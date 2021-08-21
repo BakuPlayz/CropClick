@@ -1,0 +1,11 @@
+addons:
+  JobsReborn:
+    isEnabled: true
+  mcMMO:
+    isEnabled: true
+  Residence:
+    isEnabled: true
+  Towny:
+    isEnabled: true
+  WorldGuard:
+    isEnabled: true

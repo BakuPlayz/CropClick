@@ -1,0 +1,180 @@
+name: CropClick
+author: BakuPlayz
+version: ${project.version}
+main: com.github.bakuplayz.cropclick.CropClick
+
+softdepend:
+  - Jobs
+  - mcMMO
+  - Residence
+  - Towny
+  - WorldEdit
+  - WorldGuard
+
+commands:
+  cropclick:
+    usage: /<command> []
+    aliases: [ crop ]
+    description: "Base command for the plugin: CropClick."
+
+permissions:
+  cropclick.*:
+    description: Permission to access & use everything in CropClick.
+    default: op
+    children:
+      - cropclick.plant.*
+      - cropclick.destroy.*
+      - cropclick.harvest.*
+      - cropclick.command.*
+      - cropclick.autofarmer.*
+      - cropclick.menu.button.*
+
+  cropclick.plant.*:
+    description: Permission to plant every crop.
+    default: op
+    children:
+      cropclick.plant.tall:
+        description: Permission to plant tall crops. (e.g. cactus).
+        default: op
+      cropclick.plant.beetroot:
+        description: Permission to plant the beetroot crop.
+        default: op
+      cropclick.plant.cactus:
+        description: Permission to plant the cactus crop.
+        default: op
+      cropclick.plant.carrot:
+        description: Permission to plant the carrot crop.
+        default: op
+      cropclick.plant.potato:
+        description: Permission to plant the potato crop.
+        default: op
+      cropclick.plant.sugarcane:
+        description: Permission to plant the sugarcane crop.
+        default: op
+      cropclick.plant.wheat:
+        description: Permission to plant the wheat crop.
+        default: op
+      cropclick.plant.cocoabeans:
+        description: Permisstion to plant the cocoabeans crop.
+        default: op
+
+  cropclick.destroy.*:
+    description: Permission to destory every crop.
+    default: op
+    children:
+      cropclick.destroy.tall:
+        description: Permission to destory all tall crops. (e.g. cactus).
+        default: op
+      cropclick.destroy.beetroot:
+        description: Permission to destroy the beetroot crop.
+        default: op
+      cropclick.destroy.cactus:
+        description: Permission to destroy the cactus crop.
+        default: op
+      cropclick.destroy.carrot:
+        description: Permission to destroy the carrot crop.
+        default: op
+      cropclick.destroy.potato:
+        description: Permission to destroy the potato crop.
+        default: op
+      cropclick.destroy.sugarcane:
+        description: Permission to destroy the sugarcane crop.
+        default: op
+      cropclick.destroy.wheat:
+        description: Permission to destroy the wheat crop.
+        default: op
+      cropclick.destroy.cocoabeans:
+        description: Permisstion to destroy the cocoabeans crop.
+        default: op
+
+  cropclick.harvest.*:
+    description: Permission to harvest every crop.
+    default: op
+    children:
+      cropclick.harvest.tall:
+        description: Permission to harvest all tall crops. (e.g. cactus).
+        default: op
+      cropclick.harvest.beetroot:
+        description: Permission to harvest the beetroot crop.
+        default: op
+      cropclick.harvest.cactus:
+        description: Permission to harvest the cactus crop.
+        default: op
+      cropclick.harvest.carrot:
+        description: Permission to harvest the carrot crop.
+        default: op
+      cropclick.harvest.potato:
+        description: Permission to harvest the potato crop.
+        default: op
+      cropclick.harvest.sugarcane:
+        description: Permission to harvest the sugarcane crop.
+        default: op
+      cropclick.harvest.wheat:
+        description: Permission to harvest the wheat crop.
+        default: op
+      cropclick.harvest.cocoabeans:
+        description: Permisstion to harvest the cocoabeans crop.
+        default: op
+
+  cropclick.command.*:
+    description: Permission to use every command.
+    default: op
+    children:
+      cropclick.commnad.general:
+        description: Permission to use the general command.
+        default: op
+      cropclick.command.help:
+        description: Permission to use the help command.
+        default: op
+      cropclick.command.reload:
+        description: Permission to use the reload command.
+        default: op
+      cropclick.command.reset:
+        description: Permission to use the reset command.
+        default: op
+      cropclick.command.settings:
+        description: Permission to use the settings command.
+        default: op
+
+  cropclick.autofarmer.*:
+    description: Permission to use all the autofarmer features.
+    default: op
+    children:
+      cropclick.autofarmer.link:
+        description: Permission to link autofarmers.
+        default: op
+      cropclick.autofarmer.unlink:
+        description: Permisstion to unlink autofarmers.
+        default: op
+      cropclick.autofarm.update:
+        description: Permission to update autofarmers.
+        default: op
+      cropclick.autofarm.interact:
+        description: Permission to interact with autofarmers.
+        default: op
+      cropclick.autofarmer.toggle:
+        description: Permission to toggle autofarmers.
+        default: op
+
+  cropclick.menu.button.*:
+    description: Permission to use all the menu buttons.
+    default: op
+    children:
+      cropclick.menu.addons.buton:
+        description: Permission to use the addons button.
+        default: op
+      cropclick.menu.crops.button:
+        description: Permission to use the crops button.
+        default: op
+      cropclick.menu.autofarmers.button:
+        description: Permission to use the autofarmers button.
+        default: op
+      cropclick.menu.update.button:
+        description: Permission to use the update button.
+        default: op
+      cropclick.menu.effects.button:
+        description: Permission to use the effects button.
+        default: op
+      cropclick.menu.sounds.button:
+        description: Permission to use the sounds button.
+        default: op

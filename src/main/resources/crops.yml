@@ -1,0 +1,11 @@
+crops:
+  wheat:
+    dropAmount: 0
+    dropChance: 0
+    isEnabled: true
+
+seeds:
+  wheatSeed:
+    dropAmount: 0
+    dropChance: 0
+    isEnabled: true
