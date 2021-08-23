@@ -31,16 +31,16 @@ public final class LanguageAPI {
             this.message = message;
         }
 
-        public void sendMessage() {
-            Bukkit.getConsoleSender().sendMessage(getMessage());
+        public void send() {
+            Bukkit.getConsoleSender().sendMessage(get());
         }
 
-        public void sendMessage(final String replacement) {
-            Bukkit.getConsoleSender().sendMessage(String.format(getMessage(), replacement));
+        public void send(final String replacement) {
+            Bukkit.getConsoleSender().sendMessage(String.format(get(), replacement));
         }
 
         @Contract(" -> new")
-        private @NotNull String getMessage() {
+        private @NotNull String get() {
             return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
         }
     }
@@ -77,24 +77,50 @@ public final class LanguageAPI {
             this.oldValue = oldValue;
         }
 
-        public @NotNull String getMessage(final @NotNull CropClick plugin) {
+        public @NotNull String get(final @NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("command", subCategory, key);
         }
 
-        public @NotNull String getMessage(final @NotNull CropClick plugin, final @NotNull String newValue) {
-            return getMessage(plugin).replace(oldValue, newValue);
+        public @NotNull String get(final @NotNull CropClick plugin, final @NotNull String newValue) {
+            return get(plugin).replace(oldValue, newValue);
         }
 
-        public void sendMessage(final @NotNull CropClick plugin, final @NotNull CommandSender sender) {
-            sender.sendMessage(getMessage(plugin));
+        public void send(final @NotNull CropClick plugin, final @NotNull CommandSender sender) {
+            sender.sendMessage(get(plugin));
         }
 
-        public void sendMessage(final @NotNull CropClick plugin, final @NotNull CommandSender sender, final @NotNull String newValue) {
-            sender.sendMessage(getMessage(plugin, newValue));
+        public void send(final @NotNull CropClick plugin, final @NotNull CommandSender sender, final @NotNull String newValue) {
+            sender.sendMessage(get(plugin, newValue));
         }
     }
 
     public enum Menu {
+        NEXT_PAGE_ITEM_NAME("general", "nextPageItemName"),
+        PREVIOUS_PAGE_ITEM_NAME("general", "previousPageItemName"),
+        CURRENT_PAGE_ITEM_NAME("general", "currentPageItemName", "%page%"),
+
+        CROP_TITLE("title", "crop"),
+        CROPS_TITLE("title", "crops"),
+        AUTOFARM_TITLE("title", "autofarm"),
+        AUTOFARMS_TITLE("title", "autofarms"),
+
+        MAIN_TITLE("title", "main"),
+        HELP_TITLE("title", "help"),
+        LINK_TITLE("title", "link"),
+        UPDATE_TITLE("title", "update"),
+        SETTINGS_TITLE("title", "settings"),
+
+        TOWNY_TITLE("title", "towny"),
+        MCMMO_TITLE("title", "mcMMO"),
+        RESIDENCE_TITLE("title", "residence"),
+        JOBS_REBORN_TITLE("title", "jobsReborn"),
+        WORLD_GUARD_TITLE("title", "worldGuard"),
+
+        SOUND_TITLE("title", "sound"),
+        EFFECT_TITLE("title", "effect"),
+        INTERACT_CROP_TITLE("title", "interactCrop"),
+        BLACKLIST_WORLDS_TITLE("title", "blacklistWorlds"),
+
         HELP_ITEM_NAME("help", "itemName", "%name%"),
         HELP_ITEM_USAGE("help", "itemUsage", "%usage%"),
         HELP_ITEM_DESCRIPTION("help", "itemDescription", "%description%"),
@@ -115,12 +141,16 @@ public final class LanguageAPI {
             this.oldValue = oldValue;
         }
 
-        public @NotNull String getMessage(final @NotNull CropClick plugin) {
-            return plugin.getLanguageConfig().getMessage("command", subCategory, key);
+        public @NotNull String get(final @NotNull CropClick plugin) {
+            return plugin.getLanguageConfig().getMessage("menu", subCategory, key);
         }
 
-        public @NotNull String getMessage(final @NotNull CropClick plugin, final @NotNull String newValue) {
-            return getMessage(plugin).replace(oldValue, newValue);
+        public @NotNull String get(final @NotNull CropClick plugin, final @NotNull Object newValue) {
+            return get(plugin).replace(oldValue, newValue.toString());
+        }
+
+        public @NotNull String getTitle(final @NotNull CropClick plugin) {
+            return "CraftingGUI: " + get(plugin);
         }
     }
 }

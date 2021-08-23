@@ -1,11 +1,11 @@
-package com.github.bakuplayz.cropclick.listeners.autofarm.harvest;
+package com.github.bakuplayz.cropclick.listeners.autofarm;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
+import com.github.bakuplayz.cropclick.events.autofarm.AutofarmHarvestCropEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

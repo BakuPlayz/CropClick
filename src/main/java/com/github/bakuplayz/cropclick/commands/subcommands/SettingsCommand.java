@@ -31,7 +31,7 @@ public final class SettingsCommand implements SubCommand {
 
     @Override
     public @NotNull String getDescription() {
-        return LanguageAPI.Command.SETTINGS_DESCRIPTION.getMessage(plugin);
+        return LanguageAPI.Command.SETTINGS_DESCRIPTION.get(plugin);
     }
 
     @Contract(pure = true)

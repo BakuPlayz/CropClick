@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.commands.subcommands.HelpCommand;
 import com.github.bakuplayz.cropclick.commands.subcommands.ReloadCommand;
 import com.github.bakuplayz.cropclick.commands.subcommands.ResetCommand;
 import com.github.bakuplayz.cropclick.commands.subcommands.SettingsCommand;
-import com.github.bakuplayz.cropclick.menu.menus.GeneralMenu;
+import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -44,22 +44,25 @@ public final class CommandManager implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender,
+                             final @NotNull Command command,
+                             final @NotNull String label,
+                             final String[] args) {
         if (!(sender instanceof Player)) {
-            LanguageAPI.Command.PLAYER_ONLY_COMMAND.sendMessage(plugin, sender);
+            LanguageAPI.Command.PLAYER_ONLY_COMMAND.send(plugin, sender);
             return true;
         }
 
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            new GeneralMenu(player, plugin).open();
+            new MainMenu(player, plugin).open();
         }
 
         for (SubCommand subCommand : getSubCommands()) {
             if (args[0].equalsIgnoreCase(subCommand.getName())) {
                 if (!subCommand.hasPermission(player)) {
-                    LanguageAPI.Command.PLAYER_LACK_PERMISSION.sendMessage(plugin, player, subCommand.getPermission());
+                    LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(plugin, player, subCommand.getPermission());
                     return true;
                 }
                 subCommand.perform(player, args);
@@ -70,7 +73,10 @@ public final class CommandManager implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final String @NotNull [] args) {
+    public List<String> onTabComplete(final @NotNull CommandSender sender,
+                                      final @NotNull Command command,
+                                      final @NotNull String alias,
+                                      final String @NotNull [] args) {
         if (args.length != 1) return new ArrayList<>();
         return getSubCommands().stream()
                 .map(SubCommand::getName)

@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.menu.menus.addons;
+package com.github.bakuplayz.cropclick.menu.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.LanguageAPI;
@@ -7,11 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class mcMMOMenu extends PaginatedMenu {
+public final class AutofarmsMenu extends PaginatedMenu {
 
-    public mcMMOMenu(@NotNull Player player, @NotNull CropClick plugin) {
-        super(player, plugin, LanguageAPI.Menu.MCMMO_TITLE);
+    public AutofarmsMenu(@NotNull Player player, @NotNull CropClick plugin) {
+        super(player, plugin, LanguageAPI.Menu.AUTOFARMS_TITLE);
     }
+
 
     @Override
     public void setMenuItems() {

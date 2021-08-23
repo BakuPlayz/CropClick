@@ -12,13 +12,27 @@ updateMessage:
   player: true
   console: true
 
-isEnabled:
-  autofarm: true
-
 autofarm:
+  isEnabled: true
   canHarvest:
     - beetroot
     - carrot
-    - cocoaBeans
+    - cocoaBean
     - potato
     - wheat
+
+linkable:
+  crops:
+    - beetroot
+    - cactus
+    - carrot
+    - cocoaBean
+    - potato
+    - sugarCane
+    - wheat
+  containers:
+    - chest
+    - shulker
+
+blacklistedWorlds:
+  - TEMP_WORLD

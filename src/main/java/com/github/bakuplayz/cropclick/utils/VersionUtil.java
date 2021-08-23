@@ -21,6 +21,6 @@ public final class VersionUtil {
     }
 
     public static boolean supportsShulkers() {
-        return isInInterval(11, 100);
+        return isInInterval(11, 14);
     }
 }

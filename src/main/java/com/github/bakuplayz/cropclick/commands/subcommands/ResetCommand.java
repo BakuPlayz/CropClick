@@ -33,7 +33,7 @@ public final class ResetCommand implements SubCommand {
 
     @Override
     public @NotNull String getDescription() {
-        return LanguageAPI.Command.RESET_DESCRIPTION.getMessage(plugin);
+        return LanguageAPI.Command.RESET_DESCRIPTION.get(plugin);
     }
 
     @Contract(pure = true)
@@ -57,13 +57,13 @@ public final class ResetCommand implements SubCommand {
     public void perform(Player player, String[] args) {
         try {
             deleteConfigs();
-            LanguageAPI.Command.RESET_DELETE.sendMessage(plugin, player);
+            LanguageAPI.Command.RESET_DELETE.send(plugin, player);
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Command.RESET_FAILED.sendMessage(plugin, player);
+            LanguageAPI.Command.RESET_FAILED.send(plugin, player);
         } finally {
             plugin.setupConfigs();
-            LanguageAPI.Command.RESET_SUCCESS.sendMessage(plugin, player);
+            LanguageAPI.Command.RESET_SUCCESS.send(plugin, player);
         }
     }
 

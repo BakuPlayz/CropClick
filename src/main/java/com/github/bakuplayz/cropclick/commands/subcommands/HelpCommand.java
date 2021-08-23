@@ -30,7 +30,7 @@ public final class HelpCommand implements SubCommand {
 
     @Override
     public @NotNull String getDescription() {
-        return LanguageAPI.Command.HELP_DESCRIPTION.getMessage(plugin);
+        return LanguageAPI.Command.HELP_DESCRIPTION.get(plugin);
     }
 
     @Contract(pure = true)

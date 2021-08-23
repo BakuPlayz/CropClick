@@ -33,10 +33,10 @@ public abstract class Config {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.FILE_SETUP_FAILED.sendMessage(FILE_NAME);
+            LanguageAPI.Console.FILE_SETUP_FAILED.send(FILE_NAME);
         } finally {
             config = YamlConfiguration.loadConfiguration(file);
-            LanguageAPI.Console.FILE_SETUP_LOAD.sendMessage(FILE_NAME);
+            LanguageAPI.Console.FILE_SETUP_LOAD.send(FILE_NAME);
         }
     }
 
@@ -44,6 +44,6 @@ public abstract class Config {
         if (config == null || file == null) return;
 
         config = YamlConfiguration.loadConfiguration(file);
-        LanguageAPI.Console.FILE_RELOAD.sendMessage(FILE_NAME);
+        LanguageAPI.Console.FILE_RELOAD.send(FILE_NAME);
     }
 }

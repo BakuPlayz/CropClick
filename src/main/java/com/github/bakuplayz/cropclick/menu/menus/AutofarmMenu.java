@@ -1,26 +1,16 @@
 package com.github.bakuplayz.cropclick.menu.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.api.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class GeneralMenu extends Menu {
+public final class AutofarmMenu extends Menu {
 
-    public GeneralMenu(@NotNull Player player,
-                       @NotNull CropClick plugin) {
-        super(player, plugin);
-    }
-
-    @Override
-    public String getTitle() {
-        return null;
-    }
-
-    @Override
-    public int getSlots() {
-        return 0;
+    public AutofarmMenu(@NotNull Player player, @NotNull CropClick plugin) {
+        super(player, plugin, LanguageAPI.Menu.AUTOFARM_TITLE);
     }
 
     @Override

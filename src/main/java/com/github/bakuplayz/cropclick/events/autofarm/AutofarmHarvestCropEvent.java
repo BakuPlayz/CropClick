@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.events.autofarm.harvest;
+package com.github.bakuplayz.cropclick.events.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;

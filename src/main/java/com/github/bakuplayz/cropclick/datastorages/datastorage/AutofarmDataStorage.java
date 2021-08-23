@@ -11,10 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class AutofarmDataStorage extends DataStorage {
 
-    private final List<Autofarm> autofarms = new ArrayList<>();
+    private List<Autofarm> autofarms = new ArrayList<>();
 
     public AutofarmDataStorage(final @NotNull CropClick plugin) {
         super("autofarms.json", plugin);
@@ -38,31 +39,35 @@ public final class AutofarmDataStorage extends DataStorage {
         autofarms.remove(autofarm);
     }
 
+    public void removeUnlinkedAutofarms() {
+        this.autofarms = autofarms.stream()
+                .filter(autofarm -> !autofarm.isLinked())
+                .collect(Collectors.toList());
+    }
+
     public @Nullable Autofarm getAutofarm(final @NotNull Location location) {
-        for (Autofarm autofarm : autofarms) {
-            if (autofarm.getDispenserLocation() == location) return autofarm;
-        }
-        return null;
+        return autofarms.stream()
+                .filter(autofarm -> autofarm.getDispenserLocation() == location)
+                .findFirst().orElse(null);
     }
 
-    /* Pick the most efficient one:
-        for (Autofarm autofarm : autofarms) {
-            if (autofarm.getFarmerID().equals(farmerID)) return autofarm;
-        }
-        return null;*/
-    public @Nullable Autofarm getAutofarm(final @NotNull String farmerID) {
-        return gson.fromJson(fileData.get(farmerID), Autofarm.class);
+    public @Nullable Autofarm getAutofarm(final @NotNull String farmerId) {
+        return gson.fromJson(fileData.get(farmerId), Autofarm.class);
     }
 
-    public @NotNull List<Autofarm> getAutofarms(final int start, final int maxItemLimit) {
-        Preconditions.checkArgument(maxItemLimit < start, "MaxItemLimit cannot be less than start.");
+    public @NotNull List<Autofarm> getAutofarms(final int start, final int maxLimit) {
+        Preconditions.checkArgument(maxLimit < start, "MaxLimit cannot be less than start.");
         Preconditions.checkArgument(start < 0, "Start cannot be less than zero.");
 
-        int fixedLimit = start + maxItemLimit;
+        return autofarms.stream()
+                .skip(start).limit(maxLimit)
+                .collect(Collectors.toList());
+
+        /* int fixedLimit = start + maxLimit;
         if (fixedLimit > autofarms.size()) {
             fixedLimit = autofarms.size();
         }
 
-        return autofarms.subList(start, fixedLimit);
+        return autofarms.subList(start, fixedLimit);*/
     }
 }

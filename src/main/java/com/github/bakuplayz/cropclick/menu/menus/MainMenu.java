@@ -1,16 +1,16 @@
-package com.github.bakuplayz.cropclick.menu.menus.addons;
+package com.github.bakuplayz.cropclick.menu.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class mcMMOMenu extends PaginatedMenu {
+public final class MainMenu extends Menu {
 
-    public mcMMOMenu(@NotNull Player player, @NotNull CropClick plugin) {
-        super(player, plugin, LanguageAPI.Menu.MCMMO_TITLE);
+    public MainMenu(@NotNull Player player, @NotNull CropClick plugin) {
+        super(player, plugin, LanguageAPI.Menu.MAIN_TITLE);
     }
 
     @Override

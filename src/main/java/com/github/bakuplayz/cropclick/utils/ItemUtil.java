@@ -37,15 +37,15 @@ public final class ItemUtil {
         this.damage = damage;
     }
 
-    public ItemUtil(final Material material, final String displayName) {
+    public ItemUtil(final Material material, final @NotNull String displayName) {
         this(material, displayName, 1, null);
     }
 
-    public ItemUtil(final Material material, final String displayName, final int amount) {
+    public ItemUtil(final Material material, final @NotNull String displayName, final int amount) {
         this(material, displayName, amount, null);
     }
 
-    public ItemUtil(final Material material, final String displayName, final int amount, final List<String> lore) {
+    public ItemUtil(final Material material, final @NotNull String displayName, final int amount, final List<String> lore) {
         this.displayName = displayName;
         this.material = material;
         this.amount = amount;
@@ -70,17 +70,17 @@ public final class ItemUtil {
         this.amount = amount;
     }
 
-    public ItemUtil(final ItemStack stack, final String displayName) {
+    public ItemUtil(final ItemStack stack, final @NotNull String displayName) {
         this(stack);
         this.displayName = displayName;
     }
 
-    public ItemUtil(final ItemStack stack, final String displayName, final int amount) {
+    public ItemUtil(final ItemStack stack, final @NotNull String displayName, final int amount) {
         this(stack, amount);
         this.displayName = displayName;
     }
 
-    public ItemUtil(final ItemStack stack, final String displayName, final int amount, final List<String> lore) {
+    public ItemUtil(final ItemStack stack, final @NotNull String displayName, final int amount, final List<String> lore) {
         this(stack, displayName, amount);
         this.lore = lore;
     }
@@ -109,14 +109,12 @@ public final class ItemUtil {
         return this;
     }
 
-    public ItemUtil setDisplayName(final String displayName) {
-        if (displayName == null) return this;
+    public ItemUtil setDisplayName(final @NotNull String displayName) {
         this.displayName = displayName;
         return this;
     }
 
-    public ItemUtil setLore(final List<String> lore) {
-        if (lore == null) return this;
+    public ItemUtil setLore(final @NotNull List<String> lore) {
         this.lore = lore;
         return this;
     }

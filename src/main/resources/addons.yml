@@ -3,6 +3,8 @@ addons:
     isEnabled: true
   mcMMO:
     isEnabled: true
+  OfflineGrowth:
+    isEnabled: true
   Residence:
     isEnabled: true
   Towny:

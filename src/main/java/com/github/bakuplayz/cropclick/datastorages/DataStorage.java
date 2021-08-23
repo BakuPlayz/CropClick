@@ -32,13 +32,13 @@ public abstract class DataStorage {
         this.file = new File(plugin.getDataFolder().getAbsolutePath() + "/datastorage", fileName);
 
         try {
-            file.getParentFile().mkdirs();
+            file.getParentFile().mkdir();
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SETUP.sendMessage(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SETUP.send(fileName);
         } finally {
-            LanguageAPI.Console.DATA_STORAGE_LOADING_SETUP.sendMessage(fileName);
+            LanguageAPI.Console.DATA_STORAGE_LOADING_SETUP.send(fileName);
         }
     }
 
@@ -49,11 +49,12 @@ public abstract class DataStorage {
             this.fileData = data != JsonNull.INSTANCE
                     ? data.getAsJsonObject()
                     : new JsonObject();
+            reader.close();
         } catch (Exception exception) {
             exception.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_FETCH.sendMessage(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_FETCH.send(fileName);
         } finally {
-            LanguageAPI.Console.DATA_STORAGE_FETCHED_DATA.sendMessage(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FETCHED_DATA.send(fileName);
         }
     }
 
@@ -63,9 +64,9 @@ public abstract class DataStorage {
             gson.toJson(fileData, writer);
             writer.flush();
             writer.close();
-        } catch (IOException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE.sendMessage(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE.send(fileName);
         }
     }
 }

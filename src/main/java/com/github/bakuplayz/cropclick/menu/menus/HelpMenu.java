@@ -25,18 +25,8 @@ public final class HelpMenu extends Menu {
 
     public HelpMenu(final @NotNull Player player,
                     final @NotNull CropClick plugin) {
-        super(player, plugin);
+        super(player, plugin, LanguageAPI.Menu.HELP_TITLE);
         this.subCommands = plugin.getCommandManager().getSubCommands();
-    }
-
-    @Override
-    public String getTitle() {
-        return "CropClick: Help"; //LanguageAPI
-    }
-
-    @Override
-    public int getSlots() {
-        return 54;
     }
 
     @Override
@@ -62,20 +52,20 @@ public final class HelpMenu extends Menu {
 
     private @NotNull ItemStack getSubCommandItem(@NotNull SubCommand cmd) {
         return new ItemUtil(Material.BOOK)
-                .setDisplayName(LanguageAPI.Menu.HELP_ITEM_NAME.getMessage(plugin, cmd.getName()))
-                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.getMessage(plugin, cmd.getDescription()),
-                        LanguageAPI.Menu.HELP_ITEM_PERMISSION.getMessage(plugin, cmd.getPermission()),
-                        LanguageAPI.Menu.HELP_ITEM_USAGE.getMessage(plugin, cmd.getUsage()))
+                .setDisplayName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, cmd.getName()))
+                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, cmd.getDescription()),
+                        LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, cmd.getPermission()),
+                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, cmd.getUsage()))
                 .toItemStack();
     }
 
     private @NotNull ItemStack getDefaultCommandItem() {
-        String description = LanguageAPI.Command.DEFAULT_DESCRIPTION.getMessage(plugin);
+        String description = LanguageAPI.Command.DEFAULT_DESCRIPTION.get(plugin);
         return new ItemUtil(Material.BOOK)
-                .setDisplayName(LanguageAPI.Menu.HELP_ITEM_NAME.getMessage(plugin, ""))
-                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.getMessage(plugin, description),
-                        LanguageAPI.Menu.HELP_ITEM_PERMISSION.getMessage(plugin, "cropclick.command.general"),
-                        LanguageAPI.Menu.HELP_ITEM_USAGE.getMessage(plugin, "cropclick"))
+                .setDisplayName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, ""))
+                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, description),
+                        LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, "cropclick.command.general"),
+                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, "cropclick"))
                 .toItemStack();
     }
 }

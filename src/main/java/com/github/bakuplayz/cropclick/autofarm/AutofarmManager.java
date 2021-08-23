@@ -27,7 +27,7 @@ public final class AutofarmManager {
     }
 
     public boolean isEnabled() {
-        return plugin.getConfig().getBoolean("isEnabled.autofarm");
+        return plugin.getConfig().getBoolean("autofarm.isEnabled");
     }
 
     // TODO: Change the method name to add or keep the current. (Maybe remove this)

@@ -39,7 +39,9 @@ public final class PlayerPlantCropListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlantCrop(final @NotNull PlayerPlantCropEvent event) {
-        offlineGrowthAddon.addCrop(event.getBlock().getLocation());
+        if (offlineGrowthAddon != null && offlineGrowthAddon.isEnabled()) {
+            offlineGrowthAddon.addCrop(event.getBlock().getLocation());
+        }
     }
 
 }

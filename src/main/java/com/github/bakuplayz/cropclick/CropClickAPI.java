@@ -17,5 +17,4 @@ public final class CropClickAPI {
      * Gets the AutofarmManager, which controls all the active and inactive autofarms.
      * */
     private final @Getter AutofarmManager autofarmManager = plugin.getAutofarmManager();
-
 }

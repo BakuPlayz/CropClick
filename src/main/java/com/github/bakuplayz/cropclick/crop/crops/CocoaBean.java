@@ -10,15 +10,15 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class CocoaBeans extends VanillaCrop {
+public final class CocoaBean extends VanillaCrop {
 
-    public CocoaBeans(final @NotNull CropsConfig cropsConfig) {
+    public CocoaBean(final @NotNull CropsConfig cropsConfig) {
         setCropsConfig(cropsConfig);
     }
 
     @Override
     public String getName() {
-        return "cocoaBeans";
+        return "cocoaBean";
     }
 
     @Override

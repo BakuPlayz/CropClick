@@ -3,9 +3,25 @@ crops:
     dropAmount: 0
     dropChance: 0
     isEnabled: true
+    atLeastOne: true
+    addons:
+      JobsReborn:
+        money: 0
+        points: 0
+        experience: 0
+      mcMMO:
+        experience: 0
 
 seeds:
   wheatSeed:
     dropAmount: 0
     dropChance: 0
     isEnabled: true
+    atLeastOne: true
+    addons:
+      JobsReborn:
+        money: 0
+        points: 0
+        experience: 0
+      mcMMO:
+        experience: 0

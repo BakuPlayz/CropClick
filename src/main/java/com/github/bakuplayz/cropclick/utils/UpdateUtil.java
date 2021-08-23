@@ -8,8 +8,7 @@ import com.google.gson.JsonParser;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,17 +33,34 @@ public final class UpdateUtil {
     private String latestVersion;
 
     public UpdateUtil(final @NotNull CropClick plugin) {
-        this.plugin = plugin;
+        this.currentVersion = plugin.getDescription().getVersion();
+        this.latestVersion = plugin.getDescription().getVersion();
         this.latestName = "";
         this.latestBody = "";
-        this.latestVersion = plugin.getDescription().getVersion();
-        this.currentVersion = plugin.getDescription().getVersion();
+        this.plugin = plugin;
 
         fetchUpdate();
     }
 
+    public void sendUpdateAlert(final @NotNull CommandSender sender) {
+        sender.sendMessage(colorize("&7---------- &aCropClick&7 ----------"));
+        sender.sendMessage(colorize("&7Status: &aNew update found!"));
+        sender.sendMessage(colorize("&7----------- &aDetails&7 -------------"));
+        sender.sendMessage(colorize("&7Name: &a" + latestName));
+        sender.sendMessage(colorize("&7Version: &a" + latestVersion));
+        sender.sendMessage(colorize("&7---------- &aUpdate Log&7 -----------"));
+
+        for (String log : latestBody.split("\n")) {
+            sender.sendMessage(colorize("&7" + log));
+        }
+
+        sender.sendMessage(colorize("&7----------- &aUpdate Url&7 ----------"));
+        sender.sendMessage(colorize("&a" + latestURL));
+        sender.sendMessage(colorize("&7---------------------------------"));
+    }
+
     public void startUpdateInterval() {
-        Bukkit.getScheduler().runTaskTimer(plugin, this::fetchUpdate, 0, 20 * 60 * 30); //ticks:seconds:minutes
+        Bukkit.getScheduler().runTaskTimer(plugin, this::fetchUpdate, 0, 20 * 60 * 30);
     }
 
     private void fetchUpdate() {
@@ -65,7 +81,7 @@ public final class UpdateUtil {
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
-            LanguageAPI.Console.UPDATE_FETCH_FAILED.sendMessage();
+            LanguageAPI.Console.UPDATE_FETCH_FAILED.send();
         }
     }
 
@@ -77,42 +93,7 @@ public final class UpdateUtil {
     }
 
     private boolean isUpdateForVersion() {
-        return latestName.endsWith("(for 1.13)") ^ latestName.endsWith("(for 1.8 - latest)");
-    }
-
-    public void sendUpdateAlert(final @NotNull Player player) {
-        player.sendMessage(colorize("&7---------- &aCropClick&7 ----------"));
-        player.sendMessage(colorize("&7Status: &aNew update found!"));
-        player.sendMessage(colorize("&7----------- &aDetails&7 -------------"));
-        player.sendMessage(colorize("&7Name: &a" + latestName));
-        player.sendMessage(colorize("&7Version: &a" + latestVersion));
-        player.sendMessage(colorize("&7---------- &aUpdate Log&7 ----------"));
-
-        for (String log : latestBody.split("\\r?\\n")) {
-            player.sendMessage(colorize("&7" + log));
-        }
-
-        player.sendMessage(colorize("&7----------- &aUpdate Url&7 ----------"));
-        player.sendMessage(colorize("&a" + latestURL));
-        player.sendMessage(colorize("&7-------------------------------"));
-    }
-
-    public void sendUpdateAlert() {
-        ConsoleCommandSender sender = Bukkit.getConsoleSender();
-        sender.sendMessage(colorize("&7---------- &aCropClick&7 ----------"));
-        sender.sendMessage(colorize("&7Status: &aNew update found!"));
-        sender.sendMessage(colorize("&7----------- &aDetails&7 -------------"));
-        sender.sendMessage(colorize("&7Name: &a" + latestName));
-        sender.sendMessage(colorize("&7Version: &a" + latestVersion));
-        sender.sendMessage(colorize("&7---------- &aUpdate Log&7 -----------"));
-
-        for (String log : latestBody.split("\n")) {
-            sender.sendMessage(colorize("&7" + log));
-        }
-
-        sender.sendMessage(colorize("&7----------- &aUpdate Url&7 ----------"));
-        sender.sendMessage(colorize("&a" + latestURL));
-        sender.sendMessage(colorize("&7---------------------------------"));
+        return latestName.endsWith("(for 1.8 - 1.12)") ^ latestName.endsWith("(for 1.8 - latest)");
     }
 
     @Contract("_ -> new")

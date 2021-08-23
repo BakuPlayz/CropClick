@@ -39,7 +39,7 @@ public final class ReloadCommand implements SubCommand {
 
     @Override
     public @NotNull String getDescription() {
-        return LanguageAPI.Command.RELOAD_DESCRIPTION.getMessage(plugin);
+        return LanguageAPI.Command.RELOAD_DESCRIPTION.get(plugin);
     }
 
     @Contract(pure = true)
@@ -63,15 +63,15 @@ public final class ReloadCommand implements SubCommand {
     public void perform(Player player, String[] args) {
         try {
             plugin.reloadConfig();
-            LanguageAPI.Console.FILE_RELOAD.sendMessage("config.yml");
+            LanguageAPI.Console.FILE_RELOAD.send("config.yml");
 
             cropsConfig.reloadConfig();
             addonsConfig.reloadConfig();
             languageConfig.reloadConfig();
         }catch (Exception exception) {
-            LanguageAPI.Command.RELOAD_FAILED.sendMessage(plugin, player);
+            LanguageAPI.Command.RELOAD_FAILED.send(plugin, player);
         } finally {
-            LanguageAPI.Command.RELOAD_SUCCESS.sendMessage(plugin, player);
+            LanguageAPI.Command.RELOAD_SUCCESS.send(plugin, player);
         }
     }
 }
