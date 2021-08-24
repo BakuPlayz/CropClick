@@ -8,17 +8,18 @@ import org.bukkit.entity.Player;
  * @author BakuPlayz
  * @version 1.6.0
  */
-public interface SubCommand {
+public abstract class SubCommand {
 
-    String getName();
+    public abstract String getName(); //should be sat in the constructor or check by name is better
 
-    String getDescription();
+    public abstract String getDescription(); //should be sat in the constructor or check by name is better
 
-    String getUsage();
+    public abstract String getUsage(); //should be sat in the constructor or check by name is better
 
-    String getPermission();
+    public abstract String getPermission(); //should be sat in the constructor or check by name is better
 
-    boolean hasPermission(Player player);
+    public abstract boolean hasPermission(Player player);
+    // Some solution to make this removable from the other files, however this should also be @Overrwritten in some cases.
 
-    void perform(Player player, String[] args);
+    public abstract void perform(Player player, String[] args);
 }
