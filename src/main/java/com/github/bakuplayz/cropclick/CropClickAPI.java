@@ -6,6 +6,8 @@ import lombok.Getter;
 
 public final class CropClickAPI {
 
+    // Might need to change the comments.
+
     private final CropClick plugin = CropClick.getPlugin();
 
     /**

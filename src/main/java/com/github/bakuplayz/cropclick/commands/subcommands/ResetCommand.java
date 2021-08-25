@@ -4,7 +4,6 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.LanguageAPI;
 import com.github.bakuplayz.cropclick.commands.SubCommand;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -17,49 +16,20 @@ import java.nio.file.Files;
  * @author BakuPlayz
  * @version 1.6.0
  */
-public final class ResetCommand implements SubCommand {
+public final class ResetCommand extends SubCommand {
 
-    private final CropClick plugin;
-
-    public ResetCommand(final @NotNull CropClick plugin) {
-        this.plugin = plugin;
-    }
-
-    @Contract(pure = true)
-    @Override
-    public @NotNull String getName() {
-        return "reset";
-    }
-
-    @Override
-    public @NotNull String getDescription() {
-        return LanguageAPI.Command.RESET_DESCRIPTION.get(plugin);
-    }
-
-    @Contract(pure = true)
-    @Override
-    public @NotNull String getUsage() {
-        return "cropclick reset";
-    }
-
-    @Contract(pure = true)
-    @Override
-    public @NotNull String getPermission() {
-        return "cropclick.reset";
-    }
-
-    @Override
-    public boolean hasPermission(@NotNull Player player) {
-        return player.hasPermission("cropclick.*") || player.hasPermission(getPermission());
+    public ResetCommand(@NotNull CropClick plugin) {
+        super(plugin, "reset");
     }
 
     @Override
     public void perform(Player player, String[] args) {
         try {
             deleteConfigs();
+            deleteDataStorages();
             LanguageAPI.Command.RESET_DELETE.send(plugin, player);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
             LanguageAPI.Command.RESET_FAILED.send(plugin, player);
         } finally {
             plugin.setupConfigs();
@@ -71,7 +41,10 @@ public final class ResetCommand implements SubCommand {
         Files.deleteIfExists(new File(plugin.getDataFolder(), "crops.yml").toPath());
         Files.deleteIfExists(new File(plugin.getDataFolder(), "config.yml").toPath());
         Files.deleteIfExists(new File(plugin.getDataFolder(), "addons.yml").toPath());
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "database.yml").toPath());
         Files.deleteIfExists(new File(plugin.getDataFolder(), "language.yml").toPath());
+    }
+
+    private void deleteDataStorages() throws IOException {
+        Files.deleteIfExists(new File(plugin.getDataFolder(), "autofarms.json").toPath());
     }
 }

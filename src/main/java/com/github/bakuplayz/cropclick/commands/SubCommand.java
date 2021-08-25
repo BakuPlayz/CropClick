@@ -1,6 +1,10 @@
 package com.github.bakuplayz.cropclick.commands;
 
+import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.api.LanguageAPI;
+import lombok.Getter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * (DESCRIPTION)
@@ -10,16 +14,31 @@ import org.bukkit.entity.Player;
  */
 public abstract class SubCommand {
 
-    public abstract String getName(); //should be sat in the constructor or check by name is better
+    protected final CropClick plugin;
 
-    public abstract String getDescription(); //should be sat in the constructor or check by name is better
+    private final @Getter String commandName;
 
-    public abstract String getUsage(); //should be sat in the constructor or check by name is better
+    public SubCommand(@NotNull CropClick plugin,
+                      @NotNull String commandName) {
+        this.commandName = commandName;
+        this.plugin = plugin;
+    }
 
-    public abstract String getPermission(); //should be sat in the constructor or check by name is better
+    public final @NotNull String getDescription() {
+        return LanguageAPI.Command.valueOf(commandName.toUpperCase() + "_DESCRIPTION").get(plugin);
+    }
 
-    public abstract boolean hasPermission(Player player);
-    // Some solution to make this removable from the other files, however this should also be @Overrwritten in some cases.
+    public final @NotNull String getUsage() {
+        return "cropclick " + commandName;
+    }
+
+    public final @NotNull String getPermission() {
+        return "cropclick." + commandName;
+    }
+
+    public final boolean hasPermission(@NotNull Player player) {
+        return player.hasPermission(getPermission());
+    }
 
     public abstract void perform(Player player, String[] args);
 }

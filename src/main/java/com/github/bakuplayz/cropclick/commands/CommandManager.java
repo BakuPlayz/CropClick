@@ -30,7 +30,7 @@ public final class CommandManager implements TabExecutor {
 
     private final @Getter List<SubCommand> subCommands = new ArrayList<>();
 
-    public CommandManager(final @NotNull CropClick plugin) {
+    public CommandManager(@NotNull CropClick plugin) {
         this.plugin = plugin;
 
         registerSubCommands();
@@ -44,10 +44,10 @@ public final class CommandManager implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(final @NotNull CommandSender sender,
-                             final @NotNull Command command,
-                             final @NotNull String label,
-                             final String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender,
+                             @NotNull Command command,
+                             @NotNull String label,
+                             String[] args) {
         if (!(sender instanceof Player)) {
             LanguageAPI.Command.PLAYER_ONLY_COMMAND.send(plugin, sender);
             return true;
@@ -57,10 +57,11 @@ public final class CommandManager implements TabExecutor {
 
         if (args.length == 0) {
             new MainMenu(player, plugin).open();
+            return true;
         }
 
         for (SubCommand subCommand : getSubCommands()) {
-            if (args[0].equalsIgnoreCase(subCommand.getName())) {
+            if (args[0].equalsIgnoreCase(subCommand.getCommandName())) {
                 if (!subCommand.hasPermission(player)) {
                     LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(plugin, player, subCommand.getPermission());
                     return true;
@@ -73,13 +74,13 @@ public final class CommandManager implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(final @NotNull CommandSender sender,
-                                      final @NotNull Command command,
-                                      final @NotNull String alias,
-                                      final String @NotNull [] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender,
+                                      @NotNull Command command,
+                                      @NotNull String alias,
+                                      String @NotNull [] args) {
         if (args.length != 1) return new ArrayList<>();
         return getSubCommands().stream()
-                .map(SubCommand::getName)
+                .map(SubCommand::getCommandName)
                 .filter(subCommand -> subCommand.startsWith(args[0]))
                 .sorted().collect(Collectors.toList());
     }
