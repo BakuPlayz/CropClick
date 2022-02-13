@@ -1,12 +1,10 @@
 :: Purpose: Avoid having issues with addons, while contributing to the project.
+:: Requirements: Maven & jar files (https://maven.apache.org/install.html)
 
-:: TODO: Make better step-by-step
-
-
-:: Step-by-step to solve dependency issues:
-:: 1. Install mvn (https://maven.apache.org/install.html).
-:: 2. Run this command in your IDE's (e.g. IntelliJ's) maven console.
-:: 3. You're all good, no more addon issues (You're welcome :D).
+:: Step-by-step (to fix all dependency issues):
+::  1. Make sure you have maven (command: mvn) installed.
+::  2. Run this script (.\dependency_fixall.bat) in the terminal.
+::  3. You should now be all good, no more dependency issues (You're welcome :D).
 
 
 :: Adds OfflineGrowth to the local maven.
