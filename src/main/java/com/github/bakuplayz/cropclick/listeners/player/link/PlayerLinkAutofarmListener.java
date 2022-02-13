@@ -40,7 +40,7 @@ public final class PlayerLinkAutofarmListener implements Listener {
         }
 
         AutofarmMetadata instanceValue = new AutofarmMetadata(plugin, event::getAutofarm);
-        AutofarmMetadata farmerIDValue = new AutofarmMetadata(plugin, autofarm::getFarmerID);
+        AutofarmMetadata farmerIDValue = new AutofarmMetadata(plugin, autofarm::getFarmer);
 
         Block crop = autofarm.getCropLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();

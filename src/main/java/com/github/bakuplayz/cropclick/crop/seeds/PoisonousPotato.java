@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class PoisonousPotato extends VanillaSeed {
 
-    public PoisonousPotato(final @NotNull CropsConfig cropsConfig) {
-        setCropsConfig(cropsConfig);
+    public PoisonousPotato(final @NotNull CropsConfig config) {
+        setCropsConfig(config);
     }
 
     @Contract(pure = true)
@@ -23,7 +23,7 @@ public final class PoisonousPotato extends VanillaSeed {
     @Override
     public @NotNull ItemStack getDrops() {
         return new ItemUtil(Material.POISONOUS_POTATO)
-                .setDisplayName(getDropName())
+                .setName(getDropName())
                 .setAmount(getDropAmount())
                 .toItemStack();
     }

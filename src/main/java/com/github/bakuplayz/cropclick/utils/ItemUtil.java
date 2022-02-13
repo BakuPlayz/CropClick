@@ -18,10 +18,12 @@ import java.util.List;
 public final class ItemUtil {
 
     private int amount;
-    private short damage = 0;
+    private short damage;
+
+    private ItemMeta meta;
     private Material material;
-    private ItemMeta itemMeta;
-    private String displayName = "";
+
+    private String name;
     private List<String> lore = new ArrayList<>();
 
     public ItemUtil(final Material material) {
@@ -33,32 +35,37 @@ public final class ItemUtil {
     }
 
     public ItemUtil(final Material material, final short damage) {
-        this(material);
+        this(material, "", 1, damage);
+    }
+
+    public ItemUtil(final Material material, final @NotNull String name) {
+        this(material, name, 1, null);
+    }
+
+    public ItemUtil(final Material material, final @NotNull String name, final int amount) {
+        this(material, name, amount, null);
+    }
+
+    public ItemUtil(final Material material, final @NotNull String name, final int amount, final short damage) {
+        this(material, name, amount, null);
         this.damage = damage;
     }
 
-    public ItemUtil(final Material material, final @NotNull String displayName) {
-        this(material, displayName, 1, null);
-    }
-
-    public ItemUtil(final Material material, final @NotNull String displayName, final int amount) {
-        this(material, displayName, amount, null);
-    }
-
-    public ItemUtil(final Material material, final @NotNull String displayName, final int amount, final List<String> lore) {
-        this.displayName = displayName;
+    public ItemUtil(final Material material, final @NotNull String name, final int amount, final List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;
+        this.name = name;
     }
 
-    public ItemUtil(final int materialId) {
-        this(Material.getMaterial(materialId), "", 1, null);
+    @Deprecated
+    public ItemUtil(final int id) {
+        this(Material.getMaterial(id), "", 1, null);
     }
 
     public ItemUtil(final @NotNull ItemStack stack) {
         if (stack.hasItemMeta()) {
-            itemMeta = stack.getItemMeta();
+            meta = stack.getItemMeta();
         }
         this.amount = stack.getAmount();
         this.material = stack.getType();
@@ -70,47 +77,44 @@ public final class ItemUtil {
         this.amount = amount;
     }
 
-    public ItemUtil(final ItemStack stack, final @NotNull String displayName) {
+    public ItemUtil(final ItemStack stack, final @NotNull String name) {
         this(stack);
-        this.displayName = displayName;
+        this.name = name;
     }
 
-    public ItemUtil(final ItemStack stack, final @NotNull String displayName, final int amount) {
+    public ItemUtil(final ItemStack stack, final @NotNull String name, final int amount) {
         this(stack, amount);
-        this.displayName = displayName;
+        this.name = name;
     }
 
-    public ItemUtil(final ItemStack stack, final @NotNull String displayName, final int amount, final List<String> lore) {
-        this(stack, displayName, amount);
+    public ItemUtil(final ItemStack stack, final @NotNull String name, final int amount, final List<String> lore) {
+        this(stack, name, amount);
         this.lore = lore;
     }
 
     public ItemUtil setAmount(final int amount) {
-        if (amount < -1) return this;
-        this.amount = amount;
+        this.amount = amount <= -1 ? this.amount : amount;
         return this;
     }
 
     public ItemUtil setDamage(final short damage) {
-        if (damage < -1) return this;
-        this.damage = damage;
+        this.damage = damage <= -1 ? this.damage : damage;
         return this;
     }
 
-    public ItemUtil setMaterial(final int materialId) {
-        if (materialId < -1) return this;
-        this.material = Material.getMaterial(materialId);
+    @Deprecated
+    public ItemUtil setMaterial(final int id) {
+        this.material = id <= -1 ? this.material : Material.getMaterial(id);
         return this;
     }
 
     public ItemUtil setMaterial(final Material material) {
-        if (material == null) return this;
-        this.material = material;
+        this.material = material == null ? this.material : material;
         return this;
     }
 
-    public ItemUtil setDisplayName(final @NotNull String displayName) {
-        this.displayName = displayName;
+    public ItemUtil setName(final @NotNull String name) {
+        this.name = name;
         return this;
     }
 
@@ -120,17 +124,16 @@ public final class ItemUtil {
     }
 
     public ItemUtil setLore(final String... lore) {
-        if (lore == null) return this;
-        this.lore = Arrays.asList(lore);
+        this.lore = lore == null ? this.lore : Arrays.asList(lore);
         return this;
     }
 
     public @NotNull ItemStack toItemStack() {
         ItemStack stack = new ItemStack(material, amount, damage);
-        ItemMeta meta = itemMeta != null ? itemMeta : stack.getItemMeta();
+        ItemMeta meta = this.meta != null ? this.meta : stack.getItemMeta();
 
         if (lore != null) meta.setLore(lore);
-        if (displayName != null) meta.setDisplayName(displayName);
+        if (name != null) meta.setDisplayName(name);
         stack.setItemMeta(meta);
 
         return stack;

@@ -6,6 +6,6 @@ import org.jetbrains.annotations.NotNull;
 public final class CropAlreadyRegisteredException extends Exception {
 
     public CropAlreadyRegisteredException(final @NotNull Crop crop) {
-        super(crop.getName() + " is already registered.", new Throwable("Duplicate crops are not allowed."));
+        super(crop.getName() + " is already registered.", new Throwable("Cannot register the same crop, multiple times."));
     }
 }

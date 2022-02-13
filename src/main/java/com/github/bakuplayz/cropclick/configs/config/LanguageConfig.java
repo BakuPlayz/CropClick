@@ -18,9 +18,9 @@ public final class LanguageConfig extends Config {
     }
 
     public @NotNull String getMessage(String category, String subCategory, String key) {
-        String message = getConfig().getString(category + "." + subCategory + "." + key);
+        String message = config.getString(category + "." + subCategory + "." + key);
         return message == null
-                ? ChatColor.RED + "Error: Message is null!"
-                : ChatColor.translateAlternateColorCodes('&', message);
+               ? colorize("&cError: Message is null!")
+               : colorize(message);
     }
 }

@@ -37,8 +37,8 @@ public final class ReloadCommand extends SubCommand {
             cropsConfig.reloadConfig();
             addonsConfig.reloadConfig();
             languageConfig.reloadConfig();
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             LanguageAPI.Command.RELOAD_FAILED.send(plugin, player);
         } finally {
             LanguageAPI.Command.RELOAD_SUCCESS.send(plugin, player);

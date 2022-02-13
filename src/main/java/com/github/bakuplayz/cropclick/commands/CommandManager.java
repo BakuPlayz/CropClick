@@ -28,24 +28,24 @@ public final class CommandManager implements TabExecutor {
 
     private final CropClick plugin;
 
-    private final @Getter List<SubCommand> subCommands = new ArrayList<>();
+    private final @Getter List<SubCommand> commands = new ArrayList<>();
 
     public CommandManager(@NotNull CropClick plugin) {
         this.plugin = plugin;
 
-        registerSubCommands();
+        registerCommands();
     }
 
-    private void registerSubCommands() {
-        subCommands.add(new HelpCommand(plugin));
-        subCommands.add(new ReloadCommand(plugin));
-        subCommands.add(new ResetCommand(plugin));
-        subCommands.add(new SettingsCommand(plugin));
+    private void registerCommands() {
+        commands.add(new HelpCommand(plugin));
+        commands.add(new ReloadCommand(plugin));
+        commands.add(new ResetCommand(plugin));
+        commands.add(new SettingsCommand(plugin));
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender,
-                             @NotNull Command command,
+                             @NotNull Command cmd,
                              @NotNull String label,
                              String[] args) {
         if (!(sender instanceof Player)) {
@@ -60,28 +60,31 @@ public final class CommandManager implements TabExecutor {
             return true;
         }
 
-        for (SubCommand subCommand : getSubCommands()) {
-            if (args[0].equalsIgnoreCase(subCommand.getCommandName())) {
-                if (!subCommand.hasPermission(player)) {
-                    LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(plugin, player, subCommand.getPermission());
-                    return true;
-                }
-                subCommand.perform(player, args);
+        for (SubCommand command : commands) {
+            if (!args[0].equalsIgnoreCase(command.getName())) continue;
+
+            if (!command.hasPermission(player)) {
+                LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(plugin, player, command.getPermission());
                 return true;
             }
+
+            command.perform(player, args);
+            return true;
         }
+
         return true;
     }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender,
-                                      @NotNull Command command,
+                                      @NotNull Command cmd,
                                       @NotNull String alias,
                                       String @NotNull [] args) {
-        if (args.length != 1) return new ArrayList<>();
-        return getSubCommands().stream()
-                .map(SubCommand::getCommandName)
-                .filter(subCommand -> subCommand.startsWith(args[0]))
-                .sorted().collect(Collectors.toList());
+        return args.length != 1
+               ? new ArrayList<>()
+               : commands.stream()
+                       .map(SubCommand::getName)
+                       .filter(command -> command.startsWith(args[0]))
+                       .sorted().collect(Collectors.toList());
     }
 }

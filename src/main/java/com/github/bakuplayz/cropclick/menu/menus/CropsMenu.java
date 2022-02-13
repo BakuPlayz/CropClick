@@ -59,7 +59,7 @@ public final class CropsMenu extends PaginatedMenu {
 
     private @NotNull ItemStack getMenuItem(final @NotNull Crop crop) {
         return new ItemUtil(crop.getClickableType())
-                .setDisplayName(crop.getName()) //languageAPI
+                .setName(crop.getName()) //languageAPI
                 .setLore("") //LanugageAPI
                 .toItemStack();
     }

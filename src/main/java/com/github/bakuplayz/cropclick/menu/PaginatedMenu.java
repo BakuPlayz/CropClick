@@ -58,19 +58,19 @@ public abstract class PaginatedMenu extends Menu {
 
     protected final @NotNull ItemStack getPreviousPageItem() {
         return new ItemUtil(Material.ARROW)
-                .setDisplayName(LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME.get(plugin))
+                .setName(LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME.get(plugin))
                 .toItemStack();
     }
 
     protected final @NotNull ItemStack getCurrentPageItem() {
         return new ItemUtil(Material.BOOK)
-                .setDisplayName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
+                .setName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
                 .toItemStack();
     }
 
     protected final @NotNull ItemStack getNextPageItem() {
         return new ItemUtil(Material.ARROW)
-                .setDisplayName(LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME.get(plugin))
+                .setName(LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME.get(plugin))
                 .toItemStack();
     }
 }

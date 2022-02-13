@@ -2,11 +2,12 @@ package com.github.bakuplayz.cropclick;
 
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.Getter;
 
 public final class CropClickAPI {
 
-    // Might need to change the comments.
+    // TODO: Update comments to make them more human readable.
 
     private final CropClick plugin = CropClick.getPlugin();
 
@@ -19,4 +20,9 @@ public final class CropClickAPI {
      * Gets the AutofarmManager, which controls all the active and inactive autofarms.
      * */
     private final @Getter AutofarmManager autofarmManager = plugin.getAutofarmManager();
+
+    /**
+     * Gets the WorldManager, which controls all the active and inactive worlds.
+     */
+    private final @Getter WorldManager worldManager = plugin.getWorldManager();
 }

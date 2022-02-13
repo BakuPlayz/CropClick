@@ -16,8 +16,8 @@ public final class AddonManager {
     private @Getter WorldGuardAddon worldGuardAddon;
     private @Getter OfflineGrowthAddon offlineGrowthAddon;
 
-    public AddonManager(final @NotNull AddonsConfig addonsConfig) {
-        this.addonsConfig = addonsConfig;
+    public AddonManager(final @NotNull AddonsConfig config) {
+        this.addonsConfig = config;
 
         registerAddons();
     }

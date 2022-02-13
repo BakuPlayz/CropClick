@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public final class Autofarm {
 
-    private final @NotNull @Getter UUID ownerUUID;
-    private final @NotNull @Getter String farmerID;
+    private final @NotNull @Getter String owner;
+    private final @NotNull @Getter String farmer;
 
     private @Setter @Getter boolean isEnabled;
     private @Setter @Getter Location cropLocation;
@@ -31,11 +31,11 @@ public final class Autofarm {
         this.dispenserLocation = dispenserLocation;
         this.containerLocation = containerLocation;
         this.cropLocation = cropLocation;
-        this.ownerUUID = player.getUniqueId();
-        this.farmerID = UUID.randomUUID().toString();
+        this.farmer = UUID.randomUUID().toString();
+        this.owner = player.getUniqueId().toString();
     }
 
-
+    // getOutput || getContainer || getInventory || getContainerInventory || getContainerContents
     public @Nullable Inventory getContainer() {
         Block block = containerLocation.getBlock();
         if (block.getState() instanceof Chest) return (((Chest) block).getInventory());
@@ -44,19 +44,20 @@ public final class Autofarm {
     }
 
     public boolean isLinked() {
-        if (containerLocation == null) return false;
-        if (cropLocation == null) return false;
-        return dispenserLocation != null;
+        return cropLocation != null
+                && containerLocation != null
+                && dispenserLocation != null;
     }
 
     @Override
     @Contract(pure = true)
     public @NotNull String toString() {
-        return farmerID + "{" +
-                "ownerUUID=" + ownerUUID +
+        return farmer + "{" +
+                "ownerUUID=" + owner +
                 ", isEnabled=" + isEnabled +
                 ", cropLocation=" + cropLocation +
                 ", containerLocation=" + containerLocation +
-                ", dispenserLocation=" + dispenserLocation + "}";
+                ", dispenserLocation=" + dispenserLocation +
+                "}";
     }
 }

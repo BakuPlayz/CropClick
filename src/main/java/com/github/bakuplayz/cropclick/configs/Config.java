@@ -3,8 +3,10 @@ package com.github.bakuplayz.cropclick.configs;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.LanguageAPI;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -16,7 +18,7 @@ public abstract class Config {
 
     private File file;
     private final String FILE_NAME;
-    private @Getter FileConfiguration config;
+    protected @Getter FileConfiguration config;
 
     public Config(final @NotNull String fileName,
                   final @NotNull CropClick plugin) {
@@ -45,5 +47,10 @@ public abstract class Config {
 
         config = YamlConfiguration.loadConfiguration(file);
         LanguageAPI.Console.FILE_RELOAD.send(FILE_NAME);
+    }
+
+    @Contract("_ -> new")
+    protected String colorize(@NotNull String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 }

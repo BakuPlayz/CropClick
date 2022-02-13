@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BeetrootSeed extends VanillaSeed {
 
-    public BeetrootSeed(final @NotNull CropsConfig cropsConfig) {
-        setCropsConfig(cropsConfig);
+    public BeetrootSeed(final @NotNull CropsConfig config) {
+        setCropsConfig(config);
     }
 
     @Contract(pure = true)
@@ -23,7 +23,7 @@ public final class BeetrootSeed extends VanillaSeed {
     @Override
     public @NotNull ItemStack getDrops() {
         return new ItemUtil(Material.BEETROOT_SEEDS)
-                .setDisplayName(getDropName())
+                .setName(getDropName())
                 .setAmount(getDropAmount())
                 .toItemStack();
     }

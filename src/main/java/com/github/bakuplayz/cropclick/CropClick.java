@@ -9,6 +9,7 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.LanguageConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
 import com.github.bakuplayz.cropclick.listeners.MenuListener;
 import com.github.bakuplayz.cropclick.listeners.autofarm.AutofarmHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.destory.PlayerDestroyCropListener;
@@ -38,27 +39,30 @@ public final class CropClick extends JavaPlugin {
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
     private @Getter LanguageConfig languageConfig;
+
+    private @Getter WorldDataStorage worldDataStorage;
     private @Getter AutofarmDataStorage autofarmDataStorage;
 
     private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
     @Override
     public void onEnable() {
-        if (VersionUtil.isInInterval(8.0, 13.9)) {
-            plugin = this;
-
-            registerConfigs();
-            setupConfigs();
-
-            registerDataStorages();
-            setupDataStorages();
-
-            registerManagers();
-            registerCommands();
-            registerListeners();
-        } else {
+        if (!VersionUtil.isInInterval(8.0, 13.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
+            return;
         }
+
+        plugin = this;
+
+        registerConfigs();
+        setupConfigs();
+
+        registerDataStorages();
+        setupDataStorages();
+
+        registerManagers();
+        registerCommands();
+        registerListeners();
     }
 
     @Override
@@ -73,7 +77,7 @@ public final class CropClick extends JavaPlugin {
 
     public void setupConfigs() {
         LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
-        getConfig().options().copyDefaults(true);
+        //getConfig().options().copyDefaults(true);
         saveConfig();
 
         cropsConfig.setup();
@@ -88,6 +92,7 @@ public final class CropClick extends JavaPlugin {
     }
 
     private void registerDataStorages() {
+        this.worldDataStorage = new WorldDataStorage(this);
         this.autofarmDataStorage = new AutofarmDataStorage(this);
     }
 
@@ -95,6 +100,10 @@ public final class CropClick extends JavaPlugin {
         autofarmDataStorage.setup();
         autofarmDataStorage.fetchData();
         autofarmDataStorage.saveData();
+
+        worldDataStorage.setup();
+        worldDataStorage.fetchData();
+        worldDataStorage.saveData();
     }
 
     private void registerCommands() {

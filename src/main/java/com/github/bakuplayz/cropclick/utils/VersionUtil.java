@@ -15,9 +15,9 @@ public final class VersionUtil {
         return Bukkit.getServer().getBukkitVersion().split("-")[0].substring(2);
     }
 
-    public static boolean isInInterval(final double start, final double end) {
+    public static boolean isInInterval(double minVersion, double maxVersion) {
         double serverVersion = Double.parseDouble(getServerVersion());
-        return (serverVersion >= start) && (end >= serverVersion);
+        return (serverVersion >= minVersion) && (maxVersion >= serverVersion);
     }
 
     public static boolean supportsShulkers() {

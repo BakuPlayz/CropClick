@@ -1,25 +1,32 @@
 package com.github.bakuplayz.cropclick.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import lombok.Getter;
-import org.bukkit.World;
+import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public final class WorldManager {
 
-    private final @Getter List<String> blacklistedWorlds;
 
-    public WorldManager(final @NotNull CropClick plugin) {
-        this.blacklistedWorlds = plugin.getConfig().getStringList("blacklistedWorlds");
+    private final @NotNull WorldDataStorage worldData;
+
+    public WorldManager(@NotNull CropClick plugin) {
+        this.worldData = plugin.getWorldDataStorage();
+
+        registerWorlds();
     }
 
-    public boolean isWorldBlacklisted(final @NotNull World world) {
-        return blacklistedWorlds.contains(world.getName());
+    private void registerWorlds() {
+        Bukkit.getWorlds().forEach(world -> worldData.addWorld(new World(world)));
     }
 
-    public boolean isWorldBlacklisted(final @NotNull String worldName) {
-        return blacklistedWorlds.contains(worldName);
+    public World findByWorld(@NotNull org.bukkit.World world) {
+        return findByName(world.getName());
+    }
+
+    public World findByName(@NotNull String name) {
+        return worldData.getWorlds().stream()
+                .filter(w -> w.getName().equals(name))
+                .findFirst().orElse(null);
     }
 }

@@ -10,8 +10,8 @@ import java.util.concurrent.Callable;
 public final class AutofarmMetadata extends LazyMetadataValue {
 
     public AutofarmMetadata(final @NotNull Plugin plugin,
-                            final @NotNull Callable<Object> lazyValue) {
-        super(plugin, CacheStrategy.CACHE_AFTER_FIRST_EVAL, lazyValue);
+                            final @NotNull Callable<Object> value) {
+        super(plugin, CacheStrategy.CACHE_AFTER_FIRST_EVAL, value);
     }
 
     public Autofarm asAutofarm() {

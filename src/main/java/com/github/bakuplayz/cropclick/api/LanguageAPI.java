@@ -15,7 +15,8 @@ public final class LanguageAPI {
         FILE_SETUP_FAILED("Could not setup &e%s&7."),
 
         DATA_STORAGE_LOADING_SETUP("Loading &e%s&7."),
-        DATA_STORAGE_FAILED_SAVE("Could not save &e%s&7."),
+        DATA_STORAGE_FAILED_SAVE_OTHER("Could not save &e%s&7, due to unknown reasons."),
+        DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save &e%s&7, due to it being previously removed."),
         DATA_STORAGE_FETCHED_DATA("Fetched &e%s's &7data."),
         DATA_STORAGE_FAILED_FETCH("Could not fetch &e%s&7."),
         DATA_STORAGE_FAILED_SETUP("Could not setup &e%s&7."),
@@ -35,8 +36,8 @@ public final class LanguageAPI {
             Bukkit.getConsoleSender().sendMessage(get());
         }
 
-        public void send(final String replacement) {
-            Bukkit.getConsoleSender().sendMessage(String.format(get(), replacement));
+        public void send(final String value) {
+            Bukkit.getConsoleSender().sendMessage(String.format(get(), value));
         }
 
         @Contract(" -> new")
@@ -62,35 +63,43 @@ public final class LanguageAPI {
         PLAYER_ONLY_COMMAND("general", "playerOnlyCommand"),
         PLAYER_LACK_PERMISSION("general", "playerLackPermission", "%permission%");
 
+        private final String placeholder;
+        private final String category;
         private final String key;
-        private final String subCategory;
 
-        private String oldValue = "";
-
-        Command(final String subCategory, final String key) {
+        Command(final String category,
+                final String key) {
+            this.category = category;
+            this.placeholder = "";
             this.key = key;
-            this.subCategory = subCategory;
         }
 
-        Command(final String subCategory, final String key, final String oldValue) {
-            this(subCategory, key);
-            this.oldValue = oldValue;
+        Command(final String category,
+                final String key,
+                final String placeholder) {
+            this.placeholder = placeholder;
+            this.category = category;
+            this.key = key;
         }
 
         public @NotNull String get(final @NotNull CropClick plugin) {
-            return plugin.getLanguageConfig().getMessage("command", subCategory, key);
+            return plugin.getLanguageConfig().getMessage("command", category, key);
         }
 
-        public @NotNull String get(final @NotNull CropClick plugin, final @NotNull String newValue) {
-            return get(plugin).replace(oldValue, newValue);
+        public @NotNull String get(final @NotNull CropClick plugin,
+                                   final @NotNull String value) {
+            return get(plugin).replace(placeholder, value);
         }
 
-        public void send(final @NotNull CropClick plugin, final @NotNull CommandSender sender) {
+        public void send(final @NotNull CropClick plugin,
+                         final @NotNull CommandSender sender) {
             sender.sendMessage(get(plugin));
         }
 
-        public void send(final @NotNull CropClick plugin, final @NotNull CommandSender sender, final @NotNull String newValue) {
-            sender.sendMessage(get(plugin, newValue));
+        public void send(final @NotNull CropClick plugin,
+                         final @NotNull CommandSender sender,
+                         final @NotNull String value) {
+            sender.sendMessage(get(plugin, value));
         }
     }
 
@@ -126,27 +135,32 @@ public final class LanguageAPI {
         HELP_ITEM_DESCRIPTION("help", "itemDescription", "%description%"),
         HELP_ITEM_PERMISSION("help", "itemPermission", "%permission%");
 
+        private final String placeholder;
+        private final String category;
         private final String key;
-        private final String subCategory;
 
-        private String oldValue = "";
-
-        Menu(final String subCategory, final String key) {
+        Menu(final String category,
+             final String key) {
+            this.category = category;
+            this.placeholder = "";
             this.key = key;
-            this.subCategory = subCategory;
         }
 
-        Menu(final String subCategory, final String key, final String oldValue) {
-            this(subCategory, key);
-            this.oldValue = oldValue;
+        Menu(final String category,
+             final String key,
+             final String placeholder) {
+            this.placeholder = placeholder;
+            this.category = category;
+            this.key = key;
         }
 
         public @NotNull String get(final @NotNull CropClick plugin) {
-            return plugin.getLanguageConfig().getMessage("menu", subCategory, key);
+            return plugin.getLanguageConfig().getMessage("menu", category, key);
         }
 
-        public @NotNull String get(final @NotNull CropClick plugin, final @NotNull Object newValue) {
-            return get(plugin).replace(oldValue, newValue.toString());
+        public @NotNull String get(final @NotNull CropClick plugin,
+                                   final @NotNull Object value) {
+            return get(plugin).replace(placeholder, value.toString());
         }
 
         public @NotNull String getTitle(final @NotNull CropClick plugin) {

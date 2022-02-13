@@ -16,24 +16,24 @@ public abstract class SubCommand {
 
     protected final CropClick plugin;
 
-    private final @Getter String commandName;
+    private final @Getter String name;
 
     public SubCommand(@NotNull CropClick plugin,
-                      @NotNull String commandName) {
-        this.commandName = commandName;
+                      @NotNull String name) {
         this.plugin = plugin;
+        this.name = name;
     }
 
     public final @NotNull String getDescription() {
-        return LanguageAPI.Command.valueOf(commandName.toUpperCase() + "_DESCRIPTION").get(plugin);
+        return LanguageAPI.Command.valueOf(name.toUpperCase() + "_DESCRIPTION").get(plugin);
     }
 
     public final @NotNull String getUsage() {
-        return "cropclick " + commandName;
+        return "cropclick " + name;
     }
 
     public final @NotNull String getPermission() {
-        return "cropclick." + commandName;
+        return "cropclick." + name;
     }
 
     public final boolean hasPermission(@NotNull Player player) {

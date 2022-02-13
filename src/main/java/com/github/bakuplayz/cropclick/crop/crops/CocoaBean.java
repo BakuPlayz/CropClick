@@ -1,8 +1,8 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 public final class CocoaBean extends VanillaCrop {
 
-    public CocoaBean(final @NotNull CropsConfig cropsConfig) {
-        setCropsConfig(cropsConfig);
+    public CocoaBean(final @NotNull CropsConfig config) {
+        setCropsConfig(config);
     }
 
     @Override
@@ -29,7 +29,7 @@ public final class CocoaBean extends VanillaCrop {
     @Override
     public @NotNull ItemStack getDrops() {
         return new ItemUtil(Material.COCOA)
-                .setDisplayName(getDropName())
+                .setName(getDropName())
                 .setAmount(getDropAmount())
                 .toItemStack();
     }

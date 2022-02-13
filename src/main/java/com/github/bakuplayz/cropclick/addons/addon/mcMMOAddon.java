@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.addons.addon;
 
-import com.github.bakuplayz.cropclick.addons.addon.template.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
 import com.gmail.nossr50.api.ExperienceAPI;
 import org.bukkit.entity.Player;
@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class mcMMOAddon extends Addon {
 
-    public mcMMOAddon(final @NotNull AddonsConfig addonsConfig) {
-        super("mcMMO", addonsConfig);
+    public mcMMOAddon(final @NotNull AddonsConfig config) {
+        super("mcMMO", config);
     }
 
     public void addExperience(final @NotNull Player player) {
@@ -17,7 +17,7 @@ public final class mcMMOAddon extends Addon {
     }
 
     private int getExperience() {
-        return addonsConfig.getConfig().getInt("mcMMO.<cropName>.experience");
+        return config.getConfig().getInt("mcMMO.<cropName>.experience");
     }
 
     private @NotNull String getExperienceReason() {

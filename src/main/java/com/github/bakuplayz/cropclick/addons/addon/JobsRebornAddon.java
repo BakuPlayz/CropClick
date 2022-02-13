@@ -4,7 +4,7 @@ import com.gamingmesh.jobs.Jobs;
 import com.gamingmesh.jobs.container.CurrencyType;
 import com.gamingmesh.jobs.container.Job;
 import com.gamingmesh.jobs.container.JobsPlayer;
-import com.github.bakuplayz.cropclick.addons.addon.template.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +13,8 @@ public final class JobsRebornAddon extends Addon {
 
     private final Job FARMER_JOB = Jobs.getJob("Farmer");
 
-    public JobsRebornAddon(final @NotNull AddonsConfig addonsConfig) {
-        super("JobsReborn", addonsConfig);
+    public JobsRebornAddon(final @NotNull AddonsConfig config) {
+        super("JobsReborn", config);
     }
 
     public void updateStats(final @NotNull Player player) {
@@ -29,14 +29,14 @@ public final class JobsRebornAddon extends Addon {
     }
 
     private double getPoints() {
-        return addonsConfig.getConfig().getDouble("jobsReborn.<cropName>.points");
+        return config.getConfig().getDouble("jobsReborn.<cropName>.points");
     }
 
     private double getExperience() {
-        return addonsConfig.getConfig().getDouble("jobsReborn.<cropName>.experience");
+        return config.getConfig().getDouble("jobsReborn.<cropName>.experience");
     }
 
     private double getMoney() {
-        return addonsConfig.getConfig().getDouble("jobsReborn.<cropName>.money");
+        return config.getConfig().getDouble("jobsReborn.<cropName>.money");
     }
 }

@@ -19,6 +19,6 @@ public final class AddonsConfig extends Config {
 
     public boolean isEnabled(final @NotNull String addonName) {
         if (!Bukkit.getPluginManager().isPluginEnabled(addonName)) return false;
-        return getConfig().getBoolean("addons." + addonName + ".isEnabled");
+        return config.getBoolean("addons." + addonName + ".isEnabled");
     }
 }

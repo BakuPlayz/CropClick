@@ -28,8 +28,8 @@ public final class ResetCommand extends SubCommand {
             deleteConfigs();
             deleteDataStorages();
             LanguageAPI.Command.RESET_DELETE.send(plugin, player);
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
             LanguageAPI.Command.RESET_FAILED.send(plugin, player);
         } finally {
             plugin.setupConfigs();

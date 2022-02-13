@@ -47,11 +47,11 @@ public abstract class DataStorage {
             FileReader reader = new FileReader(file);
             JsonElement data = parser.parse(reader);
             this.fileData = data != JsonNull.INSTANCE
-                    ? data.getAsJsonObject()
-                    : new JsonObject();
+                            ? data.getAsJsonObject()
+                            : new JsonObject();
             reader.close();
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             LanguageAPI.Console.DATA_STORAGE_FAILED_FETCH.send(fileName);
         } finally {
             LanguageAPI.Console.DATA_STORAGE_FETCHED_DATA.send(fileName);
@@ -64,9 +64,12 @@ public abstract class DataStorage {
             gson.toJson(fileData, writer);
             writer.flush();
             writer.close();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE.send(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_REMOVED.send(fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
         }
     }
 }

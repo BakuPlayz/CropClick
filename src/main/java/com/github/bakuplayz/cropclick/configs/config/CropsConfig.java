@@ -2,7 +2,6 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
-import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CropsConfig extends Config {
 
-    //rework this
+    //TODO: Rework this
 
     public CropsConfig(final @NotNull CropClick plugin) {
         super("crops.yml", plugin);
@@ -22,35 +21,35 @@ public final class CropsConfig extends Config {
 
     @Contract("_ -> new")
     public @NotNull String getCropDropName(final @NotNull String cropName) {
-        return ChatColor.translateAlternateColorCodes('&', getConfig().getString("crops." + cropName + ".dropName"));
+        return colorize(config.getString("crops." + cropName + ".dropName"));
     }
 
     public double getCropDropAmount(final @NotNull String cropName) {
-        return getConfig().getInt("crops." + cropName + ".dropAmount");
+        return config.getInt("crops." + cropName + ".dropAmount");
     }
 
     public double getCropDropChance(final @NotNull String cropName) {
-        return getConfig().getDouble("crops." + cropName + ".dropChance") / 100.0d;
+        return config.getDouble("crops." + cropName + ".dropChance") / 100.0d;
     }
 
     public boolean isCropEnabled(final @NotNull String cropName) {
-        return getConfig().getBoolean("crops." + cropName + ".isEnabled");
+        return config.getBoolean("crops." + cropName + ".isEnabled");
     }
 
     @Contract("_ -> new")
     public @NotNull String getSeedDropName(final @NotNull String seedName) {
-        return ChatColor.translateAlternateColorCodes('&', getConfig().getString("seeds." + seedName + ".dropName"));
+        return colorize(config.getString("seeds." + seedName + ".dropName"));
     }
 
     public int getSeedDropAmount(final @NotNull String seedName) {
-        return getConfig().getInt("seeds." + seedName + ".dropAmount");
+        return config.getInt("seeds." + seedName + ".dropAmount");
     }
 
     public double getSeedDropChance(final @NotNull String seedName) {
-        return getConfig().getDouble("seeds." + seedName + ".dropChance") / 100.0d;
+        return config.getDouble("seeds." + seedName + ".dropChance") / 100.0d;
     }
 
     public boolean isSeedEnabled(final @NotNull String seedName) {
-        return getConfig().getBoolean("seeds." + seedName + ".isEnabled");
+        return config.getBoolean("seeds." + seedName + ".isEnabled");
     }
 }

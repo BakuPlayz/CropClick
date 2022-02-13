@@ -20,21 +20,22 @@ import java.net.URL;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.26.0
+ * @version 1.6.0
  */
 public final class UpdateUtil {
 
     private final CropClick plugin;
-    private final String currentVersion;
 
     private String latestURL;
     private String latestName;
     private String latestBody;
     private String latestVersion;
 
+    private final String currentVersion;
+
     public UpdateUtil(final @NotNull CropClick plugin) {
         this.currentVersion = plugin.getDescription().getVersion();
-        this.latestVersion = plugin.getDescription().getVersion();
+        this.latestVersion = currentVersion;
         this.latestName = "";
         this.latestBody = "";
         this.plugin = plugin;
@@ -50,8 +51,8 @@ public final class UpdateUtil {
         sender.sendMessage(colorize("&7Version: &a" + latestVersion));
         sender.sendMessage(colorize("&7---------- &aUpdate Log&7 -----------"));
 
-        for (String log : latestBody.split("\n")) {
-            sender.sendMessage(colorize("&7" + log));
+        for (String line : latestBody.split("\n")) {
+            sender.sendMessage(colorize("&7" + line));
         }
 
         sender.sendMessage(colorize("&7----------- &aUpdate Url&7 ----------"));

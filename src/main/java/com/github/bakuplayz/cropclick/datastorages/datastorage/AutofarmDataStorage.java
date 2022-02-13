@@ -21,22 +21,22 @@ public final class AutofarmDataStorage extends DataStorage {
         super("autofarms.json", plugin);
     }
 
-    // Should be called once every 10 minutes or so, also before shutdown.
-    public void saveAutofarms() {
-        for (Autofarm autofarm : autofarms) {
-            String data = gson.toJson(autofarm);
-            JsonElement autofarmAsObj = parser.parse(data);
-            fileData.add(autofarm.getFarmerID(), autofarmAsObj.getAsJsonObject());
-        }
-        saveData();
-    }
-
     public void addAutofarm(final @NotNull Autofarm autofarm) {
         autofarms.add(autofarm);
     }
 
     public void removeAutofarm(final @NotNull Autofarm autofarm) {
         autofarms.remove(autofarm);
+    }
+
+    // Should be called once every 10 minutes or so, also before shutdown.
+    public void saveAutofarms() {
+        for (Autofarm autofarm : autofarms) {
+            String data = gson.toJson(autofarm);
+            JsonElement autofarmAsObj = parser.parse(data);
+            fileData.add(autofarm.getFarmer(), autofarmAsObj.getAsJsonObject());
+        }
+        saveData();
     }
 
     public void removeUnlinkedAutofarms() {
@@ -55,12 +55,12 @@ public final class AutofarmDataStorage extends DataStorage {
         return gson.fromJson(fileData.get(farmerId), Autofarm.class);
     }
 
-    public @NotNull List<Autofarm> getAutofarms(final int start, final int maxLimit) {
-        Preconditions.checkArgument(maxLimit < start, "MaxLimit cannot be less than start.");
+    public @NotNull List<Autofarm> getAutofarms(final int start, final int end) {
+        Preconditions.checkArgument(end < start, "End cannot be less than start.");
         Preconditions.checkArgument(start < 0, "Start cannot be less than zero.");
 
         return autofarms.stream()
-                .skip(start).limit(maxLimit)
+                .skip(start).limit(end)
                 .collect(Collectors.toList());
 
         /* int fixedLimit = start + maxLimit;

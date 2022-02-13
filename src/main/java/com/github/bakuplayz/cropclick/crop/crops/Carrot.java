@@ -1,8 +1,8 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public final class Carrot extends VanillaCrop {
 
-    public Carrot(final @NotNull CropsConfig cropsConfig) {
-        setCropsConfig(cropsConfig);
+    public Carrot(final @NotNull CropsConfig config) {
+        setCropsConfig(config);
     }
 
     @Contract(pure = true)
@@ -31,7 +31,7 @@ public final class Carrot extends VanillaCrop {
     @Override
     public @NotNull ItemStack getDrops() {
         return new ItemUtil(Material.CARROT)
-                .setDisplayName(getDropName())
+                .setName(getDropName())
                 .setAmount(getDropAmount())
                 .toItemStack();
     }
