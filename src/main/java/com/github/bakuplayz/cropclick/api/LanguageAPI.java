@@ -44,6 +44,7 @@ public final class LanguageAPI {
         private @NotNull String get() {
             return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
         }
+
     }
 
     public enum Command {
@@ -101,6 +102,7 @@ public final class LanguageAPI {
                          final @NotNull String value) {
             sender.sendMessage(get(plugin, value));
         }
+
     }
 
     public enum Menu {
@@ -158,13 +160,15 @@ public final class LanguageAPI {
             return plugin.getLanguageConfig().getMessage("menu", category, key);
         }
 
-        public @NotNull String get(final @NotNull CropClick plugin,
-                                   final @NotNull Object value) {
+        public @NotNull <T> String get(final @NotNull CropClick plugin,
+                                       final @NotNull T value) {
             return get(plugin).replace(placeholder, value.toString());
         }
 
         public @NotNull String getTitle(final @NotNull CropClick plugin) {
             return "CraftingGUI: " + get(plugin);
         }
+
     }
+
 }

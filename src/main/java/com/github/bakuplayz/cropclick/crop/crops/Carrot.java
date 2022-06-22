@@ -1,20 +1,18 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaCrop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public final class Carrot extends VanillaCrop {
+public final class Carrot extends GroundCrop {
 
     public Carrot(final @NotNull CropsConfig config) {
-        setCropsConfig(config);
+        setConfig(config);
     }
 
     @Contract(pure = true)
@@ -42,12 +40,8 @@ public final class Carrot extends VanillaCrop {
     }
 
     @Override
-    public @Nullable Seed getSeed() {
+    public Seed getSeed() {
         return null;
     }
 
-    @Override
-    public void harvest(@NotNull Inventory inventory) {
-        if (isEnabled()) inventory.addItem(getDrops());
-    }
 }

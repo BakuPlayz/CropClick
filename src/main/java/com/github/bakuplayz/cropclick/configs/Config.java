@@ -49,8 +49,4 @@ public abstract class Config {
         LanguageAPI.Console.FILE_RELOAD.send(FILE_NAME);
     }
 
-    @Contract("_ -> new")
-    protected String colorize(@NotNull String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
 }

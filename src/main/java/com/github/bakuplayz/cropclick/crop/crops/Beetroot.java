@@ -1,21 +1,24 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaCrop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.BeetrootSeed;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-public final class Beetroot extends VanillaCrop {
+import java.util.Collection;
+import java.util.Collections;
+
+public final class Beetroot extends GroundCrop {
 
     public Beetroot(final @NotNull CropsConfig config) {
-        setCropsConfig(config);
+        super(config);
     }
+
 
     @Contract(pure = true)
     @Override
@@ -28,12 +31,15 @@ public final class Beetroot extends VanillaCrop {
         return 7;
     }
 
+    @Contract(" -> new")
     @Override
-    public @NotNull ItemStack getDrops() {
-        return new ItemUtil(Material.BEETROOT)
-                .setName(getDropName())
-                .setAmount(getDropAmount())
-                .toItemStack();
+    public @NotNull @Unmodifiable Collection<Drop> getDrops() {
+        return Collections.singleton(
+                new Drop(Material.BEETROOT,
+                        cropsConfig.getCropDropName(getName()),
+                        cropsConfig.getCropDropAmount(getName()),
+                        0.05d)
+        );
     }
 
     @Override
@@ -47,9 +53,4 @@ public final class Beetroot extends VanillaCrop {
         return new BeetrootSeed(cropsConfig);
     }
 
-    @Override
-    public void harvest(@NotNull Inventory inventory) {
-        if (isEnabled()) inventory.addItem(getDrops());
-        if (getSeed().isEnabled()) inventory.addItem(getSeed().getDrops());
-    }
 }

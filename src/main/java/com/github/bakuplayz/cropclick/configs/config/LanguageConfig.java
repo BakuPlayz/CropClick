@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
-import org.bukkit.ChatColor;
+import com.github.bakuplayz.cropclick.utils.MessageUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,7 +20,8 @@ public final class LanguageConfig extends Config {
     public @NotNull String getMessage(String category, String subCategory, String key) {
         String message = config.getString(category + "." + subCategory + "." + key);
         return message == null
-               ? colorize("&cError: Message is null!")
-               : colorize(message);
+               ? MessageUtil.colorize("&cError: Message is null!")
+               : MessageUtil.colorize(message);
     }
+
 }

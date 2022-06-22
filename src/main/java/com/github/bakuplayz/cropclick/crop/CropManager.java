@@ -31,7 +31,8 @@ public final class CropManager {
         crops.add(new Wheat(config));
     }
 
-    public void registerCrop(final @NotNull Crop crop) throws CropAlreadyRegisteredException {
+    public void registerCrop(final @NotNull Crop crop)
+            throws CropAlreadyRegisteredException {
         if (crops.contains(crop)) {
             throw new CropAlreadyRegisteredException(crop);
         }
@@ -39,7 +40,8 @@ public final class CropManager {
         crops.add(crop);
     }
 
-    public void unregisterCrop(final @NotNull Crop crop) throws CropNotRegisteredException {
+    public void unregisterCrop(final @NotNull Crop crop)
+            throws CropNotRegisteredException {
         if (!crops.contains(crop)) {
             throw new CropNotRegisteredException(crop);
         }
@@ -51,8 +53,18 @@ public final class CropManager {
         return crops.stream().anyMatch(crop -> crop.getClickableType() == block.getType());
     }
 
-    public @Nullable Crop getCrop(final @NotNull Block block) {
-        return crops.stream().filter(crop -> crop.getClickableType() == block.getType())
-                .findFirst().orElse(null);
+    public boolean isCropValid(final Crop crop,
+                               final Block block) {
+        if (crop == null) return false;
+        if (!isCrop(block)) return false;
+        return crop.isHarvestable(block);
     }
+
+    public @Nullable Crop getCrop(final @NotNull Block block) {
+        return crops.stream()
+                .filter(crop -> crop.getClickableType() == block.getType())
+                .findFirst()
+                .orElse(null);
+    }
+
 }

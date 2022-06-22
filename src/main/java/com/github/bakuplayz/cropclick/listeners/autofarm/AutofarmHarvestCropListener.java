@@ -3,11 +3,12 @@ package com.github.bakuplayz.cropclick.listeners.autofarm;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import com.github.bakuplayz.cropclick.events.autofarm.AutofarmHarvestCropEvent;
+import com.github.bakuplayz.cropclick.utils.BlockUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,40 +35,35 @@ public final class AutofarmHarvestCropListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmerInteractWithCrop(final @NotNull BlockDispenseEvent event) {
         Block block = event.getBlock();
-        if (block == null) return;
-        if (block.getType() == null) return;
-        if (block.getType() == Material.AIR) return;
-
-        Crop crop = cropManager.getCrop(block);
-        if (crop == null) return;
-        if (!crop.isEnabled()) return;
-        if (crop.getDrops() == null) return;
-        if (crop.getDropAmount() < 0) return;
-        if (crop.getDropChance() < 0) return;
-        if (crop.getHarvestAge() != crop.getCurrentAge(block)) return;
+        if (BlockUtil.isAir(block)) return;
 
         Autofarm autofarm = autofarmManager.findAutofarm(block);
-        if (autofarm == null) return;
-        if (!autofarm.isLinked()) return;
-        if (!autofarm.isEnabled()) return;
+        if (!autofarmManager.isAutofarmValid(autofarm)) return;
+
+        Crop crop = cropManager.getCrop(block);
+        if (!cropManager.isCropValid(crop, block)) return;
 
         Bukkit.getPluginManager().callEvent(new AutofarmHarvestCropEvent(crop, block, autofarm));
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmerHarvestCrop(final @NotNull AutofarmHarvestCropEvent event) {
-        Autofarm autofarm = event.getAutofarm();
-        Block block = event.getBlock();
-        Crop crop = event.getCrop();
-
         if (!autofarmManager.isEnabled()) {
             event.setCancelled(true);
             return;
         }
 
-        if (crop.getDropChance() > crop.getRandomDropChance()) return;
+        Crop crop = event.getCrop();
+        Autofarm autofarm = event.getAutofarm();
+        Container container = autofarm.getContainer();
 
-        crop.harvest(autofarm.getContainer());
-        crop.replant(block);
+        if (!crop.willDrop()) return;
+
+        if (container != null) {
+            crop.harvest(container.getInventory());
+            crop.replant(event.getBlock());
+        }
+
     }
+
 }

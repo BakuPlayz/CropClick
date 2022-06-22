@@ -6,8 +6,8 @@ import com.github.bakuplayz.cropclick.addons.addon.*;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
+import com.github.bakuplayz.cropclick.utils.BlockUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,17 +46,10 @@ public final class PlayerHarvestCropListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractWithCrop(final @NotNull PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
-        if (block == null) return;
-        if (block.getType() == null) return;
-        if (block.getType() == Material.AIR) return;
+        if (BlockUtil.isAir(block)) return;
 
         Crop crop = cropManager.getCrop(block);
-        if (crop == null) return;
-        if (!crop.isEnabled()) return;
-        if (crop.getDrops() == null) return;
-        if (crop.getDropAmount() < 0) return;
-        if (crop.getDropChance() < 0) return;
-        if (crop.getHarvestAge() != crop.getCurrentAge(block)) return;
+        if (!cropManager.isCropValid(crop, block)) return;
 
         Bukkit.getPluginManager().callEvent(new PlayerHarvestCropEvent(crop, block, event.getAction(), event.getPlayer()));
     }
@@ -68,7 +61,7 @@ public final class PlayerHarvestCropListener implements Listener {
         Block block = event.getBlock();
         Crop crop = event.getCrop();
 
-        if (crop.getDropChance() > crop.getRandomDropChance()) return;
+        if (!crop.willDrop()) return;
 
         if (townyAddon != null && townyAddon.isEnabled()) {
             if (action != Action.LEFT_CLICK_BLOCK) return;
@@ -93,7 +86,7 @@ public final class PlayerHarvestCropListener implements Listener {
 
         // LATER: crop#playSounds();
         // LATER: crop#playEffects();
-        if (crop.hasHarvestPermission(player)) {
+        if (crop.canHarvest(player)) {
             crop.harvest(player.getInventory());
             crop.replant(block);
         }

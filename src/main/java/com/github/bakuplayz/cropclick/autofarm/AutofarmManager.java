@@ -72,4 +72,11 @@ public final class AutofarmManager {
         List<MetadataValue> values = block.getMetadata("autofarm");
         return ((AutofarmMetadata) values.get(0)).asAutofarm();
     }
+
+    public boolean isAutofarmValid(final Autofarm autofarm) {
+        if (autofarm == null) return false;
+        if (!autofarm.isLinked()) return false;
+        return autofarm.isEnabled();
+    }
+
 }

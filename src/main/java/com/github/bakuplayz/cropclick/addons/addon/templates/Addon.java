@@ -17,4 +17,5 @@ public abstract class Addon {
     public boolean isEnabled() {
         return config.isEnabled(name);
     }
+
 }

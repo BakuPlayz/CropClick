@@ -44,4 +44,5 @@ public final class ReloadCommand extends SubCommand {
             LanguageAPI.Command.RELOAD_SUCCESS.send(plugin, player);
         }
     }
+
 }

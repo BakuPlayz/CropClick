@@ -7,17 +7,19 @@ import org.jetbrains.annotations.NotNull;
 
 public final class WorldManager {
 
+    private final @NotNull CropClick plugin;
 
     private final @NotNull WorldDataStorage worldData;
 
     public WorldManager(@NotNull CropClick plugin) {
         this.worldData = plugin.getWorldDataStorage();
+        this.plugin = plugin;
 
         registerWorlds();
     }
 
     private void registerWorlds() {
-        Bukkit.getWorlds().forEach(world -> worldData.addWorld(new World(world)));
+        Bukkit.getWorlds().forEach(world -> worldData.addWorld(new World(plugin, world)));
     }
 
     public World findByWorld(@NotNull org.bukkit.World world) {

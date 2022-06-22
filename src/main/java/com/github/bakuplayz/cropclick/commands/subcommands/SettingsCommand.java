@@ -22,4 +22,5 @@ public final class SettingsCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         new SettingsMenu(plugin, player).open();
     }
+
 }

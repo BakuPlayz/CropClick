@@ -3,9 +3,10 @@ package com.github.bakuplayz.cropclick.listeners.player.plant;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
+import com.github.bakuplayz.cropclick.utils.BlockUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,11 +27,10 @@ public final class PlayerPlantCropListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(final @NotNull PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
-        if (block == null) return;
-        if (block.getType() == null) return;
-        if (block.getType() == Material.AIR) return;
+        if (BlockUtil.isAir(block)) return;
 
-        if (!cropManager.isCrop(block)) return;
+        Crop crop = cropManager.getCrop(block);
+        if (!cropManager.isCropValid(crop, block)) return;
 
         //needs to check weather or not it's a new crop planted.
 

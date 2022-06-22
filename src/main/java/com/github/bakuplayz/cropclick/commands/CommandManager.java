@@ -87,4 +87,5 @@ public final class CommandManager implements TabExecutor {
                        .filter(command -> command.startsWith(args[0]))
                        .sorted().collect(Collectors.toList());
     }
+
 }

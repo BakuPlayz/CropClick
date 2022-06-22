@@ -8,7 +8,13 @@ import java.util.Random;
 
 public abstract class Seed {
 
+    private final Random rand;
+
     protected @Setter CropsConfig cropsConfig;
+
+    public Seed() {
+        this.rand = new Random();
+    }
 
     public abstract String getName();
 
@@ -18,8 +24,8 @@ public abstract class Seed {
 
     public abstract double getDropChance();
 
-    public double getRandomDropChance() {
-        return new Random().nextDouble();
+    public boolean willDrop() {
+        return rand.nextDouble() <= getDropChance();
     }
 
     public abstract ItemStack getDrops();

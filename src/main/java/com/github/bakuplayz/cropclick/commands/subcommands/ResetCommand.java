@@ -47,4 +47,5 @@ public final class ResetCommand extends SubCommand {
     private void deleteDataStorages() throws IOException {
         Files.deleteIfExists(new File(plugin.getDataFolder(), "autofarms.json").toPath());
     }
+
 }

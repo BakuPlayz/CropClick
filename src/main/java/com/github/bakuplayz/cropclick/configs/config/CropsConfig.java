@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
+import com.github.bakuplayz.cropclick.utils.MessageUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,15 +22,15 @@ public final class CropsConfig extends Config {
 
     @Contract("_ -> new")
     public @NotNull String getCropDropName(final @NotNull String cropName) {
-        return colorize(config.getString("crops." + cropName + ".dropName"));
+        return MessageUtil.colorize(config.getString("crops." + cropName + ".drop.name"));
     }
 
-    public double getCropDropAmount(final @NotNull String cropName) {
-        return config.getInt("crops." + cropName + ".dropAmount");
+    public int getCropDropAmount(final @NotNull String cropName) {
+        return config.getInt("crops." + cropName + ".drop.amount");
     }
 
     public double getCropDropChance(final @NotNull String cropName) {
-        return config.getDouble("crops." + cropName + ".dropChance") / 100.0d;
+        return config.getDouble("crops." + cropName + ".drop.chance") / 100.0d;
     }
 
     public boolean isCropEnabled(final @NotNull String cropName) {
@@ -38,15 +39,15 @@ public final class CropsConfig extends Config {
 
     @Contract("_ -> new")
     public @NotNull String getSeedDropName(final @NotNull String seedName) {
-        return colorize(config.getString("seeds." + seedName + ".dropName"));
+        return MessageUtil.colorize(config.getString("seeds." + seedName + ".drop.name"));
     }
 
     public int getSeedDropAmount(final @NotNull String seedName) {
-        return config.getInt("seeds." + seedName + ".dropAmount");
+        return config.getInt("seeds." + seedName + ".drop.amount");
     }
 
     public double getSeedDropChance(final @NotNull String seedName) {
-        return config.getDouble("seeds." + seedName + ".dropChance") / 100.0d;
+        return config.getDouble("seeds." + seedName + ".drop.chance") / 100.0d;
     }
 
     public boolean isSeedEnabled(final @NotNull String seedName) {

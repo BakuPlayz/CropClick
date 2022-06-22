@@ -22,4 +22,5 @@ public final class HelpCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         new HelpMenu(player, plugin).open();
     }
+
 }
