@@ -1,20 +1,34 @@
 package com.github.bakuplayz.cropclick.events.player.destroy;
 
+import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
-public final class PlayerDestroyCropEvent extends Event {
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class PlayerDestroyCropEvent extends Event implements Cancellable {
 
+    private final @Getter Crop crop;
     private final @Getter Block block;
     private final @Getter Player player;
 
-    public PlayerDestroyCropEvent(final @NotNull Block block,
-                                  final @NotNull Player player) {
+    private @Getter @Setter boolean cancelled;
+
+    public PlayerDestroyCropEvent(@NotNull Crop crop,
+                                  @NotNull Block block,
+                                  @NotNull Player player) {
         this.player = player;
         this.block = block;
+        this.crop = crop;
     }
 
 }

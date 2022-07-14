@@ -91,8 +91,10 @@ permissions:
     description: Permission to harvest every crop.
     default: op
     children:
+      cropclick.harvest.ground:
+        description: Permission to harvest all ground crops (e.g. wheat).
       cropclick.harvest.tall:
-        description: Permission to harvest all tall crops. (e.g. cactus).
+        description: Permission to harvest all tall crops (e.g. cactus).
         default: op
       cropclick.harvest.beetroot:
         description: Permission to harvest the beetroot crop.

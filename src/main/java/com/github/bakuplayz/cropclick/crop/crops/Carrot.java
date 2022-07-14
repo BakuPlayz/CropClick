@@ -1,18 +1,28 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaGroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-public final class Carrot extends GroundCrop {
+import java.util.Collection;
+import java.util.Collections;
 
-    public Carrot(final @NotNull CropsConfig config) {
-        setConfig(config);
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class Carrot extends VanillaGroundCrop {
+
+    public Carrot(@NotNull CropsConfig config) {
+        super(config);
     }
 
     @Contract(pure = true)
@@ -21,27 +31,32 @@ public final class Carrot extends GroundCrop {
         return "carrot";
     }
 
+    @Contract(" -> new")
     @Override
-    public int getHarvestAge() {
-        return 7;
+    public @NotNull @Unmodifiable Collection<Drop> getDrops() {
+        return Collections.singleton(
+                new Drop(Material.CARROT,
+                        cropsConfig.getCropDropName(getName()),
+                        cropsConfig.getCropDropAmount(getName()),
+                        cropsConfig.getCropDropChance(getName())
+                )
+        );
     }
 
+    @Contract(pure = true)
     @Override
-    public @NotNull ItemStack getDrops() {
-        return new ItemUtil(Material.CARROT)
-                .setName(getDropName())
-                .setAmount(getDropAmount())
-                .toItemStack();
-    }
-
-    @Override
-    public Material getClickableType() {
-        return Material.CARROT;
-    }
-
-    @Override
-    public Seed getSeed() {
+    public @Nullable Seed getSeed() {
         return null;
+    }
+
+    @Override
+    public boolean hasSeed() {
+        return false;
+    }
+
+    @Override
+    public @NotNull Material getClickableType() {
+        return Material.CARROT;
     }
 
 }

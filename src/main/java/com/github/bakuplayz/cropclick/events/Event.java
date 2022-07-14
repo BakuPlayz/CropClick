@@ -20,4 +20,5 @@ public abstract class Event extends org.bukkit.event.Event {
     public HandlerList getHandlers() {
         return HANDLERS;
     }
+
 }

@@ -7,12 +7,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class AutofarmsMenu extends PaginatedMenu {
 
     public AutofarmsMenu(@NotNull Player player, @NotNull CropClick plugin) {
         super(player, plugin, LanguageAPI.Menu.AUTOFARMS_TITLE);
     }
-
 
     @Override
     public void setMenuItems() {

@@ -1,7 +1,9 @@
 crops:
   wheat:
-    dropAmount: 0
-    dropChance: 0
+    drop:
+      amount: 1
+      chance: 0.5
+      name: "wheat"
     isEnabled: true
     atLeastOne: true
     addons:
@@ -14,8 +16,10 @@ crops:
 
 seeds:
   wheatSeed:
-    dropAmount: 0
-    dropChance: 0
+    drop:
+      amount: 1
+      chance: 0.5
+      name: "seed"
     isEnabled: true
     atLeastOne: true
     addons:

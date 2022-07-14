@@ -1,8 +1,8 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaGroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.BeetrootSeed;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import org.bukkit.Material;
@@ -13,22 +13,22 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Collection;
 import java.util.Collections;
 
-public final class Beetroot extends GroundCrop {
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class Beetroot extends VanillaGroundCrop {
 
-    public Beetroot(final @NotNull CropsConfig config) {
+    public Beetroot(@NotNull CropsConfig config) {
         super(config);
     }
-
 
     @Contract(pure = true)
     @Override
     public @NotNull String getName() {
         return "beetroot";
-    }
-
-    @Override
-    public int getHarvestAge() {
-        return 7;
     }
 
     @Contract(" -> new")
@@ -38,19 +38,20 @@ public final class Beetroot extends GroundCrop {
                 new Drop(Material.BEETROOT,
                         cropsConfig.getCropDropName(getName()),
                         cropsConfig.getCropDropAmount(getName()),
-                        0.05d)
+                        cropsConfig.getCropDropChance(getName())
+                )
         );
-    }
-
-    @Override
-    public Material getClickableType() {
-        return Material.BEETROOT;
     }
 
     @Contract(value = " -> new", pure = true)
     @Override
     public @NotNull Seed getSeed() {
         return new BeetrootSeed(cropsConfig);
+    }
+
+    @Override
+    public @NotNull Material getClickableType() {
+        return Material.BEETROOT;
     }
 
 }

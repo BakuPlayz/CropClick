@@ -15,6 +15,9 @@ import com.github.bakuplayz.cropclick.listeners.autofarm.AutofarmHarvestCropList
 import com.github.bakuplayz.cropclick.listeners.player.destory.PlayerDestroyCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.harvest.PlayerHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtAutofarmListener;
+import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtContainerListener;
+import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtCropListener;
+import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
@@ -28,6 +31,12 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class CropClick extends JavaPlugin {
 
     private @Getter CropManager cropManager;
@@ -40,25 +49,25 @@ public final class CropClick extends JavaPlugin {
     private @Getter AddonsConfig addonsConfig;
     private @Getter LanguageConfig languageConfig;
 
-    private @Getter WorldDataStorage worldDataStorage;
-    private @Getter AutofarmDataStorage autofarmDataStorage;
+    private @Getter WorldDataStorage worldData;
+    private @Getter AutofarmDataStorage farmData;
 
     private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
     @Override
     public void onEnable() {
-        if (!VersionUtil.isInInterval(8.0, 13.9)) {
+        if (!VersionUtil.between(8.0, 13.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }
 
-        plugin = this;
+        CropClick.plugin = this;
 
         registerConfigs();
         setupConfigs();
 
-        registerDataStorages();
-        setupDataStorages();
+        registerStorages();
+        setupStorages();
 
         registerManagers();
         registerCommands();
@@ -67,10 +76,12 @@ public final class CropClick extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        plugin = null;
+        CropClick.plugin = null;
 
-        autofarmDataStorage.removeUnlinkedAutofarms();
-        autofarmDataStorage.saveAutofarms();
+        worldData.saveWorlds();
+
+        farmData.removeUnlinkedFarms();
+        farmData.saveFarms();
 
         Bukkit.getScheduler().cancelTasks(this);
     }
@@ -91,19 +102,19 @@ public final class CropClick extends JavaPlugin {
         this.languageConfig = new LanguageConfig(this);
     }
 
-    private void registerDataStorages() {
-        this.worldDataStorage = new WorldDataStorage(this);
-        this.autofarmDataStorage = new AutofarmDataStorage(this);
+    private void registerStorages() {
+        this.worldData = new WorldDataStorage(this);
+        this.farmData = new AutofarmDataStorage(this);
     }
 
-    private void setupDataStorages() {
-        autofarmDataStorage.setup();
-        autofarmDataStorage.fetchData();
-        autofarmDataStorage.saveData();
+    private void setupStorages() {
+        farmData.setup();
+        farmData.fetchData();
+        farmData.saveData();
 
-        worldDataStorage.setup();
-        worldDataStorage.fetchData();
-        worldDataStorage.saveData();
+        worldData.setup();
+        worldData.fetchData();
+        worldData.saveData();
     }
 
     private void registerCommands() {
@@ -126,18 +137,24 @@ public final class CropClick extends JavaPlugin {
     }
 
     private void registerListeners() {
-        PluginManager pluginManager = Bukkit.getPluginManager();
+        PluginManager manager = Bukkit.getPluginManager();
 
-        pluginManager.registerEvents(new MenuListener(), this);
+        manager.registerEvents(new MenuListener(), this);
 
-        pluginManager.registerEvents(new PlayerPlantCropListener(this), this);
-        pluginManager.registerEvents(new PlayerHarvestCropListener(this), this);
-        pluginManager.registerEvents(new PlayerDestroyCropListener(this), this);
-        pluginManager.registerEvents(new PlayerLinkAutofarmListener(this), this);
-        pluginManager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
-        pluginManager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
-        pluginManager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
+        manager.registerEvents(new PlayerInteractAtCropListener(this), this);
+        manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
+        manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
+        manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
 
-        pluginManager.registerEvents(new AutofarmHarvestCropListener(this), this);
+        manager.registerEvents(new PlayerLinkAutofarmListener(this), this);
+        manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
+        manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
+
+        manager.registerEvents(new PlayerPlantCropListener(this), this);
+        manager.registerEvents(new PlayerDestroyCropListener(this), this);
+        manager.registerEvents(new PlayerHarvestCropListener(this), this);
+
+        manager.registerEvents(new AutofarmHarvestCropListener(this), this);
     }
+
 }

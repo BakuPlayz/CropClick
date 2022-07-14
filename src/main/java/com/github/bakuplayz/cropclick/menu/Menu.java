@@ -18,9 +18,9 @@ public abstract class Menu implements InventoryHolder {
 
     protected LanguageAPI.Menu menuTitle;
 
-    public Menu(final @NotNull Player player,
-                final @NotNull CropClick plugin,
-                final @NotNull LanguageAPI.Menu menuTitle) {
+    public Menu(@NotNull Player player,
+                @NotNull CropClick plugin,
+                @NotNull LanguageAPI.Menu menuTitle) {
         this.menuTitle = menuTitle;
         this.player = player;
         this.plugin = plugin;
@@ -28,10 +28,10 @@ public abstract class Menu implements InventoryHolder {
 
     public abstract void setMenuItems();
 
-    public abstract void handleMenu(final InventoryClickEvent event);
+    public abstract void handleMenu(InventoryClickEvent event);
 
     private void setInventory() {
-        this.inventory = Bukkit.createInventory(this, 54, menuTitle.get(plugin));
+        this.inventory = Bukkit.createInventory(this, 54, menuTitle.getTitle(plugin));
     }
 
     public final void open() {
@@ -44,4 +44,5 @@ public abstract class Menu implements InventoryHolder {
         inventory.clear();
         setMenuItems();
     }
+
 }

@@ -1,19 +1,28 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaGroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.WheatSeed;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-public final class Wheat extends GroundCrop {
+import java.util.Collection;
+import java.util.Collections;
 
-    public Wheat(final @NotNull CropsConfig config) {
-        setConfig(config);
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class Wheat extends VanillaGroundCrop {
+
+    public Wheat(@NotNull CropsConfig config) {
+        super(config);
     }
 
     @Contract(pure = true)
@@ -22,28 +31,27 @@ public final class Wheat extends GroundCrop {
         return "wheat";
     }
 
+    @Contract(" -> new")
     @Override
-    public int getHarvestAge() {
-        return 7;
-    }
-
-    @Override
-    public @NotNull ItemStack getDrops() {
-        return new ItemUtil(Material.WHEAT)
-                .setName(getDropName())
-                .setAmount(getDropAmount())
-                .toItemStack();
-    }
-
-    @Override
-    public Material getClickableType() {
-        return Material.WHEAT;
+    public @NotNull @Unmodifiable Collection<Drop> getDrops() {
+        return Collections.singleton(
+                new Drop(Material.WHEAT,
+                        cropsConfig.getCropDropName(getName()),
+                        cropsConfig.getCropDropAmount(getName()),
+                        cropsConfig.getCropDropChance(getName())
+                )
+        );
     }
 
     @Contract(value = " -> new", pure = true)
     @Override
-    public Seed getSeed() {
+    public @NotNull Seed getSeed() {
         return new WheatSeed(cropsConfig);
+    }
+
+    @Override
+    public @NotNull Material getClickableType() {
+        return Material.CROPS;
     }
 
 }

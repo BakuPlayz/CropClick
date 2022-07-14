@@ -3,10 +3,8 @@ package com.github.bakuplayz.cropclick.configs;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.LanguageAPI;
 import lombok.Getter;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -20,33 +18,31 @@ public abstract class Config {
     private final String FILE_NAME;
     protected @Getter FileConfiguration config;
 
-    public Config(final @NotNull String fileName,
-                  final @NotNull CropClick plugin) {
+    public Config(@NotNull String fileName,
+                  @NotNull CropClick plugin) {
         this.FILE_NAME = fileName;
         this.plugin = plugin;
     }
 
     public void setup() {
-        file = new File(plugin.getDataFolder(), FILE_NAME);
+        this.file = new File(this.plugin.getDataFolder(), this.FILE_NAME);
 
         try {
-            if (file.createNewFile()) {
-                plugin.saveResource(FILE_NAME, true);
-            }
+            if (this.file.createNewFile()) this.plugin.saveResource(this.FILE_NAME, true);
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.FILE_SETUP_FAILED.send(FILE_NAME);
+            LanguageAPI.Console.FILE_SETUP_FAILED.send(this.FILE_NAME);
         } finally {
-            config = YamlConfiguration.loadConfiguration(file);
-            LanguageAPI.Console.FILE_SETUP_LOAD.send(FILE_NAME);
+            this.config = YamlConfiguration.loadConfiguration(this.file);
+            LanguageAPI.Console.FILE_SETUP_LOAD.send(this.FILE_NAME);
         }
     }
 
     public void reloadConfig() {
-        if (config == null || file == null) return;
+        if (this.config == null || this.file == null) return;
 
-        config = YamlConfiguration.loadConfiguration(file);
-        LanguageAPI.Console.FILE_RELOAD.send(FILE_NAME);
+        this.config = YamlConfiguration.loadConfiguration(this.file);
+        LanguageAPI.Console.FILE_RELOAD.send(this.FILE_NAME);
     }
 
 }

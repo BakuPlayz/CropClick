@@ -6,9 +6,15 @@ import com.github.bakuplayz.cropclick.menu.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class SettingsMenu extends Menu {
 
-    public SettingsMenu(final CropClick plugin, final Player player) {
+    public SettingsMenu(CropClick plugin, Player player) {
         super(player, plugin, LanguageAPI.Menu.SETTINGS_TITLE);
     }
 
@@ -21,4 +27,5 @@ public final class SettingsMenu extends Menu {
     public void handleMenu(InventoryClickEvent event) {
 
     }
+
 }

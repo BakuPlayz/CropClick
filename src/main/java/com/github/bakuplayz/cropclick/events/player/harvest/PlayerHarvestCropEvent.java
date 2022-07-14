@@ -1,10 +1,12 @@
 package com.github.bakuplayz.cropclick.events.player.harvest;
 
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
-import com.github.bakuplayz.cropclick.events.HarvestCropEvent;
+import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,17 +16,20 @@ import org.jetbrains.annotations.NotNull;
  * @author BakuPlayz
  * @version 1.6.0
  */
-public final class PlayerHarvestCropEvent extends HarvestCropEvent {
+public final class PlayerHarvestCropEvent extends Event implements Cancellable {
 
+    private final @Getter Crop crop;
+    private final @Getter Block block;
     private final @Getter Player player;
-    private final @Getter Action action;
 
-    public PlayerHarvestCropEvent(final @NotNull Crop crop,
-                                  final @NotNull Block block,
-                                  final @NotNull Action action,
-                                  final @NotNull Player player) {
-        super(crop, block);
-        this.action = action;
+    private @Setter @Getter boolean cancelled;
+
+    public PlayerHarvestCropEvent(@NotNull Crop crop,
+                                  @NotNull Block block,
+                                  @NotNull Player player) {
         this.player = player;
+        this.block = block;
+        this.crop = crop;
     }
+
 }

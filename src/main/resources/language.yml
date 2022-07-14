@@ -1,0 +1,5 @@
+menu:
+  title:
+    crop: "Crop"
+    container: "Container"
+    dispenser: "Dispenser"

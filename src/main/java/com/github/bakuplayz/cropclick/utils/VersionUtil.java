@@ -15,12 +15,15 @@ public final class VersionUtil {
         return Bukkit.getServer().getBukkitVersion().split("-")[0].substring(2);
     }
 
-    public static boolean isInInterval(double minVersion, double maxVersion) {
-        double serverVersion = Double.parseDouble(getServerVersion());
+    public static boolean between(double minVersion, double maxVersion) {
+        double serverVersion = Double.parseDouble(VersionUtil.getServerVersion());
         return (serverVersion >= minVersion) && (maxVersion >= serverVersion);
     }
 
+    public static boolean supportsBeetroots() { return !between(8, 8.9); }
+
     public static boolean supportsShulkers() {
-        return isInInterval(11, 14);
+        return !between(8, 10.9);
     }
+
 }

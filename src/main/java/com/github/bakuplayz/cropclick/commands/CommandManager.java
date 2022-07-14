@@ -81,11 +81,11 @@ public final class CommandManager implements TabExecutor {
                                       @NotNull String alias,
                                       String @NotNull [] args) {
         return args.length != 1
-               ? new ArrayList<>()
-               : commands.stream()
-                       .map(SubCommand::getName)
-                       .filter(command -> command.startsWith(args[0]))
-                       .sorted().collect(Collectors.toList());
+                ? new ArrayList<>()
+                : commands.stream()
+                .map(SubCommand::getName)
+                .filter(command -> command.startsWith(args[0]))
+                .sorted().collect(Collectors.toList());
     }
 
 }

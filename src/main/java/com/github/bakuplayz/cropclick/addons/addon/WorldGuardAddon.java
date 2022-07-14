@@ -15,23 +15,29 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class WorldGuardAddon extends Addon {
 
     private final WorldGuard worldGuard = WorldGuard.getInstance();
     private final StateFlag FLAG = new StateFlag("cropclick", true);
 
-    public WorldGuardAddon(final @NotNull AddonsConfig config) {
+    public WorldGuardAddon(@NotNull AddonsConfig config) {
         super("WorldGuard", config);
 
         registerFlag();
     }
 
-    public void registerFlag() {
+    private void registerFlag() {
         FlagRegistry registry = worldGuard.getFlagRegistry();
         registry.register(FLAG);
     }
 
-    public boolean regionAllowsPlayer(final @NotNull Player player) {
+    public boolean regionAllowsPlayer(@NotNull Player player) {
         RegionContainer container = worldGuard.getPlatform().getRegionContainer();
         RegionManager manager = container.get((World) player.getWorld());
         if (manager == null) return false;
@@ -49,8 +55,9 @@ public final class WorldGuardAddon extends Addon {
         return false;
     }
 
-    private boolean regionHasMember(final @NotNull ProtectedRegion region,
-                                    final @NotNull Player player) {
+    private boolean regionHasMember(@NotNull ProtectedRegion region,
+                                    @NotNull Player player) {
         return region.getMembers().contains(player.getUniqueId()) ^ region.getOwners().contains(player.getUniqueId());
     }
+
 }

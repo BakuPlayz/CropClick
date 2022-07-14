@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AddonsConfig extends Config {
 
-    public AddonsConfig(final @NotNull CropClick plugin) {
+    public AddonsConfig(@NotNull CropClick plugin) {
         super("addons.yml", plugin);
     }
 
-    public boolean isEnabled(final @NotNull String addonName) {
-        if (!Bukkit.getPluginManager().isPluginEnabled(addonName)) return false;
-        return config.getBoolean("addons." + addonName + ".isEnabled");
+    public boolean isInstalled(@NotNull String name) {
+        return Bukkit.getPluginManager().isPluginEnabled(name);
     }
+
 }

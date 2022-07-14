@@ -5,69 +5,96 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
-import org.bukkit.Location;
+import com.google.gson.JsonParser;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.parser.JSONParser;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class AutofarmDataStorage extends DataStorage {
 
-    private List<Autofarm> autofarms = new ArrayList<>();
+    private HashMap<UUID, Autofarm> farms = new HashMap<>();
 
-    public AutofarmDataStorage(final @NotNull CropClick plugin) {
+    public AutofarmDataStorage(@NotNull CropClick plugin) {
         super("autofarms.json", plugin);
+
+        loadFarms();
     }
 
-    public void addAutofarm(final @NotNull Autofarm autofarm) {
-        autofarms.add(autofarm);
+    public void addFarm(@NotNull Autofarm autofarm) {
+        farms.put(autofarm.getFarmerID(), autofarm);
     }
 
-    public void removeAutofarm(final @NotNull Autofarm autofarm) {
-        autofarms.remove(autofarm);
+    public void removeFarm(@NotNull Autofarm autofarm) {
+        farms.remove(autofarm.getFarmerID());
     }
 
-    // Should be called once every 10 minutes or so, also before shutdown.
-    public void saveAutofarms() {
-        for (Autofarm autofarm : autofarms) {
-            String data = gson.toJson(autofarm);
-            JsonElement autofarmAsObj = parser.parse(data);
-            fileData.add(autofarm.getFarmer(), autofarmAsObj.getAsJsonObject());
-        }
+    private void loadFarms() {
+        HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, (Type) Autofarm.class);
+        this.farms = loaded != null ? loaded : new HashMap<>();
+    }
+
+    // TODO: Should be called once every 10 minutes or so, also before shutdown.
+    public void saveFarms() {
+        String data = gson.toJson(farms);
+        JsonElement dataAsJson = JsonParser.parseString(data);
+        fileData = dataAsJson.getAsJsonObject();
+
         saveData();
     }
 
-    public void removeUnlinkedAutofarms() {
-        this.autofarms = autofarms.stream()
-                .filter(autofarm -> !autofarm.isLinked())
-                .collect(Collectors.toList());
+    public void removeUnlinkedFarms() {
+        farms.values().removeIf(farm -> !farm.isLinked());
     }
 
-    public @Nullable Autofarm getAutofarm(final @NotNull Location location) {
-        return autofarms.stream()
-                .filter(autofarm -> autofarm.getDispenserLocation() == location)
+    public @Nullable Autofarm findFarmById(@NotNull String farmerID) {
+        return farms.getOrDefault(UUID.fromString(farmerID), null);
+    }
+
+    public @Nullable Autofarm findFarmByCrop(@NotNull Block block) {
+        return farms.values().stream()
+                .filter(Autofarm::isLinked)
+                .filter(Autofarm::isEnabled)
+                .filter(farm -> farm.getCropLocation() == block.getLocation())
                 .findFirst().orElse(null);
     }
 
-    public @Nullable Autofarm getAutofarm(final @NotNull String farmerId) {
-        return gson.fromJson(fileData.get(farmerId), Autofarm.class);
+    public @Nullable Autofarm findFarmByContainer(@NotNull Block block) {
+        return farms.values().stream()
+                .filter(Autofarm::isLinked)
+                .filter(Autofarm::isEnabled)
+                .filter(farm -> farm.getContainerLocation() == block.getLocation())
+                .findFirst().orElse(null);
     }
 
-    public @NotNull List<Autofarm> getAutofarms(final int start, final int end) {
-        Preconditions.checkArgument(end < start, "End cannot be less than start.");
-        Preconditions.checkArgument(start < 0, "Start cannot be less than zero.");
+    public @Nullable Autofarm findFarmByDispenser(@NotNull Block block) {
+        return farms.values().stream()
+                .filter(Autofarm::isLinked)
+                .filter(Autofarm::isEnabled)
+                .filter(farm -> farm.getDispenserLocation() == block.getLocation())
+                .findFirst().orElse(null);
+    }
 
-        return autofarms.stream()
-                .skip(start).limit(end)
+    public @NotNull List<Autofarm> getFarms(int startIndex, int size) {
+        Preconditions.checkArgument(startIndex < 0, "The startIndex cannot be less than zero.");
+        Preconditions.checkArgument(size <= 0, "The size of retrieved farms cannot be less or equal to zero.");
+
+        return farms.values().stream()
+                .skip(startIndex)
+                .limit(size)
                 .collect(Collectors.toList());
-
-        /* int fixedLimit = start + maxLimit;
-        if (fixedLimit > autofarms.size()) {
-            fixedLimit = autofarms.size();
-        }
-
-        return autofarms.subList(start, fixedLimit);*/
     }
+
 }

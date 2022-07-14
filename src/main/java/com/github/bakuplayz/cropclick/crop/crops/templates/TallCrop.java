@@ -1,15 +1,11 @@
 package com.github.bakuplayz.cropclick.crop.crops.templates;
 
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import com.github.bakuplayz.cropclick.utils.BlockUtil;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class TallCrop extends GroundCrop {
-
-    public TallCrop(CropsConfig cropsConfig) {
-        super(cropsConfig);
-    }
+public abstract class TallCrop extends BaseCrop {
 
     @Override
     public int getCurrentAge(final @NotNull Block block) {
@@ -18,10 +14,10 @@ public abstract class TallCrop extends GroundCrop {
 
         int height = 0;
         for (int y = minHeight; y <= maxHeight; ++y) {
-            Block blockAbove = block.getWorld().getBlockAt(block.getX(), y, block.getZ());
+            Block currentBlock = block.getWorld().getBlockAt(block.getX(), y, block.getZ());
 
-            if (BlockUtil.isAir(blockAbove)) break;
-            if (!BlockUtil.isSameType(block, blockAbove)) break;
+            if (BlockUtil.isAir(currentBlock)) break;
+            if (!BlockUtil.isSameType(block, currentBlock)) break;
 
             ++height;
         }
@@ -32,6 +28,16 @@ public abstract class TallCrop extends GroundCrop {
     @Override
     public int getHarvestAge() {
         return 2;
+    }
+
+    @Override
+    public Seed getSeed() {
+        return null;
+    }
+
+    @Override
+    public boolean hasSeed() {
+        return false;
     }
 
 }

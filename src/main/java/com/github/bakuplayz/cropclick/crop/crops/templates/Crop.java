@@ -1,73 +1,45 @@
 package com.github.bakuplayz.cropclick.crop.crops.templates;
 
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
+import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Random;
 
-public abstract class Crop {
+public interface Crop {
 
-    private final Random rand = new Random();
+    @NotNull String getName();
 
-    protected final CropsConfig cropsConfig;
+    int getHarvestAge();
 
+    int getCurrentAge(@NotNull Block block);
 
-    public Crop(final CropsConfig config) {
-        this.cropsConfig = config;
-    }
+    Collection<Drop> getDrops();
 
-    public abstract String getName();
+    boolean hasDrops();
 
-    public abstract int getHarvestAge();
+    Seed getSeed();
 
-    public abstract int getCurrentAge(final @NotNull Block block);
+    boolean hasSeed();
 
-    public abstract Collection<Drop> getDrops();
+    void harvest(@NotNull Player player);
 
-    public boolean hasDrops() {
-        if (getDrops() == null) return false;
-        return !getDrops().isEmpty();
-    }
+    void harvest(@NotNull Container container);
 
-    public boolean willDrop() {
-        if (!isEnabled()) return false;
-        return getDropChance() >= rand.nextDouble();
-    }
+    boolean isHarvestable(@NotNull Block block);
 
-    public abstract Seed getSeed();
+    boolean canHarvest(@NotNull Player player);
 
-    public boolean hasSeed() {
-        return getSeed() != null;
-    }
+    void replant(@NotNull Block block);
 
-    public abstract void harvest(final Inventory inventory);
+    @NotNull Material getClickableType();
 
-    public boolean isHarvestable(final Block block) {
-        if (!isEnabled()) return false;
-        if (getDropChance() <= 0) return false;
-        return getHarvestAge() != getCurrentAge(block);
-    }
+    boolean shouldReplant();
 
-    public boolean canHarvest(final @NotNull Player player) {
-        return player.hasPermission("cropclick.*")
-                || player.hasPermission("cropclick.harvest.*")
-                || player.hasPermission("cropclick.harvest." + getName());
-    }
-
-    public void replant(final @NotNull Block block) {
-        block.setType(Material.AIR);
-    }
-
-    public abstract Material getClickableType();
-
-    public boolean isEnabled() {
-        return cropsConfig.isCropEnabled(getName());
-    }
+    boolean isEnabled();
 
 }

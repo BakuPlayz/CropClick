@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class CropsMenu extends PaginatedMenu {
 
@@ -36,7 +37,7 @@ public final class CropsMenu extends PaginatedMenu {
     }
 
     @Override
-    public void handleMenu(final @NotNull InventoryClickEvent event) {
+    public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
         if (clicked.equals(getPreviousPageItem())) {
@@ -57,7 +58,7 @@ public final class CropsMenu extends PaginatedMenu {
         }
     }
 
-    private @NotNull ItemStack getMenuItem(final @NotNull Crop crop) {
+    private @NotNull ItemStack getMenuItem(@NotNull Crop crop) {
         return new ItemUtil(crop.getClickableType())
                 .setName(crop.getName()) //languageAPI
                 .setLore("") //LanugageAPI
@@ -67,4 +68,5 @@ public final class CropsMenu extends PaginatedMenu {
     private @NotNull List<ItemStack> getMenuItems() {
         return crops.stream().map(this::getMenuItem).collect(Collectors.toList());
     }
+
 }

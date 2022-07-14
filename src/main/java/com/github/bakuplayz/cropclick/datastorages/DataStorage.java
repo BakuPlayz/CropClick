@@ -19,20 +19,20 @@ public abstract class DataStorage {
     protected String fileName;
     protected @Getter JsonObject fileData;
 
-    protected final Gson gson = new Gson();
-    protected final JsonParser parser = new JsonParser();
+    protected final Gson gson;
 
-    public DataStorage(final @NotNull String fileName,
-                       final @NotNull CropClick plugin) {
+    public DataStorage(@NotNull String fileName,
+                       @NotNull CropClick plugin) {
         this.fileName = fileName;
         this.plugin = plugin;
+        this.gson = new Gson();
     }
 
     public void setup() {
         this.file = new File(plugin.getDataFolder().getAbsolutePath() + "/datastorage", fileName);
 
         try {
-            file.getParentFile().mkdir();
+            file.getParentFile().mkdirs();
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,16 +45,16 @@ public abstract class DataStorage {
     public void fetchData() {
         try {
             FileReader reader = new FileReader(file);
-            JsonElement data = parser.parse(reader);
-            this.fileData = data != JsonNull.INSTANCE
-                            ? data.getAsJsonObject()
-                            : new JsonObject();
+            JsonElement data = JsonParser.parseReader(reader);
+            fileData = data != JsonNull.INSTANCE
+                    ? data.getAsJsonObject()
+                    : new JsonObject();
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_FETCH.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_LOAD.send(fileName);
         } finally {
-            LanguageAPI.Console.DATA_STORAGE_FETCHED_DATA.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_LOADED_DATA.send(fileName);
         }
     }
 
@@ -72,4 +72,5 @@ public abstract class DataStorage {
             LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
         }
     }
+
 }

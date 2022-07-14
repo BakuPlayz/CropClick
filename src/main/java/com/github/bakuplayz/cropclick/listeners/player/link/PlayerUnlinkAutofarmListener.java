@@ -1,20 +1,21 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.utils.VersionUtil;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.*;
+import com.github.bakuplayz.cropclick.utils.BlockUtil;
+import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.material.Crops;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,61 +27,57 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerUnlinkAutofarmListener implements Listener {
 
     private final CropClick plugin;
-    private final AutofarmManager manager;
-    private final AutofarmDataStorage dataStorage;
 
-    //rework the following
+    private final AutofarmDataStorage farmData;
 
-    public PlayerUnlinkAutofarmListener(final @NotNull CropClick plugin) {
-        this.dataStorage = plugin.getAutofarmDataStorage();
-        this.manager = plugin.getAutofarmManager();
+    private final WorldManager worldManager;
+    private final AddonManager addonManager;
+    private final AutofarmManager autofarmManager;
+
+    public PlayerUnlinkAutofarmListener(@NotNull CropClick plugin) {
+        this.autofarmManager = plugin.getAutofarmManager();
+        this.farmData = plugin.getFarmData();
+        this.worldManager = plugin.getWorldManager();
+        this.addonManager = plugin.getAddonManager();
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerUnlinksAutofarm(final @NotNull BlockBreakEvent event) {
-        Block block = event.getBlock();
-        BlockState state = block.getState();
-        Player player = event.getPlayer();
+    public void onPlayerInteractWithFarm(@NotNull BlockBreakEvent event) {
+        if (event.isCancelled()) return;
 
-        if (!player.hasPermission("cropclick.autofarmer.link")) {
+        Block block = event.getBlock();
+        if (BlockUtil.isAir(block)) {
             return;
         }
 
-        //if state instanceof CustomCrop
-
-        if (VersionUtil.supportsShulkers()) {
-            if (!(state instanceof Dispenser) &&
-                    !(state instanceof Crops) &&
-                    !(state instanceof Chest) &&
-                    !(state instanceof ShulkerBox) &&
-                    !hasCropOnTop(block)) {
-                return;
-            }
-        } else {
-            if (!(state instanceof Dispenser) &&
-                    !(state instanceof Crops) &&
-                    !(state instanceof Chest) &&
-                    !hasCropOnTop(block)) {
-                return;
-            }
+        Player player = event.getPlayer();
+        if (!PermissionUtil.canUnlink(player)) {
+            return;
         }
 
-        Autofarm autofarm = manager.findAutofarm(block);
-        if (autofarm == null) return;
+        FarmWorld world = worldManager.findByPlayer(player);
+        if (!worldManager.isAccessable(world)) {
+            return;
+        }
 
-        manager.unlinkAutofarm(event.getPlayer(), autofarm);
+        if (!addonManager.canModify(player)) {
+            return;
+        }
+
+        Autofarm autofarm = autofarmManager.findAutofarm(block);
+        if (!autofarmManager.isUsable(autofarm)) {
+            return;
+        }
+
+        autofarmManager.unlinkAutofarm(player, autofarm);
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onUnlinkAutofarm(final @NotNull PlayerUnlinkAutofarmEvent event) {
+    public void onUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
+        if (event.isCancelled()) return;
+
         Autofarm autofarm = event.getAutofarm();
-
-        if (!manager.isEnabled()) {
-            event.setCancelled(true);
-            return;
-        }
-
         Block crop = autofarm.getCropLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block dispenser = autofarm.getDispenserLocation().getBlock();
@@ -89,14 +86,8 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         container.removeMetadata("farmerID", plugin);
         dispenser.removeMetadata("autofarm", plugin);
 
-        dataStorage.removeAutofarm(autofarm);
+        farmData.removeFarm(autofarm);
     }
 
-    public boolean hasCropOnTop(final @NotNull Block block) {
-        if (block.getType() != Material.SOIL) return false; // Won't work for cocoa beans
-
-        Location topLocation = block.getLocation();
-        topLocation.setY(topLocation.getBlockY() + 1); // Won't work for cocoa beans
-        return topLocation.getBlock().getState() instanceof Crops;
-    }
 }
+

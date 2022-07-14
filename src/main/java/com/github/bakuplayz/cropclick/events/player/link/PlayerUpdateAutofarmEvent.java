@@ -23,20 +23,21 @@ public final class PlayerUpdateAutofarmEvent extends Event implements Cancellabl
 
     private @Setter @Getter boolean cancelled;
 
-    public PlayerUpdateAutofarmEvent(final @NotNull Player player,
-                                     final @NotNull Autofarm oldAutofarm,
-                                     final @NotNull Autofarm newAutofarm) {
+    public PlayerUpdateAutofarmEvent(@NotNull Player player,
+                                     @NotNull Autofarm oldAutofarm,
+                                     @NotNull Autofarm newAutofarm) {
         this.oldAutofarm = oldAutofarm;
         this.newAutofarm = newAutofarm;
         this.player = player;
     }
 
-    public PlayerUpdateAutofarmEvent(final @NotNull Player player,
-                                     final @NotNull String farmerID,
-                                     final @NotNull Autofarm newAutofarm,
-                                     final @NotNull AutofarmDataStorage dataStorage) {
-        this.oldAutofarm = dataStorage.getAutofarm(farmerID);
+    public PlayerUpdateAutofarmEvent(@NotNull Player player,
+                                     @NotNull String farmerID,
+                                     @NotNull Autofarm newAutofarm,
+                                     @NotNull AutofarmDataStorage dataStorage) {
+        this.oldAutofarm = dataStorage.findFarmById(farmerID);
         this.newAutofarm = newAutofarm;
         this.player = player;
     }
+
 }

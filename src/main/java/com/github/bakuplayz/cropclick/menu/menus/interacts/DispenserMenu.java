@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.menu.menus;
+package com.github.bakuplayz.cropclick.menu.menus.interacts;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.LanguageAPI;
@@ -7,10 +7,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public final class CropMenu extends Menu {
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
+public final class DispenserMenu extends Menu {
 
-    public CropMenu(@NotNull Player player, @NotNull CropClick plugin) {
-        super(player, plugin, LanguageAPI.Menu.CROP_TITLE);
+    public DispenserMenu(@NotNull Player player, @NotNull CropClick plugin) {
+        super(player, plugin, LanguageAPI.Menu.DISPENSER_TITLE);
     }
 
     @Override
@@ -22,4 +29,5 @@ public final class CropMenu extends Menu {
     public void handleMenu(InventoryClickEvent event) {
 
     }
+
 }

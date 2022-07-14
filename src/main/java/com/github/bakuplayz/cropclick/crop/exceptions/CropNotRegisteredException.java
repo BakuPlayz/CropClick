@@ -3,9 +3,16 @@ package com.github.bakuplayz.cropclick.crop.exceptions;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import org.jetbrains.annotations.NotNull;
 
-public final class CropNotRegisteredException extends Exception {
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class CropNotRegisteredException extends RuntimeException {
 
-    public CropNotRegisteredException(final @NotNull Crop crop) {
+    public CropNotRegisteredException(@NotNull Crop crop) {
         super(crop.getName() + " is not registered.", new Throwable("Cannot remove a crop, that is not registered."));
     }
+
 }

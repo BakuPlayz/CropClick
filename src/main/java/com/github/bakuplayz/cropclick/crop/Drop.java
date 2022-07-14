@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.crops.templates;
+package com.github.bakuplayz.cropclick.crop;
 
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import lombok.Getter;
@@ -6,7 +6,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class Drop {
+
+    private final Random rand;
 
     private @Getter final int amount;
     private @Getter final String name;
@@ -21,12 +31,17 @@ public final class Drop {
         this.name = name;
         this.amount = amount;
         this.chance = chance;
+        this.rand = new Random();
     }
 
-    public @NotNull ItemStack toStack() {
+    public boolean willDrop() {
+        return chance >= rand.nextDouble();
+    }
+
+    public @NotNull ItemStack toItemStack() {
         return new ItemUtil(type)
                 .setName(name)
-                .setAmount(amount)
+                .setAmount((int) (amount * chance))
                 .toItemStack();
     }
 

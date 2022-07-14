@@ -1,18 +1,25 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.TallCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaTallCrop;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public final class SugarCane extends TallCrop {
+import java.util.Collection;
+import java.util.Collections;
 
-    public SugarCane(final @NotNull CropsConfig config) {
-        setConfig(config);
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class SugarCane extends VanillaTallCrop {
+
+    public SugarCane(@NotNull CropsConfig config) {
+        super(config);
     }
 
     @Contract(pure = true)
@@ -22,21 +29,19 @@ public final class SugarCane extends TallCrop {
     }
 
     @Override
-    public @NotNull ItemStack getDrops() {
-        return new ItemUtil(Material.SUGAR_CANE)
-                .setName(getDropName())
-                .setAmount(getDropAmount())
-                .toItemStack();
+    public @NotNull Collection<Drop> getDrops() {
+        return Collections.singleton(
+                new Drop(Material.SUGAR_CANE,
+                        cropsConfig.getCropDropName(getName()),
+                        cropsConfig.getCropDropAmount(getName()),
+                        cropsConfig.getCropDropChance(getName())
+                )
+        );
     }
 
     @Override
-    public Material getClickableType() {
+    public @NotNull Material getClickableType() {
         return Material.SUGAR_CANE;
-    }
-
-    @Override
-    public Seed getSeed() {
-        return null;
     }
 
 }

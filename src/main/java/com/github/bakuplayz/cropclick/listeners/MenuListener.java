@@ -18,10 +18,12 @@ import org.jetbrains.annotations.NotNull;
 public final class MenuListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onMenuClick(final @NotNull InventoryClickEvent event) {
+    public void onMenuClick(@NotNull InventoryClickEvent event) {
         InventoryHolder holder = event.getInventory().getHolder();
+
         if (holder instanceof Menu) {
             if (event.getCurrentItem() == null) {
+                event.setCancelled(true);
                 return;
             }
 
@@ -38,9 +40,8 @@ public final class MenuListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onMenuDrag(final @NotNull InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof Menu) {
-            event.setCancelled(true);
-        }
+    public void onMenuDrag(@NotNull InventoryDragEvent event) {
+        if (event.getInventory().getHolder() instanceof Menu) event.setCancelled(true);
     }
+
 }

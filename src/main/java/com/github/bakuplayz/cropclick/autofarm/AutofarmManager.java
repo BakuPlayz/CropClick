@@ -1,82 +1,135 @@
 package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
+import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtil;
+import com.github.bakuplayz.cropclick.utils.BlockUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class AutofarmManager {
 
     private final @NotNull CropClick plugin;
-    private final @NotNull AutofarmDataStorage autofarmStorage;
+    private final @NotNull CropManager cropManager;
+    private final @NotNull AutofarmDataStorage farmStorage;
 
-    public AutofarmManager(final @NotNull CropClick plugin) {
-        this.autofarmStorage = plugin.getAutofarmDataStorage();
+    private final String cacheName = "farmerID";
+
+    public AutofarmManager(@NotNull CropClick plugin) {
+        this.farmStorage = plugin.getFarmData();
+        this.cropManager = plugin.getCropManager();
         this.plugin = plugin;
+    }
+
+    public void linkAutofarm(@NotNull Player player,
+                             @NotNull Location cropLocation,
+                             @NotNull Location containerLocation,
+                             @NotNull Location dispenserLocation) {
+        Autofarm farm = new Autofarm(
+                player,
+                cropLocation,
+                containerLocation,
+                dispenserLocation
+        );
+        Bukkit.getPluginManager().callEvent(new PlayerLinkAutofarmEvent(player, farm));
+    }
+
+    public void linkAutofarm(@NotNull Player player,
+                             @NotNull Autofarm autofarm) {
+        linkAutofarm(
+                player,
+                autofarm.getCropLocation(),
+                autofarm.getContainerLocation(),
+                autofarm.getDispenserLocation()
+        );
+    }
+
+    public void unlinkAutofarm(@NotNull Player player,
+                               @NotNull Location cropLocation,
+                               @NotNull Location containerLocation,
+                               @NotNull Location dispenserLocation) {
+        Autofarm farm = new Autofarm(
+                player,
+                cropLocation,
+                containerLocation,
+                dispenserLocation
+        );
+        Bukkit.getPluginManager().callEvent(new PlayerUnlinkAutofarmEvent(player, farm));
+    }
+
+    public void unlinkAutofarm(@NotNull Player player,
+                               @NotNull Autofarm autofarm) {
+        unlinkAutofarm(
+                player,
+                autofarm.getCropLocation(),
+                autofarm.getContainerLocation(),
+                autofarm.getDispenserLocation()
+        );
+    }
+
+    // TODO: Should this be Block -> AutofarmBlock?
+    public @Nullable Autofarm findAutofarm(@NotNull Block block) {
+        if (BlockUtil.isAir(block)) return null;
+
+        if (hasCachedID(block)) {
+            String farmerID = getCachedID(block);
+            return farmStorage.findFarmById(farmerID);
+        }
+
+        if (AutofarmUtil.isDispenser(block)) {
+            return farmStorage.findFarmByDispenser(block);
+        }
+
+        if (AutofarmUtil.isContainer(block)) {
+            return farmStorage.findFarmByContainer(block);
+        }
+
+        // TODO: needs to check the block over in case of crop... (and one around...)
+        if (AutofarmUtil.isCrop(cropManager, block)) {
+            return farmStorage.findFarmByCrop(block);
+        }
+
+        return null;
+    }
+
+    private String getCachedID(@NotNull Block block) {
+        return block.getMetadata(cacheName).get(0).asString();
+    }
+
+    private boolean hasCachedID(@NotNull Block block) {
+        return block.hasMetadata(cacheName);
+    }
+
+    // TODO: find a better name for this?
+    public boolean isUsable(Autofarm autofarm) {
+        if (autofarm == null) return false;
+        if (!autofarm.isLinked()) return false;
+        if (!autofarm.isEnabled()) return false;
+        if (!autofarm.hasContainer()) return false;
+        return isEnabled();
+    }
+
+    public boolean isComponent(Block block) {
+        if (AutofarmUtil.isDispenser(block)) return true;
+        if (AutofarmUtil.isContainer(block)) return true;
+        return AutofarmUtil.isCrop(cropManager, block);
     }
 
     public boolean isEnabled() {
         return plugin.getConfig().getBoolean("autofarm.isEnabled");
-    }
-
-    // TODO: Change the method name to add or keep the current. (Maybe remove this)
-    public void linkAutofarm(final @NotNull Player player,
-                             final @NotNull Location cropLocation,
-                             final @NotNull Location containerLocation,
-                             final @NotNull Location dispenserLocation) {
-        Autofarm autofarm = new Autofarm(player, cropLocation, containerLocation, dispenserLocation);
-        Bukkit.getPluginManager().callEvent(new PlayerLinkAutofarmEvent(player, autofarm));
-    }
-
-    // TODO: Change the method name to add or keep the current.
-    public void linkAutofarm(final @NotNull Player player,
-                             final @NotNull Autofarm autofarm) {
-        Bukkit.getPluginManager().callEvent(new PlayerLinkAutofarmEvent(player, autofarm));
-    }
-
-    // TODO: Change the method name to remove or keep the current.
-    public void unlinkAutofarm(final @NotNull Player player,
-                               final @NotNull Autofarm autofarm) {
-        Bukkit.getPluginManager().callEvent(new PlayerUnlinkAutofarmEvent(player, autofarm));
-    }
-
-    public @Nullable Autofarm findAutofarm(final @NotNull Block block) {
-        if (block.hasMetadata("farmerID")) {
-            List<MetadataValue> values = block.getMetadata("farmerID");
-            return getAutofarm(values.get(0).asString());
-        }
-        if (block.hasMetadata("autofarm")) return getCachedAutofarm(block);
-        return block.getType() != Material.DISPENSER ? null : getAutofarm(block.getLocation());
-    }
-
-    private @Nullable Autofarm getAutofarm(final @NotNull String farmerID) {
-        return autofarmStorage.getAutofarm(farmerID);
-    }
-
-    private @Nullable Autofarm getAutofarm(final @NotNull Location location) {
-        return autofarmStorage.getAutofarm(location);
-    }
-
-    private @Nullable Autofarm getCachedAutofarm(final @NotNull Block block) {
-        List<MetadataValue> values = block.getMetadata("autofarm");
-        return ((AutofarmMetadata) values.get(0)).asAutofarm();
-    }
-
-    public boolean isAutofarmValid(final Autofarm autofarm) {
-        if (autofarm == null) return false;
-        if (!autofarm.isLinked()) return false;
-        return autofarm.isEnabled();
     }
 
 }

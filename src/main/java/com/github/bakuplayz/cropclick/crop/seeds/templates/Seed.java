@@ -1,34 +1,20 @@
 package com.github.bakuplayz.cropclick.crop.seeds.templates;
 
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import lombok.Setter;
-import org.bukkit.inventory.ItemStack;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+public interface Seed {
 
-public abstract class Seed {
+    @NotNull String getName();
 
-    private final Random rand;
+    Drop getDrop();
 
-    protected @Setter CropsConfig cropsConfig;
+    boolean hasDrop();
 
-    public Seed() {
-        this.rand = new Random();
-    }
+    void harvest(@NotNull Inventory inventory);
 
-    public abstract String getName();
+    boolean isEnabled();
 
-    public abstract String getDropName();
-
-    public abstract int getDropAmount();
-
-    public abstract double getDropChance();
-
-    public boolean willDrop() {
-        return rand.nextDouble() <= getDropChance();
-    }
-
-    public abstract ItemStack getDrops();
-
-    public abstract boolean isEnabled();
 }

@@ -1,18 +1,26 @@
 package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.TallCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaTallCrop;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-public final class Cactus extends TallCrop {
+import java.util.Collection;
+import java.util.Collections;
 
-    public Cactus(final @NotNull CropsConfig config) {
-        setConfig(config);
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
+public final class Cactus extends VanillaTallCrop {
+
+    public Cactus(@NotNull CropsConfig config) {
+        super(config);
     }
 
     @Contract(pure = true)
@@ -21,22 +29,21 @@ public final class Cactus extends TallCrop {
         return "cactus";
     }
 
+    @Contract(" -> new")
     @Override
-    public @NotNull ItemStack getDrops() {
-        return new ItemUtil(Material.CACTUS)
-                .setName(getDropName())
-                .setAmount(getDropAmount())
-                .toItemStack();
+    public @NotNull @Unmodifiable Collection<Drop> getDrops() {
+        return Collections.singleton(
+                new Drop(Material.CACTUS,
+                        cropsConfig.getCropDropName(getName()),
+                        cropsConfig.getCropDropAmount(getName()),
+                        cropsConfig.getCropDropChance(getName())
+                )
+        );
     }
 
     @Override
-    public Material getClickableType() {
+    public @NotNull Material getClickableType() {
         return Material.CACTUS;
-    }
-
-    @Override
-    public Seed getSeed() {
-        return null;
     }
 
 }

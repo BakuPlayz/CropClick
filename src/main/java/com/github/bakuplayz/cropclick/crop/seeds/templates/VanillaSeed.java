@@ -1,24 +1,13 @@
 package com.github.bakuplayz.cropclick.crop.seeds.templates;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 
-public abstract class VanillaSeed extends Seed {
+public abstract class VanillaSeed extends BaseSeed {
 
-    @Contract(" -> new")
-    @Override
-    public @NotNull String getDropName() {
-        return cropsConfig.getSeedDropName(getName());
-    }
+    protected final CropsConfig cropsConfig;
 
-    @Override
-    public int getDropAmount() {
-        return (int) (cropsConfig.getSeedDropAmount(getName()) * getRandomDropChance());
-    }
-
-    @Override
-    public double getDropChance() {
-        return cropsConfig.getSeedDropChance(getName());
+    public VanillaSeed(CropsConfig config) {
+        this.cropsConfig = config;
     }
 
     @Override

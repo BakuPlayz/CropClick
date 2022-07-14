@@ -13,15 +13,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class LanguageConfig extends Config {
 
-    public LanguageConfig(final @NotNull CropClick plugin) {
+    public LanguageConfig(@NotNull CropClick plugin) {
         super("language.yml", plugin);
     }
 
     public @NotNull String getMessage(String category, String subCategory, String key) {
-        String message = config.getString(category + "." + subCategory + "." + key);
-        return message == null
-               ? MessageUtil.colorize("&cError: Message is null!")
-               : MessageUtil.colorize(message);
+        String message = config.getString(
+                category + "." + subCategory + "." + key,
+                "&cError: Message is null!"
+        );
+        return MessageUtil.colorize(message);
     }
 
 }

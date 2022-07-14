@@ -2,10 +2,17 @@ package com.github.bakuplayz.cropclick;
 
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.Getter;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class CropClickAPI {
 
     // TODO: Update comments to make them more human readable.

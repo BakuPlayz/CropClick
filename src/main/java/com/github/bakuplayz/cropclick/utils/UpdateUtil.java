@@ -33,7 +33,7 @@ public final class UpdateUtil {
 
     private final String currentVersion;
 
-    public UpdateUtil(final @NotNull CropClick plugin) {
+    public UpdateUtil(@NotNull CropClick plugin) {
         this.currentVersion = plugin.getDescription().getVersion();
         this.latestVersion = currentVersion;
         this.latestName = "";
@@ -43,21 +43,21 @@ public final class UpdateUtil {
         fetchUpdate();
     }
 
-    public void sendUpdateAlert(final @NotNull CommandSender sender) {
-        sender.sendMessage(colorize("&7---------- &aCropClick&7 ----------"));
-        sender.sendMessage(colorize("&7Status: &aNew update found!"));
-        sender.sendMessage(colorize("&7----------- &aDetails&7 -------------"));
-        sender.sendMessage(colorize("&7Name: &a" + latestName));
-        sender.sendMessage(colorize("&7Version: &a" + latestVersion));
-        sender.sendMessage(colorize("&7---------- &aUpdate Log&7 -----------"));
+    public void sendUpdateAlert(@NotNull CommandSender sender) {
+        sender.sendMessage(MessageUtil.colorize("&7---------- &aCropClick&7 ----------"));
+        sender.sendMessage(MessageUtil.colorize("&7Status: &aNew update found!"));
+        sender.sendMessage(MessageUtil.colorize("&7----------- &aDetails&7 -------------"));
+        sender.sendMessage(MessageUtil.colorize("&7Name: &a" + latestName));
+        sender.sendMessage(MessageUtil.colorize("&7Version: &a" + latestVersion));
+        sender.sendMessage(MessageUtil.colorize("&7---------- &aUpdate Log&7 -----------"));
 
         for (String line : latestBody.split("\n")) {
-            sender.sendMessage(colorize("&7" + line));
+            sender.sendMessage(MessageUtil.colorize("&7" + line));
         }
 
-        sender.sendMessage(colorize("&7----------- &aUpdate Url&7 ----------"));
-        sender.sendMessage(colorize("&a" + latestURL));
-        sender.sendMessage(colorize("&7---------------------------------"));
+        sender.sendMessage(MessageUtil.colorize("&7----------- &aUpdate Url&7 ----------"));
+        sender.sendMessage(MessageUtil.colorize("&a" + latestURL));
+        sender.sendMessage(MessageUtil.colorize("&7---------------------------------"));
     }
 
     public void startUpdateInterval() {
@@ -97,8 +97,4 @@ public final class UpdateUtil {
         return latestName.endsWith("(for 1.8 - 1.12)") ^ latestName.endsWith("(for 1.8 - latest)");
     }
 
-    @Contract("_ -> new")
-    private @NotNull String colorize(String str) {
-        return ChatColor.translateAlternateColorCodes('&', str);
-    }
 }

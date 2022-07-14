@@ -7,6 +7,12 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class LanguageAPI {
 
     public enum Console {
@@ -17,8 +23,8 @@ public final class LanguageAPI {
         DATA_STORAGE_LOADING_SETUP("Loading &e%s&7."),
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save &e%s&7, due to unknown reasons."),
         DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save &e%s&7, due to it being previously removed."),
-        DATA_STORAGE_FETCHED_DATA("Fetched &e%s's &7data."),
-        DATA_STORAGE_FAILED_FETCH("Could not fetch &e%s&7."),
+        DATA_STORAGE_LOADED_DATA("Loaded &e%s's &7data."),
+        DATA_STORAGE_FAILED_LOAD("Could not load &e%s&7."),
         DATA_STORAGE_FAILED_SETUP("Could not setup &e%s&7."),
 
         FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),
@@ -28,7 +34,7 @@ public final class LanguageAPI {
 
         private final String message;
 
-        Console(final String message) {
+        Console(String message) {
             this.message = message;
         }
 
@@ -36,7 +42,7 @@ public final class LanguageAPI {
             Bukkit.getConsoleSender().sendMessage(get());
         }
 
-        public void send(final String value) {
+        public void send(String value) {
             Bukkit.getConsoleSender().sendMessage(String.format(get(), value));
         }
 
@@ -68,38 +74,38 @@ public final class LanguageAPI {
         private final String category;
         private final String key;
 
-        Command(final String category,
-                final String key) {
+        Command(String category,
+                String key) {
             this.category = category;
             this.placeholder = "";
             this.key = key;
         }
 
-        Command(final String category,
-                final String key,
-                final String placeholder) {
+        Command(String category,
+                String key,
+                String placeholder) {
             this.placeholder = placeholder;
             this.category = category;
             this.key = key;
         }
 
-        public @NotNull String get(final @NotNull CropClick plugin) {
+        public @NotNull String get(@NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("command", category, key);
         }
 
-        public @NotNull String get(final @NotNull CropClick plugin,
-                                   final @NotNull String value) {
+        public @NotNull String get(@NotNull CropClick plugin,
+                                   @NotNull String value) {
             return get(plugin).replace(placeholder, value);
         }
 
-        public void send(final @NotNull CropClick plugin,
-                         final @NotNull CommandSender sender) {
+        public void send(@NotNull CropClick plugin,
+                         @NotNull CommandSender sender) {
             sender.sendMessage(get(plugin));
         }
 
-        public void send(final @NotNull CropClick plugin,
-                         final @NotNull CommandSender sender,
-                         final @NotNull String value) {
+        public void send(@NotNull CropClick plugin,
+                         @NotNull CommandSender sender,
+                         @NotNull String value) {
             sender.sendMessage(get(plugin, value));
         }
 
@@ -112,7 +118,8 @@ public final class LanguageAPI {
 
         CROP_TITLE("title", "crop"),
         CROPS_TITLE("title", "crops"),
-        AUTOFARM_TITLE("title", "autofarm"),
+        DISPENSER_TITLE("title", "dispenser"),
+        CONTAINER_TITLE("title", "container"),
         AUTOFARMS_TITLE("title", "autofarms"),
 
         MAIN_TITLE("title", "main"),
@@ -135,37 +142,44 @@ public final class LanguageAPI {
         HELP_ITEM_NAME("help", "itemName", "%name%"),
         HELP_ITEM_USAGE("help", "itemUsage", "%usage%"),
         HELP_ITEM_DESCRIPTION("help", "itemDescription", "%description%"),
-        HELP_ITEM_PERMISSION("help", "itemPermission", "%permission%");
+        HELP_ITEM_PERMISSION("help", "itemPermission", "%permission%"),
+
+        CONTAINER_INFO_NAME("container", "infoItemName", "%name%"),
+        CONTAINER_CROP_NAME("container", "cropItemName", "%name%"),
+        CONTAINER_DISPENSER_NAME("container", "dispenserItemName", "%name%"),
+        CONTAINER_CONTAINER_NAME("container", "containerItemName", "%name%"),
+        CONTAINER_LINKED_NAME("container", "linkedItemName", "%name%"),
+        CONTAINER_UNLINKED_NAME("container", "unlinkedItemName", "%name%")
+        ;
 
         private final String placeholder;
         private final String category;
         private final String key;
 
-        Menu(final String category,
-             final String key) {
+        Menu(String category,
+             String key) {
             this.category = category;
             this.placeholder = "";
             this.key = key;
         }
 
-        Menu(final String category,
-             final String key,
-             final String placeholder) {
+        Menu(String category,
+             String key,
+             String placeholder) {
             this.placeholder = placeholder;
             this.category = category;
             this.key = key;
         }
 
-        public @NotNull String get(final @NotNull CropClick plugin) {
+        public @NotNull String get(@NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("menu", category, key);
         }
 
-        public @NotNull <T> String get(final @NotNull CropClick plugin,
-                                       final @NotNull T value) {
+        public @NotNull <T> String get(@NotNull CropClick plugin, @NotNull T value) {
             return get(plugin).replace(placeholder, value.toString());
         }
 
-        public @NotNull String getTitle(final @NotNull CropClick plugin) {
+        public @NotNull String getTitle(@NotNull CropClick plugin) {
             return "CraftingGUI: " + get(plugin);
         }
 

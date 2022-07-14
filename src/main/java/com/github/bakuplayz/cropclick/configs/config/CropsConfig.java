@@ -14,43 +14,46 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CropsConfig extends Config {
 
-    //TODO: Rework this
-
-    public CropsConfig(final @NotNull CropClick plugin) {
+    public CropsConfig(@NotNull CropClick plugin) {
         super("crops.yml", plugin);
     }
 
     @Contract("_ -> new")
-    public @NotNull String getCropDropName(final @NotNull String cropName) {
-        return MessageUtil.colorize(config.getString("crops." + cropName + ".drop.name"));
+    public @NotNull String getCropDropName(@NotNull String name) {
+        return MessageUtil.colorize(config.getString("crops." + name + ".drop.name", "null"));
     }
 
-    public int getCropDropAmount(final @NotNull String cropName) {
-        return config.getInt("crops." + cropName + ".drop.amount");
+    public int getCropDropAmount(@NotNull String name) {
+        return config.getInt("crops." + name + ".drop.amount", 1);
     }
 
-    public double getCropDropChance(final @NotNull String cropName) {
-        return config.getDouble("crops." + cropName + ".drop.chance") / 100.0d;
+    public double getCropDropChance(@NotNull String name) {
+        return config.getDouble("crops." + name + ".drop.chance", 0.0) / 100.0d;
     }
 
-    public boolean isCropEnabled(final @NotNull String cropName) {
-        return config.getBoolean("crops." + cropName + ".isEnabled");
+    public boolean isCropEnabled(@NotNull String name) {
+        return config.getBoolean("crops." + name + ".isEnabled", true);
+    }
+
+    public boolean shouldReplantCrop(String name) {
+        return config.getBoolean("crops." + name + ".shouldReplant", true);
     }
 
     @Contract("_ -> new")
-    public @NotNull String getSeedDropName(final @NotNull String seedName) {
-        return MessageUtil.colorize(config.getString("seeds." + seedName + ".drop.name"));
+    public @NotNull String getSeedDropName(@NotNull String name) {
+        return MessageUtil.colorize(config.getString("seeds." + name + ".drop.name", "null"));
     }
 
-    public int getSeedDropAmount(final @NotNull String seedName) {
-        return config.getInt("seeds." + seedName + ".drop.amount");
+    public int getSeedDropAmount(@NotNull String name) {
+        return config.getInt("seeds." + name + ".drop.amount", 1);
     }
 
-    public double getSeedDropChance(final @NotNull String seedName) {
-        return config.getDouble("seeds." + seedName + ".drop.chance") / 100.0d;
+    public double getSeedDropChance(@NotNull String name) {
+        return config.getDouble("seeds." + name + ".drop.chance", 0.0) / 100.0d;
     }
 
-    public boolean isSeedEnabled(final @NotNull String seedName) {
-        return config.getBoolean("seeds." + seedName + ".isEnabled");
+    public boolean isSeedEnabled(@NotNull String name) {
+        return config.getBoolean("seeds." + name + ".isEnabled", true);
     }
+
 }

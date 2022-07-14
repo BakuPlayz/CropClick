@@ -2,18 +2,19 @@ package com.github.bakuplayz.cropclick.listeners.player.harvest;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
-import com.github.bakuplayz.cropclick.addons.addon.*;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtil;
+import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,69 +27,69 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerHarvestCropListener implements Listener {
 
     private final CropManager cropManager;
+    private final AddonManager addonManager;
+    private final WorldManager worldManager;
 
-    private final mcMMOAddon mcMMOAddon;
-    private final TownyAddon townyAddon;
-    private final ResidenceAddon residenceAddon;
-    private final JobsRebornAddon jobsRebornAddon;
-    private final WorldGuardAddon worldGuardAddon;
-
-    public PlayerHarvestCropListener(final @NotNull CropClick plugin) {
-        AddonManager addonManager = plugin.getAddonManager();
-        this.jobsRebornAddon = addonManager.getJobsRebornAddon();
-        this.worldGuardAddon = addonManager.getWorldGuardAddon();
-        this.residenceAddon = addonManager.getResidenceAddon();
-        this.mcMMOAddon = addonManager.getMcMMOAddon();
-        this.townyAddon = addonManager.getTownyAddon();
+    public PlayerHarvestCropListener(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
+        this.worldManager = plugin.getWorldManager();
+        this.addonManager = plugin.getAddonManager();
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithCrop(final @NotNull PlayerInteractEvent event) {
+    public void onPlayerInteractWithCrop(@NotNull PlayerInteractEvent event) {
+        if (event.isCancelled()) return;
+
         Block block = event.getClickedBlock();
-        if (BlockUtil.isAir(block)) return;
+        if (BlockUtil.isAir(block)) {
+            return;
+        }
 
-        Crop crop = cropManager.getCrop(block);
-        if (!cropManager.isCropValid(crop, block)) return;
+        Player player = event.getPlayer();
+        FarmWorld world = worldManager.findByPlayer(player);
+        if (!worldManager.isAccessable(world)) {
+            return;
+        }
 
-        Bukkit.getPluginManager().callEvent(new PlayerHarvestCropEvent(crop, block, event.getAction(), event.getPlayer()));
+        if (!addonManager.canModify(player)) {
+            return;
+        }
+
+        Crop crop = cropManager.findByBlock(block);
+        if (!cropManager.validate(crop, block)) {
+            return;
+        }
+
+        String cropName = crop.getName().toLowerCase();
+        if (!PermissionUtil.canHarvestCrop(player, cropName)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new PlayerHarvestCropEvent(crop, block, player));
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerHarvestCrop(final @NotNull PlayerHarvestCropEvent event) {
-        Action action = event.getAction();
+    public void onPlayerHarvestCrop(@NotNull PlayerHarvestCropEvent event) {
+        if (event.isCancelled()) return;
+
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Crop crop = event.getCrop();
 
-        if (!crop.willDrop()) return;
-
-        if (townyAddon != null && townyAddon.isEnabled()) {
-            if (action != Action.LEFT_CLICK_BLOCK) return;
-            if (!townyAddon.canDestroyCrop(player)) return;
+        if (!crop.hasDrops()) {
+            event.setCancelled(true);
+            return;
         }
 
-        if (worldGuardAddon != null && worldGuardAddon.isEnabled()) {
-            if (!worldGuardAddon.regionAllowsPlayer(player)) return;
-        }
-
-        if (residenceAddon != null && residenceAddon.isEnabled()) {
-            if (!residenceAddon.regionOrPlayerHasFlag(player)) return;
-        }
-
-        if (jobsRebornAddon != null && jobsRebornAddon.isEnabled()) {
-            jobsRebornAddon.updateStats(player);
-        }
-
-        if (mcMMOAddon != null && mcMMOAddon.isEnabled()) {
-            mcMMOAddon.addExperience(player);
-        }
+        addonManager.applyEffects(player);
 
         // LATER: crop#playSounds();
         // LATER: crop#playEffects();
         if (crop.canHarvest(player)) {
-            crop.harvest(player.getInventory());
+            crop.harvest(player);
             crop.replant(block);
         }
+
     }
+
 }

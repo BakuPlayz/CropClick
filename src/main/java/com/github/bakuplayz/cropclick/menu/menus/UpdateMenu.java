@@ -7,6 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class UpdateMenu extends Menu {
 
     public UpdateMenu(@NotNull Player player, @NotNull CropClick plugin) {
@@ -22,4 +28,5 @@ public final class UpdateMenu extends Menu {
     public void handleMenu(InventoryClickEvent event) {
 
     }
+
 }

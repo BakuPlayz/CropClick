@@ -1,17 +1,22 @@
 package com.github.bakuplayz.cropclick.crop.seeds;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.VanillaSeed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ */
 public final class BeetrootSeed extends VanillaSeed {
 
-    public BeetrootSeed(final @NotNull CropsConfig config) {
-        setCropsConfig(config);
+    public BeetrootSeed(@NotNull CropsConfig config) {
+        super(config);
     }
 
     @Contract(pure = true)
@@ -21,10 +26,12 @@ public final class BeetrootSeed extends VanillaSeed {
     }
 
     @Override
-    public @NotNull ItemStack getDrops() {
-        return new ItemUtil(Material.BEETROOT_SEEDS)
-                .setName(getDropName())
-                .setAmount(getDropAmount())
-                .toItemStack();
+    public @NotNull Drop getDrop() {
+        return new Drop(Material.BEETROOT_SEEDS,
+                cropsConfig.getSeedDropName(getName()),
+                cropsConfig.getSeedDropAmount(getName()),
+                cropsConfig.getSeedDropChance(getName())
+        );
     }
+
 }
