@@ -18,16 +18,16 @@ import org.jetbrains.annotations.NotNull;
 public final class DoublyLocation extends Location {
 
     @JsonAdapter(LocationTypeAdapter.class)
-    private final @Getter Location one;
+    private final @Getter Location singly;
 
     @JsonAdapter(LocationTypeAdapter.class)
-    private final @Getter Location two;
+    private final @Getter Location doubly;
 
 
-    public DoublyLocation(@NotNull Location one, @NotNull Location two) {
-        super(one.getWorld(), one.getBlockX(), one.getBlockY(), one.getBlockZ());
-        this.one = one;
-        this.two = two;
+    public DoublyLocation(@NotNull Location singly, @NotNull Location doubly) {
+        super(singly.getWorld(), singly.getBlockX(), singly.getBlockY(), singly.getBlockZ());
+        this.singly = singly;
+        this.doubly = doubly;
     }
 
 }

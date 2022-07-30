@@ -51,8 +51,8 @@ public final class PlayerLinkAutofarmListener implements Listener {
 
         DoublyLocation doublyContainer = LocationUtil.findByBlock(container);
         if (doublyContainer != null) {
-            Location one = doublyContainer.getOne();
-            Location two = doublyContainer.getOne();
+            Location one = doublyContainer.getSingly();
+            Location two = doublyContainer.getSingly();
 
             one.getBlock().setMetadata("farmerID", farmerMeta);
             two.getBlock().setMetadata("farmerID", farmerMeta);

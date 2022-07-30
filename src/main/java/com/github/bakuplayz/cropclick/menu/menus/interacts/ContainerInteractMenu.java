@@ -31,7 +31,7 @@ public final class ContainerInteractMenu extends AutofarmMenu {
 
         DoublyLocation doubly = LocationUtil.findByBlock(block);
         if (doubly != null) {
-            Block connected = doubly.getOne().getBlock();
+            Block connected = doubly.getSingly().getBlock();
             this.autofarm = autofarmManager.findAutofarm(connected);
         }
     }

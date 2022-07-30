@@ -104,8 +104,8 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
         DoublyLocation doublyContainer = LocationUtil.findByBlock(container);
         if (doublyContainer != null) {
-            Location one = doublyContainer.getOne();
-            Location two = doublyContainer.getOne();
+            Location one = doublyContainer.getSingly();
+            Location two = doublyContainer.getSingly();
 
             one.getBlock().removeMetadata("farmerID", plugin);
             two.getBlock().removeMetadata("farmerID", plugin);
