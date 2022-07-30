@@ -69,19 +69,19 @@ public final class McMMOCropMenu extends Menu {
 
         String cropName = crop.getName();
         if (clicked.equals(getExperienceAddItem(MIN_CHANGE))) {
-            cropsConfig.addMcMMOExperience(cropName, MIN_CHANGE);
+            addMcMMOExperience(cropName, MIN_CHANGE);
         }
 
         if (clicked.equals(getExperienceAddItem(MAX_CHANGE))) {
-            cropsConfig.addMcMMOExperience(cropName, MAX_CHANGE);
+            addMcMMOExperience(cropName, MAX_CHANGE);
         }
 
         if (clicked.equals(getExperienceRemoveItem(MIN_CHANGE))) {
-            cropsConfig.removeMcMMOExperience(cropName, MIN_CHANGE);
+            removeMcMMOExperience(cropName, MIN_CHANGE);
         }
 
         if (clicked.equals(getExperienceRemoveItem(MAX_CHANGE))) {
-            cropsConfig.removeMcMMOExperience(cropName, MAX_CHANGE);
+            removeMcMMOExperience(cropName, MAX_CHANGE);
         }
 
         if (clicked.equals(getReasonItem())) {
@@ -156,6 +156,32 @@ public final class McMMOCropMenu extends Menu {
                     );
                 })
                 .plugin(plugin);
+    }
+
+
+    /**
+     * Adds the given amount of experience to the given skill, but caps it at 10,000.
+     *
+     * @param name   The name of the skill to add experience to.
+     * @param amount The amount of experience to add.
+     */
+    public void addMcMMOExperience(@NotNull String name, int amount) {
+        double oldAmount = cropsConfig.getMcMMOExperience(name) + amount;
+        double newAmount = Math.min(oldAmount, 10_000);
+        cropsConfig.setMcMMOExperience(name, newAmount);
+    }
+
+
+    /**
+     * Removes the specified amount of experience from the specified skill.
+     *
+     * @param name   The name of the skill to remove experience from.
+     * @param amount The amount of experience to remove.
+     */
+    public void removeMcMMOExperience(@NotNull String name, int amount) {
+        double oldAmount = cropsConfig.getMcMMOExperience(name) - amount;
+        double newAmount = Math.max(oldAmount, 0);
+        cropsConfig.setMcMMOExperience(name, newAmount);
     }
 
 }

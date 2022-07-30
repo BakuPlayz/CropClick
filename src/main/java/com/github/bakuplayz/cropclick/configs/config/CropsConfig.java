@@ -30,7 +30,6 @@ public final class CropsConfig extends Config {
      * Returns the name of the crop drop item.
      *
      * @param name The name of the crop.
-     *
      * @return The drop name.
      */
     @NotNull
@@ -56,7 +55,6 @@ public final class CropsConfig extends Config {
      * Get the amount of items that a crop will drop when harvested.
      *
      * @param name The name of the crop.
-     *
      * @return The amount of items that will be dropped when the crop is harvested.
      */
     public int getCropDropAmount(@NotNull String name) {
@@ -77,36 +75,9 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Adds the given amount to the current drop amount of the given crop, but never more than 576.
-     *
-     * @param name   The name of the crop.
-     * @param amount The amount to add to the current drop amount.
-     */
-    public void addCropDropAmount(@NotNull String name, int amount) {
-        int oldAmount = getCropDropAmount(name) + amount;
-        int newAmount = Math.min(oldAmount, 576);
-        setCropDropAmount(name, newAmount);
-    }
-
-
-    /**
-     * Remove the given amount from the given crop's drop amount, but never less than zero.
-     *
-     * @param name   The name of the crop.
-     * @param amount The amount to add to the current amount.
-     */
-    public void removeCropDropAmount(@NotNull String name, int amount) {
-        int oldAmount = getCropDropAmount(name) - amount;
-        int newAmount = Math.max(oldAmount, 0);
-        setCropDropAmount(name, newAmount);
-    }
-
-
-    /**
      * Get the chance of a crop dropping an item.
      *
      * @param name The name of the crop.
-     *
      * @return The chance of a crop dropping an item.
      */
     public double getCropDropChance(@NotNull String name) {
@@ -118,7 +89,6 @@ public final class CropsConfig extends Config {
      * Returns whether the crop with the given name is enabled.
      *
      * @param name The name of the crop.
-     *
      * @return A boolean value.
      */
     public boolean isCropEnabled(@NotNull String name) {
@@ -142,7 +112,6 @@ public final class CropsConfig extends Config {
      * It gets the list of particles that are used for the crop with the given name.
      *
      * @param name The name of the crop.
-     *
      * @return A list of particles, as a string list.
      */
     @NotNull
@@ -173,7 +142,6 @@ public final class CropsConfig extends Config {
      * Get the list of sounds that the crop with the given name should play.
      *
      * @param name The name of the crop.
-     *
      * @return A list of particles, as a string list.
      */
     @NotNull
@@ -204,7 +172,6 @@ public final class CropsConfig extends Config {
      * Returns whether the crop should replant itself after being harvested.
      *
      * @param name The name of the crop.
-     *
      * @return A boolean value.
      */
     public boolean shouldReplantCrop(@NotNull String name) {
@@ -228,7 +195,6 @@ public final class CropsConfig extends Config {
      * Returns whether the crop should drop at least one item.
      *
      * @param name The name of the crop.
-     *
      * @return A boolean value.
      */
     public boolean shouldDropAtLeastOne(@NotNull String name) {
@@ -252,7 +218,6 @@ public final class CropsConfig extends Config {
      * It gets the mcMMO experience value from the config.
      *
      * @param name The name of the crop.
-     *
      * @return The amount of mcMMO experience that is given when the crop is harvested.
      */
     public double getMcMMOExperience(@NotNull String name) {
@@ -273,36 +238,9 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Adds the given amount of experience to the given skill, but caps it at 10,000.
-     *
-     * @param name   The name of the skill to add experience to.
-     * @param amount The amount of experience to add.
-     */
-    public void addMcMMOExperience(@NotNull String name, int amount) {
-        double oldAmount = getMcMMOExperience(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        setMcMMOExperience(name, newAmount);
-    }
-
-
-    /**
-     * Removes the specified amount of experience from the specified skill.
-     *
-     * @param name   The name of the skill to remove experience from.
-     * @param amount The amount of experience to remove.
-     */
-    public void removeMcMMOExperience(@NotNull String name, int amount) {
-        double oldAmount = getMcMMOExperience(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        setMcMMOExperience(name, newAmount);
-    }
-
-
-    /**
      * It gets the mcMMO experience reason for the crop with the given name.
      *
      * @param name The name of the crop.
-     *
      * @return The message that is displayed when a player receives mcMMO experience.
      */
     @Contract("_ -> new")
@@ -332,7 +270,6 @@ public final class CropsConfig extends Config {
      * Get the points for the specified crop.
      *
      * @param name The name of the crop.
-     *
      * @return The amount of points the player will receive for harvesting the specified crop.
      */
     public double getJobsPoints(@NotNull String name) {
@@ -353,36 +290,9 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Adds the specified amount of points to the crop.
-     *
-     * @param name   The name of the crop.
-     * @param amount The amount of points to add.
-     */
-    public void addJobsPoints(@NotNull String name, int amount) {
-        double oldAmount = getJobsPoints(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        setJobsPoints(name, newAmount);
-    }
-
-
-    /**
-     * Removes the specified amount of points from the specified player.
-     *
-     * @param name   The name of the player.
-     * @param amount The amount of points to remove.
-     */
-    public void removeJobsPoints(@NotNull String name, int amount) {
-        double oldAmount = getJobsPoints(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        setJobsPoints(name, newAmount);
-    }
-
-
-    /**
      * Get the money value for the specified crop.
      *
      * @param name The name of the crop.
-     *
      * @return The amount of money that the player will receive when they harvest the specified crop.
      */
     public double getJobsMoney(@NotNull String name) {
@@ -403,36 +313,9 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Adds the specified amount of money to the crop.
-     *
-     * @param name   The name of the crop.
-     * @param amount The amount of money to add to the specified crop.
-     */
-    public void addJobsMoney(@NotNull String name, int amount) {
-        double oldAmount = getJobsMoney(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        setJobsMoney(name, newAmount);
-    }
-
-
-    /**
-     * Remove money from a player's Jobs account.
-     *
-     * @param name   The name of the player
-     * @param amount The amount of money to remove from the player's balance.
-     */
-    public void removeJobsMoney(@NotNull String name, int amount) {
-        double oldAmount = getJobsMoney(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        setJobsMoney(name, newAmount);
-    }
-
-
-    /**
      * Get the experience value for the specified crop.
      *
      * @param name The name of the crop.
-     *
      * @return The experience gained from harvesting the specified crop.
      */
     public double getJobsExperience(@NotNull String name) {
@@ -453,36 +336,9 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Adds the given amount of experience to the given job, but caps it at 10,000.
-     *
-     * @param name   The name of the job.
-     * @param amount The amount of experience to add.
-     */
-    public void addJobsExperience(@NotNull String name, int amount) {
-        double oldAmount = getJobsExperience(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        setJobsExperience(name, newAmount);
-    }
-
-
-    /**
-     * Removes the specified amount of experience from the specified job.
-     *
-     * @param name   The name of the job you want to remove experience from.
-     * @param amount The amount of experience to remove.
-     */
-    public void removeJobsExperience(@NotNull String name, int amount) {
-        double oldAmount = getJobsExperience(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        setJobsExperience(name, newAmount);
-    }
-
-
-    /**
      * Returns the name of the seed drop for the given seed name.
      *
      * @param name The name of the seed.
-     *
      * @return A string
      */
     @NotNull
@@ -508,7 +364,6 @@ public final class CropsConfig extends Config {
      * Get the amount of seeds that should be dropped when a plant is harvested.
      *
      * @param name The name of the seed.
-     *
      * @return The amount of seeds that will drop from a plant.
      */
     public int getSeedDropAmount(@NotNull String name) {
@@ -529,36 +384,9 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Adds the given amount to the seed drop amount of the given seed, but never more than 576.
-     *
-     * @param name   The name of the seed.
-     * @param amount The amount of seeds to add to the current amount.
-     */
-    public void addSeedDropAmount(@NotNull String name, int amount) {
-        int oldAmount = getSeedDropAmount(name) + amount;
-        int newAmount = Math.min(oldAmount, 576);
-        setSeedDropAmount(name, newAmount);
-    }
-
-
-    /**
-     * Removes the given amount from the seed drop amount of the given seed, but never less than zero.
-     *
-     * @param name   The name of the seed.
-     * @param amount The amount to add to the current amount.
-     */
-    public void removeSeedDropAmount(@NotNull String name, int amount) {
-        int oldAmount = getSeedDropAmount(name) - amount;
-        int newAmount = Math.max(oldAmount, 0);
-        setSeedDropAmount(name, newAmount);
-    }
-
-
-    /**
      * Get the chance of a seed dropping from a mob.
      *
      * @param name The name of the seed.
-     *
      * @return The chance of a seed dropping.
      */
     public double getSeedDropChance(@NotNull String name) {
@@ -570,7 +398,6 @@ public final class CropsConfig extends Config {
      * Returns whether the seed with the given name is enabled.
      *
      * @param name The name of the seed.
-     *
      * @return A boolean value.
      */
     public boolean isSeedEnabled(@NotNull String name) {

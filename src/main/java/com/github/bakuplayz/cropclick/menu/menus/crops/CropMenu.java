@@ -92,19 +92,19 @@ public final class CropMenu extends Menu {
         }
 
         if (clicked.equals(getCropAddItem(MIN_CHANGE))) {
-            cropsConfig.addCropDropAmount(cropName, MIN_CHANGE);
+            addCropDropAmount(cropName, MIN_CHANGE);
         }
 
         if (clicked.equals(getCropAddItem(MAX_CHANGE))) {
-            cropsConfig.addCropDropAmount(cropName, MAX_CHANGE);
+            addCropDropAmount(cropName, MAX_CHANGE);
         }
 
         if (clicked.equals(getCropRemoveItem(MIN_CHANGE))) {
-            cropsConfig.removeCropDropAmount(cropName, MIN_CHANGE);
+            removeCropDropAmount(cropName, MIN_CHANGE);
         }
 
         if (clicked.equals(getCropRemoveItem(MAX_CHANGE))) {
-            cropsConfig.removeCropDropAmount(cropName, MAX_CHANGE);
+            removeCropDropAmount(cropName, MAX_CHANGE);
         }
 
         if (hasSeed) {
@@ -115,19 +115,19 @@ public final class CropMenu extends Menu {
             }
 
             if (clicked.equals(getSeedAddItem(MIN_CHANGE))) {
-                cropsConfig.addSeedDropAmount(seedName, MIN_CHANGE);
+                addSeedDropAmount(seedName, MIN_CHANGE);
             }
 
             if (clicked.equals(getSeedAddItem(MAX_CHANGE))) {
-                cropsConfig.addSeedDropAmount(seedName, MAX_CHANGE);
+                addSeedDropAmount(seedName, MAX_CHANGE);
             }
 
             if (clicked.equals(getSeedRemoveItem(MIN_CHANGE))) {
-                cropsConfig.removeSeedDropAmount(seedName, MIN_CHANGE);
+                removeSeedDropAmount(seedName, MIN_CHANGE);
             }
 
             if (clicked.equals(getSeedRemoveItem(MAX_CHANGE))) {
-                cropsConfig.removeSeedDropAmount(seedName, MAX_CHANGE);
+                removeSeedDropAmount(seedName, MAX_CHANGE);
             }
         }
 
@@ -221,4 +221,56 @@ public final class CropMenu extends Menu {
                 .toItemStack();
     }
 
+
+    /**
+     * Adds the given amount to the current drop amount of the given crop, but never more than 576.
+     *
+     * @param name   The name of the crop.
+     * @param amount The amount to add to the current drop amount.
+     */
+    public void addCropDropAmount(@NotNull String name, int amount) {
+        int oldAmount = cropsConfig.getCropDropAmount(name) + amount;
+        int newAmount = Math.min(oldAmount, 576);
+        cropsConfig.setCropDropAmount(name, newAmount);
+    }
+
+
+    /**
+     * Remove the given amount from the given crop's drop amount, but never less than zero.
+     *
+     * @param name   The name of the crop.
+     * @param amount The amount to add to the current amount.
+     */
+    public void removeCropDropAmount(@NotNull String name, int amount) {
+        int oldAmount = cropsConfig.getCropDropAmount(name) - amount;
+        int newAmount = Math.max(oldAmount, 0);
+        cropsConfig.setCropDropAmount(name, newAmount);
+    }
+
+
+
+    /**
+     * Adds the given amount to the seed drop amount of the given seed, but never more than 576.
+     *
+     * @param name   The name of the seed.
+     * @param amount The amount of seeds to add to the current amount.
+     */
+    public void addSeedDropAmount(@NotNull String name, int amount) {
+        int oldAmount = cropsConfig.getSeedDropAmount(name) + amount;
+        int newAmount = Math.min(oldAmount, 576);
+        cropsConfig.setSeedDropAmount(name, newAmount);
+    }
+
+
+    /**
+     * Removes the given amount from the seed drop amount of the given seed, but never less than zero.
+     *
+     * @param name   The name of the seed.
+     * @param amount The amount to add to the current amount.
+     */
+    public void removeSeedDropAmount(@NotNull String name, int amount) {
+        int oldAmount = cropsConfig.getSeedDropAmount(name) - amount;
+        int newAmount = Math.max(oldAmount, 0);
+        cropsConfig.setSeedDropAmount(name, newAmount);
+    }
 }
