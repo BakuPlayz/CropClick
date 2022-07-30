@@ -39,7 +39,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
 
                 <configuration>
                     <filters>
@@ -61,6 +61,13 @@
                         <configuration>
                             <outputFile>${SERVER_PATH}\CropClick-Legacy.jar</outputFile>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>net.wesjd.anvilgui</pattern>
+                                    <shadedPattern>com.github.bakuplayz.anvilgui</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <minimizeJar>false</minimizeJar>
                         </configuration>
                     </execution>
                 </executions>
@@ -99,8 +106,16 @@
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>local-maven-repo</id>
+            <url>file:///${project.basedir}/local-maven-repo</url>
         </repository>
     </repositories>
 
@@ -108,7 +123,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -169,9 +184,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-artifact</artifactId>
-            <version>3.8.5</version>
+            <groupId>xyz.xenondevs</groupId>
+            <artifactId>particle</artifactId>
+            <version>1.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.wesjd</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>1.5.3-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
@@ -187,6 +209,27 @@
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github</groupId>
+            <artifactId>MockBukkit</artifactId>
+            <version>0.0.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

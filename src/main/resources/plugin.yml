@@ -27,12 +27,14 @@ permissions:
       - cropclick.harvest.*
       - cropclick.command.*
       - cropclick.autofarmer.*
-      - cropclick.menu.button.*
 
   cropclick.plant.*:
     description: Permission to plant every crop.
     default: op
     children:
+      cropclick.plant.ground:
+        description: Permission to plant ground crops. (e.g. wheat).
+        default: op
       cropclick.plant.tall:
         description: Permission to plant tall crops. (e.g. cactus).
         default: op
@@ -54,16 +56,25 @@ permissions:
       cropclick.plant.wheat:
         description: Permission to plant the wheat crop.
         default: op
+      cropclick.plant.melon:
+        description: Permission to plant the melon crop.
+        default: op
+      cropclick.plant.pumpkin:
+        description: Permission to plant the pumpkin crop.
+        default: op
       cropclick.plant.cocoabeans:
-        description: Permisstion to plant the cocoabeans crop.
+        description: Permission to plant the cocoa beans crop.
         default: op
 
   cropclick.destroy.*:
-    description: Permission to destory every crop.
+    description: Permission to destroy every crop.
     default: op
     children:
+      cropclick.destroy.ground:
+        description: Permission to destroy all ground crops. (e.g. wheat).
+        default: op
       cropclick.destroy.tall:
-        description: Permission to destory all tall crops. (e.g. cactus).
+        description: Permission to destroy all tall crops. (e.g. cactus).
         default: op
       cropclick.destroy.beetroot:
         description: Permission to destroy the beetroot crop.
@@ -83,8 +94,14 @@ permissions:
       cropclick.destroy.wheat:
         description: Permission to destroy the wheat crop.
         default: op
+      cropclick.destroy.melon:
+        description: Permission to destroy the melon crop.
+        default: op
+      cropclick.destroy.pumpkin:
+        description: Permission to destroy the pumpkin crop.
+        default: op
       cropclick.destroy.cocoabeans:
-        description: Permisstion to destroy the cocoabeans crop.
+        description: Permission to destroy the cocoa beans crop.
         default: op
 
   cropclick.harvest.*:
@@ -93,6 +110,7 @@ permissions:
     children:
       cropclick.harvest.ground:
         description: Permission to harvest all ground crops (e.g. wheat).
+        default: op
       cropclick.harvest.tall:
         description: Permission to harvest all tall crops (e.g. cactus).
         default: op
@@ -114,15 +132,21 @@ permissions:
       cropclick.harvest.wheat:
         description: Permission to harvest the wheat crop.
         default: op
+      cropclick.harvest.melon:
+        description: Permission to harvest the melon crop.
+        default: op
+      cropclick.harvest.pumpkin:
+        description: Permission to harvest the pumpkin crop.
+        default: op
       cropclick.harvest.cocoabeans:
-        description: Permisstion to harvest the cocoabeans crop.
+        description: Permission to harvest the cocoa beans crop.
         default: op
 
   cropclick.command.*:
     description: Permission to use every command.
     default: op
     children:
-      cropclick.commnad.general:
+      cropclick.command.general:
         description: Permission to use the general command.
         default: op
       cropclick.command.help:
@@ -146,7 +170,7 @@ permissions:
         description: Permission to link autofarmers.
         default: op
       cropclick.autofarmer.unlink:
-        description: Permisstion to unlink autofarmers.
+        description: Permission to unlink autofarmers.
         default: op
       cropclick.autofarm.update:
         description: Permission to update autofarmers.
@@ -156,27 +180,4 @@ permissions:
         default: op
       cropclick.autofarmer.toggle:
         description: Permission to toggle autofarmers.
-        default: op
-
-  cropclick.menu.button.*:
-    description: Permission to use all the menu buttons.
-    default: op
-    children:
-      cropclick.menu.addons.buton:
-        description: Permission to use the addons button.
-        default: op
-      cropclick.menu.crops.button:
-        description: Permission to use the crops button.
-        default: op
-      cropclick.menu.autofarmers.button:
-        description: Permission to use the autofarmers button.
-        default: op
-      cropclick.menu.update.button:
-        description: Permission to use the update button.
-        default: op
-      cropclick.menu.effects.button:
-        description: Permission to use the effects button.
-        default: op
-      cropclick.menu.sounds.button:
-        description: Permission to use the sounds button.
         default: op

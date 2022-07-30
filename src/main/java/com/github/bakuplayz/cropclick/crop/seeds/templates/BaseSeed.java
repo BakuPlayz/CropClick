@@ -1,10 +1,17 @@
 package com.github.bakuplayz.cropclick.crop.seeds.templates;
 
 import com.github.bakuplayz.cropclick.crop.Drop;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
 public abstract class BaseSeed implements Seed {
 
     @Override
@@ -12,15 +19,19 @@ public abstract class BaseSeed implements Seed {
         return getDrop() != null;
     }
 
+
     @Override
     public void harvest(@NotNull Inventory inventory) {
         if (!hasDrop()) return;
 
         Drop drop = getDrop();
-        if (!drop.willDrop()) return;
+        if (!drop.willDrop()) {
+            return;
+        }
 
         inventory.addItem(drop.toItemStack());
     }
+
 
     @Override
     public boolean isEnabled() {

@@ -6,6 +6,7 @@ crops:
       name: "wheat"
     isEnabled: true
     atLeastOne: true
+    shouldReplant: true
     addons:
       JobsReborn:
         money: 0

@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.api.LanguageAPI;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,22 +10,47 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
 public abstract class PaginatedMenu extends Menu {
 
-    protected int page = 0;
-    protected int itemIndex = 0;
-    protected final int MAX_ITEMS_PER_PAGE = 45;
+    protected int page;
+    protected int itemIndex;
+    protected final int MAX_ITEMS_PER_PAGE = 21;
 
     protected List<ItemStack> menuItems;
 
-    public PaginatedMenu(final @NotNull Player player,
-                         final @NotNull CropClick plugin,
-                         final @NotNull LanguageAPI.Menu menuTitle) {
-        super(player, plugin, menuTitle);
+
+    public PaginatedMenu(@NotNull CropClick plugin,
+                         @NotNull Player player,
+                         @NotNull LanguageAPI.Menu menuTitle) {
+        super(plugin, player, menuTitle);
+        this.itemIndex = 0;
+        this.page = 0;
     }
 
+
+    /**
+     * Set the back items in the inventory.
+     */
+    protected final void setBackItems() {
+        inventory.setItem(46, getBackItem());
+        inventory.setItem(52, getBackItem());
+    }
+
+
+    /**
+     * If the page is greater than 0, set the previous page item. Set the current page item. If the menu items size is
+     * greater than the item index, set the next page item.
+     */
     protected final void setPageItems() {
-        if (page != 0) {
+        if (page > 0) {
             inventory.setItem(48, getPreviousPageItem());
         }
 
@@ -36,41 +61,109 @@ public abstract class PaginatedMenu extends Menu {
         }
     }
 
+
+    /**
+     * If the item is not in the top row, the left column, or the right column, then add it to the inventory.
+     */
     protected final void setPaginatedItems() {
-        for (int i = 0; i < MAX_ITEMS_PER_PAGE; i++) {
-            updateIndex(i);
+        int index = 0;
+        for (int i = 0; i < 35; ++i) {
+            boolean isLeft = i % 9 == 0;
+            boolean isRight = i % 9 == 8;
+            boolean isTop = (i / 9.0) <= 1.0;
+            boolean isForbidden = isLeft || isRight || isTop;
+            if (isForbidden) continue;
+
+            updateIndex(index++);
             if (isIndexOutOfBounds()) break;
-            inventory.addItem(menuItems.get(itemIndex));
+            inventory.setItem(i, menuItems.get(itemIndex));
         }
     }
 
-    protected final void updateIndex(final int i) {
+
+    /**
+     * If the player clicks the previous page item, and the page is greater than 0, then subtract 1 from the page and
+     * update the menu. If the player clicks the next page item, and the page is not above the bounds, then add 1 to the
+     * page and update the menu.
+     *
+     * @param clicked The item that was clicked.
+     */
+    protected final void handlePagination(@NotNull ItemStack clicked) {
+        if (clicked.equals(getPreviousPageItem())) {
+            if (page > 0) page -= 1;
+            updateMenu();
+        }
+
+        if (clicked.equals(getNextPageItem())) {
+            if (!isIndexOutOfBounds()) page += 1;
+            updateMenu();
+        }
+    }
+
+
+    /**
+     * Update the item index to the index of the item in the current page.
+     *
+     * @param i the index of the item in the current page.
+     */
+    private void updateIndex(int i) {
         this.itemIndex = MAX_ITEMS_PER_PAGE * page + i;
     }
 
-    protected final boolean isIndexOutOfBounds() {
+
+    /**
+     * If the item index is greater than or equal to the number of items in the menu, then the index is out of bounds.
+     *
+     * @return The method is returning a boolean value.
+     */
+    private boolean isIndexOutOfBounds() {
         return itemIndex >= menuItems.size();
     }
 
-    protected final boolean isIndexAboveBounds() {
-        return itemIndex > menuItems.size();
-    }
 
-    protected final @NotNull ItemStack getPreviousPageItem() {
+    /**
+     * It returns an ItemStack with the material of an arrow, the name of the previous page item, and the lore of the
+     * previous page item.
+     *
+     * @return An ItemStack.
+     */
+    private @NotNull ItemStack getPreviousPageItem() {
         return new ItemUtil(Material.ARROW)
                 .setName(LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME.get(plugin))
                 .toItemStack();
     }
 
-    protected final @NotNull ItemStack getCurrentPageItem() {
+
+    /**
+     * It returns an ItemStack that represents the current page.
+     *
+     * @return The current page item.
+     */
+    private @NotNull ItemStack getCurrentPageItem() {
         return new ItemUtil(Material.BOOK)
                 .setName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
                 .toItemStack();
     }
 
-    protected final @NotNull ItemStack getNextPageItem() {
+
+    /**
+     * It returns an ItemStack with the material of an arrow, the name of the next page item, and the lore of the next page
+     * item.
+     *
+     * @return An ItemStack.
+     */
+    private @NotNull ItemStack getNextPageItem() {
         return new ItemUtil(Material.ARROW)
                 .setName(LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME.get(plugin))
                 .toItemStack();
     }
+
+
+    /**
+     * Return a list of items that will be displayed in the menu.
+     *
+     * @return A list of items.
+     */
+    protected abstract List<ItemStack> getMenuItems();
+
 }

@@ -8,11 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class PlayerUnlinkAutofarmEvent extends Event implements Cancellable {
 
@@ -21,8 +23,8 @@ public final class PlayerUnlinkAutofarmEvent extends Event implements Cancellabl
 
     private @Setter @Getter boolean cancelled;
 
-    public PlayerUnlinkAutofarmEvent(@NotNull Player player,
-                                     @NotNull Autofarm autofarm) {
+
+    public PlayerUnlinkAutofarmEvent(@NotNull Player player, @NotNull Autofarm autofarm) {
         this.autofarm = autofarm;
         this.player = player;
     }

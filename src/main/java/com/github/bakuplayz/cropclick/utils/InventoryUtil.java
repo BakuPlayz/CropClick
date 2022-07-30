@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+
 public final class InventoryUtil {
 
-    public static boolean canContain(@NotNull Inventory inventory,
-                                     @NotNull ItemStack[] items) {
+    public static boolean canContain(@NotNull Inventory inventory, @NotNull ItemStack[] items) {
         Inventory clone = InventoryUtil.cloneInventory(inventory);
         HashMap<Integer, ItemStack> leftOver = clone.addItem(items);
 

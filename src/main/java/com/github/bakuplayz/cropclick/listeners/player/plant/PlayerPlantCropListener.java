@@ -19,11 +19,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class PlayerPlantCropListener implements Listener {
 
@@ -33,12 +35,14 @@ public final class PlayerPlantCropListener implements Listener {
 
     private final OfflineGrowthAddon growthAddon;
 
+
     public PlayerPlantCropListener(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
         this.growthAddon = addonManager.getOfflineGrowthAddon();
     }
+
 
     /* Step by step:
      * 1. isAir,
@@ -56,6 +60,10 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
+        if (!BlockUtil.isPlantableSurface(block)) {
+            return;
+        }
+
         Player player = event.getPlayer();
         if (!PermissionUtil.canPlaceCrop(player)) {
             return;
@@ -70,6 +78,8 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
+        // TODO: Check for the #getMaterial and then validate for placing...
+
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;
@@ -80,14 +90,19 @@ public final class PlayerPlantCropListener implements Listener {
         Bukkit.getPluginManager().callEvent(new PlayerPlantCropEvent(crop, block, player));
     }
 
+
+    /**
+     * If the growth addon is enabled, add the crop to the growth addon's list of crops.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {
         if (event.isCancelled()) return;
 
-        if (addonManager.isPresent(growthAddon)) {
+        if (addonManager.isPresentAndEnabled(growthAddon)) {
             growthAddon.addCrop(event.getBlock().getLocation());
         }
-
     }
 
 }

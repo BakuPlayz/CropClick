@@ -11,24 +11,31 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class PlayerLinkAutofarmListener implements Listener {
 
     private final CropClick plugin;
     private final AutofarmDataStorage farmData;
 
+
     public PlayerLinkAutofarmListener(@NotNull CropClick plugin) {
         this.farmData = plugin.getFarmData();
         this.plugin = plugin;
     }
 
-    // TODO: Should check beforehand if autofarms is enabled...
-    // TODO: Should check beforehand if player has the permission...
+
+    /**
+     * It adds metadata to the blocks that make up the autofarm, and then adds the autofarm to the farm data.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmLink(@NotNull PlayerLinkAutofarmEvent event) {
         Autofarm autofarm = event.getAutofarm();

@@ -3,9 +3,9 @@ package com.github.bakuplayz.cropclick.datastorages.datastorage;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,70 +14,133 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class WorldDataStorage extends DataStorage {
 
     private @Getter HashMap<String, FarmWorld> worlds = new HashMap<>();
 
+    private final Type type;
+
+
     public WorldDataStorage(@NotNull CropClick plugin) {
         super("worlds.json", plugin);
+        this.type = new TypeToken<HashMap<String, FarmWorld>>() {
+        }.getType();
+    }
 
+
+    /**
+     * Handles the fetching and loading of the worlds.
+     */
+    @Override
+    public void fetchData() {
+        super.fetchData();
         loadWorlds();
     }
 
-    public void addWorld(@NotNull FarmWorld world) {
+
+    /**
+     * Handles the saving of the worlds.
+     */
+    @Override
+    public void saveData() {
+        saveWorlds();
+    }
+
+
+    /**
+     * If the world is already registered, return. Otherwise, register the world.
+     *
+     * @param world The world to register.
+     */
+    public void registerWorld(@NotNull FarmWorld world) {
+        if (worlds.containsKey(world.getName())) {
+            return;
+        }
         worlds.put(world.getName(), world);
     }
 
-    public void removeWorld(@NotNull FarmWorld world) {
+
+    /**
+     * Remove the world from the list of worlds.
+     *
+     * @param world The world to unregister.
+     */
+    @SuppressWarnings("unused")
+    public void unregisterWorld(@NotNull FarmWorld world) {
         worlds.remove(world.getName());
     }
 
+
+    /**
+     * It loads the worlds from the file.
+     */
     private void loadWorlds() {
-        HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, (Type) FarmWorld.class);
+        HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, new TypeToken<HashMap<String, FarmWorld>>() {
+        }.getType());
         this.worlds = loaded != null ? loaded : new HashMap<>();
     }
 
-    public void saveWorlds() {
-        try {
-            String data = gson.toJson(worlds);
-            JsonElement dataAsJson = JsonParser.parseString(data);
-            fileData = dataAsJson.getAsJsonObject();
 
-            saveData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // TODO: Should be called once every 10 minutes or so, also before shutdown. (Call on another thread using bukkit.Schedule())
+
+
+    /**
+     * It converts the HashMap of worlds into a JSON object, then saves it to the file.
+     */
+    private void saveWorlds() {
+        String data = gson.toJson(worlds, type);
+        JsonElement dataAsJson = JsonParser.parseString(data);
+        fileData = dataAsJson.getAsJsonObject();
+
+        super.saveData();
     }
 
-    public @Nullable FarmWorld findWorldByName(@NotNull String name) {
+
+    /**
+     * Returns the FarmWorld object with the given name, or null if no such world exists.
+     *
+     * @param name The name of the world you want to find.
+     *
+     * @return A FarmWorld object or null.
+     */
+    @Nullable
+    public FarmWorld findWorldByName(@NotNull String name) {
         return worlds.getOrDefault(name, null);
     }
 
-    public @Nullable FarmWorld findWorldByWorld(@NotNull World world) {
+
+    /**
+     * Returns the FarmWorld object associated with the given World object, or null if no such FarmWorld exists.
+     *
+     * @param world The world to find the FarmWorld for.
+     *
+     * @return A FarmWorld object or null.
+     */
+    @Nullable
+    public FarmWorld findWorldByWorld(@NotNull World world) {
         return worlds.getOrDefault(world.getName(), null);
     }
 
-    public @Nullable FarmWorld findWorldByPlayer(@NotNull Player player) {
+
+    /**
+     * Returns the FarmWorld object associated with the given player, or null if the player is not in a FarmWorld.
+     *
+     * @param player The player to find the world for.
+     *
+     * @return A FarmWorld object or null.
+     */
+    @Nullable
+    public FarmWorld findWorldByPlayer(@NotNull Player player) {
         return worlds.getOrDefault(player.getWorld().getName(), null);
-    }
-
-    public @NotNull List<FarmWorld> getWorlds(int startIndex, int size) {
-        Preconditions.checkArgument(startIndex < 0, "The startIndex cannot be less than zero.");
-        Preconditions.checkArgument(size <= 0, "The size of retrieved farms cannot be less or equal to zero.");
-
-        return worlds.values().stream()
-                .skip(startIndex)
-                .limit(size)
-                .collect(Collectors.toList());
     }
 
 }

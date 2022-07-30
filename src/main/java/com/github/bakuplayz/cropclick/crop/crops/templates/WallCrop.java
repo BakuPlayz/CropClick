@@ -6,9 +6,18 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @see Crop
+ * @since 1.6.0
+ */
 public abstract class WallCrop extends BaseCrop {
 
-    public int getCurrentAge(final @NotNull Block block) {
+    public int getCurrentAge(@NotNull Block block) {
         return block.getData();
     }
 
@@ -18,6 +27,7 @@ public abstract class WallCrop extends BaseCrop {
     public @Nullable Seed getSeed() {
         return null;
     }
+
 
     @Override
     public boolean hasSeed() {

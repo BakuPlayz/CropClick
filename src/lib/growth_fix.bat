@@ -1,3 +1,1 @@
-mvn install:install-file -Dfile=OfflineGrowth-1.6.4.jar^
-    -DgroupId=es.yellowzaki.offlinegrowth -DartifactId=OfflineGrowth^
-    -Dversion=1.6.4 -Dpackaging=jar
+mvn deploy:deploy-file -Dfile=./local-maven-repo/OfflineGrowth-1.6.4.jar -DgroupId=es.yellowzaki.offlinegrowth -DartifactId=OfflineGrowth -Dversion=1.6.4 -Dpackaging=jar -Durl=file:./local-maven-repo/ -DrepositoryId=local-maven-repo -DupdateReleaseInfo=true

@@ -18,11 +18,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class AutofarmHarvestCropListener implements Listener {
 
@@ -30,12 +32,19 @@ public final class AutofarmHarvestCropListener implements Listener {
     private final WorldManager worldManager;
     private final AutofarmManager autofarmManager;
 
+
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
     }
 
+
+    /**
+     * If the block is a crop, cancel the event and call a new event.
+     *
+     * @param event The event that is being called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmInteractWithCrop(@NotNull BlockDispenseEvent event) {
         if (event.isCancelled()) return;
@@ -60,11 +69,19 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
+        if (!crop.isHarvestable(block)) return;
+
         event.setCancelled(true);
 
         Bukkit.getPluginManager().callEvent(new AutofarmHarvestCropEvent(crop, block, autofarm));
     }
 
+
+    /**
+     * If the crop has a drop, harvest it and replant it.
+     *
+     * @param event The event that is being called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {
         if (event.isCancelled()) return;
@@ -73,7 +90,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
 
-        if (!crop.hasDrops()) {
+        if (!crop.hasDrop()) {
             event.setCancelled(true);
             return;
         }
@@ -82,7 +99,6 @@ public final class AutofarmHarvestCropListener implements Listener {
             crop.harvest(container);
             crop.replant(event.getBlock());
         }
-
     }
 
 }

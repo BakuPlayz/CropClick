@@ -26,7 +26,9 @@ public final class PlayerInteractAtContainerEvent extends Event implements Cance
     private @Setter @Getter boolean cancelled;
 
 
-    public PlayerInteractAtContainerEvent(@NotNull Player player, @NotNull Block block, Container container) {
+    public PlayerInteractAtContainerEvent(@NotNull Player player,
+                                          @NotNull Block block,
+                                          Container container) {
         this.container = container;
         this.player = player;
         this.block = block;

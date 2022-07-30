@@ -1,31 +1,161 @@
 package com.github.bakuplayz.cropclick.menu.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.api.LanguageAPI;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.menus.main.*;
+import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
+import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class MainMenu extends Menu {
 
-    public MainMenu(@NotNull Player player, @NotNull CropClick plugin) {
-        super(player, plugin, LanguageAPI.Menu.MAIN_TITLE);
+    public MainMenu(@NotNull CropClick plugin, @NotNull Player player) {
+        super(plugin, player, LanguageAPI.Menu.MAIN_TITLE);
     }
+
 
     @Override
     public void setMenuItems() {
+        inventory.setItem(21, getCropsItem());
+        inventory.setItem(23, getAutofarmsItem());
 
+        inventory.setItem(45, getUpdatesItem());
+
+        inventory.setItem(49, getHelpItem());
+
+        inventory.setItem(44, getAddonsItem());
+        inventory.setItem(53, getSettingsItem());
     }
+
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
+    public void handleMenu(@NotNull InventoryClickEvent event) {
+        ItemStack clicked = event.getCurrentItem();
 
+        if (clicked.equals(getCropsItem())) {
+            new CropsMenu(plugin, player, CropMenuState.CROP).open();
+        }
+
+        if (clicked.equals(getAutofarmsItem())) {
+            new AutofarmsMenu(plugin, player).open();
+        }
+
+        if (clicked.equals(getUpdatesItem())) {
+            new UpdateMenu(plugin, player).open();
+        }
+
+        if (clicked.equals(getAddonsItem())) {
+            new AddonsMenu(plugin, player).open();
+        }
+
+        if (clicked.equals(getHelpItem())) {
+            new HelpMenu(plugin, player, true).open();
+        }
+
+        if (clicked.equals(getSettingsItem())) {
+            new SettingsMenu(plugin, player, true).open();
+        }
     }
+
+
+    /**
+     * It creates an item with the material of an anvil, the name of "Updates" and the lore of explaining the update menu.
+     *
+     * @return An ItemStack
+     */
+    private @NotNull ItemStack getUpdatesItem() {
+        boolean isUpdated = plugin.getUpdateManager().isUpdated();
+        return new ItemUtil(Material.ANVIL)
+                .setName(plugin, LanguageAPI.Menu.MAIN_UPDATES_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MAIN_UPDATES_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MAIN_UPDATES_ITEM_STATUS.get(plugin, isUpdated)
+                )).toItemStack();
+    }
+
+
+    /**
+     * It creates an item with the material of an ender chest, the name of "Addons" and the lore of explaining the addons menu.
+     *
+     * @return An ItemStack
+     */
+    private @NotNull ItemStack getAddonsItem() {
+        return new ItemUtil(Material.ENDER_CHEST)
+                .setName(plugin, LanguageAPI.Menu.MAIN_ADDONS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MAIN_ADDONS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MAIN_ADDONS_ITEM_STATUS.get(plugin)
+                )).toItemStack();
+    }
+
+
+    /**
+     * It creates an item with the material of a chest, the name of "Settings" and the lore explaining the settings menu.
+     *
+     * @return An ItemStack
+     */
+    private @NotNull ItemStack getSettingsItem() {
+        return new ItemUtil(Material.CHEST)
+                .setName(plugin, LanguageAPI.Menu.MAIN_SETTINGS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MAIN_SETTINGS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MAIN_SETTINGS_ITEM_STATUS.get(plugin)
+                )).toItemStack();
+    }
+
+
+    /**
+     * It creates an item with the material of a wheat, the name of "Crops" and the lore of "Amount of Crops: X".
+     *
+     * @return An ItemStack.
+     */
+    private @NotNull ItemStack getCropsItem() {
+        int amountOfCrops = plugin.getCropManager().getAmountOfCrops();
+        return new ItemUtil(Material.WHEAT)
+                .setName(plugin, LanguageAPI.Menu.MAIN_CROPS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MAIN_CROPS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MAIN_CROPS_ITEM_STATUS.get(plugin, amountOfCrops)
+                )).toItemStack();
+    }
+
+
+    /**
+     * It creates an item with material of dispenser, the name of "Autofarms" and the lore "Amount of Autofarms: X".
+     *
+     * @return An ItemStack.
+     */
+    private @NotNull ItemStack getAutofarmsItem() {
+        int amountOfFarms = plugin.getAutofarmManager().getAmountOfFarms();
+        return new ItemUtil(Material.DISPENSER)
+                .setName(plugin, LanguageAPI.Menu.MAIN_AUTOFARMS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MAIN_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MAIN_AUTOFARMS_ITEM_STATUS.get(plugin, amountOfFarms)
+                )).toItemStack();
+    }
+
+
+    /**
+     * It creates an item with material of book, the name of "Help" and the lore "Amount of Commands: X".
+     *
+     * @return An ItemStack.
+     */
+    private @NotNull ItemStack getHelpItem() {
+        int amountOfCommands = plugin.getCommandManager().getAmountOfCommands();
+        return new ItemUtil(Material.BOOK)
+                .setName(plugin, LanguageAPI.Menu.MAIN_HELP_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MAIN_HELP_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MAIN_HELP_ITEM_STATUS.get(plugin, amountOfCommands)
+                )).toItemStack();
+    }
+
 }

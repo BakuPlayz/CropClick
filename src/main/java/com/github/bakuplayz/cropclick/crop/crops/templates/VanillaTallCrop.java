@@ -6,23 +6,37 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @see BaseCrop
+ * @see Crop
+ * @since 1.6.0
+ */
 public abstract class VanillaTallCrop extends TallCrop {
 
     protected final @Getter CropsConfig cropsConfig;
 
+
     public VanillaTallCrop(CropsConfig config) {
         this.cropsConfig = config;
     }
+
 
     @Override
     public boolean canHarvest(@NotNull Player player) {
         return PermissionUtil.canHarvestCrop(player, getName());
     }
 
+
     @Override
     public boolean shouldReplant() {
         return cropsConfig.shouldReplantCrop(getName());
     }
+
 
     @Override
     public boolean isEnabled() {

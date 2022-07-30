@@ -18,11 +18,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class PlayerUnlinkAutofarmListener implements Listener {
 
@@ -34,6 +36,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
     private final AddonManager addonManager;
     private final AutofarmManager autofarmManager;
 
+
     public PlayerUnlinkAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
         this.farmData = plugin.getFarmData();
@@ -42,6 +45,14 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         this.plugin = plugin;
     }
 
+
+    /**
+     * If the player is breaking a block, and the block is an autofarm, and the player has permission to unlink autofarms,
+     * and the player is in a world where autofarms are allowed, and the player is allowed to modify autofarms, then unlink
+     * the autofarm.
+     *
+     * @param event The event that is being listened to.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractWithFarm(@NotNull BlockBreakEvent event) {
         if (event.isCancelled()) return;
@@ -73,6 +84,12 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         autofarmManager.unlinkAutofarm(player, autofarm);
     }
 
+
+    /**
+     * When a player unlinks an autofarm, remove the metadata from the blocks and remove the autofarm from the farmData.
+     *
+     * @param event The event that is being listened for.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
         if (event.isCancelled()) return;
@@ -90,4 +107,3 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
     }
 
 }
-

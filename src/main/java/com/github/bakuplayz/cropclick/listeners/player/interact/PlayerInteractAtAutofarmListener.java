@@ -26,6 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
@@ -40,6 +41,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
     private final AddonManager addonManager;
     private final AutofarmManager autofarmManager;
 
+
     public PlayerInteractAtAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
         this.addonManager = plugin.getAddonManager();
@@ -47,6 +49,13 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         this.cropManager = plugin.getCropManager();
     }
 
+
+    /**
+     * If the player is left-clicking a block, and the block is a crop, container, or dispenser, then call the appropriate
+     * event.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtBlock(@NotNull PlayerInteractEvent event) {
         if (event.isCancelled()) return;
@@ -97,11 +106,20 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
         if (AutofarmUtil.isCrop(cropManager, block)) {
             Crop crop = AutofarmUtil.getCrop(cropManager, block);
-            Event cropEvent = new PlayerInteractAtCropEvent(player, crop);
+            Event cropEvent = new PlayerInteractAtCropEvent(player, block, crop);
             Bukkit.getPluginManager().callEvent(cropEvent);
         }
     }
 
+
+    /**
+     * Returns true if the player is sneaking and left-clicking a block.
+     *
+     * @param player The player who clicked the block.
+     * @param action The action that was performed.
+     *
+     * @return A boolean value.
+     */
     private boolean isLeftShift(@NotNull Player player, @NotNull Action action) {
         return player.isSneaking() && action == Action.LEFT_CLICK_BLOCK;
     }

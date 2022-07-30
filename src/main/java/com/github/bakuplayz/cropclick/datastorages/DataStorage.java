@@ -1,16 +1,26 @@
 package com.github.bakuplayz.cropclick.datastorages;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.api.LanguageAPI;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.google.gson.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
 public abstract class DataStorage {
 
     protected CropClick plugin;
@@ -19,15 +29,23 @@ public abstract class DataStorage {
     protected String fileName;
     protected @Getter JsonObject fileData;
 
-    protected final Gson gson;
+    protected Gson gson;
+    protected @Setter Type type;
 
-    public DataStorage(@NotNull String fileName,
-                       @NotNull CropClick plugin) {
+
+    public DataStorage(@NotNull String fileName, @NotNull CropClick plugin) {
         this.fileName = fileName;
         this.plugin = plugin;
-        this.gson = new Gson();
+        this.gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
     }
 
+
+    /**
+     * It creates a new file in the plugin's data folder.
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setup() {
         this.file = new File(plugin.getDataFolder().getAbsolutePath() + "/datastorage", fileName);
 
@@ -42,13 +60,17 @@ public abstract class DataStorage {
         }
     }
 
+
+    /**
+     * It reads the file and parses it into the fileData (JsonObject).
+     */
     public void fetchData() {
         try {
             FileReader reader = new FileReader(file);
             JsonElement data = JsonParser.parseReader(reader);
             fileData = data != JsonNull.INSTANCE
-                    ? data.getAsJsonObject()
-                    : new JsonObject();
+                       ? data.getAsJsonObject()
+                       : new JsonObject();
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,9 +80,13 @@ public abstract class DataStorage {
         }
     }
 
+
+    /**
+     * It saves the data to the file.
+     */
     public void saveData() {
         try {
-            FileWriter writer = new FileWriter(file, false);
+            FileWriter writer = new FileWriter(file);
             gson.toJson(fileData, writer);
             writer.flush();
             writer.close();

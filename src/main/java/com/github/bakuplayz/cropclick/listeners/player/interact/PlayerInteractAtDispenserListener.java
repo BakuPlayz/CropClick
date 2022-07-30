@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
-import com.github.bakuplayz.cropclick.menu.menus.interacts.DispenserMenu;
+import com.github.bakuplayz.cropclick.menu.menus.interacts.DispenserInteractMenu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,16 +20,22 @@ public final class PlayerInteractAtDispenserListener implements Listener {
 
     private final CropClick plugin;
 
+
     public PlayerInteractAtDispenserListener(@NotNull CropClick plugin) {
         this.plugin = plugin;
     }
 
 
+    /**
+     * If a player interacts with a dispenser, open a menu that allows them to interact with the dispenser.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtDispenser(@NotNull PlayerInteractAtDispenserEvent event) {
         if (event.isCancelled()) return;
 
-        new DispenserMenu(event.getPlayer(), plugin).open();
+        new DispenserInteractMenu(plugin, event.getPlayer(), event.getBlock()).open();
     }
 
 }

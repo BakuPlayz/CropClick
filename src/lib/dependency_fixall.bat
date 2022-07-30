@@ -13,3 +13,7 @@ CALL ./growth_fix.bat
 
 :: Adds Residence to the local maven.
 CALL ./residence_fix.bat
+
+
+:: Adds MockBukkit to the local maven.
+CALL ./mock_fix.bat

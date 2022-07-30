@@ -8,8 +8,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
 public interface Crop {
 
     @NotNull String getName();
@@ -18,9 +24,12 @@ public interface Crop {
 
     int getCurrentAge(@NotNull Block block);
 
-    Collection<Drop> getDrops();
+    Drop getDrop();
 
-    boolean hasDrops();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    boolean hasDrop();
+
+    boolean dropAtLeastOne();
 
     Seed getSeed();
 
@@ -30,6 +39,7 @@ public interface Crop {
 
     void harvest(@NotNull Container container);
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isHarvestable(@NotNull Block block);
 
     boolean canHarvest(@NotNull Player player);
@@ -37,6 +47,8 @@ public interface Crop {
     void replant(@NotNull Block block);
 
     @NotNull Material getClickableType();
+
+    @NotNull Material getMenuType();
 
     boolean shouldReplant();
 

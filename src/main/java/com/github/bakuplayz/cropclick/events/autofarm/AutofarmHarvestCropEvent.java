@@ -9,11 +9,13 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class AutofarmHarvestCropEvent extends Event implements Cancellable {
 
@@ -22,6 +24,7 @@ public final class AutofarmHarvestCropEvent extends Event implements Cancellable
     private final @Getter Autofarm autofarm;
 
     private @Setter @Getter boolean cancelled;
+
 
     public AutofarmHarvestCropEvent(@NotNull Crop crop,
                                     @NotNull Block block,

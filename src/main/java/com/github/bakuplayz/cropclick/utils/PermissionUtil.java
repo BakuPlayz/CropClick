@@ -3,11 +3,13 @@ package com.github.bakuplayz.cropclick.utils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class PermissionUtil {
 

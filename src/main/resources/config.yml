@@ -12,6 +12,11 @@ updateMessage:
   player: true
   console: true
 
+interact:
+  jump: true
+  leftClick: true
+  rightClick: true
+
 autofarm:
   isEnabled: true
   canHarvest:
@@ -34,5 +39,6 @@ linkable:
     - chest
     - shulker
 
-blacklistedWorlds:
-  - TEMP_WORLD
+particles: [ ]
+
+sounds: [ ]
