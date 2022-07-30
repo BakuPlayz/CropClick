@@ -19,6 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 
 /**
  * (DESCRIPTION)
@@ -33,11 +35,14 @@ public final class PlayerHarvestCropListener implements Listener {
     private final AddonManager addonManager;
     private final WorldManager worldManager;
 
+    private final HashMap<Crop, Long> harvestedCrops;
+
 
     public PlayerHarvestCropListener(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
+        this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 
 
@@ -70,13 +75,19 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
+        if (!PermissionUtil.canHarvestCrop(player, crop.getName())) {
+            return;
+        }
+
         if (!crop.isHarvestable(block)) {
             return;
         }
 
-        if (!PermissionUtil.canHarvestCrop(player, crop.getName())) {
+        if (harvestedCrops.containsKey(crop)) {
             return;
         }
+
+        harvestedCrops.put(crop, System.nanoTime());
 
         Bukkit.getPluginManager().callEvent(new PlayerHarvestCropEvent(crop, block, player));
     }
@@ -107,6 +118,8 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
+        // LATER: crop#playSounds();
+        // LATER: crop#playEffects();
         if (crop instanceof TallCrop) {
             int height = crop.getCurrentAge(block);
             int actualHeight = crop.shouldReplant()
@@ -117,17 +130,12 @@ public final class PlayerHarvestCropListener implements Listener {
             }
 
             crop.replant(block);
-
-            return;
+        } else {
+            crop.harvest(player);
+            crop.replant(block);
         }
 
-        crop.harvest(player);
-        crop.replant(block);
-
-        // LATER: crop#playSounds();
-        // LATER: crop#playEffects();
-
-        //}
+        harvestedCrops.remove(crop);
     }
 
 }

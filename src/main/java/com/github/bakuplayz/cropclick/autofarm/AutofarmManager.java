@@ -208,7 +208,9 @@ public final class AutofarmManager {
      * @return The autofarm object that is associated with the block.
      */
     public @Nullable Autofarm findAutofarm(@NotNull Block block) {
-        if (BlockUtil.isAir(block)) return null;
+        if (BlockUtil.isAir(block)) {
+            return null;
+        }
 
         if (hasCachedID(block)) {
             String farmerID = getCachedID(block);

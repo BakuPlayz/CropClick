@@ -59,16 +59,31 @@ public final class AutofarmUtil {
      * @return A Container object
      */
     public static @Nullable Container getContainer(@NotNull Block block) {
-        if (block instanceof DoubleChest) {
-            return new Container(((DoubleChest) block).getInventory(), ContainerType.DOUBLE_CHEST);
+        BlockState blockState = block.getState();
+
+        if (blockState instanceof DoubleChest) {
+            return new Container(
+                    ((DoubleChest) blockState).getInventory(),
+                    ContainerType.DOUBLE_CHEST
+            );
         }
 
-        if (block instanceof Chest) {
-            return new Container(((Chest) block).getInventory(), ContainerType.CHEST);
+        if (blockState instanceof Chest) {
+            return new Container(
+                    ((Chest) blockState).getInventory(),
+                    ContainerType.CHEST
+            );
         }
 
-        if (VersionUtil.supportsShulkers()) {
-            return new Container(((ShulkerBox) block).getInventory(), ContainerType.SHULKER);
+        if (!VersionUtil.supportsShulkers()) {
+            return null;
+        }
+
+        if (blockState instanceof ShulkerBox) {
+            return new Container(
+                    ((ShulkerBox) blockState).getInventory(),
+                    ContainerType.SHULKER
+            );
         }
 
         return null;

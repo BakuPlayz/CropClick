@@ -91,8 +91,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         if (autofarmManager.isComponent(block)) {
             event.setCancelled(true);
         }
-
-        //TODO: Should work with doublyLocations
+        
         if (AutofarmUtil.isContainer(block)) {
             Container container = AutofarmUtil.getContainer(block);
             Event containerEvent = new PlayerInteractAtContainerEvent(player, block, container);

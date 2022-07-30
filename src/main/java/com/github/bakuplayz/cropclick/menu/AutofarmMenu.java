@@ -28,8 +28,8 @@ import java.util.List;
  */
 public abstract class AutofarmMenu extends Menu {
 
+    protected Autofarm autofarm;
     protected final Block block;
-    protected final Autofarm autofarm;
     protected final AutofarmManager autofarmManager;
 
     protected boolean isCropSelected;

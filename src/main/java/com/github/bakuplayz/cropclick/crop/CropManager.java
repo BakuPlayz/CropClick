@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +25,19 @@ import java.util.stream.Collectors;
  */
 public final class CropManager {
 
-    private final @Getter List<Crop> crops = new ArrayList<>();
+    private final @Getter List<Crop> crops;
+
+
+    /**
+     * A map of the crops that have been harvested and the time they were harvested,
+     * in order to obsolete a duplication issue with crops.
+     */
+    private final @Getter HashMap<Crop, Long> harvestedCrops;
 
 
     public CropManager(@NotNull CropsConfig config) {
+        harvestedCrops = new HashMap<>();
+        crops = new ArrayList<>();
         registerVanillaCrops(config);
     }
 

@@ -18,6 +18,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 
 /**
  * (DESCRIPTION)
@@ -33,10 +35,14 @@ public final class AutofarmHarvestCropListener implements Listener {
     private final AutofarmManager autofarmManager;
 
 
+    private final HashMap<Crop, Long> harvestedCrops;
+
+
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
+        this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 
 
@@ -69,7 +75,15 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        if (!crop.isHarvestable(block)) return;
+        if (!crop.isHarvestable(block)) {
+            return;
+        }
+
+        if (harvestedCrops.containsKey(crop)) {
+            return;
+        }
+
+        harvestedCrops.put(crop, System.nanoTime());
 
         event.setCancelled(true);
 
@@ -99,6 +113,8 @@ public final class AutofarmHarvestCropListener implements Listener {
             crop.harvest(container);
             crop.replant(event.getBlock());
         }
+
+        harvestedCrops.remove(crop);
     }
 
 }
