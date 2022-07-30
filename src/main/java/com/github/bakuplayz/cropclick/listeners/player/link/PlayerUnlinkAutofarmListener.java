@@ -6,10 +6,13 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.BlockUtil;
+import com.github.bakuplayz.cropclick.utils.LocationUtil;
 import com.github.bakuplayz.cropclick.utils.PermissionUtil;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -99,9 +102,19 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         Block container = autofarm.getContainerLocation().getBlock();
         Block dispenser = autofarm.getDispenserLocation().getBlock();
 
+        DoublyLocation doublyContainer = LocationUtil.findByBlock(container);
+        if (doublyContainer != null) {
+            Location one = doublyContainer.getOne();
+            Location two = doublyContainer.getOne();
+
+            one.getBlock().removeMetadata("farmerID", plugin);
+            two.getBlock().removeMetadata("farmerID", plugin);
+        } else {
+            container.removeMetadata("farmerID", plugin);
+        }
+
+        dispenser.removeMetadata("farmerID", plugin);
         crop.removeMetadata("farmerID", plugin);
-        container.removeMetadata("farmerID", plugin);
-        dispenser.removeMetadata("autofarm", plugin);
 
         farmData.removeFarm(autofarm);
     }

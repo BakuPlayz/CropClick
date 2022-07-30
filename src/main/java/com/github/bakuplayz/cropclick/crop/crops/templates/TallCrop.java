@@ -59,8 +59,6 @@ public abstract class TallCrop extends BaseCrop {
 
     @Override
     public void replant(@NotNull Block block) {
-        if (!shouldReplant()) return;
-
         int height = getCurrentAge(block);
         for (int i = height; i > 0; --i) {
             Block currentBlock = block.getWorld().getBlockAt(
@@ -69,6 +67,10 @@ public abstract class TallCrop extends BaseCrop {
                     block.getZ()
             );
             currentBlock.setType(Material.AIR);
+        }
+
+        if (!shouldReplant()) {
+            block.setType(Material.AIR);
         }
     }
 

@@ -1,11 +1,10 @@
-package com.github.bakuplayz.cropclick.autofarm;
+package com.github.bakuplayz.cropclick.location;
 
 import com.google.gson.annotations.JsonAdapter;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-
-import javax.xml.stream.Location;
 
 
 /**
@@ -16,17 +15,17 @@ import javax.xml.stream.Location;
  * @since 1.6.0
  */
 @ToString
-@EqualsAndHashCode
-public final class DoublyLocation {
+public final class DoublyLocation extends Location {
 
     @JsonAdapter(LocationTypeAdapter.class)
-    private final Location one;
+    private final @Getter Location one;
 
     @JsonAdapter(LocationTypeAdapter.class)
-    private final Location two;
+    private final @Getter Location two;
 
 
     public DoublyLocation(@NotNull Location one, @NotNull Location two) {
+        super(one.getWorld(), one.getBlockX(), one.getBlockY(), one.getBlockZ());
         this.one = one;
         this.two = two;
     }

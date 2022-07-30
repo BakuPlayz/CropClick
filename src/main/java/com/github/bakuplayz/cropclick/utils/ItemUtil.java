@@ -172,8 +172,8 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object itself.
      */
-    public ItemUtil setName(@NotNull String name) {
-        this.name = name;
+    public ItemUtil setName(String name) {
+        this.name = name == null ? this.name : name;
         return this;
     }
 
@@ -228,7 +228,9 @@ public final class ItemUtil {
 
         if (lore != null) meta.setLore(lore);
         if (name != null) meta.setDisplayName(name);
-        stack.setItemMeta(meta);
+        if (name != null || lore != null) {
+            stack.setItemMeta(meta);
+        }
 
         return stack;
     }

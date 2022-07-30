@@ -33,10 +33,11 @@ public final class CocoaBean extends VanillaWallCrop {
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.COCOA,
+        return new Drop(Material.INK_SACK,
                 cropsConfig.getCropDropName(getName()),
                 cropsConfig.getCropDropAmount(getName()),
-                cropsConfig.getCropDropChance(getName())
+                cropsConfig.getCropDropChance(getName()),
+                (short) 3
         );
     }
 

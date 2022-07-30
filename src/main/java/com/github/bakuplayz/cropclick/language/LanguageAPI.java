@@ -450,12 +450,18 @@ public final class LanguageAPI {
         JOBS_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%", "%type%"),
         JOBS_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter", "%value%"),
 
+        MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemName"),
+        MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemTips"),
+        MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue", "%value%"),
         MCMMO_CROP_EXPERIENCE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemName"),
         MCMMO_CROP_EXPERIENCE_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
         MCMMO_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%", "%type%"),
         MCMMO_CROP_EXPERIENCE_ADD_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemAfter", "%value%"),
         MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%", "%type%"),
         MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter", "%value%"),
+
+        MCMMO_CROP_REASON_RESPONSE_UNCHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "unchanged"),
+        MCMMO_CROP_REASON_RESPONSE_CHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "changed", "%name%"),
 
         UPDATES_UPDATES_ITEM_NAME(Category.UPDATES, SubCategory.UPDATES, "itemName"),
         UPDATES_UPDATES_ITEM_TIPS(Category.UPDATES, SubCategory.UPDATES, "itemTips"),
@@ -530,6 +536,7 @@ public final class LanguageAPI {
             POINTS,
             MONEY,
             EXPERIENCE,
+            EXPERIENCE_REASON("experienceReason"),
             POINTS_ADD("pointsAdd"),
             POINTS_REMOVE("pointsRemove"),
             MONEY_ADD("moneyAdd"),
@@ -551,6 +558,7 @@ public final class LanguageAPI {
             PLAYERS,
             CONSOLE,
             RESPONSE,
+            REASON_RESPONSE("reasonResponse"),
             COLOR_CODE("colorCode"),
             WORLD,
             WORLDS,
@@ -702,6 +710,17 @@ public final class LanguageAPI {
          * @param sender The CommandSender to send the message to.
          */
         public void send(@NotNull CropClick plugin, @NotNull CommandSender sender) {
+            sender.sendMessage(get(plugin));
+        }
+
+
+        /**
+         * It gets a list of all the crops, and sends it to the sender.
+         *
+         * @param plugin The plugin instance.
+         * @param sender The CommandSender that is executing the command.
+         */
+        public void sendAsList(@NotNull CropClick plugin, @NotNull CommandSender sender) {
             getAsList(plugin).forEach(sender::sendMessage);
         }
 

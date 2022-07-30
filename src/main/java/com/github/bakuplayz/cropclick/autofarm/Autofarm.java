@@ -2,6 +2,8 @@ package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
 import com.github.bakuplayz.cropclick.utils.VersionUtil;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -65,11 +67,39 @@ public final class Autofarm {
     }
 
 
+    public Autofarm(@NotNull Player player,
+                    @NotNull Location cropLocation,
+                    @NotNull DoublyLocation containerLocation,
+                    @NotNull Location dispenserLocation) {
+        this.dispenserLocation = dispenserLocation;
+        this.containerLocation = containerLocation;
+        this.cropLocation = cropLocation;
+        this.ownerID = player.getUniqueId();
+        this.farmerID = UUID.randomUUID();
+        this.isEnabled = true;
+    }
+
+
     public Autofarm(@NotNull UUID farmerID,
                     @NotNull UUID ownerID,
                     boolean isEnabled,
                     @NotNull Location cropLocation,
                     @NotNull Location containerLocation,
+                    @NotNull Location dispenserLocation) {
+        this.dispenserLocation = dispenserLocation;
+        this.containerLocation = containerLocation;
+        this.cropLocation = cropLocation;
+        this.isEnabled = isEnabled;
+        this.farmerID = farmerID;
+        this.ownerID = ownerID;
+    }
+
+
+    public Autofarm(@NotNull UUID farmerID,
+                    @NotNull UUID ownerID,
+                    boolean isEnabled,
+                    @NotNull Location cropLocation,
+                    @NotNull DoublyLocation containerLocation,
                     @NotNull Location dispenserLocation) {
         this.dispenserLocation = dispenserLocation;
         this.containerLocation = containerLocation;
@@ -91,21 +121,32 @@ public final class Autofarm {
         if (!isEnabled()) return null;
         if (!isLinked()) return null;
 
-        Block block = containerLocation.getBlock();
-        BlockState state = block.getState();
+        Block container = containerLocation.getBlock();
+        BlockState containerState = container.getState();
 
-        if (state instanceof DoubleChest) {
-            return container = new Container(((DoubleChest) state).getInventory(), ContainerType.DOUBLE_CHEST);
+        if (containerState instanceof DoubleChest) {
+            return this.container = new Container(
+                    ((DoubleChest) containerState).getInventory(),
+                    ContainerType.DOUBLE_CHEST
+            );
         }
 
-        if (state instanceof Chest) {
-            return container = new Container(((Chest) state).getInventory(), ContainerType.CHEST);
+        if (containerState instanceof Chest) {
+            return this.container = new Container(
+                    ((Chest) containerState).getInventory(),
+                    ContainerType.CHEST
+            );
         }
 
-        if (!VersionUtil.supportsShulkers()) return null;
+        if (!VersionUtil.supportsShulkers()) {
+            return null;
+        }
 
-        if (state instanceof ShulkerBox) {
-            return container = new Container(((ShulkerBox) state).getInventory(), ContainerType.SHULKER);
+        if (containerState instanceof ShulkerBox) {
+            return this.container = new Container(
+                    ((ShulkerBox) containerState).getInventory(),
+                    ContainerType.SHULKER
+            );
         }
 
         return null;

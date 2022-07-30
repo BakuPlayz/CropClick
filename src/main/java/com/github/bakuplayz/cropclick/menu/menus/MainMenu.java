@@ -95,7 +95,7 @@ public final class MainMenu extends Menu {
         return new ItemUtil(Material.ENDER_CHEST)
                 .setName(plugin, LanguageAPI.Menu.MAIN_ADDONS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_ADDONS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.MAIN_ADDONS_ITEM_STATUS.get(plugin)
+                        LanguageAPI.Menu.MAIN_ADDONS_ITEM_STATUS.get(plugin, 6)
                 )).toItemStack();
     }
 
@@ -109,7 +109,7 @@ public final class MainMenu extends Menu {
         return new ItemUtil(Material.CHEST)
                 .setName(plugin, LanguageAPI.Menu.MAIN_SETTINGS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_SETTINGS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.MAIN_SETTINGS_ITEM_STATUS.get(plugin)
+                        LanguageAPI.Menu.MAIN_SETTINGS_ITEM_STATUS.get(plugin, 6)
                 )).toItemStack();
     }
 

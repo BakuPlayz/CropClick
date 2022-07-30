@@ -3,7 +3,6 @@ package com.github.bakuplayz.cropclick.crop.crops.templates;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -57,15 +56,17 @@ public abstract class BaseCrop implements Crop {
         if (!hasDrop()) return;
 
         Drop drop = getDrop();
+        ItemStack dropItem = drop.toItemStack(hasNameChanged());
+
         if (drop.willDrop()) {
-            inventory.addItem(drop.toItemStack());
+            if (dropItem.getAmount() != 0) {
+                inventory.addItem(dropItem);
+            }
         }
 
         if (dropAtLeastOne()) {
-            ItemStack item = new ItemUtil(drop.toItemStack())
-                    .setAmount(1)
-                    .toItemStack();
-            inventory.addItem(item);
+            dropItem.setAmount(1);
+            inventory.addItem(dropItem);
         }
 
         if (!hasSeed()) return;
@@ -87,7 +88,11 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public void replant(@NotNull Block block) {
-        if (shouldReplant()) block.setType(Material.AIR);
+        if (shouldReplant()) {
+            block.setType(getClickableType());
+        } else {
+            block.setType(Material.AIR);
+        }
     }
 
 
@@ -100,6 +105,11 @@ public abstract class BaseCrop implements Crop {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    private boolean hasNameChanged() {
+        return !getName().equals(getDrop().getName());
     }
 
 }

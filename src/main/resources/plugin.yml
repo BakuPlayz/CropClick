@@ -38,6 +38,9 @@ permissions:
       cropclick.plant.tall:
         description: Permission to plant tall crops. (e.g. cactus).
         default: op
+      cropclick.plant.wall:
+        description: Permission to plant wall crops. (e.g. cocoa bean).
+        default: op
       cropclick.plant.beetroot:
         description: Permission to plant the beetroot crop.
         default: op
@@ -76,6 +79,9 @@ permissions:
       cropclick.destroy.tall:
         description: Permission to destroy all tall crops. (e.g. cactus).
         default: op
+      cropclick.destroy.wall:
+        description: Permission to destroy wall crops. (e.g. cocoa bean).
+        default: op
       cropclick.destroy.beetroot:
         description: Permission to destroy the beetroot crop.
         default: op
@@ -113,6 +119,9 @@ permissions:
         default: op
       cropclick.harvest.tall:
         description: Permission to harvest all tall crops (e.g. cactus).
+        default: op
+      cropclick.harvest.wall:
+        description: Permission to harvest wall crops. (e.g. cocoa bean).
         default: op
       cropclick.harvest.beetroot:
         description: Permission to harvest the beetroot crop.

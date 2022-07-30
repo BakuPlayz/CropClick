@@ -84,7 +84,7 @@ menu:
       itemName: "&eUpdates"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Updated: &e%status%"
-    
+
     help:
       itemName: "&eHelp"
       itemTips: "&7<placeholder>"
@@ -93,18 +93,18 @@ menu:
     addons:
       itemName: "&eAddons"
       itemTips: "&7<placeholder>"
-      itemStatus: "%status%"
+      itemStatus: "&7Amount of Addons: &e%status%"
 
     settings:
       itemName: "&eSettings"
       itemTips: "&7<placeholder>"
-      itemStatus: "%status%"
+      itemStatus: "&7Amount of Settings: &e%status%"
 
     crops:
       itemName: "&eCrops"
       itemTips: "&7Shows all the registered crops, and such you know."
       itemStatus: "&7Amount of Crops: &e%status%"
-    
+
     autofarms:
       itemName: "&eAutofarms"
       itemTips: "&7<placeholder>"
@@ -120,7 +120,7 @@ menu:
       itemName: "&ePlayer"
       itemTips: "&7Toggle the update messages for (OP) players."
       itemStatus: "&7Enabled: &e%status%"
-    
+
     console:
       itemName: "&eConsole"
       itemTips: "&7Toggle the update messages for the console."
@@ -136,7 +136,7 @@ menu:
     add:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
-    
+
     remove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
@@ -144,15 +144,15 @@ menu:
     crop:
       itemName: "&e%name% &7(%status%)"
       itemDropValue: "&7DropValue: &e%value%"
-    
+
     seed:
       itemName: "&e%name% &7(%status%)"
       itemDropValue: "&7DropValue: &e%value%"
-    
+
     atLeastOne:
       itemName: "&eAtLeastOne"
       itemStatus: "&7Status: &e%status%"
-    
+
     replant:
       itemName: "&eReplant"
       itemStatus: "&7Status: &e%status%"
@@ -194,12 +194,12 @@ menu:
 
     dispenser:
       itemName: "&eDispenser"
-  
+
   autofarms:
     itemName: "&e%name%"
     itemOwner: "&7Owner: &e%owner%"
     itemEnabled: "&7Enabled: &e%status%"
-  
+
   addon:
     worlds:
       itemName: "&eWorlds"
@@ -214,27 +214,27 @@ menu:
       itemName: "&eTowny"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     mcMMO:
       itemName: "&emcMMO"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     residence:
       itemName: "&eResidence"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     jobsReborn:
       itemName: "&eJobs Reborn"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     worldGuard:
       itemName: "&eWorldGuard"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     offlineGrowth:
       itemName: "&eOffline Growth"
       itemTips: "&7<placeholder>"
@@ -245,32 +245,32 @@ menu:
       itemName: "&eTowny"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     mcMMO:
       itemName: "&emcMMO"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     residence:
       itemName: "&eResidence"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     jobsReborn:
       itemName: "&eJobs Reborn"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     worldGuard:
       itemName: "&eWorldGuard"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     offlineGrowth:
       itemName: "&eOffline Growth"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-  
+
   jobsCrop:
     points:
       itemName: "&ePoints"
@@ -279,7 +279,7 @@ menu:
     pointsAdd:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
-    
+
     pointsRemove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
@@ -295,7 +295,7 @@ menu:
     moneyRemove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
-    
+
     experience:
       itemName: "&eExperience"
       itemValue: "&7Experience: &e%value%"
@@ -303,7 +303,7 @@ menu:
     experienceAdd:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
-    
+
     experienceRemove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
@@ -313,10 +313,19 @@ menu:
       itemName: "&eExperience"
       itemValue: "&7Experience: &e%value%"
 
+    experienceReason:
+      itemName: "&eExperience Reason"
+      itemValue: "&7Reason: &e%value%"
+      itemTips: "&7<placeholder>"
+
+    reasonResponse:
+      changed: "&7Changed the experience reason to &r%name%&7."
+      unchanged: "&cExperience reason unchanged!"
+
     experienceAdd:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
-    
+
     experienceRemove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
@@ -327,7 +336,7 @@ menu:
       itemTips: "&7<placeholder>"
       itemJump: "&7Jump on Crops: &e%status%"
       itemClick: "&7Click on Crops: &e%status%"
-    
+
     particles:
       itemName: "&eParticles"
       itemTips: "&7<placeholder>"
@@ -358,26 +367,26 @@ menu:
       itemName: "&eJump"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     rightClick:
       itemName: "&eRight Click"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     leftClick:
       itemName: "&eLeft Click"
       itemTips: "&7<placeholder>"
       itemStatus: "&7Enabled: &e%status%"
-  
+
   world:
     world:
       itemName: "&e%name%"
       itemStatus: "&7Enabled: &e%status%"
-    
+
     players:
       itemName: "&ePlayers"
       itemStatus: "&7Allowed: &e%status%"
-    
+
     autofarms:
       itemName: "&eAutofarms"
       itemStatus: "&7Allowed: &e%status%"
@@ -385,24 +394,24 @@ menu:
   worlds:
     itemName: "&e%name%"
     itemStatus: "&7Banished: &e%status%"
-  
+
   toggle:
     itemName: "&e%name%"
     itemStatus: "&7Enabled: &e%status%"
-  
+
   particles:
     itemName: "&e%name%"
     itemStatus: "&7Enabled: &e%status%"
-  
+
   sounds:
     itemName: "&e%name%"
     itemStatus: "&7Enabled: &e%status%"
-  
+
   name:
     crop:
       itemName: "&e%name%"
       dropName: "&7DropName: &r%name%"
-    
+
     seed:
       itemName: "&e%name%"
       dropName: "&7DropName: &r%name%"
@@ -410,7 +419,7 @@ menu:
     colorCode:
       itemName: "&eColor Codes"
       itemColor: "&7#%code% : &%color%%name%"
-    
+
     response:
       changed: "&7Changed the name of the crop to &r%name%&7."
-      unchanged: "&cName is unchanged!"
+      unchanged: "&cName unchanged!"

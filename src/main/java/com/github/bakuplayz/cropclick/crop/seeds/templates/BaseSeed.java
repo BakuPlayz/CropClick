@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.crop.seeds.templates;
 
 import com.github.bakuplayz.cropclick.crop.Drop;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -29,13 +30,21 @@ public abstract class BaseSeed implements Seed {
             return;
         }
 
-        inventory.addItem(drop.toItemStack());
+        ItemStack dropItem = drop.toItemStack(hasNameChanged());
+        if (dropItem.getAmount() != 0) {
+            inventory.addItem(dropItem);
+        }
     }
 
 
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    private boolean hasNameChanged() {
+        return !getName().equals(getDrop().getName());
     }
 
 }

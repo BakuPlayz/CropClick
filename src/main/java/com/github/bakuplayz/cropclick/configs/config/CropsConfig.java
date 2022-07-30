@@ -299,6 +299,36 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * It gets the mcMMO experience reason for the crop with the given name.
+     *
+     * @param name The name of the crop.
+     *
+     * @return The message that is displayed when a player receives mcMMO experience.
+     */
+    @Contract("_ -> new")
+    public @NotNull String getMcMMOExperienceReason(@NotNull String name) {
+        return MessageUtil.colorize(
+                config.getString(
+                        "crops." + name + ".addons.mcMMO.experienceReason",
+                        "Harvested " + name
+                )
+        );
+    }
+
+
+    /**
+     * Sets the mcMMO experience reason for the crop with the given name.
+     *
+     * @param name   The name of the crop.
+     * @param reason The reason to send to the player when they harvest the crop.
+     */
+    public void setMcMMOExperienceReason(@NotNull String name, @NotNull String reason) {
+        config.set("crops." + name + ".addons.mcMMO.experienceReason", reason);
+        saveConfig();
+    }
+
+
+    /**
      * Get the points for the specified crop.
      *
      * @param name The name of the crop.

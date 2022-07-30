@@ -23,7 +23,8 @@ public final class PlayerInteractAtContainerEvent extends Event implements Cance
     private final @Getter Player player;
     private final @Getter Container container;
 
-    private @Setter @Getter boolean cancelled;
+    private @Setter
+    @Getter boolean cancelled;
 
 
     public PlayerInteractAtContainerEvent(@NotNull Player player,

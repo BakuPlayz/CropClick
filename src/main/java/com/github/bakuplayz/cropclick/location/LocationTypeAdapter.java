@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.autofarm;
+package com.github.bakuplayz.cropclick.location;
 
 import com.google.gson.*;
 import org.bukkit.Bukkit;

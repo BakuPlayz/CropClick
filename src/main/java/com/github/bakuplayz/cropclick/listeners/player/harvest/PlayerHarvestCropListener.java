@@ -109,7 +109,10 @@ public final class PlayerHarvestCropListener implements Listener {
 
         if (crop instanceof TallCrop) {
             int height = crop.getCurrentAge(block);
-            for (int i = height; i > 0; --i) {
+            int actualHeight = crop.shouldReplant()
+                               ? height - 1
+                               : height;
+            for (int i = actualHeight; i > 0; --i) {
                 crop.harvest(player);
             }
 

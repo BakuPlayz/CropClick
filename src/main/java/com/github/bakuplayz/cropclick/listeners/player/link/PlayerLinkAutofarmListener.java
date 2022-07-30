@@ -5,6 +5,9 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.utils.LocationUtil;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,9 +49,19 @@ public final class PlayerLinkAutofarmListener implements Listener {
 
         AutofarmMetadata farmerMeta = new AutofarmMetadata(plugin, autofarm::getFarmerID);
 
-        crop.setMetadata("farmerID", farmerMeta);
-        container.setMetadata("farmerID", farmerMeta);
+        DoublyLocation doublyContainer = LocationUtil.findByBlock(container);
+        if (doublyContainer != null) {
+            Location one = doublyContainer.getOne();
+            Location two = doublyContainer.getOne();
+
+            one.getBlock().setMetadata("farmerID", farmerMeta);
+            two.getBlock().setMetadata("farmerID", farmerMeta);
+        } else {
+            container.setMetadata("farmerID", farmerMeta);
+        }
+
         dispenser.setMetadata("farmerID", farmerMeta);
+        crop.setMetadata("farmerID", farmerMeta);
 
         farmData.addFarm(autofarm);
     }

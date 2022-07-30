@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaGroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,6 +58,12 @@ public final class Melon extends VanillaGroundCrop {
 
 
     @Override
+    public void replant(@NotNull Block block) {
+        block.setType(Material.AIR);
+    }
+
+
+    @Override
     public @NotNull Material getClickableType() {
         return Material.MELON_BLOCK;
     }
@@ -64,7 +71,7 @@ public final class Melon extends VanillaGroundCrop {
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.MELON;
+        return Material.MELON_BLOCK;
     }
 
 }

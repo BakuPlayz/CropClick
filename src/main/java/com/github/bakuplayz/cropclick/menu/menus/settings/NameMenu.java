@@ -63,7 +63,7 @@ public final class NameMenu extends Menu {
 
         inventory.setItem(47, getCodesItem(0));
         inventory.setItem(51, getCodesItem(11));
-        
+
         setBackItem();
     }
 
@@ -75,13 +75,13 @@ public final class NameMenu extends Menu {
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.NAME));
 
         if (clicked.equals(getCropItem())) {
-            getAnvilMenu(true).open(player);
+            getNameChangeMenu(true).open(player);
         }
 
         if (!hasSeed) return;
 
         if (clicked.equals(getSeedItem())) {
-            getAnvilMenu(false).open(player);
+            getNameChangeMenu(false).open(player);
         }
     }
 
@@ -158,7 +158,7 @@ public final class NameMenu extends Menu {
      * @return AnvilGUI.Builder.
      */
     @NotNull
-    private AnvilGUI.Builder getAnvilMenu(boolean isCrop) {
+    private AnvilGUI.Builder getNameChangeMenu(boolean isCrop) {
         String currentName = getDropName(isCrop);
         return new AnvilGUI.Builder()
                 .text(ChatColor.stripColor(currentName))

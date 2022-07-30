@@ -9,6 +9,8 @@ import com.github.bakuplayz.cropclick.menu.menus.addons.McMMOMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -47,11 +49,13 @@ public final class McMMOCropMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(19, getExperienceRemoveItem(MAX_CHANGE));
-        inventory.setItem(20, getExperienceRemoveItem(MIN_CHANGE));
-        inventory.setItem(22, getExperienceItem());
-        inventory.setItem(24, getExperienceAddItem(MIN_CHANGE));
-        inventory.setItem(25, getExperienceAddItem(MAX_CHANGE));
+        inventory.setItem(13, getReasonItem());
+
+        inventory.setItem(28, getExperienceRemoveItem(MAX_CHANGE));
+        inventory.setItem(29, getExperienceRemoveItem(MIN_CHANGE));
+        inventory.setItem(31, getExperienceItem());
+        inventory.setItem(33, getExperienceAddItem(MIN_CHANGE));
+        inventory.setItem(34, getExperienceAddItem(MAX_CHANGE));
 
         setBackItem();
     }
@@ -80,7 +84,22 @@ public final class McMMOCropMenu extends Menu {
             cropsConfig.removeMcMMOExperience(cropName, MAX_CHANGE);
         }
 
+        if (clicked.equals(getReasonItem())) {
+            getReasonMenu(cropName).open(player);
+        }
+
         updateMenu();
+    }
+
+
+    @NotNull
+    private ItemStack getReasonItem() {
+        String reason = cropsConfig.getMcMMOExperienceReason(crop.getName());
+        return new ItemUtil(Material.PAPER)
+                .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE.get(plugin, reason)
+                )).toItemStack();
     }
 
 
@@ -115,6 +134,28 @@ public final class McMMOCropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .setDamage(14)
                 .toItemStack();
+    }
+
+
+    @NotNull
+    private AnvilGUI.Builder getReasonMenu(@NotNull String cropName) {
+        String currentReason = cropsConfig.getMcMMOExperienceReason(cropName);
+        return new AnvilGUI.Builder()
+                .text(ChatColor.stripColor(currentReason))
+                .itemLeft(getReasonItem())
+                .onComplete((player, text) -> {
+                    cropsConfig.setMcMMOExperienceReason(cropName, text);
+                    return AnvilGUI.Response.close();
+                })
+                .onClose((player) -> {
+                    String newReason = cropsConfig.getMcMMOExperienceReason(cropName);
+                    player.sendMessage(
+                            currentReason.equals(newReason)
+                            ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
+                            : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
+                    );
+                })
+                .plugin(plugin);
     }
 
 }

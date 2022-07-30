@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * (DESCRIPTION)
  *
@@ -23,7 +24,9 @@ public final class PlayerInteractAtDispenserEvent extends Event implements Cance
     private final @Getter Player player;
     private final @Getter Dispenser dispenser;
 
-    private @Setter @Getter boolean cancelled;
+    private @Setter
+    @Getter boolean cancelled;
+
 
     public PlayerInteractAtDispenserEvent(@NotNull Player player, @NotNull Dispenser dispenser) {
         this.block = dispenser.getBlock();

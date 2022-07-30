@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaGroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,6 +54,12 @@ public final class Pumpkin extends VanillaGroundCrop {
     @Contract(pure = true)
     public @Nullable Seed getSeed() {
         return null;
+    }
+
+
+    @Override
+    public void replant(@NotNull Block block) {
+        block.setType(Material.AIR);
     }
 
 

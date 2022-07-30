@@ -23,7 +23,8 @@ public final class AutofarmHarvestCropEvent extends Event implements Cancellable
     private final @Getter Block block;
     private final @Getter Autofarm autofarm;
 
-    private @Setter @Getter boolean cancelled;
+    private @Setter
+    @Getter boolean cancelled;
 
 
     public AutofarmHarvestCropEvent(@NotNull Crop crop,
