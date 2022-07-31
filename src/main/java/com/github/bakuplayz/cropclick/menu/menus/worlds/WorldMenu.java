@@ -45,6 +45,7 @@ public final class WorldMenu extends Menu {
     }
 
 
+    //TODO: Doesn't handel addons properly....
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
@@ -78,7 +79,7 @@ public final class WorldMenu extends Menu {
         return new ItemUtil(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers()))
-                .toSkullItem(player.getName());
+                .toItemStack();
     }
 
 

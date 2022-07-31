@@ -244,6 +244,7 @@ public final class ItemUtil {
      * @return An ItemStack.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public ItemStack toSkullItem(@NotNull String owner) {
         ItemStack stack = new ItemStack(material, amount, (byte) 3);
         SkullMeta meta = this.meta != null

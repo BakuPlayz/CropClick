@@ -73,7 +73,7 @@ public final class SettingsMenu extends Menu {
             new CropsMenu(plugin, player, CropMenuState.SOUNDS).open();
         }
 
-        if (clicked.equals(getToggleItem())) {
+        if (clicked.isSimilar(getToggleItem())) {
             new ToggleMenu(plugin, player).open();
         }
 
@@ -121,7 +121,7 @@ public final class SettingsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())
                 ))
-                .toSkullItem(player.getName());
+                .toItemStack();
     }
 
 

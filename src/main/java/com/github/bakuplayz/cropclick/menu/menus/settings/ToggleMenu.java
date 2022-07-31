@@ -108,7 +108,7 @@ public final class ToggleMenu extends PaginatedMenu {
         return new ItemUtil(Material.SKULL_ITEM)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
                 .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, isEnabled))
-                .toSkullItem(offlinePlayer.getName());
+                .toItemStack();
     }
 
 
