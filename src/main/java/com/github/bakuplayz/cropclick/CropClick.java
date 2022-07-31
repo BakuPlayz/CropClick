@@ -64,6 +64,8 @@ public class CropClick extends JavaPlugin {
 
     private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
+    private boolean isUnitTest;
+
 
     public CropClick() {
         super();
@@ -75,17 +77,27 @@ public class CropClick extends JavaPlugin {
                         File dataFolder,
                         File file) {
         super(loader, description, dataFolder, file);
+        this.isUnitTest = true;
     }
 
 
     @Override
     public void onEnable() {
+        if (isUnitTest) {
+            registerConfigs();
+            setupConfigs();
+            
+            registerStorages();
+            setupStorages();
+            return;
+        }
+
         if (!VersionUtil.between(8.0, 13.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }
 
-        plugin = this;
+        CropClick.plugin = this;
 
         registerConfigs();
         setupConfigs();
@@ -101,7 +113,7 @@ public class CropClick extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        plugin = null;
+        CropClick.plugin = null;
 
         worldData.saveData();
         farmData.saveData();
