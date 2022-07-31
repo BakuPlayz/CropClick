@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
@@ -26,11 +27,14 @@ public final class WorldMenu extends Menu {
 
     private final FarmWorld world;
 
+    private final AddonManager addonManager;
+
 
     public WorldMenu(@NotNull CropClick plugin,
                      @NotNull Player player,
                      @NotNull FarmWorld world) {
         super(plugin, player, LanguageAPI.Menu.WORLD_TITLE);
+        this.addonManager = plugin.getAddonManager();
         this.world = world;
     }
 
@@ -51,6 +55,8 @@ public final class WorldMenu extends Menu {
         ItemStack clicked = event.getCurrentItem();
 
         handleBack(clicked, new WorldsMenu(plugin, player, WorldMenuState.SETTINGS));
+
+        //world.toggleAddon(addonManager, "jo"); WorldMenuState.NAME.getName();
 
         if (clicked.equals(getWorldItem())) {
             world.isBanished(!world.isBanished());
