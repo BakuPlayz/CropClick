@@ -75,7 +75,7 @@ public final class BlockUtil {
      * @return A boolean value.
      */
     @SuppressWarnings("unused")
-    public static boolean isAnyType(@NotNull Block b, @NotNull Material... types) {
+    public static boolean isAnyType(@NotNull Block b, @NotNull Material @NotNull... types) {
         return Arrays.stream(types).anyMatch(type -> type == b.getType());
     }
 
