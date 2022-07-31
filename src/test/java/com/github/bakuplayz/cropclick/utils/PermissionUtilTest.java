@@ -1,18 +1,7 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import com.github.bakuplayz.cropclick.CropClick;
-import org.bukkit.permissions.Permissible;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 public class PermissionUtilTest {
-
+/*
     private PlayerMock player;
     private CropClick plugin;
 
@@ -70,5 +59,5 @@ public class PermissionUtilTest {
     public void testCanHarvestCrop() throws Exception {
         boolean result = PermissionUtil.canHarvestCrop(player, "wheat");
         Assert.assertTrue(result);
-    }
+    }*/
 }
