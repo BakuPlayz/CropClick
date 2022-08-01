@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.utils;
 
-public class PermissionUtilTest {
+public final class PermissionUtilTest {
 /*
     private PlayerMock player;
     private CropClick plugin;

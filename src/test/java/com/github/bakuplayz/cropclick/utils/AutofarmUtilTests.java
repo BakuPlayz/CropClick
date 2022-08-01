@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class AutofarmUtilTests {
+public final class AutofarmUtilTests {
 
     private ServerMock server;
 
@@ -32,7 +32,7 @@ public class AutofarmUtilTests {
 
 
     @Test
-    public void isContainer() {
+    public void testIsContainer() {
         /*BlockMock block = new BlockMock();
         block.setType(Material.CHEST);
 
@@ -46,27 +46,27 @@ public class AutofarmUtilTests {
 
 
     @Test
-    public void getContainer() {
+    public void testGetContainer() {
     }
 
 
     @Test
-    public void isDispenser() {
+    public void testIsDispenser() {
     }
 
 
     @Test
-    public void getDispenser() {
+    public void testGetDispenser() {
     }
 
 
     @Test
-    public void isCrop() {
+    public void testIsCrop() {
     }
 
 
     @Test
-    public void getCrop() {
+    public void testGetCrop() {
     }
 
 }

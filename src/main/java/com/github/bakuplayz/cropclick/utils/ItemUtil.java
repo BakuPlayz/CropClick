@@ -2,10 +2,10 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,17 +18,18 @@ import java.util.List;
  *
  * @author BakuPlayz
  * @version 1.6.0
+ * @since 1.6.0
  */
 public final class ItemUtil {
 
-    private int amount;
-    private short damage;
+    private @Getter int amount;
+    private @Getter short damage;
 
-    private ItemMeta meta;
-    private Material material;
+    private @Getter ItemMeta meta;
+    private @Getter Material material;
 
-    private String name;
-    private List<String> lore = new ArrayList<>();
+    private @Getter String name;
+    private @Getter List<String> lore = new ArrayList<>();
 
 
     public ItemUtil(Material material) {
@@ -115,7 +116,6 @@ public final class ItemUtil {
      * the amount
      *
      * @param amount The amount of the item.
-     *
      * @return The ItemUtil object.
      */
     public ItemUtil setAmount(int amount) {
@@ -129,7 +129,6 @@ public final class ItemUtil {
      * the damage
      *
      * @param damage The damage value of the item.
-     *
      * @return The ItemUtil object
      */
     public ItemUtil setDamage(int damage) {
@@ -142,7 +141,6 @@ public final class ItemUtil {
      * Sets the material of the item, if the id is greater than -1.
      *
      * @param id The ID of the item.
-     *
      * @return The ItemUtil object.
      */
     @Deprecated
@@ -156,7 +154,6 @@ public final class ItemUtil {
      * If the material is null, then set the material to the current material, otherwise set the material to the material.
      *
      * @param material The material of the item.
-     *
      * @return The ItemUtil object
      */
     public ItemUtil setMaterial(Material material) {
@@ -169,7 +166,6 @@ public final class ItemUtil {
      * Sets the name of the item and returns the ItemUtil instance.
      *
      * @param name The name of the item.
-     *
      * @return The ItemUtil object itself.
      */
     public ItemUtil setName(String name) {
@@ -183,7 +179,6 @@ public final class ItemUtil {
      *
      * @param plugin The plugin instance
      * @param name   The name of the item.
-     *
      * @return The ItemUtil object.
      */
     public ItemUtil setName(@NotNull CropClick plugin, @NotNull LanguageAPI.Menu name) {
@@ -196,7 +191,6 @@ public final class ItemUtil {
      * If the lore is null, then set the lore to the current lore, otherwise set the lore to the new lore.
      *
      * @param lore The lore of the item.
-     *
      * @return The ItemUtil object.
      */
     public ItemUtil setLore(List<String> lore) {
@@ -231,31 +225,6 @@ public final class ItemUtil {
         if (name != null || lore != null) {
             stack.setItemMeta(meta);
         }
-
-        return stack;
-    }
-
-
-    /**
-     * This function returns an ItemStack with the given owner, and the rest of the properties of this ItemBuilder.
-     *
-     * @param owner The owner of the skull.
-     *
-     * @return An ItemStack.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    public ItemStack toSkullItem(@NotNull String owner) {
-        ItemStack stack = new ItemStack(material, amount, (byte) 3);
-        SkullMeta meta = this.meta != null
-                         ? (SkullMeta) this.meta
-                         : (SkullMeta) stack.getItemMeta();
-
-        if (lore != null) meta.setLore(lore);
-        if (name != null) meta.setDisplayName(name);
-        meta.setOwner(owner);
-
-        stack.setItemMeta(meta);
 
         return stack;
     }

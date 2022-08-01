@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.utils;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class Param {
 
-    public String key;
-    public Object value;
+    public @Getter String key;
+    public @Getter Object value;
 
 
     public Param(@NotNull String key, @NotNull Object value) {

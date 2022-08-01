@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version 1.6.0
  * @since 1.6.0
  */
-public class ParamTest {
+public final class ParamTest {
 
     private Param param;
 
@@ -28,9 +28,9 @@ public class ParamTest {
     @Test
     public void testConstructor() {
         assertAll("Should contain, equal and mach the values and equal instances.",
-                () -> assertEquals(param, new Param("test", "value")),
-                () -> assertEquals(param.key, "test"),
-                () -> assertEquals(param.value, "value")
+                () -> assertEquals(new Param("test", "value"), param),
+                () -> assertEquals(param.getKey(), "test"),
+                () -> assertEquals(param.getValue(), "value")
         );
     }
 
