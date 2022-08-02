@@ -27,8 +27,7 @@ public final class MessageUtil {
      * This function takes a string and returns a string.
      *
      * @param message The message to colorize.
-     *
-     * @return A string
+     * @return A string.
      */
     @Contract("_ -> new")
     public static @NotNull String colorize(@NotNull String message) {
@@ -41,8 +40,7 @@ public final class MessageUtil {
      *
      * @param message       The message to beautify.
      * @param isUnderscored If the message is underscored, set this to true.
-     *
-     * @return A string
+     * @return A string.
      */
     public static @NotNull String beautify(@NotNull String message, boolean isUnderscored) {
         String[] words = message.split(isUnderscored ? "_" : "(?=\\p{Lu})");
@@ -59,7 +57,6 @@ public final class MessageUtil {
      *
      * @param message      The message you want to readify.
      * @param wordsPerLine The amount of words per line.
-     *
      * @return A list of strings
      */
     public static @NotNull List<String> readify(@NotNull String message, int wordsPerLine) {
@@ -72,12 +69,16 @@ public final class MessageUtil {
         for (int i = 0; i < words.length; ++i) {
             boolean isNotStart = i != 0;
             boolean isNewLine = i % wordsPerLine == 0;
+            boolean skipFirstLine = i != wordsPerLine;
             if (isNotStart && isNewLine) {
-                readableWords.add(color + partOfWord);
+                readableWords.add(skipFirstLine
+                        ? color + partOfWord
+                        : partOfWord.toString()
+                );
                 partOfWord = new StringBuilder();
             }
 
-            partOfWord.append(words[i]).append(" ");
+            partOfWord.append(words[i]).append(isNewLine ? " " : "");
         }
 
         if (partOfWord.length() != 0) {
@@ -85,8 +86,8 @@ public final class MessageUtil {
         }
 
         return readableWords.size() != 0
-               ? readableWords
-               : Collections.singletonList(partOfWord.toString());
+                ? readableWords
+                : Collections.singletonList(partOfWord.toString());
     }
 
 
@@ -95,10 +96,9 @@ public final class MessageUtil {
      *
      * @param plugin    The plugin instance.
      * @param isEnabled This is a boolean that determines whether the crop is enabled or not.
-     *
      * @return A string.
      */
-    public static @NotNull String getEnabledStatus(CropClick plugin, boolean isEnabled) {
+    public static @NotNull String getEnabledStatus(@NotNull CropClick plugin, boolean isEnabled) {
         if (isEnabled) return LanguageAPI.Menu.ENABLED_STATUS.get(plugin);
         return LanguageAPI.Menu.DISABLED_STATUS.get(plugin);
     }

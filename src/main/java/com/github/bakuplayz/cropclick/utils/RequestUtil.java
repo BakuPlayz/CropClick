@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataOutputStream;
@@ -24,9 +25,9 @@ import java.util.stream.Collectors;
  */
 public final class RequestUtil {
 
-    private String params;
-    private HashMap<String, String> headers;
-    private final HttpURLConnection client;
+    private @Getter String params;
+    private @Getter HashMap<String, String> headers;
+    private final @Getter HttpURLConnection client;
 
     private boolean isDataChanged;
 
@@ -63,7 +64,7 @@ public final class RequestUtil {
      * It sets the headers for the request.
      *
      * @param headers    The headers to be sent with the request.
-     * @param addDefault If true, the default headers will be added to the headers you pass in.
+     * @param addDefault Adds the default request headers.
      * @return The RequestUtil object
      */
     public RequestUtil setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
@@ -102,7 +103,7 @@ public final class RequestUtil {
      * @return A JsonElement object.
      */
     public JsonElement getResponse() throws IOException {
-        if (isDataChanged) return JsonNull.INSTANCE;
+        if (!isDataChanged) return JsonNull.INSTANCE;
 
         InputStreamReader reader = new InputStreamReader(client.getInputStream());
         JsonElement body = JsonParser.parseReader(reader);

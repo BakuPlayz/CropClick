@@ -7,8 +7,10 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.TestInstance;
 
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public final class AutofarmUtilTests {
 
     private ServerMock server;

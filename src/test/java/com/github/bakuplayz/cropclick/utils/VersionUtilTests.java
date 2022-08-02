@@ -4,6 +4,7 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @version 1.6.0
  * @since 1.6.0
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public final class VersionUtilTests {
 
 

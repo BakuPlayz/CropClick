@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class Param {
 
-    public @Getter String key;
-    public @Getter Object value;
+    private final @Getter String key;
+    private final @Getter Object value;
 
 
     public Param(@NotNull String key, @NotNull Object value) {

@@ -38,8 +38,8 @@ public final class ParamTest {
     @Test
     public void testToString() {
         assertAll("Should return param in a http encoded format.",
-                () -> assertEquals(param.key, "test"),
-                () -> assertEquals(param.value, "value"),
+                () -> assertEquals(param.getKey(), "test"),
+                () -> assertEquals(param.getValue(), "value"),
                 () -> assertEquals(param.toString(), "test=value")
         );
     }
