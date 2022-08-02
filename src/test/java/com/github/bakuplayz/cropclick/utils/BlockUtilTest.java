@@ -84,10 +84,6 @@ public final class BlockUtilTest {
     public void testIsSameType2() {
         block.setType(Material.STONE);
         assertAll("Checks if the block's type matches the other type.",
-                () -> {
-                    Material m = null;
-                    assertThrows(Exception.class, () -> BlockUtil.isSameType(block, m));
-                },
                 () -> assertFalse(BlockUtil.isSameType(block, Material.AIR)),
                 () -> assertTrue(BlockUtil.isSameType(block, Material.STONE))
         );
