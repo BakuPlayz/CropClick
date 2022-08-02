@@ -70,6 +70,7 @@ public final class MessageUtil {
             boolean isNotStart = i != 0;
             boolean isNewLine = i % wordsPerLine == 0;
             boolean skipFirstLine = i != wordsPerLine;
+            boolean hasNextWord = words.length == (i + 1);
             if (isNotStart && isNewLine) {
                 readableWords.add(skipFirstLine
                         ? color + partOfWord
@@ -78,7 +79,8 @@ public final class MessageUtil {
                 partOfWord = new StringBuilder();
             }
 
-            partOfWord.append(words[i]).append(isNewLine ? " " : "");
+            partOfWord.append(words[i])
+                    .append(isNewLine && !hasNextWord ? " " : "");
         }
 
         if (partOfWord.length() != 0) {

@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.*;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import lombok.Getter;
@@ -96,7 +96,6 @@ public final class AddonManager {
      * addon exists.
      *
      * @param name The name of the addon you want to find.
-     *
      * @return The first Addon that matches the name.
      */
     public Addon findByName(@NotNull String name) {
@@ -110,7 +109,6 @@ public final class AddonManager {
      * If the addon is not null (aka. present) and is enabled, return true.
      *
      * @param addon The addon to check.
-     *
      * @return A boolean value.
      */
     public boolean isPresentAndEnabled(Addon addon) {
@@ -122,7 +120,6 @@ public final class AddonManager {
      * Returns true if the given name is present in the list of registered addons.
      *
      * @param name The name of the addon to check for.
-     *
      * @return A boolean value.
      */
     public boolean isPresent(@NotNull String name) {
@@ -134,7 +131,6 @@ public final class AddonManager {
      * Return true if any enabled addon has the given name.
      *
      * @param name The name of the addon to check.
-     *
      * @return A boolean value.
      */
     public boolean isEnabled(@NotNull String name) {
@@ -148,10 +144,8 @@ public final class AddonManager {
      * return true.
      *
      * @param player The player who is trying to modify the block.
-     *
      * @return A boolean value.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canModify(@NotNull Player player) {
         if (isPresentAndEnabled(townyAddon)) {
             return townyAddon.canDestroyCrop(player);

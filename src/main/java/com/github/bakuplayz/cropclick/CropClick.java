@@ -89,6 +89,9 @@ public class CropClick extends JavaPlugin {
             
             registerStorages();
             setupStorages();
+
+            //registerCommands();
+            //registerListeners();
             return;
         }
 

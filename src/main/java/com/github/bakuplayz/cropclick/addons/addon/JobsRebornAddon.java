@@ -5,7 +5,7 @@ import com.gamingmesh.jobs.container.CurrencyType;
 import com.gamingmesh.jobs.container.Job;
 import com.gamingmesh.jobs.container.JobsPlayer;
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
 import org.bukkit.entity.Player;
@@ -55,7 +55,6 @@ public final class JobsRebornAddon extends Addon {
      * Get the points of the crop with the passed name.
      *
      * @param name The name of the crop.
-     *
      * @return The points of the crop.
      */
     private double getPoints(@NotNull String name) {
@@ -67,7 +66,6 @@ public final class JobsRebornAddon extends Addon {
      * Get the experience of a crop with the passed name.
      *
      * @param name The name of the crop.
-     *
      * @return The experience of the crop.
      */
     private double getExperience(@NotNull String name) {
@@ -79,7 +77,6 @@ public final class JobsRebornAddon extends Addon {
      * Get the money of a crop with the passed name.
      *
      * @param name The name of the crop.
-     *
      * @return The money of the crop.
      */
     private double getMoney(@NotNull String name) {

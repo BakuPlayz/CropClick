@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.addons.addon.templates;
+package com.github.bakuplayz.cropclick.addons.addon.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;

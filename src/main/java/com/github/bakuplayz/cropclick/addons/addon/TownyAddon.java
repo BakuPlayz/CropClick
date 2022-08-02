@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.addons.addon;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import org.bukkit.Material;
@@ -28,7 +28,6 @@ public final class TownyAddon extends Addon {
      * Returns true if the player can destroy a block (in this case: just a dummy stone).
      *
      * @param player The player who is trying to destroy the crop.
-     *
      * @return A boolean value.
      */
     public boolean canDestroyCrop(@NotNull Player player) {

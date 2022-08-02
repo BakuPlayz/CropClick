@@ -7,7 +7,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1.6.0
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MessageUtilTest {
+public final class MessageUtilTest {
 
     private CropClick plugin;
 
@@ -58,11 +60,18 @@ public class MessageUtilTest {
 
     @Test
     public void testReadify() {
-        List<String> result = MessageUtil.readify("&6Message with two words per line.", 2);
-        List<String> expectedResult = Arrays.asList("&6Message with", "&6two words", "&6per line.");
+        List<String> twoWordEven = MessageUtil.readify("&6Message with two words per line.", 2);
+        List<String> twoWordOdd = MessageUtil.readify("&6Message with two words line.", 2);
+        List<String> emptyTwoWord = MessageUtil.readify("", 2);
+        List<String> evenResult = Arrays.asList("&6Message with", "&6two words", "&6per line.");
+        List<String> oddResult = Arrays.asList("&6Message with", "&6two words", "&6line.");
         assertAll("Checks if the message is 'readified' with two lines correctly.",
-                () -> assertNotNull(result),
-                () -> assertEquals(expectedResult, result)
+                () -> assertNotNull(twoWordEven),
+                () -> assertNotNull(twoWordOdd),
+                () -> assertNotNull(emptyTwoWord),
+                () -> assertEquals(evenResult, twoWordEven),
+                () -> assertEquals(oddResult, twoWordOdd),
+                () -> assertEquals(emptyTwoWord, Collections.singletonList(""))
         );
     }
 

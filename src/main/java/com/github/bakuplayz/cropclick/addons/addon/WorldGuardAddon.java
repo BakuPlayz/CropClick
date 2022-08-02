@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.addons.addon;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
@@ -53,7 +53,6 @@ public final class WorldGuardAddon extends Addon {
      * true.
      *
      * @param player The player to check.
-     *
      * @return A boolean value.
      */
     public boolean regionAllowsPlayer(@NotNull Player player) {
@@ -80,7 +79,6 @@ public final class WorldGuardAddon extends Addon {
      *
      * @param region The region you want to check.
      * @param player The player to check if they are a member of the region.
-     *
      * @return A boolean value.
      */
     private boolean regionHasMember(@NotNull ProtectedRegion region, @NotNull Player player) {

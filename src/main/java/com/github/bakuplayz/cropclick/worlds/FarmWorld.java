@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.worlds;
 
 import com.github.bakuplayz.cropclick.addons.AddonManager;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,7 +76,6 @@ public final class FarmWorld {
      *
      * @param manager The AddonManager instance
      * @param name    The name of the addon to check
-     *
      * @return A boolean value.
      */
     public boolean isBanishedAddon(@NotNull AddonManager manager, @NotNull String name) {

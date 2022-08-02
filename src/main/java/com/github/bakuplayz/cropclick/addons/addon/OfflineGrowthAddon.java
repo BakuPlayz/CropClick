@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.addons.addon;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import es.yellowzaki.offlinegrowth.api.OfflineGrowthAPI;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

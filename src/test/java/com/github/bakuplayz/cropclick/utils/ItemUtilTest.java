@@ -6,7 +6,11 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.junit.jupiter.api.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +32,7 @@ public final class ItemUtilTest {
 
     private CropClick plugin;
 
-    @BeforeAll
+    @Before
     public void beforeAll() {
         MockBukkit.mock();
     }
@@ -39,7 +43,7 @@ public final class ItemUtilTest {
         itemUtil = new ItemUtil(Material.STONE);
     }
 
-    @AfterAll
+    @After
     public void tearDown() {
         MockBukkit.unload();
     }

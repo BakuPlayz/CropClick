@@ -8,7 +8,7 @@ import com.bekvon.bukkit.residence.protection.FlagPermissions;
 import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.addon.templates.Addon;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +45,6 @@ public final class ResidenceAddon extends Addon {
      * If the player is in a residence, and that residence or the player has the flag, return true.
      *
      * @param player The player who is trying to use the command.
-     *
      * @return A boolean value.
      */
     public boolean regionOrPlayerHasFlag(@NotNull Player player) {
