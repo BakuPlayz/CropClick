@@ -65,8 +65,8 @@ public final class BlockUtilTest {
         assertAll("Checks if the types of two blocks are the same.",
                 () -> {
                     BlockMock b = null;
-                    assertThrows(IllegalArgumentException.class, () -> BlockUtil.isSameType(block, b));
-                    assertThrows(IllegalArgumentException.class, () -> BlockUtil.isSameType(b, block));
+                    assertThrows(Exception.class, () -> BlockUtil.isSameType(block, b));
+                    assertThrows(Exception.class, () -> BlockUtil.isSameType(b, block));
                 },
                 () -> {
                     block2.setType(Material.GRASS);
@@ -84,7 +84,7 @@ public final class BlockUtilTest {
     public void testIsSameType2() {
         block.setType(Material.STONE);
         assertAll("Checks if the block's type matches the other type.",
-                () -> assertThrows(IllegalArgumentException.class, () -> BlockUtil.isSameType(block, (Material) null)),
+                () -> assertThrows(Exception.class, () -> BlockUtil.isSameType(block, (Material) null)),
                 () -> assertFalse(BlockUtil.isSameType(block, Material.AIR)),
                 () -> assertTrue(BlockUtil.isSameType(block, Material.STONE))
         );
@@ -95,8 +95,8 @@ public final class BlockUtilTest {
     public void testIsAnyType() {
         block.setType(Material.STONE);
         assertAll("Checks if the block's type matches any of the other types.",
-                () -> assertThrows(IllegalArgumentException.class, () -> BlockUtil.isAnyType(block, (Material[]) null)),
-                () -> assertThrows(IllegalArgumentException.class, () -> BlockUtil.isAnyType(block, null)),
+                () -> assertThrows(Exception.class, () -> BlockUtil.isAnyType(block, (Material[]) null)),
+                () -> assertThrows(Exception.class, () -> BlockUtil.isAnyType(block, null)),
                 () -> assertFalse(BlockUtil.isAnyType(block, Material.AIR)),
                 () -> assertTrue(BlockUtil.isAnyType(block, Material.STONE)),
                 () -> assertTrue(BlockUtil.isAnyType(block, Material.AIR, Material.SAND, Material.STONE))
