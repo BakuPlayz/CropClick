@@ -31,9 +31,9 @@ import java.util.stream.Collectors;
  */
 public final class ToggleMenu extends PaginatedMenu {
 
-    private final List<String> players;
-
     private final PlayersConfig playersConfig;
+
+    private final List<String> players;
 
 
     public ToggleMenu(@NotNull CropClick plugin, @NotNull Player player) {
@@ -61,7 +61,9 @@ public final class ToggleMenu extends PaginatedMenu {
         handlePagination(clicked);
 
         int index = getIndexOfPlayer(clicked);
-        if (index == -1) return;
+        if (index == -1) {
+            return;
+        }
 
         String player = players.get(index);
         playersConfig.togglePlayer(player);
@@ -83,17 +85,19 @@ public final class ToggleMenu extends PaginatedMenu {
      * @return The index of the sound in the menuItems list.
      */
     private int getIndexOfPlayer(@NotNull ItemStack clicked) {
-        return menuItems.stream()
+        return menuItems
+                .stream()
                 .filter(clicked::equals)
                 .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst().orElse(-1);
+                .findFirst()
+                .orElse(-1);
     }
 
 
     /**
      * "It returns an ItemStack with the name of the player."
      * <p>
-     * The first thing we do is get the player's name. We use the `MessageUtil` class to beautify the name. This means that
+     * The first thing we do is get the player's name. We use the `MessageUtils` class to beautify the name. This means that
      * we capitalize the first letter of the name and lowercase the rest.
      * </p>
      *
@@ -101,8 +105,7 @@ public final class ToggleMenu extends PaginatedMenu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getMenuItem(@NotNull String playerID) {
+    private @NotNull ItemStack getMenuItem(@NotNull String playerID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerID));
         boolean isEnabled = !playersConfig.getToggledPlayers().contains(playerID);
         return new ItemUtil(Material.SKULL_ITEM)
@@ -117,11 +120,8 @@ public final class ToggleMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
-    @NotNull
-    protected List<ItemStack> getMenuItems() {
-        return players.stream()
-                .map(this::getMenuItem)
-                .collect(Collectors.toList());
+    protected @NotNull List<ItemStack> getMenuItems() {
+        return players.stream().map(this::getMenuItem).collect(Collectors.toList());
     }
 
 
@@ -130,9 +130,9 @@ public final class ToggleMenu extends PaginatedMenu {
      *
      * @return A list of all the players on the server.
      */
-    @NotNull
-    private List<String> getPlayers() {
-        return Arrays.stream(Bukkit.getOfflinePlayers())
+    private @NotNull List<String> getPlayers() {
+        return Arrays
+                .stream(Bukkit.getOfflinePlayers())
                 .map(OfflinePlayer::getUniqueId)
                 .map(Object::toString)
                 .collect(Collectors.toList());

@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.McMMOMenu;
@@ -38,9 +38,7 @@ public final class McMMOCropMenu extends Menu {
     private final int MAX_CHANGE = 5;
 
 
-    public McMMOCropMenu(@NotNull CropClick plugin,
-                         @NotNull Player player,
-                         @NotNull Crop crop) {
+    public McMMOCropMenu(@NotNull CropClick plugin, Player player, Crop crop) {
         super(plugin, player, LanguageAPI.Menu.MCMMO_CROP_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
         this.crop = crop;
@@ -92,19 +90,17 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getReasonItem() {
+    private @NotNull ItemStack getReasonItem() {
         String reason = cropsConfig.getMcMMOExperienceReason(crop.getName());
         return new ItemUtil(Material.PAPER)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE.get(plugin, reason)
-                )).toItemStack();
+                        LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE.get(plugin, reason)))
+                .toItemStack();
     }
 
 
-    @NotNull
-    private ItemStack getExperienceItem() {
+    private @NotNull ItemStack getExperienceItem() {
         double experience = cropsConfig.getMcMMOExperience(crop.getName());
         return new ItemUtil(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_NAME)
@@ -113,8 +109,7 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getExperienceAddItem(int amount) {
+    private @NotNull ItemStack getExperienceAddItem(int amount) {
         double beforeValue = cropsConfig.getMcMMOExperience(crop.getName());
         double afterValue = Math.min(beforeValue + amount, 10_000);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -125,8 +120,7 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getExperienceRemoveItem(int amount) {
+    private @NotNull ItemStack getExperienceRemoveItem(int amount) {
         double beforeValue = cropsConfig.getMcMMOExperience(crop.getName());
         double afterValue = Math.max(beforeValue - amount, 0);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -137,8 +131,7 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private AnvilGUI.Builder getReasonMenu(@NotNull String cropName) {
+    private @NotNull AnvilGUI.Builder getReasonMenu(@NotNull String cropName) {
         String currentReason = cropsConfig.getMcMMOExperienceReason(cropName);
         return new AnvilGUI.Builder()
                 .text(ChatColor.stripColor(currentReason))
@@ -150,10 +143,9 @@ public final class McMMOCropMenu extends Menu {
                 .onClose((player) -> {
                     String newReason = cropsConfig.getMcMMOExperienceReason(cropName);
                     player.sendMessage(
-                            currentReason.equals(newReason)
-                            ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
-                            : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
-                    );
+                            currentReason.equals(newReason) ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(
+                                    plugin) : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin,
+                                    newReason));
                 })
                 .plugin(plugin);
     }

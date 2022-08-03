@@ -7,9 +7,9 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
-import com.github.bakuplayz.cropclick.utils.LocationUtil;
-import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Location;
@@ -61,17 +61,17 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
             return;
         }
 
         Player player = event.getPlayer();
-        if (!PermissionUtil.canUnlink(player)) {
+        if (!PermissionUtils.canUnlink(player)) {
             return;
         }
 
         FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessable(world)) {
+        if (!worldManager.isAccessible(world)) {
             return;
         }
 
@@ -102,7 +102,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         Block container = autofarm.getContainerLocation().getBlock();
         Block dispenser = autofarm.getDispenserLocation().getBlock();
 
-        DoublyLocation doublyContainer = LocationUtil.findByBlock(container);
+        DoublyLocation doublyContainer = LocationUtils.getAsDoubly(container);
         if (doublyContainer != null) {
             Location one = doublyContainer.getSingly();
             Location two = doublyContainer.getSingly();

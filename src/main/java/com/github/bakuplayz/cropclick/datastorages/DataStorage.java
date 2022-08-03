@@ -4,14 +4,12 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.google.gson.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 
 
 /**
@@ -22,18 +20,19 @@ import java.lang.reflect.Type;
  * @since 1.6.0
  */
 public abstract class DataStorage {
-
+    
     protected CropClick plugin;
+
 
     protected File file;
     protected String fileName;
     protected @Getter JsonObject fileData;
 
+
     protected Gson gson;
-    protected @Setter Type type;
 
 
-    public DataStorage(@NotNull String fileName, @NotNull CropClick plugin) {
+    public DataStorage(@NotNull CropClick plugin, @NotNull String fileName) {
         this.fileName = fileName;
         this.plugin = plugin;
         this.gson = new GsonBuilder()

@@ -21,8 +21,7 @@ public final class PlayerLinkAutofarmEvent extends Event implements Cancellable 
     private final @Getter Player player;
     private final @Getter Autofarm autofarm;
 
-    private @Setter
-    @Getter boolean cancelled;
+    private @Setter @Getter boolean cancelled;
 
 
     public PlayerLinkAutofarmEvent(@NotNull Player player, @NotNull Autofarm autofarm) {

@@ -2,14 +2,14 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -31,16 +31,14 @@ import java.util.stream.Collectors;
  * @since 1.6.0
  */
 public final class ParticlesMenu extends PaginatedMenu {
-
-    private final List<String> particles;
-
+    
     private final Crop crop;
     private final CropsConfig cropsConfig;
 
+    private final List<String> particles;
 
-    public ParticlesMenu(@NotNull CropClick plugin,
-                         @NotNull Player player,
-                         @NotNull Crop crop) {
+
+    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.PARTICLES_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
         this.particles = getParticles();
@@ -66,7 +64,9 @@ public final class ParticlesMenu extends PaginatedMenu {
         handlePagination(clicked);
 
         int index = getIndexOfParticle(clicked);
-        if (index == -1) return;
+        if (index == -1) {
+            return;
+        }
 
         String particle = particles.get(index);
         cropsConfig.toggleParticleCrop(crop.getName(), particle);
@@ -80,11 +80,8 @@ public final class ParticlesMenu extends PaginatedMenu {
      *
      * @return A list of all the particle effects.
      */
-    @NotNull
-    private List<String> getParticles() {
-        return Arrays.stream(ParticleEffect.values())
-                .map(ParticleEffect::name)
-                .collect(Collectors.toList());
+    private @NotNull List<String> getParticles() {
+        return Arrays.stream(ParticleEffect.values()).map(ParticleEffect::name).collect(Collectors.toList());
     }
 
 
@@ -101,10 +98,12 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return The index of the particle in the menuItems list.
      */
     private int getIndexOfParticle(@NotNull ItemStack clicked) {
-        return menuItems.stream()
+        return menuItems
+                .stream()
                 .filter(clicked::equals)
                 .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst().orElse(-1);
+                .findFirst()
+                .orElse(-1);
     }
 
 
@@ -115,9 +114,8 @@ public final class ParticlesMenu extends PaginatedMenu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getMenuItem(@NotNull String particle) {
-        String name = MessageUtil.beautify(particle, true);
+    private @NotNull ItemStack getMenuItem(@NotNull String particle) {
+        String name = MessageUtils.beautify(particle, true);
         boolean isActive = cropsConfig.getCropParticles(crop.getName()).contains(particle);
         return new ItemUtil(Material.FIREWORK)
                 .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(plugin, name))
@@ -131,11 +129,8 @@ public final class ParticlesMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
-    @NotNull
-    protected List<ItemStack> getMenuItems() {
-        return particles.stream()
-                .map(this::getMenuItem)
-                .collect(Collectors.toList());
+    protected @NotNull List<ItemStack> getMenuItems() {
+        return particles.stream().map(this::getMenuItem).collect(Collectors.toList());
     }
 
 }

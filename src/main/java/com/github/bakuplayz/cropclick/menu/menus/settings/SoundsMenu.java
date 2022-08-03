@@ -2,14 +2,14 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -31,16 +31,14 @@ import java.util.stream.Collectors;
  * @since 1.6.0
  */
 public final class SoundsMenu extends PaginatedMenu {
-
-    private final List<String> sounds;
-
+    
     private final Crop crop;
     private final CropsConfig cropsConfig;
 
+    private final List<String> sounds;
 
-    public SoundsMenu(@NotNull CropClick plugin,
-                      @NotNull Player player,
-                      @NotNull Crop crop) {
+
+    public SoundsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.SOUNDS_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
         this.sounds = getSounds();
@@ -66,7 +64,9 @@ public final class SoundsMenu extends PaginatedMenu {
         handlePagination(clicked);
 
         int index = getIndexOfSound(clicked);
-        if (index == -1) return;
+        if (index == -1) {
+            return;
+        }
 
         String sound = sounds.get(index);
         cropsConfig.toggleSoundCrop(crop.getName(), sound);
@@ -88,10 +88,12 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return The index of the sound in the menuItems list.
      */
     private int getIndexOfSound(@NotNull ItemStack clicked) {
-        return menuItems.stream()
+        return menuItems
+                .stream()
                 .filter(clicked::equals)
                 .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst().orElse(-1);
+                .findFirst()
+                .orElse(-1);
     }
 
 
@@ -102,9 +104,8 @@ public final class SoundsMenu extends PaginatedMenu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getMenuItem(@NotNull String sound) {
-        String name = MessageUtil.beautify(sound, true);
+    private @NotNull ItemStack getMenuItem(@NotNull String sound) {
+        String name = MessageUtils.beautify(sound, true);
         boolean isActive = cropsConfig.getCropSounds(crop.getName()).contains(sound);
         return new ItemUtil(Material.NOTE_BLOCK)
                 .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(plugin, name))
@@ -118,11 +119,8 @@ public final class SoundsMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
-    @NotNull
-    protected List<ItemStack> getMenuItems() {
-        return sounds.stream()
-                .map(this::getMenuItem)
-                .collect(Collectors.toList());
+    protected @NotNull List<ItemStack> getMenuItems() {
+        return sounds.stream().map(this::getMenuItem).collect(Collectors.toList());
     }
 
 
@@ -131,11 +129,8 @@ public final class SoundsMenu extends PaginatedMenu {
      *
      * @return A list of all the sounds in the Sound enum.
      */
-    @NotNull
-    private List<String> getSounds() {
-        return Arrays.stream(Sound.values())
-                .map(Sound::name)
-                .collect(Collectors.toList());
+    private @NotNull List<String> getSounds() {
+        return Arrays.stream(Sound.values()).map(Sound::name).collect(Collectors.toList());
     }
 
 }

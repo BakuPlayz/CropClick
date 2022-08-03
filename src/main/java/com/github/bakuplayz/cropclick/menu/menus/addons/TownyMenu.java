@@ -56,14 +56,12 @@ public final class TownyMenu extends AddonMenu {
      *
      * @return An ItemStack with the name "Towny" and the lore of ex: "Enabled: true".
      */
-    @NotNull
     @Override
-    protected ItemStack getToggleItem() {
+    protected @NotNull ItemStack getToggleItem() {
         return new ItemUtil(Material.FENCE_GATE)
                 .setName(plugin, LanguageAPI.Menu.ADDON_TOWNY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_TOWNY_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_TOWNY_ITEM_STATUS.get(plugin, addonEnabled)
-                ))
+                        LanguageAPI.Menu.ADDON_TOWNY_ITEM_STATUS.get(plugin, addonEnabled)))
                 .setMaterial(addonEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(addonEnabled ? -1 : 7)
                 .toItemStack();

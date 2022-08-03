@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -34,9 +34,9 @@ public final class LanguageConfig extends Config {
                                       @NotNull String subCategory,
                                       @NotNull String key,
                                       boolean colorize) {
-        String errorMsg = subCategory.equals("title") ? "&cError" : "&cError: Message is null!";
-        String message = config.getString(category + "." + subCategory + "." + key, errorMsg);
-        return colorize ? MessageUtil.colorize(message) : message;
+        String errorMessage = subCategory.equals("title") ? "&cError" : "&cError: Message is null!";
+        String message = config.getString(category + "." + subCategory + "." + key, errorMessage);
+        return colorize ? MessageUtils.colorize(message) : message;
     }
 
 }

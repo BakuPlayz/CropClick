@@ -3,10 +3,12 @@ package com.github.bakuplayz.cropclick.datastorages.datastorage;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,11 +26,12 @@ import java.util.UUID;
  */
 public final class AutofarmDataStorage extends DataStorage {
 
-    private @Getter HashMap<UUID, Autofarm> farms = new HashMap<>();
+    private @Getter HashMap<UUID, Autofarm> farms;
 
 
     public AutofarmDataStorage(@NotNull CropClick plugin) {
-        super("autofarms.json", plugin);
+        super(plugin, "autofarms.json");
+        this.farms = new HashMap<>();
     }
 
 
@@ -76,21 +79,16 @@ public final class AutofarmDataStorage extends DataStorage {
      * It loads the farms from the file.
      */
     private void loadFarms() {
-        HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, new TypeToken<HashMap<UUID, Autofarm>>() {
-        }.getType());
+        HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
         this.farms = loaded != null ? loaded : new HashMap<>();
     }
-
-
-    // TODO: Should be called once every 10 minutes or so, also before shutdown. (Call on another thread using bukkit.Schedule())
 
 
     /**
      * It converts the HashMap of farms into a JSON object, then saves it to the file.
      */
     private void saveFarms() {
-        String data = gson.toJson(farms, new TypeToken<HashMap<UUID, Autofarm>>() {
-        }.getType());
+        String data = gson.toJson(farms, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
         JsonElement dataAsJson = JsonParser.parseString(data);
         fileData = dataAsJson.getAsJsonObject();
 
@@ -114,7 +112,9 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first found farm with and ID, that equal the cached ID.
      */
     public @Nullable Autofarm findFarmById(String farmerID) {
-        if (farmerID == null) return null;
+        if (farmerID == null) {
+            return null;
+        }
         return farms.getOrDefault(UUID.fromString(farmerID), null);
     }
 
@@ -127,11 +127,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first farm that is linked, enabled, and has the same crop location as the block.
      */
     public @Nullable Autofarm findFarmByCrop(@NotNull Block block) {
-        return farms.values().stream()
-                .filter(Autofarm::isLinked)
-                .filter(Autofarm::isEnabled)
-                .filter(farm -> farm.getCropLocation().equals(block.getLocation()))
-                .findFirst().orElse(null);
+        return farms.values().stream().filter(Autofarm::isLinked).filter(Autofarm::isEnabled).filter(farm -> farm.getCropLocation().equals(block.getLocation())).findFirst().orElse(null);
     }
 
 
@@ -143,11 +139,19 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first farm that is linked, enabled, and has the same location as the block.
      */
     public @Nullable Autofarm findFarmByContainer(@NotNull Block block) {
-        return farms.values().stream()
-                .filter(Autofarm::isLinked)
-                .filter(Autofarm::isEnabled)
-                .filter(farm -> farm.getContainerLocation().equals(block.getLocation()))
-                .findFirst().orElse(null);
+        return farms.values().stream().filter(Autofarm::isLinked).filter(Autofarm::isEnabled).filter(farm -> {
+            Location blockLocation = block.getLocation();
+            Location containerLocation = farm.getContainerLocation();
+
+            if (containerLocation instanceof DoublyLocation) {
+                DoublyLocation location = (DoublyLocation) containerLocation;
+                Location singlyLocation = location.getSingly();
+                Location doublyLocation = location.getDoubly();
+                return singlyLocation.equals(blockLocation) || doublyLocation.equals(blockLocation);
+            }
+
+            return containerLocation.equals(blockLocation);
+        }).findFirst().orElse(null);
     }
 
 
@@ -159,11 +163,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first farm that is linked, enabled, and has a dispenser at the given location.
      */
     public @Nullable Autofarm findFarmByDispenser(@NotNull Block block) {
-        return farms.values().stream()
-                .filter(Autofarm::isLinked)
-                .filter(Autofarm::isEnabled)
-                .filter(farm -> farm.getDispenserLocation().equals(block.getLocation()))
-                .findFirst().orElse(null);
+        return farms.values().stream().filter(Autofarm::isLinked).filter(Autofarm::isEnabled).filter(farm -> farm.getDispenserLocation().equals(block.getLocation())).findFirst().orElse(null);
     }
 
 }

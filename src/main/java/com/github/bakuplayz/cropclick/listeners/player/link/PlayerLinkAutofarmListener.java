@@ -6,8 +6,7 @@ import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.utils.LocationUtil;
-import org.bukkit.Location;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,21 +40,24 @@ public final class PlayerLinkAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmLink(@NotNull PlayerLinkAutofarmEvent event) {
-        Autofarm autofarm = event.getAutofarm();
+        if (event.isCancelled()) return;
 
+        Autofarm autofarm = event.getAutofarm();
         Block crop = autofarm.getCropLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block dispenser = autofarm.getDispenserLocation().getBlock();
 
         AutofarmMetadata farmerMeta = new AutofarmMetadata(plugin, autofarm::getFarmerID);
 
-        DoublyLocation doublyContainer = LocationUtil.findByBlock(container);
-        if (doublyContainer != null) {
-            Location one = doublyContainer.getSingly();
-            Location two = doublyContainer.getSingly();
+        DoublyLocation doublyLocation = LocationUtils.getAsDoubly(container);
+        if (doublyLocation != null) {
+            Block singly = doublyLocation.getSingly().getBlock();
+            Block doubly = doublyLocation.getDoubly().getBlock();
 
-            one.getBlock().setMetadata("farmerID", farmerMeta);
-            two.getBlock().setMetadata("farmerID", farmerMeta);
+            singly.setMetadata("farmerID", farmerMeta);
+            doubly.setMetadata("farmerID", farmerMeta);
+
+            autofarm.setContainerLocation(doublyLocation);
         } else {
             container.setMetadata("farmerID", farmerMeta);
         }

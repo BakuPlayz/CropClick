@@ -21,7 +21,6 @@ public abstract class Addon {
 
     protected final @Getter String name;
 
-
     protected transient final CropClick plugin;
     protected transient final AddonsConfig addonsConfig;
 

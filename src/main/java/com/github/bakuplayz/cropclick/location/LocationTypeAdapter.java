@@ -28,9 +28,30 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      * @return A Location object.
      */
     @Override
-    public @NotNull Location deserialize(JsonElement element, Type type, JsonDeserializationContext context)
+    public @NotNull Location deserialize(@NotNull JsonElement element, Type type, JsonDeserializationContext context)
             throws JsonParseException {
+        if (element.getAsJsonObject().has("doubly")) {
+            return deserializeDoublyLocation(element);
+        }
         return deserializeLocation(element);
+    }
+
+
+    /**
+     * It takes a JsonElement, gets the JsonObject from it, gets the JsonObjects from the JsonObject, deserializes the
+     * JsonObjects into Locations, and returns a DoublyLocation.
+     *
+     * @param element The JsonElement that is being deserialized.
+     *
+     * @return A DoublyLocation object.
+     */
+    private @NotNull DoublyLocation deserializeDoublyLocation(@NotNull JsonElement element) {
+        JsonObject body = element.getAsJsonObject();
+        JsonObject singly = body.get("singly").getAsJsonObject();
+        JsonObject doubly = body.get("doubly").getAsJsonObject();
+        Location singlyLocation = deserializeLocation(singly);
+        Location doublyLocation = deserializeLocation(doubly);
+        return new DoublyLocation(singlyLocation, doublyLocation);
     }
 
 
@@ -55,24 +76,44 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
     /**
      * This function serializes a location into a JsonElement.
      *
-     * @param location The location to serialize
+     * @param location The location to serialize.
      * @param type     The type of the object being serialized/deserialized.
      * @param context  The context of the serialization.
      *
-     * @return A JsonElement
+     * @return A JsonElement.
      */
     @Override
     public @NotNull JsonElement serialize(Location location, Type type, JsonSerializationContext context) {
+        if (location instanceof DoublyLocation) {
+            return serializeDoublyLocation((DoublyLocation) location);
+        }
         return serializeLocation(location);
     }
 
 
     /**
-     * It takes a Bukkit Location object and returns a JsonObject that contains the world name, x, y, and z coordinates
+     * It takes a doubly location and returns a JSON object that contains the singly and doubly locations.
      *
      * @param location The location to serialize.
      *
-     * @return A JsonObject
+     * @return A JsonObject.
+     */
+    private @NotNull JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
+        JsonObject body = new JsonObject();
+        JsonObject singly = serializeLocation(location.getSingly());
+        JsonObject doubly = serializeLocation(location.getDoubly());
+        body.add("singly", singly);
+        body.add("doubly", doubly);
+        return body;
+    }
+
+
+    /**
+     * It takes a Bukkit Location object and returns a JsonObject that contains the world name, x, y, and z coordinates.
+     *
+     * @param location The location to serialize.
+     *
+     * @return A JsonObject.
      */
     private @NotNull JsonObject serializeLocation(@NotNull Location location) {
         JsonObject body = new JsonObject();

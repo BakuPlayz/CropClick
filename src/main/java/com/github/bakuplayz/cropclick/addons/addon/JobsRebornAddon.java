@@ -7,7 +7,7 @@ import com.gamingmesh.jobs.container.JobsPlayer;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +40,9 @@ public final class JobsRebornAddon extends Addon {
      */
     public void updateStats(@NotNull Player player, @NotNull Crop crop) {
         JobsPlayer jobsPlayer = new JobsPlayer(player.getName());
-        if (!jobsPlayer.isInJob(farmerJob)) return;
+        if (!jobsPlayer.isInJob(farmerJob)) {
+            return;
+        }
 
         String cropName = crop.getName();
         jobsPlayer.addPoints(getPoints(cropName));
@@ -55,6 +57,7 @@ public final class JobsRebornAddon extends Addon {
      * Get the points of the crop with the passed name.
      *
      * @param name The name of the crop.
+     *
      * @return The points of the crop.
      */
     private double getPoints(@NotNull String name) {
@@ -66,6 +69,7 @@ public final class JobsRebornAddon extends Addon {
      * Get the experience of a crop with the passed name.
      *
      * @param name The name of the crop.
+     *
      * @return The experience of the crop.
      */
     private double getExperience(@NotNull String name) {
@@ -77,6 +81,7 @@ public final class JobsRebornAddon extends Addon {
      * Get the money of a crop with the passed name.
      *
      * @param name The name of the crop.
+     *
      * @return The money of the crop.
      */
     private double getMoney(@NotNull String name) {

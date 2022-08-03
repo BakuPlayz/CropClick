@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaGroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.VanillaGroundCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class Melon extends VanillaGroundCrop {
 
-    public Melon(CropsConfig config) {
+    public Melon(@NotNull CropsConfig config) {
         super(config);
     }
 

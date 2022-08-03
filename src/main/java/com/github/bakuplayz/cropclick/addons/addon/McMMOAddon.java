@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.addons.addon;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.gmail.nossr50.api.ExperienceAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +41,7 @@ public final class McMMOAddon extends Addon {
      * Get the experience for the crop with the passed name.
      *
      * @param name The name of the crop.
+     *
      * @return The experience of the crop.
      */
     private int getExperience(@NotNull String name) {
@@ -52,10 +53,10 @@ public final class McMMOAddon extends Addon {
      * Get the experience reason for the crop with the passed name.
      *
      * @param name The name of the crop.
+     *
      * @return The experience reason for the crop.
      */
-    @NotNull
-    private String getExperienceReason(@NotNull String name) {
+    private @NotNull String getExperienceReason(@NotNull String name) {
         return addonsConfig.getConfig().getString("mcMMO." + name + ".experienceReason");
     }
 

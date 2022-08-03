@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.TallCrop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaTallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.VanillaTallCrop;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

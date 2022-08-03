@@ -85,7 +85,8 @@ public final class WorldManager {
      *
      * @return A boolean value.
      */
-    public boolean isAccessable(FarmWorld world) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean isAccessible(FarmWorld world) {
         return world != null && !world.isBanished();
     }
 

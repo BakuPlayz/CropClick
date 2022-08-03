@@ -5,14 +5,15 @@ import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
-import com.github.bakuplayz.cropclick.utils.AutofarmUtil;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
-import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.EventUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -61,13 +62,13 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getClickedBlock();
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
             return;
         }
 
         Action action = event.getAction();
         Player player = event.getPlayer();
-        if (!isLeftShift(player, action)) {
+        if (!EventUtils.isRightShift(player, action)) {
             return;
         }
 
@@ -75,12 +76,12 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
             return;
         }
 
-        if (!PermissionUtil.canInteractAtFarm(player)) {
+        if (!PermissionUtils.canInteractAtFarm(player)) {
             return;
         }
 
         FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessable(world)) {
+        if (!worldManager.isAccessible(world)) {
             return;
         }
 
@@ -91,37 +92,24 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         if (autofarmManager.isComponent(block)) {
             event.setCancelled(true);
         }
-        
-        if (AutofarmUtil.isContainer(block)) {
-            Container container = AutofarmUtil.getContainer(block);
+
+        if (AutofarmUtils.isContainer(block)) {
+            Container container = AutofarmUtils.getContainer(block);
             Event containerEvent = new PlayerInteractAtContainerEvent(player, block, container);
             Bukkit.getPluginManager().callEvent(containerEvent);
         }
 
-        if (AutofarmUtil.isDispenser(block)) {
-            Dispenser dispenser = AutofarmUtil.getDispenser(block);
+        if (AutofarmUtils.isDispenser(block)) {
+            Dispenser dispenser = AutofarmUtils.getDispenser(block);
             Event dispenserEvent = new PlayerInteractAtDispenserEvent(player, dispenser);
             Bukkit.getPluginManager().callEvent(dispenserEvent);
         }
 
-        if (AutofarmUtil.isCrop(cropManager, block)) {
-            Crop crop = AutofarmUtil.getCrop(cropManager, block);
+        if (AutofarmUtils.isCrop(cropManager, block)) {
+            Crop crop = AutofarmUtils.getCrop(cropManager, block);
             Event cropEvent = new PlayerInteractAtCropEvent(player, block, crop);
             Bukkit.getPluginManager().callEvent(cropEvent);
         }
-    }
-
-
-    /**
-     * Returns true if the player is sneaking and left-clicking a block.
-     *
-     * @param player The player who clicked the block.
-     * @param action The action that was performed.
-     *
-     * @return A boolean value.
-     */
-    private boolean isLeftShift(@NotNull Player player, @NotNull Action action) {
-        return player.isSneaking() && action == Action.LEFT_CLICK_BLOCK;
     }
 
 }

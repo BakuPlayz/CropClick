@@ -3,11 +3,12 @@ package com.github.bakuplayz.cropclick.listeners.player.harvest;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
-import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.EventUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,13 +58,18 @@ public final class PlayerHarvestCropListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getClickedBlock();
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
+            return;
+        }
+
+        Action action = event.getAction();
+        if (!EventUtils.isRightClick(action)) {
             return;
         }
 
         Player player = event.getPlayer();
         FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessable(world)) {
+        if (!worldManager.isAccessible(world)) {
             return;
         }
 
@@ -75,7 +82,7 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        if (!PermissionUtil.canHarvestCrop(player, crop.getName())) {
+        if (!PermissionUtils.canHarvestCrop(player, crop.getName())) {
             return;
         }
 
@@ -122,9 +129,7 @@ public final class PlayerHarvestCropListener implements Listener {
         // LATER: crop#playEffects();
         if (crop instanceof TallCrop) {
             int height = crop.getCurrentAge(block);
-            int actualHeight = crop.shouldReplant()
-                               ? height - 1
-                               : height;
+            int actualHeight = getActualHeight(crop, height);
             for (int i = actualHeight; i > 0; --i) {
                 crop.harvest(player);
             }
@@ -136,6 +141,19 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         harvestedCrops.remove(crop);
+    }
+
+
+    /**
+     * If the crop should be replanted, return the height minus one, otherwise return the height.
+     *
+     * @param crop   The crop to be planted
+     * @param height The height of the crop.
+     *
+     * @return The height of the crop.
+     */
+    private static int getActualHeight(@NotNull Crop crop, int height) {
+        return crop.shouldReplant() ? height - 1 : height;
     }
 
 }

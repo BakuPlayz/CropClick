@@ -31,10 +31,11 @@ public final class FarmWorld {
     private @Setter @Getter @Accessors(fluent = true) boolean allowsPlayers;
     private @Setter @Getter @Accessors(fluent = true) boolean allowsAutofarms;
 
-    private final @Getter List<Addon> banishedAddons = new ArrayList<>();
+    private final @Getter List<Addon> banishedAddons;
 
 
     public FarmWorld(@NotNull World world) {
+        this.banishedAddons = new ArrayList<>();
         this.name = world.getName();
         this.allowsAutofarms = true;
         this.allowsPlayers = true;
@@ -44,8 +45,10 @@ public final class FarmWorld {
     public FarmWorld(@NotNull String name,
                      boolean isBanished,
                      boolean allowsPlayers,
-                     boolean allowsAutofarms) {
+                     boolean allowsAutofarms,
+                     List<Addon> banishedAddons) {
         this.allowsAutofarms = allowsAutofarms;
+        this.banishedAddons = banishedAddons;
         this.allowsPlayers = allowsPlayers;
         this.isBanished = isBanished;
         this.name = name;
@@ -76,6 +79,7 @@ public final class FarmWorld {
      *
      * @param manager The AddonManager instance
      * @param name    The name of the addon to check
+     *
      * @return A boolean value.
      */
     public boolean isBanishedAddon(@NotNull AddonManager manager, @NotNull String name) {

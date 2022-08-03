@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MenuUtil;
+import com.github.bakuplayz.cropclick.utils.MenuUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,9 +30,7 @@ public final class HelpMenu extends Menu {
     private final List<SubCommand> commands;
 
 
-    public HelpMenu(@NotNull CropClick plugin,
-                    @NotNull Player player,
-                    boolean isRedirected) {
+    public HelpMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
         super(plugin, player, LanguageAPI.Menu.HELP_TITLE);
         this.commands = plugin.getCommandManager().getCommands();
         this.isRedirected = isRedirected;
@@ -55,7 +53,7 @@ public final class HelpMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
-        if (MenuUtil.isAir(clicked)) {
+        if (MenuUtils.isAir(clicked)) {
             return;
         }
 
@@ -78,11 +76,9 @@ public final class HelpMenu extends Menu {
     private @NotNull ItemStack getSubCommandItem(@NotNull SubCommand cmd) {
         return new ItemUtil(Material.BOOK)
                 .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, cmd.getName()))
-                .setLore(
-                        LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, cmd.getDescription()),
+                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, cmd.getDescription()),
                         LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, cmd.getPermission()),
-                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, cmd.getUsage())
-                )
+                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, cmd.getUsage()))
                 .toItemStack();
     }
 
@@ -91,11 +87,9 @@ public final class HelpMenu extends Menu {
         String description = LanguageAPI.Command.DEFAULT_DESCRIPTION.get(plugin);
         return new ItemUtil(Material.BOOK)
                 .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, ""))
-                .setLore(
-                        LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, description),
+                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, description),
                         LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, "cropclick.command.general"),
-                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, "cropclick")
-                )
+                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, "cropclick"))
                 .toItemStack();
     }
 

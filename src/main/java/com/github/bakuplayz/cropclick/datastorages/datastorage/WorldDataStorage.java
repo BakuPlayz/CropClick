@@ -25,15 +25,15 @@ import java.util.HashMap;
  */
 public final class WorldDataStorage extends DataStorage {
 
-    private @Getter HashMap<String, FarmWorld> worlds = new HashMap<>();
+    private @Getter HashMap<String, FarmWorld> worlds;
 
     private final Type type;
 
 
     public WorldDataStorage(@NotNull CropClick plugin) {
-        super("worlds.json", plugin);
-        this.type = new TypeToken<HashMap<String, FarmWorld>>() {
-        }.getType();
+        super(plugin, "worlds.json");
+        this.type = new TypeToken<HashMap<String, FarmWorld>>() {}.getType();
+        this.worlds = new HashMap<>();
     }
 
 
@@ -84,13 +84,9 @@ public final class WorldDataStorage extends DataStorage {
      * It loads the worlds from the file.
      */
     private void loadWorlds() {
-        HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, new TypeToken<HashMap<String, FarmWorld>>() {
-        }.getType());
+        HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, new TypeToken<HashMap<String, FarmWorld>>() {}.getType());
         this.worlds = loaded != null ? loaded : new HashMap<>();
     }
-
-
-    // TODO: Should be called once every 10 minutes or so, also before shutdown. (Call on another thread using bukkit.Schedule())
 
 
     /**
@@ -112,8 +108,7 @@ public final class WorldDataStorage extends DataStorage {
      *
      * @return A FarmWorld object or null.
      */
-    @Nullable
-    public FarmWorld findWorldByName(@NotNull String name) {
+    public @Nullable FarmWorld findWorldByName(@NotNull String name) {
         return worlds.getOrDefault(name, null);
     }
 
@@ -125,8 +120,7 @@ public final class WorldDataStorage extends DataStorage {
      *
      * @return A FarmWorld object or null.
      */
-    @Nullable
-    public FarmWorld findWorldByWorld(@NotNull World world) {
+    public @Nullable FarmWorld findWorldByWorld(@NotNull World world) {
         return worlds.getOrDefault(world.getName(), null);
     }
 
@@ -138,8 +132,7 @@ public final class WorldDataStorage extends DataStorage {
      *
      * @return A FarmWorld object or null.
      */
-    @Nullable
-    public FarmWorld findWorldByPlayer(@NotNull Player player) {
+    public @Nullable FarmWorld findWorldByPlayer(@NotNull Player player) {
         return worlds.getOrDefault(player.getWorld().getName(), null);
     }
 

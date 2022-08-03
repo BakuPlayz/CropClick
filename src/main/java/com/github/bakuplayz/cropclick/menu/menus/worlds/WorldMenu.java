@@ -1,13 +1,12 @@
 package com.github.bakuplayz.cropclick.menu.menus.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,14 +26,9 @@ public final class WorldMenu extends Menu {
 
     private final FarmWorld world;
 
-    private final AddonManager addonManager;
 
-
-    public WorldMenu(@NotNull CropClick plugin,
-                     @NotNull Player player,
-                     @NotNull FarmWorld world) {
+    public WorldMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull FarmWorld world) {
         super(plugin, player, LanguageAPI.Menu.WORLD_TITLE);
-        this.addonManager = plugin.getAddonManager();
         this.world = world;
     }
 
@@ -49,14 +43,12 @@ public final class WorldMenu extends Menu {
     }
 
 
-    //TODO: Doesn't handel addons properly....
+    //TODO: Doesn't handle addons properly....
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
         handleBack(clicked, new WorldsMenu(plugin, player, WorldMenuState.SETTINGS));
-
-        //world.toggleAddon(addonManager, "jo"); WorldMenuState.NAME.getName();
 
         if (clicked.equals(getWorldItem())) {
             world.isBanished(!world.isBanished());
@@ -80,12 +72,10 @@ public final class WorldMenu extends Menu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getPlayersItem() {
-        return new ItemUtil(Material.SKULL_ITEM)
-                .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers()))
-                .toItemStack();
+    private @NotNull ItemStack getPlayersItem() {
+        return new ItemUtil(Material.SKULL_ITEM).setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
+                                                .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers()))
+                                                .toItemStack();
     }
 
 
@@ -95,12 +85,10 @@ public final class WorldMenu extends Menu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getAutofarmsItem() {
-        return new ItemUtil(Material.DISPENSER)
-                .setName(plugin, LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin, world.allowsAutofarms()))
-                .toItemStack();
+    private @NotNull ItemStack getAutofarmsItem() {
+        return new ItemUtil(Material.DISPENSER).setName(plugin, LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_NAME)
+                                               .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin, world.allowsAutofarms()))
+                                               .toItemStack();
     }
 
 
@@ -109,15 +97,13 @@ public final class WorldMenu extends Menu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getWorldItem() {
-        String name = MessageUtil.beautify(world.getName(), true);
-        return new ItemUtil(Material.GRASS)
-                .setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
-                .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
-                .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
-                .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished()))
-                .toItemStack();
+    private @NotNull ItemStack getWorldItem() {
+        String name = MessageUtils.beautify(world.getName(), true);
+        return new ItemUtil(Material.GRASS).setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
+                                           .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
+                                           .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
+                                           .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished()))
+                                           .toItemStack();
     }
 
 }

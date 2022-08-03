@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
-import com.github.bakuplayz.cropclick.utils.AutofarmUtil;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ public final class PlayersConfig extends Config {
      * @param block  The block that the player clicked on.
      */
     public void selectCrop(@NotNull Player player, @NotNull Block block) {
-        if (!AutofarmUtil.isCrop(plugin.getCropManager(), block)) return;
+        if (!AutofarmUtils.isCrop(plugin.getCropManager(), block)) return;
         config.set(player.getUniqueId() + ".crop", block.getLocation());
         saveConfig();
     }
@@ -46,7 +46,7 @@ public final class PlayersConfig extends Config {
      * @param block  The block that the player clicked on.
      */
     public void selectContainer(@NotNull Player player, @NotNull Block block) {
-        if (!AutofarmUtil.isContainer(block)) return;
+        if (!AutofarmUtils.isContainer(block)) return;
         config.set(player.getUniqueId() + ".container", block.getLocation());
         saveConfig();
     }
@@ -59,7 +59,7 @@ public final class PlayersConfig extends Config {
      * @param block  The block that the player clicked on.
      */
     public void selectDispenser(@NotNull Player player, @NotNull Block block) {
-        if (!AutofarmUtil.isDispenser(block)) return;
+        if (!AutofarmUtils.isDispenser(block)) return;
         config.set(player.getUniqueId() + ".dispenser", block.getLocation());
         saveConfig();
     }
@@ -72,7 +72,7 @@ public final class PlayersConfig extends Config {
      * @param block  The block that the player is trying to select.
      */
     public void deselectCrop(@NotNull Player player, @NotNull Block block) {
-        if (!AutofarmUtil.isCrop(plugin.getCropManager(), block)) return;
+        if (!AutofarmUtils.isCrop(plugin.getCropManager(), block)) return;
         config.set(player.getUniqueId() + ".crop", null);
         saveConfig();
     }
@@ -85,7 +85,7 @@ public final class PlayersConfig extends Config {
      * @param block  The block that the player is trying to select.
      */
     public void deselectContainer(@NotNull Player player, @NotNull Block block) {
-        if (!AutofarmUtil.isContainer(block)) return;
+        if (!AutofarmUtils.isContainer(block)) return;
         config.set(player.getUniqueId() + ".container", null);
         saveConfig();
     }
@@ -98,7 +98,7 @@ public final class PlayersConfig extends Config {
      * @param block  The block that the player is trying to select.
      */
     public void deselectDispenser(@NotNull Player player, @NotNull Block block) {
-        if (!AutofarmUtil.isDispenser(block)) return;
+        if (!AutofarmUtils.isDispenser(block)) return;
         config.set(player.getUniqueId() + ".dispenser", null);
         saveConfig();
     }
@@ -201,7 +201,7 @@ public final class PlayersConfig extends Config {
      * @return A boolean value.
      */
     public boolean isCropSelected(@NotNull Player player, @NotNull Block block) {
-        if (AutofarmUtil.isCrop(plugin.getCropManager(), block)) {
+        if (AutofarmUtils.isCrop(plugin.getCropManager(), block)) {
             Location crop = (Location) config.get(player.getUniqueId() + ".crop");
             return crop != null && crop.equals(block.getLocation());
         }
@@ -219,7 +219,7 @@ public final class PlayersConfig extends Config {
      * @return A boolean value.
      */
     public boolean isContainerSelected(@NotNull Player player, @NotNull Block block) {
-        if (AutofarmUtil.isContainer(block)) {
+        if (AutofarmUtils.isContainer(block)) {
             Location container = (Location) config.get(player.getUniqueId() + ".container");
             return container != null && container.equals(block.getLocation());
         }
@@ -236,7 +236,7 @@ public final class PlayersConfig extends Config {
      * @return A boolean value.
      */
     public boolean isDispenserSelected(@NotNull Player player, @NotNull Block block) {
-        if (AutofarmUtil.isDispenser(block)) {
+        if (AutofarmUtils.isDispenser(block)) {
             Location dispenser = (Location) config.get(player.getUniqueId() + ".dispenser");
             return dispenser != null && dispenser.equals(block.getLocation());
         }
@@ -249,7 +249,7 @@ public final class PlayersConfig extends Config {
      *
      * @return A list of strings.
      */
-    public List<String> getToggledPlayers() {
+    public @NotNull List<String> getToggledPlayers() {
         return config.getStringList("toggles");
     }
 

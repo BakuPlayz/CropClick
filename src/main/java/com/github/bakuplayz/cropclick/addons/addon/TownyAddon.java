@@ -28,6 +28,7 @@ public final class TownyAddon extends Addon {
      * Returns true if the player can destroy a block (in this case: just a dummy stone).
      *
      * @param player The player who is trying to destroy the crop.
+     *
      * @return A boolean value.
      */
     public boolean canDestroyCrop(@NotNull Player player) {

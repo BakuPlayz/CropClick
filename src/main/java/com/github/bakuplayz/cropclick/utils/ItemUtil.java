@@ -29,44 +29,44 @@ public final class ItemUtil {
     private @Getter Material material;
 
     private @Getter String name;
-    private @Getter List<String> lore = new ArrayList<>();
+    private @Getter List<String> lore;
 
 
-    public ItemUtil(Material material) {
+    public ItemUtil(@NotNull Material material) {
         this(material, "", 1, null);
     }
 
 
-    public ItemUtil(Material material, int amount) {
+    public ItemUtil(@NotNull Material material, int amount) {
         this(material, "", amount, null);
     }
 
 
-    public ItemUtil(Material material, short damage) {
+    public ItemUtil(@NotNull Material material, short damage) {
         this(material, "", 1, damage);
     }
 
 
-    public ItemUtil(Material material, @NotNull String name) {
+    public ItemUtil(@NotNull Material material, @NotNull String name) {
         this(material, name, 1, null);
     }
 
 
-    public ItemUtil(Material material, @NotNull String name, int amount) {
+    public ItemUtil(@NotNull Material material, @NotNull String name, int amount) {
         this(material, name, amount, null);
     }
 
 
-    public ItemUtil(Material material, @NotNull String name, int amount, short damage) {
+    public ItemUtil(@NotNull Material material, @NotNull String name, int amount, short damage) {
         this(material, name, amount, null);
         this.damage = damage;
     }
 
 
-    public ItemUtil(Material material, @NotNull String name, int amount, List<String> lore) {
+    public ItemUtil(@NotNull Material material, @NotNull String name, int amount, List<String> lore) {
+        this.lore = lore == null ? new ArrayList<>() : lore;
         this.material = material;
         this.amount = amount;
-        this.lore = lore;
         this.name = name;
     }
 
@@ -79,33 +79,34 @@ public final class ItemUtil {
 
     public ItemUtil(@NotNull ItemStack stack) {
         if (stack.hasItemMeta()) {
-            meta = stack.getItemMeta();
+            this.meta = stack.getItemMeta();
         }
         this.amount = stack.getAmount();
         this.material = stack.getType();
         this.damage = stack.getDurability();
+        this.lore = meta != null && meta.hasLore() ? meta.getLore() : new ArrayList<>();
     }
 
 
-    public ItemUtil(ItemStack stack, int amount) {
+    public ItemUtil(@NotNull ItemStack stack, int amount) {
         this(stack);
         this.amount = amount;
     }
 
 
-    public ItemUtil(ItemStack stack, @NotNull String name) {
+    public ItemUtil(@NotNull ItemStack stack, @NotNull String name) {
         this(stack);
         this.name = name;
     }
 
 
-    public ItemUtil(ItemStack stack, @NotNull String name, int amount) {
+    public ItemUtil(@NotNull ItemStack stack, @NotNull String name, int amount) {
         this(stack, amount);
         this.name = name;
     }
 
 
-    public ItemUtil(ItemStack stack, @NotNull String name, int amount, List<String> lore) {
+    public ItemUtil(@NotNull ItemStack stack, @NotNull String name, int amount, List<String> lore) {
         this(stack, name, amount);
         this.lore = lore;
     }
@@ -116,6 +117,7 @@ public final class ItemUtil {
      * the amount
      *
      * @param amount The amount of the item.
+     *
      * @return The ItemUtil object.
      */
     public ItemUtil setAmount(int amount) {
@@ -129,6 +131,7 @@ public final class ItemUtil {
      * the damage
      *
      * @param damage The damage value of the item.
+     *
      * @return The ItemUtil object
      */
     public ItemUtil setDamage(int damage) {
@@ -141,6 +144,7 @@ public final class ItemUtil {
      * Sets the material of the item, if the id is greater than -1.
      *
      * @param id The ID of the item.
+     *
      * @return The ItemUtil object.
      */
     @Deprecated
@@ -154,6 +158,7 @@ public final class ItemUtil {
      * If the material is null, then set the material to the current material, otherwise set the material to the material.
      *
      * @param material The material of the item.
+     *
      * @return The ItemUtil object
      */
     public ItemUtil setMaterial(Material material) {
@@ -166,6 +171,7 @@ public final class ItemUtil {
      * Sets the name of the item and returns the ItemUtil instance.
      *
      * @param name The name of the item.
+     *
      * @return The ItemUtil object itself.
      */
     public ItemUtil setName(String name) {
@@ -179,6 +185,7 @@ public final class ItemUtil {
      *
      * @param plugin The plugin instance
      * @param name   The name of the item.
+     *
      * @return The ItemUtil object.
      */
     public ItemUtil setName(@NotNull CropClick plugin, @NotNull LanguageAPI.Menu name) {
@@ -191,6 +198,7 @@ public final class ItemUtil {
      * If the lore is null, then set the lore to the current lore, otherwise set the lore to the new lore.
      *
      * @param lore The lore of the item.
+     *
      * @return The ItemUtil object.
      */
     public ItemUtil setLore(List<String> lore) {

@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
@@ -36,9 +36,7 @@ public final class JobsCropMenu extends Menu {
     private final int MAX_CHANGE = 5;
 
 
-    public JobsCropMenu(@NotNull CropClick plugin,
-                        @NotNull Player player,
-                        @NotNull Crop crop) {
+    public JobsCropMenu(@NotNull CropClick plugin, Player player, Crop crop) {
         super(plugin, player, LanguageAPI.Menu.JOBS_CROP_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
         this.crop = crop;
@@ -128,8 +126,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getPointsItem() {
+    private @NotNull ItemStack getPointsItem() {
         double points = cropsConfig.getJobsPoints(crop.getName());
         return new ItemUtil(Material.GOLD_NUGGET)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_POINTS_ITEM_NAME)
@@ -138,8 +135,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getMoneyItem() {
+    private @NotNull ItemStack getMoneyItem() {
         double money = cropsConfig.getJobsMoney(crop.getName());
         return new ItemUtil(Material.GOLD_INGOT)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_MONEY_ITEM_NAME)
@@ -148,8 +144,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getExperienceItem() {
+    private @NotNull ItemStack getExperienceItem() {
         double experience = cropsConfig.getJobsExperience(crop.getName());
         return new ItemUtil(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_NAME)
@@ -158,8 +153,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getPointsAddItem(int amount) {
+    private @NotNull ItemStack getPointsAddItem(int amount) {
         double beforeValue = cropsConfig.getJobsPoints(crop.getName());
         double afterValue = Math.min(beforeValue + amount, 10_000);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -170,8 +164,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getPointsRemoveItem(int amount) {
+    private @NotNull ItemStack getPointsRemoveItem(int amount) {
         double beforeValue = cropsConfig.getJobsPoints(crop.getName());
         double afterValue = Math.max(beforeValue - amount, 0);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -182,8 +175,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getMoneyAddItem(int amount) {
+    private @NotNull ItemStack getMoneyAddItem(int amount) {
         double beforeValue = cropsConfig.getJobsMoney(crop.getName());
         double afterValue = Math.min(beforeValue + amount, 10_000);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -194,8 +186,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getMoneyRemoveItem(int amount) {
+    private @NotNull ItemStack getMoneyRemoveItem(int amount) {
         double beforeValue = cropsConfig.getJobsMoney(crop.getName());
         double afterValue = Math.max(beforeValue - amount, 0);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -206,8 +197,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getExperienceAddItem(int amount) {
+    private @NotNull ItemStack getExperienceAddItem(int amount) {
         double beforeValue = cropsConfig.getJobsExperience(crop.getName());
         double afterValue = Math.min(beforeValue + amount, 10_000);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -218,8 +208,7 @@ public final class JobsCropMenu extends Menu {
     }
 
 
-    @NotNull
-    private ItemStack getExperienceRemoveItem(int amount) {
+    private @NotNull ItemStack getExperienceRemoveItem(int amount) {
         double beforeValue = cropsConfig.getJobsExperience(crop.getName());
         double afterValue = Math.max(beforeValue - amount, 0);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
@@ -228,6 +217,7 @@ public final class JobsCropMenu extends Menu {
                 .setDamage(14)
                 .toItemStack();
     }
+
 
     /**
      * Adds the specified amount of points to the crop.

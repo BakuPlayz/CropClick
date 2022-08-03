@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -50,12 +50,12 @@ public final class UpdateMenu extends Menu {
         //TODO: Comeback and fix this...
         if (clicked.equals(getUpdateItem())) {
             if (!isUpdated) {
-                player.sendMessage(MessageUtil.colorize("&7No new updates."));
+                player.sendMessage(MessageUtils.colorize("&7No new updates."));
                 return;
             }
 
-            player.sendMessage(MessageUtil.colorize("&7Get the new update on Spigot!"));
-            player.sendMessage(MessageUtil.colorize("&7https://www.spigotmc.org/resources/cropclick.69480/history"));
+            player.sendMessage(MessageUtils.colorize("&7Get the new update on Spigot!"));
+            player.sendMessage(MessageUtils.colorize("&7https://www.spigotmc.org/resources/cropclick.69480/history"));
         }
 
         if (clicked.equals(getPlayerItem())) {

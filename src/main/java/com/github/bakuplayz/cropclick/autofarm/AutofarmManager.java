@@ -6,9 +6,9 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.utils.AutofarmUtil;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
-import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -64,7 +64,7 @@ public final class AutofarmManager {
                 containerLocation,
                 dispenserLocation
         );
-        if (isEnabled() && PermissionUtil.canLink(player)) {
+        if (isEnabled() && PermissionUtils.canLink(player)) {
             Bukkit.getPluginManager().callEvent(new PlayerLinkAutofarmEvent(player, farm));
         }
     }
@@ -208,7 +208,7 @@ public final class AutofarmManager {
      * @return The autofarm object that is associated with the block.
      */
     public @Nullable Autofarm findAutofarm(@NotNull Block block) {
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
             return null;
         }
 
@@ -217,16 +217,16 @@ public final class AutofarmManager {
             return farmStorage.findFarmById(farmerID);
         }
 
-        if (AutofarmUtil.isDispenser(block)) {
+        if (AutofarmUtils.isDispenser(block)) {
             return farmStorage.findFarmByDispenser(block);
         }
 
-        if (AutofarmUtil.isContainer(block)) {
+        if (AutofarmUtils.isContainer(block)) {
             return farmStorage.findFarmByContainer(block);
         }
 
         // TODO: needs to check the block over in case of crop... (and one around...)
-        if (AutofarmUtil.isCrop(cropManager, block)) {
+        if (AutofarmUtils.isCrop(cropManager, block)) {
             return farmStorage.findFarmByCrop(block);
         }
 
@@ -379,9 +379,9 @@ public final class AutofarmManager {
      * @return A boolean value.
      */
     public boolean isComponent(@NotNull Block block) {
-        if (AutofarmUtil.isDispenser(block)) return true;
-        if (AutofarmUtil.isContainer(block)) return true;
-        return AutofarmUtil.isCrop(cropManager, block);
+        if (AutofarmUtils.isDispenser(block)) return true;
+        if (AutofarmUtils.isContainer(block)) return true;
+        return AutofarmUtils.isCrop(cropManager, block);
     }
 
 

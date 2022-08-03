@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public final class CropsConfig extends Config {
 
-    //TODO: Check through all the comments.. I cannot be bothered right now.
+    // TODO: Check through all the comments... I cannot be bothered right now.
 
 
     public CropsConfig(@NotNull CropClick plugin) {
@@ -30,12 +30,12 @@ public final class CropsConfig extends Config {
      * Returns the name of the crop drop item.
      *
      * @param name The name of the crop.
+     *
      * @return The drop name.
      */
-    @NotNull
     @Contract("_ -> new")
-    public String getCropDropName(@NotNull String name) {
-        return MessageUtil.colorize(config.getString("crops." + name + ".drop.name", name));
+    public @NotNull String getCropDropName(@NotNull String name) {
+        return MessageUtils.colorize(config.getString("crops." + name + ".drop.name", name));
     }
 
 
@@ -55,6 +55,7 @@ public final class CropsConfig extends Config {
      * Get the amount of items that a crop will drop when harvested.
      *
      * @param name The name of the crop.
+     *
      * @return The amount of items that will be dropped when the crop is harvested.
      */
     public int getCropDropAmount(@NotNull String name) {
@@ -78,6 +79,7 @@ public final class CropsConfig extends Config {
      * Get the chance of a crop dropping an item.
      *
      * @param name The name of the crop.
+     *
      * @return The chance of a crop dropping an item.
      */
     public double getCropDropChance(@NotNull String name) {
@@ -89,6 +91,7 @@ public final class CropsConfig extends Config {
      * Returns whether the crop with the given name is enabled.
      *
      * @param name The name of the crop.
+     *
      * @return A boolean value.
      */
     public boolean isCropEnabled(@NotNull String name) {
@@ -112,10 +115,10 @@ public final class CropsConfig extends Config {
      * It gets the list of particles that are used for the crop with the given name.
      *
      * @param name The name of the crop.
+     *
      * @return A list of particles, as a string list.
      */
-    @NotNull
-    public List<String> getCropParticles(@NotNull String name) {
+    public @NotNull List<String> getCropParticles(@NotNull String name) {
         return config.getStringList("crops." + name + ".particles");
     }
 
@@ -142,10 +145,10 @@ public final class CropsConfig extends Config {
      * Get the list of sounds that the crop with the given name should play.
      *
      * @param name The name of the crop.
+     *
      * @return A list of particles, as a string list.
      */
-    @NotNull
-    public List<String> getCropSounds(@NotNull String name) {
+    public @NotNull List<String> getCropSounds(@NotNull String name) {
         return config.getStringList("crops." + name + ".sounds");
     }
 
@@ -172,6 +175,7 @@ public final class CropsConfig extends Config {
      * Returns whether the crop should replant itself after being harvested.
      *
      * @param name The name of the crop.
+     *
      * @return A boolean value.
      */
     public boolean shouldReplantCrop(@NotNull String name) {
@@ -195,6 +199,7 @@ public final class CropsConfig extends Config {
      * Returns whether the crop should drop at least one item.
      *
      * @param name The name of the crop.
+     *
      * @return A boolean value.
      */
     public boolean shouldDropAtLeastOne(@NotNull String name) {
@@ -218,6 +223,7 @@ public final class CropsConfig extends Config {
      * It gets the mcMMO experience value from the config.
      *
      * @param name The name of the crop.
+     *
      * @return The amount of mcMMO experience that is given when the crop is harvested.
      */
     public double getMcMMOExperience(@NotNull String name) {
@@ -241,11 +247,12 @@ public final class CropsConfig extends Config {
      * It gets the mcMMO experience reason for the crop with the given name.
      *
      * @param name The name of the crop.
+     *
      * @return The message that is displayed when a player receives mcMMO experience.
      */
     @Contract("_ -> new")
     public @NotNull String getMcMMOExperienceReason(@NotNull String name) {
-        return MessageUtil.colorize(
+        return MessageUtils.colorize(
                 config.getString(
                         "crops." + name + ".addons.mcMMO.experienceReason",
                         "Harvested " + name
@@ -270,6 +277,7 @@ public final class CropsConfig extends Config {
      * Get the points for the specified crop.
      *
      * @param name The name of the crop.
+     *
      * @return The amount of points the player will receive for harvesting the specified crop.
      */
     public double getJobsPoints(@NotNull String name) {
@@ -293,6 +301,7 @@ public final class CropsConfig extends Config {
      * Get the money value for the specified crop.
      *
      * @param name The name of the crop.
+     *
      * @return The amount of money that the player will receive when they harvest the specified crop.
      */
     public double getJobsMoney(@NotNull String name) {
@@ -316,6 +325,7 @@ public final class CropsConfig extends Config {
      * Get the experience value for the specified crop.
      *
      * @param name The name of the crop.
+     *
      * @return The experience gained from harvesting the specified crop.
      */
     public double getJobsExperience(@NotNull String name) {
@@ -339,12 +349,12 @@ public final class CropsConfig extends Config {
      * Returns the name of the seed drop for the given seed name.
      *
      * @param name The name of the seed.
+     *
      * @return A string
      */
-    @NotNull
     @Contract("_ -> new")
-    public String getSeedDropName(@NotNull String name) {
-        return MessageUtil.colorize(config.getString("seeds." + name + ".drop.name", name));
+    public @NotNull String getSeedDropName(@NotNull String name) {
+        return MessageUtils.colorize(config.getString("seeds." + name + ".drop.name", name));
     }
 
 
@@ -364,6 +374,7 @@ public final class CropsConfig extends Config {
      * Get the amount of seeds that should be dropped when a plant is harvested.
      *
      * @param name The name of the seed.
+     *
      * @return The amount of seeds that will drop from a plant.
      */
     public int getSeedDropAmount(@NotNull String name) {
@@ -387,6 +398,7 @@ public final class CropsConfig extends Config {
      * Get the chance of a seed dropping from a mob.
      *
      * @param name The name of the seed.
+     *
      * @return The chance of a seed dropping.
      */
     public double getSeedDropChance(@NotNull String name) {
@@ -398,6 +410,7 @@ public final class CropsConfig extends Config {
      * Returns whether the seed with the given name is enabled.
      *
      * @param name The name of the seed.
+     *
      * @return A boolean value.
      */
     public boolean isSeedEnabled(@NotNull String name) {

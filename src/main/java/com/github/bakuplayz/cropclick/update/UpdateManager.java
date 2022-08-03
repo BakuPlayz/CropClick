@@ -2,10 +2,10 @@ package com.github.bakuplayz.cropclick.update;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.Param;
 import com.github.bakuplayz.cropclick.utils.RequestUtil;
-import com.github.bakuplayz.cropclick.utils.VersionUtil;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -38,7 +38,7 @@ public final class UpdateManager {
 
 
     public void sendAlert(@NotNull CommandSender sender) {
-        sender.sendMessage(MessageUtil.colorize(message));
+        sender.sendMessage(MessageUtils.colorize(message));
     }
 
 
@@ -51,10 +51,8 @@ public final class UpdateManager {
         try {
             JsonElement response = new RequestUtil(URL)
                     .setDefaultHeaders()
-                    .setParams(
-                            new Param("serverVersion", VersionUtil.getServerVersion()),
-                            new Param("pluginVersion", getCurrentVersion())
-                    )
+                    .setParams(new Param("serverVersion", VersionUtils.getServerVersion()),
+                            new Param("pluginVersion", getCurrentVersion()))
                     .post(true)
                     .getResponse();
 
@@ -80,7 +78,7 @@ public final class UpdateManager {
     }
 
 
-    public String getCurrentVersion() {
+    public @NotNull String getCurrentVersion() {
         return plugin.getDescription().getVersion();
     }
 

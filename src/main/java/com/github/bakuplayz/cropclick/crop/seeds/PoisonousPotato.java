@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.crop.seeds;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.VanillaSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.VanillaSeed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +24,8 @@ public final class PoisonousPotato extends VanillaSeed {
     }
 
 
-    @Contract(pure = true)
     @Override
+    @Contract(pure = true)
     public @NotNull String getName() {
         return "poisonousPotato";
     }

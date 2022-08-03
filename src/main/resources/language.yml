@@ -79,6 +79,9 @@ menu:
     world: "World"
     name: "Name"
 
+    containerPreview: "View - &9%id%&r"
+    dispenserPreview: "View - &9%id%&r"
+
   main:
     updates:
       itemName: "&eUpdates"
@@ -175,16 +178,15 @@ menu:
       z: "&7Z: &e%z%"
       state: "&7State: %state%"
 
+    state:
+      unlinked: "&7Unlinked"
+      selected: "&bSelected"
+
     actions:
       linkSuccess: "&7You've successfully linked a farm :)"
 
-    state:
-      linked: "&eLinked"
-      unlinked: "&7Unlinked"
-      selected: "&aSelected"
-
-    selected:
-      itemName: "&eSelected"
+    glass:
+      itemName: "&7*"
 
     crop:
       itemName: "&eCrop"

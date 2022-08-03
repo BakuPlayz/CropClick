@@ -4,10 +4,10 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
-import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -44,33 +44,26 @@ public final class PlayerPlantCropListener implements Listener {
     }
 
 
-    /* Step by step:
-     * 1. isAir,
-     * 2. hasPermission,
-     * 3. hasWorldBanished,
-     * 4. canModify,
-     * 5. isValid
-     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getClickedBlock();
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
             return;
         }
 
-        if (!BlockUtil.isPlantableSurface(block)) {
+        if (!BlockUtils.isPlantableSurface(block)) {
             return;
         }
 
         Player player = event.getPlayer();
-        if (!PermissionUtil.canPlaceCrop(player)) {
+        if (!PermissionUtils.canPlaceCrop(player)) {
             return;
         }
 
         FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessable(world)) {
+        if (!worldManager.isAccessible(world)) {
             return;
         }
 

@@ -12,11 +12,6 @@ updateMessage:
   player: true
   console: true
 
-interact:
-  jump: true
-  leftClick: true
-  rightClick: true
-
 autofarm:
   isEnabled: true
   canHarvest:

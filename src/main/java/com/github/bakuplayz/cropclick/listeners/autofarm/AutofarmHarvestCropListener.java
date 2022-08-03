@@ -5,9 +5,9 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.autofarm.AutofarmHarvestCropEvent;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -56,12 +56,12 @@ public final class AutofarmHarvestCropListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
             return;
         }
 
         FarmWorld world = worldManager.findByWorld(block.getWorld());
-        if (!worldManager.isAccessable(world)) {
+        if (!worldManager.isAccessible(world)) {
             return;
         }
 

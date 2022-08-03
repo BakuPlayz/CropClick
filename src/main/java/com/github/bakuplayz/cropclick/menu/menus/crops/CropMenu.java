@@ -3,14 +3,14 @@ package com.github.bakuplayz.cropclick.menu.menus.crops;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
-import com.github.bakuplayz.cropclick.crop.seeds.templates.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -37,9 +37,7 @@ public final class CropMenu extends Menu {
     private final int MAX_CHANGE = 5;
 
 
-    public CropMenu(@NotNull CropClick plugin,
-                    @NotNull Player player,
-                    @NotNull Crop crop) {
+    public CropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.CROP_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
         this.hasSeed = crop.hasSeed();
@@ -136,8 +134,8 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getCropItem() {
-        String name = MessageUtil.beautify(crop.getName(), false);
-        String status = MessageUtil.getEnabledStatus(plugin, crop.isEnabled());
+        String name = MessageUtils.beautify(crop.getName(), false);
+        String status = MessageUtils.getEnabledStatus(plugin, crop.isEnabled());
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount()))
@@ -149,8 +147,8 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getSeedItem() {
-        String name = MessageUtil.beautify(seed.getName(), false);
-        String status = MessageUtil.getEnabledStatus(plugin, seed.isEnabled());
+        String name = MessageUtils.beautify(seed.getName(), false);
+        String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount()))
@@ -248,7 +246,6 @@ public final class CropMenu extends Menu {
     }
 
 
-
     /**
      * Adds the given amount to the seed drop amount of the given seed, but never more than 576.
      *
@@ -273,4 +270,5 @@ public final class CropMenu extends Menu {
         int newAmount = Math.max(oldAmount, 0);
         cropsConfig.setSeedDropAmount(name, newAmount);
     }
+
 }

@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.VanillaWallCrop;
-import com.github.bakuplayz.cropclick.crop.crops.templates.WallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.VanillaWallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.WallCrop;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

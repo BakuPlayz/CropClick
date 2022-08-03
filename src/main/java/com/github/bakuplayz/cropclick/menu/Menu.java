@@ -4,10 +4,12 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -25,15 +27,15 @@ public abstract class Menu implements InventoryHolder {
 
     protected Player player;
     protected CropClick plugin;
+
     protected @Getter Inventory inventory;
+    protected @Setter InventoryType inventoryType;
 
     private final String titleType;
     private final LanguageAPI.Menu menuTitle;
 
 
-    public Menu(@NotNull CropClick plugin,
-                @NotNull Player player,
-                @NotNull LanguageAPI.Menu menuTitle) {
+    public Menu(@NotNull CropClick plugin, @NotNull Player player, @NotNull LanguageAPI.Menu menuTitle) {
         this.menuTitle = menuTitle;
         this.titleType = "";
         this.player = player;
@@ -72,7 +74,9 @@ public abstract class Menu implements InventoryHolder {
      * @param menu    The menu that the item is in.
      */
     protected final void handleBack(@NotNull ItemStack clicked, @NotNull Menu menu) {
-        if (!clicked.equals(getBackItem())) return;
+        if (!clicked.equals(getBackItem())) {
+            return;
+        }
 
         menu.open();
     }
@@ -89,7 +93,12 @@ public abstract class Menu implements InventoryHolder {
     /**
      * This function creates an inventory with the title of the menuTitle variable and sets it to the inventory variable.
      */
-    protected void setInventory() {
+    private void setInventory() {
+        if (inventoryType != null) {
+            this.inventory = Bukkit.createInventory(this, inventoryType, menuTitle.getTitle(plugin, titleType));
+            return;
+        }
+
         this.inventory = Bukkit.createInventory(this, 54, menuTitle.getTitle(plugin, titleType));
     }
 
@@ -119,9 +128,7 @@ public abstract class Menu implements InventoryHolder {
      * @return An ItemStack.
      */
     protected final @NotNull ItemStack getBackItem() {
-        return new ItemUtil(Material.BARRIER)
-                .setName(plugin, LanguageAPI.Menu.BACK_ITEM_NAME)
-                .toItemStack();
+        return new ItemUtil(Material.BARRIER).setName(plugin, LanguageAPI.Menu.BACK_ITEM_NAME).toItemStack();
     }
 
 }

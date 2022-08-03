@@ -6,10 +6,10 @@ import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEvent;
-import com.github.bakuplayz.cropclick.utils.BlockUtil;
-import com.github.bakuplayz.cropclick.utils.PermissionUtil;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -60,25 +60,21 @@ public final class PlayerDestroyCropListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        if (BlockUtil.isAir(block)) {
+        if (BlockUtils.isAir(block)) {
             return;
         }
 
-        if (!BlockUtil.isPlantableSurface(block)) {
+        if (!BlockUtils.isPlantableSurface(block)) {
             return;
         }
 
         Player player = event.getPlayer();
-        if (!PermissionUtil.canDestroyCrop(player)) {
+        if (!PermissionUtils.canDestroyCrop(player)) {
             return;
         }
 
         FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessable(world)) {
-            return;
-        }
-
-        if (!addonManager.canModify(player)) {
+        if (!worldManager.isAccessible(world)) {
             return;
         }
 
@@ -87,7 +83,10 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        //TODO: Should this be here?? event.setCancelled(true);
+        if (!addonManager.canModify(player)) {
+            event.setCancelled(true);
+            return;
+        }
 
         Bukkit.getPluginManager().callEvent(new PlayerDestroyCropEvent(crop, block, player));
     }

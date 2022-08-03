@@ -112,16 +112,12 @@ public final class AddonsMenu extends Menu {
      *
      * @return An ItemStack with the name "Jobs Reborn" and the lore of ex: "Enabled: true".
      */
-    @NotNull
-    public ItemStack getJobsItem() {
+    public @NotNull ItemStack getJobsItem() {
         return new ItemUtil(Material.STONE_HOE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_JOBS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_JOBS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDONS_JOBS_ITEM_STATUS.get(plugin, jobsEnabled)
-                ))
-                .setMaterial(
-                        jobsPresent && jobsEnabled ? null : Material.STAINED_GLASS_PANE
-                )
+                        LanguageAPI.Menu.ADDONS_JOBS_ITEM_STATUS.get(plugin, jobsEnabled)))
+                .setMaterial(jobsPresent && jobsEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(jobsEnabled ? -1 : 7)
                 .setDamage(jobsPresent ? -1 : 1)
                 .toItemStack();
@@ -134,16 +130,12 @@ public final class AddonsMenu extends Menu {
      *
      * @return An ItemStack with the name "mcMMO" and the lore of ex: "Enabled: true".
      */
-    @NotNull
-    public ItemStack getMCMMOItem() {
+    public @NotNull ItemStack getMCMMOItem() {
         return new ItemUtil(Material.GOLD_SWORD)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_MCMMO_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_MCMMO_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)
-                ))
-                .setMaterial(
-                        mmoPresent && mmoEnabled ? null : Material.STAINED_GLASS_PANE
-                )
+                        LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)))
+                .setMaterial(mmoPresent && mmoEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(mmoEnabled ? -1 : 7)
                 .setDamage(mmoPresent ? -1 : 1)
                 .toItemStack();
@@ -156,16 +148,12 @@ public final class AddonsMenu extends Menu {
      *
      * @return An ItemStack with the name "Offline Growth" and the lore of ex: "Enabled: true".
      */
-    @NotNull
-    public ItemStack getGrowthItem() {
+    public @NotNull ItemStack getGrowthItem() {
         return new ItemUtil(Material.LONG_GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_GROWTH_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_GROWTH_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDONS_GROWTH_ITEM_STATUS.get(plugin, growthEnabled)
-                ))
-                .setMaterial(
-                        growthPresent && growthEnabled ? null : Material.STAINED_GLASS_PANE
-                )
+                        LanguageAPI.Menu.ADDONS_GROWTH_ITEM_STATUS.get(plugin, growthEnabled)))
+                .setMaterial(growthPresent && growthEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(growthEnabled ? -1 : 7)
                 .setDamage(growthPresent ? -1 : 1)
                 .toItemStack();
@@ -178,16 +166,12 @@ public final class AddonsMenu extends Menu {
      *
      * @return An ItemStack with the name "Residence" and the lore of ex: "Enabled: true".
      */
-    @NotNull
-    public ItemStack getResidenceItem() {
+    public @NotNull ItemStack getResidenceItem() {
         return new ItemUtil(Material.FENCE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, residenceEnabled)
-                ))
-                .setMaterial(
-                        residencePresent && residenceEnabled ? null : Material.STAINED_GLASS_PANE
-                )
+                        LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, residenceEnabled)))
+                .setMaterial(residencePresent && residenceEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(residenceEnabled ? -1 : 7)
                 .setDamage(residencePresent ? -1 : 1)
                 .toItemStack();
@@ -200,16 +184,12 @@ public final class AddonsMenu extends Menu {
      *
      * @return An ItemStack with the name "Towny" and the lore of ex: "Enabled: true".
      */
-    @NotNull
-    public ItemStack getTownyItem() {
+    public @NotNull ItemStack getTownyItem() {
         return new ItemUtil(Material.FENCE_GATE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_TOWNY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_TOWNY_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDONS_TOWNY_ITEM_STATUS.get(plugin, townyEnabled)
-                ))
-                .setMaterial(
-                        townyPresent && townyEnabled ? null : Material.STAINED_GLASS_PANE
-                )
+                        LanguageAPI.Menu.ADDONS_TOWNY_ITEM_STATUS.get(plugin, townyEnabled)))
+                .setMaterial(townyPresent && townyEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(townyEnabled ? -1 : 7)
                 .setDamage(townyPresent ? -1 : 1)
                 .toItemStack();
@@ -222,16 +202,12 @@ public final class AddonsMenu extends Menu {
      *
      * @return An ItemStack with the name "World Guard" and the lore of ex: "Enabled: true".
      */
-    @NotNull
-    public ItemStack getGuardItem() {
+    public @NotNull ItemStack getGuardItem() {
         return new ItemUtil(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_GUARD_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_GUARD_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDONS_GUARD_ITEM_STATUS.get(plugin, guardEnabled)
-                ))
-                .setMaterial(
-                        guardPresent && guardEnabled ? null : Material.STAINED_GLASS_PANE
-                )
+                        LanguageAPI.Menu.ADDONS_GUARD_ITEM_STATUS.get(plugin, guardEnabled)))
+                .setMaterial(guardPresent && guardEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(guardEnabled ? -1 : 7)
                 .setDamage(guardPresent ? -1 : 1)
                 .toItemStack();

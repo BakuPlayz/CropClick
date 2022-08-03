@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.crop;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.*;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
-import com.github.bakuplayz.cropclick.utils.VersionUtil;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public final class CropManager {
 
     /**
      * A map of the crops that have been harvested and the time they were harvested,
-     * in order to obsolete a duplication issue with crops.
+     * in order to render a duplication issue, with crops, obsolete.
      */
     private final @Getter HashMap<Crop, Long> harvestedCrops;
 
@@ -38,6 +38,7 @@ public final class CropManager {
     public CropManager(@NotNull CropsConfig config) {
         harvestedCrops = new HashMap<>();
         crops = new ArrayList<>();
+
         registerVanillaCrops(config);
     }
 
@@ -48,7 +49,7 @@ public final class CropManager {
      * @param config The config file for the crop.
      */
     private void registerVanillaCrops(@NotNull CropsConfig config) {
-        if (VersionUtil.supportsBeetroots()) {
+        if (VersionUtils.supportsBeetroots()) {
             crops.add(new Beetroot(config));
         }
         crops.add(new Cactus(config));
@@ -127,8 +128,7 @@ public final class CropManager {
      *
      * @return A crop object.
      */
-    @Nullable
-    public Crop findByBlock(@NotNull Block block) {
+    public @Nullable Crop findByBlock(@NotNull Block block) {
         return crops.stream()
                 .filter(crop -> filterByType(crop, block))
                 .findFirst().orElse(null);
@@ -142,9 +142,8 @@ public final class CropManager {
      *
      * @return A crop with the name specified in the parameter.
      */
-    @Nullable
     @SuppressWarnings("unused")
-    public Crop findByName(@NotNull String name) {
+    public @Nullable Crop findByName(@NotNull String name) {
         return crops.stream()
                 .filter(crop -> crop.getName().equals(name))
                 .findFirst().orElse(null);

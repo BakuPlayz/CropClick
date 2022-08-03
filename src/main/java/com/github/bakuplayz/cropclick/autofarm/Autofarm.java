@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
-import com.github.bakuplayz.cropclick.utils.VersionUtil;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
@@ -111,6 +111,16 @@ public final class Autofarm {
 
 
     /**
+     * This function returns the first 7 characters of the farmerID, aka shortenedID.
+     *
+     * @return The first 7 characters of the farmerID.
+     */
+    public @NotNull String getShortenedID() {
+        return farmerID.toString().substring(0, 7);
+    }
+
+
+    /**
      * If the container is not null, return it. If the container is null, check if the container is enabled, linked, and if
      * the block is a chest, double chest, or shulker box. If it is, return the container. If it is not, return null.
      *
@@ -138,7 +148,7 @@ public final class Autofarm {
             );
         }
 
-        if (!VersionUtil.supportsShulkers()) {
+        if (!VersionUtils.supportsShulkers()) {
             return null;
         }
 

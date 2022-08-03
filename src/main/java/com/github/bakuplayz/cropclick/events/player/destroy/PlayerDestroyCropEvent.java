@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.events.player.destroy;
 
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,13 +23,10 @@ public final class PlayerDestroyCropEvent extends Event implements Cancellable {
     private final @Getter Block block;
     private final @Getter Player player;
 
-    private @Getter
-    @Setter boolean cancelled;
+    private @Getter @Setter boolean cancelled;
 
 
-    public PlayerDestroyCropEvent(@NotNull Crop crop,
-                                  @NotNull Block block,
-                                  @NotNull Player player) {
+    public PlayerDestroyCropEvent(@NotNull Crop crop, @NotNull Block block, @NotNull Player player) {
         this.player = player;
         this.block = block;
         this.crop = crop;

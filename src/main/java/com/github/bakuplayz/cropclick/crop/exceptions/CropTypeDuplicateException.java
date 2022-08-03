@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.exceptions;
 
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public final class CropTypeDuplicateException extends RuntimeException {
      *
      * @return A string of the names of the crops.
      */
-    private static String getCropNames(@NotNull List<Crop> crops) {
+    private static @NotNull String getCropNames(@NotNull List<Crop> crops) {
         return crops.stream()
                 .map(Crop::getName)
                 .collect(Collectors.joining());

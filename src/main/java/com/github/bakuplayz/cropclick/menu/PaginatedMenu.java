@@ -20,16 +20,14 @@ import java.util.List;
  */
 public abstract class PaginatedMenu extends Menu {
 
-    protected int page;
-    protected int itemIndex;
     protected final int MAX_ITEMS_PER_PAGE = 21;
+    protected int itemIndex;
+    protected int page;
 
     protected List<ItemStack> menuItems;
 
 
-    public PaginatedMenu(@NotNull CropClick plugin,
-                         @NotNull Player player,
-                         @NotNull LanguageAPI.Menu menuTitle) {
+    public PaginatedMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull LanguageAPI.Menu menuTitle) {
         super(plugin, player, menuTitle);
         this.itemIndex = 0;
         this.page = 0;
@@ -128,9 +126,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getPreviousPageItem() {
-        return new ItemUtil(Material.ARROW)
-                .setName(LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME.get(plugin))
-                .toItemStack();
+        return new ItemUtil(Material.ARROW).setName(LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME.get(plugin)).toItemStack();
     }
 
 
@@ -140,9 +136,8 @@ public abstract class PaginatedMenu extends Menu {
      * @return The current page item.
      */
     private @NotNull ItemStack getCurrentPageItem() {
-        return new ItemUtil(Material.BOOK)
-                .setName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
-                .toItemStack();
+        return new ItemUtil(Material.BOOK).setName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
+                                          .toItemStack();
     }
 
 
@@ -153,9 +148,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getNextPageItem() {
-        return new ItemUtil(Material.ARROW)
-                .setName(LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME.get(plugin))
-                .toItemStack();
+        return new ItemUtil(Material.ARROW).setName(LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME.get(plugin)).toItemStack();
     }
 
 

@@ -65,8 +65,7 @@ public final class JobsRebornMenu extends AddonMenu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    private ItemStack getCropsSettingsItem() {
+    private @NotNull ItemStack getCropsSettingsItem() {
         return new ItemUtil(Material.WHEAT)
                 .setName(plugin, LanguageAPI.Menu.ADDON_CROP_SETTINGS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_CROP_SETTINGS_ITEM_TIPS.getAsList(plugin))
@@ -80,14 +79,12 @@ public final class JobsRebornMenu extends AddonMenu {
      *
      * @return An ItemStack with the name "Jobs Reborn" and the lore of ex: "Enabled: true".
      */
-    @NotNull
     @Override
-    protected ItemStack getToggleItem() {
+    protected @NotNull ItemStack getToggleItem() {
         return new ItemUtil(Material.STONE_HOE)
                 .setName(plugin, LanguageAPI.Menu.ADDON_JOBS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_JOBS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_JOBS_ITEM_STATUS.get(plugin, addonEnabled)
-                ))
+                        LanguageAPI.Menu.ADDON_JOBS_ITEM_STATUS.get(plugin, addonEnabled)))
                 .setMaterial(addonEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(addonEnabled ? -1 : 7)
                 .toItemStack();

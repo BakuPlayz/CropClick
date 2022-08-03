@@ -58,7 +58,8 @@ public abstract class Config {
      * Reloads the config file.
      */
     public void reloadConfig() {
-        if (config == null || file == null) return;
+        if (file == null) return;
+        if (config == null) return;
 
         this.config = YamlConfiguration.loadConfiguration(file);
         LanguageAPI.Console.FILE_RELOAD.send(fileName);
@@ -69,7 +70,8 @@ public abstract class Config {
      * It saves the config file.
      */
     public void saveConfig() {
-        if (config == null || file == null) return;
+        if (file == null) return;
+        if (config == null) return;
 
         try {
             config.save(file);

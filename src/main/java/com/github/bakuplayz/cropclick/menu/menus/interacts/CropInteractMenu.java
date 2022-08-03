@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.interacts;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.AutofarmMenu;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -21,10 +22,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CropInteractMenu extends AutofarmMenu {
 
-    public CropInteractMenu(@NotNull CropClick plugin,
-                            @NotNull Player player,
-                            @NotNull Block block) {
-        super(plugin, player, block, LanguageAPI.Menu.CROP_INTERACT_TITLE);
+    private final AutofarmManager autofarmManager;
+
+
+    public CropInteractMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Block block) {
+        super(plugin, player, block, LanguageAPI.Menu.CROP_INTERACT_TITLE, Component.CROP);
+        this.autofarmManager = plugin.getAutofarmManager();
     }
 
 
@@ -32,14 +35,27 @@ public final class CropInteractMenu extends AutofarmMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
-        if (isLinked) return;
-        if (!clicked.equals(cropItem)) return;
+        if (!isUnlinked) {
+            if (clicked.equals(dispenserItem)) {
+                openDispenser();
+                return;
+            }
 
-        if (isCropSelected) {
-            autofarmManager.deselectCrop(player, block);
+            if (clicked.equals(containerItem)) {
+                openContainer();
+                return;
+            }
         }
 
-        autofarmManager.selectCrop(player, block);
+        if (!clicked.equals(cropItem)) {
+            return;
+        }
+
+        if (isClickedSelected) {
+            autofarmManager.deselectCrop(player, block);
+        } else {
+            autofarmManager.selectCrop(player, block);
+        }
 
         updateMenu();
         handleLink();

@@ -45,19 +45,32 @@ public final class ResidenceAddon extends Addon {
      * If the player is in a residence, and that residence or the player has the flag, return true.
      *
      * @param player The player who is trying to use the command.
+     *
      * @return A boolean value.
      */
     public boolean regionOrPlayerHasFlag(@NotNull Player player) {
         ResidenceManager manager = Residence.getInstance().getResidenceManager();
-        if (manager == null) return false;
+        if (manager == null) {
+            return false;
+        }
 
         ClaimedResidence claimed = manager.getByLoc(player.getLocation());
-        if (claimed == null) return false;
+        if (claimed == null) {
+            return false;
+        }
 
         ResidencePermissions permissions = claimed.getPermissions();
-        if (permissions == null) return false;
-        if (permissions.getFlags() == null) return false;
-        if (permissions.getFlags().isEmpty()) return false;
+        if (permissions == null) {
+            return false;
+        }
+
+        if (permissions.getFlags() == null) {
+            return false;
+        }
+
+        if (permissions.getFlags().isEmpty()) {
+            return false;
+        }
 
         boolean residenceHasFlag = permissions.has(flag, true);
         boolean playerHasFlag = permissions.playerHas(player, flag, true);

@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
-import com.github.bakuplayz.cropclick.crop.crops.templates.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
@@ -18,11 +18,12 @@ import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -48,9 +49,7 @@ public final class CropsMenu extends PaginatedMenu {
     private final CropsConfig cropsConfig;
 
 
-    public CropsMenu(@NotNull CropClick plugin,
-                     @NotNull Player player,
-                     @NotNull CropMenuState state) {
+    public CropsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull CropMenuState state) {
         super(plugin, player, LanguageAPI.Menu.CROPS_TITLE);
         this.crops = plugin.getCropManager().getCrops();
         this.cropsConfig = plugin.getCropsConfig();
@@ -76,14 +75,17 @@ public final class CropsMenu extends PaginatedMenu {
             case CROP:
                 handleBack(clicked, new MainMenu(plugin, player));
                 break;
+
             case NAME:
             case SOUNDS:
             case PARTICLES:
                 handleBack(clicked, new SettingsMenu(plugin, player, true));
                 break;
+
             case MCMMO:
                 handleBack(clicked, new McMMOMenu(plugin, player));
                 break;
+
             case JOBS_REBORN:
                 handleBack(clicked, new JobsRebornMenu(plugin, player));
                 break;
@@ -92,25 +94,32 @@ public final class CropsMenu extends PaginatedMenu {
         handlePagination(clicked);
 
         int index = getIndexOfCrop(clicked);
-        if (index == -1) return;
+        if (index == -1) {
+            return;
+        }
 
         Crop crop = crops.get(index);
         switch (menuState) {
             case CROP:
                 new CropMenu(plugin, player, crop).open();
                 break;
+
             case SOUNDS:
                 new SoundsMenu(plugin, player, crop).open();
                 break;
+
             case PARTICLES:
                 new ParticlesMenu(plugin, player, crop).open();
                 break;
+
             case NAME:
                 new NameMenu(plugin, player, crop).open();
                 break;
+
             case JOBS_REBORN:
                 new JobsCropMenu(plugin, player, crop).open();
                 break;
+
             case MCMMO:
                 new McMMOCropMenu(plugin, player, crop).open();
                 break;
@@ -130,10 +139,12 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The index of the item in the menuItems list.
      */
     private int getIndexOfCrop(@NotNull ItemStack clicked) {
-        return menuItems.stream()
+        return menuItems
+                .stream()
                 .filter(clicked::equals)
                 .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst().orElse(-1);
+                .findFirst()
+                .orElse(-1);
     }
 
 
@@ -145,8 +156,8 @@ public final class CropsMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull Crop crop) {
-        String name = MessageUtil.beautify(crop.getName(), false);
-        String status = MessageUtil.getEnabledStatus(plugin, crop.isEnabled());
+        String name = MessageUtils.beautify(crop.getName(), false);
+        String status = MessageUtils.getEnabledStatus(plugin, crop.isEnabled());
         ItemUtil menuItem = new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
@@ -157,24 +168,27 @@ public final class CropsMenu extends PaginatedMenu {
             case CROP:
                 menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_DROP_VALUE.get(plugin, getDropValue(crop)));
                 break;
+
             case PARTICLES:
                 menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_PARTICLES.get(plugin, getAmountOfParticles(crop)));
                 break;
+
             case SOUNDS:
                 menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_SOUNDS.get(plugin, getAmountOfSounds(crop)));
                 break;
+
             case NAME:
                 menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_DROP_NAME.get(plugin, getDropName(crop)));
                 break;
+
             case MCMMO:
                 menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_MMO_EXPERIENCE.get(plugin, getMcMMOExperience(crop)));
                 break;
+
             case JOBS_REBORN:
-                menuItem.setLore(
-                        LanguageAPI.Menu.CROPS_ITEM_JOBS_MONEY.get(plugin, getJobsMoney(crop)),
+                menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_JOBS_MONEY.get(plugin, getJobsMoney(crop)),
                         LanguageAPI.Menu.CROPS_ITEM_JOBS_POINTS.get(plugin, getJobsPoints(crop)),
-                        LanguageAPI.Menu.CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, getJobsExperience(crop))
-                );
+                        LanguageAPI.Menu.CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, getJobsExperience(crop)));
         }
 
         return menuItem.toItemStack();
@@ -187,9 +201,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return A list of ItemStacks.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
-        return crops.stream()
-                .map(this::getMenuItem)
-                .collect(Collectors.toList());
+        return crops.stream().map(this::getMenuItem).collect(Collectors.toList());
     }
 
 
@@ -284,8 +296,8 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The name of the crop or the name of the drop.
      */
-    @NotNull
-    private String getDropName(@NotNull Crop crop) {
+    @Contract("_ -> new")
+    private @NotNull String getDropName(@NotNull Crop crop) {
         return cropsConfig.getCropDropName(crop.getName());
     }
 

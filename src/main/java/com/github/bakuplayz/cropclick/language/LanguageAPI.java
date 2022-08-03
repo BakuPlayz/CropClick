@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.language;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.utils.MessageUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,7 +46,8 @@ public final class LanguageAPI {
 
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
 
-        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.13.2. In order to run the plugin, please change to the correct jar for your server version.");
+        NOT_SUPPORTED_VERSION(
+                "This CropClick.jar only supports 1.8 to 1.13.2. In order to run the plugin, please change to the correct jar for your server version.");
 
         private final String message;
 
@@ -151,9 +152,7 @@ public final class LanguageAPI {
         }
 
 
-        Command(@NotNull Category category,
-                @NotNull String key,
-                @NotNull String placeholder) {
+        Command(@NotNull Category category, @NotNull String key, @NotNull String placeholder) {
             this.category = category.getName();
             this.placeholder = placeholder;
             this.key = key;
@@ -205,9 +204,7 @@ public final class LanguageAPI {
          * @param sender The CommandSender that will receive the message.
          * @param value  The value to be translated.
          */
-        public void send(@NotNull CropClick plugin,
-                         @NotNull CommandSender sender,
-                         @NotNull String value) {
+        public void send(@NotNull CropClick plugin, @NotNull CommandSender sender, @NotNull String value) {
             sender.sendMessage(get(plugin, value));
         }
 
@@ -264,7 +261,9 @@ public final class LanguageAPI {
         WORLD_TITLE(Category.TITLE, "world"),
         WORLDS_TITLE(Category.TITLE, "worlds"),
         PARTICLES_TITLE(Category.TITLE, "particles"),
-        INTERACT_TITLE(Category.TITLE, "interact"),
+
+        DISPENSER_PREVIEW_TITLE(Category.TITLE, "dispenserPreview", "%id%"),
+        CONTAINER_PREVIEW_TITLE(Category.TITLE, "containerPreview", "%id%"),
 
         MAIN_UPDATES_ITEM_NAME(Category.MAIN, SubCategory.UPDATES, "itemName"),
         MAIN_UPDATES_ITEM_STATUS(Category.MAIN, SubCategory.UPDATES, "itemStatus", "%status%"),
@@ -285,10 +284,6 @@ public final class LanguageAPI {
         MAIN_AUTOFARMS_ITEM_STATUS(Category.MAIN, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
         MAIN_AUTOFARMS_ITEM_TIPS(Category.MAIN, SubCategory.AUTOFARMS, "itemTips"),
 
-        SETTINGS_INTERACT_ITEM_NAME(Category.SETTINGS, SubCategory.INTERACT, "itemName"),
-        SETTINGS_INTERACT_ITEM_TIPS(Category.SETTINGS, SubCategory.INTERACT, "itemTips"),
-        SETTINGS_INTERACT_ITEM_JUMP(Category.SETTINGS, SubCategory.INTERACT, "itemJump", "%status%"),
-        SETTINGS_INTERACT_ITEM_CLICK(Category.SETTINGS, SubCategory.INTERACT, "itemClick", "%status%"),
         SETTINGS_PARTICLES_ITEM_NAME(Category.SETTINGS, SubCategory.PARTICLES, "itemName"),
         SETTINGS_PARTICLES_ITEM_TIPS(Category.SETTINGS, SubCategory.PARTICLES, "itemTips"),
         SETTINGS_PARTICLES_ITEM_STATUS(Category.SETTINGS, SubCategory.PARTICLES, "itemStatus", "%status%"),
@@ -304,16 +299,6 @@ public final class LanguageAPI {
         SETTINGS_WORLDS_ITEM_NAME(Category.SETTINGS, SubCategory.WORLDS, "itemName"),
         SETTINGS_WORLDS_ITEM_TIPS(Category.SETTINGS, SubCategory.WORLDS, "itemTips"),
         SETTINGS_WORLDS_ITEM_STATUS(Category.SETTINGS, SubCategory.WORLDS, "itemStatus", "%status%"),
-
-        INTERACT_JUMP_ITEM_NAME(Category.INTERACT, SubCategory.JUMP, "itemName"),
-        INTERACT_JUMP_ITEM_TIPS(Category.INTERACT, SubCategory.JUMP, "itemTips"),
-        INTERACT_JUMP_ITEM_STATUS(Category.INTERACT, SubCategory.JUMP, "itemStatus", "%status%"),
-        INTERACT_LEFT_ITEM_NAME(Category.INTERACT, SubCategory.LEFT, "itemName"),
-        INTERACT_LEFT_ITEM_TIPS(Category.INTERACT, SubCategory.LEFT, "itemTips"),
-        INTERACT_LEFT_ITEM_STATUS(Category.INTERACT, SubCategory.LEFT, "itemStatus", "%status%"),
-        INTERACT_RIGHT_ITEM_NAME(Category.INTERACT, SubCategory.RIGHT, "itemName"),
-        INTERACT_RIGHT_ITEM_TIPS(Category.INTERACT, SubCategory.RIGHT, "itemTips"),
-        INTERACT_RIGHT_ITEM_STATUS(Category.INTERACT, SubCategory.RIGHT, "itemStatus", "%status%"),
 
         PARTICLES_ITEM_NAME(Category.PARTICLES, "itemName", "%name%"),
         PARTICLES_ITEM_STATUS(Category.PARTICLES, "itemStatus", "%status%"),
@@ -376,16 +361,18 @@ public final class LanguageAPI {
         AUTOFARM_FORMAT_Z(Category.AUTOFARM, SubCategory.FORMAT, "z", "%z%"),
         AUTOFARM_FORMAT_STATE(Category.AUTOFARM, SubCategory.FORMAT, "state", "%state%"),
 
+        AUTOFARM_STATE_UNLINKED(Category.AUTOFARM, SubCategory.STATE, "unlinked"),
+        AUTOFARM_STATE_SELECTED(Category.AUTOFARM, SubCategory.STATE, "selected"),
+
         AUTOFARM_LINK_SUCCESS(Category.AUTOFARM, SubCategory.ACTIONS, "linkSuccess"),
-        AUTOFARM_SELECTED_NAME(Category.AUTOFARM, SubCategory.SELECTED, "itemName"),
 
         AUTOFARM_CROP_NAME(Category.AUTOFARM, SubCategory.CROP, "itemName"),
         AUTOFARM_DISPENSER_NAME(Category.AUTOFARM, SubCategory.DISPENSER, "itemName"),
         AUTOFARM_CONTAINER_NAME(Category.AUTOFARM, SubCategory.CONTAINER, "itemName"),
 
         AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%"),
-        AUTOFARMS_ITEM_ENABLED(Category.AUTOFARMS, "itemEnabled", "%status%"),
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
+        AUTOFARMS_ITEM_ENABLED(Category.AUTOFARMS, "itemEnabled", "%status%"),
 
         ADDON_WORLDS_ITEM_NAME(Category.ADDON, SubCategory.WORLDS, "itemName"),
         ADDON_WORLDS_ITEM_TIPS(Category.ADDON, SubCategory.WORLDS, "itemTips"),
@@ -435,30 +422,39 @@ public final class LanguageAPI {
         JOBS_CROP_POINTS_ITEM_VALUE(Category.JOBS_CROP, SubCategory.POINTS, "itemValue", "%value%"),
         JOBS_CROP_POINTS_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS_ADD, "itemName", "%amount%", "%type%"),
         JOBS_CROP_POINTS_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.POINTS_ADD, "itemAfter", "%value%"),
-        JOBS_CROP_POINTS_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS_REMOVE, "itemName", "%amount%", "%type%"),
+        JOBS_CROP_POINTS_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS_REMOVE, "itemName", "%amount%",
+                "%type%"),
         JOBS_CROP_POINTS_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.POINTS_REMOVE, "itemAfter", "%value%"),
         JOBS_CROP_MONEY_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY, "itemName"),
         JOBS_CROP_MONEY_ITEM_VALUE(Category.JOBS_CROP, SubCategory.MONEY, "itemValue", "%value%"),
         JOBS_CROP_MONEY_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY_ADD, "itemName", "%amount%", "%type%"),
         JOBS_CROP_MONEY_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.MONEY_ADD, "itemAfter", "%value%"),
-        JOBS_CROP_MONEY_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY_REMOVE, "itemName", "%amount%", "%type%"),
+        JOBS_CROP_MONEY_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY_REMOVE, "itemName", "%amount%",
+                "%type%"),
         JOBS_CROP_MONEY_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.MONEY_REMOVE, "itemAfter", "%value%"),
         JOBS_CROP_EXPERIENCE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemName"),
         JOBS_CROP_EXPERIENCE_ITEM_VALUE(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
-        JOBS_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%", "%type%"),
+        JOBS_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%",
+                "%type%"),
         JOBS_CROP_EXPERIENCE_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_ADD, "itemAfter", "%value%"),
-        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%", "%type%"),
-        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter", "%value%"),
+        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%",
+                "%type%"),
+        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter",
+                "%value%"),
 
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemName"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemTips"),
-        MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue", "%value%"),
+        MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue",
+                "%value%"),
         MCMMO_CROP_EXPERIENCE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemName"),
         MCMMO_CROP_EXPERIENCE_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
-        MCMMO_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%", "%type%"),
+        MCMMO_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%",
+                "%type%"),
         MCMMO_CROP_EXPERIENCE_ADD_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemAfter", "%value%"),
-        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%", "%type%"),
-        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter", "%value%"),
+        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName",
+                "%amount%", "%type%"),
+        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter",
+                "%value%"),
 
         MCMMO_CROP_REASON_RESPONSE_UNCHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "unchanged"),
         MCMMO_CROP_REASON_RESPONSE_CHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "changed", "%name%"),
@@ -515,8 +511,7 @@ public final class LanguageAPI {
              *
              * @return The name of the enum.
              */
-            @NotNull
-            public String getName() {
+            public @NotNull String getName() {
                 return altName != null ? altName : name().toLowerCase();
             }
 
@@ -531,6 +526,7 @@ public final class LanguageAPI {
             SELECTED,
             ACTIONS,
             FORMAT,
+            STATE,
             REMOVE,
             ADD,
             POINTS,
@@ -592,8 +588,7 @@ public final class LanguageAPI {
              *
              * @return The name of the enum.
              */
-            @NotNull
-            public String getName() {
+            public @NotNull String getName() {
                 return altName != null ? altName : name().toLowerCase();
             }
 
@@ -611,18 +606,14 @@ public final class LanguageAPI {
         }
 
 
-        Menu(@NotNull Category category,
-             @NotNull SubCategory subCategory,
-             @NotNull String key) {
+        Menu(@NotNull Category category, @NotNull SubCategory subCategory, @NotNull String key) {
             this.category = category.getName() + "." + subCategory.getName();
             this.placeholders = new String[]{};
             this.key = key;
         }
 
 
-        Menu(@NotNull Category category,
-             @NotNull String key,
-             @NotNull String... placeholders) {
+        Menu(@NotNull Category category, @NotNull String key, @NotNull String... placeholders) {
             this.placeholders = placeholders;
             this.category = category.getName();
             this.key = key;
@@ -646,8 +637,7 @@ public final class LanguageAPI {
          *
          * @return The message from the language config.
          */
-        @NotNull
-        public String get(@NotNull CropClick plugin) {
+        public @NotNull String get(@NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("menu", category, key, true);
         }
 
@@ -660,12 +650,11 @@ public final class LanguageAPI {
          *
          * @return A string.
          */
-        @NotNull
         @SafeVarargs
-        public final <T> String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
+        public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
-                    .map(Object::toString)
-                    .toArray(String[]::new);
+                                             .map(Object::toString)
+                                             .toArray(String[]::new);
             return fastReplace(get(plugin), valuesAsStrings);
         }
 
@@ -677,12 +666,11 @@ public final class LanguageAPI {
          *
          * @return A list of strings
          */
-        @NotNull
-        public List<String> getAsList(@NotNull CropClick plugin) {
+        public @NotNull List<String> getAsList(@NotNull CropClick plugin) {
             String message = plugin.getLanguageConfig().getMessage("menu", category, key, false);
-            return MessageUtil.readify(message, 4).stream()
-                    .map(MessageUtil::colorize)
-                    .collect(Collectors.toList());
+            return MessageUtils.readify(message, 4).stream()
+                               .map(MessageUtils::colorize)
+                               .collect(Collectors.toList());
         }
 
 
@@ -694,8 +682,7 @@ public final class LanguageAPI {
          *
          * @return A list of strings.
          */
-        @NotNull
-        public List<String> getAsList(@NotNull CropClick plugin, String @NotNull ... appendable) {
+        public @NotNull List<String> getAsList(@NotNull CropClick plugin, String @NotNull ... appendable) {
             List<String> messages = getAsList(plugin);
             messages.add("");
             messages.addAll(Arrays.asList(appendable));
@@ -720,6 +707,7 @@ public final class LanguageAPI {
          * @param plugin The plugin instance.
          * @param sender The CommandSender that is executing the command.
          */
+        @SuppressWarnings("unused")
         public void sendAsList(@NotNull CropClick plugin, @NotNull CommandSender sender) {
             getAsList(plugin).forEach(sender::sendMessage);
         }
@@ -732,9 +720,10 @@ public final class LanguageAPI {
          *
          * @return The title of the GUI.
          */
-        @NotNull
-        public String getTitle(@NotNull CropClick plugin) {
-            return "CraftingGUI: " + get(plugin);
+        public @NotNull String getTitle(@NotNull CropClick plugin) {
+            String title = "CraftingGUI: " + get(plugin);
+            String error = getErrorMessage(plugin);
+            return title.length() < 32 ? title : error;
         }
 
 
@@ -746,12 +735,27 @@ public final class LanguageAPI {
          *
          * @return The title of the GUI.
          */
-        @NotNull
-        public String getTitle(@NotNull CropClick plugin, @NotNull String type) {
+        public @NotNull String getTitle(@NotNull CropClick plugin, @NotNull String type) {
             if (type.equals("")) {
                 return getTitle(plugin);
             }
-            return "CraftingGUI: " + get(plugin, type);
+
+            String title = "CraftingGUI: " + get(plugin, type);
+            String errorMessage = getErrorMessage(plugin);
+            return title.length() < 32 ? title : errorMessage;
+        }
+
+
+        /**
+         * Returns an unknown issue as a trigger for the language config,
+         * to serve us with an error message response.
+         *
+         * @param plugin The plugin instance.
+         *
+         * @return The error message from the language config.
+         */
+        private @NotNull String getErrorMessage(@NotNull CropClick plugin) {
+            return plugin.getLanguageConfig().getMessage("title", "error", "message", true);
         }
 
 
@@ -762,9 +766,10 @@ public final class LanguageAPI {
          *
          * @return A string with the placeholders replaced with the values.
          */
-        @NotNull
-        private String fastReplace(@NotNull String message, @NotNull String @NotNull ... values) {
-            if (placeholders.length != values.length) return message;
+        private @NotNull String fastReplace(@NotNull String message, @NotNull String @NotNull ... values) {
+            if (placeholders.length != values.length) {
+                return message;
+            }
 
             String returned = message;
             for (int i = 0; i < values.length; ++i) {

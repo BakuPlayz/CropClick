@@ -23,7 +23,7 @@ import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmLi
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
-import com.github.bakuplayz.cropclick.utils.VersionUtil;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,6 +33,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -72,13 +73,17 @@ public class CropClick extends JavaPlugin {
     }
 
 
-    protected CropClick(JavaPluginLoader loader,
-                        PluginDescriptionFile description,
-                        File dataFolder,
-                        File file) {
+    // A constructor for unit testing.
+    protected CropClick(@NotNull JavaPluginLoader loader,
+                        @NotNull PluginDescriptionFile description,
+                        @NotNull File dataFolder,
+                        @NotNull File file) {
         super(loader, description, dataFolder, file);
         this.isUnitTest = true;
     }
+
+
+    // TODO: Should be called once every 10 minutes or so, also before shutdown. (Call on another thread using bukkit.Schedule()) -- dataStorages
 
 
     @Override
@@ -86,16 +91,13 @@ public class CropClick extends JavaPlugin {
         if (isUnitTest) {
             registerConfigs();
             setupConfigs();
-            
+
             registerStorages();
             setupStorages();
-
-            //registerCommands();
-            //registerListeners();
             return;
         }
 
-        if (!VersionUtil.between(8.0, 13.9)) {
+        if (!VersionUtils.between(8.0, 13.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }

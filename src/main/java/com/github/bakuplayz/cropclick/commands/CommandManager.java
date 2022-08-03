@@ -30,10 +30,11 @@ public final class CommandManager implements TabExecutor {
 
     private final CropClick plugin;
 
-    private final @Getter List<SubCommand> commands = new ArrayList<>();
+    private final @Getter List<SubCommand> commands;
 
 
     public CommandManager(@NotNull CropClick plugin) {
+        this.commands = new ArrayList<>();
         this.plugin = plugin;
 
         registerCommands();
@@ -111,7 +112,9 @@ public final class CommandManager implements TabExecutor {
                                       @NotNull Command cmd,
                                       @NotNull String alias,
                                       String @NotNull [] args) {
-        if (args.length != 1) return new ArrayList<>();
+        if (args.length != 1) {
+            return new ArrayList<>();
+        }
         return commands.stream()
                 .map(SubCommand::getName)
                 .filter(command -> command.startsWith(args[0]))

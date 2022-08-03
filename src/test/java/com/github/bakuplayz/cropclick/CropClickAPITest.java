@@ -20,25 +20,31 @@ public final class CropClickAPITest {
     public void setUp() {
     }
 
+
     @AfterEach
     public void tearDown() {
     }
+
 
     @Test
     public void getCropManager() {
     }
 
+
     @Test
     public void getAutofarmManager() {
     }
+
 
     @Test
     public void getUpdateManager() {
     }
 
+
     @Test
     public void getWorldManager() {
     }
+
 
     @Test
     public void getAddonManager() {

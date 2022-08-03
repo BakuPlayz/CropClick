@@ -4,7 +4,6 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
-import com.github.bakuplayz.cropclick.menu.menus.settings.InteractMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ToggleMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -33,9 +32,7 @@ public final class SettingsMenu extends Menu {
     private final boolean isRedirected;
 
 
-    public SettingsMenu(@NotNull CropClick plugin,
-                        @NotNull Player player,
-                        boolean isRedirected) {
+    public SettingsMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
         super(plugin, player, LanguageAPI.Menu.SETTINGS_TITLE);
         this.isRedirected = isRedirected;
     }
@@ -43,13 +40,12 @@ public final class SettingsMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(10, getInteractItem());
+        inventory.setItem(10, getToggleItem());
         inventory.setItem(13, getParticlesItem());
         inventory.setItem(16, getSoundsItem());
 
-        inventory.setItem(28, getToggleItem());
-        inventory.setItem(31, getNameItem());
-        inventory.setItem(34, getWorldsItem());
+        inventory.setItem(28, getNameItem());
+        inventory.setItem(31, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -60,10 +56,6 @@ public final class SettingsMenu extends Menu {
         ItemStack clicked = event.getCurrentItem();
 
         handleBack(clicked, new MainMenu(plugin, player));
-
-        if (clicked.equals(getInteractItem())) {
-            new InteractMenu(plugin, player).open();
-        }
 
         if (clicked.equals(getParticlesItem())) {
             new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
@@ -87,22 +79,12 @@ public final class SettingsMenu extends Menu {
     }
 
 
-    private @NotNull ItemStack getInteractItem() {
-        return new ItemUtil(Material.DIAMOND_HOE)
-                .setName(plugin, LanguageAPI.Menu.SETTINGS_INTERACT_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.SETTINGS_INTERACT_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_INTERACT_ITEM_JUMP.get(plugin, true),
-                        LanguageAPI.Menu.SETTINGS_INTERACT_ITEM_CLICK.get(plugin, true)
-                )).toItemStack();
-    }
-
-
     private @NotNull ItemStack getParticlesItem() {
         return new ItemUtil(Material.FIREWORK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles())
-                )).toItemStack();
+                        LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles())))
+                .toItemStack();
     }
 
 
@@ -110,8 +92,8 @@ public final class SettingsMenu extends Menu {
         return new ItemUtil(Material.NOTE_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds())
-                )).toItemStack();
+                        LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds())))
+                .toItemStack();
     }
 
 
@@ -119,8 +101,7 @@ public final class SettingsMenu extends Menu {
         return new ItemUtil(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())
-                ))
+                        LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
                 .toItemStack();
     }
 
@@ -129,8 +110,8 @@ public final class SettingsMenu extends Menu {
         return new ItemUtil(Material.NAME_TAG)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_NAME_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_NAME_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_NAME_ITEM_STATUS.get(plugin, getAmountOfRenamed())
-                )).toItemStack();
+                        LanguageAPI.Menu.SETTINGS_NAME_ITEM_STATUS.get(plugin, getAmountOfRenamed())))
+                .toItemStack();
     }
 
 
@@ -138,8 +119,8 @@ public final class SettingsMenu extends Menu {
         return new ItemUtil(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished())
-                )).toItemStack();
+                        LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished())))
+                .toItemStack();
     }
 
 
@@ -181,7 +162,10 @@ public final class SettingsMenu extends Menu {
      * @return The amount of crops that have been renamed.
      */
     private int getAmountOfRenamed() {
-        return (int) plugin.getCropManager().getCrops().stream()
+        return (int) plugin
+                .getCropManager()
+                .getCrops()
+                .stream()
                 .filter(crop -> !crop.getDrop().getName().equals(crop.getName()))
                 .count();
     }
@@ -193,10 +177,7 @@ public final class SettingsMenu extends Menu {
      * @return The number of banished worlds.
      */
     private int getAmountOfBanished() {
-        return (int) plugin.getWorldManager().getWorlds()
-                .values().stream()
-                .filter(FarmWorld::isBanished)
-                .count();
+        return (int) plugin.getWorldManager().getWorlds().values().stream().filter(FarmWorld::isBanished).count();
     }
 
 }

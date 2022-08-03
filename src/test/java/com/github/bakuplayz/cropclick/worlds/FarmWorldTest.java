@@ -1,43 +1,52 @@
 package com.github.bakuplayz.cropclick.worlds;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import com.github.bakuplayz.cropclick.CropClick;
+import be.seeseemelk.mockbukkit.WorldMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public final class FarmWorldTest {
 
-    // TODO: Fix the world mock! (for the first constructor)
-
-    private CropClick plugin;
-
     private FarmWorld farmWorld;
+
 
     @Before
     public void initialize() {
         MockBukkit.mock();
-        plugin = MockBukkit.load(CropClick.class);
     }
+
 
     @BeforeEach
     public void setUp() {
-        farmWorld = new FarmWorld("World", false, false, false);
+        farmWorld = new FarmWorld("World", false, false, false, new ArrayList<>());
     }
+
 
     @After
     public void tearDown() {
         MockBukkit.unload();
     }
 
+
     @Test
     public void testConstructor() {
-        FarmWorld result = new FarmWorld("World", false, true, true);
+        FarmWorld result = new FarmWorld("World", false, true, true, new ArrayList<>());
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals("World", result.getName()),
@@ -47,6 +56,21 @@ public final class FarmWorldTest {
         );
     }
 
+
+    @Test
+    public void testConstructor1() {
+        WorldMock world = new WorldMock();
+        FarmWorld result = new FarmWorld(world);
+        assertAll("Should contain, equal and mach the values and equal instances.",
+                () -> assertNotNull(result),
+                () -> assertEquals("World", result.getName()),
+                () -> assertFalse(result.isBanished()),
+                () -> assertTrue(result.allowsPlayers()),
+                () -> assertTrue(result.allowsAutofarms())
+        );
+    }
+
+
     @Test
     public void testAllowsPlayersGetter() {
         assertAll("Checks wheaten the getter, allowsPlayers, gets the correct value.",
@@ -54,6 +78,7 @@ public final class FarmWorldTest {
                 () -> assertFalse(farmWorld.allowsPlayers())
         );
     }
+
 
     @Test
     public void testAllowsAutofarmsGetter() {
@@ -63,6 +88,7 @@ public final class FarmWorldTest {
         );
     }
 
+
     @Test
     public void testIsBanishedGetter() {
         assertAll("Checks wheaten the getter, isBanished, gets the correct value.",
@@ -70,6 +96,7 @@ public final class FarmWorldTest {
                 () -> assertFalse(farmWorld.isBanished())
         );
     }
+
 
     @Test
     public void testAllowsPlayersSetter() {
@@ -80,6 +107,7 @@ public final class FarmWorldTest {
         );
     }
 
+
     @Test
     public void testAllowsAutofarmsSetter() {
         farmWorld.allowsAutofarms(true);
@@ -88,6 +116,7 @@ public final class FarmWorldTest {
                 () -> assertTrue(farmWorld.allowsAutofarms())
         );
     }
+
 
     @Test
     public void testIsBanishedSetter() {
@@ -98,10 +127,11 @@ public final class FarmWorldTest {
         );
     }
 
+
     @Test
     public void testToString() {
         String result = farmWorld.toString();
-        final String toStringed = "FarmWorld(name=World, isBanished=false, allowsPlayers=false, allowsAutofarms=false, banishedAddons=[])";
+        String toStringed = "FarmWorld(name=World, isBanished=false, allowsPlayers=false, allowsAutofarms=false, banishedAddons=[])";
 
         assertAll("Checks wheaten the toString formats the variables to a string correctly.",
                 () -> assertNotNull(farmWorld),
@@ -110,19 +140,19 @@ public final class FarmWorldTest {
         );
     }
 
+
     @Test
     public void testEquals() {
-        FarmWorld equalWorld = new FarmWorld("World", false, false, false);
-        FarmWorld nonEqualWorld = new FarmWorld("Sword", true, true, true);
+        FarmWorld equalWorld = new FarmWorld("World", false, false, false, new ArrayList<>());
+        FarmWorld nonEqualWorld = new FarmWorld("Sword", true, true, true, new ArrayList<>());
 
         assertAll("Checks wheaten the equal uses equality correctly.",
                 () -> assertNotNull(farmWorld),
-                () -> assertNotNull(equalWorld),
-                () -> assertNotNull(nonEqualWorld),
-                () -> assertNotEquals(nonEqualWorld, farmWorld),
-                () -> assertEquals(equalWorld, farmWorld)
+                () -> assertNotNull(equalWorld), () -> assertNotNull(nonEqualWorld),
+                () -> assertNotEquals(nonEqualWorld, farmWorld), () -> assertEquals(equalWorld, farmWorld)
         );
     }
+
 
     @Test
     public void testHashCode() {
@@ -133,28 +163,5 @@ public final class FarmWorldTest {
                 () -> assertEquals(result, -1737165185)
         );
     }
-
-    // TODO: Cannot run this due to managers being disabled in test mode.
-    /*@Test
-    public void testToggleAddon() {
-        AddonManager addonManager = plugin.getAddonManager();
-        farmWorld.toggleAddon(addonManager, "JobsReborn");
-
-        List<Addon> banishedAddons = farmWorld.getBanishedAddons();
-
-        assertAll("Toggles the addon, 'JobsReborn'.",
-                () -> assertNotNull(farmWorld),
-                () -> assertFalse(banishedAddons.isEmpty()),
-                () -> assertTrue(banishedAddons.contains(new JobsRebornAddon(plugin)))
-        );
-    }*/
-
-   /*
-    @Test
-    public void testIsBanishedAddon() {
-        boolean result = farmWorld.isBanishedAddon(new AddonManager(new CropClick()), "name");
-        Assertions.assertEquals(true, result);
-    }
-    */
 
 }

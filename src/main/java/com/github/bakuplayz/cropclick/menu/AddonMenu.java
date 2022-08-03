@@ -52,7 +52,9 @@ public abstract class AddonMenu extends Menu {
      * @param toggleItem The item that the player clicked on.
      */
     protected final void handleToggle(@NotNull ItemStack clicked, @NotNull ItemStack toggleItem) {
-        if (!clicked.equals(toggleItem)) return;
+        if (!clicked.equals(toggleItem)) {
+            return;
+        }
 
         addonManager.toggle(addonName);
     }
@@ -73,8 +75,7 @@ public abstract class AddonMenu extends Menu {
      *
      * @return The item that will be used to toggle the ability.
      */
-    @NotNull
-    protected abstract ItemStack getToggleItem();
+    protected abstract @NotNull ItemStack getToggleItem();
 
 
     /**
@@ -103,14 +104,10 @@ public abstract class AddonMenu extends Menu {
      *
      * @return An ItemStack.
      */
-    @NotNull
-    protected ItemStack getWorldsItem() {
-        return new ItemUtil(Material.GRASS)
-                .setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(plugin)
-                ))
-                .toItemStack();
+    protected final @NotNull ItemStack getWorldsItem() {
+        return new ItemUtil(Material.GRASS).setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
+                                           .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(plugin)))
+                                           .toItemStack();
     }
 
 }

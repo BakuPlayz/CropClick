@@ -1,15 +1,23 @@
 package com.github.bakuplayz.cropclick.autofarm.metadata;
 
+import com.github.bakuplayz.cropclick.CropClick;
 import org.bukkit.metadata.LazyMetadataValue;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;
 
-public class AutofarmMetadata extends LazyMetadataValue {
 
-    public AutofarmMetadata(@NotNull Plugin cropClick, Callable<Object> lazyValue) {
-        super(cropClick, CacheStrategy.CACHE_AFTER_FIRST_EVAL, lazyValue);
+/**
+ * (DESCRIPTION)
+ *
+ * @author BakuPlayz
+ * @version 1.6.0
+ * @since 1.6.0
+ */
+public final class AutofarmMetadata extends LazyMetadataValue {
+
+    public AutofarmMetadata(@NotNull CropClick plugin, Callable<Object> lazyValue) {
+        super(plugin, CacheStrategy.CACHE_AFTER_FIRST_EVAL, lazyValue);
     }
 
 }

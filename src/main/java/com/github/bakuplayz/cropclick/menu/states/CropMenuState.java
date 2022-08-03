@@ -1,8 +1,5 @@
 package com.github.bakuplayz.cropclick.menu.states;
 
-import org.jetbrains.annotations.NotNull;
-
-
 /**
  * (DESCRIPTION)
  *
@@ -16,12 +13,5 @@ public enum CropMenuState {
     MCMMO,
     CROP,
     SOUNDS,
-    PARTICLES;
-
-
-    @NotNull
-    public String getType() {
-        return name().toLowerCase();
-    }
-
+    PARTICLES
 }

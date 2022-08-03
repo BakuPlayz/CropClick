@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
@@ -25,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class WorldGuardAddon extends Addon {
 
-    private final WorldGuard worldGuard;
     private final StateFlag cropFlag;
+    private final WorldGuard worldGuard;
 
 
     public WorldGuardAddon(@NotNull CropClick plugin) {
@@ -53,6 +54,7 @@ public final class WorldGuardAddon extends Addon {
      * true.
      *
      * @param player The player to check.
+     *
      * @return A boolean value.
      */
     public boolean regionAllowsPlayer(@NotNull Player player) {
@@ -79,10 +81,13 @@ public final class WorldGuardAddon extends Addon {
      *
      * @param region The region you want to check.
      * @param player The player to check if they are a member of the region.
+     *
      * @return A boolean value.
      */
     private boolean regionHasMember(@NotNull ProtectedRegion region, @NotNull Player player) {
-        return region.getMembers().contains(player.getUniqueId()) ^ region.getOwners().contains(player.getUniqueId());
+        DefaultDomain members = region.getMembers();
+        DefaultDomain owners = region.getOwners();
+        return members.contains(player.getUniqueId()) || owners.contains(player.getUniqueId());
     }
 
 }
