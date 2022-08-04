@@ -13,6 +13,7 @@ import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.listeners.MenuListener;
 import com.github.bakuplayz.cropclick.listeners.autofarm.AutofarmHarvestCropListener;
+import com.github.bakuplayz.cropclick.listeners.entity.EntityDestroyAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.destory.PlayerDestroyCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.harvest.PlayerHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtAutofarmListener;
@@ -21,6 +22,7 @@ import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAt
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
+import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
@@ -33,7 +35,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -54,7 +55,6 @@ public class CropClick extends JavaPlugin {
     private @Getter CommandManager commandManager;
     private @Getter AutofarmManager autofarmManager;
 
-
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
     private @Getter PlayersConfig playersConfig;
@@ -68,22 +68,24 @@ public class CropClick extends JavaPlugin {
     private boolean isUnitTest;
 
 
+    /**
+     * The default plugin constructor.
+     */
     public CropClick() {
         super();
     }
 
 
-    // A constructor for unit testing.
-    protected CropClick(@NotNull JavaPluginLoader loader,
-                        @NotNull PluginDescriptionFile description,
-                        @NotNull File dataFolder,
-                        @NotNull File file) {
+    /**
+     * A constructor for unit testing.
+     */
+    protected CropClick(JavaPluginLoader loader,
+                        PluginDescriptionFile description,
+                        File dataFolder,
+                        File file) {
         super(loader, description, dataFolder, file);
         this.isUnitTest = true;
     }
-
-
-    // TODO: Should be called once every 10 minutes or so, also before shutdown. (Call on another thread using bukkit.Schedule()) -- dataStorages
 
 
     @Override
@@ -109,6 +111,7 @@ public class CropClick extends JavaPlugin {
 
         registerStorages();
         setupStorages();
+        startStoragesSaveInterval();
 
         registerManagers();
         registerCommands();
@@ -153,7 +156,7 @@ public class CropClick extends JavaPlugin {
     }
 
 
-    private void setupStorages() {
+    public void setupStorages() {
         farmData.setup();
         farmData.fetchData();
         farmData.saveData();
@@ -161,6 +164,13 @@ public class CropClick extends JavaPlugin {
         worldData.setup();
         worldData.fetchData();
         worldData.saveData();
+    }
+
+
+    private void startStoragesSaveInterval() {
+        long TEN_MINUTES_PERIOD = 12000L;
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, farmData::saveData, 0, TEN_MINUTES_PERIOD);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, worldData::saveData, 0, TEN_MINUTES_PERIOD);
     }
 
 
@@ -191,6 +201,10 @@ public class CropClick extends JavaPlugin {
 
         manager.registerEvents(new MenuListener(), this);
 
+        if (VersionUtils.between(8.3, 13.9)) {
+            manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
+        }
+
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
@@ -198,6 +212,7 @@ public class CropClick extends JavaPlugin {
 
         manager.registerEvents(new PlayerLinkAutofarmListener(this), this);
         manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
+        manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
 
         manager.registerEvents(new PlayerPlantCropListener(this), this);
         manager.registerEvents(new PlayerDestroyCropListener(this), this);

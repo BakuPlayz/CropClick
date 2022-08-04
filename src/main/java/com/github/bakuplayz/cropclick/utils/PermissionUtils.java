@@ -13,13 +13,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PermissionUtils {
 
-    public static boolean canLink(@NotNull Player player) {
+    public static boolean canLinkFarm(@NotNull Player player) {
         return player.isOp() || player.hasPermission("cropclick.autofarm.link");
     }
 
 
-    public static boolean canUnlink(@NotNull Player player) {
+    public static boolean canUnlinkFarm(@NotNull Player player) {
         return player.isOp() || player.hasPermission("cropclick.autofarm.unlink");
+    }
+
+
+    public static boolean canUpdateFarm(@NotNull Player player) {
+        return player.isOp() || player.hasPermission("cropclick.autofarm.update");
     }
 
 

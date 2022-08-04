@@ -126,7 +126,9 @@ public abstract class PaginatedMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getPreviousPageItem() {
-        return new ItemUtil(Material.ARROW).setName(LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME.get(plugin)).toItemStack();
+        return new ItemUtil(Material.ARROW)
+                .setName(plugin, LanguageAPI.Menu.PREVIOUS_PAGE_ITEM_NAME)
+                .toItemStack();
     }
 
 
@@ -136,8 +138,9 @@ public abstract class PaginatedMenu extends Menu {
      * @return The current page item.
      */
     private @NotNull ItemStack getCurrentPageItem() {
-        return new ItemUtil(Material.BOOK).setName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
-                                          .toItemStack();
+        return new ItemUtil(Material.BOOK)
+                .setName(LanguageAPI.Menu.CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
+                .toItemStack();
     }
 
 
@@ -148,7 +151,9 @@ public abstract class PaginatedMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getNextPageItem() {
-        return new ItemUtil(Material.ARROW).setName(LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME.get(plugin)).toItemStack();
+        return new ItemUtil(Material.ARROW)
+                .setName(plugin, LanguageAPI.Menu.NEXT_PAGE_ITEM_NAME)
+                .toItemStack();
     }
 
 

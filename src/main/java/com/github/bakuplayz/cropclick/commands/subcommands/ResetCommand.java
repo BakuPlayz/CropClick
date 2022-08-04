@@ -20,8 +20,12 @@ import java.nio.file.Files;
  */
 public final class ResetCommand extends SubCommand {
 
+    private final File pluginFolder;
+
+
     public ResetCommand(@NotNull CropClick plugin) {
         super(plugin, "reset", LanguageAPI.Command.RESET_DESCRIPTION);
+        this.pluginFolder = plugin.getDataFolder();
     }
 
 
@@ -42,6 +46,7 @@ public final class ResetCommand extends SubCommand {
             LanguageAPI.Command.RESET_FAILED.send(plugin, player);
         } finally {
             plugin.setupConfigs();
+            plugin.setupStorages();
             LanguageAPI.Command.RESET_SUCCESS.send(plugin, player);
         }
     }
@@ -52,11 +57,11 @@ public final class ResetCommand extends SubCommand {
      */
     private void deleteConfigs()
             throws IOException {
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "crops.yml").toPath());
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "config.yml").toPath());
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "addons.yml").toPath());
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "players.yml").toPath());
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "language.yml").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "crops.yml").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "config.yml").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "addons.yml").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "players.yml").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "language.yml").toPath());
     }
 
 
@@ -65,8 +70,8 @@ public final class ResetCommand extends SubCommand {
      */
     private void deleteDataStorages()
             throws IOException {
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "worlds.json").toPath());
-        Files.deleteIfExists(new File(plugin.getDataFolder(), "autofarms.json").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "worlds.json").toPath());
+        Files.deleteIfExists(new File(pluginFolder, "autofarms.json").toPath());
     }
 
 }

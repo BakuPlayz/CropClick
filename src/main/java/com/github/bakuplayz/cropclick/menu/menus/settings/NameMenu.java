@@ -92,12 +92,13 @@ public final class NameMenu extends Menu {
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, crop.isEnabled());
-        return new ItemUtil(crop.getMenuType()).setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
-                                               .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
-                                               .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                                               .setDamage(crop.isEnabled() ? -1 : 15)
-                                               .setMaterial(crop.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                                               .toItemStack();
+        return new ItemUtil(crop.getMenuType())
+                .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
+                .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
+                .setDamage(crop instanceof CocoaBean ? 3 : -1)
+                .setDamage(crop.isEnabled() ? -1 : 15)
+                .setMaterial(crop.isEnabled() ? null : Material.STAINED_GLASS_PANE)
+                .toItemStack();
     }
 
 
@@ -110,10 +111,11 @@ public final class NameMenu extends Menu {
         Seed seed = crop.getSeed();
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
-        return new ItemUtil(seed.getMenuType()).setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
-                                               .setLore(LanguageAPI.Menu.NAME_SEED_DROP_NAME.get(plugin, getDropName(false)))
-                                               .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                                               .setDamage(seed.isEnabled() ? -1 : 15).toItemStack();
+        return new ItemUtil(seed.getMenuType())
+                .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
+                .setLore(LanguageAPI.Menu.NAME_SEED_DROP_NAME.get(plugin, getDropName(false)))
+                .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
+                .setDamage(seed.isEnabled() ? -1 : 15).toItemStack();
     }
 
 
@@ -125,13 +127,21 @@ public final class NameMenu extends Menu {
      * @return A new ItemStack with the material of a sign, with the name of the item being the color code item name, and
      * the lore being the color codes.
      */
+    // TODO: Make more readable
     private @NotNull ItemStack getCodesItem(int start) {
-        return new ItemUtil(Material.SIGN).setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
-                                          .setLore(colorCodes.entrySet().stream()
-                                                             .map(colorMap -> MessageUtils.colorize(LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(plugin, colorMap.getKey(), colorMap.getKey(), colorMap.getValue()))
-                                                                                          .replace("#", "&")) // Some wizardry formatting
-                                                             .skip(start).limit(11).collect(Collectors.toList()))
-                                          .toItemStack();
+        return new ItemUtil(Material.SIGN)
+                .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
+                .setLore(colorCodes.entrySet().stream()
+                                   .map(colorMap -> MessageUtils.colorize(
+                                           LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(
+                                                   plugin,
+                                                   colorMap.getKey(),
+                                                   colorMap.getKey(),
+                                                   colorMap.getValue())
+                                   ).replace("#", "&")) // Some wizardry formatting
+                                   .skip(start).limit(11)
+                                   .collect(Collectors.toList())
+                ).toItemStack();
     }
 
 
@@ -144,8 +154,10 @@ public final class NameMenu extends Menu {
      */
     private @NotNull AnvilGUI.Builder getNameChangeMenu(boolean isCrop) {
         String currentName = getDropName(isCrop);
-        return new AnvilGUI.Builder().text(ChatColor.stripColor(currentName))
-                                     .itemLeft(isCrop ? getCropItem() : getSeedItem()).onComplete((player, text) -> {
+        return new AnvilGUI.Builder()
+                .text(ChatColor.stripColor(currentName))
+                .itemLeft(isCrop ? getCropItem() : getSeedItem())
+                .onComplete((player, text) -> {
                     if (isCrop) {
                         cropsConfig.setCropDropName(crop.getName(), text);
                         return AnvilGUI.Response.close();
@@ -155,8 +167,10 @@ public final class NameMenu extends Menu {
                 }).onClose((player) -> {
                     String newName = getDropName(isCrop);
                     player.sendMessage(
-                            currentName.equals(newName) ? LanguageAPI.Menu.NAME_RESPONSE_UNCHANGED.get(plugin)
-                                                        : LanguageAPI.Menu.NAME_RESPONSE_CHANGED.get(plugin, newName));
+                            currentName.equals(newName)
+                            ? LanguageAPI.Menu.NAME_RESPONSE_UNCHANGED.get(plugin)
+                            : LanguageAPI.Menu.NAME_RESPONSE_CHANGED.get(plugin, newName)
+                    );
                 }).plugin(plugin);
     }
 
@@ -169,8 +183,9 @@ public final class NameMenu extends Menu {
      * @return The name of the drop.
      */
     private @NotNull String getDropName(boolean isCrop) {
-        return isCrop ? cropsConfig.getCropDropName(crop.getName())
-                      : cropsConfig.getSeedDropName(crop.getSeed().getName());
+        return isCrop
+               ? cropsConfig.getCropDropName(crop.getName())
+               : cropsConfig.getSeedDropName(crop.getSeed().getName());
     }
 
 
@@ -181,7 +196,10 @@ public final class NameMenu extends Menu {
      */
     private @NotNull Map<Character, String> getColorCodes() {
         return Arrays.stream(ChatColor.values())
-                     .collect(Collectors.toMap(ChatColor::getChar, color -> MessageUtils.beautify(color.name(), true)));
+                     .collect(Collectors.toMap(
+                             ChatColor::getChar,
+                             color -> MessageUtils.beautify(color.name(), true)
+                     ));
     }
 
 }

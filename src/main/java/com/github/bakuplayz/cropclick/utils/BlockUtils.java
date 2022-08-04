@@ -1,8 +1,14 @@
 package com.github.bakuplayz.cropclick.utils;
 
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.inventory.DoubleChestInventory;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -38,6 +44,39 @@ public final class BlockUtils {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isPlantableSurface(@NotNull Block block) {
         return block.getType() == Material.SAND || block.getType() == Material.SOIL;
+    }
+
+
+    /**
+     * If the block is a chest, and the inventory of the chest is a double chest inventory, then the block is a double
+     * chest.
+     *
+     * @param block The block that you want to check if it's a double chest.
+     *
+     * @return A boolean value.
+     */
+    public static boolean isDoubleChest(@NotNull Block block) {
+        BlockState blockState = block.getState();
+        if (!(blockState instanceof Chest)) {
+            return false;
+        }
+
+        Chest chest = (Chest) blockState;
+        Inventory inventory = chest.getInventory();
+        return inventory instanceof DoubleChestInventory;
+    }
+
+
+    /**
+     * Returns the location of the double chest that the given block is a part of, or null if the block is not a double
+     * chest.
+     *
+     * @param block The block you want to get the double chest of.
+     *
+     * @return A DoublyLocation object.
+     */
+    public static @Nullable DoublyLocation getAsDoubleChest(@NotNull Block block) {
+        return LocationUtils.getAsDoubly(block.getLocation());
     }
 
 

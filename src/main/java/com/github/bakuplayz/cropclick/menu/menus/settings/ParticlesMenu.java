@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @since 1.6.0
  */
 public final class ParticlesMenu extends PaginatedMenu {
-    
+
     private final Crop crop;
     private final CropsConfig cropsConfig;
 
@@ -81,7 +81,9 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return A list of all the particle effects.
      */
     private @NotNull List<String> getParticles() {
-        return Arrays.stream(ParticleEffect.values()).map(ParticleEffect::name).collect(Collectors.toList());
+        return Arrays.stream(ParticleEffect.values())
+                     .map(ParticleEffect::name)
+                     .collect(Collectors.toList());
     }
 
 
@@ -130,7 +132,9 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return A list of ItemStacks.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
-        return particles.stream().map(this::getMenuItem).collect(Collectors.toList());
+        return particles.stream()
+                        .map(this::getMenuItem)
+                        .collect(Collectors.toList());
     }
 
 }

@@ -64,7 +64,7 @@ public final class AutofarmManager {
                 containerLocation,
                 dispenserLocation
         );
-        if (isEnabled() && PermissionUtils.canLink(player)) {
+        if (isEnabled() && PermissionUtils.canLinkFarm(player)) {
             Bukkit.getPluginManager().callEvent(new PlayerLinkAutofarmEvent(player, farm));
         }
     }

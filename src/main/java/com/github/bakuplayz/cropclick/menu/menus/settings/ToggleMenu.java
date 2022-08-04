@@ -85,12 +85,11 @@ public final class ToggleMenu extends PaginatedMenu {
      * @return The index of the sound in the menuItems list.
      */
     private int getIndexOfPlayer(@NotNull ItemStack clicked) {
-        return menuItems
-                .stream()
-                .filter(clicked::equals)
-                .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst()
-                .orElse(-1);
+        return menuItems.stream()
+                        .filter(clicked::equals)
+                        .mapToInt(item -> menuItems.indexOf(item))
+                        .findFirst()
+                        .orElse(-1);
     }
 
 
@@ -121,7 +120,9 @@ public final class ToggleMenu extends PaginatedMenu {
      * @return A list of ItemStacks.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
-        return players.stream().map(this::getMenuItem).collect(Collectors.toList());
+        return players.stream()
+                      .map(this::getMenuItem)
+                      .collect(Collectors.toList());
     }
 
 
@@ -131,11 +132,10 @@ public final class ToggleMenu extends PaginatedMenu {
      * @return A list of all the players on the server.
      */
     private @NotNull List<String> getPlayers() {
-        return Arrays
-                .stream(Bukkit.getOfflinePlayers())
-                .map(OfflinePlayer::getUniqueId)
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return Arrays.stream(Bukkit.getOfflinePlayers())
+                     .map(OfflinePlayer::getUniqueId)
+                     .map(Object::toString)
+                     .collect(Collectors.toList());
     }
 
 }

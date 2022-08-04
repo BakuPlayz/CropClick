@@ -66,6 +66,7 @@ public final class FarmWorld {
         if (addon == null) {
             return;
         }
+
         if (banishedAddons.contains(addon)) {
             banishedAddons.remove(addon);
         } else {
@@ -85,7 +86,7 @@ public final class FarmWorld {
     public boolean isBanishedAddon(@NotNull AddonManager manager, @NotNull String name) {
         Addon addon = manager.findByName(name);
         if (addon == null) {
-            return true;
+            return false;
         }
         return banishedAddons.contains(addon);
     }

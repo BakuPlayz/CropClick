@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -43,8 +44,13 @@ public final class CropClickAPI {
     private final @Getter AddonManager addonManager;
 
 
+    @SuppressWarnings("unused")
     public CropClickAPI() {
-        CropClick plugin = CropClick.getPlugin();
+        this(CropClick.getPlugin());
+    }
+
+
+    public CropClickAPI(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();

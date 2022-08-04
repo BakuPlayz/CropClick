@@ -6,8 +6,6 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.bukkit.Material;
 import org.bukkit.block.*;
-import org.bukkit.inventory.DoubleChestInventory;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +44,7 @@ public final class AutofarmUtils {
      */
     public static boolean isContainer(@NotNull Block block, boolean onlyDoubleChest) {
         if (onlyDoubleChest) {
-            return isDoubleChest(block);
+            return BlockUtils.isDoubleChest(block);
         }
         return isContainer(block);
     }
@@ -63,7 +61,7 @@ public final class AutofarmUtils {
     public static @Nullable Container getContainer(@NotNull Block block) {
         BlockState blockState = block.getState();
 
-        if (isDoubleChest(block)) {
+        if (BlockUtils.isDoubleChest(block)) {
             return new Container(((Chest) blockState).getInventory(), ContainerType.DOUBLE_CHEST);
         }
 
@@ -130,26 +128,6 @@ public final class AutofarmUtils {
      */
     public static @Nullable Crop getCrop(@NotNull CropManager manager, @NotNull Block block) {
         return manager.findByBlock(block);
-    }
-
-
-    /**
-     * If the block is a chest, and the inventory of the chest is a double chest inventory, then the block is a double
-     * chest.
-     *
-     * @param block The block that you want to check if it's a double chest.
-     *
-     * @return A boolean value.
-     */
-    private static boolean isDoubleChest(@NotNull Block block) {
-        BlockState blockState = block.getState();
-        if (!(blockState instanceof Chest)) {
-            return false;
-        }
-
-        Chest chest = (Chest) blockState;
-        Inventory inventory = chest.getInventory();
-        return inventory instanceof DoubleChestInventory;
     }
 
 }

@@ -20,7 +20,7 @@ import java.io.IOException;
  * @since 1.6.0
  */
 public abstract class DataStorage {
-    
+
     protected CropClick plugin;
 
 

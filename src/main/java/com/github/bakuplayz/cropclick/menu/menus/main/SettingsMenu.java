@@ -162,12 +162,10 @@ public final class SettingsMenu extends Menu {
      * @return The amount of crops that have been renamed.
      */
     private int getAmountOfRenamed() {
-        return (int) plugin
-                .getCropManager()
-                .getCrops()
-                .stream()
-                .filter(crop -> !crop.getDrop().getName().equals(crop.getName()))
-                .count();
+        return (int) plugin.getCropManager().getCrops()
+                           .stream()
+                           .filter(crop -> !crop.getDrop().getName().equals(crop.getName()))
+                           .count();
     }
 
 
@@ -177,7 +175,11 @@ public final class SettingsMenu extends Menu {
      * @return The number of banished worlds.
      */
     private int getAmountOfBanished() {
-        return (int) plugin.getWorldManager().getWorlds().values().stream().filter(FarmWorld::isBanished).count();
+        return (int) plugin.getWorldManager().getWorlds()
+                           .values()
+                           .stream()
+                           .filter(FarmWorld::isBanished)
+                           .count();
     }
 
 }

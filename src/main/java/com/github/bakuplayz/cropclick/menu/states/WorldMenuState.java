@@ -8,11 +8,11 @@ package com.github.bakuplayz.cropclick.menu.states;
  * @since 1.6.0
  */
 public enum WorldMenuState {
-    OFFLINE_GROWTH,
-    JOBS_REBORN,
-    WORLD_GUARD,
-    RESIDENCE,
     SETTINGS,
+    JOBS_REBORN,
     MCMMO,
-    TOWNY
+    OFFLINE_GROWTH,
+    RESIDENCE,
+    TOWNY,
+    WORLD_GUARD
 }

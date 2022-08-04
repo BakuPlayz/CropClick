@@ -34,6 +34,7 @@ public final class VersionUtilsTests {
     @Test
     public void getServerVersion() {
         String result = VersionUtils.getServerVersion();
+
         assertAll("Should return a formatted and double parsable version number.",
                 () -> assertNotNull(result),
                 () -> assertEquals(result, "12.1")

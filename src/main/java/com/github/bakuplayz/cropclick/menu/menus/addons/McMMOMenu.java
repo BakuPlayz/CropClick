@@ -84,7 +84,8 @@ public final class McMMOMenu extends AddonMenu {
         return new ItemUtil(Material.GOLD_SWORD)
                 .setName(plugin, LanguageAPI.Menu.ADDON_MCMMO_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_MCMMO_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_MCMMO_ITEM_STATUS.get(plugin, addonEnabled)))
+                        LanguageAPI.Menu.ADDON_MCMMO_ITEM_STATUS.get(plugin, addonEnabled)
+                ))
                 .setMaterial(addonEnabled ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(addonEnabled ? -1 : 7)
                 .toItemStack();

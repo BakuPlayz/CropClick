@@ -139,12 +139,11 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The index of the item in the menuItems list.
      */
     private int getIndexOfCrop(@NotNull ItemStack clicked) {
-        return menuItems
-                .stream()
-                .filter(clicked::equals)
-                .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst()
-                .orElse(-1);
+        return menuItems.stream()
+                        .filter(clicked::equals)
+                        .mapToInt(item -> menuItems.indexOf(item))
+                        .findFirst()
+                        .orElse(-1);
     }
 
 
@@ -201,7 +200,9 @@ public final class CropsMenu extends PaginatedMenu {
      * @return A list of ItemStacks.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
-        return crops.stream().map(this::getMenuItem).collect(Collectors.toList());
+        return crops.stream()
+                    .map(this::getMenuItem)
+                    .collect(Collectors.toList());
     }
 
 

@@ -422,39 +422,30 @@ public final class LanguageAPI {
         JOBS_CROP_POINTS_ITEM_VALUE(Category.JOBS_CROP, SubCategory.POINTS, "itemValue", "%value%"),
         JOBS_CROP_POINTS_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS_ADD, "itemName", "%amount%", "%type%"),
         JOBS_CROP_POINTS_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.POINTS_ADD, "itemAfter", "%value%"),
-        JOBS_CROP_POINTS_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS_REMOVE, "itemName", "%amount%",
-                "%type%"),
+        JOBS_CROP_POINTS_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS_REMOVE, "itemName", "%amount%", "%type%"),
         JOBS_CROP_POINTS_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.POINTS_REMOVE, "itemAfter", "%value%"),
         JOBS_CROP_MONEY_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY, "itemName"),
         JOBS_CROP_MONEY_ITEM_VALUE(Category.JOBS_CROP, SubCategory.MONEY, "itemValue", "%value%"),
         JOBS_CROP_MONEY_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY_ADD, "itemName", "%amount%", "%type%"),
         JOBS_CROP_MONEY_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.MONEY_ADD, "itemAfter", "%value%"),
-        JOBS_CROP_MONEY_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY_REMOVE, "itemName", "%amount%",
-                "%type%"),
+        JOBS_CROP_MONEY_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY_REMOVE, "itemName", "%amount%", "%type%"),
         JOBS_CROP_MONEY_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.MONEY_REMOVE, "itemAfter", "%value%"),
         JOBS_CROP_EXPERIENCE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemName"),
         JOBS_CROP_EXPERIENCE_ITEM_VALUE(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
-        JOBS_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%",
-                "%type%"),
+        JOBS_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%", "%type%"),
         JOBS_CROP_EXPERIENCE_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_ADD, "itemAfter", "%value%"),
-        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%",
-                "%type%"),
-        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter",
-                "%value%"),
+        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%", "%type%"),
+        JOBS_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter", "%value%"),
 
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemName"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemTips"),
-        MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue",
-                "%value%"),
+        MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue", "%value%"),
         MCMMO_CROP_EXPERIENCE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemName"),
         MCMMO_CROP_EXPERIENCE_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
-        MCMMO_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%",
-                "%type%"),
+        MCMMO_CROP_EXPERIENCE_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemName", "%amount%", "%type%"),
         MCMMO_CROP_EXPERIENCE_ADD_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_ADD, "itemAfter", "%value%"),
-        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName",
-                "%amount%", "%type%"),
-        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter",
-                "%value%"),
+        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemName", "%amount%", "%type%"),
+        MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REMOVE, "itemAfter", "%value%"),
 
         MCMMO_CROP_REASON_RESPONSE_UNCHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "unchanged"),
         MCMMO_CROP_REASON_RESPONSE_CHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "changed", "%name%"),
@@ -721,7 +712,7 @@ public final class LanguageAPI {
          * @return The title of the GUI.
          */
         public @NotNull String getTitle(@NotNull CropClick plugin) {
-            String title = "CraftingGUI: " + get(plugin);
+            String title = "CropClick: " + get(plugin);
             String error = getErrorMessage(plugin);
             return title.length() < 32 ? title : error;
         }
@@ -740,7 +731,7 @@ public final class LanguageAPI {
                 return getTitle(plugin);
             }
 
-            String title = "CraftingGUI: " + get(plugin, type);
+            String title = "CropClick: " + get(plugin, type);
             String errorMessage = getErrorMessage(plugin);
             return title.length() < 32 ? title : errorMessage;
         }

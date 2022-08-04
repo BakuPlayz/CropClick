@@ -1,10 +1,9 @@
 package com.github.bakuplayz.cropclick.utils;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.block.BlockMock;
 import org.bukkit.Material;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,15 +22,28 @@ public final class BlockUtilsTests {
 
 
     @BeforeAll
+    public void initialize() {
+        MockBukkit.mock();
+    }
+
+
+    @BeforeEach
     public void setUp() {
         block = new BlockMock();
+        block.setType(Material.STONE);
+    }
+
+
+    @AfterAll
+    public void tearDown() {
+        MockBukkit.unload();
     }
 
 
     @Test
     public void testIsAir() {
         assertAll("Checks wheaten or not the block is air.",
-                () -> assertTrue(BlockUtils.isAir(block)),
+                () -> assertTrue(BlockUtils.isAir(null)),
                 () -> {
                     block.setType(Material.AIR);
                     assertTrue(BlockUtils.isAir(block));
@@ -42,7 +54,6 @@ public final class BlockUtilsTests {
 
     @Test
     public void testIsPlantableSurface() {
-        block.setType(Material.STONE);
         assertAll("Checks wheaten or not the block is plantable.",
                 () -> assertFalse(BlockUtils.isPlantableSurface(block)),
                 () -> {
@@ -64,7 +75,7 @@ public final class BlockUtilsTests {
     @Test
     public void testIsSameType() {
         BlockMock block2 = new BlockMock();
-        block.setType(Material.STONE);
+
         assertAll("Checks if the types of two blocks are the same.",
                 () -> {
                     BlockMock b = null;
@@ -85,7 +96,6 @@ public final class BlockUtilsTests {
 
     @Test
     public void testIsSameType2() {
-        block.setType(Material.STONE);
         assertAll("Checks if the block's type matches the other type.",
                 () -> assertFalse(BlockUtils.isSameType(block, Material.AIR)),
                 () -> assertTrue(BlockUtils.isSameType(block, Material.STONE))
@@ -95,7 +105,6 @@ public final class BlockUtilsTests {
 
     @Test
     public void testIsAnyType() {
-        block.setType(Material.STONE);
         assertAll("Checks if the block's type matches any of the other types.",
                 () -> assertThrows(Exception.class, () -> BlockUtils.isAnyType(block, (Material[]) null)),
                 () -> assertThrows(Exception.class, () -> BlockUtils.isAnyType(block, null)),

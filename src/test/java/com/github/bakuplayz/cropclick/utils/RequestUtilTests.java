@@ -37,7 +37,8 @@ public final class RequestUtilTests {
     @Test
     public void testSetDefaultHeaders() {
         RequestUtil result = requestUtil.setHeaders(new HashMap<>(), true);
-        assertAll("",
+
+        assertAll("Checks if default headers are set correctly.",
                 () -> assertNotNull(result.getHeaders()),
                 () -> assertEquals(result.getHeaders(),
                         new HashMap<String, String>() {
@@ -55,7 +56,8 @@ public final class RequestUtilTests {
         RequestUtil result = requestUtil.setParams(
                 new Param("key", "value")
         );
-        assertAll("",
+
+        assertAll("Checks if params are set correctly.",
                 () -> assertNotNull(result.getParams()),
                 () -> assertEquals(result.getParams(), "key=value"),
                 () -> {
@@ -76,7 +78,8 @@ public final class RequestUtilTests {
         }};
         HashMap<String, String> baseHeaders = new HashMap<>(headers);
         RequestUtil result = requestUtil.setHeaders(headers, true);
-        assertAll("",
+
+        assertAll("Checks if headers are set correctly",
                 () -> assertNotNull(result.getHeaders()),
                 () -> assertNotEquals(baseHeaders, result.getHeaders()),
                 () -> assertEquals(headers, result.getHeaders())
@@ -87,6 +90,7 @@ public final class RequestUtilTests {
     @Test
     public void testConnection() {
         HttpURLConnection result = requestUtil.getClient();
+
         assertAll("Checks if the client is open.",
                 () -> assertNotNull(requestUtil),
                 () -> assertNotNull(result)
@@ -101,7 +105,8 @@ public final class RequestUtilTests {
                 .setDefaultHeaders()
                 .setParams(new Param("key", "value"))
                 .post(true);
-        assertAll("",
+
+        assertAll("Checks if the post function works.",
                 () -> assertNotNull(requestUtil),
                 () -> assertNotNull(result)
         );
@@ -112,7 +117,8 @@ public final class RequestUtilTests {
     public void testGetResponse()
             throws Exception {
         JsonElement result = requestUtil.getResponse();
-        assertAll("",
+        
+        assertAll("Checks if getting the response works.",
                 () -> assertNotNull(requestUtil),
                 () -> assertNotNull(result)
         );

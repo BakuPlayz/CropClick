@@ -47,9 +47,9 @@ public final class MessageUtils {
     public static @NotNull String beautify(@NotNull String message, boolean isUnderscored) {
         String[] words = message.split(isUnderscored ? "_" : "(?=\\p{Lu})");
         return Arrays.stream(words)
-                .map(String::toLowerCase)
-                .map(StringUtils::capitalize)
-                .collect(Collectors.joining(" "));
+                     .map(String::toLowerCase)
+                     .map(StringUtils::capitalize)
+                     .collect(Collectors.joining(" "));
     }
 
 
@@ -73,17 +73,19 @@ public final class MessageUtils {
             boolean isNotStart = i != 0;
             boolean isNewLine = i % wordsPerLine == 0;
             boolean skipFirstLine = i != wordsPerLine;
-            boolean hasNextWord = words.length == (i + 1);
             if (isNotStart && isNewLine) {
-                readableWords.add(skipFirstLine
-                                  ? color + partOfWord
-                                  : partOfWord.toString()
+                readableWords.add(
+                        skipFirstLine
+                        ? color + partOfWord
+                        : partOfWord.toString()
                 );
                 partOfWord = new StringBuilder();
             }
 
-            partOfWord.append(words[i])
-                    .append(isNewLine && !hasNextWord ? " " : "");
+            boolean hasNextWord = words.length > (i + 1);
+            boolean isNextLine = i % wordsPerLine == (wordsPerLine - 1);
+            boolean shouldAddSpace = hasNextWord && !isNextLine;
+            partOfWord.append(words[i]).append(shouldAddSpace ? " " : "");
         }
 
         if (partOfWord.length() != 0) {
@@ -105,7 +107,9 @@ public final class MessageUtils {
      * @return A string.
      */
     public static @NotNull String getEnabledStatus(@NotNull CropClick plugin, boolean isEnabled) {
-        if (isEnabled) return LanguageAPI.Menu.ENABLED_STATUS.get(plugin);
+        if (isEnabled) {
+            return LanguageAPI.Menu.ENABLED_STATUS.get(plugin);
+        }
         return LanguageAPI.Menu.DISABLED_STATUS.get(plugin);
     }
 

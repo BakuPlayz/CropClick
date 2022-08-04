@@ -43,6 +43,7 @@ public final class MessageUtilsTests {
     @Test
     public void testColorize() {
         String result = MessageUtils.colorize("&6Message");
+        
         assertAll("Checks if the colorization is applied correctly.",
                 () -> assertNotNull(result),
                 () -> assertEquals("§6Message", result)
@@ -54,6 +55,7 @@ public final class MessageUtilsTests {
     public void testBeautify() {
         String messageUnderscore = MessageUtils.beautify("message_with_underscore", true);
         String messageCaps = MessageUtils.beautify("MessageWithCaps", false);
+
         assertAll("Checks if the message is beautified correctly.",
                 () -> assertNotNull(messageUnderscore),
                 () -> assertEquals("Message With Underscore", messageUnderscore),
@@ -70,13 +72,15 @@ public final class MessageUtilsTests {
         List<String> emptyTwoWord = MessageUtils.readify("", 2);
         List<String> evenResult = Arrays.asList("&6Message with", "&6two words", "&6per line.");
         List<String> oddResult = Arrays.asList("&6Message with", "&6two words", "&6line.");
+        List<String> emptyResult = Collections.singletonList("");
+
         assertAll("Checks if the message is 'readified' with two lines correctly.",
                 () -> assertNotNull(twoWordEven),
                 () -> assertNotNull(twoWordOdd),
                 () -> assertNotNull(emptyTwoWord),
                 () -> assertEquals(evenResult, twoWordEven),
                 () -> assertEquals(oddResult, twoWordOdd),
-                () -> assertEquals(emptyTwoWord, Collections.singletonList(""))
+                () -> assertEquals(emptyResult, emptyTwoWord)
         );
     }
 
@@ -85,6 +89,7 @@ public final class MessageUtilsTests {
     public void testGetEnabledStatus() {
         String enabledResult = MessageUtils.getEnabledStatus(plugin, true);
         String disabledResult = MessageUtils.getEnabledStatus(plugin, false);
+
         assertAll("Checks if it gets the correct enabled statuses.",
                 () -> assertNotNull(enabledResult),
                 () -> assertEquals("Enabled", enabledResult),

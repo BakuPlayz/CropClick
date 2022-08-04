@@ -8,7 +8,6 @@ import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.interacts.DispenserInteractMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -69,28 +68,28 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
 
     private int getIndexOfFarm(@NotNull ItemStack clicked) {
-        return menuItems
-                .stream()
-                .filter(clicked::equals)
-                .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst()
-                .orElse(-1);
+        return menuItems.stream()
+                        .filter(clicked::equals)
+                        .mapToInt(item -> menuItems.indexOf(item))
+                        .findFirst()
+                        .orElse(-1);
     }
 
 
     private @NotNull ItemStack getMenuItem(@NotNull Autofarm farm) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(farm.getOwnerID());
-        String playerName = MessageUtils.beautify(player.getName(), false);
         return new ItemUtil(Material.DISPENSER)
                 .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, farm.getShortenedID()))
-                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin, playerName),
-                        LanguageAPI.Menu.AUTOFARMS_ITEM_ENABLED.get(plugin, farm.isEnabled()))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin, player.getName()),
+                        LanguageAPI.Menu.AUTOFARMS_ITEM_ENABLED.get(plugin, farm.isEnabled())
+                ).toItemStack();
     }
 
 
     protected @NotNull List<ItemStack> getMenuItems() {
-        return autofarms.stream().map(this::getMenuItem).collect(Collectors.toList());
+        return autofarms.stream()
+                        .map(this::getMenuItem)
+                        .collect(Collectors.toList());
     }
 
 }

@@ -33,18 +33,18 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
     private final CropClick plugin;
 
-    private final AutofarmDataStorage farmData;
-
     private final WorldManager worldManager;
     private final AddonManager addonManager;
     private final AutofarmManager autofarmManager;
 
+    private final AutofarmDataStorage farmData;
+
 
     public PlayerUnlinkAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
-        this.farmData = plugin.getFarmData();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
+        this.farmData = plugin.getFarmData();
         this.plugin = plugin;
     }
 
@@ -66,7 +66,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (!PermissionUtils.canUnlink(player)) {
+        if (!PermissionUtils.canUnlinkFarm(player)) {
             return;
         }
 
@@ -94,7 +94,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
      * @param event The event that is being listened for.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
+    public void onPlayerUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
         if (event.isCancelled()) return;
 
         Autofarm autofarm = event.getAutofarm();

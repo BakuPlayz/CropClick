@@ -136,7 +136,8 @@ public abstract class AutofarmMenu extends Menu {
      */
     protected void openDispenser() {
         Dispenser dispenser = (Dispenser) dispenserLocation.getBlock().getState();
-        PreviewDispenserMenu previewMenu = new PreviewDispenserMenu(plugin, player, autofarm.getShortenedID(), dispenser.getInventory());
+        PreviewDispenserMenu previewMenu = new PreviewDispenserMenu(plugin, player, autofarm.getShortenedID(),
+                dispenser.getInventory());
         previewMenu.open();
     }
 
@@ -146,7 +147,8 @@ public abstract class AutofarmMenu extends Menu {
      */
     protected void openContainer() {
         Chest chest = (Chest) containerLocation.getBlock().getState();
-        PreviewContainerMenu previewMenu = new PreviewContainerMenu(plugin, player, autofarm.getShortenedID(), chest.getInventory());
+        PreviewContainerMenu previewMenu = new PreviewContainerMenu(plugin, player, autofarm.getShortenedID(),
+                chest.getInventory());
         previewMenu.open();
     }
 
@@ -181,11 +183,15 @@ public abstract class AutofarmMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getCropItem() {
-        return new ItemUtil(Material.WHEAT).setName(plugin, LanguageAPI.Menu.AUTOFARM_CROP_NAME)
-                                           .setLore(getLocationAsLore(cropLocation, Component.CROP)).setMaterial(
-                        isCropSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null)
-                                           .setDamage(isUnlinked ? 15 : -1).setDamage(isCropSelected ? 3 : -1)
-                                           .toItemStack();
+        return new ItemUtil(Material.WHEAT)
+                .setName(plugin, LanguageAPI.Menu.AUTOFARM_CROP_NAME)
+                .setLore(getLocationAsLore(cropLocation, Component.CROP))
+                .setMaterial(
+                        isCropSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                )
+                .setDamage(isUnlinked ? 15 : -1)
+                .setDamage(isCropSelected ? 3 : -1)
+                .toItemStack();
     }
 
 
@@ -195,12 +201,15 @@ public abstract class AutofarmMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getContainerItem() {
-        return new ItemUtil(Material.CHEST).setName(plugin, LanguageAPI.Menu.AUTOFARM_CONTAINER_NAME)
-                                           .setLore(getLocationAsLore(containerLocation, Component.CONTAINER))
-                                           .setMaterial(isContainerSelected || isUnlinked ? Material.STAINED_GLASS_PANE
-                                                                                          : null)
-                                           .setDamage(isUnlinked ? 15 : -1).setDamage(isContainerSelected ? 3 : -1)
-                                           .toItemStack();
+        return new ItemUtil(Material.CHEST)
+                .setName(plugin, LanguageAPI.Menu.AUTOFARM_CONTAINER_NAME)
+                .setLore(getLocationAsLore(containerLocation, Component.CONTAINER))
+                .setMaterial(
+                        isContainerSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                )
+                .setDamage(isUnlinked ? 15 : -1)
+                .setDamage(isContainerSelected ? 3 : -1)
+                .toItemStack();
     }
 
 
@@ -210,13 +219,15 @@ public abstract class AutofarmMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getDispenserItem() {
-        return new ItemUtil(Material.DISPENSER).setName(plugin, LanguageAPI.Menu.AUTOFARM_DISPENSER_NAME)
-                                               .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
-                                               .setMaterial(
-                                                       isDispenserSelected || isUnlinked ? Material.STAINED_GLASS_PANE
-                                                                                         : null)
-                                               .setDamage(isUnlinked ? 15 : -1).setDamage(isDispenserSelected ? 3 : -1)
-                                               .toItemStack();
+        return new ItemUtil(Material.DISPENSER)
+                .setName(plugin, LanguageAPI.Menu.AUTOFARM_DISPENSER_NAME)
+                .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
+                .setMaterial(
+                        isDispenserSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                )
+                .setDamage(isUnlinked ? 15 : -1)
+                .setDamage(isDispenserSelected ? 3 : -1)
+                .toItemStack();
     }
 
 
@@ -226,12 +237,13 @@ public abstract class AutofarmMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getGlassItem() {
-        return new ItemUtil(Material.STAINED_GLASS_PANE).setDamage(isUnlinked ? 15 : 4)
-                                                        .setDamage(isClickedSelected ? 3 : -1)
-                                                        .setName(isUnlinked ? ChatColor.GRAY + "*" : null)
-                                                        .setName(isClickedSelected ? ChatColor.AQUA + "**" : null)
-                                                        .setName(!isUnlinked ? ChatColor.YELLOW + "***" : null)
-                                                        .toItemStack();
+        return new ItemUtil(Material.STAINED_GLASS_PANE)
+                .setDamage(isUnlinked ? 15 : 4)
+                .setDamage(isClickedSelected ? 3 : -1)
+                .setName(isUnlinked ? ChatColor.GRAY + "*" : null)
+                .setName(isClickedSelected ? ChatColor.AQUA + "**" : null)
+                .setName(!isUnlinked ? ChatColor.YELLOW + "***" : null)
+                .toItemStack();
     }
 
 
@@ -278,12 +290,24 @@ public abstract class AutofarmMenu extends Menu {
      */
     private @NotNull List<String> getLocationAsLore(Location location, @NotNull Component component) {
         if (location == null) {
-            return Collections.singletonList(LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin, LanguageAPI.Menu.AUTOFARM_STATE_UNLINKED.get(plugin)));
+            return Collections.singletonList(
+                    LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin,
+                            LanguageAPI.Menu.AUTOFARM_STATE_UNLINKED.get(plugin))
+            );
         }
 
-        ArrayList<String> locationAsLore = new ArrayList<>(Arrays.asList(LanguageAPI.Menu.AUTOFARM_FORMAT_X.get(plugin, location.getBlockX()), LanguageAPI.Menu.AUTOFARM_FORMAT_Y.get(plugin, location.getBlockY()), LanguageAPI.Menu.AUTOFARM_FORMAT_Z.get(plugin, location.getBlockZ())));
+        ArrayList<String> locationAsLore = new ArrayList<>(
+                Arrays.asList(LanguageAPI.Menu.AUTOFARM_FORMAT_X.get(plugin, location.getBlockX()),
+                        LanguageAPI.Menu.AUTOFARM_FORMAT_Y.get(plugin, location.getBlockY()),
+                        LanguageAPI.Menu.AUTOFARM_FORMAT_Z.get(plugin, location.getBlockZ())
+                )
+        );
 
-        List<String> selectedState = Collections.singletonList(LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin, LanguageAPI.Menu.AUTOFARM_STATE_SELECTED.get(plugin)));
+        List<String> selectedState = Collections.singletonList(
+                LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin,
+                        LanguageAPI.Menu.AUTOFARM_STATE_SELECTED.get(plugin)
+                )
+        );
 
         switch (component) {
             case CROP:

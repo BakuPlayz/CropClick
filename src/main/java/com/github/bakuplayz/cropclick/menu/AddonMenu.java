@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.menu;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
@@ -85,7 +86,9 @@ public abstract class AddonMenu extends Menu {
      * @param menu    The menu that the item is in.
      */
     protected final void handleWorlds(@NotNull ItemStack clicked, @NotNull Menu menu) {
-        if (!clicked.equals(getWorldsItem())) return;
+        if (!clicked.equals(getWorldsItem())) {
+            return;
+        }
 
         menu.open();
     }
@@ -105,9 +108,13 @@ public abstract class AddonMenu extends Menu {
      * @return An ItemStack.
      */
     protected final @NotNull ItemStack getWorldsItem() {
-        return new ItemUtil(Material.GRASS).setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
-                                           .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(plugin)))
-                                           .toItemStack();
+        Addon addon = addonManager.findByName(addonName);
+        int amountOfBanished = addon != null ? addon.getAmountOfBanished() : 0;
+        return new ItemUtil(Material.GRASS)
+                .setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(plugin, amountOfBanished)
+                )).toItemStack();
     }
 
 }

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @since 1.6.0
  */
 public final class SoundsMenu extends PaginatedMenu {
-    
+
     private final Crop crop;
     private final CropsConfig cropsConfig;
 
@@ -88,12 +88,11 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return The index of the sound in the menuItems list.
      */
     private int getIndexOfSound(@NotNull ItemStack clicked) {
-        return menuItems
-                .stream()
-                .filter(clicked::equals)
-                .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst()
-                .orElse(-1);
+        return menuItems.stream()
+                        .filter(clicked::equals)
+                        .mapToInt(item -> menuItems.indexOf(item))
+                        .findFirst()
+                        .orElse(-1);
     }
 
 
@@ -120,7 +119,9 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return A list of ItemStacks.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
-        return sounds.stream().map(this::getMenuItem).collect(Collectors.toList());
+        return sounds.stream()
+                     .map(this::getMenuItem)
+                     .collect(Collectors.toList());
     }
 
 
@@ -130,7 +131,9 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return A list of all the sounds in the Sound enum.
      */
     private @NotNull List<String> getSounds() {
-        return Arrays.stream(Sound.values()).map(Sound::name).collect(Collectors.toList());
+        return Arrays.stream(Sound.values())
+                     .map(Sound::name)
+                     .collect(Collectors.toList());
     }
 
 }

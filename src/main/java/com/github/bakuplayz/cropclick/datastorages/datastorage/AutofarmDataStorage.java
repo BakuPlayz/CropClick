@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -127,7 +128,11 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first farm that is linked, enabled, and has the same crop location as the block.
      */
     public @Nullable Autofarm findFarmByCrop(@NotNull Block block) {
-        return farms.values().stream().filter(Autofarm::isLinked).filter(Autofarm::isEnabled).filter(farm -> farm.getCropLocation().equals(block.getLocation())).findFirst().orElse(null);
+        return farms.values().stream()
+                    .filter(Autofarm::isLinked)
+                    .filter(Autofarm::isEnabled)
+                    .filter(farm -> farm.getCropLocation().equals(block.getLocation()))
+                    .findFirst().orElse(null);
     }
 
 
@@ -139,19 +144,22 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first farm that is linked, enabled, and has the same location as the block.
      */
     public @Nullable Autofarm findFarmByContainer(@NotNull Block block) {
-        return farms.values().stream().filter(Autofarm::isLinked).filter(Autofarm::isEnabled).filter(farm -> {
-            Location blockLocation = block.getLocation();
-            Location containerLocation = farm.getContainerLocation();
+        return farms.values().stream()
+                    .filter(Autofarm::isLinked)
+                    .filter(Autofarm::isEnabled)
+                    .filter(farm -> {
+                        boolean filterByDoubly = filterByDoubly(farm, block);
+                        boolean filterByDoubleChest = filterByDoubleChest(farm, block);
 
-            if (containerLocation instanceof DoublyLocation) {
-                DoublyLocation location = (DoublyLocation) containerLocation;
-                Location singlyLocation = location.getSingly();
-                Location doublyLocation = location.getDoubly();
-                return singlyLocation.equals(blockLocation) || doublyLocation.equals(blockLocation);
-            }
+                        if (filterByDoubly || filterByDoubleChest) {
+                            return true;
+                        }
 
-            return containerLocation.equals(blockLocation);
-        }).findFirst().orElse(null);
+                        Location blockLocation = block.getLocation();
+                        Location containerLocation = farm.getContainerLocation();
+                        return containerLocation.equals(blockLocation);
+                    })
+                    .findFirst().orElse(null);
     }
 
 
@@ -163,7 +171,61 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return The first farm that is linked, enabled, and has a dispenser at the given location.
      */
     public @Nullable Autofarm findFarmByDispenser(@NotNull Block block) {
-        return farms.values().stream().filter(Autofarm::isLinked).filter(Autofarm::isEnabled).filter(farm -> farm.getDispenserLocation().equals(block.getLocation())).findFirst().orElse(null);
+        return farms.values().stream()
+                    .filter(Autofarm::isLinked)
+                    .filter(Autofarm::isEnabled)
+                    .filter(farm -> farm.getDispenserLocation().equals(block.getLocation()))
+                    .findFirst().orElse(null);
+    }
+
+
+    /**
+     * If the container location is a doubly location, then return true if the block location is equal to the singly
+     * location or the doubly location.
+     *
+     * @param farm  The farm that is being checked.
+     * @param block The block that is being checked.
+     *
+     * @return A boolean value.
+     */
+    private boolean filterByDoubly(@NotNull Autofarm farm, @NotNull Block block) {
+        Location blockLocation = block.getLocation();
+        Location containerLocation = farm.getContainerLocation();
+
+        if (containerLocation instanceof DoublyLocation) {
+            DoublyLocation location = (DoublyLocation) containerLocation;
+            Location singlyLocation = location.getSingly();
+            Location doublyLocation = location.getDoubly();
+            return singlyLocation.equals(blockLocation) || doublyLocation.equals(blockLocation);
+        }
+
+        return false;
+    }
+
+
+    /**
+     * If the block is a double chest, and the double chest is the same as the container location, return true.
+     *
+     * @param farm  The farm that is being checked
+     * @param block The block that is being checked.
+     *
+     * @return A boolean value.
+     */
+    private boolean filterByDoubleChest(@NotNull Autofarm farm, @NotNull Block block) {
+        if (!BlockUtils.isDoubleChest(block)) {
+            return false;
+        }
+
+        DoublyLocation doubleChest = BlockUtils.getAsDoubleChest(block);
+
+        if (doubleChest == null) {
+            return false;
+        }
+
+        Location singlyLocation = doubleChest.getSingly();
+        Location doublyLocation = doubleChest.getDoubly();
+        Location containerLocation = farm.getContainerLocation();
+        return singlyLocation.equals(containerLocation) || doublyLocation.equals(containerLocation);
     }
 
 }

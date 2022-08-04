@@ -34,7 +34,13 @@ public final class FarmWorldTest {
 
     @BeforeEach
     public void setUp() {
-        farmWorld = new FarmWorld("World", false, false, false, new ArrayList<>());
+        farmWorld = new FarmWorld(
+                "World",
+                false,
+                false,
+                false,
+                new ArrayList<>()
+        );
     }
 
 
@@ -46,7 +52,14 @@ public final class FarmWorldTest {
 
     @Test
     public void testConstructor() {
-        FarmWorld result = new FarmWorld("World", false, true, true, new ArrayList<>());
+        FarmWorld result = new FarmWorld(
+                "World",
+                false,
+                true,
+                true,
+                new ArrayList<>()
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals("World", result.getName()),
@@ -61,6 +74,7 @@ public final class FarmWorldTest {
     public void testConstructor1() {
         WorldMock world = new WorldMock();
         FarmWorld result = new FarmWorld(world);
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals("World", result.getName()),
@@ -101,6 +115,7 @@ public final class FarmWorldTest {
     @Test
     public void testAllowsPlayersSetter() {
         farmWorld.allowsPlayers(true);
+
         assertAll("Checks wheaten the setter, allowsPlayers, sets the correct value.",
                 () -> assertNotNull(farmWorld),
                 () -> assertTrue(farmWorld.allowsPlayers())
@@ -111,6 +126,7 @@ public final class FarmWorldTest {
     @Test
     public void testAllowsAutofarmsSetter() {
         farmWorld.allowsAutofarms(true);
+
         assertAll("Checks wheaten the setter, allowsAutofarms, sets the correct value.",
                 () -> assertNotNull(farmWorld),
                 () -> assertTrue(farmWorld.allowsAutofarms())
@@ -121,6 +137,7 @@ public final class FarmWorldTest {
     @Test
     public void testIsBanishedSetter() {
         farmWorld.isBanished(true);
+
         assertAll("Checks wheaten the setter, isBanished, sets the correct value.",
                 () -> assertNotNull(farmWorld),
                 () -> assertTrue(farmWorld.isBanished())

@@ -43,7 +43,6 @@ public final class WorldMenu extends Menu {
     }
 
 
-    //TODO: Doesn't handle addons properly....
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
@@ -73,9 +72,11 @@ public final class WorldMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getPlayersItem() {
-        return new ItemUtil(Material.SKULL_ITEM).setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
-                                                .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers()))
-                                                .toItemStack();
+        return new ItemUtil(Material.SKULL_ITEM)
+                .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin,
+                        world.allowsPlayers()
+                )).toItemStack();
     }
 
 
@@ -86,9 +87,11 @@ public final class WorldMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getAutofarmsItem() {
-        return new ItemUtil(Material.DISPENSER).setName(plugin, LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_NAME)
-                                               .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin, world.allowsAutofarms()))
-                                               .toItemStack();
+        return new ItemUtil(Material.DISPENSER)
+                .setName(plugin, LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin,
+                        world.allowsAutofarms()
+                )).toItemStack();
     }
 
 
@@ -99,11 +102,12 @@ public final class WorldMenu extends Menu {
      */
     private @NotNull ItemStack getWorldItem() {
         String name = MessageUtils.beautify(world.getName(), true);
-        return new ItemUtil(Material.GRASS).setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
-                                           .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
-                                           .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
-                                           .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished()))
-                                           .toItemStack();
+        return new ItemUtil(Material.GRASS)
+                .setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
+                .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
+                .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
+                .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished()))
+                .toItemStack();
     }
 
 }

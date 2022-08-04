@@ -51,6 +51,7 @@ public final class ItemUtilTests {
     @Test
     public void testConstructor() {
         ItemUtil result = new ItemUtil(Material.STONE);
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(Material.STONE, result.getMaterial()),
@@ -63,7 +64,11 @@ public final class ItemUtilTests {
 
     @Test
     public void testConstructor1() {
-        ItemUtil result = new ItemUtil(Material.STONE, 2);
+        ItemUtil result = new ItemUtil(
+                Material.STONE,
+                2
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(Material.STONE, result.getMaterial()),
@@ -76,7 +81,11 @@ public final class ItemUtilTests {
 
     @Test
     public void testConstructor2() {
-        ItemUtil result = new ItemUtil(Material.STONE, (short) 2);
+        ItemUtil result = new ItemUtil(
+                Material.STONE,
+                (short) 2
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(Material.STONE, result.getMaterial()),
@@ -90,7 +99,11 @@ public final class ItemUtilTests {
 
     @Test
     public void testConstructor3() {
-        ItemUtil result = new ItemUtil(Material.STONE, "Arkham");
+        ItemUtil result = new ItemUtil(
+                Material.STONE,
+                "Arkham"
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(Material.STONE, result.getMaterial()),
@@ -103,7 +116,12 @@ public final class ItemUtilTests {
 
     @Test
     public void testConstructor4() {
-        ItemUtil result = new ItemUtil(Material.STONE, "Arkham", 2);
+        ItemUtil result = new ItemUtil(
+                Material.STONE,
+                "Arkham",
+                2
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(Material.STONE, result.getMaterial()),
@@ -116,7 +134,13 @@ public final class ItemUtilTests {
 
     @Test
     public void testConstructor5() {
-        ItemUtil result = new ItemUtil(Material.STONE, "Arkham", 2, (short) 2);
+        ItemUtil result = new ItemUtil(
+                Material.STONE,
+                "Arkham",
+                2,
+                (short) 2
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(Material.STONE, result.getMaterial()),
@@ -130,7 +154,12 @@ public final class ItemUtilTests {
 
     @Test
     public void testConstructor6() {
-        ItemUtil result = new ItemUtil(Material.STONE, "Arkham", 2, Collections.singletonList("City"));
+        ItemUtil result = new ItemUtil(Material.STONE,
+                "Arkham",
+                2,
+                Collections.singletonList("City")
+        );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertNotNull(result.getLore()),
@@ -145,6 +174,7 @@ public final class ItemUtilTests {
     @Test
     public void testConstructor7() {
         ItemUtil result = new ItemUtil(5);
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertNull(result.getMeta()),
@@ -161,6 +191,7 @@ public final class ItemUtilTests {
         ItemUtil result = new ItemUtil(
                 new ItemStack(Material.STONE, 2, (short) 2)
         );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertNull(result.getName()),
@@ -179,6 +210,7 @@ public final class ItemUtilTests {
                 new ItemStack(Material.STONE, 2, (short) 2),
                 10
         );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertNull(result.getName()),
@@ -197,6 +229,7 @@ public final class ItemUtilTests {
                 new ItemStack(Material.STONE, 2, (short) 2),
                 "Test"
         );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(2, result.getDamage()),
@@ -216,6 +249,7 @@ public final class ItemUtilTests {
                 "Test",
                 10
         );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(2, result.getDamage()),
@@ -236,6 +270,7 @@ public final class ItemUtilTests {
                 10,
                 Collections.singletonList("Arkham")
         );
+
         assertAll("Should contain, equal and mach the values and equal instances.",
                 () -> assertNotNull(result),
                 () -> assertEquals(2, result.getDamage()),
@@ -251,6 +286,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetAmount() {
         ItemUtil result = itemUtil.setAmount(10);
+
         assertAll("Check wheaten or not the #setAmount updates the amount.",
                 () -> assertNotEquals(-1, result.getAmount()),
                 () -> assertNotEquals(1, result.getAmount()),
@@ -262,6 +298,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetDamage() {
         ItemUtil result = itemUtil.setDamage(10);
+
         assertAll("Check wheaten or not the #setDamage updates the damage.",
                 () -> assertNotEquals(-1, result.getDamage()),
                 () -> assertNotEquals(1, result.getDamage()),
@@ -273,6 +310,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetMaterial() {
         ItemUtil result = itemUtil.setMaterial(5);
+
         assertAll("Check wheaten or not the #setMaterial updates the material.",
                 () -> assertNotNull(result.getMaterial()),
                 () -> assertNotEquals(Material.AIR, result.getMaterial()),
@@ -284,6 +322,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetMaterial2() {
         ItemUtil result = itemUtil.setMaterial(Material.STONE);
+
         assertAll("Check wheaten or not the #setMaterial updates the material.",
                 () -> assertNotNull(result.getMaterial()),
                 () -> assertNotEquals(Material.AIR, result.getMaterial()),
@@ -295,6 +334,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetName() {
         ItemUtil result = itemUtil.setName("Name");
+
         assertAll("Check wheaten or not the #setName updates the name.",
                 () -> assertNotNull(result.getName()),
                 () -> assertNotEquals("name", result.getName()),
@@ -306,6 +346,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetName2() {
         ItemUtil result = itemUtil.setName(plugin, LanguageAPI.Menu.BACK_ITEM_NAME);
+
         assertAll("Check wheaten or not the #setName updates the name.",
                 () -> assertNotNull(result.getName()),
                 () -> assertNotEquals("name", result.getName()),
@@ -317,6 +358,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetLore() {
         ItemUtil result = itemUtil.setLore(Collections.singletonList("Test"));
+
         assertAll("Check wheaten or not the #setLore updates the lore.",
                 () -> assertNotNull(result.getLore()),
                 () -> assertNotEquals(new ArrayList<>(), result.getLore()),
@@ -329,6 +371,7 @@ public final class ItemUtilTests {
     @Test
     public void testSetLore2() {
         ItemUtil result = itemUtil.setLore("Test");
+
         assertAll("Check wheaten or not the #setLore updates the lore.",
                 () -> assertNotNull(result.getLore()),
                 () -> assertNotEquals(new ArrayList<>(), result.getLore()),
@@ -341,6 +384,7 @@ public final class ItemUtilTests {
     @Test
     public void testToItemStack() {
         ItemStack result = itemUtil.toItemStack();
+        
         assertAll("Check wheaten or not the #toItemStack results in a correct ItemStack.",
                 () -> assertNotNull(result),
                 () -> assertNotEquals(new ItemUtil(Material.AIR).toItemStack(), result),

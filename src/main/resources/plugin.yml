@@ -171,14 +171,14 @@ permissions:
         description: Permission to use the settings command.
         default: op
 
-  cropclick.autofarmer.*:
+  cropclick.autofarm.*:
     description: Permission to use all the autofarmer features.
     default: op
     children:
-      cropclick.autofarmer.link:
+      cropclick.autofarm.link:
         description: Permission to link autofarmers.
         default: op
-      cropclick.autofarmer.unlink:
+      cropclick.autofarm.unlink:
         description: Permission to unlink autofarmers.
         default: op
       cropclick.autofarm.update:
@@ -187,6 +187,6 @@ permissions:
       cropclick.autofarm.interact:
         description: Permission to interact with autofarmers.
         default: op
-      cropclick.autofarmer.toggle:
+      cropclick.autofarm.toggle:
         description: Permission to toggle autofarmers.
         default: op

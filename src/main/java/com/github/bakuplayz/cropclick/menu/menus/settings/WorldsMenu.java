@@ -68,28 +68,28 @@ public final class WorldsMenu extends PaginatedMenu {
                 handleBack(clicked, new SettingsMenu(plugin, player, true));
                 break;
 
+            case JOBS_REBORN:
+                handleBack(clicked, new JobsRebornMenu(plugin, player));
+                break;
+
             case MCMMO:
                 handleBack(clicked, new McMMOMenu(plugin, player));
                 break;
 
-            case TOWNY:
-                handleBack(clicked, new TownyMenu(plugin, player));
+            case OFFLINE_GROWTH:
+                handleBack(clicked, new OfflineGrowthMenu(plugin, player));
                 break;
 
             case RESIDENCE:
                 handleBack(clicked, new ResidenceMenu(plugin, player));
                 break;
 
+            case TOWNY:
+                handleBack(clicked, new TownyMenu(plugin, player));
+                break;
+
             case WORLD_GUARD:
                 handleBack(clicked, new WorldGuardMenu(plugin, player));
-                break;
-
-            case JOBS_REBORN:
-                handleBack(clicked, new JobsRebornMenu(plugin, player));
-                break;
-
-            case OFFLINE_GROWTH:
-                handleBack(clicked, new OfflineGrowthMenu(plugin, player));
                 break;
         }
 
@@ -106,16 +106,16 @@ public final class WorldsMenu extends PaginatedMenu {
                 new WorldMenu(plugin, player, world).open();
                 break;
 
-            case OFFLINE_GROWTH:
-                world.toggleAddon(addonManager, "OfflineGrowth");
-                break;
-
             case JOBS_REBORN:
                 world.toggleAddon(addonManager, "JobsReborn");
                 break;
 
-            case WORLD_GUARD:
-                world.toggleAddon(addonManager, "WorldGuard");
+            case MCMMO:
+                world.toggleAddon(addonManager, "mcMMO");
+                break;
+
+            case OFFLINE_GROWTH:
+                world.toggleAddon(addonManager, "OfflineGrowth");
                 break;
 
             case RESIDENCE:
@@ -126,8 +126,8 @@ public final class WorldsMenu extends PaginatedMenu {
                 world.toggleAddon(addonManager, "Towny");
                 break;
 
-            case MCMMO:
-                world.toggleAddon(addonManager, "mcMMO");
+            case WORLD_GUARD:
+                world.toggleAddon(addonManager, "WorldGuard");
                 break;
         }
 
@@ -148,12 +148,11 @@ public final class WorldsMenu extends PaginatedMenu {
      * @return The index of the world in the menuItems list.
      */
     private int getIndexOfWorld(@NotNull ItemStack clicked) {
-        return menuItems
-                .stream()
-                .filter(clicked::equals)
-                .mapToInt(item -> menuItems.indexOf(item))
-                .findFirst()
-                .orElse(-1);
+        return menuItems.stream()
+                        .filter(clicked::equals)
+                        .mapToInt(item -> menuItems.indexOf(item))
+                        .findFirst()
+                        .orElse(-1);
     }
 
 
@@ -174,12 +173,12 @@ public final class WorldsMenu extends PaginatedMenu {
         boolean status = world.isBanished();
 
         switch (menuState) {
-            case OFFLINE_GROWTH:
-                status = world.isBanishedAddon(addonManager, "OfflineGrowth");
-                break;
-
             case JOBS_REBORN:
                 status = world.isBanishedAddon(addonManager, "JobsReborn");
+                break;
+
+            case MCMMO:
+                status = world.isBanishedAddon(addonManager, "mcMMO");
                 break;
 
             case WORLD_GUARD:
@@ -194,8 +193,8 @@ public final class WorldsMenu extends PaginatedMenu {
                 status = world.isBanishedAddon(addonManager, "Towny");
                 break;
 
-            case MCMMO:
-                status = world.isBanishedAddon(addonManager, "mcMMO");
+            case OFFLINE_GROWTH:
+                status = world.isBanishedAddon(addonManager, "OfflineGrowth");
                 break;
         }
 
@@ -209,7 +208,9 @@ public final class WorldsMenu extends PaginatedMenu {
      * @return A list of ItemStacks.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
-        return worlds.stream().map(this::getMenuItem).collect(Collectors.toList());
+        return worlds.stream()
+                     .map(this::getMenuItem)
+                     .collect(Collectors.toList());
     }
 
 

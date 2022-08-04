@@ -143,9 +143,10 @@ public final class McMMOCropMenu extends Menu {
                 .onClose((player) -> {
                     String newReason = cropsConfig.getMcMMOExperienceReason(cropName);
                     player.sendMessage(
-                            currentReason.equals(newReason) ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(
-                                    plugin) : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin,
-                                    newReason));
+                            currentReason.equals(newReason)
+                            ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
+                            : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
+                    );
                 })
                 .plugin(plugin);
     }

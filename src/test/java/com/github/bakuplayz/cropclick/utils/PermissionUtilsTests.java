@@ -50,7 +50,8 @@ public final class PermissionUtilsTests {
 
     @Test
     public void testCanLink() {
-        boolean result = PermissionUtils.canLink(player);
+        boolean result = PermissionUtils.canLinkFarm(player);
+
         assertAll("Checks if an OP player can link.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
@@ -61,7 +62,8 @@ public final class PermissionUtilsTests {
 
     @Test
     public void testCanUnlink() {
-        boolean result = PermissionUtils.canUnlink(player);
+        boolean result = PermissionUtils.canUnlinkFarm(player);
+
         assertAll("Checks if an OP player can unlink.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
@@ -73,6 +75,7 @@ public final class PermissionUtilsTests {
     @Test
     public void testCanInteractAtFarm() {
         boolean result = PermissionUtils.canInteractAtFarm(player);
+
         assertAll("Checks if an OP player can interact at a farm.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
@@ -84,6 +87,7 @@ public final class PermissionUtilsTests {
     @Test
     public void testCanDestroyCrop() {
         boolean result = PermissionUtils.canDestroyCrop(player);
+
         assertAll("Checks if an OP player can destroy a crop.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
@@ -95,6 +99,7 @@ public final class PermissionUtilsTests {
     @Test
     public void testCanPlaceCrop() {
         boolean result = PermissionUtils.canPlaceCrop(player);
+
         assertAll("Checks if an OP player can place a crop.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
@@ -106,6 +111,7 @@ public final class PermissionUtilsTests {
     @Test
     public void testCanHarvestCrop() {
         boolean result = PermissionUtils.canHarvestCrop(player, "wheat");
+
         assertAll("Checks if an OP player can harvest a wheat crop.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),

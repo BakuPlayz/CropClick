@@ -101,8 +101,8 @@ public final class AddonManager {
      */
     public Addon findByName(@NotNull String name) {
         return registeredAddons.stream()
-                .filter(addon -> addon.getName().equals(name))
-                .findFirst().orElse(null);
+                               .filter(addon -> addon.getName().equals(name))
+                               .findFirst().orElse(null);
     }
 
 
