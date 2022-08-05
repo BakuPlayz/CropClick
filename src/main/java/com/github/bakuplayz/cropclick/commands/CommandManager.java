@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,12 +114,13 @@ public final class CommandManager implements TabExecutor {
                                       @NotNull String alias,
                                       String @NotNull [] args) {
         if (args.length != 1) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
+        
         return commands.stream()
-                .map(SubCommand::getName)
-                .filter(command -> command.startsWith(args[0]))
-                .sorted().collect(Collectors.toList());
+                       .map(SubCommand::getName)
+                       .filter(command -> command.startsWith(args[0]))
+                       .sorted().collect(Collectors.toList());
     }
 
 

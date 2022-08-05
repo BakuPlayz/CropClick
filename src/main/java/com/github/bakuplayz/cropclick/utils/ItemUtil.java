@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -64,7 +64,7 @@ public final class ItemUtil {
 
 
     public ItemUtil(@NotNull Material material, @NotNull String name, int amount, List<String> lore) {
-        this.lore = lore == null ? new ArrayList<>() : lore;
+        this.lore = lore == null ? Collections.emptyList() : lore;
         this.material = material;
         this.amount = amount;
         this.name = name;
@@ -84,7 +84,9 @@ public final class ItemUtil {
         this.amount = stack.getAmount();
         this.material = stack.getType();
         this.damage = stack.getDurability();
-        this.lore = meta != null && meta.hasLore() ? meta.getLore() : new ArrayList<>();
+        this.lore = meta != null && meta.hasLore()
+                    ? meta.getLore()
+                    : Collections.emptyList();
     }
 
 

@@ -91,13 +91,13 @@ public final class NameMenu extends Menu {
      */
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
-        String status = MessageUtils.getEnabledStatus(plugin, crop.isEnabled());
+        String status = MessageUtils.getEnabledStatus(plugin, crop.isHarvestable());
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isEnabled() ? -1 : 15)
-                .setMaterial(crop.isEnabled() ? null : Material.STAINED_GLASS_PANE)
+                .setDamage(crop.isHarvestable() ? -1 : 15)
+                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

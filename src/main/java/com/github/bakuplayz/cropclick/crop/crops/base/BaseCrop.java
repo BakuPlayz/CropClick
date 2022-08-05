@@ -52,7 +52,7 @@ public abstract class BaseCrop implements Crop {
 
 
     private void harvest(@NotNull Inventory inventory) {
-        if (!isEnabled()) return;
+        if (!isHarvestable()) return;
         if (!hasDrop()) return;
 
         Drop drop = getDrop();
@@ -80,8 +80,8 @@ public abstract class BaseCrop implements Crop {
 
 
     @Override
-    public boolean isHarvestable(@NotNull Block block) {
-        if (!isEnabled()) return false;
+    public boolean isHarvestAge(@NotNull Block block) {
+        if (!isHarvestable()) return false;
         return getHarvestAge() <= getCurrentAge(block);
     }
 
@@ -103,7 +103,13 @@ public abstract class BaseCrop implements Crop {
 
 
     @Override
-    public boolean isEnabled() {
+    public boolean isHarvestable() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isLinkable() {
         return true;
     }
 

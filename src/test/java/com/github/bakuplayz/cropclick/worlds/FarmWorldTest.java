@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +39,7 @@ public final class FarmWorldTest {
                 false,
                 false,
                 false,
-                new ArrayList<>()
+                Collections.emptyList()
         );
     }
 
@@ -57,7 +57,7 @@ public final class FarmWorldTest {
                 false,
                 true,
                 true,
-                new ArrayList<>()
+                Collections.emptyList()
         );
 
         assertAll("Should contain, equal and mach the values and equal instances.",
@@ -160,8 +160,8 @@ public final class FarmWorldTest {
 
     @Test
     public void testEquals() {
-        FarmWorld equalWorld = new FarmWorld("World", false, false, false, new ArrayList<>());
-        FarmWorld nonEqualWorld = new FarmWorld("Sword", true, true, true, new ArrayList<>());
+        FarmWorld equalWorld = new FarmWorld("World", false, false, false, Collections.emptyList());
+        FarmWorld nonEqualWorld = new FarmWorld("Sword", true, true, true, Collections.emptyList());
 
         assertAll("Checks wheaten the equal uses equality correctly.",
                 () -> assertNotNull(farmWorld),

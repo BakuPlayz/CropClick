@@ -2,12 +2,16 @@ package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.utils.LocationUtils;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,48 +28,49 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerLinkAutofarmListener implements Listener {
 
     private final CropClick plugin;
-    private final AutofarmDataStorage farmData;
+
+    private final CropManager cropManager;
 
 
     public PlayerLinkAutofarmListener(@NotNull CropClick plugin) {
-        this.farmData = plugin.getFarmData();
+        this.cropManager = plugin.getCropManager();
         this.plugin = plugin;
     }
 
 
     /**
-     * It adds metadata to the blocks that make up the autofarm, and then adds the autofarm to the farm data.
+     * When a player links an autofarm, call the AutofarmLinkEvent.
      *
      * @param event The event that was called.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onAutofarmLink(@NotNull PlayerLinkAutofarmEvent event) {
+    public void onPlayerLinkAutofarm(@NotNull PlayerLinkAutofarmEvent event) {
         if (event.isCancelled()) return;
 
         Autofarm autofarm = event.getAutofarm();
-        Block crop = autofarm.getCropLocation().getBlock();
-        Block container = autofarm.getContainerLocation().getBlock();
-        Block dispenser = autofarm.getDispenserLocation().getBlock();
+        Block cropBlock = autofarm.getCropLocation().getBlock();
+        Crop crop = AutofarmUtils.getCrop(cropManager, cropBlock);
 
-        AutofarmMetadata farmerMeta = new AutofarmMetadata(plugin, autofarm::getFarmerID);
+        assert crop != null; // Only here for the compiler.
 
-        DoublyLocation doublyLocation = LocationUtils.getAsDoubly(container);
-        if (doublyLocation != null) {
-            Block singly = doublyLocation.getSingly().getBlock();
-            Block doubly = doublyLocation.getDoubly().getBlock();
-
-            singly.setMetadata("farmerID", farmerMeta);
-            doubly.setMetadata("farmerID", farmerMeta);
-
-            autofarm.setContainerLocation(doublyLocation);
-        } else {
-            container.setMetadata("farmerID", farmerMeta);
+        if (!crop.isLinkable()) {
+            event.setCancelled(true);
+            return;
         }
 
-        dispenser.setMetadata("farmerID", farmerMeta);
-        crop.setMetadata("farmerID", farmerMeta);
+        Player player = event.getPlayer();
+        if (!PermissionUtils.canLinkFarm(player)) {
+            event.setCancelled(true);
+            return;
+        }
 
-        farmData.addFarm(autofarm);
+        LanguageAPI.Menu.AUTOFARM_LINK_SUCCESS.send(plugin, player);
+
+        System.out.println("Player -- Linked");
+
+        Bukkit.getPluginManager().callEvent(
+                new AutofarmLinkEvent(event.getAutofarm())
+        );
     }
 
 }

@@ -12,8 +12,12 @@ import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStora
 import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.listeners.MenuListener;
-import com.github.bakuplayz.cropclick.listeners.autofarm.AutofarmHarvestCropListener;
+import com.github.bakuplayz.cropclick.listeners.autofarm.harvest.AutofarmHarvestCropListener;
+import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmLinkListener;
+import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmUnlinkListener;
+import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmUpdateListener;
 import com.github.bakuplayz.cropclick.listeners.entity.EntityDestroyAutofarmListener;
+import com.github.bakuplayz.cropclick.listeners.harvest.HarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.destory.PlayerDestroyCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.harvest.PlayerHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtAutofarmListener;
@@ -201,24 +205,29 @@ public class CropClick extends JavaPlugin {
 
         manager.registerEvents(new MenuListener(), this);
 
-        if (VersionUtils.between(8.3, 13.9)) {
-            manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
-        }
+        manager.registerEvents(new HarvestCropListener(), this);
+        manager.registerEvents(new PlayerHarvestCropListener(this), this);
+        manager.registerEvents(new AutofarmHarvestCropListener(this), this);
 
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
 
-        manager.registerEvents(new PlayerLinkAutofarmListener(this), this);
-        manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
         manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
+        manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
+        manager.registerEvents(new PlayerLinkAutofarmListener(this), this);
 
         manager.registerEvents(new PlayerPlantCropListener(this), this);
         manager.registerEvents(new PlayerDestroyCropListener(this), this);
-        manager.registerEvents(new PlayerHarvestCropListener(this), this);
 
-        manager.registerEvents(new AutofarmHarvestCropListener(this), this);
+        manager.registerEvents(new AutofarmUpdateListener(this), this);
+        manager.registerEvents(new AutofarmUnlinkListener(this), this);
+        manager.registerEvents(new AutofarmLinkListener(this), this);
+
+        if (VersionUtils.between(8.3, 13.9)) {
+            manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
+        }
     }
 
 }

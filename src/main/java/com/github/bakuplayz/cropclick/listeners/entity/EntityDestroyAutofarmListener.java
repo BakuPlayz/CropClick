@@ -3,7 +3,8 @@ package com.github.bakuplayz.cropclick.listeners.entity;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,13 +25,11 @@ import java.util.stream.Collectors;
  */
 public final class EntityDestroyAutofarmListener implements Listener {
 
-    private final AutofarmDataStorage farmData;
     private final AutofarmManager autofarmManager;
 
 
     public EntityDestroyAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
-        this.farmData = plugin.getFarmData();
     }
 
 
@@ -50,7 +49,7 @@ public final class EntityDestroyAutofarmListener implements Listener {
 
         List<Block> explodedBlocks = event.blockList();
         List<Block> explodedComponents = getExplodedComponents(explodedBlocks);
-        
+
         for (Block component : explodedComponents) {
 
             Autofarm autofarm = autofarmManager.findAutofarm(component);
@@ -59,7 +58,9 @@ public final class EntityDestroyAutofarmListener implements Listener {
                 continue;
             }
 
-            farmData.removeFarm(autofarm);
+            Bukkit.getPluginManager().callEvent(
+                    new AutofarmUnlinkEvent(autofarm)
+            );
         }
     }
 

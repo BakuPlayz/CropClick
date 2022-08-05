@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.Event;
+import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUpdateEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUpdateAutofarmEvent;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
@@ -14,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,23 +28,30 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerUpdateAutofarmListener implements Listener {
 
-    private final CropClick plugin;
-
     private final AutofarmManager autofarmManager;
 
 
     public PlayerUpdateAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
-        this.plugin = plugin;
     }
 
 
+    /**
+     * If a player places a block, and that block is a double chest, and that double chest is part of an autofarm, then
+     * update the autofarm to use the double chest.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerPlaceBlock(@NotNull BlockPlaceEvent event) {
+    public void onPlayerPlaceDoubleChest(@NotNull BlockPlaceEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
         if (!BlockUtils.isDoubleChest(block)) {
+            return;
+        }
+
+        if (!autofarmManager.isEnabled()) {
             return;
         }
 
@@ -78,13 +85,6 @@ public final class PlayerUpdateAutofarmListener implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerBreakBlock(@NotNull BlockBreakEvent event) {
-        if (event.isCancelled()) return;
-
-    }
-
-
     /**
      * If the player has permission to update their autofarm, then unlink the old autofarm and link the new autofarm.
      *
@@ -105,11 +105,14 @@ public final class PlayerUpdateAutofarmListener implements Listener {
             return;
         }
 
-        Autofarm oldAutofarm = event.getOldAutofarm();
-        Autofarm newAutofarm = event.getNewAutofarm();
+        Event updateEvent = new AutofarmUpdateEvent(
+                event.getOldAutofarm(),
+                event.getNewAutofarm()
+        );
 
-        autofarmManager.unlinkAutofarm(player, oldAutofarm);
-        autofarmManager.linkAutofarm(player, newAutofarm);
+        System.out.println("Player -- Update");
+
+        Bukkit.getPluginManager().callEvent(updateEvent);
     }
 
 }

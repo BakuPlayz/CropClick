@@ -73,8 +73,8 @@ public final class CropManager {
             throws CropTypeDuplicateException {
 
         List<Crop> foundCrops = crops.stream()
-                .filter(c -> filterByType(c, crop))
-                .collect(Collectors.toList());
+                                     .filter(c -> filterByType(c, crop))
+                                     .collect(Collectors.toList());
 
         if (foundCrops.size() > 1) {
             throw new CropTypeDuplicateException(foundCrops);
@@ -130,8 +130,8 @@ public final class CropManager {
      */
     public @Nullable Crop findByBlock(@NotNull Block block) {
         return crops.stream()
-                .filter(crop -> filterByType(crop, block))
-                .findFirst().orElse(null);
+                    .filter(crop -> filterByType(crop, block))
+                    .findFirst().orElse(null);
     }
 
 
@@ -145,8 +145,8 @@ public final class CropManager {
     @SuppressWarnings("unused")
     public @Nullable Crop findByName(@NotNull String name) {
         return crops.stream()
-                .filter(crop -> crop.getName().equals(name))
-                .findFirst().orElse(null);
+                    .filter(crop -> crop.getName().equals(name))
+                    .findFirst().orElse(null);
     }
 
 
@@ -177,12 +177,12 @@ public final class CropManager {
 
 
     /**
-     * Returns the *real* amount of crops.
+     * Returns the amount of crops.
      *
      * @return The amount of crops.
      */
     public int getAmountOfCrops() {
-        return getCrops().size() + 1;
+        return getCrops().size();
     }
 
 }

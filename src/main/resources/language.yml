@@ -152,6 +152,10 @@ menu:
       itemName: "&e%name% &7(%status%)"
       itemDropValue: "&7DropValue: &e%value%"
 
+    linkable:
+      itemName: "&eLinkable"
+      itemStatus: "&7Status: &e%status%"
+
     atLeastOne:
       itemName: "&eAtLeastOne"
       itemStatus: "&7Status: &e%status%"
@@ -184,9 +188,12 @@ menu:
 
     actions:
       linkSuccess: "&7You've successfully linked a farm :)"
+      linkFailure: "&cYour link failed to be established!"
 
     glass:
-      itemName: "&7*"
+      itemNameUnlinked: "&7*"
+      itemNameSelected: "&b**"
+      itemNameLinked: "&e***"
 
     crop:
       itemName: "&eCrop"

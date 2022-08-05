@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.listeners.autofarm;
+package com.github.bakuplayz.cropclick.listeners.autofarm.harvest;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.events.autofarm.AutofarmHarvestCropEvent;
+import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -75,7 +75,11 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        if (!crop.isHarvestable(block)) {
+        if (!crop.isHarvestable()) {
+            return;
+        }
+
+        if (!crop.isHarvestAge(block)) {
             return;
         }
 
@@ -87,7 +91,9 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         event.setCancelled(true);
 
-        Bukkit.getPluginManager().callEvent(new AutofarmHarvestCropEvent(crop, block, autofarm));
+        Bukkit.getPluginManager().callEvent(
+                new AutofarmHarvestCropEvent(crop, block, autofarm)
+        );
     }
 
 
@@ -103,11 +109,6 @@ public final class AutofarmHarvestCropListener implements Listener {
         Crop crop = event.getCrop();
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
-
-        if (!crop.hasDrop()) {
-            event.setCancelled(true);
-            return;
-        }
 
         if (container != null) {
             crop.harvest(container);

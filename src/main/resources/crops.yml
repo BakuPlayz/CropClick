@@ -4,7 +4,8 @@ crops:
       amount: 1
       chance: 0.5
       name: "wheat"
-    isEnabled: true
+    isHarvestable: true
+    isLinkable: true
     atLeastOne: true
     shouldReplant: true
     addons:

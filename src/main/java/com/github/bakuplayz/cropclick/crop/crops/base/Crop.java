@@ -40,7 +40,7 @@ public interface Crop {
     void harvest(@NotNull Container container);
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    boolean isHarvestable(@NotNull Block block);
+    boolean isHarvestAge(@NotNull Block block);
 
     boolean canHarvest(@NotNull Player player);
 
@@ -52,6 +52,8 @@ public interface Crop {
 
     boolean shouldReplant();
 
-    boolean isEnabled();
+    boolean isHarvestable();
+
+    boolean isLinkable();
 
 }

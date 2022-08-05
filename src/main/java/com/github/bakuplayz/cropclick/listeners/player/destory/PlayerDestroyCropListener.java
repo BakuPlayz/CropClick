@@ -8,6 +8,7 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEvent;
+import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
@@ -88,7 +89,9 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new PlayerDestroyCropEvent(crop, block, player));
+        Bukkit.getPluginManager().callEvent(
+                new PlayerDestroyCropEvent(crop, block, player)
+        );
     }
 
 
@@ -109,9 +112,14 @@ public final class PlayerDestroyCropListener implements Listener {
         }
 
         Autofarm farm = autofarmManager.findAutofarm(block);
-        if (autofarmManager.isUsable(farm)) {
-            autofarmManager.unlinkAutofarm(player, farm);
+        if (!autofarmManager.isUsable(farm)) {
+            event.setCancelled(true);
+            return;
         }
+
+        Bukkit.getPluginManager().callEvent(
+                new PlayerUnlinkAutofarmEvent(player, farm)
+        );
     }
 
 }

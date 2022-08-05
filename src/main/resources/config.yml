@@ -12,7 +12,7 @@ updateMessage:
   player: true
   console: true
 
-autofarm:
+autofarms:
   isEnabled: true
   canHarvest:
     - beetroot

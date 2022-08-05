@@ -4,16 +4,12 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
-import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import com.github.bakuplayz.cropclick.utils.PermissionUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,89 +31,12 @@ public final class AutofarmManager {
     private final @NotNull PlayersConfig playersConfig;
     private final @NotNull AutofarmDataStorage farmStorage;
 
-    private final String cacheName = "farmerID";
-
 
     public AutofarmManager(@NotNull CropClick plugin) {
-        this.farmStorage = plugin.getFarmData();
-        this.cropManager = plugin.getCropManager();
         this.playersConfig = plugin.getPlayersConfig();
+        this.cropManager = plugin.getCropManager();
+        this.farmStorage = plugin.getFarmData();
         this.plugin = plugin;
-    }
-
-
-    /**
-     * This function links an autofarm to a player.
-     *
-     * @param player            The player who is linking the autofarm.
-     * @param cropLocation      The location of the crop block
-     * @param containerLocation The location of the chest that will store the crops
-     * @param dispenserLocation The location of the dispenser that will be used to plant the crops.
-     */
-    public void linkAutofarm(@NotNull Player player,
-                             @NotNull Location cropLocation,
-                             @NotNull Location containerLocation,
-                             @NotNull Location dispenserLocation) {
-        Autofarm farm = new Autofarm(
-                player,
-                cropLocation,
-                containerLocation,
-                dispenserLocation
-        );
-        if (isEnabled() && PermissionUtils.canLinkFarm(player)) {
-            Bukkit.getPluginManager().callEvent(new PlayerLinkAutofarmEvent(player, farm));
-        }
-    }
-
-
-    /**
-     * Link an autofarm to a player.
-     *
-     * @param player   The player who is linking the autofarm.
-     * @param autofarm The autofarm object that you want to link to the player.
-     */
-    @SuppressWarnings("unused")
-    public void linkAutofarm(@NotNull Player player, @NotNull Autofarm autofarm) {
-        linkAutofarm(
-                player,
-                autofarm.getCropLocation(),
-                autofarm.getContainerLocation(),
-                autofarm.getDispenserLocation()
-        );
-    }
-
-
-    /**
-     * This function unlinks an autofarm and calls the PlayerUnlinkAutofarmEvent.
-     *
-     * @param player            The player who is unlinking the autofarm
-     * @param cropLocation      The location of the crop block
-     * @param containerLocation The location of the chest that the crops will be placed in.
-     * @param dispenserLocation The location of the dispenser that will be used to plant the crops.
-     */
-    @SuppressWarnings("unused")
-    public void unlinkAutofarm(@NotNull Player player,
-                               @NotNull Location cropLocation,
-                               @NotNull Location containerLocation,
-                               @NotNull Location dispenserLocation) {
-        Autofarm farm = new Autofarm(
-                player,
-                cropLocation,
-                containerLocation,
-                dispenserLocation
-        );
-        Bukkit.getPluginManager().callEvent(new PlayerUnlinkAutofarmEvent(player, farm));
-    }
-
-
-    /**
-     * This function unlinks an autofarm from a player.
-     *
-     * @param player   The player who is unlinking the autofarm.
-     * @param autofarm The autofarm that the player is unlinking from.
-     */
-    public void unlinkAutofarm(@NotNull Player player, @NotNull Autofarm autofarm) {
-        Bukkit.getPluginManager().callEvent(new PlayerUnlinkAutofarmEvent(player, autofarm));
     }
 
 
@@ -198,10 +117,7 @@ public final class AutofarmManager {
 
 
     /**
-     * "Find the farm that the given block is a part of."
-     * <p>
-     * The first thing we do is check if the block is air. If it is, we return null.
-     * </p>
+     * Find the farm that the given block is a part of.
      *
      * @param block The block to check.
      *
@@ -225,9 +141,15 @@ public final class AutofarmManager {
             return farmStorage.findFarmByContainer(block);
         }
 
-        // TODO: needs to check the block over in case of crop... (and one around...)
         if (AutofarmUtils.isCrop(cropManager, block)) {
             return farmStorage.findFarmByCrop(block);
+        }
+
+        if (BlockUtils.isPlantableSurface(block)) {
+            Block blockAbove = block.getRelative(BlockFace.UP);
+            if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
+                return farmStorage.findFarmByCrop(blockAbove);
+            }
         }
 
         return null;
@@ -285,8 +207,7 @@ public final class AutofarmManager {
      * @return The ID of the block.
      */
     private @Nullable String getCachedID(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(cacheName);
-        return metas.isEmpty() ? null : metas.get(0).asString();
+        return AutofarmUtils.getFarmerID(block);
     }
 
 
@@ -298,8 +219,7 @@ public final class AutofarmManager {
      * @return A boolean value.
      */
     private boolean hasCachedID(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(cacheName);
-        return block.hasMetadata(cacheName) && !metas.isEmpty();
+        return AutofarmUtils.componentHasFarmerID(block);
     }
 
 
@@ -362,6 +282,7 @@ public final class AutofarmManager {
      *
      * @return A boolean value.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isUsable(Autofarm autofarm) {
         if (autofarm == null) return false;
         if (!autofarm.isLinked()) return false;
@@ -391,7 +312,7 @@ public final class AutofarmManager {
      * @return A boolean value.
      */
     public boolean isEnabled() {
-        return plugin.getConfig().getBoolean("autofarm.isEnabled");
+        return plugin.getConfig().getBoolean("autofarms.isEnabled");
     }
 
 

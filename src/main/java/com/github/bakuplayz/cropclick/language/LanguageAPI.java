@@ -332,6 +332,8 @@ public final class LanguageAPI {
         CROP_ITEM_DROP_VALUE(Category.CROP, SubCategory.CROP, "itemDropValue", "%value%"),
         CROP_SEED_ITEM_NAME(Category.CROP, SubCategory.SEED, "itemName", "%name%", "%status%"),
         CROP_SEED_ITEM_DROP_VALUE(Category.CROP, SubCategory.SEED, "itemDropValue", "%value%"),
+        CROP_LINKABLE_ITEM_NAME(Category.CROP, SubCategory.LINKABLE, "itemName"),
+        CROP_LINKABLE_ITEM_STATUS(Category.CROP, SubCategory.LINKABLE, "itemStatus", "%status%"),
         CROP_AT_LEAST_ITEM_NAME(Category.CROP, SubCategory.AT_LEAST, "itemName"),
         CROP_AT_LEAST_ITEM_STATUS(Category.CROP, SubCategory.AT_LEAST, "itemStatus", "%status%"),
         CROP_REPLANT_ITEM_NAME(Category.CROP, SubCategory.REPLANT, "itemName"),
@@ -365,6 +367,11 @@ public final class LanguageAPI {
         AUTOFARM_STATE_SELECTED(Category.AUTOFARM, SubCategory.STATE, "selected"),
 
         AUTOFARM_LINK_SUCCESS(Category.AUTOFARM, SubCategory.ACTIONS, "linkSuccess"),
+        AUTOFARM_LINK_FAILURE(Category.AUTOFARM, SubCategory.ACTIONS, "linkFailure"),
+
+        AUTOFARM_GLASS_ITEM_NAME_LINKED(Category.AUTOFARM, SubCategory.GLASS, "itemNameLinked"),
+        AUTOFARM_GLASS_ITEM_NAME_UNLINKED(Category.AUTOFARM, SubCategory.GLASS, "itemNameUnlinked"),
+        AUTOFARM_GLASS_ITEM_NAME_SELECTED(Category.AUTOFARM, SubCategory.GLASS, "itemNameSelected"),
 
         AUTOFARM_CROP_NAME(Category.AUTOFARM, SubCategory.CROP, "itemName"),
         AUTOFARM_DISPENSER_NAME(Category.AUTOFARM, SubCategory.DISPENSER, "itemName"),
@@ -521,7 +528,9 @@ public final class LanguageAPI {
             REMOVE,
             ADD,
             POINTS,
+            GLASS,
             MONEY,
+            LINKABLE,
             EXPERIENCE,
             EXPERIENCE_REASON("experienceReason"),
             POINTS_ADD("pointsAdd"),

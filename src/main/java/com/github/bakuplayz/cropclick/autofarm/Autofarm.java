@@ -184,4 +184,30 @@ public final class Autofarm {
                 && dispenserLocation != null;
     }
 
+
+    /**
+     * If the farm is linked, check if the dispenser, container, and crop are present.
+     *
+     * @param manager The AutofarmManager instance that is calling this method.
+     *
+     * @return A boolean value.
+     */
+    public boolean isComponentsPresent(@NotNull AutofarmManager manager) {
+        if (!isLinked()) {
+            return false;
+        }
+
+        boolean isDispenserPresent = manager.isComponent(dispenserLocation.getBlock());
+        if (!isDispenserPresent) {
+            return false;
+        }
+
+        boolean isContainerPresent = manager.isComponent(containerLocation.getBlock());
+        if (!isContainerPresent) {
+            return false;
+        }
+
+        return manager.isComponent(cropLocation.getBlock());
+    }
+
 }

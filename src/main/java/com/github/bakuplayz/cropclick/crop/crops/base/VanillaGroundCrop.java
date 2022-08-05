@@ -57,9 +57,14 @@ public abstract class VanillaGroundCrop extends GroundCrop {
 
 
     @Override
-    public boolean isEnabled() {
-        return cropsConfig.isCropEnabled(getName());
+    public boolean isHarvestable() {
+        return cropsConfig.isCropHarvestable(getName());
     }
 
+
+    @Override
+    public boolean isLinkable() {
+        return cropsConfig.isCropLinkable(getName());
+    }
 
 }

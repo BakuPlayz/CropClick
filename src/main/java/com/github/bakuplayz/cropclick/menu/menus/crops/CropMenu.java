@@ -62,8 +62,9 @@ public final class CropMenu extends Menu {
             inventory.setItem(34, getSeedAddItem(MAX_CHANGE));
         }
 
-        inventory.setItem(47, getReplantItem());
-        inventory.setItem(51, getAtLeastItem());
+        inventory.setItem(47, getLinkableItem());
+        inventory.setItem(51, getReplantItem());
+        inventory.setItem(52, getAtLeastItem());
 
         setBackItem();
     }
@@ -77,6 +78,10 @@ public final class CropMenu extends Menu {
 
         String cropName = crop.getName();
 
+        if (clicked.equals(getLinkableItem())) {
+            cropsConfig.toggleLinkableCrop(cropName);
+        }
+
         if (clicked.equals(getReplantItem())) {
             cropsConfig.toggleReplantCrop(cropName);
         }
@@ -86,7 +91,7 @@ public final class CropMenu extends Menu {
         }
 
         if (clicked.equals(getCropItem())) {
-            cropsConfig.toggleCrop(cropName);
+            cropsConfig.toggleHarvestCrop(cropName);
         }
 
         if (clicked.equals(getCropAddItem(MIN_CHANGE))) {
@@ -135,13 +140,13 @@ public final class CropMenu extends Menu {
 
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
-        String status = MessageUtils.getEnabledStatus(plugin, crop.isEnabled());
+        String status = MessageUtils.getEnabledStatus(plugin, crop.isHarvestable());
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount()))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isEnabled() ? -1 : 15)
-                .setMaterial(crop.isEnabled() ? null : Material.STAINED_GLASS_PANE)
+                .setDamage(crop.isHarvestable() ? -1 : 15)
+                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -152,8 +157,17 @@ public final class CropMenu extends Menu {
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount()))
-                .setMaterial(crop.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(crop.isEnabled() ? -1 : 15)
+                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
+                .setDamage(crop.isHarvestable() ? -1 : 15)
+                .toItemStack();
+    }
+
+
+    private @NotNull ItemStack getLinkableItem() {
+        boolean isLinkable = cropsConfig.isCropLinkable(crop.getName());
+        return new ItemUtil(Material.DAYLIGHT_DETECTOR)
+                .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
                 .toItemStack();
     }
 

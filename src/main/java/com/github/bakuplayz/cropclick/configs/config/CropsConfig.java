@@ -88,25 +88,49 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Returns whether the crop with the given name is enabled.
+     * Returns whether the crop with the given name is harvestable.
      *
      * @param name The name of the crop.
      *
      * @return A boolean value.
      */
-    public boolean isCropEnabled(@NotNull String name) {
-        return config.getBoolean("crops." + name + ".isEnabled", true);
+    public boolean isCropHarvestable(@NotNull String name) {
+        return config.getBoolean("crops." + name + ".isHarvestable", true);
     }
 
 
     /**
-     * It toggles the crop's enabled state.
+     * It toggles the crop's harvestable state.
      *
      * @param name The name of the crop.
      */
-    public void toggleCrop(@NotNull String name) {
-        boolean isEnabled = isCropEnabled(name);
-        config.set("crops." + name + ".isEnabled", !isEnabled);
+    public void toggleHarvestCrop(@NotNull String name) {
+        boolean isEnabled = isCropHarvestable(name);
+        config.set("crops." + name + ".isHarvestable", !isEnabled);
+        saveConfig();
+    }
+
+
+    /**
+     * Returns whether the crop with the given name is linkable.
+     *
+     * @param name The name of the crop.
+     *
+     * @return A boolean value.
+     */
+    public boolean isCropLinkable(@NotNull String name) {
+        return config.getBoolean("crops." + name + ".isLinkable", true);
+    }
+
+
+    /**
+     * It toggles the crop's linkable state.
+     *
+     * @param name The name of the crop.
+     */
+    public void toggleLinkableCrop(@NotNull String name) {
+        boolean isEnabled = isCropLinkable(name);
+        config.set("crops." + name + ".isLinkable", !isEnabled);
         saveConfig();
     }
 

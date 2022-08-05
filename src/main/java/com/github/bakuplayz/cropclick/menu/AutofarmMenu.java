@@ -3,12 +3,14 @@ package com.github.bakuplayz.cropclick.menu;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.menus.interacts.Component;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewDispenserMenu;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -68,6 +70,8 @@ public abstract class AutofarmMenu extends Menu {
         this.isUnlinked = !autofarmManager.isLinked(autofarm);
         this.clickedComponent = clickedComponent;
         this.block = block;
+
+        assignCachedMeta();
     }
 
 
@@ -89,6 +93,20 @@ public abstract class AutofarmMenu extends Menu {
             if (isLeft || isRight || isBottom) {
                 inventory.setItem(i, getGlassItem());
             }
+        }
+    }
+
+
+    /**
+     * If the autofarm is present and has no cached id, assign it one.
+     */
+    private void assignCachedMeta() {
+        if (autofarm == null) {
+            return;
+        }
+
+        if (!AutofarmUtils.hasIDPresent(autofarm)) {
+            AutofarmUtils.setMeta(plugin, autofarm);
         }
     }
 
@@ -170,10 +188,23 @@ public abstract class AutofarmMenu extends Menu {
         assert dispenser != null; // Only here for the compiler.
 
         autofarmManager.deselectAll(player);
-        autofarmManager.linkAutofarm(player, crop, container, dispenser);
-
         player.closeInventory();
-        LanguageAPI.Menu.AUTOFARM_LINK_SUCCESS.send(plugin, player);
+
+        Autofarm autofarm = new Autofarm(
+                player,
+                crop,
+                container,
+                dispenser
+        );
+
+        if (!autofarm.isComponentsPresent(autofarmManager)) {
+            LanguageAPI.Menu.AUTOFARM_LINK_FAILURE.send(plugin, player);
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(
+                new PlayerLinkAutofarmEvent(player, autofarm)
+        );
     }
 
 
@@ -240,9 +271,15 @@ public abstract class AutofarmMenu extends Menu {
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setDamage(isUnlinked ? 15 : 4)
                 .setDamage(isClickedSelected ? 3 : -1)
-                .setName(isUnlinked ? ChatColor.GRAY + "*" : null)
-                .setName(isClickedSelected ? ChatColor.AQUA + "**" : null)
-                .setName(!isUnlinked ? ChatColor.YELLOW + "***" : null)
+                .setName(plugin, LanguageAPI.Menu.AUTOFARM_GLASS_ITEM_NAME_LINKED)
+                .setName(isUnlinked
+                         ? LanguageAPI.Menu.AUTOFARM_GLASS_ITEM_NAME_UNLINKED.get(plugin)
+                         : null
+                )
+                .setName(isClickedSelected
+                         ? LanguageAPI.Menu.AUTOFARM_GLASS_ITEM_NAME_SELECTED.get(plugin)
+                         : null
+                )
                 .toItemStack();
     }
 

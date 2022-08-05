@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +56,7 @@ public final class ItemUtilTests {
                 () -> assertEquals(Material.STONE, result.getMaterial()),
                 () -> assertEquals("", result.getName()),
                 () -> assertEquals(1, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore())
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -74,7 +73,7 @@ public final class ItemUtilTests {
                 () -> assertEquals(Material.STONE, result.getMaterial()),
                 () -> assertEquals("", result.getName()),
                 () -> assertEquals(2, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore())
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -92,7 +91,7 @@ public final class ItemUtilTests {
                 () -> assertEquals("", result.getName()),
                 () -> assertEquals(2, result.getDamage()),
                 () -> assertEquals(1, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore())
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -109,7 +108,7 @@ public final class ItemUtilTests {
                 () -> assertEquals(Material.STONE, result.getMaterial()),
                 () -> assertEquals("Arkham", result.getName()),
                 () -> assertEquals(1, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore())
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -127,7 +126,7 @@ public final class ItemUtilTests {
                 () -> assertEquals(Material.STONE, result.getMaterial()),
                 () -> assertEquals("Arkham", result.getName()),
                 () -> assertEquals(2, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore())
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -147,7 +146,7 @@ public final class ItemUtilTests {
                 () -> assertEquals("Arkham", result.getName()),
                 () -> assertEquals(2, result.getAmount()),
                 () -> assertEquals(2, result.getDamage()),
-                () -> assertEquals(new ArrayList<>(), result.getLore())
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -180,8 +179,8 @@ public final class ItemUtilTests {
                 () -> assertNull(result.getMeta()),
                 () -> assertEquals("", result.getName()),
                 () -> assertEquals(1, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore()),
-                () -> assertEquals(Material.WOOD, result.getMaterial())
+                () -> assertEquals(Material.WOOD, result.getMaterial()),
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -197,9 +196,9 @@ public final class ItemUtilTests {
                 () -> assertNull(result.getName()),
                 () -> assertEquals(2, result.getAmount()),
                 () -> assertEquals(2, result.getDamage()),
-                () -> assertEquals(new ArrayList<>(), result.getLore()),
                 () -> assertEquals(new ItemMetaMock(), result.getMeta()),
-                () -> assertEquals(Material.STONE, result.getMaterial())
+                () -> assertEquals(Material.STONE, result.getMaterial()),
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -216,9 +215,9 @@ public final class ItemUtilTests {
                 () -> assertNull(result.getName()),
                 () -> assertEquals(2, result.getDamage()),
                 () -> assertEquals(10, result.getAmount()),
-                () -> assertEquals(new ArrayList<>(), result.getLore()),
                 () -> assertEquals(new ItemMetaMock(), result.getMeta()),
-                () -> assertEquals(Material.STONE, result.getMaterial())
+                () -> assertEquals(Material.STONE, result.getMaterial()),
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -235,9 +234,9 @@ public final class ItemUtilTests {
                 () -> assertEquals(2, result.getDamage()),
                 () -> assertEquals(2, result.getAmount()),
                 () -> assertEquals("Test", result.getName()),
-                () -> assertEquals(new ArrayList<>(), result.getLore()),
                 () -> assertEquals(new ItemMetaMock(), result.getMeta()),
-                () -> assertEquals(Material.STONE, result.getMaterial())
+                () -> assertEquals(Material.STONE, result.getMaterial()),
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -255,9 +254,9 @@ public final class ItemUtilTests {
                 () -> assertEquals(2, result.getDamage()),
                 () -> assertEquals(10, result.getAmount()),
                 () -> assertEquals("Test", result.getName()),
-                () -> assertEquals(new ArrayList<>(), result.getLore()),
                 () -> assertEquals(new ItemMetaMock(), result.getMeta()),
-                () -> assertEquals(Material.STONE, result.getMaterial())
+                () -> assertEquals(Material.STONE, result.getMaterial()),
+                () -> assertEquals(Collections.emptyList(), result.getLore())
         );
     }
 
@@ -361,7 +360,7 @@ public final class ItemUtilTests {
 
         assertAll("Check wheaten or not the #setLore updates the lore.",
                 () -> assertNotNull(result.getLore()),
-                () -> assertNotEquals(new ArrayList<>(), result.getLore()),
+                () -> assertNotEquals(Collections.emptyList(), result.getLore()),
                 () -> assertNotEquals(Collections.singletonList("TEst"), result.getLore()),
                 () -> assertEquals(Collections.singletonList("Test"), result.getLore())
         );
@@ -374,7 +373,7 @@ public final class ItemUtilTests {
 
         assertAll("Check wheaten or not the #setLore updates the lore.",
                 () -> assertNotNull(result.getLore()),
-                () -> assertNotEquals(new ArrayList<>(), result.getLore()),
+                () -> assertNotEquals(Collections.emptyList(), result.getLore()),
                 () -> assertNotEquals(Collections.singletonList("TEst"), result.getLore()),
                 () -> assertEquals(Collections.singletonList("Test"), result.getLore())
         );
@@ -384,11 +383,13 @@ public final class ItemUtilTests {
     @Test
     public void testToItemStack() {
         ItemStack result = itemUtil.toItemStack();
-        
+        ItemStack airStack = new ItemUtil(Material.AIR).toItemStack();
+        ItemStack stoneStack = new ItemUtil(Material.STONE).toItemStack();
+
         assertAll("Check wheaten or not the #toItemStack results in a correct ItemStack.",
                 () -> assertNotNull(result),
-                () -> assertNotEquals(new ItemUtil(Material.AIR).toItemStack(), result),
-                () -> assertEquals(new ItemUtil(Material.STONE).toItemStack(), result)
+                () -> assertNotEquals(airStack, result),
+                () -> assertEquals(stoneStack, result)
         );
     }
 

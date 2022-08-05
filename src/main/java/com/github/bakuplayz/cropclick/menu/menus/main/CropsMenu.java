@@ -156,12 +156,12 @@ public final class CropsMenu extends PaginatedMenu {
      */
     private @NotNull ItemStack getMenuItem(@NotNull Crop crop) {
         String name = MessageUtils.beautify(crop.getName(), false);
-        String status = MessageUtils.getEnabledStatus(plugin, crop.isEnabled());
+        String status = MessageUtils.getEnabledStatus(plugin, crop.isHarvestable());
         ItemUtil menuItem = new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isEnabled() ? -1 : 15)
-                .setMaterial(crop.isEnabled() ? null : Material.STAINED_GLASS_PANE);
+                .setDamage(crop.isHarvestable() ? -1 : 15)
+                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE);
 
         switch (menuState) {
             case CROP:

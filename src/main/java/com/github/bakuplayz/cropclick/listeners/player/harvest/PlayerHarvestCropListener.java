@@ -86,7 +86,11 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        if (!crop.isHarvestable(block)) {
+        if (!crop.isHarvestable()) {
+            return;
+        }
+
+        if (!crop.isHarvestAge(block)) {
             return;
         }
 
@@ -96,7 +100,9 @@ public final class PlayerHarvestCropListener implements Listener {
 
         harvestedCrops.put(crop, System.nanoTime());
 
-        Bukkit.getPluginManager().callEvent(new PlayerHarvestCropEvent(crop, block, player));
+        Bukkit.getPluginManager().callEvent(
+                new PlayerHarvestCropEvent(crop, block, player)
+        );
     }
 
 
@@ -113,34 +119,42 @@ public final class PlayerHarvestCropListener implements Listener {
         Block block = event.getBlock();
         Crop crop = event.getCrop();
 
-        if (!crop.hasDrop()) {
-            event.setCancelled(true);
-            return;
-        }
-
-        addonManager.applyEffects(player, crop);
-
         if (!crop.canHarvest(player)) {
             event.setCancelled(true);
             return;
         }
 
-        // LATER: crop#playSounds();
-        // LATER: crop#playEffects();
-        if (crop instanceof TallCrop) {
-            int height = crop.getCurrentAge(block);
-            int actualHeight = getActualHeight(crop, height);
-            for (int i = actualHeight; i > 0; --i) {
-                crop.harvest(player);
-            }
+        System.out.println("Player -- Harvest");
 
-            crop.replant(block);
+        if (crop instanceof TallCrop) {
+            harvestAll(player, block, crop);
         } else {
             crop.harvest(player);
-            crop.replant(block);
         }
 
+        crop.replant(block);
+        // LATER: crop#playSounds();
+        // LATER: crop#playEffects();
+
+        addonManager.applyEffects(player, crop);
+
         harvestedCrops.remove(crop);
+    }
+
+
+    /**
+     * Harvest all the crops that is connected to the tall crop.
+     *
+     * @param player       The player who is harvesting the crop.
+     * @param clickedBlock The block that was clicked.
+     * @param crop         The crop that was clicked on
+     */
+    private void harvestAll(@NotNull Player player, @NotNull Block clickedBlock, @NotNull Crop crop) {
+        int height = crop.getCurrentAge(clickedBlock);
+        int actualHeight = getActualHeight(crop, height);
+        for (int i = actualHeight; i > 0; --i) {
+            crop.harvest(player);
+        }
     }
 
 
@@ -152,7 +166,7 @@ public final class PlayerHarvestCropListener implements Listener {
      *
      * @return The height of the crop.
      */
-    private static int getActualHeight(@NotNull Crop crop, int height) {
+    private int getActualHeight(@NotNull Crop crop, int height) {
         return crop.shouldReplant() ? height - 1 : height;
     }
 

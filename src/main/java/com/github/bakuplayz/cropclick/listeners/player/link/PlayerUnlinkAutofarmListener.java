@@ -4,15 +4,13 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
-import org.bukkit.Location;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,14 +35,11 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
     private final AddonManager addonManager;
     private final AutofarmManager autofarmManager;
 
-    private final AutofarmDataStorage farmData;
-
 
     public PlayerUnlinkAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
-        this.farmData = plugin.getFarmData();
         this.plugin = plugin;
     }
 
@@ -84,12 +79,14 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        autofarmManager.unlinkAutofarm(player, autofarm);
+        Bukkit.getPluginManager().callEvent(
+                new PlayerUnlinkAutofarmEvent(player, autofarm)
+        );
     }
 
 
     /**
-     * When a player unlinks an autofarm, remove the metadata from the blocks and remove the autofarm from the farmData.
+     * When a player unlinks an autofarm, call the AutofarmUnlinkEvent.
      *
      * @param event The event that is being listened for.
      */
@@ -97,26 +94,17 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
     public void onPlayerUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
         if (event.isCancelled()) return;
 
-        Autofarm autofarm = event.getAutofarm();
-        Block crop = autofarm.getCropLocation().getBlock();
-        Block container = autofarm.getContainerLocation().getBlock();
-        Block dispenser = autofarm.getDispenserLocation().getBlock();
-
-        DoublyLocation doublyContainer = LocationUtils.getAsDoubly(container);
-        if (doublyContainer != null) {
-            Location one = doublyContainer.getSingly();
-            Location two = doublyContainer.getSingly();
-
-            one.getBlock().removeMetadata("farmerID", plugin);
-            two.getBlock().removeMetadata("farmerID", plugin);
-        } else {
-            container.removeMetadata("farmerID", plugin);
+        Player player = event.getPlayer();
+        if (!PermissionUtils.canUnlinkFarm(player)) {
+            event.setCancelled(true);
+            return;
         }
 
-        dispenser.removeMetadata("farmerID", plugin);
-        crop.removeMetadata("farmerID", plugin);
+        System.out.println("Player -- Unlinked");
 
-        farmData.removeFarm(autofarm);
+        Bukkit.getPluginManager().callEvent(
+                new AutofarmUnlinkEvent(event.getAutofarm())
+        );
     }
 
 }

@@ -2,8 +2,10 @@ package com.github.bakuplayz.cropclick.datastorages.datastorage;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -63,6 +65,17 @@ public final class AutofarmDataStorage extends DataStorage {
      */
     public void addFarm(@NotNull Autofarm autofarm) {
         farms.put(autofarm.getFarmerID(), autofarm);
+        addFarmerMeta(autofarm);
+    }
+
+
+    /**
+     * Adds the metadata to the blocks that are associated with the autofarm.
+     *
+     * @param autofarm The autofarm object that we're adding metadata to.
+     */
+    private void addFarmerMeta(@NotNull Autofarm autofarm) {
+        AutofarmUtils.setMeta(plugin, autofarm);
     }
 
 
@@ -73,6 +86,17 @@ public final class AutofarmDataStorage extends DataStorage {
      */
     public void removeFarm(@NotNull Autofarm autofarm) {
         farms.remove(autofarm.getFarmerID());
+        removeFarmerMeta(autofarm);
+    }
+
+
+    /**
+     * Remove the metadata from the blocks that are associated with the autofarm.
+     *
+     * @param autofarm The autofarm object that is being removed.
+     */
+    private void removeFarmerMeta(@NotNull Autofarm autofarm) {
+        AutofarmUtils.removeMeta(plugin, autofarm);
     }
 
 
@@ -101,7 +125,14 @@ public final class AutofarmDataStorage extends DataStorage {
      * Remove all farms from the map that are not linked to any other farm.
      */
     private void removeUnlinkedFarms() {
-        farms.values().removeIf(farm -> !farm.isLinked());
+        AutofarmManager autofarmManager = plugin.getAutofarmManager();
+
+        if (autofarmManager == null) {
+            farms.values().removeIf(farm -> !farm.isLinked());
+            return;
+        }
+
+        farms.values().removeIf(farm -> !farm.isComponentsPresent(autofarmManager));
     }
 
 

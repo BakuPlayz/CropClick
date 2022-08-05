@@ -72,6 +72,10 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
             return;
         }
 
+        if (!autofarmManager.isEnabled()) {
+            return;
+        }
+
         if (!addonManager.canModify(player)) {
             return;
         }
@@ -82,10 +86,6 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
         FarmWorld world = worldManager.findByPlayer(player);
         if (!worldManager.isAccessible(world)) {
-            return;
-        }
-
-        if (!autofarmManager.isEnabled()) {
             return;
         }
 
