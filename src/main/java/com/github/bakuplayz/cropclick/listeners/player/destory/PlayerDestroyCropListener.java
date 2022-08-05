@@ -79,6 +79,10 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
+        if (!world.allowsPlayers()) {
+            return;
+        }
+
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;

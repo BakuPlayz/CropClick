@@ -136,6 +136,10 @@ menu:
     itemDescription: "&7Description: &e%description%"
 
   crop:
+    status:
+      enabled: "Harvestable"
+      disabled: "Disabled"
+
     add:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
@@ -165,15 +169,20 @@ menu:
       itemStatus: "&7Status: &e%status%"
 
   crops:
-    itemName: "&e%name% &7(%status%)"
-    itemDropName: "&7DropName: &r%name%"
-    itemDropValue: "&7DropValue: &e%value%"
-    itemParticles: "&7Amount of Particles: &e%status%"
-    itemSounds: "&7Amount of Sounds: &e%status%"
-    itemMMOExperience: "&7Experience: &e%status%"
-    itemJobsExperience: "&7Experience: &e%status%"
-    itemJobsMoney: "&7Money: &e%status%"
-    itemJobsPoints: "&7Points: &e%status%"
+    status:
+      enabled: "Harvestable"
+      disabled: "Disabled"
+
+    item:
+      name: "&e%name% &7(%status%)"
+      dropName: "&7DropName: &r%name%"
+      dropValue: "&7DropValue: &e%value%"
+      particles: "&7Amount of Particles: &e%status%"
+      sounds: "&7Amount of Sounds: &e%status%"
+      MMOExperience: "&7Experience: &e%status%"
+      jobsExperience: "&7Experience: &e%status%"
+      jobsMoney: "&7Money: &e%status%"
+      jobsPoints: "&7Points: &e%status%"
 
   autofarm:
     format:
@@ -390,7 +399,7 @@ menu:
   world:
     world:
       itemName: "&e%name%"
-      itemStatus: "&7Enabled: &e%status%"
+      itemStatus: "&7Banished: &e%status%"
 
     players:
       itemName: "&ePlayers"

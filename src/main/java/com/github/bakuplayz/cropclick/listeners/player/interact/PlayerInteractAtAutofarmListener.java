@@ -89,6 +89,10 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
             return;
         }
 
+        if (!world.allowsPlayers()) {
+            return;
+        }
+
         if (autofarmManager.isComponent(block)) {
             event.setCancelled(true);
         }

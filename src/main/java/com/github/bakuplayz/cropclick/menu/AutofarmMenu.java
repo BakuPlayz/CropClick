@@ -5,11 +5,13 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.menu.menus.interacts.Component;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewDispenserMenu;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -105,8 +107,8 @@ public abstract class AutofarmMenu extends Menu {
             return;
         }
 
-        if (!AutofarmUtils.hasIDPresent(autofarm)) {
-            AutofarmUtils.setMeta(plugin, autofarm);
+        if (!AutofarmUtils.hasMeta(autofarm)) {
+            AutofarmUtils.addMeta(plugin, autofarm);
         }
     }
 
@@ -154,8 +156,12 @@ public abstract class AutofarmMenu extends Menu {
      */
     protected void openDispenser() {
         Dispenser dispenser = (Dispenser) dispenserLocation.getBlock().getState();
-        PreviewDispenserMenu previewMenu = new PreviewDispenserMenu(plugin, player, autofarm.getShortenedID(),
-                dispenser.getInventory());
+        PreviewDispenserMenu previewMenu = new PreviewDispenserMenu(
+                plugin,
+                player,
+                autofarm.getShortenedID(),
+                dispenser.getInventory()
+        );
         previewMenu.open();
     }
 
@@ -165,8 +171,12 @@ public abstract class AutofarmMenu extends Menu {
      */
     protected void openContainer() {
         Chest chest = (Chest) containerLocation.getBlock().getState();
-        PreviewContainerMenu previewMenu = new PreviewContainerMenu(plugin, player, autofarm.getShortenedID(),
-                chest.getInventory());
+        PreviewContainerMenu previewMenu = new PreviewContainerMenu(
+                plugin,
+                player,
+                autofarm.getShortenedID(),
+                chest.getInventory()
+        );
         previewMenu.open();
     }
 
@@ -329,12 +339,26 @@ public abstract class AutofarmMenu extends Menu {
         if (location == null) {
             return Collections.singletonList(
                     LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin,
-                            LanguageAPI.Menu.AUTOFARM_STATE_UNLINKED.get(plugin))
+                            LanguageAPI.Menu.AUTOFARM_STATE_UNLINKED.get(plugin)
+                    )
             );
         }
 
+        if (location instanceof DoublyLocation) {
+            DoublyLocation doublyLocation = LocationUtils.getAsDoubly(location);
+
+            assert doublyLocation != null;  // Only here for the compiler.
+
+            Location clicked = block.getLocation();
+            Location doubly = doublyLocation.getDoubly();
+            if (clicked.equals(doubly)) {
+                location = doubly;
+            }
+        }
+
         ArrayList<String> locationAsLore = new ArrayList<>(
-                Arrays.asList(LanguageAPI.Menu.AUTOFARM_FORMAT_X.get(plugin, location.getBlockX()),
+                Arrays.asList(
+                        LanguageAPI.Menu.AUTOFARM_FORMAT_X.get(plugin, location.getBlockX()),
                         LanguageAPI.Menu.AUTOFARM_FORMAT_Y.get(plugin, location.getBlockY()),
                         LanguageAPI.Menu.AUTOFARM_FORMAT_Z.get(plugin, location.getBlockZ())
                 )

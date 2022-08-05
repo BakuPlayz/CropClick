@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.menu.menus.interacts.CropInteractMenu;
 import org.bukkit.event.EventHandler;
@@ -34,6 +35,18 @@ public final class PlayerInteractAtCropListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtCrop(@NotNull PlayerInteractAtCropEvent event) {
         if (event.isCancelled()) return;
+
+        Crop crop = event.getCrop();
+
+        if (!crop.isHarvestable()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!crop.isLinkable()) {
+            event.setCancelled(true);
+            return;
+        }
 
         new CropInteractMenu(plugin, event.getPlayer(), event.getBlock()).open();
     }

@@ -26,7 +26,7 @@ import java.util.List;
  */
 public final class AutofarmUtils {
 
-    public static final String FARMERID_META = "farmerID";
+    public static final String FARMER_ID_META = "farmerID";
 
 
     /**
@@ -142,12 +142,12 @@ public final class AutofarmUtils {
 
 
     /**
-     * It sets the metadata of the dispenser, container, and crop to the farmer's id.
+     * Adds the Autofarm meta (aka farmerID) to all the Autofarm components (the dispenser, container, and crop).
      *
      * @param plugin   The plugin instance
      * @param autofarm The autofarm object that you want to set the metadata for.
      */
-    public static void setMeta(@NotNull CropClick plugin, @NotNull Autofarm autofarm) {
+    public static void addMeta(@NotNull CropClick plugin, @NotNull Autofarm autofarm) {
         Block dispenser = autofarm.getDispenserLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block crop = autofarm.getCropLocation().getBlock();
@@ -159,21 +159,21 @@ public final class AutofarmUtils {
             Block singly = doublyLocation.getSingly().getBlock();
             Block doubly = doublyLocation.getDoubly().getBlock();
 
-            singly.setMetadata(FARMERID_META, farmerMeta);
-            doubly.setMetadata(FARMERID_META, farmerMeta);
+            singly.setMetadata(FARMER_ID_META, farmerMeta);
+            doubly.setMetadata(FARMER_ID_META, farmerMeta);
 
             autofarm.setContainerLocation(doublyLocation);
         } else {
-            container.setMetadata(FARMERID_META, farmerMeta);
+            container.setMetadata(FARMER_ID_META, farmerMeta);
         }
 
-        dispenser.setMetadata(FARMERID_META, farmerMeta);
-        crop.setMetadata(FARMERID_META, farmerMeta);
+        dispenser.setMetadata(FARMER_ID_META, farmerMeta);
+        crop.setMetadata(FARMER_ID_META, farmerMeta);
     }
 
 
     /**
-     * Remove the farmerID metadata from the dispenser, container, and crop.
+     * Remove the Autofarm meta (aka farmerID) from the dispenser, container, and crop.
      *
      * @param plugin   The main class of the plugin.
      * @param autofarm The autofarm object that you want to remove the metadata from.
@@ -188,34 +188,34 @@ public final class AutofarmUtils {
             Block singly = doublyContainer.getSingly().getBlock();
             Block doubly = doublyContainer.getSingly().getBlock();
 
-            singly.removeMetadata(FARMERID_META, plugin);
-            doubly.removeMetadata(FARMERID_META, plugin);
+            singly.removeMetadata(FARMER_ID_META, plugin);
+            doubly.removeMetadata(FARMER_ID_META, plugin);
         } else {
-            container.removeMetadata(FARMERID_META, plugin);
+            container.removeMetadata(FARMER_ID_META, plugin);
         }
 
-        dispenser.removeMetadata(FARMERID_META, plugin);
-        crop.removeMetadata(FARMERID_META, plugin);
+        dispenser.removeMetadata(FARMER_ID_META, plugin);
+        crop.removeMetadata(FARMER_ID_META, plugin);
     }
 
 
     /**
-     * If the dispenser, container, and crop all have the farmerID present, return true.
+     * If the dispenser, container, and crop all have the Autofarm meta (aka farmerID) present, return true.
      *
      * @param autofarm The autofarm object that you want to check.
      *
      * @return A boolean value.
      */
-    public static boolean hasIDPresent(@NotNull Autofarm autofarm) {
+    public static boolean hasMeta(@NotNull Autofarm autofarm) {
         Block dispenser = autofarm.getDispenserLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block crop = autofarm.getCropLocation().getBlock();
 
-        if (!componentHasFarmerID(dispenser)) {
+        if (!componentHasMeta(dispenser)) {
             return false;
         }
 
-        if (!componentHasFarmerID(crop)) {
+        if (!componentHasMeta(crop)) {
             return false;
         }
 
@@ -224,41 +224,41 @@ public final class AutofarmUtils {
             Block singly = doublyContainer.getSingly().getBlock();
             Block doubly = doublyContainer.getSingly().getBlock();
 
-            if (!componentHasFarmerID(singly)) {
+            if (!componentHasMeta(singly)) {
                 return false;
             }
 
-            if (!componentHasFarmerID(doubly)) {
+            if (!componentHasMeta(doubly)) {
                 return false;
             }
         }
 
-        return componentHasFarmerID(container);
+        return componentHasMeta(container);
     }
 
 
     /**
-     * Checks if the given component (i.e. chest) has the cached farmerID.
+     * Checks if the given component (i.e. chest) has the Autofarm meta (aka farmerID).
      *
      * @param block The block to check
      *
      * @return A boolean value.
      */
-    public static boolean componentHasFarmerID(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(FARMERID_META);
-        return block.hasMetadata(FARMERID_META) && !metas.isEmpty();
+    public static boolean componentHasMeta(@NotNull Block block) {
+        List<MetadataValue> metas = block.getMetadata(FARMER_ID_META);
+        return block.hasMetadata(FARMER_ID_META) && !metas.isEmpty();
     }
 
 
     /**
-     * Get the farmerID of the given block, or null if it doesn't have one.
+     * Get the Autofarm Meta Value (aka. farmerID) of the given block, or null if it doesn't have one.
      *
      * @param block The block to get the farmer ID from.
      *
      * @return The farmerID of the block.
      */
-    public static @Nullable String getFarmerID(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(FARMERID_META);
+    public static @Nullable String getMetaValue(@NotNull Block block) {
+        List<MetadataValue> metas = block.getMetadata(FARMER_ID_META);
         return metas.isEmpty() ? null : metas.get(0).asString();
     }
 

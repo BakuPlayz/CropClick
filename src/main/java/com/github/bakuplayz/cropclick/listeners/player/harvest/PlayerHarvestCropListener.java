@@ -73,6 +73,10 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
+        if (!world.allowsPlayers()) {
+            return;
+        }
+
         if (!addonManager.canModify(player)) {
             return;
         }

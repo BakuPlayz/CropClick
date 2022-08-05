@@ -14,26 +14,3 @@ updateMessage:
 
 autofarms:
   isEnabled: true
-  canHarvest:
-    - beetroot
-    - carrot
-    - cocoaBean
-    - potato
-    - wheat
-
-linkable:
-  crops:
-    - beetroot
-    - cactus
-    - carrot
-    - cocoaBean
-    - potato
-    - sugarCane
-    - wheat
-  containers:
-    - chest
-    - shulker
-
-particles: [ ]
-
-sounds: [ ]

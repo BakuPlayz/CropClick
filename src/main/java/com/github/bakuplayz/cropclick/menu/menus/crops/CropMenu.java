@@ -140,7 +140,9 @@ public final class CropMenu extends Menu {
 
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
-        String status = MessageUtils.getEnabledStatus(plugin, crop.isHarvestable());
+        String status = crop.isHarvestable()
+                        ? LanguageAPI.Menu.CROP_STATUS_ENABLED.get(plugin)
+                        : LanguageAPI.Menu.CROP_STATUS_DISABLED.get(plugin);
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount()))

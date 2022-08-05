@@ -207,7 +207,7 @@ public final class AutofarmManager {
      * @return The ID of the block.
      */
     private @Nullable String getCachedID(@NotNull Block block) {
-        return AutofarmUtils.getFarmerID(block);
+        return AutofarmUtils.getMetaValue(block);
     }
 
 
@@ -219,7 +219,7 @@ public final class AutofarmManager {
      * @return A boolean value.
      */
     private boolean hasCachedID(@NotNull Block block) {
-        return AutofarmUtils.componentHasFarmerID(block);
+        return AutofarmUtils.componentHasMeta(block);
     }
 
 

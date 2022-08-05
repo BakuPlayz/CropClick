@@ -65,6 +65,10 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
+        if (!world.allowsAutofarms()) {
+            return;
+        }
+
         Autofarm autofarm = autofarmManager.findAutofarm(block);
         if (!autofarmManager.isUsable(autofarm)) {
             return;

@@ -75,7 +75,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * @param autofarm The autofarm object that we're adding metadata to.
      */
     private void addFarmerMeta(@NotNull Autofarm autofarm) {
-        AutofarmUtils.setMeta(plugin, autofarm);
+        AutofarmUtils.addMeta(plugin, autofarm);
     }
 
 

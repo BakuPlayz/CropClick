@@ -1,16 +1,12 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,18 +42,7 @@ public final class PlayerLinkAutofarmListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLinkAutofarm(@NotNull PlayerLinkAutofarmEvent event) {
         if (event.isCancelled()) return;
-
-        Autofarm autofarm = event.getAutofarm();
-        Block cropBlock = autofarm.getCropLocation().getBlock();
-        Crop crop = AutofarmUtils.getCrop(cropManager, cropBlock);
-
-        assert crop != null; // Only here for the compiler.
-
-        if (!crop.isLinkable()) {
-            event.setCancelled(true);
-            return;
-        }
-
+        
         Player player = event.getPlayer();
         if (!PermissionUtils.canLinkFarm(player)) {
             event.setCancelled(true);

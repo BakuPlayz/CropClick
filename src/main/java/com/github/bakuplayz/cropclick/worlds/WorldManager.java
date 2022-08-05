@@ -89,5 +89,5 @@ public final class WorldManager {
     public boolean isAccessible(FarmWorld world) {
         return world != null && !world.isBanished();
     }
-    
+
 }
