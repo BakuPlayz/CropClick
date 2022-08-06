@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.listeners.player.interact;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
-import com.github.bakuplayz.cropclick.menu.menus.interacts.CropInteractMenu;
+import com.github.bakuplayz.cropclick.menu.menus.links.CropLinkMenu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -48,7 +48,11 @@ public final class PlayerInteractAtCropListener implements Listener {
             return;
         }
 
-        new CropInteractMenu(plugin, event.getPlayer(), event.getBlock()).open();
+        new CropLinkMenu(
+                plugin,
+                event.getPlayer(),
+                event.getBlock()
+        ).open();
     }
 
 }

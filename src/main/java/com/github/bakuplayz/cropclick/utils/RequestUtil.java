@@ -31,12 +31,14 @@ public final class RequestUtil {
 
     private boolean isDataChanged;
 
+
     public RequestUtil(@NotNull String url)
             throws IOException {
         this.client = (HttpURLConnection) new URL(url).openConnection();
         this.headers = new HashMap<>();
         this.params = "";
     }
+
 
     /**
      * This function sets the default headers for the request.
@@ -48,6 +50,7 @@ public final class RequestUtil {
         return this;
     }
 
+
     /**
      * It takes a list of Param objects and converts them to a string.
      *
@@ -55,16 +58,18 @@ public final class RequestUtil {
      */
     public RequestUtil setParams(@NotNull Param... param) {
         this.params = Arrays.stream(param)
-                .map(Param::toString)
-                .collect(Collectors.joining("&"));
+                            .map(Param::toString)
+                            .collect(Collectors.joining("&"));
         return this;
     }
+
 
     /**
      * It sets the headers for the request.
      *
      * @param headers    The headers to be sent with the request.
      * @param addDefault Adds the default request headers.
+     *
      * @return The RequestUtil object
      */
     public RequestUtil setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
@@ -73,12 +78,14 @@ public final class RequestUtil {
         return this;
     }
 
+
     /**
      * Set the request method to POST, set the doOutput flag to the value of the doOutput parameter, and if the params
      * string is not empty, write the params string to the output stream.
      *
      * @param doOutput If true, the request will be sent to the server. If false, the request will not be sent to the
      *                 server.
+     *
      * @return The RequestUtil object
      */
     public RequestUtil post(boolean doOutput)
@@ -97,13 +104,17 @@ public final class RequestUtil {
         return this;
     }
 
+
     /**
      * If the data has changed, return null. Otherwise, read the response from the server and return it.
      *
      * @return A JsonElement object.
      */
-    public JsonElement getResponse() throws IOException {
-        if (!isDataChanged) return JsonNull.INSTANCE;
+    public JsonElement getResponse()
+            throws IOException {
+        if (!isDataChanged) {
+            return JsonNull.INSTANCE;
+        }
 
         InputStreamReader reader = new InputStreamReader(client.getInputStream());
         JsonElement body = JsonParser.parseReader(reader);

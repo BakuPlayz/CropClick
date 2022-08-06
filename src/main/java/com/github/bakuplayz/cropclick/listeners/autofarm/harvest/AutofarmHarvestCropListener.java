@@ -74,6 +74,10 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
+        if (!autofarm.isEnabled()) {
+            return;
+        }
+
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;

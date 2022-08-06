@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public final class AddonsConfig extends Config {
 
     public AddonsConfig(@NotNull CropClick plugin) {
-        super("addons.yml", plugin);
+        super(plugin, "addons.yml");
     }
 
 
@@ -40,9 +40,9 @@ public final class AddonsConfig extends Config {
      * @return A boolean value.
      */
     public boolean isEnabled(@NotNull String name) {
-        return config.getBoolean("addons." + name + ".isEnabled");
+        return config.getBoolean("addons." + name + ".isEnabled", true);
     }
-    
+
 
     /**
      * It toggles the enabled state of an addon.

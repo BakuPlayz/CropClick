@@ -4,9 +4,9 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
-import com.github.bakuplayz.cropclick.menu.menus.interacts.DispenserInteractMenu;
+import com.github.bakuplayz.cropclick.menu.menus.links.DispenserLinkMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -63,7 +63,12 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
         Autofarm farm = autofarms.get(index);
         Location dispenser = farm.getDispenserLocation();
-        new DispenserInteractMenu(plugin, player, dispenser.getBlock()).open();
+        new DispenserLinkMenu(
+                plugin,
+                player,
+                dispenser.getBlock(),
+                true
+        ).open();
     }
 
 
@@ -77,12 +82,15 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
 
     private @NotNull ItemStack getMenuItem(@NotNull Autofarm farm) {
+        String status = farm.isEnabled()
+                        ? LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin)
+                        : LanguageAPI.Menu.GENERAL_DISABLED_STATUS.get(plugin);
         OfflinePlayer player = Bukkit.getOfflinePlayer(farm.getOwnerID());
+
         return new ItemUtil(Material.DISPENSER)
-                .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, farm.getShortenedID()))
-                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin, player.getName()),
-                        LanguageAPI.Menu.AUTOFARMS_ITEM_ENABLED.get(plugin, farm.isEnabled())
-                ).toItemStack();
+                .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, farm.getShortenedID(), status))
+                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin, player.getName()))
+                .toItemStack();
     }
 
 

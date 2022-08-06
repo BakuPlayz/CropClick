@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.bukkit.Location;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
@@ -37,7 +38,7 @@ public final class Autofarm {
     @SerializedName("farmer")
     private final @NotNull @Getter UUID farmerID;
 
-    private @Setter @Getter boolean isEnabled;
+    private @Setter @Getter @Accessors(fluent = true) boolean isEnabled;
 
     @SerializedName("crop")
     @JsonAdapter(LocationTypeAdapter.class)
@@ -192,6 +193,7 @@ public final class Autofarm {
      *
      * @return A boolean value.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isComponentsPresent(@NotNull AutofarmManager manager) {
         if (!isLinked()) {
             return false;

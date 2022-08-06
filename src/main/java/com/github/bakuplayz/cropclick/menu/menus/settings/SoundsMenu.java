@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
@@ -104,11 +104,15 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String sound) {
-        String name = MessageUtils.beautify(sound, true);
-        boolean isActive = cropsConfig.getCropSounds(crop.getName()).contains(sound);
+        String soundName = MessageUtils.beautify(sound, true);
+        String soundStatus = MessageUtils.getEnabledStatus(
+                plugin,
+                cropsConfig.getCropSounds(crop.getName()).contains(sound)
+        );
+
         return new ItemUtil(Material.NOTE_BLOCK)
-                .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(plugin, name))
-                .setLore(LanguageAPI.Menu.SOUNDS_ITEM_STATUS.get(plugin, isActive))
+                .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(plugin, soundName))
+                .setLore(LanguageAPI.Menu.SOUNDS_ITEM_STATUS.get(plugin, soundStatus))
                 .toItemStack();
     }
 

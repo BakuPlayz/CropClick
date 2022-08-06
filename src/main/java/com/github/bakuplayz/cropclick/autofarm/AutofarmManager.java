@@ -195,12 +195,7 @@ public final class AutofarmManager {
 
 
     /**
-     * "Get the cached ID of a block, or null if it doesn't exist."
-     * <p>
-     * The first line of the function is the function declaration. It's a private function, so it can only be called from
-     * within the class. It returns a String, and it's called getCachedID. The block parameter is a Block, and it's not
-     * null.
-     * </p>
+     * Get the cached ID of a block, or null if it doesn't exist.
      *
      * @param block The block to get the ID of.
      *
@@ -212,9 +207,9 @@ public final class AutofarmManager {
 
 
     /**
-     * If the block has metadata with the key `cacheName` and that metadata is not empty, return true.
+     * Returns true if the block has a cached ID.
      *
-     * @param block The block to check.
+     * @param block The block that is being checked.
      *
      * @return A boolean value.
      */
@@ -307,12 +302,12 @@ public final class AutofarmManager {
 
 
     /**
-     * This function returns a boolean value that is the value of the key 'autofarm.isEnabled' in the config.yml file.
+     * This function returns a boolean value that is the value of the key 'autofarms.isEnabled' in the config.yml file.
      *
      * @return A boolean value.
      */
     public boolean isEnabled() {
-        return plugin.getConfig().getBoolean("autofarms.isEnabled");
+        return plugin.getConfig().getBoolean("autofarms.isEnabled", true);
     }
 
 

@@ -1,7 +1,6 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
@@ -25,11 +24,8 @@ public final class PlayerLinkAutofarmListener implements Listener {
 
     private final CropClick plugin;
 
-    private final CropManager cropManager;
-
 
     public PlayerLinkAutofarmListener(@NotNull CropClick plugin) {
-        this.cropManager = plugin.getCropManager();
         this.plugin = plugin;
     }
 
@@ -42,14 +38,14 @@ public final class PlayerLinkAutofarmListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLinkAutofarm(@NotNull PlayerLinkAutofarmEvent event) {
         if (event.isCancelled()) return;
-        
+
         Player player = event.getPlayer();
         if (!PermissionUtils.canLinkFarm(player)) {
             event.setCancelled(true);
             return;
         }
 
-        LanguageAPI.Menu.AUTOFARM_LINK_SUCCESS.send(plugin, player);
+        LanguageAPI.Menu.LINK_ACTION_SUCCESS.send(plugin, player);
 
         System.out.println("Player -- Linked");
 

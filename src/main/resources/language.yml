@@ -41,13 +41,23 @@ command:
 
 menu:
   general:
-    previousPageItemName: "&7Previous Page"
-    currentPageItemName: "&7Page: &e%page%"
-    nextPageItemName: "&7Next Page"
     backItemName: "&cBack"
-    enabledStatus: "Enabled"
-    disabledStatus: "Disabled"
 
+    pagination:
+      previousPageItemName: "&7Previous Page"
+      currentPageItemName: "&7Page: &e%page%"
+      nextPageItemName: "&7Next Page"
+    
+    status:
+      enabled: "Enabled"
+      disabled: "Disabled"
+
+    updateStates:
+      upToDate: "&aUp to Date"
+      newUpdate: "&aNew Update"
+      notYetFetched: "&eNot yet fetched"
+      failedToFetch: "&cFailed to fetch"
+  
   title:
     main: "Main"
     help: "Help"
@@ -57,9 +67,9 @@ menu:
     crop: "Crop"
     crops: "Crops"
     autofarms: "Autofarms"
-    cropInteract: "Crop"
-    containerInteract: "Container"
-    dispenserInteract: "Dispenser"
+    cropLink: "Crop"
+    containerLink: "Container"
+    dispenserLink: "Dispenser"
 
     addons: "Addons"
     towny: "Towny"
@@ -86,7 +96,7 @@ menu:
     updates:
       itemName: "&eUpdates"
       itemTips: "&7<placeholder>"
-      itemStatus: "&7Updated: &e%status%"
+      itemState: "&7State: &r%state%"
 
     help:
       itemName: "&eHelp"
@@ -117,17 +127,17 @@ menu:
     updates:
       itemName: "&eUpdates"
       itemTips: "&7<placeholder>"
-      itemStatus: "&7Updated: &e%status%"
+      itemState: "&7Status: &r%state%"
 
     player:
       itemName: "&ePlayer"
       itemTips: "&7Toggle the update messages for (OP) players."
-      itemStatus: "&7Enabled: &e%status%"
+      itemStatus: "&7Status: &e%status%"
 
     console:
       itemName: "&eConsole"
       itemTips: "&7Toggle the update messages for the console."
-      itemStatus: "&7Enabled: &e%status%"
+      itemStatus: "&7Status: &e%status%"
 
   help:
     itemName: "&7crop &e%name%"
@@ -184,14 +194,14 @@ menu:
       jobsMoney: "&7Money: &e%status%"
       jobsPoints: "&7Points: &e%status%"
 
-  autofarm:
+  link:
     format:
       x: "&7X: &e%x%"
       y: "&7Y: &e%y%"
       z: "&7Z: &e%z%"
       state: "&7State: %state%"
 
-    state:
+    states:
       unlinked: "&7Unlinked"
       selected: "&bSelected"
 
@@ -204,6 +214,10 @@ menu:
       itemNameSelected: "&b**"
       itemNameLinked: "&e***"
 
+    toggle:
+      itemName: "&eAutofarm"
+      itemStatus: "&7Status: &e%status%"
+
     crop:
       itemName: "&eCrop"
 
@@ -214,9 +228,8 @@ menu:
       itemName: "&eDispenser"
 
   autofarms:
-    itemName: "&e%name%"
+    itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
-    itemEnabled: "&7Enabled: &e%status%"
 
   addon:
     worlds:
@@ -349,11 +362,10 @@ menu:
       itemAfter: "&7After: &c%value%"
 
   settings:
-    interact:
-      itemName: "&eInteract"
+    autofarms:
+      itemName: "&eAutofarms"
       itemTips: "&7<placeholder>"
-      itemJump: "&7Jump on Crops: &e%status%"
-      itemClick: "&7Click on Crops: &e%status%"
+      itemStatus: "&7Status: &e%status%"
 
     particles:
       itemName: "&eParticles"
@@ -380,22 +392,6 @@ menu:
       itemTips: "&7<placeholder>"
       itemStatus: "&7Amount of Banished: &e%status%"
 
-  interact:
-    jump:
-      itemName: "&eJump"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    rightClick:
-      itemName: "&eRight Click"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    leftClick:
-      itemName: "&eLeft Click"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
   world:
     world:
       itemName: "&e%name%"
@@ -415,15 +411,15 @@ menu:
 
   toggle:
     itemName: "&e%name%"
-    itemStatus: "&7Enabled: &e%status%"
+    itemStatus: "&7Status: &e%status%"
 
   particles:
     itemName: "&e%name%"
-    itemStatus: "&7Enabled: &e%status%"
+    itemStatus: "&7Status: &e%status%"
 
   sounds:
     itemName: "&e%name%"
-    itemStatus: "&7Enabled: &e%status%"
+    itemStatus: "&7Status: &e%status%"
 
   name:
     crop:

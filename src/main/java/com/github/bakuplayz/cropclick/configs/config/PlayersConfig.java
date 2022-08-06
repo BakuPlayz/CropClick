@@ -22,7 +22,7 @@ import java.util.List;
 public final class PlayersConfig extends Config {
 
     public PlayersConfig(@NotNull CropClick plugin) {
-        super("players.yml", plugin);
+        super(plugin, "players.yml");
     }
 
 
@@ -245,12 +245,24 @@ public final class PlayersConfig extends Config {
 
 
     /**
+     * Returns true if the player is not in the list of disabled players.
+     *
+     * @param playerID The player's UUID
+     *
+     * @return A boolean value.
+     */
+    public boolean isEnabled(@NotNull String playerID) {
+        return !getDisabledPlayers().contains(playerID);
+    }
+
+
+    /**
      * It returns a list of all the players who have the plugin disabled.
      *
      * @return A list of strings.
      */
-    public @NotNull List<String> getToggledPlayers() {
-        return config.getStringList("toggles");
+    public @NotNull List<String> getDisabledPlayers() {
+        return config.getStringList("disabled");
     }
 
 
@@ -260,13 +272,13 @@ public final class PlayersConfig extends Config {
      * @param playerID The player's UUID.
      */
     public void togglePlayer(@NotNull String playerID) {
-        List<String> toggles = getToggledPlayers();
+        List<String> toggles = getDisabledPlayers();
         if (toggles.contains(playerID)) {
             toggles.remove(playerID);
         } else {
             toggles.add(playerID);
         }
-        config.set("toggles", toggles);
+        config.set("disabled", toggles);
         saveConfig();
     }
 

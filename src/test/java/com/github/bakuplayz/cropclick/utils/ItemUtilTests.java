@@ -344,7 +344,7 @@ public final class ItemUtilTests {
 
     @Test
     public void testSetName2() {
-        ItemUtil result = itemUtil.setName(plugin, LanguageAPI.Menu.BACK_ITEM_NAME);
+        ItemUtil result = itemUtil.setName(plugin, LanguageAPI.Menu.GENERAL_BACK_ITEM_NAME);
 
         assertAll("Check wheaten or not the #setName updates the name.",
                 () -> assertNotNull(result.getName()),

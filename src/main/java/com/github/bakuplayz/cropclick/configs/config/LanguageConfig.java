@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public final class LanguageConfig extends Config {
 
     public LanguageConfig(@NotNull CropClick plugin) {
-        super("language.yml", plugin);
+        super(plugin, "language.yml");
     }
 
 

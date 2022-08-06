@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
-import com.github.bakuplayz.cropclick.menu.menus.interacts.ContainerInteractMenu;
+import com.github.bakuplayz.cropclick.menu.menus.links.ContainerLinkMenu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,7 +35,11 @@ public final class PlayerInteractAtContainerListener implements Listener {
     public void onPlayerInteractAtContainer(@NotNull PlayerInteractAtContainerEvent event) {
         if (event.isCancelled()) return;
 
-        new ContainerInteractMenu(plugin, event.getPlayer(), event.getBlock()).open();
+        new ContainerLinkMenu(
+                plugin,
+                event.getPlayer(),
+                event.getBlock()
+        ).open();
     }
 
 }

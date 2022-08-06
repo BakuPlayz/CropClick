@@ -9,6 +9,7 @@ import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -40,12 +41,13 @@ public final class SettingsMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(10, getToggleItem());
-        inventory.setItem(13, getParticlesItem());
-        inventory.setItem(16, getSoundsItem());
+        inventory.setItem(10, getAutofarmsItem());
+        inventory.setItem(13, getToggleItem());
+        inventory.setItem(16, getParticlesItem());
 
-        inventory.setItem(28, getNameItem());
-        inventory.setItem(31, getWorldsItem());
+        inventory.setItem(28, getSoundsItem());
+        inventory.setItem(31, getNameItem());
+        inventory.setItem(34, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -56,6 +58,12 @@ public final class SettingsMenu extends Menu {
         ItemStack clicked = event.getCurrentItem();
 
         handleBack(clicked, new MainMenu(plugin, player));
+
+        if (clicked.equals(getAutofarmsItem())) {
+            toggleAutofarms();
+            updateMenu();
+            return;
+        }
 
         if (clicked.equals(getParticlesItem())) {
             new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
@@ -76,6 +84,20 @@ public final class SettingsMenu extends Menu {
         if (clicked.equals(getWorldsItem())) {
             new WorldsMenu(plugin, player, WorldMenuState.SETTINGS).open();
         }
+    }
+
+
+    private @NotNull ItemStack getAutofarmsItem() {
+        String state = MessageUtils.getEnabledStatus(
+                plugin,
+                getAutofarmsState()
+        );
+
+        return new ItemUtil(Material.DISPENSER)
+                .setName(plugin, LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, state)))
+                .toItemStack();
     }
 
 
@@ -125,6 +147,26 @@ public final class SettingsMenu extends Menu {
 
 
     /**
+     * This function returns the value of the autofarms.isEnabled key in the config.yml file.
+     *
+     * @return The boolean value of the autofarms.isEnabled key in the config.yml file.
+     */
+    private boolean getAutofarmsState() {
+        return plugin.getAutofarmManager().isEnabled();
+    }
+
+
+    /**
+     * Toggle the state of autofarms.
+     */
+    private void toggleAutofarms() {
+        boolean state = getAutofarmsState();
+        plugin.getConfig().set("autofarms.isEnabled", !state);
+        plugin.saveConfig();
+    }
+
+
+    /**
      * It returns the amount of particles in the ParticleEffect enum.
      *
      * @return The amount of particles in the ParticleEffect enum.
@@ -151,7 +193,7 @@ public final class SettingsMenu extends Menu {
      */
     private int getAmountOfEnabled() {
         int amountOfPlayers = Bukkit.getOfflinePlayers().length;
-        int amountOfDisabled = plugin.getPlayersConfig().getToggledPlayers().size();
+        int amountOfDisabled = plugin.getPlayersConfig().getDisabledPlayers().size();
         return amountOfPlayers - amountOfDisabled;
     }
 

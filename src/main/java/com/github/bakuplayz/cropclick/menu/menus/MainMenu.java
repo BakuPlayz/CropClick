@@ -54,7 +54,7 @@ public final class MainMenu extends Menu {
         }
 
         if (clicked.equals(getUpdatesItem())) {
-            new UpdateMenu(plugin, player).open();
+            new UpdatesMenu(plugin, player).open();
         }
 
         if (clicked.equals(getAddonsItem())) {
@@ -77,11 +77,11 @@ public final class MainMenu extends Menu {
      * @return An ItemStack
      */
     private @NotNull ItemStack getUpdatesItem() {
-        boolean isUpdated = plugin.getUpdateManager().isUpdated();
+        String updateState = plugin.getUpdateManager().getUpdateStateMessage();
         return new ItemUtil(Material.ANVIL)
                 .setName(plugin, LanguageAPI.Menu.MAIN_UPDATES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_UPDATES_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.MAIN_UPDATES_ITEM_STATUS.get(plugin, isUpdated)
+                        LanguageAPI.Menu.MAIN_UPDATES_ITEM_STATE.get(plugin, updateState)
                 )).toItemStack();
     }
 

@@ -225,20 +225,27 @@ public final class LanguageAPI {
     }
 
     public enum Menu {
-        BACK_ITEM_NAME(Category.GENERAL, "backItemName"),
-        NEXT_PAGE_ITEM_NAME(Category.GENERAL, "nextPageItemName"),
-        PREVIOUS_PAGE_ITEM_NAME(Category.GENERAL, "previousPageItemName"),
-        CURRENT_PAGE_ITEM_NAME(Category.GENERAL, "currentPageItemName", "%page%"),
-        ENABLED_STATUS(Category.GENERAL, "enabledStatus"),
-        DISABLED_STATUS(Category.GENERAL, "disabledStatus"),
+        GENERAL_BACK_ITEM_NAME(Category.GENERAL, "backItemName"),
+
+        GENERAL_NEXT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "nextPageItemName"),
+        GENERAL_PREVIOUS_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "previousPageItemName"),
+        GENERAL_CURRENT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "currentPageItemName", "%page%"),
+
+        GENERAL_ENABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "enabled"),
+        GENERAL_DISABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "disabled"),
+
+        GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
+        GENERAL_STATES_NEW_UPDATE(Category.GENERAL, SubCategory.UPDATE_STATES, "newUpdate"),
+        GENERAL_STATES_NOT_YET_FETCHED(Category.GENERAL, SubCategory.UPDATE_STATES, "notYetFetched"),
+        GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
 
         CROP_TITLE(Category.TITLE, "crop"),
         CROPS_TITLE(Category.TITLE, "crops", "%type%"),
         AUTOFARMS_TITLE(Category.TITLE, "autofarms"),
 
-        CROP_INTERACT_TITLE(Category.TITLE, "cropInteract"),
-        CONTAINER_INTERACT_TITLE(Category.TITLE, "containerInteract"),
-        DISPENSER_INTERACT_TITLE(Category.TITLE, "dispenserInteract"),
+        CROP_LINK_TITLE(Category.TITLE, "cropLink"),
+        CONTAINER_LINK_TITLE(Category.TITLE, "containerLink"),
+        DISPENSER_LINK_TITLE(Category.TITLE, "dispenserLink"),
 
         MAIN_TITLE(Category.TITLE, "main"),
         HELP_TITLE(Category.TITLE, "help"),
@@ -266,7 +273,7 @@ public final class LanguageAPI {
         CONTAINER_PREVIEW_TITLE(Category.TITLE, "containerPreview", "%id%"),
 
         MAIN_UPDATES_ITEM_NAME(Category.MAIN, SubCategory.UPDATES, "itemName"),
-        MAIN_UPDATES_ITEM_STATUS(Category.MAIN, SubCategory.UPDATES, "itemStatus", "%status%"),
+        MAIN_UPDATES_ITEM_STATE(Category.MAIN, SubCategory.UPDATES, "itemState", "%state%"),
         MAIN_UPDATES_ITEM_TIPS(Category.MAIN, SubCategory.UPDATES, "itemTips"),
         MAIN_HELP_ITEM_NAME(Category.MAIN, SubCategory.HELP, "itemName"),
         MAIN_HELP_ITEM_STATUS(Category.MAIN, SubCategory.HELP, "itemStatus", "%status%"),
@@ -284,6 +291,9 @@ public final class LanguageAPI {
         MAIN_AUTOFARMS_ITEM_STATUS(Category.MAIN, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
         MAIN_AUTOFARMS_ITEM_TIPS(Category.MAIN, SubCategory.AUTOFARMS, "itemTips"),
 
+        SETTINGS_AUTOFARMS_ITEM_NAME(Category.SETTINGS, SubCategory.AUTOFARMS, "itemName"),
+        SETTINGS_AUTOFARMS_ITEM_TIPS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemTips"),
+        SETTINGS_AUTOFARMS_ITEM_STATUS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
         SETTINGS_PARTICLES_ITEM_NAME(Category.SETTINGS, SubCategory.PARTICLES, "itemName"),
         SETTINGS_PARTICLES_ITEM_TIPS(Category.SETTINGS, SubCategory.PARTICLES, "itemTips"),
         SETTINGS_PARTICLES_ITEM_STATUS(Category.SETTINGS, SubCategory.PARTICLES, "itemStatus", "%status%"),
@@ -362,28 +372,30 @@ public final class LanguageAPI {
         HELP_ITEM_PERMISSION(Category.HELP, "itemPermission", "%permission%"),
         HELP_ITEM_DESCRIPTION(Category.HELP, "itemDescription", "%description%"),
 
-        AUTOFARM_FORMAT_X(Category.AUTOFARM, SubCategory.FORMAT, "x", "%x%"),
-        AUTOFARM_FORMAT_Y(Category.AUTOFARM, SubCategory.FORMAT, "y", "%y%"),
-        AUTOFARM_FORMAT_Z(Category.AUTOFARM, SubCategory.FORMAT, "z", "%z%"),
-        AUTOFARM_FORMAT_STATE(Category.AUTOFARM, SubCategory.FORMAT, "state", "%state%"),
+        LINK_FORMAT_X(Category.LINK, SubCategory.FORMAT, "x", "%x%"),
+        LINK_FORMAT_Y(Category.LINK, SubCategory.FORMAT, "y", "%y%"),
+        LINK_FORMAT_Z(Category.LINK, SubCategory.FORMAT, "z", "%z%"),
+        LINK_FORMAT_STATE(Category.LINK, SubCategory.FORMAT, "state", "%state%"),
 
-        AUTOFARM_STATE_UNLINKED(Category.AUTOFARM, SubCategory.STATE, "unlinked"),
-        AUTOFARM_STATE_SELECTED(Category.AUTOFARM, SubCategory.STATE, "selected"),
+        LINK_STATES_UNLINKED(Category.LINK, SubCategory.STATES, "unlinked"),
+        LINK_STATES_SELECTED(Category.LINK, SubCategory.STATES, "selected"),
 
-        AUTOFARM_LINK_SUCCESS(Category.AUTOFARM, SubCategory.ACTIONS, "linkSuccess"),
-        AUTOFARM_LINK_FAILURE(Category.AUTOFARM, SubCategory.ACTIONS, "linkFailure"),
+        LINK_ACTION_SUCCESS(Category.LINK, SubCategory.ACTIONS, "linkSuccess"),
+        LINK_ACTION_FAILURE(Category.LINK, SubCategory.ACTIONS, "linkFailure"),
 
-        AUTOFARM_GLASS_ITEM_NAME_LINKED(Category.AUTOFARM, SubCategory.GLASS, "itemNameLinked"),
-        AUTOFARM_GLASS_ITEM_NAME_UNLINKED(Category.AUTOFARM, SubCategory.GLASS, "itemNameUnlinked"),
-        AUTOFARM_GLASS_ITEM_NAME_SELECTED(Category.AUTOFARM, SubCategory.GLASS, "itemNameSelected"),
+        LINK_GLASS_ITEM_NAME_LINKED(Category.LINK, SubCategory.GLASS, "itemNameLinked"),
+        LINK_GLASS_ITEM_NAME_UNLINKED(Category.LINK, SubCategory.GLASS, "itemNameUnlinked"),
+        LINK_GLASS_ITEM_NAME_SELECTED(Category.LINK, SubCategory.GLASS, "itemNameSelected"),
 
-        AUTOFARM_CROP_NAME(Category.AUTOFARM, SubCategory.CROP, "itemName"),
-        AUTOFARM_DISPENSER_NAME(Category.AUTOFARM, SubCategory.DISPENSER, "itemName"),
-        AUTOFARM_CONTAINER_NAME(Category.AUTOFARM, SubCategory.CONTAINER, "itemName"),
+        LINK_CROP_NAME(Category.LINK, SubCategory.CROP, "itemName"),
+        LINK_DISPENSER_NAME(Category.LINK, SubCategory.DISPENSER, "itemName"),
+        LINK_CONTAINER_NAME(Category.LINK, SubCategory.CONTAINER, "itemName"),
 
-        AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%"),
+        LINK_TOGGLE_NAME(Category.LINK, SubCategory.TOGGLE, "itemName"),
+        LINK_TOGGLE_STATUS(Category.LINK, SubCategory.TOGGLE, "itemStatus", "%status%"),
+
+        AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%", "%status%"),
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
-        AUTOFARMS_ITEM_ENABLED(Category.AUTOFARMS, "itemEnabled", "%status%"),
 
         ADDON_WORLDS_ITEM_NAME(Category.ADDON, SubCategory.WORLDS, "itemName"),
         ADDON_WORLDS_ITEM_TIPS(Category.ADDON, SubCategory.WORLDS, "itemTips"),
@@ -463,7 +475,7 @@ public final class LanguageAPI {
 
         UPDATES_UPDATES_ITEM_NAME(Category.UPDATES, SubCategory.UPDATES, "itemName"),
         UPDATES_UPDATES_ITEM_TIPS(Category.UPDATES, SubCategory.UPDATES, "itemTips"),
-        UPDATES_UPDATES_ITEM_STATUS(Category.UPDATES, SubCategory.UPDATES, "itemStatus", "%status%"),
+        UPDATES_UPDATES_ITEM_STATE(Category.UPDATES, SubCategory.UPDATES, "itemState", "%state%"),
         UPDATES_PLAYER_ITEM_NAME(Category.UPDATES, SubCategory.PLAYER, "itemName"),
         UPDATES_PLAYER_ITEM_TIPS(Category.UPDATES, SubCategory.PLAYER, "itemTips"),
         UPDATES_PLAYER_ITEM_STATUS(Category.UPDATES, SubCategory.PLAYER, "itemStatus", "%status%"),
@@ -478,7 +490,7 @@ public final class LanguageAPI {
             CROP,
             CROPS,
             HELP,
-            AUTOFARM,
+            LINK,
             AUTOFARMS,
             UPDATES,
             ADDON,
@@ -526,10 +538,12 @@ public final class LanguageAPI {
             SEED,
             CONTAINER,
             DISPENSER,
+            PAGINATION,
             STATUS,
             ACTIONS,
             FORMAT,
-            STATE,
+            STATES,
+            UPDATE_STATES("updateStates"),
             REMOVE,
             ADD,
             POINTS,

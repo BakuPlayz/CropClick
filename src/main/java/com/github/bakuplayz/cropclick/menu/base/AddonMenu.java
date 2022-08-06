@@ -1,9 +1,10 @@
-package com.github.bakuplayz.cropclick.menu;
+package com.github.bakuplayz.cropclick.menu.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

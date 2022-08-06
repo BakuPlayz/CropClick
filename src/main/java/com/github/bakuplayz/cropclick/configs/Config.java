@@ -28,7 +28,7 @@ public abstract class Config {
     protected @Getter FileConfiguration config;
 
 
-    public Config(@NotNull String fileName, @NotNull CropClick plugin) {
+    public Config(@NotNull CropClick plugin, @NotNull String fileName) {
         this.fileName = fileName;
         this.plugin = plugin;
     }

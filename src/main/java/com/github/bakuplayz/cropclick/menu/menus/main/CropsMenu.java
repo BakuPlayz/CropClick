@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.McMMOMenu;

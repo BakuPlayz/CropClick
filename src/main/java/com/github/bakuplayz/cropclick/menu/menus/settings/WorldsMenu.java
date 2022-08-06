@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.worlds.WorldMenu;

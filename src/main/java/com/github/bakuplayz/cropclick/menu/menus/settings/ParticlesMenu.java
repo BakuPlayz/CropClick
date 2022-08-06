@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
@@ -117,11 +117,15 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String particle) {
-        String name = MessageUtils.beautify(particle, true);
-        boolean isActive = cropsConfig.getCropParticles(crop.getName()).contains(particle);
+        String particleName = MessageUtils.beautify(particle, true);
+        String particleStatus = MessageUtils.getEnabledStatus(
+                plugin,
+                cropsConfig.getCropParticles(crop.getName()).contains(particle)
+        );
+
         return new ItemUtil(Material.FIREWORK)
-                .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(plugin, name))
-                .setLore(LanguageAPI.Menu.PARTICLES_ITEM_STATUS.get(plugin, isActive))
+                .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(plugin, particleName))
+                .setLore(LanguageAPI.Menu.PARTICLES_ITEM_STATUS.get(plugin, particleStatus))
                 .toItemStack();
     }
 

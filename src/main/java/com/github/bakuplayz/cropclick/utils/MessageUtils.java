@@ -108,9 +108,9 @@ public final class MessageUtils {
      */
     public static @NotNull String getEnabledStatus(@NotNull CropClick plugin, boolean isEnabled) {
         if (isEnabled) {
-            return LanguageAPI.Menu.ENABLED_STATUS.get(plugin);
+            return LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin);
         }
-        return LanguageAPI.Menu.DISABLED_STATUS.get(plugin);
+        return LanguageAPI.Menu.GENERAL_DISABLED_STATUS.get(plugin);
     }
 
 }

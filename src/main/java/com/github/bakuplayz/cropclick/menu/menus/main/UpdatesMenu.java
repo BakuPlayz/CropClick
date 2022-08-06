@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
+import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
@@ -20,14 +21,14 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.6.0
  * @since 1.6.0
  */
-public final class UpdateMenu extends Menu {
+public final class UpdatesMenu extends Menu {
 
-    private final boolean isUpdated;
+    private final UpdateManager updateManager;
 
 
-    public UpdateMenu(@NotNull CropClick plugin, @NotNull Player player) {
+    public UpdatesMenu(@NotNull CropClick plugin, @NotNull Player player) {
         super(plugin, player, LanguageAPI.Menu.UPDATES_TITLE);
-        isUpdated = plugin.getUpdateManager().isUpdated();
+        this.updateManager = plugin.getUpdateManager();
     }
 
 
@@ -47,25 +48,29 @@ public final class UpdateMenu extends Menu {
 
         handleBack(clicked, new MainMenu(plugin, player));
 
-        //TODO: Comeback and fix this...
+        if (clicked.equals(getPlayerItem())) {
+            updateManager.togglePlayerMessage();
+        }
+
+        if (clicked.equals(getConsoleItem())) {
+            updateManager.toggleConsoleMessage();
+        }
+
         if (clicked.equals(getUpdateItem())) {
-            if (!isUpdated) {
+            if (!updateManager.isUpdated()) {
                 player.sendMessage(MessageUtils.colorize("&7No new updates."));
                 return;
             }
 
+            String updateURL = updateManager.getUpdateURL();
+            if (updateURL.equals("")) return;
+
+            String updateMessage = updateManager.getUpdateMessage();
+            if (updateMessage.equals("")) return;
+
+            player.sendMessage(MessageUtils.colorize(updateMessage));
             player.sendMessage(MessageUtils.colorize("&7Get the new update on Spigot!"));
-            player.sendMessage(MessageUtils.colorize("&7https://www.spigotmc.org/resources/cropclick.69480/history"));
-        }
-
-        if (clicked.equals(getPlayerItem())) {
-            plugin.getConfig().set("updateMessage.player", !getState("player"));
-            plugin.saveConfig();
-        }
-
-        if (clicked.equals(getConsoleItem())) {
-            plugin.getConfig().set("updateMessage.console", !getState("console"));
-            plugin.saveConfig();
+            player.sendMessage(MessageUtils.colorize("&7" + updateURL));
         }
 
         updateMenu();
@@ -73,34 +78,41 @@ public final class UpdateMenu extends Menu {
 
 
     private @NotNull ItemStack getUpdateItem() {
+        String updateState = updateManager.getUpdateStateMessage();
+
         return new ItemUtil(Material.ANVIL)
                 .setName(plugin, LanguageAPI.Menu.UPDATES_UPDATES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.UPDATES_UPDATES_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.UPDATES_UPDATES_ITEM_STATUS.get(plugin, isUpdated)
+                        LanguageAPI.Menu.UPDATES_UPDATES_ITEM_STATE.get(plugin, updateState)
                 )).toItemStack();
     }
 
 
     private @NotNull ItemStack getPlayerItem() {
+        String status = MessageUtils.getEnabledStatus(
+                plugin,
+                updateManager.getPlayerMessageState()
+        );
+
         return new ItemUtil(Material.ITEM_FRAME)
                 .setName(plugin, LanguageAPI.Menu.UPDATES_PLAYER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.UPDATES_PLAYER_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.UPDATES_PLAYER_ITEM_STATUS.get(plugin, getState("player"))
+                        LanguageAPI.Menu.UPDATES_PLAYER_ITEM_STATUS.get(plugin, status)
                 )).toItemStack();
     }
 
 
     private @NotNull ItemStack getConsoleItem() {
+        String status = MessageUtils.getEnabledStatus(
+                plugin,
+                updateManager.getConsoleMessageState()
+        );
+
         return new ItemUtil(Material.ITEM_FRAME)
                 .setName(plugin, LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_STATUS.get(plugin, getState("console"))
+                        LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_STATUS.get(plugin, status)
                 )).toItemStack();
-    }
-
-
-    private boolean getState(@NotNull String name) {
-        return plugin.getConfig().getBoolean("updateMessage." + name, true);
     }
 
 }

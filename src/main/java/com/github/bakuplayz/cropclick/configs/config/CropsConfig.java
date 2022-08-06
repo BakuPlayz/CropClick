@@ -22,7 +22,7 @@ public final class CropsConfig extends Config {
 
 
     public CropsConfig(@NotNull CropClick plugin) {
-        super("crops.yml", plugin);
+        super(plugin, "crops.yml");
     }
 
 
@@ -250,8 +250,8 @@ public final class CropsConfig extends Config {
      *
      * @return The amount of mcMMO experience that is given when the crop is harvested.
      */
-    public double getMcMMOExperience(@NotNull String name) {
-        return config.getDouble("crops." + name + ".addons.mcMMO.experience", 0);
+    public int getMcMMOExperience(@NotNull String name) {
+        return config.getInt("crops." + name + ".addons.mcMMO.experience", 0);
     }
 
 

@@ -129,7 +129,7 @@ public abstract class Menu implements InventoryHolder {
      */
     protected final @NotNull ItemStack getBackItem() {
         return new ItemUtil(Material.BARRIER)
-                .setName(plugin, LanguageAPI.Menu.BACK_ITEM_NAME)
+                .setName(plugin, LanguageAPI.Menu.GENERAL_BACK_ITEM_NAME)
                 .toItemStack();
     }
 

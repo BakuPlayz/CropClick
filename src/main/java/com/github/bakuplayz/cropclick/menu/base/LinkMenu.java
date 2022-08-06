@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.menu;
+package com.github.bakuplayz.cropclick.menu.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
@@ -6,12 +6,14 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.menu.menus.interacts.Component;
+import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewDispenserMenu;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.LocationUtils;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,36 +38,37 @@ import java.util.List;
  * @version 1.6.0
  * @since 1.6.0
  */
-public abstract class AutofarmMenu extends Menu {
+public abstract class LinkMenu extends Menu {
 
-    protected final Block block;
-
-    protected final Autofarm autofarm;
     private final AutofarmManager autofarmManager;
+    private final Autofarm autofarm;
+    private final Block block;
 
-    protected boolean isCropSelected;
-    protected boolean isDispenserSelected;
-    protected boolean isContainerSelected;
+    private boolean isCropSelected;
+    private boolean isContainerSelected;
+    private boolean isDispenserSelected;
 
     protected boolean isUnlinked;
-    protected boolean isClickedSelected;
+    private boolean isClickedSelected;
 
-    protected Location cropLocation;
-    protected Location dispenserLocation;
-    protected Location containerLocation;
+    private Location cropLocation;
+    private Location dispenserLocation;
+    private Location containerLocation;
 
     protected ItemStack cropItem;
     protected ItemStack containerItem;
     protected ItemStack dispenserItem;
 
+    private ItemStack toggleItem;
+
     private final Component clickedComponent;
 
 
-    public AutofarmMenu(@NotNull CropClick plugin,
-                        @NotNull Player player,
-                        @NotNull Block block,
-                        @NotNull LanguageAPI.Menu menuTitle,
-                        @NotNull Component clickedComponent) {
+    public LinkMenu(@NotNull CropClick plugin,
+                    @NotNull Player player,
+                    @NotNull Block block,
+                    @NotNull LanguageAPI.Menu menuTitle,
+                    @NotNull Component clickedComponent) {
         super(plugin, player, menuTitle);
         this.autofarmManager = plugin.getAutofarmManager();
         this.autofarm = autofarmManager.findAutofarm(block);
@@ -80,19 +83,24 @@ public abstract class AutofarmMenu extends Menu {
     @Override
     public void setMenuItems() {
         assignClicked();
+        assignToggle();
         assignCrop();
         assignContainer();
         assignDispenser();
 
-        inventory.setItem(20, cropItem);
-        inventory.setItem(22, dispenserItem);
-        inventory.setItem(24, containerItem);
+        if (!isUnlinked) {
+            inventory.setItem(13, toggleItem);
+        }
+
+        inventory.setItem(isUnlinked ? 20 : 29, cropItem);
+        inventory.setItem(isUnlinked ? 22 : 31, dispenserItem);
+        inventory.setItem(isUnlinked ? 24 : 33, containerItem);
 
         for (int i = 0; i < 54; ++i) {
-            boolean isLeft = i % 9 == 0;
-            boolean isRight = i % 9 == 8;
-            boolean isBottom = i > 45;
-            if (isLeft || isRight || isBottom) {
+            boolean isBottomSide = i > 45;
+            boolean isLeftSide = i % 9 == 0;
+            boolean isRightSide = i % 9 == 8;
+            if (isBottomSide || isLeftSide || isRightSide) {
                 inventory.setItem(i, getGlassItem());
             }
         }
@@ -118,6 +126,18 @@ public abstract class AutofarmMenu extends Menu {
      */
     private void assignClicked() {
         this.isClickedSelected = isClickedSelected(clickedComponent);
+    }
+
+
+    /**
+     * Assigns the toggle item to the toggle item variable.
+     */
+    private void assignToggle() {
+        if (autofarm == null) {
+            return;
+        }
+
+        this.toggleItem = getToggleItem();
     }
 
 
@@ -208,7 +228,7 @@ public abstract class AutofarmMenu extends Menu {
         );
 
         if (!autofarm.isComponentsPresent(autofarmManager)) {
-            LanguageAPI.Menu.AUTOFARM_LINK_FAILURE.send(plugin, player);
+            LanguageAPI.Menu.LINK_ACTION_FAILURE.send(plugin, player);
             return;
         }
 
@@ -219,13 +239,89 @@ public abstract class AutofarmMenu extends Menu {
 
 
     /**
+     * If the clicked block is selected, deselect it, otherwise select it - if it is already selected.
+     */
+    protected void handleSelect() {
+        switch (clickedComponent) {
+            case DISPENSER:
+                if (isClickedSelected) {
+                    autofarmManager.deselectDispenser(player, block);
+                } else {
+                    autofarmManager.selectDispenser(player, block);
+                }
+                break;
+
+            case CONTAINER:
+                if (isClickedSelected) {
+                    autofarmManager.deselectContainer(player, block);
+                } else {
+                    autofarmManager.selectContainer(player, block);
+                }
+                break;
+
+            case CROP:
+                if (isClickedSelected) {
+                    autofarmManager.deselectCrop(player, block);
+                } else {
+                    autofarmManager.selectCrop(player, block);
+                }
+                break;
+        }
+    }
+
+
+    /**
+     * If the player clicks on the dispenser item, open the dispenser. If the player clicks on the container item, open the
+     * container.
+     *
+     * @param clicked The item that was clicked.
+     */
+    protected void handlePreviews(@NotNull ItemStack clicked) {
+        if (clicked.equals(dispenserItem)) {
+            openDispenser();
+        } else if (clicked.equals(containerItem)) {
+            openContainer();
+        }
+    }
+
+
+    /**
+     * If the player clicks on the toggle item, toggle the autofarm and update the menu.
+     *
+     * @param clicked The item that was clicked.
+     */
+    protected void handleToggle(@NotNull ItemStack clicked) {
+        if (clicked.equals(toggleItem)) {
+            autofarm.isEnabled(!autofarm.isEnabled());
+        }
+    }
+
+
+    /**
+     * It returns an ItemStack that represents the Autofarm state.
+     *
+     * @return An ItemStack.
+     */
+    private @NotNull ItemStack getToggleItem() {
+        String state = MessageUtils.getEnabledStatus(
+                plugin,
+                autofarm.isEnabled()
+        );
+        return new ItemUtil(Material.IRON_PLATE)
+                .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
+                .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, state))
+                .toItemStack();
+    }
+
+
+    /**
      * It returns an ItemStack that represents the crop.
      *
      * @return An ItemStack.
      */
     private @NotNull ItemStack getCropItem() {
         return new ItemUtil(Material.WHEAT)
-                .setName(plugin, LanguageAPI.Menu.AUTOFARM_CROP_NAME)
+                .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
                 .setMaterial(
                         isCropSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
@@ -243,7 +339,7 @@ public abstract class AutofarmMenu extends Menu {
      */
     private @NotNull ItemStack getContainerItem() {
         return new ItemUtil(Material.CHEST)
-                .setName(plugin, LanguageAPI.Menu.AUTOFARM_CONTAINER_NAME)
+                .setName(plugin, LanguageAPI.Menu.LINK_CONTAINER_NAME)
                 .setLore(getLocationAsLore(containerLocation, Component.CONTAINER))
                 .setMaterial(
                         isContainerSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
@@ -261,7 +357,7 @@ public abstract class AutofarmMenu extends Menu {
      */
     private @NotNull ItemStack getDispenserItem() {
         return new ItemUtil(Material.DISPENSER)
-                .setName(plugin, LanguageAPI.Menu.AUTOFARM_DISPENSER_NAME)
+                .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
                 .setMaterial(
                         isDispenserSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
@@ -281,13 +377,13 @@ public abstract class AutofarmMenu extends Menu {
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setDamage(isUnlinked ? 15 : 4)
                 .setDamage(isClickedSelected ? 3 : -1)
-                .setName(plugin, LanguageAPI.Menu.AUTOFARM_GLASS_ITEM_NAME_LINKED)
+                .setName(plugin, LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_LINKED)
                 .setName(isUnlinked
-                         ? LanguageAPI.Menu.AUTOFARM_GLASS_ITEM_NAME_UNLINKED.get(plugin)
+                         ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNLINKED.get(plugin)
                          : null
                 )
                 .setName(isClickedSelected
-                         ? LanguageAPI.Menu.AUTOFARM_GLASS_ITEM_NAME_SELECTED.get(plugin)
+                         ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_SELECTED.get(plugin)
                          : null
                 )
                 .toItemStack();
@@ -338,8 +434,8 @@ public abstract class AutofarmMenu extends Menu {
     private @NotNull List<String> getLocationAsLore(Location location, @NotNull Component component) {
         if (location == null) {
             return Collections.singletonList(
-                    LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin,
-                            LanguageAPI.Menu.AUTOFARM_STATE_UNLINKED.get(plugin)
+                    LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
+                            LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)
                     )
             );
         }
@@ -358,15 +454,15 @@ public abstract class AutofarmMenu extends Menu {
 
         ArrayList<String> locationAsLore = new ArrayList<>(
                 Arrays.asList(
-                        LanguageAPI.Menu.AUTOFARM_FORMAT_X.get(plugin, location.getBlockX()),
-                        LanguageAPI.Menu.AUTOFARM_FORMAT_Y.get(plugin, location.getBlockY()),
-                        LanguageAPI.Menu.AUTOFARM_FORMAT_Z.get(plugin, location.getBlockZ())
+                        LanguageAPI.Menu.LINK_FORMAT_X.get(plugin, location.getBlockX()),
+                        LanguageAPI.Menu.LINK_FORMAT_Y.get(plugin, location.getBlockY()),
+                        LanguageAPI.Menu.LINK_FORMAT_Z.get(plugin, location.getBlockZ())
                 )
         );
 
         List<String> selectedState = Collections.singletonList(
-                LanguageAPI.Menu.AUTOFARM_FORMAT_STATE.get(plugin,
-                        LanguageAPI.Menu.AUTOFARM_STATE_SELECTED.get(plugin)
+                LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
+                        LanguageAPI.Menu.LINK_STATES_SELECTED.get(plugin)
                 )
         );
 

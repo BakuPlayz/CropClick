@@ -4,9 +4,10 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.menu.PaginatedMenu;
+import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -106,10 +107,14 @@ public final class ToggleMenu extends PaginatedMenu {
      */
     private @NotNull ItemStack getMenuItem(@NotNull String playerID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerID));
-        boolean isEnabled = !playersConfig.getToggledPlayers().contains(playerID);
+        String status = MessageUtils.getEnabledStatus(
+                plugin,
+                playersConfig.isEnabled(playerID)
+        );
+
         return new ItemUtil(Material.SKULL_ITEM)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
-                .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, isEnabled))
+                .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, status))
                 .toItemStack();
     }
 

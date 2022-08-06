@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.previews;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.PreviewMenu;
+import com.github.bakuplayz.cropclick.menu.base.PreviewMenu;
 import lombok.AccessLevel;
 import lombok.Setter;
 import org.bukkit.entity.Player;
