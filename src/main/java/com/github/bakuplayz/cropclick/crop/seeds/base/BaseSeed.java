@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.seeds.base;
 
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,14 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.6.0
  */
 public abstract class BaseSeed implements Seed {
+
+    protected final CropsConfig cropsConfig;
+
+
+    public BaseSeed(@NotNull CropsConfig config) {
+        this.cropsConfig = config;
+    }
+
 
     @Override
     public boolean hasDrop() {
@@ -39,7 +48,7 @@ public abstract class BaseSeed implements Seed {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return cropsConfig.isSeedEnabled(getName());
     }
 
 

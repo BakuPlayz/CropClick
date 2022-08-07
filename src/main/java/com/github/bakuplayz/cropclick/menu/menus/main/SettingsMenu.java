@@ -88,7 +88,7 @@ public final class SettingsMenu extends Menu {
 
 
     private @NotNull ItemStack getAutofarmsItem() {
-        String state = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getEnabledStatus(
                 plugin,
                 getAutofarmsState()
         );
@@ -96,7 +96,7 @@ public final class SettingsMenu extends Menu {
         return new ItemUtil(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, state)))
+                        LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, status)))
                 .toItemStack();
     }
 

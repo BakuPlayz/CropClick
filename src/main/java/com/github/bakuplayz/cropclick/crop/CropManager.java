@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.crops.*;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
 import org.bukkit.block.Block;
@@ -27,6 +28,8 @@ public final class CropManager {
 
     private final @Getter List<Crop> crops;
 
+    private final CropsConfig cropsConfig;
+
 
     /**
      * A map of the crops that have been harvested and the time they were harvested,
@@ -36,30 +39,29 @@ public final class CropManager {
 
 
     public CropManager(@NotNull CropsConfig config) {
-        harvestedCrops = new HashMap<>();
-        crops = new ArrayList<>();
+        this.harvestedCrops = new HashMap<>();
+        this.crops = new ArrayList<>();
+        this.cropsConfig = config;
 
-        registerVanillaCrops(config);
+        registerVanillaCrops();
     }
 
 
     /**
      * It adds all the vanilla crops to the list of crops.
-     *
-     * @param config The config file for the crop.
      */
-    private void registerVanillaCrops(@NotNull CropsConfig config) {
+    private void registerVanillaCrops() {
         if (VersionUtils.supportsBeetroots()) {
-            crops.add(new Beetroot(config));
+            registerCrop(new Beetroot(cropsConfig));
         }
-        crops.add(new Cactus(config));
-        crops.add(new Carrot(config));
-        crops.add(new CocoaBean(config));
-        crops.add(new Melon(config));
-        crops.add(new Pumpkin(config));
-        crops.add(new Potato(config));
-        crops.add(new SugarCane(config));
-        crops.add(new Wheat(config));
+        registerCrop(new Cactus(cropsConfig));
+        registerCrop(new Carrot(cropsConfig));
+        registerCrop(new CocoaBean(cropsConfig));
+        registerCrop(new Melon(cropsConfig));
+        registerCrop(new Pumpkin(cropsConfig));
+        registerCrop(new Potato(cropsConfig));
+        registerCrop(new SugarCane(cropsConfig));
+        registerCrop(new Wheat(cropsConfig));
     }
 
 
@@ -68,19 +70,70 @@ public final class CropManager {
      *
      * @param crop The crop to register.
      */
-    @SuppressWarnings("unused")
     public void registerCrop(@NotNull Crop crop)
             throws CropTypeDuplicateException {
 
-        List<Crop> foundCrops = crops.stream()
-                                     .filter(c -> filterByType(c, crop))
-                                     .collect(Collectors.toList());
+        List<Crop> duplicateCrops = getDuplicateCrops(crop);
 
-        if (foundCrops.size() > 1) {
-            throw new CropTypeDuplicateException(foundCrops);
+        if (duplicateCrops.size() > 1) {
+            throw new CropTypeDuplicateException(duplicateCrops);
         }
 
         crops.add(crop);
+        addSettings(crop);
+    }
+
+
+    /**
+     * It adds the crop and seed to the config if they don't already exist.
+     *
+     * @param crop The crop to add settings for.
+     */
+    private void addSettings(@NotNull Crop crop) {
+        String cropName = crop.getName();
+
+        if (!cropsConfig.doesCropExist(cropName)) {
+            // Drop Settings
+            if (crop.hasDrop()) {
+                Drop drop = crop.getDrop();
+                cropsConfig.setCropDropName(cropName, drop.getName());
+                cropsConfig.setCropDropAmount(cropName, drop.getAmount());
+                cropsConfig.setCropDropChance(cropName, drop.getChance());
+                cropsConfig.setCropDropAtLeastOne(cropName, crop.dropAtLeastOne());
+            }
+
+            // Action Settings
+            cropsConfig.getConfig().set("crops." + cropName + ".shouldReplant", crop.shouldReplant());
+            cropsConfig.getConfig().set("crops." + cropName + ".isHarvestable", crop.isHarvestable());
+            cropsConfig.getConfig().set("crops." + cropName + ".isLinkable", crop.isLinkable());
+
+            // mcMMO Settings
+            cropsConfig.setMcMMOExperience(cropName, 0);
+            cropsConfig.setMcMMOExperienceReason(cropName, "You harvested " + cropName + ".");
+
+            // JobsReborn Settings
+            cropsConfig.setJobsMoney(cropName, 0);
+            cropsConfig.setJobsPoints(cropName, 0);
+            cropsConfig.setJobsExperience(cropName, 0);
+        }
+
+        if (!crop.hasSeed()) {
+            return;
+        }
+
+        Seed seed = crop.getSeed();
+        String seedName = seed.getName();
+        if (!cropsConfig.doesSeedExist(seedName)) {
+            // Drop Settings
+            if (crop.hasDrop()) {
+                Drop drop = seed.getDrop();
+                cropsConfig.setSeedDropName(seedName, drop.getName());
+                cropsConfig.setSeedDropAmount(seedName, drop.getAmount());
+                cropsConfig.setSeedDropChance(seedName, drop.getChance());
+            }
+
+            cropsConfig.setSeedEnabled(seedName, seed.isEnabled());
+        }
     }
 
 
@@ -92,6 +145,42 @@ public final class CropManager {
     @SuppressWarnings("unused")
     public void unregisterCrop(@NotNull Crop crop) {
         crops.remove(crop);
+        removeSettings(crop);
+    }
+
+
+    /**
+     * It removes the settings for a crop and its seed from the crops.yml file
+     *
+     * @param crop The crop to remove
+     */
+    private void removeSettings(@NotNull Crop crop) {
+        String cropName = crop.getName();
+
+        if (cropsConfig.doesCropExist(cropName)) {
+            cropsConfig.getConfig().set("crops." + cropName, null);
+        }
+
+        if (crop.hasSeed()) {
+            Seed seed = crop.getSeed();
+            String seedName = seed.getName();
+            if (cropsConfig.doesSeedExist(seedName)) {
+                cropsConfig.getConfig().set("seeds." + seedName, null);
+            }
+        }
+
+        cropsConfig.saveConfig();
+    }
+
+
+    /**
+     * Remove the settings for the given crop, then add the default back.
+     *
+     * @param crop The crop to reset the settings for.
+     */
+    public void resetSettings(@NotNull Crop crop) {
+        removeSettings(crop);
+        addSettings(crop);
     }
 
 
@@ -183,6 +272,20 @@ public final class CropManager {
      */
     public int getAmountOfCrops() {
         return getCrops().size();
+    }
+
+
+    /**
+     * Get all the crops that are the same type as the given crop.
+     *
+     * @param crop The crop to check for duplicates.
+     *
+     * @return A list of crops that are the same type as the crop passed in.
+     */
+    private @NotNull List<Crop> getDuplicateCrops(@NotNull Crop crop) {
+        return crops.stream()
+                    .filter(c -> filterByType(c, crop))
+                    .collect(Collectors.toList());
     }
 
 }

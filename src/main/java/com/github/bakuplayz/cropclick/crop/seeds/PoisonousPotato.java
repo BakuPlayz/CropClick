@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.crop.seeds;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
-import com.github.bakuplayz.cropclick.crop.seeds.base.VanillaSeed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @see Seed
  * @since 1.6.0
  */
-public final class PoisonousPotato extends VanillaSeed {
+public final class PoisonousPotato extends BaseSeed {
 
     public PoisonousPotato(@NotNull CropsConfig config) {
         super(config);

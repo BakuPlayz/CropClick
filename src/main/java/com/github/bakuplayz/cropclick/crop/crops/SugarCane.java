@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.VanillaTallCrop;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 1.6.0
- * @see TallCrop
+ * @see BaseCrop
  * @since 1.6.0
  */
-public final class SugarCane extends VanillaTallCrop {
+public final class SugarCane extends TallCrop {
 
     public SugarCane(@NotNull CropsConfig config) {
         super(config);

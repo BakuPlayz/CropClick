@@ -27,6 +27,18 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * This function returns true if the crop exists in the config, and false if it doesn't.
+     *
+     * @param name The name of the crop.
+     *
+     * @return A boolean value.
+     */
+    public boolean doesCropExist(@NotNull String name) {
+        return config.get("crops." + name) != null;
+    }
+
+
+    /**
      * Returns the name of the crop drop item.
      *
      * @param name The name of the crop.
@@ -84,6 +96,43 @@ public final class CropsConfig extends Config {
      */
     public double getCropDropChance(@NotNull String name) {
         return config.getDouble("crops." + name + ".drop.chance", 0.0) / 100.0d;
+    }
+
+
+    /**
+     * It sets the chance of a crop dropping an item.
+     *
+     * @param name   The name of the crop.
+     * @param chance The chance of the crop dropping the item.
+     */
+    public void setCropDropChance(@NotNull String name, double chance) {
+        config.set("crops." + name + ".drop.chance", chance);
+        saveConfig();
+    }
+
+
+    /**
+     * Returns whether the crop should drop at least one item when harvested.
+     *
+     * @param name The name of the crop.
+     *
+     * @return A boolean value.
+     */
+    @SuppressWarnings("unused")
+    public boolean getCropDropAtLeastOne(@NotNull String name) {
+        return config.getBoolean("crops." + name + ".drop.atLeastOne", true);
+    }
+
+
+    /**
+     * Sets the crop's drop atLeastOne value.
+     *
+     * @param name       The name of the crop.
+     * @param atLeastOne If true, the crop will always drop at least one item.
+     */
+    public void setCropDropAtLeastOne(@NotNull String name, boolean atLeastOne) {
+        config.set("crops." + name + ".drop.atLeastOne", atLeastOne);
+        saveConfig();
     }
 
 
@@ -370,6 +419,18 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * Returns true if the seed with the given name exists in the config.
+     *
+     * @param name The name of the seed.
+     *
+     * @return A boolean value.
+     */
+    public boolean doesSeedExist(@NotNull String name) {
+        return config.get("seeds." + name) != null;
+    }
+
+
+    /**
      * Returns the name of the seed drop for the given seed name.
      *
      * @param name The name of the seed.
@@ -431,6 +492,30 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * Sets the chance of a seed dropping from a mob
+     *
+     * @param name   The name of the seed.
+     * @param chance The chance that the seed will drop.
+     */
+    public void setSeedDropChance(@NotNull String name, double chance) {
+        config.set("seeds." + name + ".drop.chance", chance);
+        saveConfig();
+    }
+
+
+    /**
+     * It sets the seed's enabled state to the value of the boolean parameter
+     *
+     * @param name    The name of the seed.
+     * @param enabled Whether the seed is enabled.
+     */
+    public void setSeedEnabled(@NotNull String name, boolean enabled) {
+        config.set("seeds." + name + ".isEnabled", enabled);
+        saveConfig();
+    }
+
+
+    /**
      * Returns whether the seed with the given name is enabled.
      *
      * @param name The name of the seed.
@@ -449,8 +534,7 @@ public final class CropsConfig extends Config {
      */
     public void toggleSeed(@NotNull String name) {
         boolean isEnabled = isSeedEnabled(name);
-        config.set("seeds." + name + ".isEnabled", !isEnabled);
-        saveConfig();
+        setSeedEnabled(name, !isEnabled);
     }
 
 }

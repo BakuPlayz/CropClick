@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.commands.SubCommand;
+import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
@@ -27,7 +27,7 @@ public final class HelpMenu extends Menu {
 
     private final boolean isRedirected;
 
-    private final List<SubCommand> commands;
+    private final List<Subcommand> commands;
 
 
     public HelpMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
@@ -41,7 +41,7 @@ public final class HelpMenu extends Menu {
     public void setMenuItems() {
         inventory.addItem(getDefaultCommandItem());
 
-        for (SubCommand subCommand : commands) {
+        for (Subcommand subCommand : commands) {
             inventory.addItem(getSubCommandItem(subCommand));
         }
 
@@ -73,7 +73,7 @@ public final class HelpMenu extends Menu {
     }
 
 
-    private @NotNull ItemStack getSubCommandItem(@NotNull SubCommand cmd) {
+    private @NotNull ItemStack getSubCommandItem(@NotNull Subcommand cmd) {
         return new ItemUtil(Material.BOOK)
                 .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, cmd.getName()))
                 .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, cmd.getDescription()),

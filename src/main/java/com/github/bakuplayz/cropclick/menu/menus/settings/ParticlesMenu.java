@@ -117,15 +117,15 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String particle) {
-        String particleName = MessageUtils.beautify(particle, true);
-        String particleStatus = MessageUtils.getEnabledStatus(
+        String name = MessageUtils.beautify(particle, true);
+        String status = MessageUtils.getEnabledStatus(
                 plugin,
                 cropsConfig.getCropParticles(crop.getName()).contains(particle)
         );
 
         return new ItemUtil(Material.FIREWORK)
-                .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(plugin, particleName))
-                .setLore(LanguageAPI.Menu.PARTICLES_ITEM_STATUS.get(plugin, particleStatus))
+                .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(plugin, name))
+                .setLore(LanguageAPI.Menu.PARTICLES_ITEM_STATUS.get(plugin, status))
                 .toItemStack();
     }
 

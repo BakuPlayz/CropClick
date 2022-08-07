@@ -89,7 +89,7 @@ public final class RequestUtilTests {
 
     @Test
     public void testConnection() {
-        HttpURLConnection result = requestUtil.getClient();
+        HttpURLConnection result = requestUtil.getConnection();
 
         assertAll("Checks if the client is open.",
                 () -> assertNotNull(requestUtil),
@@ -114,10 +114,21 @@ public final class RequestUtilTests {
 
 
     @Test
+    public void testDataChanged() {
+        boolean result = requestUtil.isDataChanged();
+
+        assertAll("Checks if the data changed (aka no 304 response).",
+                () -> assertNotNull(requestUtil),
+                () -> assertFalse(result)
+        );
+    }
+
+
+    @Test
     public void testGetResponse()
             throws Exception {
         JsonElement result = requestUtil.getResponse();
-        
+
         assertAll("Checks if getting the response works.",
                 () -> assertNotNull(requestUtil),
                 () -> assertNotNull(result)

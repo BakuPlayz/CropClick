@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.6.0
  * @since 1.6.0
  */
-public abstract class SubCommand {
+public abstract class Subcommand {
 
     protected final CropClick plugin;
 
@@ -22,7 +22,7 @@ public abstract class SubCommand {
     private final LanguageAPI.Command description;
 
 
-    public SubCommand(@NotNull CropClick plugin,
+    public Subcommand(@NotNull CropClick plugin,
                       @NotNull String name,
                       @NotNull LanguageAPI.Command description) {
         this.description = description;
@@ -57,7 +57,7 @@ public abstract class SubCommand {
      * @return The permission for the command.
      */
     public final @NotNull String getPermission() {
-        return "cropclick." + name;
+        return "cropclick.command." + name;
     }
 
 

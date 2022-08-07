@@ -137,8 +137,8 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         crop.replant(block);
-        // LATER: crop#playSounds();
-        // LATER: crop#playEffects();
+        crop.playSounds(block);
+        crop.playParticles(block);
 
         addonManager.applyEffects(player, crop);
 

@@ -27,14 +27,14 @@ public final class RequestUtil {
 
     private @Getter String params;
     private @Getter HashMap<String, String> headers;
-    private final @Getter HttpURLConnection client;
+    private final @Getter HttpURLConnection connection;
 
-    private boolean isDataChanged;
+    private @Getter boolean isDataChanged;
 
 
-    public RequestUtil(@NotNull String url)
+    public RequestUtil(@NotNull String URL)
             throws IOException {
-        this.client = (HttpURLConnection) new URL(url).openConnection();
+        this.connection = (HttpURLConnection) new URL(URL).openConnection();
         this.headers = new HashMap<>();
         this.params = "";
     }
@@ -90,16 +90,16 @@ public final class RequestUtil {
      */
     public RequestUtil post(boolean doOutput)
             throws Exception {
-        client.setRequestMethod("POST");
-        client.setDoOutput(doOutput);
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(doOutput);
 
         if (!params.equals("")) {
-            DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+            DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
             dos.writeBytes(params);
             dos.flush();
         }
 
-        this.isDataChanged = client.getResponseCode() != 304;
+        this.isDataChanged = connection.getResponseCode() != 304;
 
         return this;
     }
@@ -116,7 +116,7 @@ public final class RequestUtil {
             return JsonNull.INSTANCE;
         }
 
-        InputStreamReader reader = new InputStreamReader(client.getInputStream());
+        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
         JsonElement body = JsonParser.parseReader(reader);
         reader.close();
         return body;

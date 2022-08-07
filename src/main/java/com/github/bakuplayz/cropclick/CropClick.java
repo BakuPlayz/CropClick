@@ -28,6 +28,7 @@ import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmLi
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
+import com.github.bakuplayz.cropclick.permissions.PermissionManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -58,6 +59,7 @@ public class CropClick extends JavaPlugin {
     private @Getter UpdateManager updateManager;
     private @Getter CommandManager commandManager;
     private @Getter AutofarmManager autofarmManager;
+    private @Getter PermissionManager permissionManager;
 
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
@@ -197,6 +199,7 @@ public class CropClick extends JavaPlugin {
         this.updateManager = new UpdateManager(this);
         this.commandManager = new CommandManager(this);
         this.autofarmManager = new AutofarmManager(this);
+        this.permissionManager = new PermissionManager(this);
     }
 
 

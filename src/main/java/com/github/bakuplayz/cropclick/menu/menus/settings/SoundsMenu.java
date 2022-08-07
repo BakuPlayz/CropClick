@@ -104,15 +104,15 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String sound) {
-        String soundName = MessageUtils.beautify(sound, true);
-        String soundStatus = MessageUtils.getEnabledStatus(
+        String name = MessageUtils.beautify(sound, true);
+        String status = MessageUtils.getEnabledStatus(
                 plugin,
                 cropsConfig.getCropSounds(crop.getName()).contains(sound)
         );
 
         return new ItemUtil(Material.NOTE_BLOCK)
-                .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(plugin, soundName))
-                .setLore(LanguageAPI.Menu.SOUNDS_ITEM_STATUS.get(plugin, soundStatus))
+                .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(plugin, name))
+                .setLore(LanguageAPI.Menu.SOUNDS_ITEM_STATUS.get(plugin, status))
                 .toItemStack();
     }
 

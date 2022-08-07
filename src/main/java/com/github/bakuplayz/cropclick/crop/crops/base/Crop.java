@@ -44,15 +44,19 @@ public interface Crop {
 
     boolean canHarvest(@NotNull Player player);
 
+    boolean isHarvestable();
+
     void replant(@NotNull Block block);
+
+    boolean shouldReplant();
+
+    void playSounds(@NotNull Block block);
+
+    void playParticles(@NotNull Block block);
 
     @NotNull Material getClickableType();
 
     @NotNull Material getMenuType();
-
-    boolean shouldReplant();
-
-    boolean isHarvestable();
 
     boolean isLinkable();
 

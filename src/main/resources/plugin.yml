@@ -23,170 +23,22 @@ permissions:
     default: op
     children:
       - cropclick.plant.*
-      - cropclick.destroy.*
       - cropclick.harvest.*
+      - cropclick.destroy.*
       - cropclick.command.*
-      - cropclick.autofarmer.*
-
-  cropclick.plant.*:
-    description: Permission to plant every crop.
-    default: op
-    children:
-      cropclick.plant.ground:
-        description: Permission to plant ground crops. (e.g. wheat).
-        default: op
-      cropclick.plant.tall:
-        description: Permission to plant tall crops. (e.g. cactus).
-        default: op
-      cropclick.plant.wall:
-        description: Permission to plant wall crops. (e.g. cocoa bean).
-        default: op
-      cropclick.plant.beetroot:
-        description: Permission to plant the beetroot crop.
-        default: op
-      cropclick.plant.cactus:
-        description: Permission to plant the cactus crop.
-        default: op
-      cropclick.plant.carrot:
-        description: Permission to plant the carrot crop.
-        default: op
-      cropclick.plant.potato:
-        description: Permission to plant the potato crop.
-        default: op
-      cropclick.plant.sugarcane:
-        description: Permission to plant the sugarcane crop.
-        default: op
-      cropclick.plant.wheat:
-        description: Permission to plant the wheat crop.
-        default: op
-      cropclick.plant.melon:
-        description: Permission to plant the melon crop.
-        default: op
-      cropclick.plant.pumpkin:
-        description: Permission to plant the pumpkin crop.
-        default: op
-      cropclick.plant.cocoabeans:
-        description: Permission to plant the cocoa beans crop.
-        default: op
-
-  cropclick.destroy.*:
-    description: Permission to destroy every crop.
-    default: op
-    children:
-      cropclick.destroy.ground:
-        description: Permission to destroy all ground crops. (e.g. wheat).
-        default: op
-      cropclick.destroy.tall:
-        description: Permission to destroy all tall crops. (e.g. cactus).
-        default: op
-      cropclick.destroy.wall:
-        description: Permission to destroy wall crops. (e.g. cocoa bean).
-        default: op
-      cropclick.destroy.beetroot:
-        description: Permission to destroy the beetroot crop.
-        default: op
-      cropclick.destroy.cactus:
-        description: Permission to destroy the cactus crop.
-        default: op
-      cropclick.destroy.carrot:
-        description: Permission to destroy the carrot crop.
-        default: op
-      cropclick.destroy.potato:
-        description: Permission to destroy the potato crop.
-        default: op
-      cropclick.destroy.sugarcane:
-        description: Permission to destroy the sugarcane crop.
-        default: op
-      cropclick.destroy.wheat:
-        description: Permission to destroy the wheat crop.
-        default: op
-      cropclick.destroy.melon:
-        description: Permission to destroy the melon crop.
-        default: op
-      cropclick.destroy.pumpkin:
-        description: Permission to destroy the pumpkin crop.
-        default: op
-      cropclick.destroy.cocoabeans:
-        description: Permission to destroy the cocoa beans crop.
-        default: op
-
-  cropclick.harvest.*:
-    description: Permission to harvest every crop.
-    default: op
-    children:
-      cropclick.harvest.ground:
-        description: Permission to harvest all ground crops (e.g. wheat).
-        default: op
-      cropclick.harvest.tall:
-        description: Permission to harvest all tall crops (e.g. cactus).
-        default: op
-      cropclick.harvest.wall:
-        description: Permission to harvest wall crops. (e.g. cocoa bean).
-        default: op
-      cropclick.harvest.beetroot:
-        description: Permission to harvest the beetroot crop.
-        default: op
-      cropclick.harvest.cactus:
-        description: Permission to harvest the cactus crop.
-        default: op
-      cropclick.harvest.carrot:
-        description: Permission to harvest the carrot crop.
-        default: op
-      cropclick.harvest.potato:
-        description: Permission to harvest the potato crop.
-        default: op
-      cropclick.harvest.sugarcane:
-        description: Permission to harvest the sugarcane crop.
-        default: op
-      cropclick.harvest.wheat:
-        description: Permission to harvest the wheat crop.
-        default: op
-      cropclick.harvest.melon:
-        description: Permission to harvest the melon crop.
-        default: op
-      cropclick.harvest.pumpkin:
-        description: Permission to harvest the pumpkin crop.
-        default: op
-      cropclick.harvest.cocoabeans:
-        description: Permission to harvest the cocoa beans crop.
-        default: op
-
-  cropclick.command.*:
-    description: Permission to use every command.
-    default: op
-    children:
-      cropclick.command.general:
-        description: Permission to use the general command.
-        default: op
-      cropclick.command.help:
-        description: Permission to use the help command.
-        default: op
-      cropclick.command.reload:
-        description: Permission to use the reload command.
-        default: op
-      cropclick.command.reset:
-        description: Permission to use the reset command.
-        default: op
-      cropclick.command.settings:
-        description: Permission to use the settings command.
-        default: op
+      - cropclick.autofarm.*
 
   cropclick.autofarm.*:
-    description: Permission to use all the autofarmer features.
+    description: Permission to use all the autofarm features.
     default: op
     children:
       cropclick.autofarm.link:
-        description: Permission to link autofarmers.
-        default: op
+        description: Permission to link autofarms.
       cropclick.autofarm.unlink:
-        description: Permission to unlink autofarmers.
-        default: op
+        description: Permission to unlink autofarms.
       cropclick.autofarm.update:
-        description: Permission to update autofarmers.
-        default: op
-      cropclick.autofarm.interact:
-        description: Permission to interact with autofarmers.
-        default: op
+        description: Permission to update autofarms.
       cropclick.autofarm.toggle:
-        description: Permission to toggle autofarmers.
-        default: op
+        description: Permission to toggle autofarms.
+      cropclick.autofarm.interact:
+        description: Permission to interact with autofarms.

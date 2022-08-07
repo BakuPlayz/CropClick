@@ -1,14 +1,19 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
+import lombok.Getter;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleEffect;
 
 
 /**
@@ -20,6 +25,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseCrop implements Crop {
 
+    protected final @Getter CropsConfig cropsConfig;
+
+
+    public BaseCrop(@NotNull CropsConfig cropsConfig) {
+        this.cropsConfig = cropsConfig;
+    }
+
+
     @Override
     public boolean hasDrop() {
         return getDrop() != null;
@@ -28,7 +41,7 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean dropAtLeastOne() {
-        return true;
+        return cropsConfig.shouldDropAtLeastOne(getName());
     }
 
 
@@ -58,15 +71,19 @@ public abstract class BaseCrop implements Crop {
         Drop drop = getDrop();
         ItemStack dropItem = drop.toItemStack(hasNameChanged());
 
-        if (drop.willDrop()) {
+        boolean willDrop = drop.willDrop();
+
+        if (willDrop) {
             if (dropItem.getAmount() != 0) {
                 inventory.addItem(dropItem);
             }
         }
 
         if (dropAtLeastOne()) {
-            dropItem.setAmount(1);
-            inventory.addItem(dropItem);
+            if (!willDrop) {
+                dropItem.setAmount(1);
+                inventory.addItem(dropItem);
+            }
         }
 
         if (!hasSeed()) return;
@@ -81,8 +98,16 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean isHarvestAge(@NotNull Block block) {
-        if (!isHarvestable()) return false;
+        if (!isHarvestable()) {
+            return false;
+        }
         return getHarvestAge() <= getCurrentAge(block);
+    }
+
+
+    @Override
+    public boolean canHarvest(@NotNull Player player) {
+        return PermissionUtils.canHarvestCrop(player, getName());
     }
 
 
@@ -98,19 +123,35 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean shouldReplant() {
-        return true;
+        return cropsConfig.shouldReplantCrop(getName());
     }
 
 
     @Override
     public boolean isHarvestable() {
-        return true;
+        return cropsConfig.isCropHarvestable(getName());
+    }
+
+
+    @Override
+    public void playSounds(@NotNull Block block) {
+        getCropsConfig().getCropSounds(getName()).stream()
+                        .map(Sound::valueOf)
+                        .forEach(sound -> block.getWorld().playSound(block.getLocation(), sound, 1f, 1f));
+    }
+
+
+    @Override
+    public void playParticles(@NotNull Block block) {
+        getCropsConfig().getCropParticles(getName()).stream()
+                        .map(ParticleEffect::valueOf)
+                        .forEach(particle -> particle.display(block.getLocation()));
     }
 
 
     @Override
     public boolean isLinkable() {
-        return true;
+        return cropsConfig.isCropLinkable(getName());
     }
 
 

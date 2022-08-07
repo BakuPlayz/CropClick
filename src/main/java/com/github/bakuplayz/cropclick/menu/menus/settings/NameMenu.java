@@ -92,6 +92,7 @@ public final class NameMenu extends Menu {
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, crop.isHarvestable());
+
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
@@ -111,6 +112,7 @@ public final class NameMenu extends Menu {
         Seed seed = crop.getSeed();
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
+
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_SEED_DROP_NAME.get(plugin, getDropName(false)))

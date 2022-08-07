@@ -303,13 +303,14 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getToggleItem() {
-        String state = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getEnabledStatus(
                 plugin,
                 autofarm.isEnabled()
         );
+
         return new ItemUtil(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
-                .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, state))
+                .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, status))
                 .toItemStack();
     }
 

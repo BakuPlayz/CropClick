@@ -31,7 +31,7 @@ public final class CommandManager implements TabExecutor {
 
     private final CropClick plugin;
 
-    private final @Getter List<SubCommand> commands;
+    private final @Getter List<Subcommand> commands;
 
 
     public CommandManager(@NotNull CropClick plugin) {
@@ -80,7 +80,7 @@ public final class CommandManager implements TabExecutor {
             return true;
         }
 
-        for (SubCommand command : commands) {
+        for (Subcommand command : commands) {
             if (!args[0].equalsIgnoreCase(command.getName())) {
                 continue;
             }
@@ -116,9 +116,9 @@ public final class CommandManager implements TabExecutor {
         if (args.length != 1) {
             return Collections.emptyList();
         }
-        
+
         return commands.stream()
-                       .map(SubCommand::getName)
+                       .map(Subcommand::getName)
                        .filter(command -> command.startsWith(args[0]))
                        .sorted().collect(Collectors.toList());
     }

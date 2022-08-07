@@ -1,10 +1,12 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -16,6 +18,17 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.6.0
  */
 public abstract class TallCrop extends BaseCrop {
+
+    public TallCrop(@NotNull CropsConfig cropsConfig) {
+        super(cropsConfig);
+    }
+
+
+    @Override
+    public int getHarvestAge() {
+        return 2;
+    }
+
 
     @Override
     public int getCurrentAge(@NotNull Block block) {
@@ -40,13 +53,7 @@ public abstract class TallCrop extends BaseCrop {
 
 
     @Override
-    public int getHarvestAge() {
-        return 2;
-    }
-
-
-    @Override
-    public Seed getSeed() {
+    public @Nullable Seed getSeed() {
         return null;
     }
 
