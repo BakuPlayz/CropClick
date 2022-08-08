@@ -34,11 +34,12 @@ public final class Beetroot extends GroundCrop {
 
 
     @Override
+    @Contract(" -> new")
     public @NotNull Drop getDrop() {
         return new Drop(Material.BEETROOT,
                 cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName()),
-                cropsConfig.getCropDropChance(getName())
+                cropsConfig.getCropDropAmount(getName(), 2),
+                cropsConfig.getCropDropChance(getName(), 80)
         );
     }
 

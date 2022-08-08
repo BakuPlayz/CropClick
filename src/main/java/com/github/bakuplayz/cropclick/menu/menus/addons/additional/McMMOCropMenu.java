@@ -113,8 +113,8 @@ public final class McMMOCropMenu extends Menu {
         double beforeValue = cropsConfig.getMcMMOExperience(crop.getName());
         double afterValue = Math.min(beforeValue + amount, 10_000);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
-                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
+                .setLore(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .setDamage(5)
                 .toItemStack();
     }
@@ -124,8 +124,8 @@ public final class McMMOCropMenu extends Menu {
         double beforeValue = cropsConfig.getMcMMOExperience(crop.getName());
         double afterValue = Math.max(beforeValue - amount, 0);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
-                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
+                .setLore(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .setDamage(14)
                 .toItemStack();
     }

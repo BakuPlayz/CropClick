@@ -7,13 +7,11 @@ import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import lombok.Getter;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.particle.ParticleEffect;
 
 
 /**
@@ -69,18 +67,20 @@ public abstract class BaseCrop implements Crop {
         if (!hasDrop()) return;
 
         Drop drop = getDrop();
-        ItemStack dropItem = drop.toItemStack(hasNameChanged());
+        ItemStack dropItem = drop.toItemStack(
+                hasNameChanged()
+        );
 
-        boolean willDrop = drop.willDrop();
+        boolean hasDropped = dropItem.getAmount() != 0;
 
-        if (willDrop) {
-            if (dropItem.getAmount() != 0) {
+        if (drop.willDrop()) {
+            if (hasDropped) {
                 inventory.addItem(dropItem);
             }
         }
 
         if (dropAtLeastOne()) {
-            if (!willDrop) {
+            if (!hasDropped) {
                 dropItem.setAmount(1);
                 inventory.addItem(dropItem);
             }
@@ -123,7 +123,7 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean shouldReplant() {
-        return cropsConfig.shouldReplantCrop(getName());
+        return cropsConfig.shouldCropReplant(getName());
     }
 
 
@@ -135,17 +135,18 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public void playSounds(@NotNull Block block) {
-        getCropsConfig().getCropSounds(getName()).stream()
+      /*  getCropsConfig().getCropSounds(getName()).stream()
                         .map(Sound::valueOf)
-                        .forEach(sound -> block.getWorld().playSound(block.getLocation(), sound, 1f, 1f));
+                        .forEach(sound -> block.getWorld().playSound(block.getLocation(), sound, 1f, 1f));*/
     }
 
 
     @Override
     public void playParticles(@NotNull Block block) {
-        getCropsConfig().getCropParticles(getName()).stream()
+        //ParticleEffect.ASH.display(block.getLocation(), Vector.getRandom(), 10f, 10, null);
+        /*getCropsConfig().getCropParticles(getName()).stream()
                         .map(ParticleEffect::valueOf)
-                        .forEach(particle -> particle.display(block.getLocation()));
+                        .forEach(particle -> particle.display(block.getLocation()));*/
     }
 
 

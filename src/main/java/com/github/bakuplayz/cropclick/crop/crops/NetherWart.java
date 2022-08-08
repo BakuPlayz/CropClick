@@ -6,7 +6,6 @@ import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,32 +19,32 @@ import org.jetbrains.annotations.Nullable;
  * @see BaseCrop
  * @since 1.6.0
  */
-public final class Pumpkin extends GroundCrop {
+public final class NetherWart extends GroundCrop {
 
-    public Pumpkin(@NotNull CropsConfig config) {
-        super(config);
+    public NetherWart(@NotNull CropsConfig cropsConfig) {
+        super(cropsConfig);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "pumpkin";
+        return "netherWart";
     }
 
 
     @Override
     public int getHarvestAge() {
-        return 0;
+        return 3;
     }
 
 
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.PUMPKIN,
+        return new Drop(Material.NETHER_STALK,
                 cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName(), 1),
-                cropsConfig.getCropDropChance(getName(), 100)
+                cropsConfig.getCropDropAmount(getName(), 3),
+                cropsConfig.getCropDropChance(getName(), 80)
         );
     }
 
@@ -58,26 +57,14 @@ public final class Pumpkin extends GroundCrop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
-        block.setType(Material.AIR);
-    }
-
-
-    @Override
     public @NotNull Material getClickableType() {
-        return Material.PUMPKIN;
+        return Material.NETHER_WARTS;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.PUMPKIN;
-    }
-
-
-    @Override
-    public boolean isLinkable() {
-        return cropsConfig.isCropLinkable(getName(), false);
+        return Material.NETHER_STALK;
     }
 
 }

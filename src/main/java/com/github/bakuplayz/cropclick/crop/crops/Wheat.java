@@ -37,8 +37,8 @@ public final class Wheat extends GroundCrop {
     public @NotNull Drop getDrop() {
         return new Drop(Material.WHEAT,
                 cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName()),
-                cropsConfig.getCropDropChance(getName())
+                cropsConfig.getCropDropAmount(getName(), 1),
+                cropsConfig.getCropDropChance(getName(), 80)
         );
     }
 

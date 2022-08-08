@@ -7,6 +7,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
+import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
@@ -68,10 +69,12 @@ public final class ParticlesMenu extends PaginatedMenu {
             return;
         }
 
-        String particle = particles.get(index);
-        cropsConfig.toggleParticleCrop(crop.getName(), particle);
-
-        updateMenu();
+        new ParticleMenu(
+                plugin,
+                player,
+                crop,
+                particles.get(index)
+        ).open();
     }
 
 
@@ -120,7 +123,7 @@ public final class ParticlesMenu extends PaginatedMenu {
         String name = MessageUtils.beautify(particle, true);
         String status = MessageUtils.getEnabledStatus(
                 plugin,
-                cropsConfig.getCropParticles(crop.getName()).contains(particle)
+                false //cropsConfig.getCropParticles(crop.getName()).contains(particle)
         );
 
         return new ItemUtil(Material.FIREWORK)

@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.permissions;
+package com.github.bakuplayz.cropclick.permissions.crop;
 
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Contract;

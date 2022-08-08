@@ -35,8 +35,8 @@ public final class WheatSeed extends BaseSeed {
     public @NotNull Drop getDrop() {
         return new Drop(Material.SEEDS,
                 cropsConfig.getSeedDropName(getName()),
-                cropsConfig.getSeedDropAmount(getName()),
-                cropsConfig.getSeedDropChance(getName())
+                cropsConfig.getSeedDropAmount(getName(), 3),
+                cropsConfig.getSeedDropChance(getName(), 80)
         );
     }
 

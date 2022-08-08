@@ -66,6 +66,8 @@ menu:
 
     crop: "Crop"
     crops: "Crops"
+    dropChance: "Drop Chance"
+
     autofarms: "Autofarms"
     cropLink: "Crop"
     containerLink: "Container"
@@ -81,8 +83,12 @@ menu:
     offlineGrowth: "Offline Growth"
     worldGuard: "WorldGuard"
 
+    sound: "Sound"
     sounds: "Sounds"
+
+    particle: "Particle"
     particles: "Particles"
+
     interact: "Interact"
     toggle: "Toggle"
     worlds: "Worlds"
@@ -160,11 +166,16 @@ menu:
 
     crop:
       itemName: "&e%name% &7(%status%)"
-      itemDropValue: "&7DropValue: &e%value%"
+      itemDropValue: "&7Drop Value: &e%value%"
 
     seed:
       itemName: "&e%name% &7(%status%)"
-      itemDropValue: "&7DropValue: &e%value%"
+      itemDropValue: "&7Drop Value: &e%value%"
+
+    dropChance:
+      itemName: "&eDrop Chance"
+      itemCropStatus: "&7Crop: &e%chance%%"
+      itemSeedStatus: "&7Seed: &e%chance%%"
 
     linkable:
       itemName: "&eLinkable"
@@ -178,6 +189,27 @@ menu:
       itemName: "&eReplant"
       itemStatus: "&7Status: &e%status%"
 
+  dropChance:
+    status:
+      enabled: "Harvestable"
+      disabled: "Disabled"
+
+    add:
+      itemName: "&7Add &a%amount% &7(%type%)"
+      itemAfter: "&7After: &a%value%%"
+
+    remove:
+      itemName: "&7Remove &c%amount% &7(%type%)"
+      itemAfter: "&7After: &c%value%%"
+
+    crop:
+      itemName: "&e%name% &7(%status%)"
+      itemDropChance: "&7Drop Chance: &e%chance%%"
+
+    seed:
+      itemName: "&e%name% &7(%status%)"
+      itemDropChance: "&7Drop Chance: &e%chance%%"
+
   crops:
     status:
       enabled: "Harvestable"
@@ -185,8 +217,8 @@ menu:
 
     item:
       name: "&e%name% &7(%status%)"
-      dropName: "&7DropName: &r%name%"
-      dropValue: "&7DropValue: &e%value%"
+      dropName: "&7Drop Name: &r%name%"
+      dropValue: "&7Drop Value: &e%value%"
       particles: "&7Amount of Particles: &e%status%"
       sounds: "&7Amount of Sounds: &e%status%"
       MMOExperience: "&7Experience: &e%status%"
@@ -303,43 +335,36 @@ menu:
       itemStatus: "&7Enabled: &e%status%"
 
   jobsCrop:
-    points:
-      itemName: "&ePoints"
-      itemValue: "&7Points: &e%value%"
-
-    pointsAdd:
+    add:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
 
-    pointsRemove:
+    remove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
+
+    points:
+      itemName: "&ePoints"
+      itemValue: "&7Points: &e%value%"
 
     money:
       itemName: "&eMoney"
       itemValue: "&7Money: &e%value%"
 
-    moneyAdd:
-      itemName: "&7Add &a%amount% &7(%type%)"
-      itemAfter: "&7After: &a%value%"
-
-    moneyRemove:
-      itemName: "&7Remove &c%amount% &7(%type%)"
-      itemAfter: "&7After: &c%value%"
-
     experience:
       itemName: "&eExperience"
       itemValue: "&7Experience: &e%value%"
 
-    experienceAdd:
+
+  mcMMOCrop:
+    add:
       itemName: "&7Add &a%amount% &7(%type%)"
       itemAfter: "&7After: &a%value%"
 
-    experienceRemove:
+    remove:
       itemName: "&7Remove &c%amount% &7(%type%)"
       itemAfter: "&7After: &c%value%"
 
-  mcMMOCrop:
     experience:
       itemName: "&eExperience"
       itemValue: "&7Experience: &e%value%"
@@ -352,14 +377,6 @@ menu:
     reasonResponse:
       changed: "&7Changed the experience reason to &r%name%&7."
       unchanged: "&cExperience reason unchanged!"
-
-    experienceAdd:
-      itemName: "&7Add &a%amount% &7(%type%)"
-      itemAfter: "&7After: &a%value%"
-
-    experienceRemove:
-      itemName: "&7Remove &c%amount% &7(%type%)"
-      itemAfter: "&7After: &c%value%"
 
   settings:
     autofarms:
@@ -417,18 +434,60 @@ menu:
     itemName: "&e%name%"
     itemStatus: "&7Status: &e%status%"
 
+  particle:
+    add:
+      itemName: "&7Add &a%amount% &7(%type%)"
+      itemAfter: "&7After: &a%value%"
+
+    remove:
+      itemName: "&7Remove &c%amount% &7(%type%)"
+      itemAfter: "&7After: &c%value%"
+
+    delay:
+      itemName: "&eDelay"
+      itemValue: "&7Delay: &e%value%"
+
+    speed:
+      itemName: "&eSpeed"
+      itemValue: "&7Speed: &e%value%"
+
+    amount:
+      itemName: "&eAmount"
+      itemValue: "&7Amount: &e%value%"
+
   sounds:
     itemName: "&e%name%"
     itemStatus: "&7Status: &e%status%"
 
+  sound:
+    add:
+      itemName: "&7Add &a%amount% &7(%type%)"
+      itemAfter: "&7After: &a%value%"
+
+    remove:
+      itemName: "&7Remove &c%amount% &7(%type%)"
+      itemAfter: "&7After: &c%value%"
+
+    delay:
+      itemName: "&eDelay"
+      itemValue: "&7Delay: &e%value%"
+
+    volume:
+      itemName: "&eVolume"
+      itemValue: "&7Volume: &e%value%"
+
+    pitch:
+      itemName: "&ePitch"
+      itemValue: "&7Pitch: &e%value%"
+
   name:
     crop:
       itemName: "&e%name%"
-      dropName: "&7DropName: &r%name%"
+      dropName: "&7Drop Name: &r%name%"
 
     seed:
       itemName: "&e%name%"
-      dropName: "&7DropName: &r%name%"
+      dropName: "&7Drop Name: &r%name%"
 
     colorCode:
       itemName: "&eColor Codes"

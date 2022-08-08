@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.permissions;
+package com.github.bakuplayz.cropclick.permissions.command;
 
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import org.bukkit.permissions.Permission;
@@ -21,6 +21,12 @@ public final class CommandPermission extends Permission {
     public static Permission ALL_COMMANDS = new Permission(
             "cropclick.command.*",
             "Permission to use every command.",
+            PermissionDefault.OP
+    );
+
+    public static Permission GENERAL_COMMAND = new Permission(
+            "cropclick.command.general",
+            "Permission to use the general command.",
             PermissionDefault.OP
     );
 

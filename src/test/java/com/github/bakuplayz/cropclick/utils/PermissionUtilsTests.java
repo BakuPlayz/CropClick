@@ -86,9 +86,9 @@ public final class PermissionUtilsTests {
 
     @Test
     public void testCanDestroyCrop() {
-        boolean result = PermissionUtils.canDestroyCrop(player);
+        boolean result = PermissionUtils.canDestroyCrop(player, "wheat");
 
-        assertAll("Checks if an OP player can destroy a crop.",
+        assertAll("Checks if an OP player can destroy a wheat crop.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
                 () -> assertTrue(result)
@@ -97,10 +97,10 @@ public final class PermissionUtilsTests {
 
 
     @Test
-    public void testCanPlaceCrop() {
-        boolean result = PermissionUtils.canPlaceCrop(player);
+    public void testCanPlantCrop() {
+        boolean result = PermissionUtils.canPlantCrop(player, "wheat");
 
-        assertAll("Checks if an OP player can place a crop.",
+        assertAll("Checks if an OP player can plant a wheat crop.",
                 () -> assertNotNull(player),
                 () -> assertTrue(player.isOp()),
                 () -> assertTrue(result)

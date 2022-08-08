@@ -33,18 +33,18 @@ public final class PermissionUtils {
     }
 
 
-    public static boolean canDestroyCrop(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.crop.destroy");
+    public static boolean canDestroyCrop(@NotNull Player player, String name) {
+        return player.isOp() || player.hasPermission("cropclick.destroy." + name);
     }
 
 
-    public static boolean canPlaceCrop(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.crop.place");
+    public static boolean canPlantCrop(@NotNull Player player, String name) {
+        return player.isOp() || player.hasPermission("cropclick.plant." + name);
     }
 
 
     public static boolean canHarvestCrop(@NotNull Player player, String name) {
-        return player.isOp() || player.hasPermission("cropclick.crop.harvest." + name);
+        return player.isOp() || player.hasPermission("cropclick.harvest." + name);
     }
 
 }

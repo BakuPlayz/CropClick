@@ -39,7 +39,9 @@ public abstract class BaseSeed implements Seed {
             return;
         }
 
-        ItemStack dropItem = drop.toItemStack(hasNameChanged());
+        ItemStack dropItem = drop.toItemStack(
+                hasNameChanged()
+        );
         if (dropItem.getAmount() != 0) {
             inventory.addItem(dropItem);
         }

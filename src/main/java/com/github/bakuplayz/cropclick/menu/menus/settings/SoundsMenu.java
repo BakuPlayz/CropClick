@@ -7,6 +7,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
+import com.github.bakuplayz.cropclick.menu.menus.sounds.SoundMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
@@ -68,10 +69,12 @@ public final class SoundsMenu extends PaginatedMenu {
             return;
         }
 
-        String sound = sounds.get(index);
-        cropsConfig.toggleSoundCrop(crop.getName(), sound);
-
-        updateMenu();
+        new SoundMenu(
+                plugin,
+                player,
+                crop,
+                sounds.get(index)
+        ).open();
     }
 
 
@@ -107,7 +110,7 @@ public final class SoundsMenu extends PaginatedMenu {
         String name = MessageUtils.beautify(sound, true);
         String status = MessageUtils.getEnabledStatus(
                 plugin,
-                cropsConfig.getCropSounds(crop.getName()).contains(sound)
+                false // cropsConfig.getCropSounds(crop.getName()).contains(sound)
         );
 
         return new ItemUtil(Material.NOTE_BLOCK)

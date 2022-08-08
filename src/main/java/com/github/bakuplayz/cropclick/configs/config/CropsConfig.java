@@ -6,8 +6,6 @@ import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 
 /**
  * (DESCRIPTION)
@@ -71,12 +69,25 @@ public final class CropsConfig extends Config {
      * @return The amount of items that will be dropped when the crop is harvested.
      */
     public int getCropDropAmount(@NotNull String name) {
-        return config.getInt("crops." + name + ".drop.amount", 0);
+        return getCropDropAmount(name, 0);
     }
 
 
     /**
-     * It sets the amount of items that a crop will drop when harvested.
+     * Get the amount of items that a crop will drop when harvested.
+     *
+     * @param name The name of the crop.
+     * @param def  The default value to return if the value is not found.
+     *
+     * @return The amount of items that will be dropped when the crop is harvested.
+     */
+    public int getCropDropAmount(@NotNull String name, int def) {
+        return config.getInt("crops." + name + ".drop.amount", def);
+    }
+
+
+    /**
+     * It sets the amount of items that a crop will drop when harvested
      *
      * @param name   The name of the crop.
      * @param amount The amount of the item that will be dropped.
@@ -95,15 +106,28 @@ public final class CropsConfig extends Config {
      * @return The chance of a crop dropping an item.
      */
     public double getCropDropChance(@NotNull String name) {
-        return config.getDouble("crops." + name + ".drop.chance", 0.0) / 100.0d;
+        return getCropDropChance(name, 0.0);
     }
 
 
     /**
-     * It sets the chance of a crop dropping an item.
+     * Get the chance of a crop dropping its item.
+     *
+     * @param name The name of the crop.
+     * @param def  The default value to return if the config doesn't have the value.
+     *
+     * @return The chance of a crop dropping an item.
+     */
+    public double getCropDropChance(@NotNull String name, double def) {
+        return config.getDouble("crops." + name + ".drop.chance", def) / 100.0d;
+    }
+
+
+    /**
+     * Sets the chance of a crop dropping an item.
      *
      * @param name   The name of the crop.
-     * @param chance The chance of the crop dropping the item.
+     * @param chance The chance that the crop will drop the item.
      */
     public void setCropDropChance(@NotNull String name, double chance) {
         config.set("crops." + name + ".drop.chance", chance);
@@ -118,7 +142,6 @@ public final class CropsConfig extends Config {
      *
      * @return A boolean value.
      */
-    @SuppressWarnings("unused")
     public boolean getCropDropAtLeastOne(@NotNull String name) {
         return config.getBoolean("crops." + name + ".drop.atLeastOne", true);
     }
@@ -149,6 +172,18 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * Set the crop harvestable state of the crop with the given name to the given value.
+     *
+     * @param name          The name of the crop.
+     * @param isHarvestable Whether the crop can be harvested.
+     */
+    public void setCropHarvestable(@NotNull String name, boolean isHarvestable) {
+        config.set("crops." + name + ".isHarvestable", isHarvestable);
+        saveConfig();
+    }
+
+
+    /**
      * It toggles the crop's harvestable state.
      *
      * @param name The name of the crop.
@@ -168,7 +203,32 @@ public final class CropsConfig extends Config {
      * @return A boolean value.
      */
     public boolean isCropLinkable(@NotNull String name) {
-        return config.getBoolean("crops." + name + ".isLinkable", true);
+        return isCropLinkable(name, true);
+    }
+
+
+    /**
+     * Returns whether the crop with the given name is linkable.
+     *
+     * @param name The name of the crop.
+     * @param def  The default value to return if the parameter is not found.
+     *
+     * @return A boolean value.
+     */
+    public boolean isCropLinkable(@NotNull String name, boolean def) {
+        return config.getBoolean("crops." + name + ".isLinkable", def);
+    }
+
+
+    /**
+     * It sets the crop linkable value to the value of the linkable variable
+     *
+     * @param name     The name of the crop.
+     * @param linkable Whether the crop can be linked to a crop.
+     */
+    public void setCropLinkable(@NotNull String name, boolean linkable) {
+        config.set("crops." + name + ".isLinkable", linkable);
+        saveConfig();
     }
 
 
@@ -185,61 +245,157 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * It gets the list of particles that are used for the crop with the given name.
+     * Get the delay between particle spawns for a specific particle type for a specific crop.
      *
-     * @param name The name of the crop.
+     * @param cropName     The name of the crop.
+     * @param particleName The name of the particle.
      *
-     * @return A list of particles, as a string list.
+     * @return The delay of the particle.
      */
-    public @NotNull List<String> getCropParticles(@NotNull String name) {
-        return config.getStringList("crops." + name + ".particles");
+    public double getParticleDelay(@NotNull String cropName, @NotNull String particleName) {
+        return config.getDouble("crops." + cropName + ".particles." + particleName + ".delay", 0.0);
     }
 
 
     /**
-     * If the particle is in the list of particles, remove it, otherwise add it.
+     * Sets the delay of a particle for a crop.
      *
-     * @param name     The name of the crop.
-     * @param particle The name of the particle you want to toggle.
+     * @param cropName     The name of the crop.
+     * @param particleName The name of the particle.
+     * @param delay        The delay between each particle spawn.
      */
-    public void toggleParticleCrop(@NotNull String name, @NotNull String particle) {
-        List<String> particles = getCropParticles(name);
-        if (particles.contains(particle)) {
-            particles.remove(particle);
-        } else {
-            particles.add(particle);
-        }
-        config.set("crops." + name + ".particles", particles);
+    public void setParticleDelay(@NotNull String cropName, @NotNull String particleName, double delay) {
+        config.set("crops." + cropName + ".particles." + particleName + ".delay", delay);
         saveConfig();
     }
 
 
     /**
-     * Get the list of sounds that the crop with the given name should play.
+     * Get the speed of a particle.
      *
-     * @param name The name of the crop.
+     * @param cropName     The name of the crop.
+     * @param particleName The name of the particle.
      *
-     * @return A list of particles, as a string list.
+     * @return The speed of the particle.
      */
-    public @NotNull List<String> getCropSounds(@NotNull String name) {
-        return config.getStringList("crops." + name + ".sounds");
+    public double getParticleSpeed(@NotNull String cropName, @NotNull String particleName) {
+        return config.getDouble("crops." + cropName + ".particles." + particleName + ".speed", 0.0);
     }
 
 
     /**
-     * If the sound is in the list of sounds, remove it, otherwise add it.
+     * Sets the speed of a particle for a crop.
      *
-     * @param name  The name of the crop.
-     * @param sound The name of the sound to toggle.
+     * @param cropName     The name of the crop.
+     * @param particleName The name of the particle.
+     * @param speed        The speed of the particle.
      */
-    public void toggleSoundCrop(@NotNull String name, @NotNull String sound) {
-        List<String> sounds = getCropSounds(name);
-        if (sounds.contains(sound)) {
-            sounds.remove(sound);
-        } else {
-            sounds.add(sound);
-        }
-        config.set("crops." + name + ".sounds", sounds);
+    public void setParticleSpeed(@NotNull String cropName, @NotNull String particleName, double speed) {
+        config.set("crops." + cropName + ".particles." + particleName + ".speed", speed);
+        saveConfig();
+    }
+
+
+    /**
+     * Get the amount of particles to spawn for a specific particle type.
+     *
+     * @param cropName     The cropName of the crop.
+     * @param particleName The name of the particle.
+     *
+     * @return The amount of particles.
+     */
+    public int getParticleAmount(@NotNull String cropName, @NotNull String particleName) {
+        return config.getInt("crops." + cropName + ".particles." + particleName + ".amount", 0);
+    }
+
+
+    /**
+     * It sets the amount of particles that will be spawned when a crop is harvested
+     *
+     * @param cropName     The name of the crop.
+     * @param particleName The name of the particle.
+     * @param amount       The amount of particles to spawn.
+     */
+    public void setParticleAmount(@NotNull String cropName, @NotNull String particleName, int amount) {
+        config.set("crops." + cropName + ".particles." + particleName + ".amount", amount);
+        saveConfig();
+    }
+
+
+    /**
+     * Get the delay between the sound being played and the next sound being played.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound.
+     *
+     * @return The delay of the sound.
+     */
+    public double getSoundDelay(@NotNull String cropName, @NotNull String soundName) {
+        return config.getDouble("crops." + cropName + ".sounds." + soundName + ".delay", 0.0);
+    }
+
+
+    /**
+     * Sets the delay of a sound for a crop.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound you want to set the delay for.
+     * @param delay     The delay between each sound.
+     */
+    public void setSoundDelay(@NotNull String cropName, @NotNull String soundName, double delay) {
+        config.set("crops." + cropName + ".sounds." + soundName + ".delay", delay);
+        saveConfig();
+    }
+
+
+    /**
+     * Get the volume of a sound for a crop.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound.
+     *
+     * @return The volume of the sound.
+     */
+    public double getSoundVolume(@NotNull String cropName, @NotNull String soundName) {
+        return config.getDouble("crops." + cropName + ".sounds." + soundName + ".volume", 0.0);
+    }
+
+
+    /**
+     * Sets the volume of a sound for a crop.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound.
+     * @param volume    The volume of the sound.
+     */
+    public void setSoundVolume(@NotNull String cropName, @NotNull String soundName, double volume) {
+        config.set("crops." + cropName + ".sounds." + soundName + ".volume", volume);
+        saveConfig();
+    }
+
+
+    /**
+     * Get the pitch of a sound for a crop.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound.
+     *
+     * @return The pitch of the sound.
+     */
+    public double getSoundPitch(@NotNull String cropName, @NotNull String soundName) {
+        return config.getDouble("crops." + cropName + ".sounds." + soundName + ".pitch", 0.0);
+    }
+
+
+    /**
+     * Sets the pitch of the sound for the specified crop.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound.
+     * @param pitch     The pitch of the sound.
+     */
+    public void setSoundPitch(@NotNull String cropName, @NotNull String soundName, double pitch) {
+        config.set("crops." + cropName + ".sounds." + soundName + ".pitch", pitch);
         saveConfig();
     }
 
@@ -251,8 +407,20 @@ public final class CropsConfig extends Config {
      *
      * @return A boolean value.
      */
-    public boolean shouldReplantCrop(@NotNull String name) {
+    public boolean shouldCropReplant(@NotNull String name) {
         return config.getBoolean("crops." + name + ".shouldReplant", true);
+    }
+
+
+    /**
+     * Sets the replant value of a crop to the given value.
+     *
+     * @param name    The name of the crop.
+     * @param replant Whether the crop should replant itself
+     */
+    public void setCropReplant(@NotNull String name, boolean replant) {
+        config.set("crops." + name + ".shouldReplant", replant);
+        saveConfig();
     }
 
 
@@ -262,7 +430,7 @@ public final class CropsConfig extends Config {
      * @param name The name of the crop.
      */
     public void toggleReplantCrop(@NotNull String name) {
-        boolean shouldReplant = shouldReplantCrop(name);
+        boolean shouldReplant = shouldCropReplant(name);
         config.set("crops." + name + ".shouldReplant", !shouldReplant);
         saveConfig();
     }
@@ -456,14 +624,27 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Get the amount of seeds that should be dropped when a plant is harvested.
+     * Get the amount of seeds that should be dropped when a plant is broken.
      *
      * @param name The name of the seed.
      *
      * @return The amount of seeds that will drop from a plant.
      */
     public int getSeedDropAmount(@NotNull String name) {
-        return config.getInt("seeds." + name + ".drop.amount", 0);
+        return getSeedDropAmount(name, 0);
+    }
+
+
+    /**
+     * Get the amount of seeds that should drop from a plant.
+     *
+     * @param name The name of the seed.
+     * @param def  The default value to return if the value is not found.
+     *
+     * @return The amount of seeds that will drop from a plant.
+     */
+    public int getSeedDropAmount(@NotNull String name, int def) {
+        return config.getInt("seeds." + name + ".drop.amount", def);
     }
 
 
@@ -486,16 +667,30 @@ public final class CropsConfig extends Config {
      *
      * @return The chance of a seed dropping.
      */
+    @SuppressWarnings("unused")
     public double getSeedDropChance(@NotNull String name) {
-        return config.getDouble("seeds." + name + ".drop.chance", 0.0) / 100.0d;
+        return getSeedDropChance(name, 0.0);
     }
 
 
     /**
-     * Sets the chance of a seed dropping from a mob
+     * Get the chance of a seed dropping from a plant, as a decimal.
+     *
+     * @param name The name of the seed.
+     * @param def  The default value to return if the config doesn't have the value.
+     *
+     * @return The chance of a seed dropping.
+     */
+    public double getSeedDropChance(@NotNull String name, double def) {
+        return config.getDouble("seeds." + name + ".drop.chance", def) / 100.0d;
+    }
+
+
+    /**
+     * Sets the chance of a seed dropping.
      *
      * @param name   The name of the seed.
-     * @param chance The chance that the seed will drop.
+     * @param chance The chance of the seed dropping.
      */
     public void setSeedDropChance(@NotNull String name, double chance) {
         config.set("seeds." + name + ".drop.chance", chance);

@@ -7,6 +7,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.menus.crop.DropChanceMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
@@ -29,6 +30,7 @@ public final class CropMenu extends Menu {
 
     private final Crop crop;
     private final Seed seed;
+    private final String cropName;
     private final boolean hasSeed;
 
     private final CropsConfig cropsConfig;
@@ -36,10 +38,14 @@ public final class CropMenu extends Menu {
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
+    private final int MIN_VALUE = 0;
+    private final int MAX_VALUE = 576;
+
 
     public CropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.CROP_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
+        this.cropName = crop.getName();
         this.hasSeed = crop.hasSeed();
         this.seed = crop.getSeed();
         this.crop = crop;
@@ -62,6 +68,7 @@ public final class CropMenu extends Menu {
             inventory.setItem(34, getSeedAddItem(MAX_CHANGE));
         }
 
+        inventory.setItem(46, getChanceItem());
         inventory.setItem(47, getLinkableItem());
         inventory.setItem(51, getReplantItem());
         inventory.setItem(52, getAtLeastItem());
@@ -76,7 +83,9 @@ public final class CropMenu extends Menu {
 
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.CROP));
 
-        String cropName = crop.getName();
+        if (clicked.equals(getChanceItem())) {
+            new DropChanceMenu(plugin, player, crop).open();
+        }
 
         if (clicked.equals(getLinkableItem())) {
             cropsConfig.toggleLinkableCrop(cropName);
@@ -95,19 +104,19 @@ public final class CropMenu extends Menu {
         }
 
         if (clicked.equals(getCropAddItem(MIN_CHANGE))) {
-            addCropDropAmount(cropName, MIN_CHANGE);
+            addCropDropAmount(MIN_CHANGE);
         }
 
         if (clicked.equals(getCropAddItem(MAX_CHANGE))) {
-            addCropDropAmount(cropName, MAX_CHANGE);
+            addCropDropAmount(MAX_CHANGE);
         }
 
         if (clicked.equals(getCropRemoveItem(MIN_CHANGE))) {
-            removeCropDropAmount(cropName, MIN_CHANGE);
+            removeCropDropAmount(MIN_CHANGE);
         }
 
         if (clicked.equals(getCropRemoveItem(MAX_CHANGE))) {
-            removeCropDropAmount(cropName, MAX_CHANGE);
+            removeCropDropAmount(MAX_CHANGE);
         }
 
         if (hasSeed) {
@@ -139,10 +148,11 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getCropItem() {
-        String name = MessageUtils.beautify(crop.getName(), false);
+        String name = MessageUtils.beautify(cropName, false);
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.CROP_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROP_STATUS_DISABLED.get(plugin);
+
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount()))
@@ -166,9 +176,29 @@ public final class CropMenu extends Menu {
     }
 
 
+    private @NotNull ItemStack getChanceItem() {
+        int cropChance = getDropChanceAsPercent(true);
+
+        ItemUtil item = new ItemUtil(Material.WOOD_PLATE)
+                .setName(plugin, LanguageAPI.Menu.CROP_CHANCE_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, cropChance));
+
+        if (hasSeed) {
+            int seedChance = getDropChanceAsPercent(false);
+            item.setLore(
+                    LanguageAPI.Menu.CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, cropChance),
+                    LanguageAPI.Menu.CROP_CHANCE_ITEM_SEED_STATUS.get(plugin, seedChance)
+            );
+        }
+
+        return item.toItemStack();
+    }
+
+
     private @NotNull ItemStack getLinkableItem() {
-        boolean isLinkable = cropsConfig.isCropLinkable(crop.getName());
-        return new ItemUtil(Material.DAYLIGHT_DETECTOR)
+        boolean isLinkable = cropsConfig.isCropLinkable(cropName);
+
+        return new ItemUtil(Material.STONE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
                 .toItemStack();
@@ -176,7 +206,8 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getReplantItem() {
-        boolean shouldReplant = cropsConfig.shouldReplantCrop(crop.getName());
+        boolean shouldReplant = cropsConfig.shouldCropReplant(cropName);
+
         return new ItemUtil(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_REPLANT_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
@@ -185,7 +216,8 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getAtLeastItem() {
-        boolean atLeastOne = cropsConfig.shouldDropAtLeastOne(crop.getName());
+        boolean atLeastOne = cropsConfig.shouldDropAtLeastOne(cropName);
+
         return new ItemUtil(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_AT_LEAST_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
@@ -194,8 +226,9 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getCropAddItem(int amount) {
-        int beforeValue = cropsConfig.getCropDropAmount(crop.getName());
+        int beforeValue = cropsConfig.getCropDropAmount(cropName);
         int afterValue = Math.min(beforeValue + amount, 576);
+
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
@@ -205,8 +238,9 @@ public final class CropMenu extends Menu {
 
 
     private @NotNull ItemStack getCropRemoveItem(int amount) {
-        int beforeValue = cropsConfig.getCropDropAmount(crop.getName());
+        int beforeValue = cropsConfig.getCropDropAmount(cropName);
         int afterValue = Math.max(beforeValue - amount, 0);
+
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
@@ -218,6 +252,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getSeedAddItem(int amount) {
         int beforeValue = cropsConfig.getSeedDropAmount(seed.getName());
         int afterValue = Math.min(beforeValue + amount, 576);
+
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
@@ -229,6 +264,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
         int beforeValue = cropsConfig.getSeedDropAmount(seed.getName());
         int afterValue = Math.max(beforeValue - amount, 0);
+
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
@@ -238,54 +274,68 @@ public final class CropMenu extends Menu {
 
 
     /**
-     * Adds the given amount to the current drop amount of the given crop, but never more than 576.
+     * Add the given amount to the current drop amount, but don't exceed the maximum value.
      *
-     * @param name   The name of the crop.
      * @param amount The amount to add to the current drop amount.
      */
-    public void addCropDropAmount(@NotNull String name, int amount) {
-        int oldAmount = cropsConfig.getCropDropAmount(name) + amount;
-        int newAmount = Math.min(oldAmount, 576);
-        cropsConfig.setCropDropAmount(name, newAmount);
+    public void addCropDropAmount(int amount) {
+        int oldAmount = cropsConfig.getCropDropAmount(cropName) + amount;
+        int newAmount = Math.min(oldAmount, MAX_VALUE);
+        cropsConfig.setCropDropAmount(cropName, newAmount);
     }
 
 
     /**
-     * Remove the given amount from the given crop's drop amount, but never less than zero.
+     * Remove the given amount from the current crop drop amount, but don't go below the minimum value.
      *
-     * @param name   The name of the crop.
-     * @param amount The amount to add to the current amount.
+     * @param amount The amount to remove from the current drop amount.
      */
-    public void removeCropDropAmount(@NotNull String name, int amount) {
-        int oldAmount = cropsConfig.getCropDropAmount(name) - amount;
-        int newAmount = Math.max(oldAmount, 0);
-        cropsConfig.setCropDropAmount(name, newAmount);
+    public void removeCropDropAmount(int amount) {
+        int oldAmount = cropsConfig.getCropDropAmount(cropName) - amount;
+        int newAmount = Math.max(oldAmount, MIN_VALUE);
+        cropsConfig.setCropDropAmount(cropName, newAmount);
     }
 
 
     /**
      * Adds the given amount to the seed drop amount of the given seed, but never more than 576.
      *
-     * @param name   The name of the seed.
-     * @param amount The amount of seeds to add to the current amount.
+     * @param seedName The name of the seed.
+     * @param amount   The amount of seeds to add to the current amount.
      */
-    public void addSeedDropAmount(@NotNull String name, int amount) {
-        int oldAmount = cropsConfig.getSeedDropAmount(name) + amount;
-        int newAmount = Math.min(oldAmount, 576);
-        cropsConfig.setSeedDropAmount(name, newAmount);
+    public void addSeedDropAmount(@NotNull String seedName, int amount) {
+        int oldAmount = cropsConfig.getSeedDropAmount(seedName) + amount;
+        int newAmount = Math.min(oldAmount, MAX_VALUE);
+        cropsConfig.setSeedDropAmount(seedName, newAmount);
     }
 
 
     /**
      * Removes the given amount from the seed drop amount of the given seed, but never less than zero.
      *
-     * @param name   The name of the seed.
-     * @param amount The amount to add to the current amount.
+     * @param seedName The name of the seed.
+     * @param amount   The amount to add to the current amount.
      */
-    public void removeSeedDropAmount(@NotNull String name, int amount) {
-        int oldAmount = cropsConfig.getSeedDropAmount(name) - amount;
-        int newAmount = Math.max(oldAmount, 0);
-        cropsConfig.setSeedDropAmount(name, newAmount);
+    public void removeSeedDropAmount(@NotNull String seedName, int amount) {
+        int oldAmount = cropsConfig.getSeedDropAmount(seedName) - amount;
+        int newAmount = Math.max(oldAmount, MIN_VALUE);
+        cropsConfig.setSeedDropAmount(seedName, newAmount);
+    }
+
+
+    /**
+     * It returns the drop chance of the crop or seed, depending on the boolean parameter.
+     *
+     * @param isCrop Whether the drop is a crop or a seed.
+     *
+     * @return The drop chance of the crop or seed.
+     */
+    private int getDropChanceAsPercent(boolean isCrop) {
+        double DECIMAL_TO_PERCENT = 10_000;
+        if (isCrop) {
+            return (int) (cropsConfig.getCropDropChance(cropName) * DECIMAL_TO_PERCENT);
+        }
+        return (int) (cropsConfig.getSeedDropChance(cropName) * DECIMAL_TO_PERCENT);
     }
 
 }

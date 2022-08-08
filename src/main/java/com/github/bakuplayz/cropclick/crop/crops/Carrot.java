@@ -35,10 +35,10 @@ public final class Carrot extends GroundCrop {
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.CARROT,
+        return new Drop(Material.CARROT_ITEM,
                 cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName()),
-                cropsConfig.getCropDropChance(getName())
+                cropsConfig.getCropDropAmount(getName(), 4),
+                cropsConfig.getCropDropChance(getName(), 80)
         );
     }
 

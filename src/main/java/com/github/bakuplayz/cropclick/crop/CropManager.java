@@ -58,6 +58,7 @@ public final class CropManager {
         registerCrop(new Carrot(cropsConfig));
         registerCrop(new CocoaBean(cropsConfig));
         registerCrop(new Melon(cropsConfig));
+        registerCrop(new NetherWart(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
         registerCrop(new Potato(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
@@ -103,9 +104,9 @@ public final class CropManager {
             }
 
             // Action Settings
-            cropsConfig.getConfig().set("crops." + cropName + ".shouldReplant", crop.shouldReplant());
-            cropsConfig.getConfig().set("crops." + cropName + ".isHarvestable", crop.isHarvestable());
-            cropsConfig.getConfig().set("crops." + cropName + ".isLinkable", crop.isLinkable());
+            cropsConfig.setCropReplant(cropName, crop.shouldReplant());
+            cropsConfig.setCropHarvestable(cropName, crop.isHarvestable());
+            cropsConfig.setCropLinkable(cropName, crop.isLinkable());
 
             // mcMMO Settings
             cropsConfig.setMcMMOExperience(cropName, 0);

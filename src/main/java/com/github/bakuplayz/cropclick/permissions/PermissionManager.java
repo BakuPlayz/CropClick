@@ -3,6 +3,13 @@ package com.github.bakuplayz.cropclick.permissions;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.WallCrop;
+import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
+import com.github.bakuplayz.cropclick.permissions.crop.CropPermission;
+import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionBase;
+import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionType;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
@@ -52,6 +59,10 @@ public final class PermissionManager {
             child.addParent(allPermission, true);
             pluginManager.addPermission(child);
         });
+
+        Permission generalPermission = CommandPermission.GENERAL_COMMAND;
+        generalPermission.addParent(allPermission, true);
+        pluginManager.addPermission(generalPermission);
     }
 
 
@@ -72,11 +83,32 @@ public final class PermissionManager {
         Permission allPermission = type.getAllPermission();
         pluginManager.addPermission(allPermission);
 
+        Permission groundPermission = new CropPermission(CropPermissionBase.GROUND, type);
+        Permission tallPermission = new CropPermission(CropPermissionBase.TALL, type);
+        Permission wallPermission = new CropPermission(CropPermissionBase.WALL, type);
+
         crops.forEach(crop -> {
             Permission child = new CropPermission(crop.getName(), type);
-            child.addParent(allPermission, true);
+
+            if (crop instanceof GroundCrop) {
+                child.addParent(groundPermission, true);
+            } else if (crop instanceof TallCrop) {
+                child.addParent(tallPermission, true);
+            } else if (crop instanceof WallCrop) {
+                child.addParent(wallPermission, true);
+            } else {
+                child.addParent(allPermission, true);
+            }
+
             pluginManager.addPermission(child);
         });
+
+        groundPermission.addParent(allPermission, true);
+        tallPermission.addParent(allPermission, true);
+        wallPermission.addParent(allPermission, true);
+        pluginManager.addPermission(groundPermission);
+        pluginManager.addPermission(tallPermission);
+        pluginManager.addPermission(wallPermission);
     }
 
 }

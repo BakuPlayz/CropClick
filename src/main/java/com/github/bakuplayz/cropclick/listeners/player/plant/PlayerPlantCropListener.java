@@ -58,10 +58,6 @@ public final class PlayerPlantCropListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (!PermissionUtils.canPlaceCrop(player)) {
-            return;
-        }
-
         FarmWorld world = worldManager.findByPlayer(player);
         if (!worldManager.isAccessible(world)) {
             return;
@@ -75,6 +71,10 @@ public final class PlayerPlantCropListener implements Listener {
 
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
+            return;
+        }
+
+        if (!PermissionUtils.canPlantCrop(player, crop.getName())) {
             return;
         }
 

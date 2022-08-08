@@ -44,8 +44,8 @@ public final class Melon extends GroundCrop {
     public @NotNull Drop getDrop() {
         return new Drop(Material.MELON,
                 cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName()),
-                cropsConfig.getCropDropChance(getName())
+                cropsConfig.getCropDropAmount(getName(), 7),
+                cropsConfig.getCropDropChance(getName(), 80)
         );
     }
 
@@ -71,7 +71,13 @@ public final class Melon extends GroundCrop {
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.MELON_BLOCK;
+        return Material.MELON;
+    }
+
+
+    @Override
+    public boolean isLinkable() {
+        return cropsConfig.isCropLinkable(getName(), false);
     }
 
 }

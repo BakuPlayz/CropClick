@@ -60,7 +60,7 @@ public final class Drop {
      * @return A boolean value.
      */
     public boolean willDrop() {
-        return chance >= randomChance;
+        return randomChance >= chance;
     }
 
 

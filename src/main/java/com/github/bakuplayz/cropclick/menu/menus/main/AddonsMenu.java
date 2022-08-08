@@ -81,11 +81,11 @@ public final class AddonsMenu extends Menu {
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getJobsItem())) {
-            if (jobsPresent) new JobsRebornMenu(plugin, player).open();
+            if (jobsPresent || true) new JobsRebornMenu(plugin, player).open();
         }
 
         if (clicked.equals(getMCMMOItem())) {
-            if (mmoPresent) new McMMOMenu(plugin, player).open();
+            if (mmoPresent || true) new McMMOMenu(plugin, player).open();
         }
 
         if (clicked.equals(getGrowthItem())) {

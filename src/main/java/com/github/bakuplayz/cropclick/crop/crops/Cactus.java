@@ -35,8 +35,8 @@ public final class Cactus extends TallCrop {
     public @NotNull Drop getDrop() {
         return new Drop(Material.CACTUS,
                 cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName()),
-                cropsConfig.getCropDropChance(getName())
+                cropsConfig.getCropDropAmount(getName(), 1),
+                cropsConfig.getCropDropChance(getName(), 100)
         );
     }
 
