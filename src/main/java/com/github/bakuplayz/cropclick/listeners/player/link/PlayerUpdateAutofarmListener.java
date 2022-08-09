@@ -23,8 +23,8 @@ import org.jetbrains.annotations.NotNull;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class PlayerUpdateAutofarmListener implements Listener {
 
@@ -100,14 +100,16 @@ public final class PlayerUpdateAutofarmListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        if (!PermissionUtils.canUpdateFarm(player)) {
+        Autofarm oldFarm = event.getOldAutofarm();
+        Autofarm newFarm = event.getNewAutofarm();
+        if (!PermissionUtils.canUpdateOthersFarm(player, oldFarm.getOwnerID())) {
             event.setCancelled(true);
             return;
         }
 
         Event updateEvent = new AutofarmUpdateEvent(
-                event.getOldAutofarm(),
-                event.getNewAutofarm()
+                oldFarm,
+                newFarm
         );
 
         System.out.println("Player -- Update");

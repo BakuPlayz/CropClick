@@ -34,9 +34,9 @@ import java.util.stream.Collectors;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
+ * @version 2.0.0
  * @see Menu
- * @since 1.6.0
+ * @since 2.0.0
  */
 public final class CropsMenu extends PaginatedMenu {
 
@@ -187,9 +187,11 @@ public final class CropsMenu extends PaginatedMenu {
                 break;
 
             case JOBS_REBORN:
-                menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_JOBS_MONEY.get(plugin, getJobsMoney(crop)),
+                menuItem.setLore(
+                        LanguageAPI.Menu.CROPS_ITEM_JOBS_MONEY.get(plugin, getJobsMoney(crop)),
                         LanguageAPI.Menu.CROPS_ITEM_JOBS_POINTS.get(plugin, getJobsPoints(crop)),
-                        LanguageAPI.Menu.CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, getJobsExperience(crop)));
+                        LanguageAPI.Menu.CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, getJobsExperience(crop))
+                );
         }
 
         return menuItem.toItemStack();
@@ -264,7 +266,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of sounds for a crop.
      */
     private int getAmountOfSounds(@NotNull Crop crop) {
-        return 0;//cropsConfig.getCropSounds(crop.getName()).size();
+        return cropsConfig.getAmountOfEnabledSounds(crop.getName());
     }
 
 
@@ -276,7 +278,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of particles that are in the config file for the crop.
      */
     private int getAmountOfParticles(@NotNull Crop crop) {
-        return 0;//cropsConfig.getCropParticles(crop.getName()).size();
+        return cropsConfig.getAmountOfEnabledParticles(crop.getName());
     }
 
 

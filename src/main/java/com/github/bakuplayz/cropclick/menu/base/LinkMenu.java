@@ -35,8 +35,8 @@ import java.util.List;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public abstract class LinkMenu extends Menu {
 
@@ -67,13 +67,14 @@ public abstract class LinkMenu extends Menu {
     public LinkMenu(@NotNull CropClick plugin,
                     @NotNull Player player,
                     @NotNull Block block,
+                    Autofarm autofarm,
                     @NotNull LanguageAPI.Menu menuTitle,
                     @NotNull Component clickedComponent) {
         super(plugin, player, menuTitle);
         this.autofarmManager = plugin.getAutofarmManager();
-        this.autofarm = autofarmManager.findAutofarm(block);
         this.isUnlinked = !autofarmManager.isLinked(autofarm);
         this.clickedComponent = clickedComponent;
+        this.autofarm = autofarm;
         this.block = block;
 
         assignCachedMeta();

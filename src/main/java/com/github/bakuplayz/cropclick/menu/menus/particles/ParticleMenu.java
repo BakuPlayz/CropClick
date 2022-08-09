@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class ParticleMenu extends Menu {
 
@@ -32,8 +32,8 @@ public final class ParticleMenu extends Menu {
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
-    public final int MIN_DELAY = 0;
-    public final int MAX_DELAY = 5;
+    public final int MIN_DELAY = 0; // in milliseconds
+    public final int MAX_DELAY = 5000; // in milliseconds
 
     public final int MIN_SPEED = 0;
     public final int MAX_SPEED = 50;

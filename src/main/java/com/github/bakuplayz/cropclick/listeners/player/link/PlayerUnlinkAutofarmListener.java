@@ -24,12 +24,10 @@ import org.jetbrains.annotations.NotNull;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class PlayerUnlinkAutofarmListener implements Listener {
-
-    private final CropClick plugin;
 
     private final WorldManager worldManager;
     private final AddonManager addonManager;
@@ -40,7 +38,6 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
-        this.plugin = plugin;
     }
 
 
@@ -76,6 +73,10 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
         Autofarm autofarm = autofarmManager.findAutofarm(block);
         if (!autofarmManager.isUsable(autofarm)) {
+            return;
+        }
+
+        if (!PermissionUtils.canUnlinkOthersFarm(player, autofarm.getOwnerID())) {
             return;
         }
 

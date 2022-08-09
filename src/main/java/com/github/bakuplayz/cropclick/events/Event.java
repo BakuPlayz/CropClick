@@ -7,8 +7,8 @@ import org.bukkit.event.HandlerList;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public abstract class Event extends org.bukkit.event.Event {
 

@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class CropTypeDuplicateException extends RuntimeException {
 
@@ -33,8 +33,8 @@ public final class CropTypeDuplicateException extends RuntimeException {
      */
     private static @NotNull String getCropNames(@NotNull List<Crop> crops) {
         return crops.stream()
-                .map(Crop::getName)
-                .collect(Collectors.joining());
+                    .map(Crop::getName)
+                    .collect(Collectors.joining());
     }
 
 }

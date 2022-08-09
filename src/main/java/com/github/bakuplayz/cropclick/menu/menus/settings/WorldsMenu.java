@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
+ * @version 2.0.0
  * @see Menu
- * @since 1.6.0
+ * @since 2.0.0
  */
 public final class WorldsMenu extends PaginatedMenu {
 

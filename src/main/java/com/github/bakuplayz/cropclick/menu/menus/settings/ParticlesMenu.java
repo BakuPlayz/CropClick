@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
+ * @version 2.0.0
  * @see Menu
- * @since 1.6.0
+ * @since 2.0.0
  */
 public final class ParticlesMenu extends PaginatedMenu {
 
@@ -123,7 +123,7 @@ public final class ParticlesMenu extends PaginatedMenu {
         String name = MessageUtils.beautify(particle, true);
         String status = MessageUtils.getEnabledStatus(
                 plugin,
-                false //cropsConfig.getCropParticles(crop.getName()).contains(particle)
+                cropsConfig.isParticleEnabled(crop.getName(), particle)
         );
 
         return new ItemUtil(Material.FIREWORK)

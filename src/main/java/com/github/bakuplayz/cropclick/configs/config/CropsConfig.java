@@ -3,16 +3,20 @@ package com.github.bakuplayz.cropclick.configs.config;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleEffect;
+
+import java.util.Arrays;
 
 
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class CropsConfig extends Config {
 
@@ -136,30 +140,6 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Returns whether the crop should drop at least one item when harvested.
-     *
-     * @param name The name of the crop.
-     *
-     * @return A boolean value.
-     */
-    public boolean getCropDropAtLeastOne(@NotNull String name) {
-        return config.getBoolean("crops." + name + ".drop.atLeastOne", true);
-    }
-
-
-    /**
-     * Sets the crop's drop atLeastOne value.
-     *
-     * @param name       The name of the crop.
-     * @param atLeastOne If true, the crop will always drop at least one item.
-     */
-    public void setCropDropAtLeastOne(@NotNull String name, boolean atLeastOne) {
-        config.set("crops." + name + ".drop.atLeastOne", atLeastOne);
-        saveConfig();
-    }
-
-
-    /**
      * Returns whether the crop with the given name is harvestable.
      *
      * @param name The name of the crop.
@@ -245,6 +225,34 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * Returns true if the particle is enabled for the crop (aka has one or more amount).
+     *
+     * @param cropName     The name of the crop.
+     * @param particleName The name of the particle.
+     *
+     * @return A boolean value.
+     */
+    public boolean isParticleEnabled(@NotNull String cropName, @NotNull String particleName) {
+        return getParticleAmount(cropName, particleName) != 0;
+    }
+
+
+    /**
+     * Return the amount of enabled particles for a crop.
+     *
+     * @param cropName The name of the crop.
+     *
+     * @return The amount of enabled particles for a crop.
+     */
+    public int getAmountOfEnabledParticles(@NotNull String cropName) {
+        return (int) Arrays.stream(ParticleEffect.values())
+                           .map(ParticleEffect::name)
+                           .filter(particle -> isParticleEnabled(cropName, particle))
+                           .count();
+    }
+
+
+    /**
      * Get the delay between particle spawns for a specific particle type for a specific crop.
      *
      * @param cropName     The name of the crop.
@@ -319,6 +327,36 @@ public final class CropsConfig extends Config {
     public void setParticleAmount(@NotNull String cropName, @NotNull String particleName, int amount) {
         config.set("crops." + cropName + ".particles." + particleName + ".amount", amount);
         saveConfig();
+    }
+
+
+    /**
+     * Returns true if the sound is enabled, false otherwise.
+     *
+     * @param cropName  The name of the crop.
+     * @param soundName The name of the sound.
+     *
+     * @return A boolean value.
+     */
+    public boolean isSoundEnabled(@NotNull String cropName, @NotNull String soundName) {
+        double volume = getSoundVolume(cropName, soundName);
+        double pitch = getSoundPitch(cropName, soundName);
+        return volume != 0.0 & pitch != 0.0;
+    }
+
+
+    /**
+     * Return the amount of enabled sounds for a given crop.
+     *
+     * @param cropName The name of the crop.
+     *
+     * @return The amount of enabled sounds for a crop.
+     */
+    public int getAmountOfEnabledSounds(@NotNull String cropName) {
+        return (int) Arrays.stream(Sound.values())
+                           .map(Sound::name)
+                           .filter(sound -> isSoundEnabled(cropName, sound))
+                           .count();
     }
 
 
@@ -430,9 +468,7 @@ public final class CropsConfig extends Config {
      * @param name The name of the crop.
      */
     public void toggleReplantCrop(@NotNull String name) {
-        boolean shouldReplant = shouldCropReplant(name);
-        config.set("crops." + name + ".shouldReplant", !shouldReplant);
-        saveConfig();
+        setCropReplant(name, !shouldCropReplant(name));
     }
 
 
@@ -449,14 +485,24 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * Sets the crop's drop atLeastOne value.
+     *
+     * @param name       The name of the crop.
+     * @param atLeastOne If true, the crop will always drop at least one item.
+     */
+    public void setDropAtLeastOne(@NotNull String name, boolean atLeastOne) {
+        config.set("crops." + name + ".drop.atLeastOne", atLeastOne);
+        saveConfig();
+    }
+
+
+    /**
      * It toggles the dropAtLeastOne boolean for the crop with the given name.
      *
      * @param name The name of the crop.
      */
     public void toggleDropAtLeastOne(@NotNull String name) {
-        boolean dropAtLeastOne = shouldDropAtLeastOne(name);
-        config.set("crops." + name + ".atLeastOne", !dropAtLeastOne);
-        saveConfig();
+        setDropAtLeastOne(name, !shouldDropAtLeastOne(name));
     }
 
 

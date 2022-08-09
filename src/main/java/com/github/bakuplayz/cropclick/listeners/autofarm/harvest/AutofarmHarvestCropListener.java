@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.material.Directional;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -25,8 +26,8 @@ import java.util.HashMap;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class AutofarmHarvestCropListener implements Listener {
 
@@ -78,16 +79,16 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        Crop crop = cropManager.findByBlock(block);
-        if (!cropManager.validate(crop, block)) {
+        Block facing = findDispenserFacing(block);
+        Crop crop = cropManager.findByBlock(facing);
+        if (!cropManager.validate(crop, facing)) {
             return;
         }
-
         if (!crop.isHarvestable()) {
             return;
         }
 
-        if (!crop.isHarvestAge(block)) {
+        if (!crop.isHarvestAge(facing)) {
             return;
         }
 
@@ -97,10 +98,8 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         harvestedCrops.put(crop, System.nanoTime());
 
-        event.setCancelled(true);
-
         Bukkit.getPluginManager().callEvent(
-                new AutofarmHarvestCropEvent(crop, block, autofarm)
+                new AutofarmHarvestCropEvent(crop, facing, autofarm)
         );
     }
 
@@ -123,7 +122,23 @@ public final class AutofarmHarvestCropListener implements Listener {
             crop.replant(event.getBlock());
         }
 
+        System.out.println("Autofarm -- Harvest");
+
         harvestedCrops.remove(crop);
+    }
+
+
+    /**
+     * Get the block that the dispenser is facing.
+     *
+     * @param block The block that the dispenser is on.
+     *
+     * @return The block that the dispenser is facing.
+     */
+    private Block findDispenserFacing(@NotNull Block block) {
+        return block.getRelative(
+                ((Directional) block.getState().getData()).getFacing()
+        );
     }
 
 }

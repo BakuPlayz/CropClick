@@ -4,22 +4,28 @@ import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.particles.ParticleRunnable;
+import com.github.bakuplayz.cropclick.sounds.SoundRunnable;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
 
 
 /**
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public abstract class BaseCrop implements Crop {
 
@@ -135,24 +141,85 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public void playSounds(@NotNull Block block) {
-      /*  getCropsConfig().getCropSounds(getName()).stream()
-                        .map(Sound::valueOf)
-                        .forEach(sound -> block.getWorld().playSound(block.getLocation(), sound, 1f, 1f));*/
+        SoundRunnable runnable = new SoundRunnable(block);
+
+        Set<String> sounds = getSounds();
+        if (sounds == null) {
+            return;
+        }
+
+        for (String sound : sounds) {
+            double delay = cropsConfig.getSoundDelay(getName(), sound);
+            double pitch = cropsConfig.getSoundPitch(getName(), sound);
+            double volume = cropsConfig.getSoundVolume(getName(), sound);
+
+            runnable.addSound(
+                    sound,
+                    volume,
+                    pitch,
+                    delay
+            );
+        }
+
+        runnable.run();
     }
 
 
     @Override
     public void playParticles(@NotNull Block block) {
-        //ParticleEffect.ASH.display(block.getLocation(), Vector.getRandom(), 10f, 10, null);
-        /*getCropsConfig().getCropParticles(getName()).stream()
-                        .map(ParticleEffect::valueOf)
-                        .forEach(particle -> particle.display(block.getLocation()));*/
+        ParticleRunnable runnable = new ParticleRunnable(block);
+
+        Set<String> particles = getParticles();
+        if (particles == null) {
+            return;
+        }
+
+        for (String particle : particles) {
+            double delay = cropsConfig.getParticleDelay(getName(), particle);
+            double speed = cropsConfig.getParticleSpeed(getName(), particle);
+            int amount = cropsConfig.getParticleAmount(getName(), particle);
+
+            runnable.addParticle(
+                    particle,
+                    amount,
+                    speed,
+                    delay
+            );
+        }
+
+        runnable.run();
     }
 
 
     @Override
     public boolean isLinkable() {
         return cropsConfig.isCropLinkable(getName());
+    }
+
+
+    /**
+     * Get the names of all the particles in the config file.
+     *
+     * @return A set of strings.
+     */
+    private @Nullable Set<String> getParticles() {
+        ConfigurationSection section = cropsConfig.getConfig().getConfigurationSection(
+                "crops." + getName() + ".particles"
+        );
+        return section == null ? null : section.getKeys(false);
+    }
+
+
+    /**
+     * Get the sounds for the crop.
+     *
+     * @return A set of strings.
+     */
+    private @Nullable Set<String> getSounds() {
+        ConfigurationSection section = cropsConfig.getConfig().getConfigurationSection(
+                "crops." + getName() + ".sounds"
+        );
+        return section == null ? null : section.getKeys(false);
     }
 
 

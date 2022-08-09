@@ -16,8 +16,8 @@ import java.util.HashMap;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class WorldManager {
 
@@ -61,6 +61,7 @@ public final class WorldManager {
      *
      * @return A FarmWorld object
      */
+    @SuppressWarnings("unused")
     public @Nullable FarmWorld findByName(@NotNull String name) {
         return worldData.findWorldByName(name);
     }

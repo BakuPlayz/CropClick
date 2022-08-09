@@ -7,12 +7,12 @@ import com.github.bakuplayz.cropclick.menu.base.LinkMenu;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
+ * @version 2.0.0
  * @see DispenserLinkMenu
  * @see ContainerLinkMenu
  * @see CropLinkMenu
  * @see LinkMenu
- * @since 1.6.0
+ * @since 2.0.0
  */
 public enum Component {
     CROP,

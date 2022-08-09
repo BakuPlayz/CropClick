@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
+ * @version 2.0.0
  * @see Menu
- * @since 1.6.0
+ * @since 2.0.0
  */
 public final class SoundsMenu extends PaginatedMenu {
 
@@ -110,7 +110,7 @@ public final class SoundsMenu extends PaginatedMenu {
         String name = MessageUtils.beautify(sound, true);
         String status = MessageUtils.getEnabledStatus(
                 plugin,
-                false // cropsConfig.getCropSounds(crop.getName()).contains(sound)
+                cropsConfig.isSoundEnabled(crop.getName(), sound)
         );
 
         return new ItemUtil(Material.NOTE_BLOCK)

@@ -221,7 +221,7 @@ menu:
       dropValue: "&7Drop Value: &e%value%"
       particles: "&7Amount of Particles: &e%status%"
       sounds: "&7Amount of Sounds: &e%status%"
-      MMOExperience: "&7Experience: &e%status%"
+      mcMMOExperience: "&7Experience: &e%status%"
       jobsExperience: "&7Experience: &e%status%"
       jobsMoney: "&7Money: &e%status%"
       jobsPoints: "&7Points: &e%status%"
@@ -354,7 +354,6 @@ menu:
     experience:
       itemName: "&eExperience"
       itemValue: "&7Experience: &e%value%"
-
 
   mcMMOCrop:
     add:

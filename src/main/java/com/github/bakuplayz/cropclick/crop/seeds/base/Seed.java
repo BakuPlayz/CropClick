@@ -10,12 +10,13 @@ import org.jetbrains.annotations.NotNull;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public interface Seed {
 
-    @NotNull String getName();
+    @NotNull
+    String getName();
 
     Drop getDrop();
 
@@ -24,7 +25,8 @@ public interface Seed {
 
     void harvest(@NotNull Inventory inventory);
 
-    @NotNull Material getMenuType();
+    @NotNull
+    Material getMenuType();
 
     boolean isEnabled();
 

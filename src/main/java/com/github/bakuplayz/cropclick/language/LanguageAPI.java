@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public final class LanguageAPI {
 
@@ -219,6 +219,56 @@ public final class LanguageAPI {
     }
 
     public enum Menu {
+        MAIN_TITLE(Category.TITLE, "main"),
+        ADDONS_TITLE(Category.TITLE, "addons"),
+        HELP_TITLE(Category.TITLE, "help"),
+        NAME_TITLE(Category.TITLE, "name"),
+        AUTOFARMS_TITLE(Category.TITLE, "autofarms"),
+        SETTINGS_TITLE(Category.TITLE, "settings"),
+        TOGGLE_TITLE(Category.TITLE, "toggle"),
+        UPDATES_TITLE(Category.TITLE, "updates"),
+
+        DISPENSER_PREVIEW_TITLE(Category.TITLE, "dispenserPreview", "%id%"),
+        CONTAINER_PREVIEW_TITLE(Category.TITLE, "containerPreview", "%id%"),
+
+        CROP_TITLE(Category.TITLE, "crop"),
+        CROPS_TITLE(Category.TITLE, "crops", "%type%"),
+        DROP_CHANCE_TITLE(Category.TITLE, "dropChance"),
+
+        CROP_LINK_TITLE(Category.TITLE, "cropLink"),
+        DISPENSER_LINK_TITLE(Category.TITLE, "dispenserLink"),
+        CONTAINER_LINK_TITLE(Category.TITLE, "containerLink"),
+
+        PARTICLES_TITLE(Category.TITLE, "particles"),
+        PARTICLE_TITLE(Category.TITLE, "particle"),
+
+        SOUNDS_TITLE(Category.TITLE, "sounds"),
+        SOUND_TITLE(Category.TITLE, "sound"),
+
+        WORLD_TITLE(Category.TITLE, "world"),
+        WORLDS_TITLE(Category.TITLE, "worlds"),
+
+        MCMMO_CROP_TITLE(Category.TITLE, "mcMMOCrop"),
+        MCMMO_TITLE(Category.TITLE, "mcMMO"),
+        JOBS_CROP_TITLE(Category.TITLE, "jobsRebornCrop"),
+        JOBS_REBORN_TITLE(Category.TITLE, "jobsReborn"),
+        WORLD_GUARD_TITLE(Category.TITLE, "worldGuard"),
+        TOWNY_TITLE(Category.TITLE, "towny"),
+        RESIDENCE_TITLE(Category.TITLE, "residence"),
+        OFFLINE_GROWTH_TITLE(Category.TITLE, "offlineGrowth"),
+
+        GENERAL_BACK_ITEM_NAME(Category.GENERAL, "backItemName"),
+        GENERAL_CURRENT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "currentPageItemName", "%page%"),
+        GENERAL_DISABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "disabled"),
+        GENERAL_ENABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "enabled"),
+        GENERAL_NEXT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "nextPageItemName"),
+        GENERAL_PREVIOUS_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "previousPageItemName"),
+        GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
+
+        GENERAL_STATES_NEW_UPDATE(Category.GENERAL, SubCategory.UPDATE_STATES, "newUpdate"),
+        GENERAL_STATES_NOT_YET_FETCHED(Category.GENERAL, SubCategory.UPDATE_STATES, "notYetFetched"),
+        GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
+
         ADDONS_GROWTH_ITEM_NAME(Category.ADDONS, SubCategory.OFFLINE_GROWTH, "itemName"),
 
         ADDONS_GROWTH_ITEM_STATUS(Category.ADDONS, SubCategory.OFFLINE_GROWTH, "itemStatus", "%status%"),
@@ -239,7 +289,6 @@ public final class LanguageAPI {
         ADDONS_RESIDENCE_ITEM_STATUS(Category.ADDONS, SubCategory.RESIDENCE, "itemStatus", "%status%"),
 
         ADDONS_RESIDENCE_ITEM_TIPS(Category.ADDONS, SubCategory.RESIDENCE, "itemTips"),
-        ADDONS_TITLE(Category.TITLE, "addons"),
         ADDONS_TOWNY_ITEM_NAME(Category.ADDONS, SubCategory.TOWNY, "itemName"),
 
         ADDONS_TOWNY_ITEM_STATUS(Category.ADDONS, SubCategory.TOWNY, "itemStatus", "%status%"),
@@ -275,22 +324,20 @@ public final class LanguageAPI {
         ADDON_WORLDS_ITEM_TIPS(Category.ADDON, SubCategory.WORLDS, "itemTips"),
         AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%", "%status%"),
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
-        AUTOFARMS_TITLE(Category.TITLE, "autofarms"),
-        CONTAINER_LINK_TITLE(Category.TITLE, "containerLink"),
-        CONTAINER_PREVIEW_TITLE(Category.TITLE, "containerPreview", "%id%"),
+
         CROPS_ITEM_DROP_NAME(Category.CROPS, SubCategory.ITEM, "dropName", "%name%"),
         CROPS_ITEM_DROP_VALUE(Category.CROPS, SubCategory.ITEM, "dropValue", "%value%"),
         CROPS_ITEM_JOBS_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "jobsExperience", "%status%"),
         CROPS_ITEM_JOBS_MONEY(Category.CROPS, SubCategory.ITEM, "jobsMoney", "%status%"),
         CROPS_ITEM_JOBS_POINTS(Category.CROPS, SubCategory.ITEM, "jobsPoints", "%status%"),
-        CROPS_ITEM_MMO_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "MMOExperience", "%status%"),
+        CROPS_ITEM_MMO_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "mcMMOExperience", "%status%"),
+        CROPS_ITEM_MMO_EXPERIENCE_REASON(Category.CROPS, SubCategory.ITEM, "mcMMOExperienceReason", "%reason%"),
         CROPS_ITEM_NAME(Category.CROPS, SubCategory.ITEM, "name", "%name%", "%status%"),
         CROPS_ITEM_PARTICLES(Category.CROPS, SubCategory.ITEM, "particles", "%status%"),
         CROPS_ITEM_SOUNDS(Category.CROPS, SubCategory.ITEM, "sounds", "%status%"),
         CROPS_STATUS_DISABLED(Category.CROPS, SubCategory.STATUS, "disabled"),
         CROPS_STATUS_ENABLED(Category.CROPS, SubCategory.STATUS, "enabled"),
 
-        CROPS_TITLE(Category.TITLE, "crops", "%type%"),
         CROP_ADD_ITEM_AFTER(Category.CROP, SubCategory.ADD, "itemAfter", "%value%"),
         CROP_ADD_ITEM_NAME(Category.CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         CROP_AT_LEAST_ITEM_NAME(Category.CROP, SubCategory.AT_LEAST, "itemName"),
@@ -302,50 +349,30 @@ public final class LanguageAPI {
         CROP_ITEM_NAME(Category.CROP, SubCategory.CROP, "itemName", "%name%", "%status%"),
         CROP_LINKABLE_ITEM_NAME(Category.CROP, SubCategory.LINKABLE, "itemName"),
         CROP_LINKABLE_ITEM_STATUS(Category.CROP, SubCategory.LINKABLE, "itemStatus", "%status%"),
-        CROP_LINK_TITLE(Category.TITLE, "cropLink"),
         CROP_REMOVE_ITEM_AFTER(Category.CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
         CROP_REMOVE_ITEM_NAME(Category.CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
         CROP_REPLANT_ITEM_NAME(Category.CROP, SubCategory.REPLANT, "itemName"),
         CROP_REPLANT_ITEM_STATUS(Category.CROP, SubCategory.REPLANT, "itemStatus", "%status%"),
         CROP_SEED_ITEM_DROP_VALUE(Category.CROP, SubCategory.SEED, "itemDropValue", "%value%"),
-
         CROP_SEED_ITEM_NAME(Category.CROP, SubCategory.SEED, "itemName", "%name%", "%status%"),
         CROP_STATUS_DISABLED(Category.CROP, SubCategory.STATUS, "disabled"),
-
         CROP_STATUS_ENABLED(Category.CROP, SubCategory.STATUS, "enabled"),
-        CROP_TITLE(Category.TITLE, "crop"),
-        DISPENSER_LINK_TITLE(Category.TITLE, "dispenserLink"),
-        DISPENSER_PREVIEW_TITLE(Category.TITLE, "dispenserPreview", "%id%"),
+
         DROP_CHANCE_ADD_ITEM_AFTER(Category.DROP_CHANCE, SubCategory.ADD, "itemAfter", "%value%"),
         DROP_CHANCE_ADD_ITEM_NAME(Category.DROP_CHANCE, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         DROP_CHANCE_CROP_ITEM_DROP_CHANCE(Category.DROP_CHANCE, SubCategory.CROP, "itemDropChance", "%chance%"),
         DROP_CHANCE_CROP_ITEM_NAME(Category.DROP_CHANCE, SubCategory.CROP, "itemName", "%name%", "%status%"),
         DROP_CHANCE_REMOVE_ITEM_AFTER(Category.DROP_CHANCE, SubCategory.REMOVE, "itemAfter", "%value%"),
         DROP_CHANCE_REMOVE_ITEM_NAME(Category.DROP_CHANCE, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
-
         DROP_CHANCE_SEED_ITEM_DROP_CHANCE(Category.DROP_CHANCE, SubCategory.SEED, "itemDropChance", "%chance%"),
         DROP_CHANCE_SEED_ITEM_NAME(Category.DROP_CHANCE, SubCategory.SEED, "itemName", "%name%", "%status%"),
-
         DROP_CHANCE_STATUS_DISABLED(Category.DROP_CHANCE, SubCategory.STATUS, "disabled"),
         DROP_CHANCE_STATUS_ENABLED(Category.DROP_CHANCE, SubCategory.STATUS, "enabled"),
-        DROP_CHANCE_TITLE(Category.TITLE, "dropChance"),
-        GENERAL_BACK_ITEM_NAME(Category.GENERAL, "backItemName"),
-        GENERAL_CURRENT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "currentPageItemName", "%page%"),
-        GENERAL_DISABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "disabled"),
-        GENERAL_ENABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "enabled"),
-        GENERAL_NEXT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "nextPageItemName"),
-        GENERAL_PREVIOUS_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "previousPageItemName"),
-        GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
 
-        GENERAL_STATES_NEW_UPDATE(Category.GENERAL, SubCategory.UPDATE_STATES, "newUpdate"),
-        GENERAL_STATES_NOT_YET_FETCHED(Category.GENERAL, SubCategory.UPDATE_STATES, "notYetFetched"),
-        GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
         HELP_ITEM_DESCRIPTION(Category.HELP, "itemDescription", "%description%"),
         HELP_ITEM_NAME(Category.HELP, "itemName", "%name%"),
         HELP_ITEM_PERMISSION(Category.HELP, "itemPermission", "%permission%"),
-
         HELP_ITEM_USAGE(Category.HELP, "itemUsage", "%usage%"),
-        HELP_TITLE(Category.TITLE, "help"),
 
         JOBS_CROP_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.ADD, "itemAfter", "%value%"),
         JOBS_CROP_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
@@ -359,8 +386,6 @@ public final class LanguageAPI {
         JOBS_CROP_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
         JOBS_CROP_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
 
-        JOBS_CROP_TITLE(Category.TITLE, "jobsRebornCrop"),
-        JOBS_REBORN_TITLE(Category.TITLE, "jobsReborn"),
         LINK_ACTION_FAILURE(Category.LINK, SubCategory.ACTIONS, "linkFailure"),
         LINK_ACTION_SUCCESS(Category.LINK, SubCategory.ACTIONS, "linkSuccess"),
         LINK_CONTAINER_NAME(Category.LINK, SubCategory.CONTAINER, "itemName"),
@@ -378,6 +403,7 @@ public final class LanguageAPI {
         LINK_STATES_UNLINKED(Category.LINK, SubCategory.STATES, "unlinked"),
         LINK_TOGGLE_NAME(Category.LINK, SubCategory.TOGGLE, "itemName"),
         LINK_TOGGLE_STATUS(Category.LINK, SubCategory.TOGGLE, "itemStatus", "%status%"),
+
         MAIN_ADDONS_ITEM_NAME(Category.MAIN, SubCategory.ADDONS, "itemName"),
         MAIN_ADDONS_ITEM_STATUS(Category.MAIN, SubCategory.ADDONS, "itemStatus", "%status%"),
         MAIN_ADDONS_ITEM_TIPS(Category.MAIN, SubCategory.ADDONS, "itemTips"),
@@ -389,63 +415,50 @@ public final class LanguageAPI {
         MAIN_CROPS_ITEM_TIPS(Category.MAIN, SubCategory.CROPS, "itemTips"),
         MAIN_HELP_ITEM_NAME(Category.MAIN, SubCategory.HELP, "itemName"),
         MAIN_HELP_ITEM_STATUS(Category.MAIN, SubCategory.HELP, "itemStatus", "%status%"),
-
         MAIN_HELP_ITEM_TIPS(Category.MAIN, SubCategory.HELP, "itemTips"),
         MAIN_SETTINGS_ITEM_NAME(Category.MAIN, SubCategory.SETTINGS, "itemName"),
         MAIN_SETTINGS_ITEM_STATUS(Category.MAIN, SubCategory.SETTINGS, "itemStatus", "%status%"),
         MAIN_SETTINGS_ITEM_TIPS(Category.MAIN, SubCategory.SETTINGS, "itemTips"),
-        MAIN_TITLE(Category.TITLE, "main"),
         MAIN_UPDATES_ITEM_NAME(Category.MAIN, SubCategory.UPDATES, "itemName"),
         MAIN_UPDATES_ITEM_STATE(Category.MAIN, SubCategory.UPDATES, "itemState", "%state%"),
         MAIN_UPDATES_ITEM_TIPS(Category.MAIN, SubCategory.UPDATES, "itemTips"),
+
         MCMMO_CROP_ADD_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.ADD, "itemAfter", "%value%"),
         MCMMO_CROP_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         MCMMO_CROP_EXPERIENCE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemName"),
-
         MCMMO_CROP_EXPERIENCE_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemName"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemTips"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue", "%value%"),
-
         MCMMO_CROP_REASON_RESPONSE_CHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "changed", "%name%"),
         MCMMO_CROP_REASON_RESPONSE_UNCHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "unchanged"),
         MCMMO_CROP_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
         MCMMO_CROP_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
-
-        MCMMO_CROP_TITLE(Category.TITLE, "mcMMOCrop"),
-        MCMMO_TITLE(Category.TITLE, "mcMMO"),
 
         NAME_COLOR_ITEM_CODE(Category.NAME, SubCategory.COLOR_CODE, "itemColor", "%code%", "%color%", "%name%"),
         NAME_COLOR_ITEM_NAME(Category.NAME, SubCategory.COLOR_CODE, "itemName"),
 
         NAME_CROP_DROP_NAME(Category.NAME, SubCategory.CROP, "dropName", "%name%"),
         NAME_CROP_ITEM_NAME(Category.NAME, SubCategory.CROP, "itemName", "%name%", "%status%"),
-        NAME_RESPONSE_CHANGED(Category.NAME, SubCategory.RESPONSE, "changed", "%name%"),
-
-        NAME_RESPONSE_UNCHANGED(Category.NAME, SubCategory.RESPONSE, "unchanged"),
         NAME_SEED_DROP_NAME(Category.NAME, SubCategory.SEED, "dropName", "%name%"),
         NAME_SEED_ITEM_NAME(Category.NAME, SubCategory.SEED, "itemName", "%name%", "%status%"),
-
-        NAME_TITLE(Category.TITLE, "name"),
-        OFFLINE_GROWTH_TITLE(Category.TITLE, "offlineGrowth"),
+        NAME_RESPONSE_CHANGED(Category.NAME, SubCategory.RESPONSE, "changed", "%name%"),
+        NAME_RESPONSE_UNCHANGED(Category.NAME, SubCategory.RESPONSE, "unchanged"),
 
         PARTICLES_ITEM_NAME(Category.PARTICLES, "itemName", "%name%"),
         PARTICLES_ITEM_STATUS(Category.PARTICLES, "itemStatus", "%status%"),
 
-        PARTICLES_TITLE(Category.TITLE, "particles"),
         PARTICLE_ADD_ITEM_AFTER(Category.PARTICLE, SubCategory.ADD, "itemAfter", "%value%"),
         PARTICLE_ADD_ITEM_NAME(Category.PARTICLE, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         PARTICLE_AMOUNT_ITEM_NAME(Category.PARTICLE, SubCategory.AMOUNT, "itemName"),
         PARTICLE_AMOUNT_ITEM_VALUE(Category.PARTICLE, SubCategory.AMOUNT, "itemValue", "%value%"),
-
         PARTICLE_DELAY_ITEM_NAME(Category.PARTICLE, SubCategory.DELAY, "itemName"),
         PARTICLE_DELAY_ITEM_VALUE(Category.PARTICLE, SubCategory.DELAY, "itemValue", "%value%"),
         PARTICLE_REMOVE_ITEM_AFTER(Category.PARTICLE, SubCategory.REMOVE, "itemAfter", "%value%"),
         PARTICLE_REMOVE_ITEM_NAME(Category.PARTICLE, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
         PARTICLE_SPEED_ITEM_NAME(Category.PARTICLE, SubCategory.SPEED, "itemName"),
         PARTICLE_SPEED_ITEM_VALUE(Category.PARTICLE, SubCategory.SPEED, "itemValue", "%value%"),
-        PARTICLE_TITLE(Category.TITLE, "particle"),
-        RESIDENCE_TITLE(Category.TITLE, "residence"),
+
         SETTINGS_AUTOFARMS_ITEM_NAME(Category.SETTINGS, SubCategory.AUTOFARMS, "itemName"),
         SETTINGS_AUTOFARMS_ITEM_STATUS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
         SETTINGS_AUTOFARMS_ITEM_TIPS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemTips"),
@@ -456,57 +469,48 @@ public final class LanguageAPI {
         SETTINGS_PARTICLES_ITEM_STATUS(Category.SETTINGS, SubCategory.PARTICLES, "itemStatus", "%status%"),
         SETTINGS_PARTICLES_ITEM_TIPS(Category.SETTINGS, SubCategory.PARTICLES, "itemTips"),
         SETTINGS_SOUNDS_ITEM_NAME(Category.SETTINGS, SubCategory.SOUNDS, "itemName"),
-
         SETTINGS_SOUNDS_ITEM_STATUS(Category.SETTINGS, SubCategory.SOUNDS, "itemStatus", "%status%"),
         SETTINGS_SOUNDS_ITEM_TIPS(Category.SETTINGS, SubCategory.SOUNDS, "itemTips"),
-        SETTINGS_TITLE(Category.TITLE, "settings"),
         SETTINGS_TOGGLE_ITEM_NAME(Category.SETTINGS, SubCategory.TOGGLE, "itemName"),
         SETTINGS_TOGGLE_ITEM_STATUS(Category.SETTINGS, SubCategory.TOGGLE, "itemStatus", "%status%"),
         SETTINGS_TOGGLE_ITEM_TIPS(Category.SETTINGS, SubCategory.TOGGLE, "itemTips"),
         SETTINGS_WORLDS_ITEM_NAME(Category.SETTINGS, SubCategory.WORLDS, "itemName"),
         SETTINGS_WORLDS_ITEM_STATUS(Category.SETTINGS, SubCategory.WORLDS, "itemStatus", "%status%"),
         SETTINGS_WORLDS_ITEM_TIPS(Category.SETTINGS, SubCategory.WORLDS, "itemTips"),
+
         SOUNDS_ITEM_NAME(Category.SOUNDS, "itemName", "%name%"),
         SOUNDS_ITEM_STATUS(Category.SOUNDS, "itemStatus", "%status%"),
-        SOUNDS_TITLE(Category.TITLE, "sounds"),
+
         SOUND_ADD_ITEM_AFTER(Category.SOUND, SubCategory.ADD, "itemAfter", "%value%"),
         SOUND_ADD_ITEM_NAME(Category.SOUND, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         SOUND_DELAY_ITEM_NAME(Category.SOUND, SubCategory.DELAY, "itemName"),
         SOUND_DELAY_ITEM_VALUE(Category.SOUND, SubCategory.DELAY, "itemValue", "%value%"),
         SOUND_PITCH_ITEM_NAME(Category.SOUND, SubCategory.PITCH, "itemName"),
         SOUND_PITCH_ITEM_VALUE(Category.SOUND, SubCategory.PITCH, "itemValue", "%value%"),
-
         SOUND_REMOVE_ITEM_AFTER(Category.SOUND, SubCategory.REMOVE, "itemAfter", "%value%"),
         SOUND_REMOVE_ITEM_NAME(Category.SOUND, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
-        SOUND_TITLE(Category.TITLE, "sounds"),
         SOUND_VOLUME_ITEM_NAME(Category.SOUND, SubCategory.VOLUME, "itemName"),
         SOUND_VOLUME_ITEM_VALUE(Category.SOUND, SubCategory.VOLUME, "itemValue", "%value%"),
+
         TOGGLE_ITEM_NAME(Category.TOGGLE, "itemName", "%name%"),
         TOGGLE_ITEM_STATUS(Category.TOGGLE, "itemStatus", "%status%"),
-        TOGGLE_TITLE(Category.TITLE, "toggle"),
-        TOWNY_TITLE(Category.TITLE, "towny"),
-        UPDATES_CONSOLE_ITEM_NAME(Category.UPDATES, SubCategory.CONSOLE, "itemName"),
 
+        UPDATES_CONSOLE_ITEM_NAME(Category.UPDATES, SubCategory.CONSOLE, "itemName"),
         UPDATES_CONSOLE_ITEM_STATUS(Category.UPDATES, SubCategory.CONSOLE, "itemStatus", "%status%"),
         UPDATES_CONSOLE_ITEM_TIPS(Category.UPDATES, SubCategory.CONSOLE, "itemTips"),
         UPDATES_PLAYER_ITEM_NAME(Category.UPDATES, SubCategory.PLAYER, "itemName"),
         UPDATES_PLAYER_ITEM_STATUS(Category.UPDATES, SubCategory.PLAYER, "itemStatus", "%status%"),
         UPDATES_PLAYER_ITEM_TIPS(Category.UPDATES, SubCategory.PLAYER, "itemTips"),
-        UPDATES_TITLE(Category.TITLE, "updates"),
         UPDATES_UPDATES_ITEM_NAME(Category.UPDATES, SubCategory.UPDATES, "itemName"),
         UPDATES_UPDATES_ITEM_STATE(Category.UPDATES, SubCategory.UPDATES, "itemState", "%state%"),
         UPDATES_UPDATES_ITEM_TIPS(Category.UPDATES, SubCategory.UPDATES, "itemTips"),
 
         WORLDS_ITEM_NAME(Category.WORLDS, "itemName", "%name%"),
         WORLDS_ITEM_STATUS(Category.WORLDS, "itemStatus", "%status%"),
-
-        WORLDS_TITLE(Category.TITLE, "worlds"),
         WORLD_AUTOFARMS_ITEM_NAME(Category.WORLD, SubCategory.AUTOFARMS, "itemName"),
         WORLD_AUTOFARMS_ITEM_STATUS(Category.WORLD, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
-        WORLD_GUARD_TITLE(Category.TITLE, "worldGuard"),
         WORLD_PLAYERS_ITEM_NAME(Category.WORLD, SubCategory.PLAYERS, "itemName"),
         WORLD_PLAYERS_ITEM_STATUS(Category.WORLD, SubCategory.PLAYERS, "itemStatus", "%status%"),
-        WORLD_TITLE(Category.TITLE, "world"),
         WORLD_WORLD_ITEM_NAME(Category.WORLD, SubCategory.WORLD, "itemName", "%name%"),
         WORLD_WORLD_ITEM_STATUS(Category.WORLD, SubCategory.WORLD, "itemStatus", "%status%");
 

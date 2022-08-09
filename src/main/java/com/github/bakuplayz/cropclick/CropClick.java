@@ -48,8 +48,8 @@ import java.io.File;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public class CropClick extends JavaPlugin {
 
@@ -208,14 +208,14 @@ public class CropClick extends JavaPlugin {
 
         manager.registerEvents(new MenuListener(), this);
 
-        manager.registerEvents(new HarvestCropListener(), this);
-        manager.registerEvents(new PlayerHarvestCropListener(this), this);
-        manager.registerEvents(new AutofarmHarvestCropListener(this), this);
-
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
+
+        manager.registerEvents(new HarvestCropListener(), this);
+        manager.registerEvents(new PlayerHarvestCropListener(this), this);
+        manager.registerEvents(new AutofarmHarvestCropListener(this), this);
 
         manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
         manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);

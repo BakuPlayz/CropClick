@@ -33,12 +33,20 @@ permissions:
     default: op
     children:
       cropclick.autofarm.link:
-        description: Permission to link autofarms.
+        description: Permission to link your own autofarms.
       cropclick.autofarm.unlink:
-        description: Permission to unlink autofarms.
+        description: Permission to unlink your own autofarms.
+      cropclick.autofarm.unlink.others:
+        description: Permission to unlink others autofarms.
       cropclick.autofarm.update:
-        description: Permission to update autofarms.
+        description: Permission to update you own autofarms.
+      cropclick.autofarm.update.others:
+        description: Permission to update others autofarms.
       cropclick.autofarm.toggle:
-        description: Permission to toggle autofarms.
+        description: Permission to toggle your own autofarms.
+      cropclick.autofarm.toggle.others:
+        description: Permission to toggle others autofarms.
       cropclick.autofarm.interact:
-        description: Permission to interact with autofarms.
+        description: Permission to interact with your own autofarms.
+      cropclick.autofarm.interact.others:
+        description: Permission to interact with others autofarms.
