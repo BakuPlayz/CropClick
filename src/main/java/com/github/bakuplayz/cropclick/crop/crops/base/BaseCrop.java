@@ -10,14 +10,10 @@ import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Set;
 
 
 /**
@@ -143,12 +139,8 @@ public abstract class BaseCrop implements Crop {
     public void playSounds(@NotNull Block block) {
         SoundRunnable runnable = new SoundRunnable(block);
 
-        Set<String> sounds = getSounds();
-        if (sounds == null) {
-            return;
-        }
 
-        for (String sound : sounds) {
+        for (String sound : cropsConfig.getSounds(getName())) {
             double delay = cropsConfig.getSoundDelay(getName(), sound);
             double pitch = cropsConfig.getSoundPitch(getName(), sound);
             double volume = cropsConfig.getSoundVolume(getName(), sound);
@@ -169,12 +161,7 @@ public abstract class BaseCrop implements Crop {
     public void playParticles(@NotNull Block block) {
         ParticleRunnable runnable = new ParticleRunnable(block);
 
-        Set<String> particles = getParticles();
-        if (particles == null) {
-            return;
-        }
-
-        for (String particle : particles) {
+        for (String particle : cropsConfig.getParticles(getName())) {
             double delay = cropsConfig.getParticleDelay(getName(), particle);
             double speed = cropsConfig.getParticleSpeed(getName(), particle);
             int amount = cropsConfig.getParticleAmount(getName(), particle);
@@ -194,32 +181,6 @@ public abstract class BaseCrop implements Crop {
     @Override
     public boolean isLinkable() {
         return cropsConfig.isCropLinkable(getName());
-    }
-
-
-    /**
-     * Get the names of all the particles in the config file.
-     *
-     * @return A set of strings.
-     */
-    private @Nullable Set<String> getParticles() {
-        ConfigurationSection section = cropsConfig.getConfig().getConfigurationSection(
-                "crops." + getName() + ".particles"
-        );
-        return section == null ? null : section.getKeys(false);
-    }
-
-
-    /**
-     * Get the sounds for the crop.
-     *
-     * @return A set of strings.
-     */
-    private @Nullable Set<String> getSounds() {
-        ConfigurationSection section = cropsConfig.getConfig().getConfigurationSection(
-                "crops." + getName() + ".sounds"
-        );
-        return section == null ? null : section.getKeys(false);
     }
 
 

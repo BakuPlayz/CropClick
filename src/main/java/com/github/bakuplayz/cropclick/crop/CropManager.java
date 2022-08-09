@@ -94,6 +94,7 @@ public final class CropManager {
         String cropName = crop.getName();
 
         if (!cropsConfig.doesCropExist(cropName)) {
+
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = crop.getDrop();
@@ -125,6 +126,7 @@ public final class CropManager {
         Seed seed = crop.getSeed();
         String seedName = seed.getName();
         if (!cropsConfig.doesSeedExist(seedName)) {
+            
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = seed.getDrop();

@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public final class ItemUtilTests {
@@ -171,6 +171,7 @@ public final class ItemUtilTests {
 
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testConstructor7() {
         ItemUtil result = new ItemUtil(5);
 
@@ -307,6 +308,7 @@ public final class ItemUtilTests {
 
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testSetMaterial() {
         ItemUtil result = itemUtil.setMaterial(5);
 

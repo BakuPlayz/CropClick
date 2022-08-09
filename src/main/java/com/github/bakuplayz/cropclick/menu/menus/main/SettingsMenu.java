@@ -41,12 +41,12 @@ public final class SettingsMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(10, getAutofarmsItem());
-        inventory.setItem(13, getToggleItem());
-        inventory.setItem(16, getParticlesItem());
+        inventory.setItem(10, getToggleItem());
+        inventory.setItem(13, getParticlesItem());
+        inventory.setItem(16, getSoundsItem());
 
-        inventory.setItem(28, getSoundsItem());
-        inventory.setItem(31, getNameItem());
+        inventory.setItem(28, getNameItem());
+        inventory.setItem(31, getAutofarmsItem());
         inventory.setItem(34, getWorldsItem());
 
         if (isRedirected) setBackItem();

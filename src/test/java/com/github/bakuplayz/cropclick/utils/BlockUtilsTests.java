@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * (DESCRIPTION)
  *
  * @author BakuPlayz
- * @version 1.6.0
- * @since 1.6.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public final class BlockUtilsTests {
@@ -73,6 +73,7 @@ public final class BlockUtilsTests {
 
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void testIsSameType() {
         BlockMock block2 = new BlockMock();
 
@@ -104,6 +105,7 @@ public final class BlockUtilsTests {
 
 
     @Test
+    @SuppressWarnings({"ConstantConditions", "ConfusingArgumentToVarargsMethod"})
     public void testIsAnyType() {
         assertAll("Checks if the block's type matches any of the other types.",
                 () -> assertThrows(Exception.class, () -> BlockUtils.isAnyType(block, (Material[]) null)),

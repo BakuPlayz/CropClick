@@ -28,18 +28,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class JobsCropMenu extends Menu {
 
-    private final Crop crop;
 
+    private final String cropName;
     private final CropsConfig cropsConfig;
 
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
+    public final int VALUE_MAX = 10_000;
+    public final int VALUE_MIN = 0;
 
-    public JobsCropMenu(@NotNull CropClick plugin, Player player, Crop crop) {
+
+    public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.JOBS_CROP_TITLE);
         this.cropsConfig = plugin.getCropsConfig();
-        this.crop = crop;
+        this.cropName = crop.getName();
     }
 
 
@@ -73,53 +76,55 @@ public final class JobsCropMenu extends Menu {
 
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.JOBS_REBORN));
 
-        String cropName = crop.getName();
+        // Points
         if (clicked.equals(getPointsAddItem(MIN_CHANGE))) {
-            addJobsPoints(cropName, MIN_CHANGE);
+            addJobsPoints(MIN_CHANGE);
         }
 
         if (clicked.equals(getPointsAddItem(MAX_CHANGE))) {
-            addJobsPoints(cropName, MAX_CHANGE);
+            addJobsPoints(MAX_CHANGE);
         }
 
         if (clicked.equals(getPointsRemoveItem(MIN_CHANGE))) {
-            removeJobsPoints(cropName, MIN_CHANGE);
+            removeJobsPoints(MIN_CHANGE);
         }
 
         if (clicked.equals(getPointsRemoveItem(MAX_CHANGE))) {
-            removeJobsPoints(cropName, MAX_CHANGE);
+            removeJobsPoints(MAX_CHANGE);
         }
 
+        // Money
         if (clicked.equals(getMoneyAddItem(MIN_CHANGE))) {
-            addJobsMoney(cropName, MIN_CHANGE);
+            addJobsMoney(MIN_CHANGE);
         }
 
         if (clicked.equals(getMoneyAddItem(MAX_CHANGE))) {
-            addJobsMoney(cropName, MAX_CHANGE);
+            addJobsMoney(MAX_CHANGE);
         }
 
         if (clicked.equals(getMoneyRemoveItem(MIN_CHANGE))) {
-            removeJobsMoney(cropName, MIN_CHANGE);
+            removeJobsMoney(MIN_CHANGE);
         }
 
         if (clicked.equals(getMoneyRemoveItem(MAX_CHANGE))) {
-            removeJobsMoney(cropName, MAX_CHANGE);
+            removeJobsMoney(MAX_CHANGE);
         }
 
+        // Experience
         if (clicked.equals(getExperienceAddItem(MIN_CHANGE))) {
-            addJobsExperience(cropName, MIN_CHANGE);
+            addJobsExperience(MIN_CHANGE);
         }
 
         if (clicked.equals(getExperienceAddItem(MAX_CHANGE))) {
-            addJobsExperience(cropName, MAX_CHANGE);
+            addJobsExperience(MAX_CHANGE);
         }
 
         if (clicked.equals(getExperienceRemoveItem(MIN_CHANGE))) {
-            removeJobsExperience(cropName, MIN_CHANGE);
+            removeJobsExperience(MIN_CHANGE);
         }
 
         if (clicked.equals(getExperienceRemoveItem(MAX_CHANGE))) {
-            removeJobsExperience(cropName, MAX_CHANGE);
+            removeJobsExperience(MAX_CHANGE);
         }
 
         updateMenu();
@@ -127,7 +132,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getPointsItem() {
-        double points = cropsConfig.getJobsPoints(crop.getName());
+        double points = cropsConfig.getJobsPoints(cropName);
         return new ItemUtil(Material.GOLD_NUGGET)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_POINTS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_POINTS_ITEM_VALUE.get(plugin, points))
@@ -136,7 +141,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getMoneyItem() {
-        double money = cropsConfig.getJobsMoney(crop.getName());
+        double money = cropsConfig.getJobsMoney(cropName);
         return new ItemUtil(Material.GOLD_INGOT)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_MONEY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_MONEY_ITEM_VALUE.get(plugin, money))
@@ -145,7 +150,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceItem() {
-        double experience = cropsConfig.getJobsExperience(crop.getName());
+        double experience = cropsConfig.getJobsExperience(cropName);
         return new ItemUtil(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience))
@@ -154,8 +159,8 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getPointsAddItem(int amount) {
-        double beforeValue = cropsConfig.getJobsPoints(crop.getName());
-        double afterValue = Math.min(beforeValue + amount, 10_000);
+        double beforeValue = cropsConfig.getJobsPoints(cropName);
+        double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Points"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
@@ -165,8 +170,8 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getPointsRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getJobsPoints(crop.getName());
-        double afterValue = Math.max(beforeValue - amount, 0);
+        double beforeValue = cropsConfig.getJobsPoints(cropName);
+        double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Points"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
@@ -176,8 +181,8 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getMoneyAddItem(int amount) {
-        double beforeValue = cropsConfig.getJobsMoney(crop.getName());
-        double afterValue = Math.min(beforeValue + amount, 10_000);
+        double beforeValue = cropsConfig.getJobsMoney(cropName);
+        double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
@@ -187,8 +192,8 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getMoneyRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getJobsMoney(crop.getName());
-        double afterValue = Math.max(beforeValue - amount, 0);
+        double beforeValue = cropsConfig.getJobsMoney(cropName);
+        double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
@@ -198,8 +203,8 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceAddItem(int amount) {
-        double beforeValue = cropsConfig.getJobsExperience(crop.getName());
-        double afterValue = Math.min(beforeValue + amount, 10_000);
+        double beforeValue = cropsConfig.getJobsExperience(cropName);
+        double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
@@ -209,8 +214,8 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getJobsExperience(crop.getName());
-        double afterValue = Math.max(beforeValue - amount, 0);
+        double beforeValue = cropsConfig.getJobsExperience(cropName);
+        double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
@@ -222,78 +227,72 @@ public final class JobsCropMenu extends Menu {
     /**
      * Adds the specified amount of points to the crop.
      *
-     * @param name   The name of the crop.
      * @param amount The amount of points to add.
      */
-    public void addJobsPoints(@NotNull String name, int amount) {
-        double oldAmount = cropsConfig.getJobsPoints(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        cropsConfig.setJobsPoints(name, newAmount);
+    public void addJobsPoints(int amount) {
+        double oldAmount = cropsConfig.getJobsPoints(cropName) + amount;
+        double newAmount = Math.min(oldAmount, VALUE_MAX);
+        cropsConfig.setJobsPoints(cropName, newAmount);
     }
 
 
     /**
      * Removes the specified amount of points from the specified player.
      *
-     * @param name   The name of the player.
      * @param amount The amount of points to remove.
      */
-    public void removeJobsPoints(@NotNull String name, int amount) {
-        double oldAmount = cropsConfig.getJobsPoints(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        cropsConfig.setJobsPoints(name, newAmount);
+    public void removeJobsPoints(int amount) {
+        double oldAmount = cropsConfig.getJobsPoints(cropName) - amount;
+        double newAmount = Math.max(oldAmount, VALUE_MIN);
+        cropsConfig.setJobsPoints(cropName, newAmount);
     }
 
 
     /**
      * Adds the specified amount of money to the crop.
      *
-     * @param name   The name of the crop.
      * @param amount The amount of money to add to the specified crop.
      */
-    public void addJobsMoney(@NotNull String name, int amount) {
-        double oldAmount = cropsConfig.getJobsMoney(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        cropsConfig.setJobsMoney(name, newAmount);
+    public void addJobsMoney(int amount) {
+        double oldAmount = cropsConfig.getJobsMoney(cropName) + amount;
+        double newAmount = Math.min(oldAmount, VALUE_MAX);
+        cropsConfig.setJobsMoney(cropName, newAmount);
     }
 
 
     /**
      * Remove money from a player's Jobs account.
      *
-     * @param name   The name of the player
      * @param amount The amount of money to remove from the player's balance.
      */
-    public void removeJobsMoney(@NotNull String name, int amount) {
-        double oldAmount = cropsConfig.getJobsMoney(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        cropsConfig.setJobsMoney(name, newAmount);
+    public void removeJobsMoney(int amount) {
+        double oldAmount = cropsConfig.getJobsMoney(cropName) - amount;
+        double newAmount = Math.max(oldAmount, VALUE_MIN);
+        cropsConfig.setJobsMoney(cropName, newAmount);
     }
 
 
     /**
      * Adds the given amount of experience to the given job, but caps it at 10,000.
      *
-     * @param name   The name of the job.
      * @param amount The amount of experience to add.
      */
-    public void addJobsExperience(@NotNull String name, int amount) {
-        double oldAmount = cropsConfig.getJobsExperience(name) + amount;
-        double newAmount = Math.min(oldAmount, 10_000);
-        cropsConfig.setJobsExperience(name, newAmount);
+    public void addJobsExperience(int amount) {
+        double oldAmount = cropsConfig.getJobsExperience(cropName) + amount;
+        double newAmount = Math.min(oldAmount, VALUE_MAX);
+        cropsConfig.setJobsExperience(cropName, newAmount);
     }
 
 
     /**
      * Removes the specified amount of experience from the specified job.
      *
-     * @param name   The name of the job you want to remove experience from.
      * @param amount The amount of experience to remove.
      */
-    public void removeJobsExperience(@NotNull String name, int amount) {
-        double oldAmount = cropsConfig.getJobsExperience(name) - amount;
-        double newAmount = Math.max(oldAmount, 0);
-        cropsConfig.setJobsExperience(name, newAmount);
+    public void removeJobsExperience(int amount) {
+        double oldAmount = cropsConfig.getJobsExperience(cropName) - amount;
+        double newAmount = Math.max(oldAmount, VALUE_MIN);
+        cropsConfig.setJobsExperience(cropName, newAmount);
     }
 
 

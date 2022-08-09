@@ -80,7 +80,9 @@ public final class PlayerPlantCropListener implements Listener {
 
         // Maybe needs to cache a plant for some time...
 
-        Bukkit.getPluginManager().callEvent(new PlayerPlantCropEvent(crop, block, player));
+        Bukkit.getPluginManager().callEvent(
+                new PlayerPlantCropEvent(crop, block, player)
+        );
     }
 
 

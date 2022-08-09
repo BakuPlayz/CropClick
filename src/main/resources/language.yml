@@ -430,8 +430,8 @@ menu:
     itemStatus: "&7Status: &e%status%"
 
   particles:
-    itemName: "&e%name%"
-    itemStatus: "&7Status: &e%status%"
+    itemName: "&e%name% &7(%status%)"
+    itemOrder: "&7Order: &e%order%"
 
   particle:
     add:
@@ -455,8 +455,8 @@ menu:
       itemValue: "&7Amount: &e%value%"
 
   sounds:
-    itemName: "&e%name%"
-    itemStatus: "&7Status: &e%status%"
+    itemName: "&e%name% &7(%status%)"
+    itemOrder: "&7Order: &e%order%"
 
   sound:
     add:

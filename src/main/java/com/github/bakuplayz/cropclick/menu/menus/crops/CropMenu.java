@@ -103,6 +103,7 @@ public final class CropMenu extends Menu {
             cropsConfig.toggleHarvestCrop(cropName);
         }
 
+        // Crop Add
         if (clicked.equals(getCropAddItem(MIN_CHANGE))) {
             addCropDropAmount(MIN_CHANGE);
         }
@@ -111,6 +112,7 @@ public final class CropMenu extends Menu {
             addCropDropAmount(MAX_CHANGE);
         }
 
+        // Crop Remove
         if (clicked.equals(getCropRemoveItem(MIN_CHANGE))) {
             removeCropDropAmount(MIN_CHANGE);
         }
@@ -126,6 +128,7 @@ public final class CropMenu extends Menu {
                 cropsConfig.toggleSeed(seedName);
             }
 
+            // Seed Add
             if (clicked.equals(getSeedAddItem(MIN_CHANGE))) {
                 addSeedDropAmount(seedName, MIN_CHANGE);
             }
@@ -134,6 +137,7 @@ public final class CropMenu extends Menu {
                 addSeedDropAmount(seedName, MAX_CHANGE);
             }
 
+            // Seed Remove
             if (clicked.equals(getSeedRemoveItem(MIN_CHANGE))) {
                 removeSeedDropAmount(seedName, MIN_CHANGE);
             }

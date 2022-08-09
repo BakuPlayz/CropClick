@@ -107,16 +107,30 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String sound) {
-        String name = MessageUtils.beautify(sound, true);
-        String status = MessageUtils.getEnabledStatus(
-                plugin,
-                cropsConfig.isSoundEnabled(crop.getName(), sound)
+        boolean isEnabled = cropsConfig.isSoundEnabled(
+                crop.getName(),
+                sound
         );
+        String status = MessageUtils.getEnabledStatus(plugin, isEnabled);
+        String name = MessageUtils.beautify(sound, true);
 
-        return new ItemUtil(Material.NOTE_BLOCK)
-                .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(plugin, name))
-                .setLore(LanguageAPI.Menu.SOUNDS_ITEM_STATUS.get(plugin, status))
-                .toItemStack();
+        ItemUtil item = new ItemUtil(Material.NOTE_BLOCK)
+                .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(
+                        plugin,
+                        name,
+                        status
+                ));
+
+        if (isEnabled) {
+            item.setDamage(5)
+                .setMaterial(Material.STAINED_GLASS_PANE)
+                .setLore(LanguageAPI.Menu.SOUNDS_ITEM_ORDER.get(
+                        plugin,
+                        getOrderOfSound(sound)
+                ));
+        }
+
+        return item.toItemStack();
     }
 
 
@@ -141,6 +155,18 @@ public final class SoundsMenu extends PaginatedMenu {
         return Arrays.stream(Sound.values())
                      .map(Sound::name)
                      .collect(Collectors.toList());
+    }
+
+
+    /**
+     * It returns the index of the sound in the list of sounds for the crop.
+     *
+     * @param sound The name of the sound to play.
+     *
+     * @return The index of the sound in the list of sounds for the crop.
+     */
+    private int getOrderOfSound(@NotNull String sound) {
+        return cropsConfig.getSounds(crop.getName()).indexOf(sound);
     }
 
 }

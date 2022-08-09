@@ -4,11 +4,15 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.particle.ParticleEffect;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -253,6 +257,24 @@ public final class CropsConfig extends Config {
 
 
     /**
+     * Get the particles for a crop.
+     *
+     * @param cropName The name of the crop.
+     *
+     * @return A list of strings
+     */
+    //TODO: Check for actual particles, meaning a check if the children has children.
+    public @NotNull List<String> getParticles(@NotNull String cropName) {
+        ConfigurationSection section = config.getConfigurationSection(
+                "crops." + cropName + ".particles"
+        );
+        return section == null
+               ? Collections.emptyList()
+               : new ArrayList<>(section.getKeys(false));
+    }
+
+
+    /**
      * Get the delay between particle spawns for a specific particle type for a specific crop.
      *
      * @param cropName     The name of the crop.
@@ -355,8 +377,26 @@ public final class CropsConfig extends Config {
     public int getAmountOfEnabledSounds(@NotNull String cropName) {
         return (int) Arrays.stream(Sound.values())
                            .map(Sound::name)
-                           .filter(sound -> isSoundEnabled(cropName, sound))
+                           .filter(particle -> isSoundEnabled(cropName, particle))
                            .count();
+    }
+
+
+    /**
+     * Get the sounds for a crop, or null if the crop doesn't exist.
+     *
+     * @param cropName The name of the crop to get the sounds for.
+     *
+     * @return A list of strings.
+     */
+    //TODO: Check for actual sounds, meaning a check if the children has children.
+    public @NotNull List<String> getSounds(@NotNull String cropName) {
+        ConfigurationSection section = config.getConfigurationSection(
+                "crops." + cropName + ".sounds"
+        );
+        return section == null
+               ? Collections.emptyList()
+               : new ArrayList<>(section.getKeys(false));
     }
 
 

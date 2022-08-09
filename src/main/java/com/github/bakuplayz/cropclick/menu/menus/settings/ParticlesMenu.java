@@ -120,16 +120,30 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String particle) {
-        String name = MessageUtils.beautify(particle, true);
-        String status = MessageUtils.getEnabledStatus(
-                plugin,
-                cropsConfig.isParticleEnabled(crop.getName(), particle)
+        boolean isEnabled = cropsConfig.isParticleEnabled(
+                crop.getName(),
+                particle
         );
+        String status = MessageUtils.getEnabledStatus(plugin, isEnabled);
+        String name = MessageUtils.beautify(particle, true);
 
-        return new ItemUtil(Material.FIREWORK)
-                .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(plugin, name))
-                .setLore(LanguageAPI.Menu.PARTICLES_ITEM_STATUS.get(plugin, status))
-                .toItemStack();
+        ItemUtil item = new ItemUtil(Material.FIREWORK)
+                .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(
+                        plugin,
+                        name,
+                        status
+                ));
+
+        if (isEnabled) {
+            item.setDamage(5)
+                .setMaterial(Material.STAINED_GLASS_PANE)
+                .setLore(LanguageAPI.Menu.PARTICLES_ITEM_ORDER.get(
+                        plugin,
+                        getOrderOfParticle(particle)
+                ));
+        }
+
+        return item.toItemStack();
     }
 
 
@@ -142,6 +156,18 @@ public final class ParticlesMenu extends PaginatedMenu {
         return particles.stream()
                         .map(this::getMenuItem)
                         .collect(Collectors.toList());
+    }
+
+
+    /**
+     * It returns the index of the particle in the list of particles for the crop.
+     *
+     * @param particle The name of the particle to play.
+     *
+     * @return The index of the particle in the list of particles for the crop.
+     */
+    private int getOrderOfParticle(@NotNull String particle) {
+        return cropsConfig.getParticles(crop.getName()).indexOf(particle);
     }
 
 }

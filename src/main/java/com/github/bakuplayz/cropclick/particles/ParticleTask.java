@@ -37,9 +37,9 @@ public final class ParticleTask extends TimerTask {
 
         effect.display(
                 location,
-                random.nextFloat(),
+                random.nextFloat() + 0.5f,
                 random.nextFloat() + 2,
-                random.nextFloat(),
+                random.nextFloat() + 0.5f,
                 particle.getSpeed(),
                 particle.getAmount(),
                 null

@@ -445,8 +445,8 @@ public final class LanguageAPI {
         NAME_RESPONSE_CHANGED(Category.NAME, SubCategory.RESPONSE, "changed", "%name%"),
         NAME_RESPONSE_UNCHANGED(Category.NAME, SubCategory.RESPONSE, "unchanged"),
 
-        PARTICLES_ITEM_NAME(Category.PARTICLES, "itemName", "%name%"),
-        PARTICLES_ITEM_STATUS(Category.PARTICLES, "itemStatus", "%status%"),
+        PARTICLES_ITEM_NAME(Category.PARTICLES, "itemName", "%name%", "%status%"),
+        PARTICLES_ITEM_ORDER(Category.PARTICLES, "itemOrder", "%order%"),
 
         PARTICLE_ADD_ITEM_AFTER(Category.PARTICLE, SubCategory.ADD, "itemAfter", "%value%"),
         PARTICLE_ADD_ITEM_NAME(Category.PARTICLE, SubCategory.ADD, "itemName", "%amount%", "%type%"),
@@ -478,8 +478,8 @@ public final class LanguageAPI {
         SETTINGS_WORLDS_ITEM_STATUS(Category.SETTINGS, SubCategory.WORLDS, "itemStatus", "%status%"),
         SETTINGS_WORLDS_ITEM_TIPS(Category.SETTINGS, SubCategory.WORLDS, "itemTips"),
 
-        SOUNDS_ITEM_NAME(Category.SOUNDS, "itemName", "%name%"),
-        SOUNDS_ITEM_STATUS(Category.SOUNDS, "itemStatus", "%status%"),
+        SOUNDS_ITEM_NAME(Category.SOUNDS, "itemName", "%name%", "%status%"),
+        SOUNDS_ITEM_ORDER(Category.SOUNDS, "itemOrder", "%order%"),
 
         SOUND_ADD_ITEM_AFTER(Category.SOUND, SubCategory.ADD, "itemAfter", "%value%"),
         SOUND_ADD_ITEM_NAME(Category.SOUND, SubCategory.ADD, "itemName", "%amount%", "%type%"),

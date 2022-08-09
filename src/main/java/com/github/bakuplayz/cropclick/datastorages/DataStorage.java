@@ -23,11 +23,9 @@ public abstract class DataStorage {
 
     protected CropClick plugin;
 
-
     protected File file;
     protected String fileName;
     protected @Getter JsonObject fileData;
-
 
     protected Gson gson;
 

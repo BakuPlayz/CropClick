@@ -130,10 +130,7 @@ public final class PlayersConfig extends Config {
 
         saveConfig();
     }
-
-
-    // TODO: Explain function :) and a better name
-
+    
 
     /**
      * If the location is the same as the location in the config, set the location in the config to null.

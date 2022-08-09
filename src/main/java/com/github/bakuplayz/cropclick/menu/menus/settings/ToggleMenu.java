@@ -66,8 +66,9 @@ public final class ToggleMenu extends PaginatedMenu {
             return;
         }
 
-        String player = players.get(index);
-        playersConfig.togglePlayer(player);
+        playersConfig.togglePlayer(
+                players.get(index)
+        );
 
         updateMenu();
     }
