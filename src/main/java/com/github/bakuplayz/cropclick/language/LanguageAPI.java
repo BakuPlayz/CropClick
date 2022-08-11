@@ -46,8 +46,7 @@ public final class LanguageAPI {
 
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
 
-        NOT_SUPPORTED_VERSION(
-                "This CropClick.jar only supports 1.8 to 1.13.2. In order to run the plugin, please change to the correct jar for your server version.");
+        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.13.2. In order to run the plugin, please change to the correct jar for your server version.");
 
         private final String message;
 
@@ -450,14 +449,22 @@ public final class LanguageAPI {
 
         PARTICLE_ADD_ITEM_AFTER(Category.PARTICLE, SubCategory.ADD, "itemAfter", "%value%"),
         PARTICLE_ADD_ITEM_NAME(Category.PARTICLE, SubCategory.ADD, "itemName", "%amount%", "%type%"),
-        PARTICLE_AMOUNT_ITEM_NAME(Category.PARTICLE, SubCategory.AMOUNT, "itemName"),
-        PARTICLE_AMOUNT_ITEM_VALUE(Category.PARTICLE, SubCategory.AMOUNT, "itemValue", "%value%"),
-        PARTICLE_DELAY_ITEM_NAME(Category.PARTICLE, SubCategory.DELAY, "itemName"),
-        PARTICLE_DELAY_ITEM_VALUE(Category.PARTICLE, SubCategory.DELAY, "itemValue", "%value%"),
         PARTICLE_REMOVE_ITEM_AFTER(Category.PARTICLE, SubCategory.REMOVE, "itemAfter", "%value%"),
         PARTICLE_REMOVE_ITEM_NAME(Category.PARTICLE, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
+        PARTICLE_AMOUNT_ITEM_NAME(Category.PARTICLE, SubCategory.AMOUNT, "itemName"),
+        PARTICLE_AMOUNT_ITEM_TIPS(Category.PARTICLE, SubCategory.AMOUNT, "itemTips"),
+        PARTICLE_AMOUNT_ITEM_VALUE(Category.PARTICLE, SubCategory.AMOUNT, "itemValue", "%value%"),
+        PARTICLE_DELAY_ITEM_NAME(Category.PARTICLE, SubCategory.DELAY, "itemName"),
+        PARTICLE_DELAY_ITEM_TIPS(Category.PARTICLE, SubCategory.DELAY, "itemTips"),
+        PARTICLE_DELAY_ITEM_VALUE(Category.PARTICLE, SubCategory.DELAY, "itemValue", "%value%"),
         PARTICLE_SPEED_ITEM_NAME(Category.PARTICLE, SubCategory.SPEED, "itemName"),
+        PARTICLE_SPEED_ITEM_TIPS(Category.PARTICLE, SubCategory.SPEED, "itemTips"),
         PARTICLE_SPEED_ITEM_VALUE(Category.PARTICLE, SubCategory.SPEED, "itemValue", "%value%"),
+        PARTICLE_INCREASE_ORDER_ITEM_NAME(Category.PARTICLE, SubCategory.INCREASE_ORDER, "itemName"),
+        PARTICLE_INCREASE_ORDER_ITEM_AFTER(Category.PARTICLE, SubCategory.INCREASE_ORDER, "itemAfter", "%value%"),
+        PARTICLE_DECREASE_ORDER_ITEM_NAME(Category.PARTICLE, SubCategory.DECREASE_ORDER, "itemName"),
+        PARTICLE_DECREASE_ORDER_ITEM_AFTER(Category.PARTICLE, SubCategory.DECREASE_ORDER, "itemAfter", "%value%"),
+
 
         SETTINGS_AUTOFARMS_ITEM_NAME(Category.SETTINGS, SubCategory.AUTOFARMS, "itemName"),
         SETTINGS_AUTOFARMS_ITEM_STATUS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
@@ -483,14 +490,21 @@ public final class LanguageAPI {
 
         SOUND_ADD_ITEM_AFTER(Category.SOUND, SubCategory.ADD, "itemAfter", "%value%"),
         SOUND_ADD_ITEM_NAME(Category.SOUND, SubCategory.ADD, "itemName", "%amount%", "%type%"),
-        SOUND_DELAY_ITEM_NAME(Category.SOUND, SubCategory.DELAY, "itemName"),
-        SOUND_DELAY_ITEM_VALUE(Category.SOUND, SubCategory.DELAY, "itemValue", "%value%"),
-        SOUND_PITCH_ITEM_NAME(Category.SOUND, SubCategory.PITCH, "itemName"),
-        SOUND_PITCH_ITEM_VALUE(Category.SOUND, SubCategory.PITCH, "itemValue", "%value%"),
         SOUND_REMOVE_ITEM_AFTER(Category.SOUND, SubCategory.REMOVE, "itemAfter", "%value%"),
         SOUND_REMOVE_ITEM_NAME(Category.SOUND, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
+        SOUND_DELAY_ITEM_NAME(Category.SOUND, SubCategory.DELAY, "itemName"),
+        SOUND_DELAY_ITEM_TIPS(Category.SOUND, SubCategory.DELAY, "itemTips"),
+        SOUND_DELAY_ITEM_VALUE(Category.SOUND, SubCategory.DELAY, "itemValue", "%value%"),
+        SOUND_PITCH_ITEM_NAME(Category.SOUND, SubCategory.PITCH, "itemName"),
+        SOUND_PITCH_ITEM_TIPS(Category.SOUND, SubCategory.PITCH, "itemTips"),
+        SOUND_PITCH_ITEM_VALUE(Category.SOUND, SubCategory.PITCH, "itemValue", "%value%"),
         SOUND_VOLUME_ITEM_NAME(Category.SOUND, SubCategory.VOLUME, "itemName"),
+        SOUND_VOLUME_ITEM_TIPS(Category.SOUND, SubCategory.VOLUME, "itemTips"),
         SOUND_VOLUME_ITEM_VALUE(Category.SOUND, SubCategory.VOLUME, "itemValue", "%value%"),
+        SOUND_INCREASE_ORDER_ITEM_NAME(Category.SOUND, SubCategory.INCREASE_ORDER, "itemName"),
+        SOUND_INCREASE_ORDER_ITEM_AFTER(Category.SOUND, SubCategory.INCREASE_ORDER, "itemAfter", "%value%"),
+        SOUND_DECREASE_ORDER_ITEM_NAME(Category.SOUND, SubCategory.DECREASE_ORDER, "itemName"),
+        SOUND_DECREASE_ORDER_ITEM_AFTER(Category.SOUND, SubCategory.DECREASE_ORDER, "itemAfter", "%value%"),
 
         TOGGLE_ITEM_NAME(Category.TOGGLE, "itemName", "%name%"),
         TOGGLE_ITEM_STATUS(Category.TOGGLE, "itemStatus", "%status%"),
@@ -586,6 +600,8 @@ public final class LanguageAPI {
             EXPERIENCE_REASON("experienceReason"),
             EXPERIENCE_REMOVE("experienceRemove"),
             FORMAT,
+            INCREASE_ORDER("increaseOrder"),
+            DECREASE_ORDER("decreaseOrder"),
             GLASS,
             HELP,
             ITEM,
@@ -708,8 +724,8 @@ public final class LanguageAPI {
         @SafeVarargs
         public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
-                                             .map(Object::toString)
-                                             .toArray(String[]::new);
+                                                   .map(Object::toString)
+                                                   .toArray(String[]::new);
             return fastReplace(get(plugin), valuesAsStrings);
         }
 
@@ -753,18 +769,6 @@ public final class LanguageAPI {
          */
         public void send(@NotNull CropClick plugin, @NotNull CommandSender sender) {
             sender.sendMessage(get(plugin));
-        }
-
-
-        /**
-         * It gets a list of all the crops, and sends it to the sender.
-         *
-         * @param plugin The plugin instance.
-         * @param sender The CommandSender that is executing the command.
-         */
-        @SuppressWarnings("unused")
-        public void sendAsList(@NotNull CropClick plugin, @NotNull CommandSender sender) {
-            getAsList(plugin).forEach(sender::sendMessage);
         }
 
 

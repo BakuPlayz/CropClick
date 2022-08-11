@@ -24,15 +24,17 @@ public final class SoundRunnable {
 
     private final Location location;
 
-    private final List<Sound> sounds;
+    private final List<Sound> queuedSounds;
 
 
     public SoundRunnable(@NotNull Block block) {
         this.runnable = new Timer(true);
+        this.queuedSounds = new ArrayList<>();
         this.location = block.getLocation();
-        this.sounds = new ArrayList<>();
     }
 
+
+    //TODO: Update the comment.
 
     /**
      * This function adds a sound to the sounds list.
@@ -42,8 +44,8 @@ public final class SoundRunnable {
      * @param volume The volume of the sound.
      * @param delay  The delay in milliseconds before the sound is played.
      */
-    public void addSound(@NotNull String name, double pitch, double volume, double delay) {
-        sounds.add(
+    public void queueSound(@NotNull String name, double pitch, double volume, double delay) {
+        queuedSounds.add(
                 new Sound(name, pitch, volume, delay)
         );
     }
@@ -53,8 +55,9 @@ public final class SoundRunnable {
      * For each sound, schedule a task to run after the sound's delay.
      */
     public void run() {
+        long start = System.nanoTime();
         long delay = 0;
-        for (Sound sound : sounds) {
+        for (Sound sound : queuedSounds) {
             delay += sound.getDelay();
             runnable.schedule(
                     new SoundTask(sound, location),
@@ -62,6 +65,7 @@ public final class SoundRunnable {
             );
         }
         runnable.schedule(clean(), delay + 10);
+        System.out.println(System.nanoTime() - start);
     }
 
 

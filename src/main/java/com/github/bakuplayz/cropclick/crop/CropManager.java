@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
  */
 public final class CropManager {
 
-    private final @Getter List<Crop> crops;
 
     private final CropsConfig cropsConfig;
+    private final @Getter List<Crop> crops;
 
 
     /**

@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
+import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
@@ -40,11 +41,13 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
     private final CropManager cropManager;
     private final WorldManager worldManager;
     private final AddonManager addonManager;
+    private final PlayersConfig playersConfig;
     private final AutofarmManager autofarmManager;
 
 
     public PlayerInteractAtAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
+        this.playersConfig = plugin.getPlayersConfig();
         this.addonManager = plugin.getAddonManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
@@ -69,6 +72,10 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         Action action = event.getAction();
         Player player = event.getPlayer();
         if (!EventUtils.isRightShift(player, action)) {
+            return;
+        }
+
+        if (!playersConfig.isEnabled(player)) {
             return;
         }
 

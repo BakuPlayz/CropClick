@@ -25,16 +25,17 @@ public final class ParticleRunnable {
 
     private final Location location;
 
-    private final List<Particle> particles;
+    private final List<Particle> queuedParticles;
 
 
     public ParticleRunnable(@NotNull Block block) {
+        this.queuedParticles = new ArrayList<>();
         this.runnable = new Timer(true);
         this.location = block.getLocation();
-        this.particles = new ArrayList<>();
     }
 
 
+    // TODO: Update comment
     /**
      * Adds a particle to the list of particles to be spawned.
      *
@@ -43,8 +44,8 @@ public final class ParticleRunnable {
      * @param speed  The speed of the particle.
      * @param delay  The delay in milliseconds before the particle is played
      */
-    public void addParticle(@NotNull String name, int amount, double speed, double delay) {
-        particles.add(
+    public void queueParticle(@NotNull String name, int amount, double speed, double delay) {
+        queuedParticles.add(
                 new Particle(name, amount, speed, delay)
         );
     }
@@ -55,7 +56,7 @@ public final class ParticleRunnable {
      */
     public void run() {
         long delay = 0;
-        for (Particle particle : particles) {
+        for (Particle particle : queuedParticles) {
             delay += particle.getDelay();
             runnable.schedule(
                     new ParticleTask(particle, location),

@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -129,21 +130,11 @@ public final class NameMenu extends Menu {
      * @return A new ItemStack with the material of a sign, with the name of the item being the color code item name, and
      * the lore being the color codes.
      */
-    // TODO: Make more readable
     private @NotNull ItemStack getCodesItem(int start) {
         return new ItemUtil(Material.SIGN)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
-                .setLore(colorCodes.entrySet().stream()
-                                   .map(colorMap -> MessageUtils.colorize(
-                                           LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(
-                                                   plugin,
-                                                   colorMap.getKey(),
-                                                   colorMap.getKey(),
-                                                   colorMap.getValue())
-                                   ).replace("#", "&")) // Some wizardry formatting
-                                   .skip(start).limit(11)
-                                   .collect(Collectors.toList())
-                ).toItemStack();
+                .setLore(getCodesLore(start))
+                .toItemStack();
     }
 
 
@@ -202,6 +193,20 @@ public final class NameMenu extends Menu {
                              ChatColor::getChar,
                              color -> MessageUtils.beautify(color.name(), true)
                      ));
+    }
+
+    //TODO: Comment the following
+    private List<String> getCodesLore(int start) {
+        return colorCodes.entrySet().stream()
+                .map(colorMap -> MessageUtils.colorize(
+                        LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(
+                                plugin,
+                                colorMap.getKey(),
+                                colorMap.getKey(),
+                                colorMap.getValue())
+                ).replace("#", "&")) // Some wizardry formatting
+                .skip(start).limit(11)
+                .collect(Collectors.toList());
     }
 
 }

@@ -145,7 +145,7 @@ public abstract class BaseCrop implements Crop {
             double pitch = cropsConfig.getSoundPitch(getName(), sound);
             double volume = cropsConfig.getSoundVolume(getName(), sound);
 
-            runnable.addSound(
+            runnable.queueSound(
                     sound,
                     volume,
                     pitch,
@@ -166,7 +166,7 @@ public abstract class BaseCrop implements Crop {
             double speed = cropsConfig.getParticleSpeed(getName(), particle);
             int amount = cropsConfig.getParticleAmount(getName(), particle);
 
-            runnable.addParticle(
+            runnable.queueParticle(
                     particle,
                     amount,
                     speed,

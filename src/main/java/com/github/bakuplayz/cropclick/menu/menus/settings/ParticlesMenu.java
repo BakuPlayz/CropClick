@@ -152,6 +152,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
+    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return particles.stream()
                         .map(this::getMenuItem)
@@ -167,7 +168,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return The index of the particle in the list of particles for the crop.
      */
     private int getOrderOfParticle(@NotNull String particle) {
-        return cropsConfig.getParticles(crop.getName()).indexOf(particle);
+        return cropsConfig.getParticleOrder(crop.getName(), particle);
     }
 
 }

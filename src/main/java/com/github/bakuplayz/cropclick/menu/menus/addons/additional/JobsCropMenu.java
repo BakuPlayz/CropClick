@@ -35,8 +35,8 @@ public final class JobsCropMenu extends Menu {
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
-    public final int VALUE_MAX = 10_000;
-    public final int VALUE_MIN = 0;
+    private final int VALUE_MIN = 0;
+    private final int VALUE_MAX = 10_000;
 
 
     public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {

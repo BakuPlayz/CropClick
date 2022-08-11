@@ -166,7 +166,7 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return The index of the sound in the list of sounds for the crop.
      */
     private int getOrderOfSound(@NotNull String sound) {
-        return cropsConfig.getSounds(crop.getName()).indexOf(sound);
+        return cropsConfig.getSoundOrder(crop.getName(), sound);
     }
 
 }

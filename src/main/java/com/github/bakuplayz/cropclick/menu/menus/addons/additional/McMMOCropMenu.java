@@ -36,8 +36,8 @@ public final class McMMOCropMenu extends Menu {
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
-    public final int EXPERIENCE_MIN = 0;
-    public final int EXPERIENCE_MAX = 10_000;
+    private final int EXPERIENCE_MIN = 0;
+    private final int EXPERIENCE_MAX = 10_000;
 
 
     public McMMOCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
@@ -145,8 +145,8 @@ public final class McMMOCropMenu extends Menu {
                     String newReason = cropsConfig.getMcMMOExperienceReason(cropName);
                     player.sendMessage(
                             currentReason.equals(newReason)
-                            ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
-                            : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
+                                    ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
+                                    : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
                     );
                 })
                 .plugin(plugin);

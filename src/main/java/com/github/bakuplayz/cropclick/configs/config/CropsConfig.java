@@ -2,17 +2,14 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
+import com.github.bakuplayz.cropclick.utils.MapUtils;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.particle.ParticleEffect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -249,10 +246,7 @@ public final class CropsConfig extends Config {
      * @return The amount of enabled particles for a crop.
      */
     public int getAmountOfEnabledParticles(@NotNull String cropName) {
-        return (int) Arrays.stream(ParticleEffect.values())
-                           .map(ParticleEffect::name)
-                           .filter(particle -> isParticleEnabled(cropName, particle))
-                           .count();
+        return getParticles(cropName).size();
     }
 
 
@@ -263,14 +257,24 @@ public final class CropsConfig extends Config {
      *
      * @return A list of strings
      */
-    //TODO: Check for actual particles, meaning a check if the children has children.
     public @NotNull List<String> getParticles(@NotNull String cropName) {
         ConfigurationSection section = config.getConfigurationSection(
                 "crops." + cropName + ".particles"
         );
-        return section == null
-               ? Collections.emptyList()
-               : new ArrayList<>(section.getKeys(false));
+
+        if (section == null) {
+            return Collections.emptyList();
+        }
+
+        return section.getKeys(false).stream()
+                      .filter(particleName -> isParticleEnabled(cropName, particleName))
+                      .sorted(compareParticleOrder(cropName))
+                      .collect(Collectors.toList());
+    }
+
+
+    private Comparator<String> compareParticleOrder(@NotNull String cropName) {
+        return Comparator.comparingInt((particleName) -> getParticleOrder(cropName, particleName));
     }
 
 
@@ -352,6 +356,32 @@ public final class CropsConfig extends Config {
     }
 
 
+    public int getParticleOrder(@NotNull String cropName, @NotNull String particleName) {
+        return config.getInt("crops." + cropName + ".particles." + particleName + ".order", -1);
+    }
+
+
+    public void setParticleOrder(@NotNull String cropName, @NotNull String particleName, int order) {
+        config.set("crops." + cropName + ".particles." + particleName + ".order", order);
+        saveConfig();
+    }
+
+
+    public void setParticleOrder(@NotNull String cropName, @NotNull String particleName, int oldOrder, int newOrder) {
+        for (String particle : getParticles(cropName)) {
+            int order = getParticleOrder(cropName, particle);
+
+            if (order != newOrder) {
+                continue;
+            }
+
+            setParticleOrder(cropName, particle, oldOrder);
+        }
+
+        setParticleOrder(cropName, particleName, newOrder);
+    }
+
+
     /**
      * Returns true if the sound is enabled, false otherwise.
      *
@@ -375,10 +405,7 @@ public final class CropsConfig extends Config {
      * @return The amount of enabled sounds for a crop.
      */
     public int getAmountOfEnabledSounds(@NotNull String cropName) {
-        return (int) Arrays.stream(Sound.values())
-                           .map(Sound::name)
-                           .filter(particle -> isSoundEnabled(cropName, particle))
-                           .count();
+        return getSounds(cropName).size();
     }
 
 
@@ -389,14 +416,18 @@ public final class CropsConfig extends Config {
      *
      * @return A list of strings.
      */
-    //TODO: Check for actual sounds, meaning a check if the children has children.
     public @NotNull List<String> getSounds(@NotNull String cropName) {
         ConfigurationSection section = config.getConfigurationSection(
                 "crops." + cropName + ".sounds"
         );
-        return section == null
-               ? Collections.emptyList()
-               : new ArrayList<>(section.getKeys(false));
+
+        if (section == null) {
+            return Collections.emptyList();
+        }
+
+        return section.getKeys(false).stream()
+                      .filter(soundName -> isSoundEnabled(cropName, soundName))
+                      .collect(Collectors.toList());
     }
 
 
@@ -474,6 +505,49 @@ public final class CropsConfig extends Config {
      */
     public void setSoundPitch(@NotNull String cropName, @NotNull String soundName, double pitch) {
         config.set("crops." + cropName + ".sounds." + soundName + ".pitch", pitch);
+        saveConfig();
+    }
+
+
+    public int getSoundOrder(@NotNull String cropName, @NotNull String soundName) {
+        return getSounds(cropName).indexOf(soundName);
+    }
+
+
+    public void swapSoundOrder(@NotNull String cropName, int oldOrder, int newOrder) {
+        Map<Integer, Object> soundObjects = new HashMap<>(); //EVENTUELLT TREEMAP
+
+        List<String> sounds = getSounds(cropName);
+        for (int i = 0; i < sounds.size(); i++) {
+            String sound = sounds.get(i);
+            Map<String, Object> values = config
+                    .getConfigurationSection("crops." + cropName + ".sounds." + sound)
+                    .getValues(true);
+            soundObjects.put(i, values);
+        }
+
+        MapUtils.swap(soundObjects, oldOrder, newOrder);
+
+        config.set("crops." + cropName + ".sounds", null);
+        System.out.println(soundObjects);
+
+        // SHORTEN AND CHECK THE TIME FOR EVERYTHING MOVE TO UTILITY CLASSES
+        // E.G.
+
+        Map<String, Object> savableSounds = MapUtils.fromIntToStringKeyed(
+                soundObjects,
+                (key) -> {
+                    if (key == newOrder) {
+                        key = oldOrder;
+                    } else if (key == oldOrder) {
+                        key = newOrder;
+                    }
+
+                    return sounds.get(key);
+                }
+        );
+
+        config.set("crops." + cropName + ".sounds", savableSounds);
         saveConfig();
     }
 
@@ -753,7 +827,6 @@ public final class CropsConfig extends Config {
      *
      * @return The chance of a seed dropping.
      */
-    @SuppressWarnings("unused")
     public double getSeedDropChance(@NotNull String name) {
         return getSeedDropChance(name, 0.0);
     }

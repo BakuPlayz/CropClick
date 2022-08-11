@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.listeners.player.harvest;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
@@ -36,6 +37,7 @@ public final class PlayerHarvestCropListener implements Listener {
     private final CropManager cropManager;
     private final AddonManager addonManager;
     private final WorldManager worldManager;
+    private final PlayersConfig playersConfig;
 
     private final HashMap<Crop, Long> harvestedCrops;
 
@@ -44,6 +46,7 @@ public final class PlayerHarvestCropListener implements Listener {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
+        this.playersConfig = plugin.getPlayersConfig();
         this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 
@@ -68,6 +71,10 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         Player player = event.getPlayer();
+        if (!playersConfig.isEnabled(player)) {
+            return;
+        }
+
         FarmWorld world = worldManager.findByPlayer(player);
         if (!worldManager.isAccessible(world)) {
             return;

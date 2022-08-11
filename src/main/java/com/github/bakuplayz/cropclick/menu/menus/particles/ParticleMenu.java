@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 
 /**
  * (DESCRIPTION)
@@ -23,23 +25,31 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ParticleMenu extends Menu {
 
+    private final int MIN_CHANGE = 1;
+    private final int MAX_CHANGE = 5;
+
+    private final int DELAY_MIN_CHANGE = 100; // in milliseconds
+    private final int DELAY_MAX_CHANGE = 500; // in milliseconds
+
+    private final int DELAY_MIN = 0; // in milliseconds
+    private final int DELAY_MAX = 5000; // in milliseconds
+
+    private final int MIN_SPEED = 0;
+    private final int MAX_SPEED = 50;
+
+    private final int MIN_AMOUNT = 0;
+    private final int MAX_AMOUNT = 20;
+
     private final Crop crop;
     private final CropsConfig cropsConfig;
 
     private final String particleName;
     private final String cropName;
 
-    private final int MIN_CHANGE = 1;
-    private final int MAX_CHANGE = 5;
+    private List<String> particles;
 
-    public final int MIN_DELAY = 0; // in milliseconds
-    public final int MAX_DELAY = 5000; // in milliseconds
-
-    public final int MIN_SPEED = 0;
-    public final int MAX_SPEED = 50;
-
-    public final int MIN_AMOUNT = 0;
-    public final int MAX_AMOUNT = 20;
+    private int maxOrder;
+    private int currentOrder;
 
 
     public ParticleMenu(@NotNull CropClick plugin,
@@ -50,17 +60,22 @@ public final class ParticleMenu extends Menu {
         this.cropsConfig = plugin.getCropsConfig();
         this.particleName = particleName;
         this.cropName = crop.getName();
+        this.particles = cropsConfig.getParticles(cropName);
         this.crop = crop;
     }
 
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(10, getDelayRemoveItem(MAX_CHANGE));
-        inventory.setItem(11, getDelayRemoveItem(MIN_CHANGE));
+        this.currentOrder = cropsConfig.getParticleOrder(cropName, particleName);
+        this.particles = cropsConfig.getParticles(cropName);
+        this.maxOrder = particles.size() - 1;
+
+        inventory.setItem(10, getDelayRemoveItem(DELAY_MAX_CHANGE));
+        inventory.setItem(11, getDelayRemoveItem(DELAY_MIN_CHANGE));
         inventory.setItem(13, getDelayItem());
-        inventory.setItem(15, getDelayAddItem(MIN_CHANGE));
-        inventory.setItem(16, getDelayAddItem(MAX_CHANGE));
+        inventory.setItem(15, getDelayAddItem(DELAY_MIN_CHANGE));
+        inventory.setItem(16, getDelayAddItem(DELAY_MAX_CHANGE));
 
         inventory.setItem(19, getSpeedRemoveItem(MAX_CHANGE));
         inventory.setItem(20, getSpeedRemoveItem(MIN_CHANGE));
@@ -75,6 +90,18 @@ public final class ParticleMenu extends Menu {
         inventory.setItem(34, getAmountAddItem(MAX_CHANGE));
 
         setBackItem();
+
+        if (currentOrder == -1) {
+            return;
+        }
+
+        if (currentOrder != 0) {
+            inventory.setItem(47, getDecreaseOrderItem());
+        }
+
+        if (currentOrder != maxOrder) {
+            inventory.setItem(51, getIncreaseOrderItem());
+        }
     }
 
 
@@ -84,21 +111,30 @@ public final class ParticleMenu extends Menu {
 
         handleBack(clicked, new ParticlesMenu(plugin, player, crop));
 
+        // ORDER
+        if (clicked.equals(getIncreaseOrderItem())) {
+            cropsConfig.setParticleOrder(cropName, particleName, currentOrder, ++currentOrder);
+        }
+
+        if (clicked.equals(getDecreaseOrderItem())) {
+            cropsConfig.setParticleOrder(cropName, particleName, currentOrder, --currentOrder);
+        }
+
         // DELAY
-        if (clicked.equals(getDelayAddItem(MIN_CHANGE))) {
-            addParticleDelay(MIN_CHANGE);
+        if (clicked.equals(getDelayAddItem(DELAY_MIN_CHANGE))) {
+            addParticleDelay(DELAY_MIN_CHANGE);
         }
 
-        if (clicked.equals(getDelayAddItem(MAX_CHANGE))) {
-            addParticleDelay(MAX_CHANGE);
+        if (clicked.equals(getDelayAddItem(DELAY_MAX_CHANGE))) {
+            addParticleDelay(DELAY_MAX_CHANGE);
         }
 
-        if (clicked.equals(getDelayRemoveItem(MIN_CHANGE))) {
-            removeParticleDelay(MIN_CHANGE);
+        if (clicked.equals(getDelayRemoveItem(DELAY_MIN_CHANGE))) {
+            removeParticleDelay(DELAY_MIN_CHANGE);
         }
 
-        if (clicked.equals(getDelayRemoveItem(MAX_CHANGE))) {
-            removeParticleDelay(MAX_CHANGE);
+        if (clicked.equals(getDelayRemoveItem(DELAY_MAX_CHANGE))) {
+            removeParticleDelay(DELAY_MAX_CHANGE);
         }
 
         // SPEED
@@ -135,6 +171,10 @@ public final class ParticleMenu extends Menu {
             removeParticleAmount(MAX_CHANGE);
         }
 
+        if (currentOrder == -1) {
+            initializeOrder();
+        }
+
         updateMenu();
     }
 
@@ -147,7 +187,9 @@ public final class ParticleMenu extends Menu {
 
         return new ItemUtil(Material.WATCH)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DELAY_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.PARTICLE_DELAY_ITEM_VALUE.get(plugin, delay))
+                .setLore(LanguageAPI.Menu.PARTICLE_DELAY_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.PARTICLE_DELAY_ITEM_VALUE.get(plugin, delay)
+                ))
                 .toItemStack();
     }
 
@@ -160,7 +202,9 @@ public final class ParticleMenu extends Menu {
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 4)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_SPEED_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.PARTICLE_SPEED_ITEM_VALUE.get(plugin, speed))
+                .setLore(LanguageAPI.Menu.PARTICLE_SPEED_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.PARTICLE_SPEED_ITEM_VALUE.get(plugin, speed)
+                ))
                 .toItemStack();
     }
 
@@ -173,7 +217,29 @@ public final class ParticleMenu extends Menu {
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_VALUE.get(plugin, amount))
+                .setLore(LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_VALUE.get(plugin, amount)
+                ))
+                .toItemStack();
+    }
+
+
+    private @NotNull ItemStack getIncreaseOrderItem() {
+        int orderAfter = Math.min(currentOrder + 1, maxOrder);
+
+        return new ItemUtil(Material.IRON_PLATE)
+                .setName(plugin, LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
+                .toItemStack();
+    }
+
+
+    private @NotNull ItemStack getDecreaseOrderItem() {
+        int orderAfter = Math.max(currentOrder - 1, 0);
+
+        return new ItemUtil(Material.GOLD_PLATE)
+                .setName(plugin, LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
     }
 
@@ -183,7 +249,7 @@ public final class ParticleMenu extends Menu {
                 cropName,
                 particleName
         );
-        double afterValue = Math.min(beforeValue + amount, MAX_DELAY);
+        double afterValue = Math.min(beforeValue + amount, DELAY_MAX);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amount, "Delay"))
@@ -197,7 +263,7 @@ public final class ParticleMenu extends Menu {
                 cropName,
                 particleName
         );
-        double afterValue = Math.max(beforeValue - amount, MIN_DELAY);
+        double afterValue = Math.max(beforeValue - amount, DELAY_MIN);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amount, "Delay"))
@@ -263,16 +329,24 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    private void initializeOrder() {
+        if (!cropsConfig.isParticleEnabled(cropName, particleName)) {
+            return;
+        }
+        cropsConfig.setParticleOrder(cropName, particleName, ++maxOrder);
+    }
+
+
     public void addParticleDelay(int delay) {
         int oldDelay = (int) (cropsConfig.getParticleDelay(cropName, particleName) + delay);
-        int newDelay = Math.min(oldDelay, MAX_DELAY);
+        int newDelay = Math.min(oldDelay, DELAY_MAX);
         cropsConfig.setParticleDelay(cropName, particleName, newDelay);
     }
 
 
     public void removeParticleDelay(int delay) {
         int oldDelay = (int) (cropsConfig.getParticleDelay(cropName, particleName) - delay);
-        int newDelay = Math.max(oldDelay, MIN_DELAY);
+        int newDelay = Math.max(oldDelay, DELAY_MIN);
         cropsConfig.setParticleDelay(cropName, particleName, newDelay);
     }
 

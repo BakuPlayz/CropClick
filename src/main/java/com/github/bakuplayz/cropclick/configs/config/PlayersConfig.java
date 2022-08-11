@@ -130,7 +130,7 @@ public final class PlayersConfig extends Config {
 
         saveConfig();
     }
-    
+
 
     /**
      * If the location is the same as the location in the config, set the location in the config to null.
@@ -238,6 +238,11 @@ public final class PlayersConfig extends Config {
             return dispenser != null && dispenser.equals(block.getLocation());
         }
         return false;
+    }
+
+
+    public boolean isEnabled(@NotNull Player player) {
+        return isEnabled(player.getUniqueId().toString());
     }
 
 
