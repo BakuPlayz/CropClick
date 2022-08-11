@@ -8,7 +8,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -23,9 +26,22 @@ public final class CropsConfig extends Config {
 
     // TODO: Check through all the comments... I cannot be bothered right now.
 
+    private final List<String> sounds;
+    private final List<String> particles;
+
+    /*
+     * Cache maps of particles and sounds,
+     * and then update the caches via a get & set
+     * and then save that change to the config.
+     *
+     * Do this instead of having lists.
+     * */
+
 
     public CropsConfig(@NotNull CropClick plugin) {
         super(plugin, "crops.yml");
+        this.particles = new ArrayList<>();
+        this.sounds = new ArrayList<>();
     }
 
 
@@ -268,13 +284,7 @@ public final class CropsConfig extends Config {
 
         return section.getKeys(false).stream()
                       .filter(particleName -> isParticleEnabled(cropName, particleName))
-                      .sorted(compareParticleOrder(cropName))
                       .collect(Collectors.toList());
-    }
-
-
-    private Comparator<String> compareParticleOrder(@NotNull String cropName) {
-        return Comparator.comparingInt((particleName) -> getParticleOrder(cropName, particleName));
     }
 
 
@@ -357,28 +367,46 @@ public final class CropsConfig extends Config {
 
 
     public int getParticleOrder(@NotNull String cropName, @NotNull String particleName) {
-        return config.getInt("crops." + cropName + ".particles." + particleName + ".order", -1);
+        return getParticles(cropName).indexOf(particleName);
     }
 
 
-    public void setParticleOrder(@NotNull String cropName, @NotNull String particleName, int order) {
-        config.set("crops." + cropName + ".particles." + particleName + ".order", order);
+    public void swapParticleOrder(@NotNull String cropName, int oldOrder, int newOrder) {
+        List<String> particles = getParticles(cropName);
+        String basePath = "crops." + cropName + ".particles";
+
+        long start = System.nanoTime();
+
+        Map<Integer, Object> particlesAsMap = MapUtils.configListToMap(
+                config,
+                basePath,
+                particles
+        );
+
+        long mapped = System.nanoTime();
+        System.out.println("MAPPED::" + (mapped - start));
+
+        MapUtils.swap(particlesAsMap, oldOrder, newOrder);
+
+        long swapped = System.nanoTime();
+        System.out.println("SWAPPED::" + (swapped - mapped));
+
+        Map<String, Object> particleObjects = MapUtils.fromIntToStringKeyed(
+                particlesAsMap,
+                (key) -> {
+                    if (key == newOrder) {
+                        key = oldOrder;
+                    } else if (key == oldOrder) {
+                        key = newOrder;
+                    }
+
+                    return particles.get(key);
+                }
+        );
+        System.out.println("OBJECTS::" + (System.nanoTime() - swapped));
+
+        config.set(basePath, particleObjects);
         saveConfig();
-    }
-
-
-    public void setParticleOrder(@NotNull String cropName, @NotNull String particleName, int oldOrder, int newOrder) {
-        for (String particle : getParticles(cropName)) {
-            int order = getParticleOrder(cropName, particle);
-
-            if (order != newOrder) {
-                continue;
-            }
-
-            setParticleOrder(cropName, particle, oldOrder);
-        }
-
-        setParticleOrder(cropName, particleName, newOrder);
     }
 
 
@@ -515,24 +543,16 @@ public final class CropsConfig extends Config {
 
 
     public void swapSoundOrder(@NotNull String cropName, int oldOrder, int newOrder) {
-        Map<Integer, Object> soundObjects = new HashMap<>(); //EVENTUELLT TREEMAP
-
         List<String> sounds = getSounds(cropName);
-        for (int i = 0; i < sounds.size(); i++) {
-            String sound = sounds.get(i);
-            Map<String, Object> values = config
-                    .getConfigurationSection("crops." + cropName + ".sounds." + sound)
-                    .getValues(true);
-            soundObjects.put(i, values);
-        }
+        String basePath = "crops." + cropName + ".sounds";
+
+        Map<Integer, Object> soundObjects = MapUtils.configListToMap(
+                config,
+                basePath,
+                sounds
+        );
 
         MapUtils.swap(soundObjects, oldOrder, newOrder);
-
-        config.set("crops." + cropName + ".sounds", null);
-        System.out.println(soundObjects);
-
-        // SHORTEN AND CHECK THE TIME FOR EVERYTHING MOVE TO UTILITY CLASSES
-        // E.G.
 
         Map<String, Object> savableSounds = MapUtils.fromIntToStringKeyed(
                 soundObjects,
@@ -547,7 +567,7 @@ public final class CropsConfig extends Config {
                 }
         );
 
-        config.set("crops." + cropName + ".sounds", savableSounds);
+        config.set(basePath, savableSounds);
         saveConfig();
     }
 

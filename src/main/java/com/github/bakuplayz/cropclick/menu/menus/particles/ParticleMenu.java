@@ -46,8 +46,6 @@ public final class ParticleMenu extends Menu {
     private final String particleName;
     private final String cropName;
 
-    private List<String> particles;
-
     private int maxOrder;
     private int currentOrder;
 
@@ -60,16 +58,20 @@ public final class ParticleMenu extends Menu {
         this.cropsConfig = plugin.getCropsConfig();
         this.particleName = particleName;
         this.cropName = crop.getName();
-        this.particles = cropsConfig.getParticles(cropName);
         this.crop = crop;
     }
 
 
     @Override
     public void setMenuItems() {
-        this.currentOrder = cropsConfig.getParticleOrder(cropName, particleName);
-        this.particles = cropsConfig.getParticles(cropName);
+        List<String> particles = cropsConfig.getParticles(cropName);
+        this.currentOrder = particles.indexOf(particleName);
         this.maxOrder = particles.size() - 1;
+
+        System.out.println(particles);
+
+        System.out.println("curr::" + currentOrder);
+        System.out.println("max::" + maxOrder);
 
         inventory.setItem(10, getDelayRemoveItem(DELAY_MAX_CHANGE));
         inventory.setItem(11, getDelayRemoveItem(DELAY_MIN_CHANGE));
@@ -113,11 +115,11 @@ public final class ParticleMenu extends Menu {
 
         // ORDER
         if (clicked.equals(getIncreaseOrderItem())) {
-            cropsConfig.setParticleOrder(cropName, particleName, currentOrder, ++currentOrder);
+            cropsConfig.swapParticleOrder(cropName, currentOrder, ++currentOrder);
         }
 
         if (clicked.equals(getDecreaseOrderItem())) {
-            cropsConfig.setParticleOrder(cropName, particleName, currentOrder, --currentOrder);
+            cropsConfig.swapParticleOrder(cropName, currentOrder, --currentOrder);
         }
 
         // DELAY
@@ -169,10 +171,6 @@ public final class ParticleMenu extends Menu {
 
         if (clicked.equals(getAmountRemoveItem(MAX_CHANGE))) {
             removeParticleAmount(MAX_CHANGE);
-        }
-
-        if (currentOrder == -1) {
-            initializeOrder();
         }
 
         updateMenu();
@@ -326,14 +324,6 @@ public final class ParticleMenu extends Menu {
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amount, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
-    }
-
-
-    private void initializeOrder() {
-        if (!cropsConfig.isParticleEnabled(cropName, particleName)) {
-            return;
-        }
-        cropsConfig.setParticleOrder(cropName, particleName, ++maxOrder);
     }
 
 
