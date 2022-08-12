@@ -34,9 +34,9 @@ public final class BeetrootSeed extends BaseSeed {
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.BEETROOT_SEEDS,
-                cropsConfig.getSeedDropName(getName()),
-                cropsConfig.getSeedDropAmount(getName(), 2),
-                cropsConfig.getSeedDropChance(getName(), 80)
+                seedSection.getDropName(getName()),
+                seedSection.getDropAmount(getName(), 2),
+                seedSection.getDropChance(getName(), 80)
         );
     }
 

@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.sounds;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SoundMenu extends Menu {
 
-
     private final int MIN_DELAY = 0; // in milliseconds
     private final int MAX_DELAY = 5000; // in milliseconds
 
@@ -44,10 +43,9 @@ public final class SoundMenu extends Menu {
     private final double PITCH_MAX_CHANGE = 0.2;
 
     private final Crop crop;
-    private final CropsConfig cropsConfig;
-
-    private final String soundName;
     private final String cropName;
+    private final String soundName;
+    private final SoundConfigSection soundSection;
 
     private int maxOrder;
     private int currentOrder;
@@ -58,7 +56,7 @@ public final class SoundMenu extends Menu {
                      @NotNull Crop crop,
                      @NotNull String soundName) {
         super(plugin, player, LanguageAPI.Menu.SOUND_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.soundSection = plugin.getCropsConfig().getSoundSection();
         this.cropName = crop.getName();
         this.soundName = soundName;
         this.crop = crop;
@@ -67,8 +65,8 @@ public final class SoundMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        this.currentOrder = cropsConfig.getSoundOrder(cropName, soundName);
-        this.maxOrder = cropsConfig.getSounds(cropName).size() - 1;
+        this.currentOrder = soundSection.getSoundOrder(cropName, soundName);
+        this.maxOrder = soundSection.getSounds(cropName).size() - 1;
 
         inventory.setItem(10, getDelayRemoveItem(DELAY_MAX_CHANGE));
         inventory.setItem(11, getDelayRemoveItem(DELAY_MIN_CHANGE));
@@ -112,11 +110,11 @@ public final class SoundMenu extends Menu {
 
         // ORDER
         if (clicked.equals(getIncreaseOrderItem())) {
-            cropsConfig.swapSoundOrder(cropName, currentOrder, ++currentOrder);
+            soundSection.swapSoundOrder(cropName, currentOrder, ++currentOrder);
         }
 
         if (clicked.equals(getDecreaseOrderItem())) {
-            cropsConfig.swapSoundOrder(cropName, currentOrder, --currentOrder);
+            soundSection.swapSoundOrder(cropName, currentOrder, --currentOrder);
         }
 
         // DELAY
@@ -175,7 +173,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayItem() {
-        double delay = cropsConfig.getSoundDelay(
+        double delay = soundSection.getSoundDelay(
                 cropName,
                 soundName
         );
@@ -190,7 +188,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getVolumeItem() {
-        double volume = cropsConfig.getSoundVolume(
+        double volume = soundSection.getSoundVolume(
                 cropName,
                 soundName
         );
@@ -205,7 +203,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getPitchItem() {
-        double pitch = cropsConfig.getSoundPitch(
+        double pitch = soundSection.getSoundPitch(
                 cropName,
                 soundName
         );
@@ -240,7 +238,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayAddItem(int amount) {
-        double beforeValue = cropsConfig.getSoundDelay(
+        double beforeValue = soundSection.getSoundDelay(
                 cropName,
                 soundName
         );
@@ -254,7 +252,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getSoundDelay(
+        double beforeValue = soundSection.getSoundDelay(
                 cropName,
                 soundName
         );
@@ -268,7 +266,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getVolumeAddItem(int amount) {
-        double beforeValue = cropsConfig.getSoundVolume(
+        double beforeValue = soundSection.getSoundVolume(
                 cropName,
                 soundName
         );
@@ -283,7 +281,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getVolumeRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getSoundVolume(
+        double beforeValue = soundSection.getSoundVolume(
                 cropName,
                 soundName
         );
@@ -297,7 +295,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getPitchAddItem(double amount) {
-        double beforeValue = cropsConfig.getSoundPitch(
+        double beforeValue = soundSection.getSoundPitch(
                 cropName,
                 soundName
         );
@@ -314,7 +312,7 @@ public final class SoundMenu extends Menu {
 
 
     private @NotNull ItemStack getPitchRemoveItem(double amount) {
-        double beforeValue = cropsConfig.getSoundPitch(
+        double beforeValue = soundSection.getSoundPitch(
                 cropName,
                 soundName
         );
@@ -331,50 +329,50 @@ public final class SoundMenu extends Menu {
 
 
     private void addSoundDelay(int delay) {
-        int oldDelay = (int) (cropsConfig.getSoundDelay(cropName, soundName) + delay);
+        int oldDelay = (int) (soundSection.getSoundDelay(cropName, soundName) + delay);
         int newDelay = Math.min(oldDelay, MAX_DELAY);
-        cropsConfig.setSoundDelay(cropName, soundName, newDelay);
+        soundSection.setSoundDelay(cropName, soundName, newDelay);
     }
 
 
     private void removeSoundDelay(int delay) {
-        int oldDelay = (int) (cropsConfig.getSoundDelay(cropName, soundName) - delay);
+        int oldDelay = (int) (soundSection.getSoundDelay(cropName, soundName) - delay);
         int newDelay = Math.max(oldDelay, MIN_DELAY);
-        cropsConfig.setSoundDelay(cropName, soundName, newDelay);
+        soundSection.setSoundDelay(cropName, soundName, newDelay);
     }
 
 
     private void increaseVolume(int volume) {
-        int oldVolume = (int) (cropsConfig.getSoundVolume(cropName, soundName) + volume);
+        int oldVolume = (int) (soundSection.getSoundVolume(cropName, soundName) + volume);
         int newVolume = Math.min(oldVolume, MAX_VOLUME);
-        cropsConfig.setSoundVolume(cropName, soundName, newVolume);
+        soundSection.setSoundVolume(cropName, soundName, newVolume);
     }
 
 
     private void decreaseVolume(int volume) {
-        int oldVolume = (int) (cropsConfig.getSoundVolume(cropName, soundName) - volume);
+        int oldVolume = (int) (soundSection.getSoundVolume(cropName, soundName) - volume);
         int newVolume = Math.max(oldVolume, MIN_VOLUME);
-        cropsConfig.setSoundVolume(cropName, soundName, newVolume);
+        soundSection.setSoundVolume(cropName, soundName, newVolume);
     }
 
 
     private void increasePitch(double pitch) {
         double oldPitch = MathUtil.round(
-                cropsConfig.getSoundPitch(cropName, soundName) + pitch,
+                soundSection.getSoundPitch(cropName, soundName) + pitch,
                 2
         );
         double newPitch = Math.min(oldPitch, MAX_PITCH);
-        cropsConfig.setSoundPitch(cropName, soundName, newPitch);
+        soundSection.setSoundPitch(cropName, soundName, newPitch);
     }
 
 
     private void decreasePitch(double pitch) {
         double oldPitch = MathUtil.round(
-                cropsConfig.getSoundPitch(cropName, soundName) - pitch,
+                soundSection.getSoundPitch(cropName, soundName) - pitch,
                 2
         );
         double newPitch = Math.max(oldPitch, MIN_PITCH);
-        cropsConfig.setSoundPitch(cropName, soundName, newPitch);
+        soundSection.setSoundPitch(cropName, soundName, newPitch);
     }
 
 }

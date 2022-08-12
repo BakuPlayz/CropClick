@@ -34,9 +34,9 @@ public final class PoisonousPotato extends BaseSeed {
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.POISONOUS_POTATO,
-                cropsConfig.getSeedDropName(getName()),
-                cropsConfig.getSeedDropAmount(getName(), 1),
-                cropsConfig.getSeedDropChance(getName(), 10)
+                seedSection.getDropName(getName()),
+                seedSection.getDropAmount(getName(), 1),
+                seedSection.getDropChance(getName(), 10)
         );
     }
 

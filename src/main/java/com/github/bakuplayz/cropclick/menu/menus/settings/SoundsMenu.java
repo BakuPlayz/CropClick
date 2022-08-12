@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -34,14 +34,14 @@ import java.util.stream.Collectors;
 public final class SoundsMenu extends PaginatedMenu {
 
     private final Crop crop;
-    private final CropsConfig cropsConfig;
 
     private final List<String> sounds;
+    private final SoundConfigSection soundSection;
 
 
     public SoundsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.SOUNDS_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.soundSection = plugin.getCropsConfig().getSoundSection();
         this.sounds = getSounds();
         this.crop = crop;
     }
@@ -107,7 +107,7 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String sound) {
-        boolean isEnabled = cropsConfig.isSoundEnabled(
+        boolean isEnabled = soundSection.isSoundEnabled(
                 crop.getName(),
                 sound
         );
@@ -166,7 +166,7 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return The index of the sound in the list of sounds for the crop.
      */
     private int getOrderOfSound(@NotNull String sound) {
-        return cropsConfig.getSoundOrder(crop.getName(), sound);
+        return soundSection.getSoundOrder(crop.getName(), sound);
     }
 
 }

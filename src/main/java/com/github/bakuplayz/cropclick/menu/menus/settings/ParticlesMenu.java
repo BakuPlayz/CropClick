@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -34,14 +34,14 @@ import java.util.stream.Collectors;
 public final class ParticlesMenu extends PaginatedMenu {
 
     private final Crop crop;
-    private final CropsConfig cropsConfig;
 
     private final List<String> particles;
+    private final ParticleConfigSection particleSection;
 
 
     public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.PARTICLES_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.particleSection = plugin.getCropsConfig().getParticleSection();
         this.particles = getParticles();
         this.crop = crop;
     }
@@ -120,7 +120,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String particle) {
-        boolean isEnabled = cropsConfig.isParticleEnabled(
+        boolean isEnabled = particleSection.isParticleEnabled(
                 crop.getName(),
                 particle
         );
@@ -168,7 +168,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return The index of the particle in the list of particles for the crop.
      */
     private int getOrderOfParticle(@NotNull String particle) {
-        return cropsConfig.getParticleOrder(crop.getName(), particle);
+        return particleSection.getParticleOrder(crop.getName(), particle);
     }
 
 }

@@ -36,9 +36,9 @@ public final class Potato extends GroundCrop {
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.POTATO_ITEM,
-                cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName(), 4),
-                cropsConfig.getCropDropChance(getName(), 80)
+                cropSection.getDropName(getName()),
+                cropSection.getDropAmount(getName(), 4),
+                cropSection.getDropChance(getName(), 80)
         );
     }
 

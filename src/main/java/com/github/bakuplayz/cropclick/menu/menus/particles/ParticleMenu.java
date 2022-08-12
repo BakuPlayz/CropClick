@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.particles;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -41,10 +41,9 @@ public final class ParticleMenu extends Menu {
     private final int MAX_AMOUNT = 20;
 
     private final Crop crop;
-    private final CropsConfig cropsConfig;
-
-    private final String particleName;
     private final String cropName;
+    private final String particleName;
+    private final ParticleConfigSection particleSection;
 
     private int maxOrder;
     private int currentOrder;
@@ -55,7 +54,7 @@ public final class ParticleMenu extends Menu {
                         @NotNull Crop crop,
                         @NotNull String particleName) {
         super(plugin, player, LanguageAPI.Menu.PARTICLE_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.particleSection = plugin.getCropsConfig().getParticleSection();
         this.particleName = particleName;
         this.cropName = crop.getName();
         this.crop = crop;
@@ -64,14 +63,9 @@ public final class ParticleMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        List<String> particles = cropsConfig.getParticles(cropName);
+        List<String> particles = particleSection.getParticles(cropName);
         this.currentOrder = particles.indexOf(particleName);
         this.maxOrder = particles.size() - 1;
-
-        System.out.println(particles);
-
-        System.out.println("curr::" + currentOrder);
-        System.out.println("max::" + maxOrder);
 
         inventory.setItem(10, getDelayRemoveItem(DELAY_MAX_CHANGE));
         inventory.setItem(11, getDelayRemoveItem(DELAY_MIN_CHANGE));
@@ -115,11 +109,11 @@ public final class ParticleMenu extends Menu {
 
         // ORDER
         if (clicked.equals(getIncreaseOrderItem())) {
-            cropsConfig.swapParticleOrder(cropName, currentOrder, ++currentOrder);
+            particleSection.swapParticleOrder(cropName, currentOrder, ++currentOrder);
         }
 
         if (clicked.equals(getDecreaseOrderItem())) {
-            cropsConfig.swapParticleOrder(cropName, currentOrder, --currentOrder);
+            particleSection.swapParticleOrder(cropName, currentOrder, --currentOrder);
         }
 
         // DELAY
@@ -178,7 +172,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayItem() {
-        double delay = cropsConfig.getParticleDelay(
+        double delay = particleSection.getParticleDelay(
                 cropName,
                 particleName
         );
@@ -193,7 +187,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getSpeedItem() {
-        double speed = cropsConfig.getParticleSpeed(
+        double speed = particleSection.getParticleSpeed(
                 cropName,
                 particleName
         );
@@ -208,7 +202,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getAmountItem() {
-        int amount = cropsConfig.getParticleAmount(
+        int amount = particleSection.getParticleAmount(
                 cropName,
                 particleName
         );
@@ -243,7 +237,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayAddItem(int amount) {
-        double beforeValue = cropsConfig.getParticleDelay(
+        double beforeValue = particleSection.getParticleDelay(
                 cropName,
                 particleName
         );
@@ -257,7 +251,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getParticleDelay(
+        double beforeValue = particleSection.getParticleDelay(
                 cropName,
                 particleName
         );
@@ -271,7 +265,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getSpeedAddItem(int amount) {
-        double beforeValue = cropsConfig.getParticleSpeed(
+        double beforeValue = particleSection.getParticleSpeed(
                 cropName,
                 particleName
         );
@@ -286,7 +280,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getSpeedRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getParticleSpeed(
+        double beforeValue = particleSection.getParticleSpeed(
                 cropName,
                 particleName
         );
@@ -300,7 +294,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getAmountAddItem(int amount) {
-        double beforeValue = cropsConfig.getParticleAmount(
+        double beforeValue = particleSection.getParticleAmount(
                 cropName,
                 particleName
         );
@@ -314,7 +308,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getAmountRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getParticleAmount(
+        double beforeValue = particleSection.getParticleAmount(
                 cropName,
                 particleName
         );
@@ -328,44 +322,44 @@ public final class ParticleMenu extends Menu {
 
 
     public void addParticleDelay(int delay) {
-        int oldDelay = (int) (cropsConfig.getParticleDelay(cropName, particleName) + delay);
+        int oldDelay = (int) (particleSection.getParticleDelay(cropName, particleName) + delay);
         int newDelay = Math.min(oldDelay, DELAY_MAX);
-        cropsConfig.setParticleDelay(cropName, particleName, newDelay);
+        particleSection.setParticleDelay(cropName, particleName, newDelay);
     }
 
 
     public void removeParticleDelay(int delay) {
-        int oldDelay = (int) (cropsConfig.getParticleDelay(cropName, particleName) - delay);
+        int oldDelay = (int) (particleSection.getParticleDelay(cropName, particleName) - delay);
         int newDelay = Math.max(oldDelay, DELAY_MIN);
-        cropsConfig.setParticleDelay(cropName, particleName, newDelay);
+        particleSection.setParticleDelay(cropName, particleName, newDelay);
     }
 
 
     public void addParticleSpeed(int speed) {
-        int oldSpeed = (int) (cropsConfig.getParticleSpeed(cropName, particleName) + speed);
+        int oldSpeed = (int) (particleSection.getParticleSpeed(cropName, particleName) + speed);
         int newSpeed = Math.min(oldSpeed, MAX_SPEED);
-        cropsConfig.setParticleSpeed(cropName, particleName, newSpeed);
+        particleSection.setParticleSpeed(cropName, particleName, newSpeed);
     }
 
 
     public void removeParticleSpeed(int speed) {
-        int oldSpeed = (int) (cropsConfig.getParticleSpeed(cropName, particleName) - speed);
+        int oldSpeed = (int) (particleSection.getParticleSpeed(cropName, particleName) - speed);
         int newSpeed = Math.max(oldSpeed, MIN_SPEED);
-        cropsConfig.setParticleSpeed(cropName, particleName, newSpeed);
+        particleSection.setParticleSpeed(cropName, particleName, newSpeed);
     }
 
 
     public void addParticleAmount(int amount) {
-        int oldAmount = cropsConfig.getParticleAmount(cropName, particleName) + amount;
+        int oldAmount = particleSection.getParticleAmount(cropName, particleName) + amount;
         int newAmount = Math.min(oldAmount, MAX_AMOUNT);
-        cropsConfig.setParticleAmount(cropName, particleName, newAmount);
+        particleSection.setParticleAmount(cropName, particleName, newAmount);
     }
 
 
     public void removeParticleAmount(int amount) {
-        int oldAmount = cropsConfig.getParticleAmount(cropName, particleName) - amount;
+        int oldAmount = particleSection.getParticleAmount(cropName, particleName) - amount;
         int newAmount = Math.max(oldAmount, MIN_AMOUNT);
-        cropsConfig.setParticleAmount(cropName, particleName, newAmount);
+        particleSection.setParticleAmount(cropName, particleName, newAmount);
     }
 
 }

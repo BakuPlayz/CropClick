@@ -2,12 +2,14 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.particles.ParticleRunnable;
 import com.github.bakuplayz.cropclick.sounds.SoundRunnable;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
-import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -25,10 +27,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseCrop implements Crop {
 
-    protected final @Getter CropsConfig cropsConfig;
+    protected final CropsConfig cropsConfig;
+
+    protected final CropConfigSection cropSection;
+    protected final SoundConfigSection soundSection;
+    protected final ParticleConfigSection particleSection;
 
 
     public BaseCrop(@NotNull CropsConfig cropsConfig) {
+        this.particleSection = cropsConfig.getParticleSection();
+        this.soundSection = cropsConfig.getSoundSection();
+        this.cropSection = cropsConfig.getCropSection();
         this.cropsConfig = cropsConfig;
     }
 
@@ -41,7 +50,7 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean dropAtLeastOne() {
-        return cropsConfig.shouldDropAtLeastOne(getName());
+        return cropSection.shouldDropAtLeastOne(getName());
     }
 
 
@@ -125,13 +134,13 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean shouldReplant() {
-        return cropsConfig.shouldCropReplant(getName());
+        return cropSection.shouldReplant(getName());
     }
 
 
     @Override
     public boolean isHarvestable() {
-        return cropsConfig.isCropHarvestable(getName());
+        return cropSection.isHarvestable(getName());
     }
 
 
@@ -139,11 +148,10 @@ public abstract class BaseCrop implements Crop {
     public void playSounds(@NotNull Block block) {
         SoundRunnable runnable = new SoundRunnable(block);
 
-
-        for (String sound : cropsConfig.getSounds(getName())) {
-            double delay = cropsConfig.getSoundDelay(getName(), sound);
-            double pitch = cropsConfig.getSoundPitch(getName(), sound);
-            double volume = cropsConfig.getSoundVolume(getName(), sound);
+        for (String sound : soundSection.getSounds(getName())) {
+            double delay = soundSection.getSoundDelay(getName(), sound);
+            double pitch = soundSection.getSoundPitch(getName(), sound);
+            double volume = soundSection.getSoundVolume(getName(), sound);
 
             runnable.queueSound(
                     sound,
@@ -161,10 +169,10 @@ public abstract class BaseCrop implements Crop {
     public void playParticles(@NotNull Block block) {
         ParticleRunnable runnable = new ParticleRunnable(block);
 
-        for (String particle : cropsConfig.getParticles(getName())) {
-            double delay = cropsConfig.getParticleDelay(getName(), particle);
-            double speed = cropsConfig.getParticleSpeed(getName(), particle);
-            int amount = cropsConfig.getParticleAmount(getName(), particle);
+        for (String particle : particleSection.getParticles(getName())) {
+            double delay = particleSection.getParticleDelay(getName(), particle);
+            double speed = particleSection.getParticleSpeed(getName(), particle);
+            int amount = particleSection.getParticleAmount(getName(), particle);
 
             runnable.queueParticle(
                     particle,
@@ -180,7 +188,7 @@ public abstract class BaseCrop implements Crop {
 
     @Override
     public boolean isLinkable() {
-        return cropsConfig.isCropLinkable(getName());
+        return cropSection.isLinkable(getName());
     }
 
 

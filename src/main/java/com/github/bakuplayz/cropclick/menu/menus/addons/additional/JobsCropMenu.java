@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -28,10 +28,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class JobsCropMenu extends Menu {
 
-
-    private final String cropName;
-    private final CropsConfig cropsConfig;
-
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
@@ -39,9 +35,13 @@ public final class JobsCropMenu extends Menu {
     private final int VALUE_MAX = 10_000;
 
 
+    private final String cropName;
+    private final AddonConfigSection addonSection;
+
+
     public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.JOBS_CROP_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.addonSection = plugin.getCropsConfig().getAddonSection();
         this.cropName = crop.getName();
     }
 
@@ -132,7 +132,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getPointsItem() {
-        double points = cropsConfig.getJobsPoints(cropName);
+        double points = addonSection.getJobsPoints(cropName);
         return new ItemUtil(Material.GOLD_NUGGET)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_POINTS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_POINTS_ITEM_VALUE.get(plugin, points))
@@ -141,7 +141,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getMoneyItem() {
-        double money = cropsConfig.getJobsMoney(cropName);
+        double money = addonSection.getJobsMoney(cropName);
         return new ItemUtil(Material.GOLD_INGOT)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_MONEY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_MONEY_ITEM_VALUE.get(plugin, money))
@@ -150,7 +150,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceItem() {
-        double experience = cropsConfig.getJobsExperience(cropName);
+        double experience = addonSection.getJobsExperience(cropName);
         return new ItemUtil(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience))
@@ -159,7 +159,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getPointsAddItem(int amount) {
-        double beforeValue = cropsConfig.getJobsPoints(cropName);
+        double beforeValue = addonSection.getJobsPoints(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Points"))
@@ -170,7 +170,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getPointsRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getJobsPoints(cropName);
+        double beforeValue = addonSection.getJobsPoints(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Points"))
@@ -181,7 +181,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getMoneyAddItem(int amount) {
-        double beforeValue = cropsConfig.getJobsMoney(cropName);
+        double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Money"))
@@ -192,7 +192,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getMoneyRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getJobsMoney(cropName);
+        double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Money"))
@@ -203,7 +203,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceAddItem(int amount) {
-        double beforeValue = cropsConfig.getJobsExperience(cropName);
+        double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
@@ -214,7 +214,7 @@ public final class JobsCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getJobsExperience(cropName);
+        double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
@@ -230,9 +230,9 @@ public final class JobsCropMenu extends Menu {
      * @param amount The amount of points to add.
      */
     public void addJobsPoints(int amount) {
-        double oldAmount = cropsConfig.getJobsPoints(cropName) + amount;
+        double oldAmount = addonSection.getJobsPoints(cropName) + amount;
         double newAmount = Math.min(oldAmount, VALUE_MAX);
-        cropsConfig.setJobsPoints(cropName, newAmount);
+        addonSection.setJobsPoints(cropName, newAmount);
     }
 
 
@@ -242,9 +242,9 @@ public final class JobsCropMenu extends Menu {
      * @param amount The amount of points to remove.
      */
     public void removeJobsPoints(int amount) {
-        double oldAmount = cropsConfig.getJobsPoints(cropName) - amount;
+        double oldAmount = addonSection.getJobsPoints(cropName) - amount;
         double newAmount = Math.max(oldAmount, VALUE_MIN);
-        cropsConfig.setJobsPoints(cropName, newAmount);
+        addonSection.setJobsPoints(cropName, newAmount);
     }
 
 
@@ -254,9 +254,9 @@ public final class JobsCropMenu extends Menu {
      * @param amount The amount of money to add to the specified crop.
      */
     public void addJobsMoney(int amount) {
-        double oldAmount = cropsConfig.getJobsMoney(cropName) + amount;
+        double oldAmount = addonSection.getJobsMoney(cropName) + amount;
         double newAmount = Math.min(oldAmount, VALUE_MAX);
-        cropsConfig.setJobsMoney(cropName, newAmount);
+        addonSection.setJobsMoney(cropName, newAmount);
     }
 
 
@@ -266,9 +266,9 @@ public final class JobsCropMenu extends Menu {
      * @param amount The amount of money to remove from the player's balance.
      */
     public void removeJobsMoney(int amount) {
-        double oldAmount = cropsConfig.getJobsMoney(cropName) - amount;
+        double oldAmount = addonSection.getJobsMoney(cropName) - amount;
         double newAmount = Math.max(oldAmount, VALUE_MIN);
-        cropsConfig.setJobsMoney(cropName, newAmount);
+        addonSection.setJobsMoney(cropName, newAmount);
     }
 
 
@@ -278,9 +278,9 @@ public final class JobsCropMenu extends Menu {
      * @param amount The amount of experience to add.
      */
     public void addJobsExperience(int amount) {
-        double oldAmount = cropsConfig.getJobsExperience(cropName) + amount;
+        double oldAmount = addonSection.getJobsExperience(cropName) + amount;
         double newAmount = Math.min(oldAmount, VALUE_MAX);
-        cropsConfig.setJobsExperience(cropName, newAmount);
+        addonSection.setJobsExperience(cropName, newAmount);
     }
 
 
@@ -290,9 +290,9 @@ public final class JobsCropMenu extends Menu {
      * @param amount The amount of experience to remove.
      */
     public void removeJobsExperience(int amount) {
-        double oldAmount = cropsConfig.getJobsExperience(cropName) - amount;
+        double oldAmount = addonSection.getJobsExperience(cropName) - amount;
         double newAmount = Math.max(oldAmount, VALUE_MIN);
-        cropsConfig.setJobsExperience(cropName, newAmount);
+        addonSection.setJobsExperience(cropName, newAmount);
     }
 
 

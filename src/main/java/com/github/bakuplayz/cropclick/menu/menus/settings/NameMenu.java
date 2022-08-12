@@ -1,7 +1,8 @@
 package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
@@ -37,14 +38,16 @@ public final class NameMenu extends Menu {
     private final Crop crop;
     private final boolean hasSeed;
 
-    private final CropsConfig cropsConfig;
+    private final CropConfigSection cropSection;
+    private final SeedConfigSection seedSection;
 
     private final Map<Character, String> colorCodes;
 
 
     public NameMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.NAME_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.cropSection = plugin.getCropsConfig().getCropSection();
+        this.seedSection = plugin.getCropsConfig().getSeedSection();
         this.colorCodes = getColorCodes();
         this.hasSeed = crop.hasSeed();
         this.crop = crop;
@@ -147,18 +150,22 @@ public final class NameMenu extends Menu {
      */
     private @NotNull AnvilGUI.Builder getNameChangeMenu(boolean isCrop) {
         String currentName = getDropName(isCrop);
+
         return new AnvilGUI.Builder()
                 .text(ChatColor.stripColor(currentName))
                 .itemLeft(isCrop ? getCropItem() : getSeedItem())
                 .onComplete((player, text) -> {
+
                     if (isCrop) {
-                        cropsConfig.setCropDropName(crop.getName(), text);
-                        return AnvilGUI.Response.close();
+                        cropSection.setDropName(crop.getName(), text);
+                    } else {
+                        seedSection.setDropName(crop.getSeed().getName(), text);
                     }
-                    cropsConfig.setSeedDropName(crop.getSeed().getName(), text);
+
                     return AnvilGUI.Response.close();
                 }).onClose((player) -> {
                     String newName = getDropName(isCrop);
+
                     player.sendMessage(
                             currentName.equals(newName)
                             ? LanguageAPI.Menu.NAME_RESPONSE_UNCHANGED.get(plugin)
@@ -177,8 +184,8 @@ public final class NameMenu extends Menu {
      */
     private @NotNull String getDropName(boolean isCrop) {
         return isCrop
-               ? cropsConfig.getCropDropName(crop.getName())
-               : cropsConfig.getSeedDropName(crop.getSeed().getName());
+               ? cropSection.getDropName(crop.getName())
+               : seedSection.getDropName(crop.getSeed().getName());
     }
 
 
@@ -195,18 +202,25 @@ public final class NameMenu extends Menu {
                      ));
     }
 
-    //TODO: Comment the following
+
+    /**
+     * It takes a start index, and returns a list of 11 color codes, starting at the start index.
+     *
+     * @param start The starting index of the list of codes to display.
+     *
+     * @return A list of strings that are color codes.
+     */
     private List<String> getCodesLore(int start) {
         return colorCodes.entrySet().stream()
-                .map(colorMap -> MessageUtils.colorize(
-                        LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(
-                                plugin,
-                                colorMap.getKey(),
-                                colorMap.getKey(),
-                                colorMap.getValue())
-                ).replace("#", "&")) // Some wizardry formatting
-                .skip(start).limit(11)
-                .collect(Collectors.toList());
+                         .map(colorMap -> MessageUtils.colorize(
+                                 LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(
+                                         plugin,
+                                         colorMap.getKey(),
+                                         colorMap.getKey(),
+                                         colorMap.getValue())
+                         ).replace("#", "&")) // Some wizardry formatting
+                         .skip(start).limit(11)
+                         .collect(Collectors.toList());
     }
 
 }

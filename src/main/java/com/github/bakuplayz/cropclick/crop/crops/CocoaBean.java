@@ -34,9 +34,9 @@ public final class CocoaBean extends WallCrop {
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.INK_SACK,
-                cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName(), 3),
-                cropsConfig.getCropDropChance(getName(), 80),
+                cropSection.getDropName(getName()),
+                cropSection.getDropAmount(getName(), 3),
+                cropSection.getDropChance(getName(), 80),
                 (short) 3
         );
     }
@@ -56,7 +56,7 @@ public final class CocoaBean extends WallCrop {
 
     @Override
     public boolean isLinkable() {
-        return cropsConfig.isCropLinkable(getName(), false);
+        return cropSection.isLinkable(getName(), false);
     }
 
 }

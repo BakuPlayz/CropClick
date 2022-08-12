@@ -37,7 +37,11 @@ public abstract class TallCrop extends BaseCrop {
 
         int height = 0;
         for (int y = minHeight; y <= maxHeight; ++y) {
-            Block currentBlock = block.getWorld().getBlockAt(block.getX(), y, block.getZ());
+            Block currentBlock = block.getWorld().getBlockAt(
+                    block.getX(),
+                    y,
+                    block.getZ()
+            );
 
             if (BlockUtils.isAir(currentBlock)) {
                 break;

@@ -141,7 +141,9 @@ public class CropClick extends JavaPlugin {
         //getConfig().options().copyDefaults(true);
         saveConfig();
 
-        cropsConfig.setup();
+        if (!isUnitTest) {
+            cropsConfig.setup();
+        }
         addonsConfig.setup();
         playersConfig.setup();
         languageConfig.setup();
@@ -149,7 +151,9 @@ public class CropClick extends JavaPlugin {
 
 
     private void registerConfigs() {
-        this.cropsConfig = new CropsConfig(this);
+        if (!isUnitTest) {
+            this.cropsConfig = new CropsConfig(this);
+        }
         this.addonsConfig = new AddonsConfig(this);
         this.playersConfig = new PlayersConfig(this);
         this.languageConfig = new LanguageConfig(this);

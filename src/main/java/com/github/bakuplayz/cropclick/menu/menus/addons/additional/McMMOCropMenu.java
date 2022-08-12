@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
@@ -30,9 +30,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class McMMOCropMenu extends Menu {
 
-    private final String cropName;
-    private final CropsConfig cropsConfig;
-
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
 
@@ -40,9 +37,13 @@ public final class McMMOCropMenu extends Menu {
     private final int EXPERIENCE_MAX = 10_000;
 
 
+    private final String cropName;
+    private final AddonConfigSection addonSection;
+
+
     public McMMOCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.MCMMO_CROP_TITLE);
-        this.cropsConfig = plugin.getCropsConfig();
+        this.addonSection = plugin.getCropsConfig().getAddonSection();
         this.cropName = crop.getName();
     }
 
@@ -92,7 +93,7 @@ public final class McMMOCropMenu extends Menu {
 
 
     private @NotNull ItemStack getReasonItem() {
-        String reason = cropsConfig.getMcMMOExperienceReason(cropName);
+        String reason = addonSection.getMcMMOExperienceReason(cropName);
         return new ItemUtil(Material.PAPER)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS.getAsList(plugin,
@@ -102,7 +103,7 @@ public final class McMMOCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceItem() {
-        double experience = cropsConfig.getMcMMOExperience(cropName);
+        double experience = addonSection.getMcMMOExperience(cropName);
         return new ItemUtil(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience))
@@ -111,7 +112,7 @@ public final class McMMOCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceAddItem(int amount) {
-        double beforeValue = cropsConfig.getMcMMOExperience(cropName);
+        double beforeValue = addonSection.getMcMMOExperience(cropName);
         double afterValue = Math.min(beforeValue + amount, EXPERIENCE_MAX);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
@@ -122,7 +123,7 @@ public final class McMMOCropMenu extends Menu {
 
 
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
-        double beforeValue = cropsConfig.getMcMMOExperience(cropName);
+        double beforeValue = addonSection.getMcMMOExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, EXPERIENCE_MIN);
         return new ItemUtil(Material.STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
@@ -133,20 +134,20 @@ public final class McMMOCropMenu extends Menu {
 
 
     private @NotNull AnvilGUI.Builder getReasonMenu() {
-        String currentReason = cropsConfig.getMcMMOExperienceReason(cropName);
+        String currentReason = addonSection.getMcMMOExperienceReason(cropName);
         return new AnvilGUI.Builder()
                 .text(ChatColor.stripColor(currentReason))
                 .itemLeft(getReasonItem())
                 .onComplete((player, text) -> {
-                    cropsConfig.setMcMMOExperienceReason(cropName, text);
+                    addonSection.setMcMMOExperienceReason(cropName, text);
                     return AnvilGUI.Response.close();
                 })
                 .onClose((player) -> {
-                    String newReason = cropsConfig.getMcMMOExperienceReason(cropName);
+                    String newReason = addonSection.getMcMMOExperienceReason(cropName);
                     player.sendMessage(
                             currentReason.equals(newReason)
-                                    ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
-                                    : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
+                            ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
+                            : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
                     );
                 })
                 .plugin(plugin);
@@ -159,9 +160,9 @@ public final class McMMOCropMenu extends Menu {
      * @param amount The amount of experience to add.
      */
     public void addMcMMOExperience(int amount) {
-        double oldAmount = cropsConfig.getMcMMOExperience(cropName) + amount;
+        double oldAmount = addonSection.getMcMMOExperience(cropName) + amount;
         double newAmount = Math.min(oldAmount, EXPERIENCE_MAX);
-        cropsConfig.setMcMMOExperience(cropName, newAmount);
+        addonSection.setMcMMOExperience(cropName, newAmount);
     }
 
 
@@ -171,9 +172,9 @@ public final class McMMOCropMenu extends Menu {
      * @param amount The amount of experience to remove.
      */
     public void removeMcMMOExperience(int amount) {
-        double oldAmount = cropsConfig.getMcMMOExperience(cropName) - amount;
+        double oldAmount = addonSection.getMcMMOExperience(cropName) - amount;
         double newAmount = Math.max(oldAmount, EXPERIENCE_MIN);
-        cropsConfig.setMcMMOExperience(cropName, newAmount);
+        addonSection.setMcMMOExperience(cropName, newAmount);
     }
 
 }

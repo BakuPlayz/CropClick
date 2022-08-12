@@ -43,9 +43,9 @@ public final class Pumpkin extends GroundCrop {
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
         return new Drop(Material.PUMPKIN,
-                cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName(), 1),
-                cropsConfig.getCropDropChance(getName(), 100)
+                cropSection.getDropName(getName()),
+                cropSection.getDropAmount(getName(), 1),
+                cropSection.getDropChance(getName(), 100)
         );
     }
 
@@ -77,7 +77,7 @@ public final class Pumpkin extends GroundCrop {
 
     @Override
     public boolean isLinkable() {
-        return cropsConfig.isCropLinkable(getName(), false);
+        return cropSection.isLinkable(getName(), false);
     }
 
 }

@@ -43,9 +43,9 @@ public final class Melon extends GroundCrop {
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
         return new Drop(Material.MELON,
-                cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName(), 7),
-                cropsConfig.getCropDropChance(getName(), 80)
+                cropSection.getDropName(getName()),
+                cropSection.getDropAmount(getName(), 7),
+                cropSection.getDropChance(getName(), 80)
         );
     }
 
@@ -77,7 +77,7 @@ public final class Melon extends GroundCrop {
 
     @Override
     public boolean isLinkable() {
-        return cropsConfig.isCropLinkable(getName(), false);
+        return cropSection.isLinkable(getName(), false);
     }
 
 }

@@ -34,9 +34,9 @@ public final class SugarCane extends TallCrop {
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.SUGAR_CANE,
-                cropsConfig.getCropDropName(getName()),
-                cropsConfig.getCropDropAmount(getName(), 1),
-                cropsConfig.getCropDropChance(getName(), 100)
+                cropSection.getDropName(getName()),
+                cropSection.getDropAmount(getName(), 1),
+                cropSection.getDropChance(getName(), 100)
         );
     }
 

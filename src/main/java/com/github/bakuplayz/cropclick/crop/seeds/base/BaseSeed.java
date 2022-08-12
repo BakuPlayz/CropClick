@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.crop.seeds.base;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +20,11 @@ public abstract class BaseSeed implements Seed {
     protected final CropsConfig cropsConfig;
 
 
+    protected final SeedConfigSection seedSection;
+
+
     public BaseSeed(@NotNull CropsConfig config) {
+        this.seedSection = config.getSeedSection();
         this.cropsConfig = config;
     }
 
@@ -50,7 +55,7 @@ public abstract class BaseSeed implements Seed {
 
     @Override
     public boolean isEnabled() {
-        return cropsConfig.isSeedEnabled(getName());
+        return seedSection.isEnabled(getName());
     }
 
 

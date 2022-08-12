@@ -6,7 +6,7 @@ import com.gamingmesh.jobs.container.Job;
 import com.gamingmesh.jobs.container.JobsPlayer;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,13 +23,13 @@ public final class JobsRebornAddon extends Addon {
 
     private final Job farmerJob;
 
-    private final CropsConfig cropsConfig;
+    private final AddonConfigSection addonSection;
 
 
     public JobsRebornAddon(@NotNull CropClick plugin) {
         super(plugin, "JobsReborn");
-        this.cropsConfig = plugin.getCropsConfig();
         this.farmerJob = Jobs.getJob("Farmer");
+        this.addonSection = plugin.getCropsConfig().getAddonSection();
     }
 
 
@@ -46,8 +46,10 @@ public final class JobsRebornAddon extends Addon {
 
         String cropName = crop.getName();
         jobsPlayer.addPoints(getPoints(cropName));
-        jobsPlayer.getJobProgression(farmerJob).addExperience(getExperience(cropName));
-        jobsPlayer.getPaymentLimit().addNewAmount(CurrencyType.MONEY, getMoney(cropName));
+        jobsPlayer.getJobProgression(farmerJob)
+                  .addExperience(getExperience(cropName));
+        jobsPlayer.getPaymentLimit()
+                  .addNewAmount(CurrencyType.MONEY, getMoney(cropName));
 
         Jobs.getBBManager().ShowJobProgression(jobsPlayer);
     }
@@ -61,7 +63,7 @@ public final class JobsRebornAddon extends Addon {
      * @return The points of the crop.
      */
     private double getPoints(@NotNull String name) {
-        return cropsConfig.getJobsPoints(name);
+        return addonSection.getJobsPoints(name);
     }
 
 
@@ -73,7 +75,7 @@ public final class JobsRebornAddon extends Addon {
      * @return The experience of the crop.
      */
     private double getExperience(@NotNull String name) {
-        return cropsConfig.getJobsExperience(name);
+        return addonSection.getJobsExperience(name);
     }
 
 
@@ -85,7 +87,7 @@ public final class JobsRebornAddon extends Addon {
      * @return The money of the crop.
      */
     private double getMoney(@NotNull String name) {
-        return cropsConfig.getJobsMoney(name);
+        return addonSection.getJobsMoney(name);
     }
 
 }

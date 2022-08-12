@@ -1,7 +1,10 @@
 package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
@@ -46,13 +49,19 @@ public final class CropsMenu extends PaginatedMenu {
 
     private final CropMenuState menuState;
 
-    private final CropsConfig cropsConfig;
+    private final CropConfigSection cropSection;
+    private final AddonConfigSection addonSection;
+    private final SoundConfigSection soundSection;
+    private final ParticleConfigSection particleSection;
 
 
     public CropsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull CropMenuState state) {
         super(plugin, player, LanguageAPI.Menu.CROPS_TITLE);
+        this.particleSection = plugin.getCropsConfig().getParticleSection();
+        this.soundSection = plugin.getCropsConfig().getSoundSection();
+        this.addonSection = plugin.getCropsConfig().getAddonSection();
+        this.cropSection = plugin.getCropsConfig().getCropSection();
         this.crops = plugin.getCropManager().getCrops();
-        this.cropsConfig = plugin.getCropsConfig();
         this.menuState = state;
     }
 
@@ -218,7 +227,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The McMMO experience for the crop.
      */
     private double getMcMMOExperience(@NotNull Crop crop) {
-        return cropsConfig.getMcMMOExperience(crop.getName());
+        return addonSection.getMcMMOExperience(crop.getName());
     }
 
 
@@ -230,7 +239,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of money that the player will receive for harvesting the crop.
      */
     private double getJobsMoney(@NotNull Crop crop) {
-        return cropsConfig.getJobsMoney(crop.getName());
+        return addonSection.getJobsMoney(crop.getName());
     }
 
 
@@ -239,10 +248,10 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @param crop The crop that is being harvested.
      *
-     * @return The jobs points for the crop.
+     * @return The jobs point for the crop.
      */
     private double getJobsPoints(@NotNull Crop crop) {
-        return cropsConfig.getJobsPoints(crop.getName());
+        return addonSection.getJobsPoints(crop.getName());
     }
 
 
@@ -254,7 +263,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The experience gained from harvesting a crop.
      */
     private double getJobsExperience(@NotNull Crop crop) {
-        return cropsConfig.getJobsExperience(crop.getName());
+        return addonSection.getJobsExperience(crop.getName());
     }
 
 
@@ -266,7 +275,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of sounds for a crop.
      */
     private int getAmountOfSounds(@NotNull Crop crop) {
-        return cropsConfig.getAmountOfEnabledSounds(crop.getName());
+        return soundSection.getAmountOfEnabledSounds(crop.getName());
     }
 
 
@@ -278,7 +287,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of particles that are in the config file for the crop.
      */
     private int getAmountOfParticles(@NotNull Crop crop) {
-        return cropsConfig.getAmountOfEnabledParticles(crop.getName());
+        return particleSection.getAmountOfEnabledParticles(crop.getName());
     }
 
 
@@ -303,7 +312,7 @@ public final class CropsMenu extends PaginatedMenu {
      */
     @Contract("_ -> new")
     private @NotNull String getDropName(@NotNull Crop crop) {
-        return cropsConfig.getCropDropName(crop.getName());
+        return cropSection.getDropName(crop.getName());
     }
 
 }

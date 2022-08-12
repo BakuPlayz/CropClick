@@ -1,6 +1,9 @@
 package com.github.bakuplayz.cropclick.crop;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.*;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
@@ -28,6 +31,11 @@ public final class CropManager {
 
 
     private final CropsConfig cropsConfig;
+    private final CropConfigSection cropSection;
+    private final SeedConfigSection seedSection;
+    private final AddonConfigSection addonSection;
+
+
     private final @Getter List<Crop> crops;
 
 
@@ -39,6 +47,9 @@ public final class CropManager {
 
 
     public CropManager(@NotNull CropsConfig config) {
+        this.addonSection = config.getAddonSection();
+        this.seedSection = config.getSeedSection();
+        this.cropSection = config.getCropSection();
         this.harvestedCrops = new HashMap<>();
         this.crops = new ArrayList<>();
         this.cropsConfig = config;
@@ -93,30 +104,30 @@ public final class CropManager {
     private void addSettings(@NotNull Crop crop) {
         String cropName = crop.getName();
 
-        if (!cropsConfig.doesCropExist(cropName)) {
+        if (!cropSection.doesExist(cropName)) {
 
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = crop.getDrop();
-                cropsConfig.setCropDropName(cropName, drop.getName());
-                cropsConfig.setCropDropAmount(cropName, drop.getAmount());
-                cropsConfig.setCropDropChance(cropName, drop.getChance());
-                cropsConfig.setDropAtLeastOne(cropName, crop.dropAtLeastOne());
+                cropSection.setDropName(cropName, drop.getName());
+                cropSection.setDropAmount(cropName, drop.getAmount());
+                cropSection.setDropChance(cropName, drop.getChance());
+                cropSection.setDropAtLeastOne(cropName, crop.dropAtLeastOne());
             }
 
             // Action Settings
-            cropsConfig.setCropReplant(cropName, crop.shouldReplant());
-            cropsConfig.setCropHarvestable(cropName, crop.isHarvestable());
-            cropsConfig.setCropLinkable(cropName, crop.isLinkable());
+            cropSection.setReplant(cropName, crop.shouldReplant());
+            cropSection.setHarvestable(cropName, crop.isHarvestable());
+            cropSection.setLinkable(cropName, crop.isLinkable());
 
             // mcMMO Settings
-            cropsConfig.setMcMMOExperience(cropName, 0);
-            cropsConfig.setMcMMOExperienceReason(cropName, "You harvested " + cropName + ".");
+            addonSection.setMcMMOExperience(cropName, 0);
+            addonSection.setMcMMOExperienceReason(cropName, "You harvested " + cropName + ".");
 
             // JobsReborn Settings
-            cropsConfig.setJobsMoney(cropName, 0);
-            cropsConfig.setJobsPoints(cropName, 0);
-            cropsConfig.setJobsExperience(cropName, 0);
+            addonSection.setJobsMoney(cropName, 0);
+            addonSection.setJobsPoints(cropName, 0);
+            addonSection.setJobsExperience(cropName, 0);
         }
 
         if (!crop.hasSeed()) {
@@ -125,17 +136,17 @@ public final class CropManager {
 
         Seed seed = crop.getSeed();
         String seedName = seed.getName();
-        if (!cropsConfig.doesSeedExist(seedName)) {
-            
+        if (!seedSection.doesExist(seedName)) {
+
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = seed.getDrop();
-                cropsConfig.setSeedDropName(seedName, drop.getName());
-                cropsConfig.setSeedDropAmount(seedName, drop.getAmount());
-                cropsConfig.setSeedDropChance(seedName, drop.getChance());
+                seedSection.setDropName(seedName, drop.getName());
+                seedSection.setDropAmount(seedName, drop.getAmount());
+                seedSection.setDropChance(seedName, drop.getChance());
             }
 
-            cropsConfig.setSeedEnabled(seedName, seed.isEnabled());
+            seedSection.setEnabled(seedName, seed.isEnabled());
         }
     }
 
@@ -160,14 +171,14 @@ public final class CropManager {
     private void removeSettings(@NotNull Crop crop) {
         String cropName = crop.getName();
 
-        if (cropsConfig.doesCropExist(cropName)) {
+        if (cropSection.doesExist(cropName)) {
             cropsConfig.getConfig().set("crops." + cropName, null);
         }
 
         if (crop.hasSeed()) {
             Seed seed = crop.getSeed();
             String seedName = seed.getName();
-            if (cropsConfig.doesSeedExist(seedName)) {
+            if (seedSection.doesExist(seedName)) {
                 cropsConfig.getConfig().set("seeds." + seedName, null);
             }
         }
