@@ -1,6 +1,8 @@
 package com.github.bakuplayz.cropclick.particles;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -11,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
+@ToString
+@EqualsAndHashCode
 public final class Particle {
 
     private final @Getter String name;
@@ -21,10 +25,10 @@ public final class Particle {
 
 
     public Particle(@NotNull String name, int amount, double speed, double delay) {
-        this.name = name;
-        this.amount = amount;
         this.speed = (float) speed;
+        this.amount = amount;
         this.delay = delay;
+        this.name = name;
     }
 
 }

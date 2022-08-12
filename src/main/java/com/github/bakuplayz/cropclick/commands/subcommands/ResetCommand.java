@@ -2,7 +2,6 @@ package com.github.bakuplayz.cropclick.commands.subcommands;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
-import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,13 +22,10 @@ public final class ResetCommand extends Subcommand {
 
     private final File pluginFolder;
 
-    private final CropManager cropManager;
-
 
     public ResetCommand(@NotNull CropClick plugin) {
         super(plugin, "reset", LanguageAPI.Command.RESET_DESCRIPTION);
         this.pluginFolder = plugin.getDataFolder();
-        this.cropManager = plugin.getCropManager();
     }
 
 
@@ -49,9 +45,7 @@ public final class ResetCommand extends Subcommand {
             e.printStackTrace();
             LanguageAPI.Command.RESET_FAILED.send(plugin, player);
         } finally {
-            plugin.setupConfigs();
-            plugin.setupStorages();
-            resetCropSettings();
+            plugin.onReset();
             LanguageAPI.Command.RESET_SUCCESS.send(plugin, player);
         }
     }
@@ -77,14 +71,6 @@ public final class ResetCommand extends Subcommand {
             throws IOException {
         Files.deleteIfExists(new File(pluginFolder, "worlds.json").toPath());
         Files.deleteIfExists(new File(pluginFolder, "autofarms.json").toPath());
-    }
-
-
-    /**
-     * For each crop, reset the settings.
-     */
-    private void resetCropSettings() {
-        cropManager.getCrops().forEach(cropManager::resetSettings);
     }
 
 }

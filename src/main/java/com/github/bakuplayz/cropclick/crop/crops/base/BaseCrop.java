@@ -149,9 +149,9 @@ public abstract class BaseCrop implements Crop {
         SoundRunnable runnable = new SoundRunnable(block);
 
         for (String sound : soundSection.getSounds(getName())) {
-            double delay = soundSection.getSoundDelay(getName(), sound);
-            double pitch = soundSection.getSoundPitch(getName(), sound);
-            double volume = soundSection.getSoundVolume(getName(), sound);
+            double delay = soundSection.getDelay(getName(), sound);
+            double pitch = soundSection.getPitch(getName(), sound);
+            double volume = soundSection.getVolume(getName(), sound);
 
             runnable.queueSound(
                     sound,
@@ -170,9 +170,9 @@ public abstract class BaseCrop implements Crop {
         ParticleRunnable runnable = new ParticleRunnable(block);
 
         for (String particle : particleSection.getParticles(getName())) {
-            double delay = particleSection.getParticleDelay(getName(), particle);
-            double speed = particleSection.getParticleSpeed(getName(), particle);
-            int amount = particleSection.getParticleAmount(getName(), particle);
+            double delay = particleSection.getDelay(getName(), particle);
+            double speed = particleSection.getSpeed(getName(), particle);
+            int amount = particleSection.getAmount(getName(), particle);
 
             runnable.queueParticle(
                     particle,

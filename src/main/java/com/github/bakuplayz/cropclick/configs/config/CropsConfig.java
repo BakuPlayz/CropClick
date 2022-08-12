@@ -28,18 +28,18 @@ public final class CropsConfig extends Config {
     }
 
 
-    @Override
-    public void setup() {
-        super.setup();
-
+    public void setupSections() {
         this.cropSection = new CropConfigSection(this);
         this.seedSection = new SeedConfigSection(this);
         this.addonSection = new AddonConfigSection(this);
         this.soundSection = new SoundConfigSection(this);
         this.particleSection = new ParticleConfigSection(this);
+    }
 
-        soundSection.setup();
-        particleSection.setup();
+
+    public void loadSections() {
+        particleSection.loadParticles();
+        soundSection.loadSounds();
     }
 
 }

@@ -109,11 +109,11 @@ public final class ParticleMenu extends Menu {
 
         // ORDER
         if (clicked.equals(getIncreaseOrderItem())) {
-            particleSection.swapParticleOrder(cropName, currentOrder, ++currentOrder);
+            particleSection.swapOrder(cropName, currentOrder, ++currentOrder);
         }
 
         if (clicked.equals(getDecreaseOrderItem())) {
-            particleSection.swapParticleOrder(cropName, currentOrder, --currentOrder);
+            particleSection.swapOrder(cropName, currentOrder, --currentOrder);
         }
 
         // DELAY
@@ -172,7 +172,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayItem() {
-        double delay = particleSection.getParticleDelay(
+        double delay = particleSection.getDelay(
                 cropName,
                 particleName
         );
@@ -187,7 +187,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getSpeedItem() {
-        double speed = particleSection.getParticleSpeed(
+        double speed = particleSection.getSpeed(
                 cropName,
                 particleName
         );
@@ -202,7 +202,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getAmountItem() {
-        int amount = particleSection.getParticleAmount(
+        int amount = particleSection.getAmount(
                 cropName,
                 particleName
         );
@@ -237,7 +237,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayAddItem(int amount) {
-        double beforeValue = particleSection.getParticleDelay(
+        double beforeValue = particleSection.getDelay(
                 cropName,
                 particleName
         );
@@ -251,7 +251,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getDelayRemoveItem(int amount) {
-        double beforeValue = particleSection.getParticleDelay(
+        double beforeValue = particleSection.getDelay(
                 cropName,
                 particleName
         );
@@ -265,7 +265,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getSpeedAddItem(int amount) {
-        double beforeValue = particleSection.getParticleSpeed(
+        double beforeValue = particleSection.getSpeed(
                 cropName,
                 particleName
         );
@@ -280,7 +280,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getSpeedRemoveItem(int amount) {
-        double beforeValue = particleSection.getParticleSpeed(
+        double beforeValue = particleSection.getSpeed(
                 cropName,
                 particleName
         );
@@ -294,7 +294,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getAmountAddItem(int amount) {
-        double beforeValue = particleSection.getParticleAmount(
+        double beforeValue = particleSection.getAmount(
                 cropName,
                 particleName
         );
@@ -308,7 +308,7 @@ public final class ParticleMenu extends Menu {
 
 
     private @NotNull ItemStack getAmountRemoveItem(int amount) {
-        double beforeValue = particleSection.getParticleAmount(
+        double beforeValue = particleSection.getAmount(
                 cropName,
                 particleName
         );
@@ -322,44 +322,44 @@ public final class ParticleMenu extends Menu {
 
 
     public void addParticleDelay(int delay) {
-        int oldDelay = (int) (particleSection.getParticleDelay(cropName, particleName) + delay);
+        int oldDelay = (int) (particleSection.getDelay(cropName, particleName) + delay);
         int newDelay = Math.min(oldDelay, DELAY_MAX);
-        particleSection.setParticleDelay(cropName, particleName, newDelay);
+        particleSection.setDelay(cropName, particleName, newDelay);
     }
 
 
     public void removeParticleDelay(int delay) {
-        int oldDelay = (int) (particleSection.getParticleDelay(cropName, particleName) - delay);
+        int oldDelay = (int) (particleSection.getDelay(cropName, particleName) - delay);
         int newDelay = Math.max(oldDelay, DELAY_MIN);
-        particleSection.setParticleDelay(cropName, particleName, newDelay);
+        particleSection.setDelay(cropName, particleName, newDelay);
     }
 
 
     public void addParticleSpeed(int speed) {
-        int oldSpeed = (int) (particleSection.getParticleSpeed(cropName, particleName) + speed);
+        int oldSpeed = (int) (particleSection.getSpeed(cropName, particleName) + speed);
         int newSpeed = Math.min(oldSpeed, MAX_SPEED);
-        particleSection.setParticleSpeed(cropName, particleName, newSpeed);
+        particleSection.setSpeed(cropName, particleName, newSpeed);
     }
 
 
     public void removeParticleSpeed(int speed) {
-        int oldSpeed = (int) (particleSection.getParticleSpeed(cropName, particleName) - speed);
+        int oldSpeed = (int) (particleSection.getSpeed(cropName, particleName) - speed);
         int newSpeed = Math.max(oldSpeed, MIN_SPEED);
-        particleSection.setParticleSpeed(cropName, particleName, newSpeed);
+        particleSection.setSpeed(cropName, particleName, newSpeed);
     }
 
 
     public void addParticleAmount(int amount) {
-        int oldAmount = particleSection.getParticleAmount(cropName, particleName) + amount;
+        int oldAmount = particleSection.getAmount(cropName, particleName) + amount;
         int newAmount = Math.min(oldAmount, MAX_AMOUNT);
-        particleSection.setParticleAmount(cropName, particleName, newAmount);
+        particleSection.setAmount(cropName, particleName, newAmount);
     }
 
 
     public void removeParticleAmount(int amount) {
-        int oldAmount = particleSection.getParticleAmount(cropName, particleName) - amount;
+        int oldAmount = particleSection.getAmount(cropName, particleName) - amount;
         int newAmount = Math.max(oldAmount, MIN_AMOUNT);
-        particleSection.setParticleAmount(cropName, particleName, newAmount);
+        particleSection.setAmount(cropName, particleName, newAmount);
     }
 
 }

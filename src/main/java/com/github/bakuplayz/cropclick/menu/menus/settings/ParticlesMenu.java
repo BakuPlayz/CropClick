@@ -120,7 +120,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String particle) {
-        boolean isEnabled = particleSection.isParticleEnabled(
+        boolean isEnabled = particleSection.isEnabled(
                 crop.getName(),
                 particle
         );
@@ -168,7 +168,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return The index of the particle in the list of particles for the crop.
      */
     private int getOrderOfParticle(@NotNull String particle) {
-        return particleSection.getParticleOrder(crop.getName(), particle);
+        return particleSection.getOrder(crop.getName(), particle);
     }
 
 }

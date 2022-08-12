@@ -1,11 +1,12 @@
 package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 
+import com.github.bakuplayz.cropclick.collections.IndexedYamlMap;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
-import com.github.bakuplayz.cropclick.sounds.SoundYaml;
-import com.github.bakuplayz.cropclick.utils.IndexedMap;
+import com.github.bakuplayz.cropclick.yaml.SoundYaml;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ public final class SoundConfigSection extends ConfigSection {
 
     private final CropsConfig cropsConfig;
 
-    private final Map<String, IndexedMap<SoundYaml>> sounds;
+    private final Map<String, IndexedYamlMap<SoundYaml>> sounds;
 
 
     public SoundConfigSection(@NotNull CropsConfig cropsConfig) {
@@ -34,29 +35,14 @@ public final class SoundConfigSection extends ConfigSection {
     }
 
 
-    public void setup() {
-        loadSounds();
-    }
-
-
     //TODO: Make it readable & better
-    private void loadSounds() {
-        ConfigurationSection cropSection = config.getConfigurationSection(
-                "crops"
-        );
-
-        if (cropSection == null) {
-            return;
-        }
-
-        Set<String> cropNames = cropSection.getKeys(false);
-
-        for (String cropName : cropNames) {
+    public void loadSounds() {
+        for (String cropName : getCropsNames()) {
             ConfigurationSection soundSection = config.getConfigurationSection(
                     "crops." + cropName + ".sounds"
             );
 
-            IndexedMap<SoundYaml> indexedMap = new IndexedMap<>();
+            IndexedYamlMap<SoundYaml> indexedMap = new IndexedYamlMap<>();
 
             if (soundSection == null) {
                 sounds.put(cropName, indexedMap);
@@ -65,18 +51,38 @@ public final class SoundConfigSection extends ConfigSection {
 
             Set<String> soundNames = soundSection.getKeys(false);
 
-
             for (String soundName : soundNames) {
-                indexedMap.put(soundName, new SoundYaml(
-                        config.getDouble("crops." + cropName + ".sounds." + soundName + ".delay"),
-                        config.getDouble("crops." + cropName + ".sounds." + soundName + ".pitch"),
-                        config.getDouble("crops." + cropName + ".sounds." + soundName + ".volume")
-                ));
+                indexedMap.put(
+                        soundName,
+                        new SoundYaml(
+                                config.getDouble("crops." + cropName + ".sounds." + soundName + ".delay"),
+                                config.getDouble("crops." + cropName + ".sounds." + soundName + ".pitch"),
+                                config.getDouble("crops." + cropName + ".sounds." + soundName + ".volume")
+                        )
+                );
             }
 
             sounds.put(cropName, indexedMap);
         }
 
+    }
+
+
+    /**
+     * Get the names of all the crops in the config file.
+     *
+     * @return A set of strings.
+     */
+    private @NotNull @Unmodifiable Set<String> getCropsNames() {
+        ConfigurationSection cropSection = config.getConfigurationSection(
+                "crops"
+        );
+
+        if (cropSection == null) {
+            return Collections.emptySet();
+        }
+
+        return cropSection.getKeys(false);
     }
 
 
@@ -88,9 +94,9 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return A boolean value.
      */
-    public boolean isSoundEnabled(@NotNull String cropName, @NotNull String soundName) {
-        double volume = getSoundVolume(cropName, soundName);
-        double pitch = getSoundPitch(cropName, soundName);
+    public boolean isEnabled(@NotNull String cropName, @NotNull String soundName) {
+        double volume = getVolume(cropName, soundName);
+        double pitch = getPitch(cropName, soundName);
         return volume != 0.0 & pitch != 0.0;
     }
 
@@ -115,13 +121,13 @@ public final class SoundConfigSection extends ConfigSection {
      * @return A list of strings.
      */
     public @NotNull List<String> getSounds(@NotNull String cropName) {
-        IndexedMap<SoundYaml> sound = sounds.get(cropName);
+        IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (sound == null) {
+        if (indexedSounds == null) {
             return Collections.emptyList();
         }
 
-        return sound.toList();
+        return indexedSounds.toList();
     }
 
 
@@ -133,8 +139,8 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return The delay of the sound.
      */
-    public double getSoundDelay(@NotNull String cropName, @NotNull String soundName) {
-        IndexedMap<SoundYaml> map = sounds.get(cropName);
+    public double getDelay(@NotNull String cropName, @NotNull String soundName) {
+        IndexedYamlMap<SoundYaml> map = sounds.get(cropName);
 
         if (!map.hasKey(soundName)) {
             return 0;
@@ -151,9 +157,9 @@ public final class SoundConfigSection extends ConfigSection {
      * @param soundName The name of the sound you want to set the delay for.
      * @param delay     The delay between each sound.
      */
-    public void setSoundDelay(@NotNull String cropName, @NotNull String soundName, double delay) {
+    public void setDelay(@NotNull String cropName, @NotNull String soundName, double delay) {
         config.set("crops." + cropName + ".sounds." + soundName + ".delay", delay);
-        getOrInitSound(cropName, soundName).setDelay(delay);
+        getOrInit(cropName, soundName).setDelay(delay);
         cropsConfig.saveConfig();
     }
 
@@ -166,8 +172,8 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return The volume of the sound.
      */
-    public double getSoundVolume(@NotNull String cropName, @NotNull String soundName) {
-        IndexedMap<SoundYaml> map = sounds.get(cropName);
+    public double getVolume(@NotNull String cropName, @NotNull String soundName) {
+        IndexedYamlMap<SoundYaml> map = sounds.get(cropName);
 
         if (!map.hasKey(soundName)) {
             return 0;
@@ -184,9 +190,9 @@ public final class SoundConfigSection extends ConfigSection {
      * @param soundName The name of the sound.
      * @param volume    The volume of the sound.
      */
-    public void setSoundVolume(@NotNull String cropName, @NotNull String soundName, double volume) {
+    public void setVolume(@NotNull String cropName, @NotNull String soundName, double volume) {
         config.set("crops." + cropName + ".sounds." + soundName + ".volume", volume);
-        getOrInitSound(cropName, soundName).setVolume(volume);
+        getOrInit(cropName, soundName).setVolume(volume);
         cropsConfig.saveConfig();
     }
 
@@ -199,8 +205,8 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return The pitch of the sound.
      */
-    public double getSoundPitch(@NotNull String cropName, @NotNull String soundName) {
-        IndexedMap<SoundYaml> map = sounds.get(cropName);
+    public double getPitch(@NotNull String cropName, @NotNull String soundName) {
+        IndexedYamlMap<SoundYaml> map = sounds.get(cropName);
 
         if (!map.hasKey(soundName)) {
             return 0;
@@ -217,9 +223,9 @@ public final class SoundConfigSection extends ConfigSection {
      * @param soundName The name of the sound.
      * @param pitch     The pitch of the sound.
      */
-    public void setSoundPitch(@NotNull String cropName, @NotNull String soundName, double pitch) {
+    public void setPitch(@NotNull String cropName, @NotNull String soundName, double pitch) {
         config.set("crops." + cropName + ".sounds." + soundName + ".pitch", pitch);
-        getOrInitSound(cropName, soundName).setPitch(pitch);
+        getOrInit(cropName, soundName).setPitch(pitch);
         cropsConfig.saveConfig();
     }
 
@@ -233,8 +239,8 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return A SoundYaml object.
      */
-    public SoundYaml getOrInitSound(@NotNull String cropName, @NotNull String soundName) {
-        IndexedMap<SoundYaml> map = sounds.get(cropName);
+    public SoundYaml getOrInit(@NotNull String cropName, @NotNull String soundName) {
+        IndexedYamlMap<SoundYaml> map = sounds.get(cropName);
 
         if (map.indexOf(soundName) > -1) {
             return map.get(soundName);
@@ -255,8 +261,8 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return The index of the soundName in the list of sounds for the cropName.
      */
-    public int getSoundOrder(@NotNull String cropName, @NotNull String soundName) {
-        IndexedMap<SoundYaml> indexedSounds = sounds.get(cropName);
+    public int getOrder(@NotNull String cropName, @NotNull String soundName) {
+        IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
         if (indexedSounds == null) {
             return -1;
@@ -273,12 +279,23 @@ public final class SoundConfigSection extends ConfigSection {
      * @param oldOrder The old order of the sound.
      * @param newOrder The new order of the sound.
      */
-    public void swapSoundOrder(@NotNull String cropName, int oldOrder, int newOrder) {
-        IndexedMap<SoundYaml> indexedSounds = sounds.get(cropName);
+    public void swapOrder(@NotNull String cropName, int oldOrder, int newOrder) {
+        long start = System.nanoTime();
+
+        IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
+
+        if (indexedSounds == null) {
+            return;
+        }
 
         indexedSounds.swap(oldOrder, newOrder);
 
-        config.set("crops." + cropName + ".sounds", indexedSounds.toMap());
+        config.set(
+                "crops." + cropName + ".sounds",
+                indexedSounds.toYaml()
+        );
+
+        System.out.println(System.nanoTime() - start);
 
         cropsConfig.saveConfig();
     }

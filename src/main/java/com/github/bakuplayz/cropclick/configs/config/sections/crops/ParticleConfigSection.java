@@ -1,11 +1,13 @@
 package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 
+import com.github.bakuplayz.cropclick.collections.IndexedMap;
+import com.github.bakuplayz.cropclick.collections.IndexedYamlMap;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
-import com.github.bakuplayz.cropclick.particles.ParticleYaml;
-import com.github.bakuplayz.cropclick.utils.IndexedMap;
+import com.github.bakuplayz.cropclick.yaml.ParticleYaml;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
@@ -21,9 +23,10 @@ public final class ParticleConfigSection extends ConfigSection {
 
     // TODO: Check through all the comments... I cannot be bothered right now.
 
+
     private final CropsConfig cropsConfig;
 
-    private final Map<String, IndexedMap<ParticleYaml>> particles;
+    private final Map<String, IndexedYamlMap<ParticleYaml>> particles;
 
 
     public ParticleConfigSection(@NotNull CropsConfig cropsConfig) {
@@ -33,50 +36,54 @@ public final class ParticleConfigSection extends ConfigSection {
     }
 
 
-    public void setup() {
-        loadParticles();
-    }
-
-
-    private void loadParticles() {
-        ConfigurationSection cropSection = config.getConfigurationSection(
-                "crops"
-        );
-
-        if (cropSection == null) {
-            return;
-        }
-
-        Set<String> cropNames = cropSection.getKeys(false);
-
-        for (String cropName : cropNames) {
+    public void loadParticles() {
+        for (String cropName : getCropsNames()) {
             ConfigurationSection particleSection = config.getConfigurationSection(
                     "crops." + cropName + ".particles"
             );
 
-            IndexedMap<ParticleYaml> indexedMap = new IndexedMap<>();
+            IndexedYamlMap<ParticleYaml> indexedMap = new IndexedYamlMap<>();
 
             if (particleSection == null) {
                 particles.put(cropName, indexedMap);
                 continue;
             }
 
-
             Set<String> particleNames = particleSection.getKeys(false);
 
-
             for (String particleName : particleNames) {
-                indexedMap.put(particleName, new ParticleYaml(
-                        config.getDouble("crops." + cropName + ".particles." + particleName + ".delay"),
-                        config.getDouble("crops." + cropName + ".particles." + particleName + ".speed"),
-                        config.getDouble("crops." + cropName + ".particles." + particleName + ".volume"),
-                        config.getInt("crops." + cropName + ".particles." + particleName + ".amount")
-                ));
+                indexedMap.put(
+                        particleName,
+                        new ParticleYaml(
+                                config.getDouble("crops." + cropName + ".particles." + particleName + ".delay"),
+                                config.getDouble("crops." + cropName + ".particles." + particleName + ".speed"),
+                                config.getDouble("crops." + cropName + ".particles." + particleName + ".volume"),
+                                config.getInt("crops." + cropName + ".particles." + particleName + ".amount")
+                        )
+                );
             }
 
             particles.put(cropName, indexedMap);
         }
 
+    }
+
+
+    /**
+     * Get the names of all the crops in the config file.
+     *
+     * @return A set of strings.
+     */
+    private @NotNull @Unmodifiable Set<String> getCropsNames() {
+        ConfigurationSection cropSection = config.getConfigurationSection(
+                "crops"
+        );
+
+        if (cropSection == null) {
+            return Collections.emptySet();
+        }
+
+        return cropSection.getKeys(false);
     }
 
 
@@ -88,8 +95,8 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return A boolean value.
      */
-    public boolean isParticleEnabled(@NotNull String cropName, @NotNull String particleName) {
-        return getParticleAmount(cropName, particleName) != 0;
+    public boolean isEnabled(@NotNull String cropName, @NotNull String particleName) {
+        return getAmount(cropName, particleName) != 0;
     }
 
 
@@ -114,9 +121,12 @@ public final class ParticleConfigSection extends ConfigSection {
      */
     public @NotNull List<String> getParticles(@NotNull String cropName) {
         IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
-        return indexedParticles == null
-               ? Collections.emptyList()
-               : indexedParticles.toList();
+
+        if (indexedParticles == null) {
+            return Collections.emptyList();
+        }
+
+        return indexedParticles.toList();
     }
 
 
@@ -128,14 +138,14 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return The delay of the particle.
      */
-    public double getParticleDelay(@NotNull String cropName, @NotNull String particleName) {
-        IndexedMap<ParticleYaml> map = particles.get(cropName);
+    public double getDelay(@NotNull String cropName, @NotNull String particleName) {
+        IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!map.hasKey(particleName)) {
+        if (!indexedParticles.hasKey(particleName)) {
             return 0;
         }
 
-        return particles.get(cropName).get(particleName).getDelay();
+        return indexedParticles.get(particleName).getDelay();
     }
 
 
@@ -146,9 +156,9 @@ public final class ParticleConfigSection extends ConfigSection {
      * @param particleName The name of the particle.
      * @param delay        The delay between each particle spawn.
      */
-    public void setParticleDelay(@NotNull String cropName, @NotNull String particleName, double delay) {
+    public void setDelay(@NotNull String cropName, @NotNull String particleName, double delay) {
         config.set("crops." + cropName + ".particles." + particleName + ".delay", delay);
-        getOrInitParticle(cropName, particleName).setDelay(delay);
+        getOrInit(cropName, particleName).setDelay(delay);
         cropsConfig.saveConfig();
     }
 
@@ -161,14 +171,14 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return The speed of the particle.
      */
-    public double getParticleSpeed(@NotNull String cropName, @NotNull String particleName) {
-        IndexedMap<ParticleYaml> map = particles.get(cropName);
+    public double getSpeed(@NotNull String cropName, @NotNull String particleName) {
+        IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!map.hasKey(particleName)) {
+        if (!indexedParticles.hasKey(particleName)) {
             return 0;
         }
 
-        return particles.get(cropName).get(particleName).getSpeed();
+        return indexedParticles.get(particleName).getSpeed();
     }
 
 
@@ -179,9 +189,9 @@ public final class ParticleConfigSection extends ConfigSection {
      * @param particleName The name of the particle.
      * @param speed        The speed of the particle.
      */
-    public void setParticleSpeed(@NotNull String cropName, @NotNull String particleName, double speed) {
+    public void setSpeed(@NotNull String cropName, @NotNull String particleName, double speed) {
         config.set("crops." + cropName + ".particles." + particleName + ".speed", speed);
-        getOrInitParticle(cropName, particleName).setSpeed(speed);
+        getOrInit(cropName, particleName).setSpeed(speed);
         cropsConfig.saveConfig();
     }
 
@@ -194,14 +204,14 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return The amount of particles.
      */
-    public int getParticleAmount(@NotNull String cropName, @NotNull String particleName) {
-        IndexedMap<ParticleYaml> map = particles.get(cropName);
+    public int getAmount(@NotNull String cropName, @NotNull String particleName) {
+        IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!map.hasKey(particleName)) {
+        if (!indexedParticles.hasKey(particleName)) {
             return 0;
         }
 
-        return particles.get(cropName).get(particleName).getAmount();
+        return indexedParticles.get(particleName).getAmount();
     }
 
 
@@ -212,9 +222,9 @@ public final class ParticleConfigSection extends ConfigSection {
      * @param particleName The name of the particle.
      * @param amount       The amount of particles to spawn.
      */
-    public void setParticleAmount(@NotNull String cropName, @NotNull String particleName, int amount) {
+    public void setAmount(@NotNull String cropName, @NotNull String particleName, int amount) {
         config.set("crops." + cropName + ".particles." + particleName + ".amount", amount);
-        getOrInitParticle(cropName, particleName).setAmount(amount);
+        getOrInit(cropName, particleName).setAmount(amount);
         cropsConfig.saveConfig();
     }
 
@@ -227,9 +237,14 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return A ParticleYaml object.
      */
-    public ParticleYaml getOrInitParticle(@NotNull String cropName, @NotNull String particleName) {
-        IndexedMap<ParticleYaml> map = particles.get(cropName);
-        return map.getOrInit(
+    public ParticleYaml getOrInit(@NotNull String cropName, @NotNull String particleName) {
+        IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
+
+        if (indexedParticles.indexOf(particleName) > -1) {
+            return indexedParticles.get(particleName);
+        }
+
+        return indexedParticles.getOrInit(
                 particleName,
                 new ParticleYaml(0, 0, 0, 0)
         );
@@ -244,8 +259,8 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return The index of the particleName in the list of particles for the cropName.
      */
-    public int getParticleOrder(@NotNull String cropName, @NotNull String particleName) {
-        IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
+    public int getOrder(@NotNull String cropName, @NotNull String particleName) {
+        IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
         if (indexedParticles == null) {
             return -1;
@@ -262,8 +277,10 @@ public final class ParticleConfigSection extends ConfigSection {
      * @param oldOrder The old order of the particle.
      * @param newOrder The new order of the particle.
      */
-    public void swapParticleOrder(@NotNull String cropName, int oldOrder, int newOrder) {
-        IndexedMap<ParticleYaml> indexedParticles = particles.get(cropName);
+    public void swapOrder(@NotNull String cropName, int oldOrder, int newOrder) {
+        long start = System.nanoTime();
+
+        IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
         if (indexedParticles == null) {
             return;
@@ -271,15 +288,12 @@ public final class ParticleConfigSection extends ConfigSection {
 
         indexedParticles.swap(oldOrder, newOrder);
 
-        HashMap<String, Object> objectHashMap = new LinkedHashMap<>();
-        for (Map.Entry<String, ParticleYaml> entry : indexedParticles.toMap().entrySet()) {
-            objectHashMap.put(entry.getKey(), new Object[]{entry.getValue()});
-        }
-
         config.set(
                 "crops." + cropName + ".particles",
-                objectHashMap
+                indexedParticles.toYaml()
         );
+
+        System.out.println(System.nanoTime() - start);
 
         cropsConfig.saveConfig();
     }

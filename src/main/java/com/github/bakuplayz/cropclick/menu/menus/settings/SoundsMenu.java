@@ -107,7 +107,7 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String sound) {
-        boolean isEnabled = soundSection.isSoundEnabled(
+        boolean isEnabled = soundSection.isEnabled(
                 crop.getName(),
                 sound
         );
@@ -166,7 +166,7 @@ public final class SoundsMenu extends PaginatedMenu {
      * @return The index of the sound in the list of sounds for the crop.
      */
     private int getOrderOfSound(@NotNull String sound) {
-        return soundSection.getSoundOrder(crop.getName(), sound);
+        return soundSection.getOrder(crop.getName(), sound);
     }
 
 }

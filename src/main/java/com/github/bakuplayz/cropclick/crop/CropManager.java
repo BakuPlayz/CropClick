@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop;
 
+import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
@@ -46,13 +47,13 @@ public final class CropManager {
     private final @Getter HashMap<Crop, Long> harvestedCrops;
 
 
-    public CropManager(@NotNull CropsConfig config) {
-        this.addonSection = config.getAddonSection();
-        this.seedSection = config.getSeedSection();
-        this.cropSection = config.getCropSection();
+    public CropManager(@NotNull CropClick plugin) {
+        this.cropsConfig = plugin.getCropsConfig();
+        this.addonSection = cropsConfig.getAddonSection();
+        this.seedSection = cropsConfig.getSeedSection();
+        this.cropSection = cropsConfig.getCropSection();
         this.harvestedCrops = new HashMap<>();
         this.crops = new ArrayList<>();
-        this.cropsConfig = config;
 
         registerVanillaCrops();
     }
@@ -169,32 +170,14 @@ public final class CropManager {
      * @param crop The crop to remove
      */
     private void removeSettings(@NotNull Crop crop) {
-        String cropName = crop.getName();
-
-        if (cropSection.doesExist(cropName)) {
-            cropsConfig.getConfig().set("crops." + cropName, null);
-        }
-
         if (crop.hasSeed()) {
             Seed seed = crop.getSeed();
             String seedName = seed.getName();
-            if (seedSection.doesExist(seedName)) {
-                cropsConfig.getConfig().set("seeds." + seedName, null);
-            }
+            cropsConfig.getConfig().set("seeds." + seedName, null);
         }
 
+        cropsConfig.getConfig().set("crops." + crop.getName(), null);
         cropsConfig.saveConfig();
-    }
-
-
-    /**
-     * Remove the settings for the given crop, then add the default back.
-     *
-     * @param crop The crop to reset the settings for.
-     */
-    public void resetSettings(@NotNull Crop crop) {
-        removeSettings(crop);
-        addSettings(crop);
     }
 
 

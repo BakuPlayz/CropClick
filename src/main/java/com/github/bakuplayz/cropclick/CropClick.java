@@ -72,6 +72,7 @@ public class CropClick extends JavaPlugin {
     private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
     private boolean isUnitTest;
+    private boolean isReset;
 
 
     /**
@@ -122,6 +123,8 @@ public class CropClick extends JavaPlugin {
         registerManagers();
         registerCommands();
         registerListeners();
+        
+        loadConfigSections();
     }
 
 
@@ -136,6 +139,25 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It resets the plugin (takes long to compute, 90ms+).
+     */
+    public void onReset() {
+        this.isReset = true;
+
+        registerConfigs();
+        setupConfigs();
+
+        registerStorages();
+        setupStorages();
+        startStoragesSaveInterval();
+
+        registerManagers();
+
+        loadConfigSections();
+    }
+
+
     public void setupConfigs() {
         LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
         //getConfig().options().copyDefaults(true);
@@ -143,10 +165,17 @@ public class CropClick extends JavaPlugin {
 
         if (!isUnitTest) {
             cropsConfig.setup();
+            cropsConfig.setupSections();
         }
+
         addonsConfig.setup();
         playersConfig.setup();
         languageConfig.setup();
+    }
+
+
+    public void loadConfigSections() {
+        cropsConfig.loadSections();
     }
 
 
@@ -154,6 +183,7 @@ public class CropClick extends JavaPlugin {
         if (!isUnitTest) {
             this.cropsConfig = new CropsConfig(this);
         }
+
         this.addonsConfig = new AddonsConfig(this);
         this.playersConfig = new PlayersConfig(this);
         this.languageConfig = new LanguageConfig(this);
@@ -168,12 +198,16 @@ public class CropClick extends JavaPlugin {
 
     public void setupStorages() {
         farmData.setup();
-        farmData.fetchData();
-        farmData.saveData();
+        if (!isReset) {
+            farmData.fetchData();
+            farmData.saveData();
+        }
 
         worldData.setup();
-        worldData.fetchData();
-        worldData.saveData();
+        if (!isReset) {
+            worldData.fetchData();
+            worldData.saveData();
+        }
     }
 
 
@@ -197,13 +231,16 @@ public class CropClick extends JavaPlugin {
 
 
     private void registerManagers() {
-        this.cropManager = new CropManager(cropsConfig);
+        this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
-        this.addonManager = new AddonManager(this);
-        this.updateManager = new UpdateManager(this);
-        this.commandManager = new CommandManager(this);
         this.autofarmManager = new AutofarmManager(this);
-        this.permissionManager = new PermissionManager(this);
+
+        if (!isReset) {
+            this.addonManager = new AddonManager(this);
+            this.updateManager = new UpdateManager(this);
+            this.commandManager = new CommandManager(this);
+            this.permissionManager = new PermissionManager(this);
+        }
     }
 
 

@@ -1,9 +1,9 @@
 package com.github.bakuplayz.cropclick.sounds;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.jetbrains.annotations.Contract;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
-import org.yaml.snakeyaml.Yaml;
 
 
 /**
@@ -13,6 +13,8 @@ import org.yaml.snakeyaml.Yaml;
  * @version 2.0.0
  * @since 2.0.0
  */
+@ToString
+@EqualsAndHashCode
 public final class Sound {
 
     private final @Getter String name;
@@ -23,10 +25,10 @@ public final class Sound {
 
 
     public Sound(@NotNull String name, double pitch, double volume, double delay) {
-        this.name = name;
-        this.pitch = pitch;
         this.volume = volume;
+        this.pitch = pitch;
         this.delay = delay;
+        this.name = name;
     }
 
 }
