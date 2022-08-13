@@ -6,12 +6,15 @@
 
     <groupId>com.github.bakuplayz.cropclick</groupId>
     <artifactId>CropClick</artifactId>
-    <version>1.6.0</version>
     <packaging>jar</packaging>
 
-    <name>CropClick</name>
+    <name>${project.name}</name>
+    <version>${project.version}</version>
 
     <properties>
+        <project.name>CropClick</project.name>
+        <project.version>2.0.0</project.version>
+
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
