@@ -42,6 +42,7 @@ public final class SoundMenu extends Menu {
     private final double PITCH_MIN_CHANGE = 0.1;
     private final double PITCH_MAX_CHANGE = 0.2;
 
+
     private final Crop crop;
     private final String cropName;
     private final String soundName;
@@ -237,121 +238,133 @@ public final class SoundMenu extends Menu {
     }
 
 
-    private @NotNull ItemStack getDelayAddItem(int amount) {
-        double beforeValue = soundSection.getDelay(
+    private @NotNull ItemStack getDelayAddItem(int delayChange) {
+        double delayBefore = soundSection.getDelay(
                 cropName,
                 soundName
         );
-        double afterValue = Math.min(beforeValue + amount, MAX_DELAY);
+        double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, amount, "Delay"))
-                .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
+                .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getDelayRemoveItem(int amount) {
-        double beforeValue = soundSection.getDelay(
+    private @NotNull ItemStack getDelayRemoveItem(int delayChange) {
+        double delayBefore = soundSection.getDelay(
                 cropName,
                 soundName
         );
-        double afterValue = Math.max(beforeValue - amount, MIN_DELAY);
+        double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, amount, "Delay"))
-                .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
+                .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getVolumeAddItem(int amount) {
-        double beforeValue = soundSection.getVolume(
+    private @NotNull ItemStack getVolumeAddItem(int volumeChange) {
+        double volumeBefore = soundSection.getVolume(
                 cropName,
                 soundName
         );
-        double afterValue = Math.min(beforeValue + amount, MAX_VOLUME);
+        double volumeAfter = Math.min(volumeBefore + volumeChange, MAX_VOLUME);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, amount, "Volume"))
-                .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volumeChange, "Volume"))
+                .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, volumeAfter))
                 .setDamage(5)
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getVolumeRemoveItem(int amount) {
-        double beforeValue = soundSection.getVolume(
+    private @NotNull ItemStack getVolumeRemoveItem(int volumeChange) {
+        double volumeBefore = soundSection.getVolume(
                 cropName,
                 soundName
         );
-        double afterValue = Math.max(beforeValue - amount, MIN_VOLUME);
+        double volumeAfter = Math.max(volumeBefore - volumeChange, MIN_VOLUME);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, amount, "Volume"))
-                .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volumeChange, "Volume"))
+                .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getPitchAddItem(double amount) {
-        double beforeValue = soundSection.getPitch(
+    private @NotNull ItemStack getPitchAddItem(double pitchChange) {
+        double pitchBefore = soundSection.getPitch(
                 cropName,
                 soundName
         );
-        double afterValue = MathUtil.round(
-                Math.min(beforeValue + amount, MAX_PITCH),
+        double pitchAfter = MathUtil.round(
+                Math.min(pitchBefore + pitchChange, MAX_PITCH),
                 2
         );
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, amount, "Pitch"))
-                .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
+                .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getPitchRemoveItem(double amount) {
-        double beforeValue = soundSection.getPitch(
+    private @NotNull ItemStack getPitchRemoveItem(double pitchChange) {
+        double pitchBefore = soundSection.getPitch(
                 cropName,
                 soundName
         );
-        double afterValue = MathUtil.round(
-                Math.max(beforeValue - amount, MIN_PITCH),
+        double pitchAfter = MathUtil.round(
+                Math.max(pitchBefore - pitchChange, MIN_PITCH),
                 2
         );
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, amount, "Pitch"))
-                .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
+                .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
     }
 
 
     private void addSoundDelay(int delay) {
-        int oldDelay = (int) (soundSection.getDelay(cropName, soundName) + delay);
-        int newDelay = Math.min(oldDelay, MAX_DELAY);
+        double oldDelay = MathUtil.round(
+                soundSection.getDelay(cropName, soundName) + delay,
+                2
+        );
+        double newDelay = Math.min(oldDelay, MAX_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
     }
 
 
     private void removeSoundDelay(int delay) {
-        int oldDelay = (int) (soundSection.getDelay(cropName, soundName) - delay);
-        int newDelay = Math.max(oldDelay, MIN_DELAY);
+        double oldDelay = MathUtil.round(
+                soundSection.getDelay(cropName, soundName) - delay,
+                2
+        );
+        double newDelay = Math.max(oldDelay, MIN_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
     }
 
 
     private void increaseVolume(int volume) {
-        int oldVolume = (int) (soundSection.getVolume(cropName, soundName) + volume);
-        int newVolume = Math.min(oldVolume, MAX_VOLUME);
+        double oldVolume = MathUtil.round(
+                soundSection.getVolume(cropName, soundName) + volume,
+                2
+        );
+        double newVolume = Math.min(oldVolume, MAX_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
     }
 
 
     private void decreaseVolume(int volume) {
-        int oldVolume = (int) (soundSection.getVolume(cropName, soundName) - volume);
-        int newVolume = Math.max(oldVolume, MIN_VOLUME);
+        double oldVolume = MathUtil.round(
+                soundSection.getVolume(cropName, soundName) - volume,
+                2
+        );
+        double newVolume = Math.max(oldVolume, MIN_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
     }
 

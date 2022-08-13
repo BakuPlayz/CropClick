@@ -22,6 +22,8 @@ import java.util.List;
 public abstract class PaginatedMenu extends Menu {
 
     protected final int MAX_ITEMS_PER_PAGE = 21;
+
+
     protected int itemIndex;
     protected int page;
 

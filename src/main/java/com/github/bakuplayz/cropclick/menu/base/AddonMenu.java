@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AddonMenu extends Menu {
 
-    protected boolean addonEnabled;
+    protected boolean isAddonEnabled;
     protected final String addonName;
 
     protected final AddonManager addonManager;
@@ -67,7 +67,7 @@ public abstract class AddonMenu extends Menu {
      * finally it updates the addons enabled status.
      */
     protected final void setToggleItem() {
-        addonEnabled = addonManager.isEnabled(addonName);
+        isAddonEnabled = addonManager.isEnabled(addonName);
         inventory.setItem(22, getToggleItem());
     }
 
@@ -110,12 +110,20 @@ public abstract class AddonMenu extends Menu {
      */
     protected final @NotNull ItemStack getWorldsItem() {
         Addon addon = addonManager.findByName(addonName);
-        int amountOfBanished = addon != null ? addon.getAmountOfBanished() : 0;
+
         return new ItemUtil(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(plugin, amountOfBanished)
+                        LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(
+                                plugin,
+                                getAmountOfBanished(addon)
+                        )
                 )).toItemStack();
+    }
+
+
+    private int getAmountOfBanished(Addon addon) {
+        return addon == null ? 0 : addon.getAmountOfBanished();
     }
 
 }

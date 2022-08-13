@@ -7,6 +7,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.MathUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -39,6 +40,7 @@ public final class ParticleMenu extends Menu {
 
     private final int MIN_AMOUNT = 0;
     private final int MAX_AMOUNT = 20;
+
 
     private final Crop crop;
     private final String cropName;
@@ -236,115 +238,127 @@ public final class ParticleMenu extends Menu {
     }
 
 
-    private @NotNull ItemStack getDelayAddItem(int amount) {
-        double beforeValue = particleSection.getDelay(
+    private @NotNull ItemStack getDelayAddItem(int delayChange) {
+        double delayBefore = particleSection.getDelay(
                 cropName,
                 particleName
         );
-        double afterValue = Math.min(beforeValue + amount, DELAY_MAX);
+        double delayAfter = Math.min(delayBefore + delayChange, DELAY_MAX);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amount, "Delay"))
-                .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
+                .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getDelayRemoveItem(int amount) {
-        double beforeValue = particleSection.getDelay(
+    private @NotNull ItemStack getDelayRemoveItem(int delayChange) {
+        double delayBefore = particleSection.getDelay(
                 cropName,
                 particleName
         );
-        double afterValue = Math.max(beforeValue - amount, DELAY_MIN);
+        double delayAfter = Math.max(delayBefore - delayChange, DELAY_MIN);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amount, "Delay"))
-                .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
+                .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getSpeedAddItem(int amount) {
-        double beforeValue = particleSection.getSpeed(
+    private @NotNull ItemStack getSpeedAddItem(int speedChange) {
+        double speedBefore = particleSection.getSpeed(
                 cropName,
                 particleName
         );
-        double afterValue = Math.min(beforeValue + amount, MAX_SPEED);
+        double speedAfter = Math.min(speedBefore + speedChange, MAX_SPEED);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amount, "Speed"))
-                .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, speedChange, "Speed"))
+                .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, speedAfter))
                 .setDamage(5)
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getSpeedRemoveItem(int amount) {
-        double beforeValue = particleSection.getSpeed(
+    private @NotNull ItemStack getSpeedRemoveItem(int speedChange) {
+        double speedBefore = particleSection.getSpeed(
                 cropName,
                 particleName
         );
-        double afterValue = Math.max(beforeValue - amount, MIN_SPEED);
+        double speedAfter = Math.max(speedBefore - speedChange, MIN_SPEED);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amount, "Speed"))
-                .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, speedChange, "Speed"))
+                .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getAmountAddItem(int amount) {
-        double beforeValue = particleSection.getAmount(
+    private @NotNull ItemStack getAmountAddItem(int amountChange) {
+        int amountBefore = particleSection.getAmount(
                 cropName,
                 particleName
         );
-        double afterValue = Math.min(beforeValue + amount, MAX_AMOUNT);
+        int amountAfter = Math.min(amountBefore + amountChange, MAX_AMOUNT);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amount, "Amount"))
-                .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amountChange, "Amount"))
+                .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getAmountRemoveItem(int amount) {
-        double beforeValue = particleSection.getAmount(
+    private @NotNull ItemStack getAmountRemoveItem(int amountChange) {
+        int amountBefore = particleSection.getAmount(
                 cropName,
                 particleName
         );
-        double afterValue = Math.max(beforeValue - amount, MIN_AMOUNT);
+        int amountAfter = Math.max(amountBefore - amountChange, MIN_AMOUNT);
 
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amount, "Amount"))
-                .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
+                .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amountChange, "Amount"))
+                .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();
     }
 
 
     public void addParticleDelay(int delay) {
-        int oldDelay = (int) (particleSection.getDelay(cropName, particleName) + delay);
-        int newDelay = Math.min(oldDelay, DELAY_MAX);
+        double oldDelay = MathUtil.round(
+                particleSection.getDelay(cropName, particleName) + delay,
+                2
+        );
+        double newDelay = Math.min(oldDelay, DELAY_MAX);
         particleSection.setDelay(cropName, particleName, newDelay);
     }
 
 
     public void removeParticleDelay(int delay) {
-        int oldDelay = (int) (particleSection.getDelay(cropName, particleName) - delay);
-        int newDelay = Math.max(oldDelay, DELAY_MIN);
+        double oldDelay = MathUtil.round(
+                particleSection.getDelay(cropName, particleName) - delay,
+                2
+        );
+        double newDelay = Math.max(oldDelay, DELAY_MIN);
         particleSection.setDelay(cropName, particleName, newDelay);
     }
 
 
     public void addParticleSpeed(int speed) {
-        int oldSpeed = (int) (particleSection.getSpeed(cropName, particleName) + speed);
-        int newSpeed = Math.min(oldSpeed, MAX_SPEED);
+        double oldSpeed = MathUtil.round(
+                particleSection.getSpeed(cropName, particleName) + speed,
+                2
+        );
+        double newSpeed = Math.min(oldSpeed, MAX_SPEED);
         particleSection.setSpeed(cropName, particleName, newSpeed);
     }
 
 
     public void removeParticleSpeed(int speed) {
-        int oldSpeed = (int) (particleSection.getSpeed(cropName, particleName) - speed);
-        int newSpeed = Math.max(oldSpeed, MIN_SPEED);
+        double oldSpeed = MathUtil.round(
+                particleSection.getSpeed(cropName, particleName) - speed,
+                2
+        );
+        double newSpeed = Math.max(oldSpeed, MIN_SPEED);
         particleSection.setSpeed(cropName, particleName, newSpeed);
     }
 

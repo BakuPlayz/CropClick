@@ -17,4 +17,6 @@ public abstract class YamlItem {
 
     public abstract Map<String, Object> toYaml();
 
+    public abstract boolean isEnabled();
+    
 }

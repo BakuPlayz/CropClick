@@ -9,6 +9,7 @@ import com.github.bakuplayz.cropclick.crop.crops.*;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
 import org.bukkit.block.Block;
@@ -123,7 +124,10 @@ public final class CropManager {
 
             // mcMMO Settings
             addonSection.setMcMMOExperience(cropName, 0);
-            addonSection.setMcMMOExperienceReason(cropName, "You harvested " + cropName + ".");
+            addonSection.setMcMMOExperienceReason(
+                    cropName,
+                    "You harvested " + MessageUtils.beautify(cropName, false) + "."
+            );
 
             // JobsReborn Settings
             addonSection.setJobsMoney(cropName, 0);

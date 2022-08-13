@@ -61,10 +61,10 @@ public final class WorldGuardMenu extends AddonMenu {
         return new ItemUtil(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDON_GUARD_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_GUARD_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_GUARD_ITEM_STATUS.get(plugin, addonEnabled)
+                        LanguageAPI.Menu.ADDON_GUARD_ITEM_STATUS.get(plugin, isAddonEnabled)
                 ))
-                .setMaterial(addonEnabled ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(addonEnabled ? -1 : 7)
+                .setMaterial(isAddonEnabled ? null : Material.STAINED_GLASS_PANE)
+                .setDamage(isAddonEnabled ? -1 : 7)
                 .toItemStack();
     }
 

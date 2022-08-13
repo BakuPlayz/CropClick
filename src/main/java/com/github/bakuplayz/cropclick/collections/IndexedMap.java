@@ -54,6 +54,11 @@ public class IndexedMap<E> {
     }
 
 
+    public E getOrDefault(@NotNull String name, E item) {
+        return map.getOrDefault(name, item);
+    }
+
+
     public E getOrInit(@NotNull String name, E item) {
         if (!hasKey(name)) {
             put(name, item);

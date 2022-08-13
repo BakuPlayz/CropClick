@@ -4,7 +4,12 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.*;
 import lombok.Getter;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collections;
+import java.util.Set;
 
 
 /**
@@ -40,6 +45,26 @@ public final class CropsConfig extends Config {
     public void loadSections() {
         particleSection.loadParticles();
         soundSection.loadSounds();
+    }
+
+
+    /**
+     * Get the names of all the crops in the config file.
+     *
+     * @return A set of strings.
+     */
+    @NotNull
+    @Unmodifiable
+    public Set<String> getCropsNames() {
+        ConfigurationSection cropSection = config.getConfigurationSection(
+                "crops"
+        );
+
+        if (cropSection == null) {
+            return Collections.emptySet();
+        }
+
+        return cropSection.getKeys(false);
     }
 
 }

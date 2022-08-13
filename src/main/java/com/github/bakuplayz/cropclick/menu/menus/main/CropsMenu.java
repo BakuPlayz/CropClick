@@ -275,7 +275,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of sounds for a crop.
      */
     private int getAmountOfSounds(@NotNull Crop crop) {
-        return soundSection.getAmountOfEnabledSounds(crop.getName());
+        return soundSection.getAmountOfSounds(crop.getName());
     }
 
 
@@ -287,7 +287,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The amount of particles that are in the config file for the crop.
      */
     private int getAmountOfParticles(@NotNull Crop crop) {
-        return particleSection.getAmountOfEnabledParticles(crop.getName());
+        return particleSection.getAmountOfSounds(crop.getName());
     }
 
 

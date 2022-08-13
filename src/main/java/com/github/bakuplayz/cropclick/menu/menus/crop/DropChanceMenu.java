@@ -35,7 +35,7 @@ public final class DropChanceMenu extends Menu {
     private final double DECIMAL_TO_PERCENT = 10_000;
     private final double PERCENT_TO_DECIMAL = 0.01;
 
-    
+
     private final Crop crop;
     private final Seed seed;
     private final boolean hasSeed;
@@ -146,8 +146,8 @@ public final class DropChanceMenu extends Menu {
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance))
-                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(crop.isHarvestable() ? -1 : 15)
+                .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
+                .setDamage(seed.isEnabled() ? -1 : 15)
                 .toItemStack();
     }
 

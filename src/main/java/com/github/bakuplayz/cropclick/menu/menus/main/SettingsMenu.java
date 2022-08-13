@@ -217,9 +217,7 @@ public final class SettingsMenu extends Menu {
      * @return The number of banished worlds.
      */
     private int getAmountOfBanished() {
-        return (int) plugin.getWorldManager().getWorlds()
-                           .values()
-                           .stream()
+        return (int) plugin.getWorldManager().getWorlds().values().stream()
                            .filter(FarmWorld::isBanished)
                            .count();
     }

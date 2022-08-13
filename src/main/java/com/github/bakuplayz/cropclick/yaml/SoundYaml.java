@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.yaml;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,9 +21,9 @@ import java.util.Map;
 @ToString
 public final class SoundYaml extends YamlItem {
 
-    private @Setter @Getter double delay;
-    private @Setter @Getter double pitch;
-    private @Setter @Getter double volume;
+    private @Setter @Getter @Accessors(chain = true) double delay;
+    private @Setter @Getter @Accessors(chain = true) double pitch;
+    private @Setter @Getter @Accessors(chain = true) double volume;
 
 
     public SoundYaml(double delay, double pitch, double volume) {
@@ -40,6 +41,12 @@ public final class SoundYaml extends YamlItem {
             put("pitch", pitch);
             put("volume", volume);
         }};
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return volume != 0.0 & pitch != 0.0;
     }
 
 }

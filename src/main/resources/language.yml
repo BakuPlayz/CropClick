@@ -503,11 +503,11 @@ menu:
 
   name:
     crop:
-      itemName: "&e%name%"
+      itemName: "&e%name% &7(%status%)"
       dropName: "&7Drop Name: &r%name%"
 
     seed:
-      itemName: "&e%name%"
+      itemName: "&e%name% &7(%status%)"
       dropName: "&7Drop Name: &r%name%"
 
     colorCode:

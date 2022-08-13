@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.yaml;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,16 +21,14 @@ import java.util.Map;
 @ToString
 public final class ParticleYaml extends YamlItem {
 
-    private @Setter @Getter double delay;
-    private @Setter @Getter double speed;
-    private @Setter @Getter double volume;
-    private @Setter @Getter int amount;
+    private @Setter @Getter @Accessors(chain = true) double delay;
+    private @Setter @Getter @Accessors(chain = true) double speed;
+    private @Setter @Getter @Accessors(chain = true) int amount;
 
 
-    public ParticleYaml(double delay, double speed, double volume, int amount) {
+    public ParticleYaml(double delay, double speed, int amount) {
         this.delay = delay;
         this.speed = speed;
-        this.volume = volume;
         this.amount = amount;
     }
 
@@ -40,9 +39,14 @@ public final class ParticleYaml extends YamlItem {
         return new HashMap<String, Object>() {{
             put("delay", delay);
             put("speed", speed);
-            put("volume", volume);
             put("amount", amount);
         }};
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return amount != 0;
     }
 
 }

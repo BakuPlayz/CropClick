@@ -27,8 +27,8 @@ public final class PreviewDispenserMenu extends PreviewMenu {
                                 @NotNull String shortFarmerID,
                                 @NotNull Inventory inventory) {
         super(plugin, player, LanguageAPI.Menu.DISPENSER_PREVIEW_TITLE, shortFarmerID);
-        setDispenserInventory(inventory);
         setInventoryType(inventory.getType());
+        setDispenserInventory(inventory);
     }
 
 

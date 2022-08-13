@@ -341,7 +341,7 @@ public final class CropMenu extends Menu {
     private int getDropChanceAsPercent(boolean isCrop) {
         double DECIMAL_TO_PERCENT = 10_000;
         if (isCrop) {
-            return (int) (seedSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
+            return (int) (cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
         }
         return (int) (seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
     }
