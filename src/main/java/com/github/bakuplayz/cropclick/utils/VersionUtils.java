@@ -48,6 +48,14 @@ public final class VersionUtils {
 
 
     /**
+     * If the server version supports chorus, return true;
+     *
+     * @return A boolean value.
+     */
+    public static boolean supportsChorus() {return !between(8, 8.9);}
+
+
+    /**
      * If the server version supports shulkers, return true.
      *
      * @return A boolean value.

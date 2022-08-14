@@ -17,9 +17,7 @@ import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Dispenser;
+import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -191,14 +189,23 @@ public abstract class LinkMenu extends Menu {
      * Open a preview menu of the container's inventory.
      */
     protected void openContainer() {
-        Chest chest = (Chest) containerLocation.getBlock().getState();
-        PreviewContainerMenu previewMenu = new PreviewContainerMenu(
-                plugin,
-                player,
-                autofarm.getShortenedID(),
-                chest.getInventory()
-        );
-        previewMenu.open();
+        BlockState containerState = containerLocation.getBlock().getState();
+
+        if (containerState instanceof Chest) {
+            new PreviewContainerMenu(
+                    plugin,
+                    player,
+                    autofarm.getShortenedID(),
+                    ((Chest) containerState).getInventory()
+            ).open();
+        } else if (containerState instanceof ShulkerBox) {
+            new PreviewContainerMenu(
+                    plugin,
+                    player,
+                    autofarm.getShortenedID(),
+                    ((ShulkerBox) containerState).getInventory()
+            ).open();
+        }
     }
 
 
@@ -343,6 +350,9 @@ public abstract class LinkMenu extends Menu {
         return new ItemUtil(Material.CHEST)
                 .setName(plugin, LanguageAPI.Menu.LINK_CONTAINER_NAME)
                 .setLore(getLocationAsLore(containerLocation, Component.CONTAINER))
+                .setMaterial(
+                        containerLocation != null ? containerLocation.getBlock().getType() : null
+                )
                 .setMaterial(
                         isContainerSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
                 )

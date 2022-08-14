@@ -123,7 +123,7 @@ public class CropClick extends JavaPlugin {
         registerManagers();
         registerCommands();
         registerListeners();
-        
+
         loadConfigSections();
     }
 
@@ -249,10 +249,10 @@ public class CropClick extends JavaPlugin {
 
         manager.registerEvents(new MenuListener(), this);
 
-        manager.registerEvents(new PlayerInteractAtCropListener(this), this);
-        manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
+        manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
+        manager.registerEvents(new PlayerInteractAtCropListener(this), this);
 
         manager.registerEvents(new HarvestCropListener(), this);
         manager.registerEvents(new PlayerHarvestCropListener(this), this);
@@ -269,9 +269,7 @@ public class CropClick extends JavaPlugin {
         manager.registerEvents(new AutofarmUnlinkListener(this), this);
         manager.registerEvents(new AutofarmLinkListener(this), this);
 
-        if (VersionUtils.between(8.3, 13.9)) {
-            manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
-        }
+        manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
     }
 
 }

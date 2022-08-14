@@ -72,8 +72,8 @@ public final class CropManager {
         registerCrop(new CocoaBean(cropsConfig));
         registerCrop(new Melon(cropsConfig));
         registerCrop(new NetherWart(cropsConfig));
-        registerCrop(new Pumpkin(cropsConfig));
         registerCrop(new Potato(cropsConfig));
+        registerCrop(new Pumpkin(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
         registerCrop(new Wheat(cropsConfig));
     }

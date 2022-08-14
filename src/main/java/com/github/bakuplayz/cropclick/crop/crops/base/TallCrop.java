@@ -1,10 +1,12 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,6 +85,51 @@ public abstract class TallCrop extends BaseCrop {
         if (!shouldReplant()) {
             block.setType(Material.AIR);
         }
+    }
+
+
+    /**
+     * Harvest all the crops, stacked on each other, starting from the top.
+     *
+     * @param player       The player who is harvesting the crop
+     * @param clickedBlock The block that was clicked.
+     * @param crop         The crop that is being harvested.
+     */
+    public void harvestAll(@NotNull Player player, @NotNull Block clickedBlock, @NotNull Crop crop) {
+        int height = getCurrentAge(clickedBlock);
+        int actualHeight = getActualHeight(crop, height);
+        for (int i = actualHeight; i > 0; --i) {
+            crop.harvest(player);
+        }
+    }
+
+
+    /**
+     * Harvest all the crops, stacked on each other, starting from the top.
+     *
+     * @param container    The container that the crop is in.
+     * @param clickedBlock The block that was clicked.
+     * @param crop         The crop that is being harvested.
+     */
+    public void harvestAll(@NotNull Container container, @NotNull Block clickedBlock, @NotNull Crop crop) {
+        int height = getCurrentAge(clickedBlock);
+        int actualHeight = getActualHeight(crop, height);
+        for (int i = actualHeight; i > 0; --i) {
+            crop.harvest(container);
+        }
+    }
+
+
+    /**
+     * If the crop should be replanted, return the height minus one, otherwise return the height.
+     *
+     * @param crop   The crop to be planted
+     * @param height The height of the crop.
+     *
+     * @return The height of the crop.
+     */
+    public int getActualHeight(@NotNull Crop crop, int height) {
+        return crop.shouldReplant() ? height - 1 : height;
     }
 
 }

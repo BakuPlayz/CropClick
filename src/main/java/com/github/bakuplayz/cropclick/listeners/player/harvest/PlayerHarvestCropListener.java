@@ -138,7 +138,8 @@ public final class PlayerHarvestCropListener implements Listener {
         System.out.println("Player -- Harvest");
 
         if (crop instanceof TallCrop) {
-            harvestAll(player, block, crop);
+            TallCrop tallCrop = (TallCrop) crop;
+            tallCrop.harvestAll(player, block, crop);
         } else {
             crop.harvest(player);
         }
@@ -152,33 +153,5 @@ public final class PlayerHarvestCropListener implements Listener {
         harvestedCrops.remove(crop);
     }
 
-
-    /**
-     * Harvest all the crops that is connected to the tall crop.
-     *
-     * @param player       The player who is harvesting the crop.
-     * @param clickedBlock The block that was clicked.
-     * @param crop         The crop that was clicked on
-     */
-    private void harvestAll(@NotNull Player player, @NotNull Block clickedBlock, @NotNull Crop crop) {
-        int height = crop.getCurrentAge(clickedBlock);
-        int actualHeight = getActualHeight(crop, height);
-        for (int i = actualHeight; i > 0; --i) {
-            crop.harvest(player);
-        }
-    }
-
-
-    /**
-     * If the crop should be replanted, return the height minus one, otherwise return the height.
-     *
-     * @param crop   The crop to be planted
-     * @param height The height of the crop.
-     *
-     * @return The height of the crop.
-     */
-    private int getActualHeight(@NotNull Crop crop, int height) {
-        return crop.shouldReplant() ? height - 1 : height;
-    }
 
 }

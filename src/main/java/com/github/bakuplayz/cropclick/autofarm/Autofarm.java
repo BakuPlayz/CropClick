@@ -3,9 +3,7 @@ package com.github.bakuplayz.cropclick.autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,15 +39,12 @@ public final class Autofarm {
     private @Setter @Getter @Accessors(fluent = true) boolean isEnabled;
 
     @SerializedName("crop")
-    @JsonAdapter(LocationTypeAdapter.class)
     private @Setter @Getter Location cropLocation;
 
     @SerializedName("container")
-    @JsonAdapter(LocationTypeAdapter.class)
     private @Setter @Getter Location containerLocation;
 
     @SerializedName("dispenser")
-    @JsonAdapter(LocationTypeAdapter.class)
     private @Setter @Getter Location dispenserLocation;
 
     private transient Container container;

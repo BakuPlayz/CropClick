@@ -9,7 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public final class EntityDestroyAutofarmListener implements Listener {
      * @param event The event that is being called.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onEntityExplodeBlock(@NotNull BlockExplodeEvent event) {
+    public void onEntityExplodeBlock(@NotNull EntityExplodeEvent event) {
         if (event.isCancelled()) return;
 
         if (!autofarmManager.isEnabled()) {

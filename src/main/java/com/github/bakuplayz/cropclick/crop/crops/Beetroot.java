@@ -34,6 +34,12 @@ public final class Beetroot extends GroundCrop {
 
 
     @Override
+    public int getHarvestAge() {
+        return 3;
+    }
+
+
+    @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
         return new Drop(Material.BEETROOT,
@@ -53,13 +59,13 @@ public final class Beetroot extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.BEETROOT;
+        return Material.BEETROOT_BLOCK;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.BEETROOT_BLOCK;
+        return Material.BEETROOT;
     }
 
 }

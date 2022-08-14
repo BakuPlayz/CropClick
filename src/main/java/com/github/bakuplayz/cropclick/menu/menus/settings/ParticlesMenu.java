@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.particle.ParticleEffect;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,9 +83,9 @@ public final class ParticlesMenu extends PaginatedMenu {
      * @return A list of all the particle effects.
      */
     private @NotNull List<String> getParticles() {
-        return Arrays.stream(ParticleEffect.values())
-                     .map(ParticleEffect::name)
-                     .collect(Collectors.toList());
+        return ParticleEffect.getAvailableEffects().stream()
+                             .map(ParticleEffect::name)
+                             .collect(Collectors.toList());
     }
 
 

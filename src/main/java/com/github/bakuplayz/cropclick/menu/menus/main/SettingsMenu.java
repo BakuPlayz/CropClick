@@ -172,7 +172,7 @@ public final class SettingsMenu extends Menu {
      * @return The amount of particles in the ParticleEffect enum.
      */
     private int getAmountOfParticles() {
-        return ParticleEffect.values().length;
+        return ParticleEffect.getAvailableEffects().size();
     }
 
 
