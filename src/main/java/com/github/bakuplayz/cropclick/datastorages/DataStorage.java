@@ -27,6 +27,8 @@ public abstract class DataStorage {
     protected String fileName;
     protected @Getter JsonObject fileData;
 
+    protected JsonParser jsonParser;
+
     protected Gson gson;
 
 
@@ -36,6 +38,7 @@ public abstract class DataStorage {
         this.gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
+        this.jsonParser = new JsonParser();
     }
 
 
@@ -64,7 +67,7 @@ public abstract class DataStorage {
     public void fetchData() {
         try {
             FileReader reader = new FileReader(file);
-            JsonElement data = JsonParser.parseReader(reader);
+            JsonElement data = jsonParser.parse(reader);
             fileData = data != JsonNull.INSTANCE
                        ? data.getAsJsonObject()
                        : new JsonObject();

@@ -8,7 +8,6 @@ import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -114,7 +113,7 @@ public final class AutofarmDataStorage extends DataStorage {
      */
     private void saveFarms() {
         String data = gson.toJson(farms, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
-        JsonElement dataAsJson = JsonParser.parseString(data);
+        JsonElement dataAsJson = jsonParser.parse(data);
         fileData = dataAsJson.getAsJsonObject();
 
         super.saveData();

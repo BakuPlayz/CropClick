@@ -94,7 +94,7 @@ public final class WorldDataStorage extends DataStorage {
      */
     private void saveWorlds() {
         String data = gson.toJson(worlds, type);
-        JsonElement dataAsJson = JsonParser.parseString(data);
+        JsonElement dataAsJson = jsonParser.parse(data);
         fileData = dataAsJson.getAsJsonObject();
 
         super.saveData();

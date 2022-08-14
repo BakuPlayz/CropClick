@@ -117,7 +117,7 @@ public final class RequestUtil {
         }
 
         InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-        JsonElement body = JsonParser.parseReader(reader);
+        JsonElement body = new JsonParser().parse(reader);
         reader.close();
         return body;
     }
