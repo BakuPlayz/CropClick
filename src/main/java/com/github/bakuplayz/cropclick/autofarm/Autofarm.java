@@ -1,9 +1,10 @@
 package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
-import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.utils.VersionUtils;
+import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.bukkit.Location;
-import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,12 +39,15 @@ public final class Autofarm {
     private @Setter @Getter @Accessors(fluent = true) boolean isEnabled;
 
     @SerializedName("crop")
+    @JsonAdapter(LocationTypeAdapter.class)
     private @Setter @Getter Location cropLocation;
 
     @SerializedName("container")
+    @JsonAdapter(LocationTypeAdapter.class)
     private @Setter @Getter Location containerLocation;
 
     @SerializedName("dispenser")
+    @JsonAdapter(LocationTypeAdapter.class)
     private @Setter @Getter Location dispenserLocation;
 
     private transient Container container;
@@ -127,35 +130,9 @@ public final class Autofarm {
         if (!isEnabled()) return null;
         if (!isLinked()) return null;
 
-        Block container = containerLocation.getBlock();
-        BlockState containerState = container.getState();
-
-        if (containerState instanceof DoubleChest) {
-            return this.container = new Container(
-                    ((DoubleChest) containerState).getInventory(),
-                    ContainerType.DOUBLE_CHEST
-            );
-        }
-
-        if (containerState instanceof Chest) {
-            return this.container = new Container(
-                    ((Chest) containerState).getInventory(),
-                    ContainerType.CHEST
-            );
-        }
-
-        if (!VersionUtils.supportsShulkers()) {
-            return null;
-        }
-
-        if (containerState instanceof ShulkerBox) {
-            return this.container = new Container(
-                    ((ShulkerBox) containerState).getInventory(),
-                    ContainerType.SHULKER
-            );
-        }
-
-        return null;
+        return this.container = AutofarmUtils.getContainer(
+                containerLocation.getBlock()
+        );
     }
 
 

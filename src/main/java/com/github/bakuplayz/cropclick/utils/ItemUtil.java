@@ -23,7 +23,6 @@ import java.util.List;
 public final class ItemUtil {
 
     private @Getter int amount;
-    private @Getter short damage;
 
     private @Getter ItemMeta meta;
     private @Getter Material material;
@@ -42,11 +41,6 @@ public final class ItemUtil {
     }
 
 
-    public ItemUtil(@NotNull Material material, short damage) {
-        this(material, "", 1, damage);
-    }
-
-
     public ItemUtil(@NotNull Material material, @NotNull String name) {
         this(material, name, 1, null);
     }
@@ -54,12 +48,6 @@ public final class ItemUtil {
 
     public ItemUtil(@NotNull Material material, @NotNull String name, int amount) {
         this(material, name, amount, null);
-    }
-
-
-    public ItemUtil(@NotNull Material material, @NotNull String name, int amount, short damage) {
-        this(material, name, amount, null);
-        this.damage = damage;
     }
 
 
@@ -71,19 +59,12 @@ public final class ItemUtil {
     }
 
 
-    @Deprecated
-    public ItemUtil(int id) {
-        this(Material.getMaterial(id), "", 1, null);
-    }
-
-
     public ItemUtil(@NotNull ItemStack stack) {
         if (stack.hasItemMeta()) {
             this.meta = stack.getItemMeta();
         }
         this.amount = stack.getAmount();
         this.material = stack.getType();
-        this.damage = stack.getDurability();
         this.lore = meta != null && meta.hasLore()
                     ? meta.getLore()
                     : Collections.emptyList();
@@ -124,34 +105,6 @@ public final class ItemUtil {
      */
     public ItemUtil setAmount(int amount) {
         this.amount = amount <= -1 ? this.amount : amount;
-        return this;
-    }
-
-
-    /**
-     * If the damage is less than or equal to -1, then set the damage to the current damage, otherwise set the damage to
-     * the damage
-     *
-     * @param damage The damage value of the item.
-     *
-     * @return The ItemUtil object
-     */
-    public ItemUtil setDamage(int damage) {
-        this.damage = damage <= -1 ? this.damage : (short) damage;
-        return this;
-    }
-
-
-    /**
-     * Sets the material of the item, if the id is greater than -1.
-     *
-     * @param id The ID of the item.
-     *
-     * @return The ItemUtil object.
-     */
-    @Deprecated
-    public ItemUtil setMaterial(int id) {
-        this.material = id <= -1 ? this.material : Material.getMaterial(id);
         return this;
     }
 
@@ -227,8 +180,10 @@ public final class ItemUtil {
      * @return An ItemStack.
      */
     public @NotNull ItemStack toItemStack() {
-        ItemStack stack = new ItemStack(material, amount, damage);
+        ItemStack stack = new ItemStack(material, amount);
         ItemMeta meta = this.meta != null ? this.meta : stack.getItemMeta();
+
+        assert meta != null; // Only here for the compiler.
 
         if (lore != null) meta.setLore(lore);
         if (name != null) meta.setDisplayName(name);

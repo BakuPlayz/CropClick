@@ -1,8 +1,8 @@
 package com.github.bakuplayz.cropclick.location;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 
@@ -20,7 +20,7 @@ public final class LocationTypeAdapterTest {
     private LocationTypeAdapter typeAdapter;
 
 
-    @Before
+    @BeforeAll
     public void initialize() {
         MockBukkit.mock();
     }
@@ -32,9 +32,9 @@ public final class LocationTypeAdapterTest {
     }
 
 
-    @After
+    @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
     //TODO: Fix World Mock...

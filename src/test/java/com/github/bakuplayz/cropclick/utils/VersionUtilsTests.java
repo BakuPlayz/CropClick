@@ -1,9 +1,9 @@
 package com.github.bakuplayz.cropclick.utils;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public final class VersionUtilsTests {
 
-    @Before
+    @BeforeAll
     public void setUp() {
         MockBukkit.mock();
     }
 
 
-    @After
+    @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
 

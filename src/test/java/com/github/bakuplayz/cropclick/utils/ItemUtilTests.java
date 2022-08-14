@@ -43,7 +43,7 @@ public final class ItemUtilTests {
 
     @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
 

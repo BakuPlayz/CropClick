@@ -52,7 +52,7 @@ public final class Wheat extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.CROPS;
+        return Material.WHEAT_SEEDS;
     }
 
 

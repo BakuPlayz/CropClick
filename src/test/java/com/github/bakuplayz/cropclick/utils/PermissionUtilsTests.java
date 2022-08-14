@@ -44,7 +44,7 @@ public final class PermissionUtilsTests {
 
     @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
 

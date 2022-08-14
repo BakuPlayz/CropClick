@@ -179,7 +179,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemUtil(Material.WATCH)
+        return new ItemUtil(Material.CLOCK)
                 .setName(plugin, LanguageAPI.Menu.SOUND_DELAY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_DELAY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_DELAY_ITEM_VALUE.get(plugin, delay)
@@ -221,7 +221,7 @@ public final class SoundMenu extends Menu {
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
-        return new ItemUtil(Material.IRON_PLATE)
+        return new ItemUtil(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.SOUND_INCREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -231,7 +231,7 @@ public final class SoundMenu extends Menu {
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
-        return new ItemUtil(Material.GOLD_PLATE)
+        return new ItemUtil(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.SOUND_DECREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -245,7 +245,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemUtil(Material.GREEN_STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();

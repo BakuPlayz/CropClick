@@ -102,6 +102,10 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -127,7 +131,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
+            <version>1.19.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -281,6 +285,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>xyz.xenondevs</groupId>
             <artifactId>particle</artifactId>
             <version>1.8.1</version>
@@ -301,19 +312,10 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Not updated to keep in sync with spigot. -->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Not updated to keep in sync with spigot. -->
-
-        <dependency>
-            <groupId>com.github</groupId>
-            <artifactId>MockBukkit</artifactId>
-            <version>0.0.1</version>
+            <groupId>com.github.seeseemelk</groupId>
+            <artifactId>MockBukkit-v1.19</artifactId>
+            <version>2.106.0</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

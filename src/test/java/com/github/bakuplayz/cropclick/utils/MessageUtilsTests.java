@@ -36,7 +36,7 @@ public final class MessageUtilsTests {
 
     @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
 

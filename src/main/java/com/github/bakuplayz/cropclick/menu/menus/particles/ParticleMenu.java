@@ -179,7 +179,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.WATCH)
+        return new ItemUtil(Material.CLOCK)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DELAY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_DELAY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_DELAY_ITEM_VALUE.get(plugin, delay)
@@ -194,7 +194,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 4)
+        return new ItemUtil(Material.GREEN_STAINED_GLASS_PANE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_SPEED_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_SPEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_SPEED_ITEM_VALUE.get(plugin, speed)

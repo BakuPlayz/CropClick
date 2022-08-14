@@ -35,7 +35,7 @@ public final class AutofarmUtilsTests {
 
     @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
 

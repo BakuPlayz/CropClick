@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -21,7 +21,7 @@ public final class ParamTests {
     private Param param;
 
 
-    @Before
+    @BeforeAll
     public void setUp() {
         param = new Param("test", "value");
     }

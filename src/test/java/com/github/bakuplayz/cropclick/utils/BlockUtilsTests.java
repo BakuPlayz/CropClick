@@ -36,7 +36,7 @@ public final class BlockUtilsTests {
 
     @AfterAll
     public void tearDown() {
-        MockBukkit.unload();
+        MockBukkit.unmock();
     }
 
 
@@ -65,7 +65,7 @@ public final class BlockUtilsTests {
                     assertTrue(BlockUtils.isPlantableSurface(block));
                 },
                 () -> {
-                    block.setType(Material.SOIL);
+                    block.setType(Material.FARMLAND);
                     assertTrue(BlockUtils.isPlantableSurface(block));
                 }
         );

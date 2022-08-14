@@ -5,7 +5,6 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.google.gson.GsonBuilder;
@@ -37,7 +36,6 @@ public final class AutofarmDataStorage extends DataStorage {
         super(plugin, "autofarms.json");
         this.farms = new HashMap<>();
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(Location.class, new LocationTypeAdapter())
                 .setPrettyPrinting()
                 .create();
     }
