@@ -13,7 +13,10 @@
 
     <properties>
         <java.version>1.8</java.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <PLUGIN_JAR_NAME>CropClick-Latest</PLUGIN_JAR_NAME>
     </properties>
 
     <distributionManagement>
@@ -59,7 +62,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <outputFile>${SERVER_PATH}\CropClick-Legacy.jar</outputFile>
+                            <outputFile>${SERVER_PATH}\${PLUGIN_JAR_NAME}.jar</outputFile>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
