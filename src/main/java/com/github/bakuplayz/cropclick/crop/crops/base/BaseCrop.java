@@ -63,7 +63,6 @@ public abstract class BaseCrop implements Crop {
     @Override
     public void harvest(@NotNull Player player) {
         harvest(player.getInventory());
-        player.updateInventory();
     }
 
 

@@ -36,12 +36,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
-
-import java.io.File;
 
 
 /**
@@ -71,7 +67,6 @@ public class CropClick extends JavaPlugin {
 
     private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
-    private boolean isUnitTest;
     private boolean isReset;
 
 
@@ -83,30 +78,9 @@ public class CropClick extends JavaPlugin {
     }
 
 
-    /**
-     * A constructor for unit testing.
-     */
-    protected CropClick(JavaPluginLoader loader,
-                        PluginDescriptionFile description,
-                        File dataFolder,
-                        File file) {
-        super(loader, description, dataFolder, file);
-        this.isUnitTest = true;
-    }
-
-
     @Override
     public void onEnable() {
-        if (isUnitTest) {
-            registerConfigs();
-            setupConfigs();
-
-            registerStorages();
-            setupStorages();
-            return;
-        }
-
-        if (!VersionUtils.between(8.0, 13.9)) {
+        if (!VersionUtils.between(13.0, 13.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }
@@ -163,11 +137,8 @@ public class CropClick extends JavaPlugin {
         //getConfig().options().copyDefaults(true);
         saveConfig();
 
-        if (!isUnitTest) {
-            cropsConfig.setup();
-            cropsConfig.setupSections();
-        }
-
+        cropsConfig.setup();
+        cropsConfig.setupSections();
         addonsConfig.setup();
         playersConfig.setup();
         languageConfig.setup();
@@ -180,10 +151,7 @@ public class CropClick extends JavaPlugin {
 
 
     private void registerConfigs() {
-        if (!isUnitTest) {
-            this.cropsConfig = new CropsConfig(this);
-        }
-
+        this.cropsConfig = new CropsConfig(this);
         this.addonsConfig = new AddonsConfig(this);
         this.playersConfig = new PlayersConfig(this);
         this.languageConfig = new LanguageConfig(this);

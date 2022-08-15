@@ -19,7 +19,6 @@ import java.util.Random;
 public final class Drop {
 
     private @Getter final int amount;
-    private @Getter final short damage;
     private @Getter final String name;
     private @Getter final Material type;
 
@@ -35,21 +34,6 @@ public final class Drop {
         this.name = name;
         this.amount = amount;
         this.chance = chance;
-        this.damage = -1;
-        this.randomChance = new Random().nextDouble();
-    }
-
-
-    public Drop(@NotNull Material type,
-                @NotNull String name,
-                int amount,
-                double chance,
-                short damage) {
-        this.type = type;
-        this.name = name;
-        this.amount = amount;
-        this.chance = chance;
-        this.damage = damage;
         this.randomChance = new Random().nextDouble();
     }
 
@@ -74,7 +58,6 @@ public final class Drop {
         return new ItemUtil(type)
                 .setName(nameChanged ? name : null)
                 .setAmount(randomAmount)
-                .setDamage(damage)
                 .toItemStack();
     }
 

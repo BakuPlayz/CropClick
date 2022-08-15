@@ -41,7 +41,7 @@ public final class NetherWart extends GroundCrop {
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.NETHER_STALK,
+        return new Drop(Material.NETHER_WART,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 3),
                 cropSection.getDropChance(getName(), 80)
@@ -58,13 +58,13 @@ public final class NetherWart extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.NETHER_WARTS;
+        return Material.NETHER_WART;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.NETHER_STALK;
+        return Material.NETHER_WART;
     }
 
 }

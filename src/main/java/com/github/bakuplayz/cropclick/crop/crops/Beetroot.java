@@ -59,7 +59,7 @@ public final class Beetroot extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.BEETROOT_BLOCK;
+        return Material.BEETROOTS;
     }
 
 

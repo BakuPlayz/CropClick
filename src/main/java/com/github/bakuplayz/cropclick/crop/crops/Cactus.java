@@ -52,4 +52,10 @@ public final class Cactus extends TallCrop {
         return Material.CACTUS;
     }
 
+
+    @Override
+    public boolean isLinkable() {
+        return cropSection.isLinkable(getName(), false);
+    }
+
 }

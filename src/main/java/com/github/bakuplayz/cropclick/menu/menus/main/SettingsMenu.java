@@ -10,7 +10,6 @@ import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.particle.ParticleEffect;
 
 
 /**
@@ -32,12 +30,10 @@ import xyz.xenondevs.particle.ParticleEffect;
 public final class SettingsMenu extends Menu {
 
     private final boolean isRedirected;
-    private final boolean supportsParticles;
 
 
     public SettingsMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
         super(plugin, player, LanguageAPI.Menu.SETTINGS_TITLE);
-        this.supportsParticles = VersionUtils.between(8.0, 12.9);
         this.isRedirected = isRedirected;
     }
 
@@ -45,16 +41,11 @@ public final class SettingsMenu extends Menu {
     @Override
     public void setMenuItems() {
         inventory.setItem(10, getToggleItem());
+        inventory.setItem(13, getSoundsItem());
+        inventory.setItem(16, getNameItem());
 
-        if (supportsParticles) {
-            inventory.setItem(13, getParticlesItem());
-        }
-
-        inventory.setItem(supportsParticles ? 16 : 13, getSoundsItem());
-
-        inventory.setItem(supportsParticles ? 28 : 16, getNameItem());
-        inventory.setItem(supportsParticles ? 31 : 28, getAutofarmsItem());
-        inventory.setItem(supportsParticles ? 34 : 31, getWorldsItem());
+        inventory.setItem(28, getAutofarmsItem());
+        inventory.setItem(31, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -70,10 +61,6 @@ public final class SettingsMenu extends Menu {
             toggleAutofarms();
             updateMenu();
             return;
-        }
-
-        if (clicked.equals(getParticlesItem())) {
-            new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
         }
 
         if (clicked.equals(getSoundsItem())) {
@@ -108,15 +95,6 @@ public final class SettingsMenu extends Menu {
     }
 
 
-    private @NotNull ItemStack getParticlesItem() {
-        return new ItemUtil(Material.FIREWORK)
-                .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles())))
-                .toItemStack();
-    }
-
-
     private @NotNull ItemStack getSoundsItem() {
         return new ItemUtil(Material.NOTE_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_NAME)
@@ -126,8 +104,9 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    //TODO: Get as skull item with the players head
     private @NotNull ItemStack getToggleItem() {
-        return new ItemUtil(Material.SKULL_ITEM)
+        return new ItemUtil(Material.PLAYER_HEAD)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
@@ -145,7 +124,7 @@ public final class SettingsMenu extends Menu {
 
 
     private @NotNull ItemStack getWorldsItem() {
-        return new ItemUtil(Material.GRASS)
+        return new ItemUtil(Material.GRASS_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished())))
@@ -170,20 +149,6 @@ public final class SettingsMenu extends Menu {
         boolean state = getAutofarmsState();
         plugin.getConfig().set("autofarms.isEnabled", !state);
         plugin.saveConfig();
-    }
-
-
-    /**
-     * It returns the amount of particles in the ParticleEffect enum.
-     *
-     * @return The amount of particles in the ParticleEffect enum.
-     */
-    private int getAmountOfParticles() {
-        if (VersionUtils.between(8.0, 12.9)) {
-            return ParticleEffect.getAvailableEffects().size();
-        }
-
-        return 0;
     }
 
 

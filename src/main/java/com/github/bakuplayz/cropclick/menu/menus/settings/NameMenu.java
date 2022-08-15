@@ -3,7 +3,6 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
@@ -102,9 +101,7 @@ public final class NameMenu extends Menu {
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
-                .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isHarvestable() ? -1 : 15)
-                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
+                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -122,8 +119,8 @@ public final class NameMenu extends Menu {
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_SEED_DROP_NAME.get(plugin, getDropName(false)))
-                .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(seed.isEnabled() ? -1 : 15).toItemStack();
+                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
+                .toItemStack();
     }
 
 

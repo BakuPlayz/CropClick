@@ -316,7 +316,7 @@ public abstract class LinkMenu extends Menu {
                 autofarm.isEnabled()
         );
 
-        return new ItemUtil(Material.IRON_PLATE)
+        return new ItemUtil(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
                 .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, status))
                 .toItemStack();
@@ -333,10 +333,11 @@ public abstract class LinkMenu extends Menu {
                 .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
                 .setMaterial(
-                        isCropSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
                 )
-                .setDamage(isUnlinked ? 15 : -1)
-                .setDamage(isCropSelected ? 3 : -1)
+                .setMaterial(
+                        isCropSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .toItemStack();
     }
 
@@ -354,10 +355,11 @@ public abstract class LinkMenu extends Menu {
                         containerLocation != null ? containerLocation.getBlock().getType() : null
                 )
                 .setMaterial(
-                        isContainerSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
                 )
-                .setDamage(isUnlinked ? 15 : -1)
-                .setDamage(isContainerSelected ? 3 : -1)
+                .setMaterial(
+                        isContainerSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .toItemStack();
     }
 
@@ -372,10 +374,11 @@ public abstract class LinkMenu extends Menu {
                 .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
                 .setMaterial(
-                        isDispenserSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
                 )
-                .setDamage(isUnlinked ? 15 : -1)
-                .setDamage(isDispenserSelected ? 3 : -1)
+                .setMaterial(
+                        isDispenserSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .toItemStack();
     }
 
@@ -386,10 +389,14 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getGlassItem() {
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
-                .setDamage(isUnlinked ? 15 : 4)
-                .setDamage(isClickedSelected ? 3 : -1)
+        return new ItemUtil(Material.GRAY_STAINED_GLASS_PANE)
                 .setName(plugin, LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_LINKED)
+                .setMaterial(
+                        !isUnlinked ? Material.YELLOW_STAINED_GLASS_PANE : null
+                )
+                .setMaterial(
+                        isClickedSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .setName(isUnlinked
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNLINKED.get(plugin)
                          : null

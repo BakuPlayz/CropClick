@@ -1,6 +1,7 @@
 name: CropClick
 author: BakuPlayz
 version: ${project.version}
+api-version: 1.13
 main: com.github.bakuplayz.cropclick.CropClick
 
 softdepend:

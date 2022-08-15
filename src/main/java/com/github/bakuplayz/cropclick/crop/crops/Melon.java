@@ -42,7 +42,7 @@ public final class Melon extends GroundCrop {
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.MELON,
+        return new Drop(Material.MELON_SLICE,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 7),
                 cropSection.getDropChance(getName(), 80)
@@ -65,13 +65,13 @@ public final class Melon extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.MELON_BLOCK;
+        return Material.MELON;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.MELON;
+        return Material.MELON_SLICE;
     }
 
 

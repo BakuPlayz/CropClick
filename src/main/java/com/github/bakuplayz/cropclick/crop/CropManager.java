@@ -10,7 +10,6 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -64,9 +63,7 @@ public final class CropManager {
      * It adds all the vanilla crops to the list of crops.
      */
     private void registerVanillaCrops() {
-        if (VersionUtils.supportsBeetroots()) {
-            registerCrop(new Beetroot(cropsConfig));
-        }
+        registerCrop(new Beetroot(cropsConfig));
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
         registerCrop(new CocoaBean(cropsConfig));

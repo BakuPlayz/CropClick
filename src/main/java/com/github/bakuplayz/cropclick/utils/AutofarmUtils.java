@@ -79,10 +79,6 @@ public final class AutofarmUtils {
             return new Container(((Chest) blockState).getInventory(), ContainerType.CHEST);
         }
 
-        if (!VersionUtils.supportsShulkers()) {
-            return null;
-        }
-
         if (blockState instanceof ShulkerBox) {
             return new Container(((ShulkerBox) blockState).getInventory(), ContainerType.SHULKER);
         }

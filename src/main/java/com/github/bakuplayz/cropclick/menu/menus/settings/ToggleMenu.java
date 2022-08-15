@@ -96,24 +96,23 @@ public final class ToggleMenu extends PaginatedMenu {
 
 
     /**
-     * "It returns an ItemStack with the name of the player."
-     * <p>
-     * The first thing we do is get the player's name. We use the `MessageUtils` class to beautify the name. This means that
-     * we capitalize the first letter of the name and lowercase the rest.
-     * </p>
+     * It returns an ItemStack with the name of the player.
      *
      * @param playerID The UUID of the player to get the menu item for.
      *
      * @return An ItemStack.
      */
+    //TODO: Get as skull item with the players head
     private @NotNull ItemStack getMenuItem(@NotNull String playerID) {
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerID));
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(
+                UUID.fromString(playerID)
+        );
         String status = MessageUtils.getEnabledStatus(
                 plugin,
                 playersConfig.isEnabled(playerID)
         );
 
-        return new ItemUtil(Material.SKULL_ITEM)
+        return new ItemUtil(Material.PLAYER_HEAD)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
                 .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, status))
                 .toItemStack();

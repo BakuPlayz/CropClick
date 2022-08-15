@@ -165,9 +165,9 @@ public final class WorldsMenu extends PaginatedMenu {
      */
     private @NotNull ItemStack getMenuItem(@NotNull FarmWorld world) {
         String name = MessageUtils.beautify(world.getName(), true);
-        ItemUtil menuItem = new ItemUtil(Material.GRASS)
+        ItemUtil menuItem = new ItemUtil(Material.GRASS_BLOCK)
                 .setName(LanguageAPI.Menu.WORLDS_ITEM_NAME.get(plugin, name))
-                .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
+                .setMaterial(name.contains("End") ? Material.END_STONE : null)
                 .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null);
 
         boolean status = world.isBanished();

@@ -43,7 +43,7 @@ public final class SugarCane extends TallCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.SUGAR_CANE_BLOCK;
+        return Material.SUGAR_CANE;
     }
 
 

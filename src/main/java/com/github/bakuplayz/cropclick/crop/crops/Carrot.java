@@ -35,7 +35,7 @@ public final class Carrot extends GroundCrop {
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.CARROT_ITEM,
+        return new Drop(Material.CARROT,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 4),
                 cropSection.getDropChance(getName(), 80)
@@ -58,13 +58,13 @@ public final class Carrot extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.CARROT;
+        return Material.CARROTS;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.CARROT_ITEM;
+        return Material.CARROT;
     }
 
 

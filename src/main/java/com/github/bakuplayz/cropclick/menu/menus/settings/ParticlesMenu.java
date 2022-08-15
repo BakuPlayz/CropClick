@@ -126,7 +126,7 @@ public final class ParticlesMenu extends PaginatedMenu {
         String status = MessageUtils.getEnabledStatus(plugin, isEnabled);
         String name = MessageUtils.beautify(particle, true);
 
-        ItemUtil item = new ItemUtil(Material.FIREWORK)
+        ItemUtil item = new ItemUtil(Material.FIREWORK_ROCKET)
                 .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(
                         plugin,
                         name,
@@ -134,8 +134,7 @@ public final class ParticlesMenu extends PaginatedMenu {
                 ));
 
         if (isEnabled) {
-            item.setDamage(5)
-                .setMaterial(Material.STAINED_GLASS_PANE)
+            item.setMaterial(Material.LIME_STAINED_GLASS_PANE)
                 .setLore(LanguageAPI.Menu.PARTICLES_ITEM_ORDER.get(
                         plugin,
                         getOrderOfParticle(particle)

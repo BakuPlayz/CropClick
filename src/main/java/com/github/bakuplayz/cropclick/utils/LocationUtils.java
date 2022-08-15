@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,10 @@ public final class LocationUtils {
     public static @Nullable DoublyLocation getAsDoubly(@NotNull Location location) {
         if (isDoubly(location)) {
             return (DoublyLocation) location;
+        }
+
+        if (location.getBlock().getType() != Material.CHEST) {
+            return null;
         }
 
         Location locOne = new Location(

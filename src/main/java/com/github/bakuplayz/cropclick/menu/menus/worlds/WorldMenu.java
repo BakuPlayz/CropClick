@@ -71,8 +71,9 @@ public final class WorldMenu extends Menu {
      *
      * @return An ItemStack.
      */
+    //TODO: Get as skull item with the player's head.
     private @NotNull ItemStack getPlayersItem() {
-        return new ItemUtil(Material.SKULL_ITEM)
+        return new ItemUtil(Material.PLAYER_HEAD)
                 .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin,
                         world.allowsPlayers()
@@ -102,9 +103,10 @@ public final class WorldMenu extends Menu {
      */
     private @NotNull ItemStack getWorldItem() {
         String name = MessageUtils.beautify(world.getName(), true);
-        return new ItemUtil(Material.GRASS)
+        
+        return new ItemUtil(Material.GRASS_BLOCK)
                 .setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
-                .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
+                .setMaterial(name.contains("End") ? Material.END_STONE : null)
                 .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
                 .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished()))
                 .toItemStack();

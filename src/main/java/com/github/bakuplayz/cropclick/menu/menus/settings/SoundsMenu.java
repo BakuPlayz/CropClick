@@ -122,8 +122,7 @@ public final class SoundsMenu extends PaginatedMenu {
                 ));
 
         if (isEnabled) {
-            item.setDamage(5)
-                .setMaterial(Material.STAINED_GLASS_PANE)
+            item.setMaterial(Material.LIME_STAINED_GLASS_PANE)
                 .setLore(LanguageAPI.Menu.SOUNDS_ITEM_ORDER.get(
                         plugin,
                         getOrderOfSound(sound)

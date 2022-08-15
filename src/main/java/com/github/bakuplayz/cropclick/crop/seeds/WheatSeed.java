@@ -33,7 +33,7 @@ public final class WheatSeed extends BaseSeed {
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.SEEDS,
+        return new Drop(Material.WHEAT_SEEDS,
                 seedSection.getDropName(getName()),
                 seedSection.getDropAmount(getName(), 3),
                 seedSection.getDropChance(getName(), 80)
@@ -43,7 +43,7 @@ public final class WheatSeed extends BaseSeed {
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.SEEDS;
+        return Material.WHEAT_SEEDS;
     }
 
 }

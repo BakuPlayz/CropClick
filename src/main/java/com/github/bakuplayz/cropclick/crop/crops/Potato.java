@@ -35,7 +35,7 @@ public final class Potato extends GroundCrop {
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.POTATO_ITEM,
+        return new Drop(Material.POTATO,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 4),
                 cropSection.getDropChance(getName(), 80)
@@ -52,13 +52,13 @@ public final class Potato extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.POTATO;
+        return Material.POTATOES;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.POTATO_ITEM;
+        return Material.POTATO;
     }
 
 

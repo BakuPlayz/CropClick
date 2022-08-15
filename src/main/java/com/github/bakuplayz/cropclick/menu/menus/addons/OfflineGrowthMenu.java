@@ -58,13 +58,12 @@ public final class OfflineGrowthMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemUtil(Material.LONG_GRASS)
+        return new ItemUtil(Material.TALL_GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDON_GROWTH_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_GROWTH_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDON_GROWTH_ITEM_STATUS.get(plugin, isAddonEnabled)
                 ))
-                .setMaterial(isAddonEnabled ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(isAddonEnabled ? 1 : 7)
+                .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

@@ -3,13 +3,13 @@ package com.github.bakuplayz.cropclick.menu.menus.crop;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.MathUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -126,14 +126,14 @@ public final class DropChanceMenu extends Menu {
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.DROP_CHANCE_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.DROP_CHANCE_STATUS_DISABLED.get(plugin);
-        int chance = (int) (crop.getDrop().getChance() * DECIMAL_TO_PERCENT);
+        double chance = MathUtil.round(
+                crop.getDrop().getChance() * DECIMAL_TO_PERCENT
+        );
 
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance))
-                .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isHarvestable() ? -1 : 15)
-                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
+                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -141,61 +141,66 @@ public final class DropChanceMenu extends Menu {
     private @NotNull ItemStack getSeedItem() {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
-        int chance = (int) (seed.getDrop().getChance() * DECIMAL_TO_PERCENT);
+        double chance = MathUtil.round(
+                seed.getDrop().getChance() * DECIMAL_TO_PERCENT
+        );
 
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance))
-                .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(seed.isEnabled() ? -1 : 15)
+                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getCropAddItem(int amount) {
-        int beforeValue = (int) (cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT);
-        int afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
+        double beforeValue = MathUtil.round(
+                cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
+        );
+        double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(5)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getCropRemoveItem(int amount) {
-        int beforeValue = (int) (cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT);
-        int afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
+        double beforeValue = MathUtil.round(
+                cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
+        );
+        double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(14)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getSeedAddItem(int amount) {
-        int beforeValue = (int) (seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
-        int afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
+        double beforeValue = MathUtil.round(
+                seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
+        );
+        double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(5)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
-        int beforeValue = (int) (seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
-        int afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
+        double beforeValue = MathUtil.round(
+                seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
+        );
+        double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(14)
                 .toItemStack();
     }
 

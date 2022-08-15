@@ -33,11 +33,10 @@ public final class CocoaBean extends WallCrop {
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.INK_SACK,
+        return new Drop(Material.COCOA_BEANS,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 3),
-                cropSection.getDropChance(getName(), 80),
-                (short) 3
+                cropSection.getDropChance(getName(), 80)
         );
     }
 
@@ -50,7 +49,7 @@ public final class CocoaBean extends WallCrop {
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.INK_SACK;
+        return Material.COCOA_BEANS;
     }
 
 
