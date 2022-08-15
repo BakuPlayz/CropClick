@@ -2,11 +2,9 @@ package com.github.bakuplayz.cropclick.crop.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,40 +15,33 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @since 2.0.0
  */
-public final class Melon extends GroundCrop {
+public final class SweetBerries extends GroundCrop {
 
-    public Melon(@NotNull CropsConfig config) {
-        super(config);
+    public SweetBerries(@NotNull CropsConfig cropsConfig) {
+        super(cropsConfig);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "melon";
+        return "sweetBerries";
     }
 
 
     @Override
     public int getHarvestAge() {
-        return 1;
+        return 3;
     }
 
 
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return 1;
-    }
-
-
-    @Override
     @Contract(" -> new")
+    @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.MELON_SLICE,
+        return new Drop(Material.SWEET_BERRIES,
                 cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 7),
+                cropSection.getDropAmount(getName(), 3),
                 cropSection.getDropChance(getName(), 80)
         );
     }
@@ -64,26 +55,14 @@ public final class Melon extends GroundCrop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
-        block.setType(Material.AIR);
-    }
-
-
-    @Override
     public @NotNull Material getClickableType() {
-        return Material.MELON;
+        return Material.SWEET_BERRY_BUSH;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.MELON_SLICE;
-    }
-
-
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
+        return Material.SWEET_BERRIES;
     }
 
 }

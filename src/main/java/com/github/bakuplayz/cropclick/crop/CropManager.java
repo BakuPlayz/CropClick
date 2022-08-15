@@ -63,15 +63,18 @@ public final class CropManager {
      * It adds all the vanilla crops to the list of crops.
      */
     private void registerVanillaCrops() {
+        registerCrop(new Bamboo(cropsConfig));
         registerCrop(new Beetroot(cropsConfig));
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
         registerCrop(new CocoaBean(cropsConfig));
+        registerCrop(new Kelp(cropsConfig));
         registerCrop(new Melon(cropsConfig));
         registerCrop(new NetherWart(cropsConfig));
         registerCrop(new Potato(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
+        registerCrop(new SweetBerries(cropsConfig));
         registerCrop(new Wheat(cropsConfig));
     }
 

@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -28,11 +29,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerUpdateAutofarmListener implements Listener {
 
+    private final CropClick plugin;
+
     private final AutofarmManager autofarmManager;
 
 
     public PlayerUpdateAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
+        this.plugin = plugin;
     }
 
 
@@ -46,42 +50,20 @@ public final class PlayerUpdateAutofarmListener implements Listener {
     public void onPlayerPlaceDoubleChest(@NotNull BlockPlaceEvent event) {
         if (event.isCancelled()) return;
 
-        Block block = event.getBlock();
-        if (!BlockUtils.isDoubleChest(block)) {
-            return;
-        }
-
         if (!autofarmManager.isEnabled()) {
             return;
         }
 
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
-        if (autofarm == null) {
-            return;
-        }
-
-        DoublyLocation doubleChest = BlockUtils.getAsDoubleChest(block);
-
-        if (doubleChest == null) {
-            return;
-        }
-
-        Autofarm newAutofarm = new Autofarm(
-                autofarm.getFarmerID(),
-                autofarm.getOwnerID(),
-                autofarm.isEnabled(),
-                autofarm.getCropLocation(),
-                doubleChest,
-                autofarm.getDispenserLocation()
-        );
-
-        Event updateEvent = new PlayerUpdateAutofarmEvent(
+        Runnable chestRunnable = placeDoubleChestRunnable(
                 event.getPlayer(),
-                autofarm,
-                newAutofarm
+                event.getBlock()
         );
-
-        Bukkit.getPluginManager().callEvent(updateEvent);
+        
+        Bukkit.getScheduler().runTaskLater(
+                plugin,
+                chestRunnable,
+                1
+        );
     }
 
 
@@ -115,6 +97,52 @@ public final class PlayerUpdateAutofarmListener implements Listener {
         System.out.println("Player -- Update");
 
         Bukkit.getPluginManager().callEvent(updateEvent);
+    }
+
+
+    /**
+     * It returns a runnable that calls an event when a player places a double chest.
+     *
+     * @param player The player who placed the block.
+     * @param block  The block that the player is placing.
+     *
+     * @return A Runnable.
+     */
+    @Contract(pure = true)
+    private @NotNull Runnable placeDoubleChestRunnable(@NotNull Player player, @NotNull Block block) {
+        return () -> {
+            if (!BlockUtils.isDoubleChest(block)) {
+                return;
+            }
+
+            Autofarm autofarm = autofarmManager.findAutofarm(block);
+            if (autofarm == null) {
+                return;
+            }
+
+            DoublyLocation doubleChest = BlockUtils.getAsDoubleChest(block);
+
+            if (doubleChest == null) {
+                return;
+            }
+
+            Autofarm newAutofarm = new Autofarm(
+                    autofarm.getFarmerID(),
+                    autofarm.getOwnerID(),
+                    autofarm.isEnabled(),
+                    autofarm.getCropLocation(),
+                    doubleChest,
+                    autofarm.getDispenserLocation()
+            );
+
+            Event updateEvent = new PlayerUpdateAutofarmEvent(
+                    player,
+                    autofarm,
+                    newAutofarm
+            );
+
+            Bukkit.getPluginManager().callEvent(updateEvent);
+        };
     }
 
 }

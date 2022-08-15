@@ -12,6 +12,7 @@ import com.github.bakuplayz.cropclick.sounds.SoundRunnable;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -39,6 +40,12 @@ public abstract class BaseCrop implements Crop {
         this.soundSection = cropsConfig.getSoundSection();
         this.cropSection = cropsConfig.getCropSection();
         this.cropsConfig = cropsConfig;
+    }
+
+
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return ((Ageable) block.getBlockData()).getAge();
     }
 
 
@@ -124,7 +131,9 @@ public abstract class BaseCrop implements Crop {
     @Override
     public void replant(@NotNull Block block) {
         if (shouldReplant()) {
-            block.setType(getClickableType());
+            Ageable crop = (Ageable) block.getBlockData();
+            crop.setAge(0);
+            block.setBlockData(crop);
         } else {
             block.setType(Material.AIR);
         }

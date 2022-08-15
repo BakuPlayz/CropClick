@@ -40,12 +40,8 @@ public class IndexedMap<E> {
         E oldItem = map.get(firstKey);
         E newItem = map.get(secondKey);
 
-        //System.out.println("Before Swap::" + map);
-
         map.put(indexOfSecond, firstKey, oldItem);
         map.put(indexOfFirst, secondKey, newItem);
-
-        //System.out.println("After Swap::" + map);
     }
 
 

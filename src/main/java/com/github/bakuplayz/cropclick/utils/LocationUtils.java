@@ -2,7 +2,6 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -31,10 +30,36 @@ public final class LocationUtils {
             return (DoublyLocation) location;
         }
 
-        if (location.getBlock().getType() != Material.CHEST) {
+        if (!BlockUtils.isDoubleChest(location.getBlock())) {
             return null;
         }
 
+        return getDoubly(location);
+    }
+
+
+    /**
+     * Finds the DoublyLocation that is at the given Block's location.
+     *
+     * @param block The block to find the location of.
+     *
+     * @return A DoublyLocation object.
+     */
+    public static DoublyLocation getAsDoubly(@NotNull Block block) {
+        return LocationUtils.getAsDoubly(block.getLocation());
+    }
+
+
+    /**
+     * If the block at the given location is a container, return a DoublyLocation object containing the given location and
+     * the location of the container next to it.
+     *
+     * @param location The location of the block that was broken.
+     *
+     * @return A DoublyLocation object.
+     */
+    @Contract("_ -> new")
+    private static @Nullable DoublyLocation getDoubly(@NotNull Location location) {
         Location locOne = new Location(
                 location.getWorld(),
                 location.getX() + 1,
@@ -75,20 +100,7 @@ public final class LocationUtils {
         if (AutofarmUtils.isContainer(locFour.getBlock(), true)) {
             return new DoublyLocation(location, locFour);
         }
-
         return null;
-    }
-
-
-    /**
-     * Finds the DoublyLocation that is at the given Block's location.
-     *
-     * @param block The block to find the location of.
-     *
-     * @return A DoublyLocation object.
-     */
-    public static DoublyLocation getAsDoubly(@NotNull Block block) {
-        return LocationUtils.getAsDoubly(block.getLocation());
     }
 
 
@@ -113,7 +125,7 @@ public final class LocationUtils {
      */
     @SuppressWarnings("unused")
     public static boolean isDoubly(@NotNull Block block) {
-        return block.getLocation() instanceof DoublyLocation;
+        return isDoubly(block.getLocation());
     }
 
 }

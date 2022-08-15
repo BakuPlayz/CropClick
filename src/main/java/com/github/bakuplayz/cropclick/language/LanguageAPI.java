@@ -41,6 +41,7 @@ public final class LanguageAPI {
         DATA_STORAGE_FAILED_LOAD("Could not load &e%s&7."),
 
         DATA_STORAGE_FAILED_SETUP("Could not setup &e%s&7."),
+        AUTOFARM_STORAGE_FAILED_REMOVE("Unlinked autofarms were unsuccessfully removed."),
 
         FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),
 

@@ -245,7 +245,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
-        return new ItemUtil(Material.GREEN_STAINED_GLASS_PANE, (short) 5)
+        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();

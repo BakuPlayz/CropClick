@@ -316,7 +316,7 @@ public abstract class LinkMenu extends Menu {
                 autofarm.isEnabled()
         );
 
-        return new ItemUtil(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
+        return new ItemUtil(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
                 .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, status))
                 .toItemStack();

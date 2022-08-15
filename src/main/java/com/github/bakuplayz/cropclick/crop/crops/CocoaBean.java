@@ -32,6 +32,12 @@ public final class CocoaBean extends WallCrop {
 
 
     @Override
+    public int getHarvestAge() {
+        return 2;
+    }
+
+
+    @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.COCOA_BEANS,
                 cropSection.getDropName(getName()),

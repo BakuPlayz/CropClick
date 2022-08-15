@@ -35,7 +35,13 @@ public final class Pumpkin extends GroundCrop {
 
     @Override
     public int getHarvestAge() {
-        return 0;
+        return 1;
+    }
+
+
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return 1;
     }
 
 

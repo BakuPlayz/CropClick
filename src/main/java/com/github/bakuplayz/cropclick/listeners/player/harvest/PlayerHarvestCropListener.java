@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.SweetBerries;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
@@ -58,8 +59,6 @@ public final class PlayerHarvestCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractWithCrop(@NotNull PlayerInteractEvent event) {
-        if (event.isCancelled()) return;
-
         Block block = event.getClickedBlock();
         if (BlockUtils.isAir(block)) {
             return;
@@ -86,10 +85,19 @@ public final class PlayerHarvestCropListener implements Listener {
 
         if (!addonManager.canModify(player)) {
             return;
+
         }
 
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
+            return;
+        }
+
+        if (crop instanceof SweetBerries) {
+            event.setCancelled(true);
+        }
+
+        if (harvestedCrops.containsKey(crop)) {
             return;
         }
 
@@ -102,10 +110,6 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         if (!crop.isHarvestAge(block)) {
-            return;
-        }
-
-        if (harvestedCrops.containsKey(crop)) {
             return;
         }
 

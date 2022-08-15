@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
@@ -12,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -135,7 +137,11 @@ public final class AutofarmDataStorage extends DataStorage {
             return;
         }
 
-        farms.values().removeIf(farm -> !farm.isComponentsPresent(autofarmManager));
+        try {
+            farms.values().removeIf(farm -> !farm.isComponentsPresent(autofarmManager));
+        } catch (Exception e) {
+            LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send();
+        }
     }
 
 
@@ -246,7 +252,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return A boolean value.
      */
     private boolean filterByDoubleChest(@NotNull Autofarm farm, @NotNull Block block) {
-        if (!BlockUtils.isDoubleChest(block)) {
+        if (!BlockUtils.isSameType(block, Material.CHEST)) {
             return false;
         }
 

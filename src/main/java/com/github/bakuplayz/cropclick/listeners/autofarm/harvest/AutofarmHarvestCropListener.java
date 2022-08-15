@@ -85,15 +85,16 @@ public final class AutofarmHarvestCropListener implements Listener {
         if (!cropManager.validate(crop, facing)) {
             return;
         }
+
+        if (harvestedCrops.containsKey(crop)) {
+            return;
+        }
+
         if (!crop.isHarvestable()) {
             return;
         }
 
         if (!crop.isHarvestAge(facing)) {
-            return;
-        }
-
-        if (harvestedCrops.containsKey(crop)) {
             return;
         }
 

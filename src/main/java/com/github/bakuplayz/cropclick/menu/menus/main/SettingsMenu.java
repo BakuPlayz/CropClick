@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleEffect;
 
 
 /**
@@ -41,11 +42,12 @@ public final class SettingsMenu extends Menu {
     @Override
     public void setMenuItems() {
         inventory.setItem(10, getToggleItem());
-        inventory.setItem(13, getSoundsItem());
-        inventory.setItem(16, getNameItem());
+        inventory.setItem(13, getParticlesItem());
+        inventory.setItem(16, getSoundsItem());
 
-        inventory.setItem(28, getAutofarmsItem());
-        inventory.setItem(31, getWorldsItem());
+        inventory.setItem(28, getNameItem());
+        inventory.setItem(31, getAutofarmsItem());
+        inventory.setItem(34, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -61,6 +63,10 @@ public final class SettingsMenu extends Menu {
             toggleAutofarms();
             updateMenu();
             return;
+        }
+
+        if (clicked.equals(getParticlesItem())) {
+            new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
         }
 
         if (clicked.equals(getSoundsItem())) {
@@ -91,6 +97,15 @@ public final class SettingsMenu extends Menu {
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, status)))
+                .toItemStack();
+    }
+
+
+    private @NotNull ItemStack getParticlesItem() {
+        return new ItemUtil(Material.FIREWORK_ROCKET)
+                .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles())))
                 .toItemStack();
     }
 
@@ -149,6 +164,16 @@ public final class SettingsMenu extends Menu {
         boolean state = getAutofarmsState();
         plugin.getConfig().set("autofarms.isEnabled", !state);
         plugin.saveConfig();
+    }
+
+
+    /**
+     * It returns the amount of particles in the ParticleEffect enum.
+     *
+     * @return The amount of particles in the ParticleEffect enum.
+     */
+    private int getAmountOfParticles() {
+        return ParticleEffect.getAvailableEffects().size();
     }
 
 
