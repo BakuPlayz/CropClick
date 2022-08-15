@@ -183,6 +183,8 @@ public final class ItemUtil {
         ItemStack stack = new ItemStack(material, amount);
         ItemMeta meta = this.meta != null ? this.meta : stack.getItemMeta();
 
+        assert meta != null; // Only here for the compiler.
+
         if (lore != null) meta.setLore(lore);
         if (name != null) meta.setDisplayName(name);
         if (name != null || lore != null) {

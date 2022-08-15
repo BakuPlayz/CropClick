@@ -194,7 +194,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemUtil(Material.NOTE_BLOCK)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 4)
                 .setName(plugin, LanguageAPI.Menu.SOUND_VOLUME_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_VOLUME_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_VOLUME_ITEM_VALUE.get(plugin, volume)
@@ -209,7 +209,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemUtil(Material.TRIPWIRE_HOOK)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(plugin, LanguageAPI.Menu.SOUND_PITCH_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_PITCH_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_PITCH_ITEM_VALUE.get(plugin, pitch)
@@ -245,7 +245,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemUtil(Material.GREEN_STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -259,7 +259,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -273,9 +273,10 @@ public final class SoundMenu extends Menu {
         );
         double volumeAfter = Math.min(volumeBefore + volumeChange, MAX_VOLUME);
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volumeChange, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, volumeAfter))
+                .setDamage(5)
                 .toItemStack();
     }
 
@@ -287,7 +288,7 @@ public final class SoundMenu extends Menu {
         );
         double volumeAfter = Math.max(volumeBefore - volumeChange, MIN_VOLUME);
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volumeChange, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
@@ -300,10 +301,11 @@ public final class SoundMenu extends Menu {
                 soundName
         );
         double pitchAfter = MathUtil.round(
-                Math.min(pitchBefore + pitchChange, MAX_PITCH)
+                Math.min(pitchBefore + pitchChange, MAX_PITCH),
+                2
         );
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
@@ -316,10 +318,11 @@ public final class SoundMenu extends Menu {
                 soundName
         );
         double pitchAfter = MathUtil.round(
-                Math.max(pitchBefore - pitchChange, MIN_PITCH)
+                Math.max(pitchBefore - pitchChange, MIN_PITCH),
+                2
         );
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
@@ -328,7 +331,8 @@ public final class SoundMenu extends Menu {
 
     private void addSoundDelay(int delay) {
         double oldDelay = MathUtil.round(
-                soundSection.getDelay(cropName, soundName) + delay
+                soundSection.getDelay(cropName, soundName) + delay,
+                2
         );
         double newDelay = Math.min(oldDelay, MAX_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
@@ -337,7 +341,8 @@ public final class SoundMenu extends Menu {
 
     private void removeSoundDelay(int delay) {
         double oldDelay = MathUtil.round(
-                soundSection.getDelay(cropName, soundName) - delay
+                soundSection.getDelay(cropName, soundName) - delay,
+                2
         );
         double newDelay = Math.max(oldDelay, MIN_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
@@ -346,7 +351,8 @@ public final class SoundMenu extends Menu {
 
     private void increaseVolume(int volume) {
         double oldVolume = MathUtil.round(
-                soundSection.getVolume(cropName, soundName) + volume
+                soundSection.getVolume(cropName, soundName) + volume,
+                2
         );
         double newVolume = Math.min(oldVolume, MAX_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
@@ -355,7 +361,8 @@ public final class SoundMenu extends Menu {
 
     private void decreaseVolume(int volume) {
         double oldVolume = MathUtil.round(
-                soundSection.getVolume(cropName, soundName) - volume
+                soundSection.getVolume(cropName, soundName) - volume,
+                2
         );
         double newVolume = Math.max(oldVolume, MIN_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
@@ -364,7 +371,8 @@ public final class SoundMenu extends Menu {
 
     private void increasePitch(double pitch) {
         double oldPitch = MathUtil.round(
-                soundSection.getPitch(cropName, soundName) + pitch
+                soundSection.getPitch(cropName, soundName) + pitch,
+                2
         );
         double newPitch = Math.min(oldPitch, MAX_PITCH);
         soundSection.setPitch(cropName, soundName, newPitch);
@@ -373,7 +381,8 @@ public final class SoundMenu extends Menu {
 
     private void decreasePitch(double pitch) {
         double oldPitch = MathUtil.round(
-                soundSection.getPitch(cropName, soundName) - pitch
+                soundSection.getPitch(cropName, soundName) - pitch,
+                2
         );
         double newPitch = Math.max(oldPitch, MIN_PITCH);
         soundSection.setPitch(cropName, soundName, newPitch);

@@ -72,15 +72,24 @@ public final class AutofarmUtils {
         BlockState blockState = block.getState();
 
         if (BlockUtils.isDoubleChest(block)) {
-            return new Container(((Chest) blockState).getInventory(), ContainerType.DOUBLE_CHEST);
+            return new Container(
+                    ((Chest) blockState).getInventory(),
+                    ContainerType.DOUBLE_CHEST
+            );
         }
 
         if (blockState instanceof Chest) {
-            return new Container(((Chest) blockState).getInventory(), ContainerType.CHEST);
+            return new Container(
+                    ((Chest) blockState).getInventory(),
+                    ContainerType.CHEST
+            );
         }
 
         if (blockState instanceof ShulkerBox) {
-            return new Container(((ShulkerBox) blockState).getInventory(), ContainerType.SHULKER);
+            return new Container(
+                    ((ShulkerBox) blockState).getInventory(),
+                    ContainerType.SHULKER
+            );
         }
 
         return null;
