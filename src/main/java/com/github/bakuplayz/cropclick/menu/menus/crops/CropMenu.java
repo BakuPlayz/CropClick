@@ -235,48 +235,44 @@ public final class CropMenu extends Menu {
 
     private @NotNull ItemStack getCropAddItem(int amount) {
         int beforeValue = cropSection.getDropAmount(cropName);
-        int afterValue = Math.min(beforeValue + amount, 576);
+        int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(5)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getCropRemoveItem(int amount) {
         int beforeValue = cropSection.getDropAmount(cropName);
-        int afterValue = Math.max(beforeValue - amount, 0);
+        int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(14)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getSeedAddItem(int amount) {
         int beforeValue = seedSection.getDropAmount(seed.getName());
-        int afterValue = Math.min(beforeValue + amount, 576);
+        int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(5)
                 .toItemStack();
     }
 
 
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
         int beforeValue = seedSection.getDropAmount(seed.getName());
-        int afterValue = Math.max(beforeValue - amount, 0);
+        int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
-                .setDamage(14)
                 .toItemStack();
     }
 
@@ -341,9 +337,9 @@ public final class CropMenu extends Menu {
     private int getDropChanceAsPercent(boolean isCrop) {
         double DECIMAL_TO_PERCENT = 10_000;
         if (isCrop) {
-            return (int) (cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
+            return (int) Math.round(cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
         }
-        return (int) (seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
+        return (int) Math.round(seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
     }
 
 }

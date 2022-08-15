@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 
 /**
  * (DESCRIPTION)
@@ -12,11 +12,18 @@ import java.math.RoundingMode;
  */
 public final class MathUtil {
 
-    public static double round(double number, int numOfDecimals) {
-        String rounded = new BigDecimal(number)
-                .setScale(numOfDecimals, RoundingMode.HALF_UP)
-                .toString();
-        return Double.parseDouble(rounded);
+    /**
+     * It takes a double, formats it to two decimal places, and returns the formatted double.
+     *
+     * @param number The number to be rounded.
+     *
+     * @return A double
+     */
+    public static double round(double number) {
+        DecimalFormat decimalFormat = new DecimalFormat("###.##");
+        return Double.parseDouble(
+                decimalFormat.format(number)
+        );
     }
 
 }

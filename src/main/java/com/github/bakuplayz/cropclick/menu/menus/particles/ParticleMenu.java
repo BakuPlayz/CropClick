@@ -276,7 +276,6 @@ public final class ParticleMenu extends Menu {
         return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, speedAfter))
-                .setDamage(5)
                 .toItemStack();
     }
 
@@ -325,8 +324,7 @@ public final class ParticleMenu extends Menu {
 
     public void addParticleDelay(int delay) {
         double oldDelay = MathUtil.round(
-                particleSection.getDelay(cropName, particleName) + delay,
-                2
+                particleSection.getDelay(cropName, particleName) + delay
         );
         double newDelay = Math.min(oldDelay, DELAY_MAX);
         particleSection.setDelay(cropName, particleName, newDelay);
@@ -335,8 +333,7 @@ public final class ParticleMenu extends Menu {
 
     public void removeParticleDelay(int delay) {
         double oldDelay = MathUtil.round(
-                particleSection.getDelay(cropName, particleName) - delay,
-                2
+                particleSection.getDelay(cropName, particleName) - delay
         );
         double newDelay = Math.max(oldDelay, DELAY_MIN);
         particleSection.setDelay(cropName, particleName, newDelay);
@@ -345,8 +342,7 @@ public final class ParticleMenu extends Menu {
 
     public void addParticleSpeed(int speed) {
         double oldSpeed = MathUtil.round(
-                particleSection.getSpeed(cropName, particleName) + speed,
-                2
+                particleSection.getSpeed(cropName, particleName) + speed
         );
         double newSpeed = Math.min(oldSpeed, MAX_SPEED);
         particleSection.setSpeed(cropName, particleName, newSpeed);
@@ -355,8 +351,7 @@ public final class ParticleMenu extends Menu {
 
     public void removeParticleSpeed(int speed) {
         double oldSpeed = MathUtil.round(
-                particleSection.getSpeed(cropName, particleName) - speed,
-                2
+                particleSection.getSpeed(cropName, particleName) - speed
         );
         double newSpeed = Math.max(oldSpeed, MIN_SPEED);
         particleSection.setSpeed(cropName, particleName, newSpeed);
