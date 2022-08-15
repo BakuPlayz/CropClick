@@ -1,8 +1,7 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
@@ -16,19 +15,18 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @since 2.0.0
  */
-public final class NetherWart extends GroundCrop {
+public final class SweetBerries extends GroundCrop {
 
-    public NetherWart(@NotNull CropsConfig cropsConfig) {
+    public SweetBerries(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "netherWart";
+        return "sweetBerries";
     }
 
 
@@ -38,10 +36,10 @@ public final class NetherWart extends GroundCrop {
     }
 
 
-    @Override
     @Contract(" -> new")
+    @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.NETHER_WART,
+        return new Drop(Material.SWEET_BERRIES,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 3),
                 cropSection.getDropChance(getName(), 80)
@@ -58,13 +56,13 @@ public final class NetherWart extends GroundCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.NETHER_WART;
+        return Material.SWEET_BERRY_BUSH;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.NETHER_WART;
+        return Material.SWEET_BERRIES;
     }
 
 }

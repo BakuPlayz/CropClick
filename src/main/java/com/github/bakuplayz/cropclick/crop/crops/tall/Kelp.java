@@ -1,11 +1,9 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.tall;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import org.bukkit.Material;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -14,42 +12,40 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @since 2.0.0
  */
-public final class SugarCane extends TallCrop {
+public final class Kelp extends TallCrop {
 
-    public SugarCane(@NotNull CropsConfig config) {
-        super(config);
+    public Kelp(@NotNull CropsConfig cropsConfig) {
+        super(cropsConfig);
     }
 
 
     @Override
-    @Contract(pure = true)
     public @NotNull String getName() {
-        return "sugarCane";
+        return "kelp";
     }
 
 
     @Override
-    public @NotNull Drop getDrop() {
-        return new Drop(Material.SUGAR_CANE,
+    public Drop getDrop() {
+        return new Drop(Material.KELP,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
+                cropSection.getDropChance(getName(), 80)
         );
     }
 
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.SUGAR_CANE;
+        return Material.KELP_PLANT;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.SUGAR_CANE;
+        return Material.KELP;
     }
 
 }

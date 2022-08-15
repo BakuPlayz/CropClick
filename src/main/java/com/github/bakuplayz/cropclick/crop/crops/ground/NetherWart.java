@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
@@ -6,7 +6,6 @@ import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,38 +19,32 @@ import org.jetbrains.annotations.Nullable;
  * @see BaseCrop
  * @since 2.0.0
  */
-public final class Pumpkin extends GroundCrop {
+public final class NetherWart extends GroundCrop {
 
-    public Pumpkin(@NotNull CropsConfig config) {
-        super(config);
+    public NetherWart(@NotNull CropsConfig cropsConfig) {
+        super(cropsConfig);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "pumpkin";
+        return "netherWart";
     }
 
 
     @Override
     public int getHarvestAge() {
-        return 1;
-    }
-
-
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return 1;
+        return 3;
     }
 
 
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.PUMPKIN,
+        return new Drop(Material.NETHER_WART,
                 cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
+                cropSection.getDropAmount(getName(), 3),
+                cropSection.getDropChance(getName(), 80)
         );
     }
 
@@ -64,26 +57,14 @@ public final class Pumpkin extends GroundCrop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
-        block.setType(Material.AIR);
-    }
-
-
-    @Override
     public @NotNull Material getClickableType() {
-        return Material.PUMPKIN;
+        return Material.NETHER_WART;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.PUMPKIN;
-    }
-
-
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
+        return Material.NETHER_WART;
     }
 
 }

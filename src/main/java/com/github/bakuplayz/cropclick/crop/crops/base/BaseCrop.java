@@ -6,7 +6,6 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSe
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.crops.SeaPickle;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.particles.ParticleRunnable;
 import com.github.bakuplayz.cropclick.sounds.SoundRunnable;
@@ -135,15 +134,9 @@ public abstract class BaseCrop implements Crop {
             block.setType(Material.AIR);
         }
 
-        if (this instanceof SeaPickle) {
-            org.bukkit.block.data.type.SeaPickle seaPickle = (org.bukkit.block.data.type.SeaPickle) block.getBlockData();
-            seaPickle.setPickles(1);
-            block.setBlockData(seaPickle);
-        } else {
-            Ageable crop = (Ageable) block.getBlockData();
-            crop.setAge(0);
-            block.setBlockData(crop);
-        }
+        Ageable crop = (Ageable) block.getBlockData();
+        crop.setAge(0);
+        block.setBlockData(crop);
     }
 
 

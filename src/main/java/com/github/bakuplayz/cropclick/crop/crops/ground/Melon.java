@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;

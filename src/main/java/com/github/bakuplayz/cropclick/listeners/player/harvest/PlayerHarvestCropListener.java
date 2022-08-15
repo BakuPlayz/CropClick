@@ -4,10 +4,11 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.SeaPickle;
-import com.github.bakuplayz.cropclick.crop.crops.SweetBerries;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.ground.SeaPickle;
+import com.github.bakuplayz.cropclick.crop.crops.ground.SweetBerries;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.EventUtils;
@@ -145,9 +146,15 @@ public final class PlayerHarvestCropListener implements Listener {
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
             tallCrop.harvestAll(player, block, crop);
+
+        } else if (crop instanceof RoofCrop) {
+            RoofCrop roofCrop = (RoofCrop) crop;
+            roofCrop.harvestAll(player, block, crop);
+
         } else if (crop instanceof SeaPickle) {
             SeaPickle seaPickle = (SeaPickle) crop;
             seaPickle.harvestAll(player, block, crop);
+
         } else {
             crop.harvest(player);
         }

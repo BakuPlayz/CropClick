@@ -36,4 +36,24 @@ public final class VersionUtils {
         return (serverVersion >= minVersion) && (maxVersion >= serverVersion);
     }
 
+
+    /**
+     * If the server version supports twisting vines, return true.
+     *
+     * @return A boolean value.
+     */
+    public static boolean supportsTwistingVines() {
+        return !between(0.0, 15.9);
+    }
+
+
+    /**
+     * If the server version supports glow berries, return true.
+     *
+     * @return A boolean value.
+     */
+    public static boolean supportsGlowBerries() {
+        return !between(0.0, 16.9);
+    }
+
 }

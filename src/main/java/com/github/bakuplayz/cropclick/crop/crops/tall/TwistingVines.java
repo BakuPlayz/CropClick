@@ -1,9 +1,10 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.tall;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import org.bukkit.Material;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -14,22 +15,23 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class Kelp extends TallCrop {
+public final class TwistingVines extends TallCrop {
 
-    public Kelp(@NotNull CropsConfig cropsConfig) {
+    public TwistingVines(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "kelp";
+        return "twistingVines";
     }
 
 
     @Override
-    public Drop getDrop() {
-        return new Drop(Material.KELP,
+    @Contract(" -> new")
+    public @NotNull Drop getDrop() {
+        return new Drop(Material.TWISTING_VINES,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 1),
                 cropSection.getDropChance(getName(), 80)
@@ -39,13 +41,13 @@ public final class Kelp extends TallCrop {
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.KELP_PLANT;
+        return Material.TWISTING_VINES_PLANT;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.KELP;
+        return Material.TWISTING_VINES;
     }
 
 }

@@ -5,11 +5,15 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.*;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.ground.*;
+import com.github.bakuplayz.cropclick.crop.crops.roof.GlowBerries;
+import com.github.bakuplayz.cropclick.crop.crops.tall.*;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -68,6 +72,11 @@ public final class CropManager {
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
         registerCrop(new CocoaBean(cropsConfig));
+
+        if (VersionUtils.supportsGlowBerries()) {
+            registerCrop(new GlowBerries(cropsConfig));
+        }
+
         registerCrop(new Kelp(cropsConfig));
         registerCrop(new Melon(cropsConfig));
         registerCrop(new NetherWart(cropsConfig));
@@ -76,6 +85,11 @@ public final class CropManager {
         registerCrop(new SeaPickle(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
         registerCrop(new SweetBerries(cropsConfig));
+
+        if (VersionUtils.supportsTwistingVines()) {
+            registerCrop(new TwistingVines(cropsConfig));
+        }
+
         registerCrop(new Wheat(cropsConfig));
     }
 

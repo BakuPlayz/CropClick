@@ -1,9 +1,11 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.WallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.BeetrootSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
  * @see BaseCrop
  * @since 2.0.0
  */
-public final class CocoaBean extends WallCrop {
+public final class Beetroot extends GroundCrop {
 
-    public CocoaBean(@NotNull CropsConfig config) {
+    public Beetroot(@NotNull CropsConfig config) {
         super(config);
     }
 
@@ -27,41 +29,43 @@ public final class CocoaBean extends WallCrop {
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
-        return "cocoaBean";
+        return "beetroot";
     }
 
 
     @Override
     public int getHarvestAge() {
-        return 2;
+        return 3;
     }
 
 
     @Override
+    @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.COCOA_BEANS,
+        return new Drop(Material.BEETROOT,
                 cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 3),
+                cropSection.getDropAmount(getName(), 2),
                 cropSection.getDropChance(getName(), 80)
         );
     }
 
 
     @Override
+    @Contract(value = " -> new", pure = true)
+    public @NotNull Seed getSeed() {
+        return new BeetrootSeed(cropsConfig);
+    }
+
+
+    @Override
     public @NotNull Material getClickableType() {
-        return Material.COCOA;
+        return Material.BEETROOTS;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.COCOA_BEANS;
-    }
-
-
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
+        return Material.BEETROOT;
     }
 
 }
