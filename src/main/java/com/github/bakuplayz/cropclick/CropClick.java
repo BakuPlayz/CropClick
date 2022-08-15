@@ -106,7 +106,7 @@ public class CropClick extends JavaPlugin {
             return;
         }
 
-        if (!VersionUtils.between(8.0, 13.9)) {
+        if (!VersionUtils.between(8.0, 12.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }

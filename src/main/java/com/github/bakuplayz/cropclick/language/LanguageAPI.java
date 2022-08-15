@@ -46,7 +46,7 @@ public final class LanguageAPI {
 
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
 
-        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.13.2. In order to run the plugin, please change to the correct jar for your server version.");
+        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.12.2. In order to run the plugin, please change to the correct jar for your server version.");
 
         private final String message;
 
@@ -724,8 +724,8 @@ public final class LanguageAPI {
         @SafeVarargs
         public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
-                                                   .map(Object::toString)
-                                                   .toArray(String[]::new);
+                                             .map(Object::toString)
+                                             .toArray(String[]::new);
             return fastReplace(get(plugin), valuesAsStrings);
         }
 
