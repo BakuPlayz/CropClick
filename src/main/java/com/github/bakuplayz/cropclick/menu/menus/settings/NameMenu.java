@@ -133,7 +133,7 @@ public final class NameMenu extends Menu {
      * the lore being the color codes.
      */
     private @NotNull ItemStack getCodesItem(int start) {
-        return new ItemUtil(Material.SIGN)
+        return new ItemUtil(Material.OAK_SIGN)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
                 .setLore(getCodesLore(start))
                 .toItemStack();

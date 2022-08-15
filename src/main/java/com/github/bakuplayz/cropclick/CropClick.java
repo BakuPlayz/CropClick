@@ -70,14 +70,6 @@ public class CropClick extends JavaPlugin {
     private boolean isReset;
 
 
-    /**
-     * The default plugin constructor.
-     */
-    public CropClick() {
-        super();
-    }
-
-
     @Override
     public void onEnable() {
         if (!VersionUtils.between(13.0, 13.9)) {
@@ -139,7 +131,7 @@ public class CropClick extends JavaPlugin {
 
         cropsConfig.setup();
         cropsConfig.setupSections();
-        addonsConfig.setup();
+
         playersConfig.setup();
         languageConfig.setup();
     }
