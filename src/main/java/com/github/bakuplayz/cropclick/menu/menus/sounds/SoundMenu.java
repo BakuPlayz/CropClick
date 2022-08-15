@@ -194,7 +194,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 4)
+        return new ItemUtil(Material.NOTE_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SOUND_VOLUME_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_VOLUME_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_VOLUME_ITEM_VALUE.get(plugin, volume)
@@ -209,7 +209,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemUtil(Material.TRIPWIRE_HOOK)
                 .setName(plugin, LanguageAPI.Menu.SOUND_PITCH_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_PITCH_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_PITCH_ITEM_VALUE.get(plugin, pitch)

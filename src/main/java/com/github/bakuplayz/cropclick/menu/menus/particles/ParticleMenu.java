@@ -194,7 +194,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 4)
+        return new ItemUtil(Material.FEATHER)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_SPEED_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_SPEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_SPEED_ITEM_VALUE.get(plugin, speed)
@@ -209,7 +209,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemUtil(Material.CHEST)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_VALUE.get(plugin, amount)
