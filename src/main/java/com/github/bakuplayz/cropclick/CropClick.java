@@ -72,7 +72,7 @@ public class CropClick extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!VersionUtils.between(13.0, 13.9)) {
+        if (VersionUtils.between(8.0, 13.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }

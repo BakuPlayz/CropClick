@@ -175,7 +175,7 @@ public final class ItemUtil {
 
 
     /**
-     * Converts the ItemUtil to an ItemStack, with a given name, material, amount, damage and lore (if there is one).
+     * Converts the ItemUtil to an ItemStack, with a given name, material, amount and lore (if there is one).
      *
      * @return An ItemStack.
      */
