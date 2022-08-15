@@ -91,12 +91,12 @@ public abstract class TallCrop extends BaseCrop {
     /**
      * Harvest all the crops, stacked on each other, starting from the top.
      *
-     * @param player       The player who is harvesting the crop
-     * @param clickedBlock The block that was clicked.
-     * @param crop         The crop that is being harvested.
+     * @param player The player who is harvesting the crop
+     * @param block  The block that was clicked.
+     * @param crop   The crop that is being harvested.
      */
-    public void harvestAll(@NotNull Player player, @NotNull Block clickedBlock, @NotNull Crop crop) {
-        int height = getCurrentAge(clickedBlock);
+    public void harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+        int height = getCurrentAge(block);
         int actualHeight = getActualHeight(crop, height);
         for (int i = actualHeight; i > 0; --i) {
             crop.harvest(player);
@@ -107,12 +107,12 @@ public abstract class TallCrop extends BaseCrop {
     /**
      * Harvest all the crops, stacked on each other, starting from the top.
      *
-     * @param container    The container that the crop is in.
-     * @param clickedBlock The block that was clicked.
-     * @param crop         The crop that is being harvested.
+     * @param container The container that the crop is in.
+     * @param block     The block that was clicked.
+     * @param crop      The crop that is being harvested.
      */
-    public void harvestAll(@NotNull Container container, @NotNull Block clickedBlock, @NotNull Crop crop) {
-        int height = getCurrentAge(clickedBlock);
+    public void harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+        int height = getCurrentAge(block);
         int actualHeight = getActualHeight(crop, height);
         for (int i = actualHeight; i > 0; --i) {
             crop.harvest(container);

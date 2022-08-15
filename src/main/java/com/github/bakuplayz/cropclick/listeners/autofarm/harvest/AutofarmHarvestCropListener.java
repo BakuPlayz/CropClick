@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.SeaPickle;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
@@ -127,6 +128,9 @@ public final class AutofarmHarvestCropListener implements Listener {
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
             tallCrop.harvestAll(container, block, crop);
+        } else if (crop instanceof SeaPickle) {
+            SeaPickle seaPickle = (SeaPickle) crop;
+            seaPickle.harvestAll(container, block, crop);
         } else {
             crop.harvest(container);
         }

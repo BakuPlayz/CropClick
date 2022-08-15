@@ -73,6 +73,7 @@ public final class CropManager {
         registerCrop(new NetherWart(cropsConfig));
         registerCrop(new Potato(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
+        registerCrop(new SeaPickle(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
         registerCrop(new SweetBerries(cropsConfig));
         registerCrop(new Wheat(cropsConfig));

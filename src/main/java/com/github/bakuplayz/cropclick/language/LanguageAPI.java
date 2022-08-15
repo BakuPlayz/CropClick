@@ -832,7 +832,8 @@ public final class LanguageAPI {
             }
 
             String returned = message;
-            for (int i = 0; i < values.length; ++i) {
+            int amountOfValues = values.length;
+            for (int i = 0; i < amountOfValues; ++i) {
                 returned = StringUtils.replaceOnce(returned, placeholders[i], values[i]);
             }
             return returned;
