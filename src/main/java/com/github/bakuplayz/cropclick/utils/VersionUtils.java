@@ -38,6 +38,26 @@ public final class VersionUtils {
 
 
     /**
+     * If the server version supports bamboos, return true.
+     *
+     * @return A boolean value.
+     */
+    public static boolean supportsBamboos() {
+        return !between(0.0, 13.9);
+    }
+
+
+    /**
+     * If the server version supports sweet berries, return true.
+     *
+     * @return A boolean value.
+     */
+    public static boolean supportsSweetBerries() {
+        return !between(0.0, 13.9);
+    }
+
+
+    /**
      * If the server version supports twisting vines, return true.
      *
      * @return A boolean value.
@@ -53,6 +73,16 @@ public final class VersionUtils {
      * @return A boolean value.
      */
     public static boolean supportsGlowBerries() {
+        return !between(0.0, 16.9);
+    }
+
+
+    /**
+     * If the server version supports dripleaves, return true.
+     *
+     * @return A boolean value.
+     */
+    public static boolean supportsDripleaves() {
         return !between(0.0, 16.9);
     }
 

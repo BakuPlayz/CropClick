@@ -47,7 +47,7 @@ public final class LanguageAPI {
 
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
 
-        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.13 to 1.13.2. In order to run the plugin, please change to the correct jar for your server version.");
+        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.13 to the latest version. In order to run the plugin, please change to the correct jar for your server version.");
 
         private final String message;
 
@@ -108,6 +108,7 @@ public final class LanguageAPI {
         RESET_DESCRIPTION(Category.RESET, "description"),
         RELOAD_DESCRIPTION(Category.RELOAD, "description"),
         DEFAULT_DESCRIPTION(Category.DEFAULT, "description"),
+        AUTOFARM_DESCRIPTION(Category.AUTOFARM, "description"),
         SETTINGS_DESCRIPTION(Category.SETTINGS, "description"),
 
         RESET_DELETE(Category.RESET, "delete"),
@@ -119,6 +120,7 @@ public final class LanguageAPI {
 
         private enum Category {
             GENERAL,
+            AUTOFARM,
             HELP,
             RESET,
             RELOAD,

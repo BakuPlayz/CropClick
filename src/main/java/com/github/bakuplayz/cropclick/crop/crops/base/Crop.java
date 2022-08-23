@@ -18,8 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Crop {
 
-    @NotNull
-    String getName();
+    @NotNull String getName();
 
     int getHarvestAge();
 

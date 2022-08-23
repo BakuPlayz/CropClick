@@ -5,9 +5,11 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.WaterloggedCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,16 +23,16 @@ import org.jetbrains.annotations.NotNull;
  * @see Crop
  * @since 2.0.0
  */
-public final class Kelp extends TallCrop {
+public final class Dripleaf extends TallCrop implements WaterloggedCrop {
 
-    public Kelp(@NotNull CropsConfig cropsConfig) {
+    public Dripleaf(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "kelp";
+        return "dripleaf";
     }
 
 
@@ -51,7 +53,7 @@ public final class Kelp extends TallCrop {
                 break;
             }
 
-            if (isKelp(currentBlock)) {
+            if (isDripleaf(currentBlock)) {
                 ++height;
             }
         }
@@ -63,7 +65,7 @@ public final class Kelp extends TallCrop {
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.KELP,
+        return new Drop(Material.BIG_DRIPLEAF,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 1),
                 cropSection.getDropChance(getName(), 100)
@@ -73,49 +75,87 @@ public final class Kelp extends TallCrop {
 
     @Override
     public void replant(@NotNull Block block) {
-        int height = getCurrentAge(block) - 1;
+        boolean isWaterLogged = false;
+
+        int height = getCurrentAge(block);
         for (int y = height; y > 0; --y) {
             Block currentBlock = block.getWorld().getBlockAt(
                     block.getX(),
                     block.getY() + y,
                     block.getZ()
             );
-            currentBlock.setType(Material.WATER);
+
+            if (!isWaterLogged) {
+                isWaterLogged = isWaterLogged(currentBlock);
+            }
+
+            currentBlock.setType(
+                    isWaterLogged ? Material.WATER : Material.AIR
+            );
         }
 
         if (!shouldReplant()) {
-            block.setType(Material.WATER);
+            block.setType(
+                    isWaterLogged ? Material.WATER : Material.AIR
+            );
+            return;
         }
+
+        block.setType(Material.BIG_DRIPLEAF);
+        setWaterLogged(block, isWaterLogged);
     }
 
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.KELP_PLANT;
+        return Material.BIG_DRIPLEAF_STEM;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.KELP;
-    }
-
-
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
+        return Material.BIG_DRIPLEAF;
     }
 
 
     /**
-     * Returns true if the block is any type of kelp.
+     * Returns true if the given block is dripleaf.
      *
      * @param block The block to check
      *
      * @return A boolean value.
      */
-    public boolean isKelp(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, Material.KELP, Material.KELP_PLANT);
+    public boolean isDripleaf(@NotNull Block block) {
+        return BlockUtils.isAnyType(block, Material.BIG_DRIPLEAF, Material.BIG_DRIPLEAF_STEM);
+    }
+
+
+    /**
+     * Returns true if the block is waterlogged.
+     *
+     * @param block The block to check
+     *
+     * @return A boolean value.
+     */
+    public boolean isWaterLogged(@NotNull Block block) {
+        if (!(block.getBlockData() instanceof org.bukkit.block.data.type.Dripleaf)) {
+            return false;
+        }
+        return ((org.bukkit.block.data.type.Dripleaf) block.getBlockData()).isWaterlogged();
+    }
+
+
+    /**
+     * Set the waterlogged state of the block to the provided waterlogged state.
+     *
+     * @param block       The block you want to set the waterlogged state of.
+     * @param waterlogged Whether the dripleaf is waterlogged.
+     */
+    @Override
+    public void setWaterLogged(@NotNull Block block, boolean waterlogged) {
+        Waterlogged dripleaf = (Waterlogged) block.getBlockData();
+        dripleaf.setWaterlogged(waterlogged);
+        block.setBlockData(dripleaf);
     }
 
 }

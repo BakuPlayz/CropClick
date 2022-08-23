@@ -35,19 +35,6 @@ public final class BlockUtils {
 
 
     /**
-     * Returns true if the given block is a plantable surface, false otherwise.
-     *
-     * @param block The block to check.
-     *
-     * @return A boolean value.
-     */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isPlantableSurface(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, Material.SAND, Material.FARMLAND); //TODO: Material.END_STONE for chorus
-    }
-
-
-    /**
      * If the block is a chest, and the inventory of the chest is a double chest inventory, then the block is a double
      * chest.
      *

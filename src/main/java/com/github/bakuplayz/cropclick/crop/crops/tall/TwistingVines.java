@@ -2,6 +2,8 @@ package com.github.bakuplayz.cropclick.crop.crops.tall;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
+ * @see BaseCrop
+ * @see Crop
  * @since 2.0.0
  */
 public final class TwistingVines extends TallCrop {

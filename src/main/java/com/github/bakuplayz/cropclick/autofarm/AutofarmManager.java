@@ -145,11 +145,9 @@ public final class AutofarmManager {
             return farmStorage.findFarmByCrop(block);
         }
 
-        if (BlockUtils.isPlantableSurface(block)) {
-            Block blockAbove = block.getRelative(BlockFace.UP);
-            if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
-                return farmStorage.findFarmByCrop(blockAbove);
-            }
+        Block blockAbove = block.getRelative(BlockFace.UP);
+        if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
+            return farmStorage.findFarmByCrop(blockAbove);
         }
 
         return null;

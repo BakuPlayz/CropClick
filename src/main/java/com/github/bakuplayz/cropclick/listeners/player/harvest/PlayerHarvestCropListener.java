@@ -8,7 +8,6 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.SeaPickle;
-import com.github.bakuplayz.cropclick.crop.crops.ground.SweetBerries;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.EventUtils;
@@ -61,6 +60,10 @@ public final class PlayerHarvestCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractWithCrop(@NotNull PlayerInteractEvent event) {
+        if (!EventUtils.isMainHand(event)) {
+            return;
+        }
+
         Block block = event.getClickedBlock();
         if (BlockUtils.isAir(block)) {
             return;
@@ -95,12 +98,12 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        if (crop instanceof SweetBerries) {
-            event.setCancelled(true);
-        }
-
         if (harvestedCrops.containsKey(crop)) {
             return;
+        }
+
+        if (cropManager.isAlreadyClickable(crop)) {
+            event.setCancelled(true);
         }
 
         if (!PermissionUtils.canHarvestCrop(player, crop.getName())) {

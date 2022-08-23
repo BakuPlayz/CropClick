@@ -39,8 +39,7 @@ public final class CropManager {
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
     private final AddonConfigSection addonSection;
-
-
+    
     private final @Getter List<Crop> crops;
 
 
@@ -67,11 +66,19 @@ public final class CropManager {
      * It adds all the vanilla crops to the list of crops.
      */
     private void registerVanillaCrops() {
-        registerCrop(new Bamboo(cropsConfig));
+        if (VersionUtils.supportsBamboos()) {
+            registerCrop(new Bamboo(cropsConfig));
+        }
+
         registerCrop(new Beetroot(cropsConfig));
+        registerCrop(new BrownMushroom(cropsConfig));
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
         registerCrop(new CocoaBean(cropsConfig));
+
+        if (VersionUtils.supportsDripleaves()) {
+            registerCrop(new Dripleaf(cropsConfig));
+        }
 
         if (VersionUtils.supportsGlowBerries()) {
             registerCrop(new GlowBerries(cropsConfig));
@@ -82,9 +89,13 @@ public final class CropManager {
         registerCrop(new NetherWart(cropsConfig));
         registerCrop(new Potato(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
+        registerCrop(new RedMushroom(cropsConfig));
         registerCrop(new SeaPickle(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
-        registerCrop(new SweetBerries(cropsConfig));
+
+        if (VersionUtils.supportsSweetBerries()) {
+            registerCrop(new SweetBerries(cropsConfig));
+        }
 
         if (VersionUtils.supportsTwistingVines()) {
             registerCrop(new TwistingVines(cropsConfig));
@@ -122,7 +133,6 @@ public final class CropManager {
         String cropName = crop.getName();
 
         if (!cropSection.doesExist(cropName)) {
-
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = crop.getDrop();
@@ -157,7 +167,6 @@ public final class CropManager {
         Seed seed = crop.getSeed();
         String seedName = seed.getName();
         if (!seedSection.doesExist(seedName)) {
-
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = seed.getDrop();
@@ -227,6 +236,21 @@ public final class CropManager {
 
 
     /**
+     * If the crop is already clickable (like sweet berries), return true. Otherwise, false.
+     *
+     * @param crop The crop that is being checked.
+     *
+     * @return A boolean value.
+     */
+    public boolean isAlreadyClickable(@NotNull Crop crop) {
+        if (crop instanceof SweetBerries) {
+            return true;
+        }
+        return crop instanceof GlowBerries;
+    }
+
+
+    /**
      * Find the first crop that matches the given block, or return null if none are found.
      *
      * @param block The block to find the crop for.
@@ -264,6 +288,30 @@ public final class CropManager {
      * @return A boolean value.
      */
     private boolean filterByType(@NotNull Crop crop, @NotNull Block block) {
+        if (crop instanceof GlowBerries) {
+            return ((GlowBerries) crop).isGlowBerry(block);
+        }
+
+        if (crop instanceof Dripleaf) {
+            return ((Dripleaf) crop).isDripleaf(block);
+        }
+
+        if (crop instanceof Kelp) {
+            return ((Kelp) crop).isKelp(block);
+        }
+
+        if (crop instanceof Chorus) {
+            return ((Chorus) crop).isChorus(block);
+        }
+
+        if (crop instanceof BrownMushroom) {
+            return ((BrownMushroom) crop).isBrownMushroom(block);
+        }
+
+        if (crop instanceof RedMushroom) {
+            return ((RedMushroom) crop).isRedMushroom(block);
+        }
+
         return crop.getClickableType() == block.getType();
     }
 

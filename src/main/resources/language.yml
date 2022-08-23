@@ -16,28 +16,31 @@
 
 command:
   general:
-    playerOnlyCommand: "&7<placeholder>"
-    playerLackPermission: "&7<placeholder>"
+    playerOnlyCommand: "&cOnly players can use this command."
+    playerLackPermission: "&cYou lack permission to run this command."
 
   default:
-    description: "&7<placeholder>"
+    description: "&7Opens the easy-access menu to configure the plugin."
 
   help:
-    description: "&7<placeholder>"
+    description: "&7Opens this help menu for commands."
+
+  autofarm:
+    description: "&7Opens a menu to configure your/other's autofarms."
 
   reset:
-    delete: "&7<placeholder>"
-    failed: "&7<placeholder>"
-    success: "&7<placeholder>"
-    description: "&7<placeholder>"
+    delete: "&cDeleting &7CropClick files..."
+    failed: "&cFailed &7to reset CropClick files."
+    success: "&aSuccessfully &7reset CropClick files, to initial settings."
+    description: "&7Resets CropClick, to its initial settings."
 
   reload:
-    failed: "&7<placeholder>"
-    success: "&7<placeholder>"
-    description: "&7<placeholder>"
+    failed: "&cFailed &7to reload CropClick."
+    success: "&aSuccessfully &7reloaded CropClick."
+    description: "&7Reloads CropClick."
 
   settings:
-    description: "&7<placeholder>"
+    description: "&7Opens the 'general' settings menu."
 
 menu:
   general:
@@ -64,15 +67,6 @@ menu:
     updates: "Updates"
     settings: "Settings"
 
-    crop: "Crop"
-    crops: "Crops"
-    dropChance: "Drop Chance"
-
-    autofarms: "Autofarms"
-    cropLink: "Crop"
-    containerLink: "Container"
-    dispenserLink: "Dispenser"
-
     addons: "Addons"
     towny: "Towny"
     mcMMO: "mcMMO"
@@ -82,6 +76,15 @@ menu:
     jobsRebornCrop: "Crop Settings"
     offlineGrowth: "Offline Growth"
     worldGuard: "WorldGuard"
+
+    crop: "Crop"
+    crops: "Crops"
+    dropChance: "Drop Chance"
+
+    autofarms: "Autofarms"
+    cropLink: "Crop"
+    containerLink: "Container"
+    dispenserLink: "Dispenser"
 
     sound: "Sound"
     sounds: "Sounds"
@@ -101,32 +104,32 @@ menu:
   main:
     updates:
       itemName: "&eUpdates"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows the current update status, updates every 30 minutes."
       itemState: "&7State: &r%state%"
 
     help:
       itemName: "&eHelp"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows the available commands, with their permissions and a short description."
       itemStatus: "&7Amount of Commands: &e%status%"
 
     addons:
       itemName: "&eAddons"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows addon specific settings (e.g. WorldGuard Settings)."
       itemStatus: "&7Amount of Addons: &e%status%"
 
     settings:
       itemName: "&eSettings"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows general settings (e.g. World Settings)."
       itemStatus: "&7Amount of Settings: &e%status%"
 
     crops:
       itemName: "&eCrops"
-      itemTips: "&7Shows all the registered crops, and such you know."
+      itemTips: "&7Shows all the registered crops."
       itemStatus: "&7Amount of Crops: &e%status%"
 
     autofarms:
       itemName: "&eAutofarms"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows all the registered autofarms."
       itemStatus: "&7Amount of Farms: &e%status%"
 
   updates:

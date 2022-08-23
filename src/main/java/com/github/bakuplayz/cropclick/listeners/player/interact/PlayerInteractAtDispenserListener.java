@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
 import com.github.bakuplayz.cropclick.menu.menus.links.DispenserLinkMenu;
+import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -58,7 +59,7 @@ public final class PlayerInteractAtDispenserListener implements Listener {
                 player,
                 block,
                 autofarm,
-                false
+                AutofarmsMenuState.LINK
         ).open();
     }
 

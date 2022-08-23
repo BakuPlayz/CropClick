@@ -72,7 +72,7 @@ public class CropClick extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (VersionUtils.between(8.0, 13.9)) {
+        if (VersionUtils.between(8.0, 12.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }
@@ -132,6 +132,7 @@ public class CropClick extends JavaPlugin {
         cropsConfig.setup();
         cropsConfig.setupSections();
 
+        addonsConfig.setup();
         playersConfig.setup();
         languageConfig.setup();
     }
@@ -194,9 +195,9 @@ public class CropClick extends JavaPlugin {
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
         this.autofarmManager = new AutofarmManager(this);
+        this.addonManager = new AddonManager(this);
 
         if (!isReset) {
-            this.addonManager = new AddonManager(this);
             this.updateManager = new UpdateManager(this);
             this.commandManager = new CommandManager(this);
             this.permissionManager = new PermissionManager(this);

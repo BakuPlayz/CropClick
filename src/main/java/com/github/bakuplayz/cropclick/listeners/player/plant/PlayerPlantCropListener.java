@@ -7,6 +7,7 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.EventUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -46,14 +47,12 @@ public final class PlayerPlantCropListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
-        if (event.isCancelled()) return;
-
-        Block block = event.getClickedBlock();
-        if (BlockUtils.isAir(block)) {
+        if (!EventUtils.isMainHand(event)) {
             return;
         }
 
-        if (!BlockUtils.isPlantableSurface(block)) {
+        Block block = event.getClickedBlock();
+        if (BlockUtils.isAir(block)) {
             return;
         }
 

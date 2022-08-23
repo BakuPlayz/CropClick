@@ -65,10 +65,6 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        if (!BlockUtils.isPlantableSurface(block)) {
-            return;
-        }
-
         Player player = event.getPlayer();
         FarmWorld world = worldManager.findByPlayer(player);
         if (!worldManager.isAccessible(world)) {

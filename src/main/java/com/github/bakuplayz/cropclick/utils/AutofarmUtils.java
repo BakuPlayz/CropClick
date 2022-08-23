@@ -10,6 +10,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Material;
 import org.bukkit.block.*;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +28,19 @@ import java.util.List;
 public final class AutofarmUtils {
 
     public static final String FARMER_ID_META = "farmerID";
+
+
+    /**
+     * Returns true if the player is the owner of the autofarm.
+     *
+     * @param player   The player who is trying to access the autofarm.
+     * @param autofarm The autofarm object.
+     *
+     * @return A boolean value.
+     */
+    public static boolean isOwner(@NotNull Player player, @NotNull Autofarm autofarm) {
+        return autofarm.getOwnerID().equals(player.getUniqueId());
+    }
 
 
     /**

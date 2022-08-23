@@ -62,7 +62,9 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtBlock(@NotNull PlayerInteractEvent event) {
-        if (event.isCancelled()) return;
+        if (!EventUtils.isMainHand(event)) {
+            return;
+        }
 
         Block block = event.getClickedBlock();
         if (BlockUtils.isAir(block)) {
@@ -71,7 +73,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
         Action action = event.getAction();
         Player player = event.getPlayer();
-        if (!EventUtils.isRightShift(player, action)) {
+        if (!EventUtils.isLeftShift(player, action)) {
             return;
         }
 

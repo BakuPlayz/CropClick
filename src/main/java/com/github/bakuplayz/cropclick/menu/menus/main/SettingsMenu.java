@@ -10,6 +10,7 @@ import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,10 +32,12 @@ import xyz.xenondevs.particle.ParticleEffect;
 public final class SettingsMenu extends Menu {
 
     private final boolean isRedirected;
+    private final boolean supportsParticles;
 
 
     public SettingsMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
         super(plugin, player, LanguageAPI.Menu.SETTINGS_TITLE);
+        this.supportsParticles = !VersionUtils.between(0.0, 13.9);
         this.isRedirected = isRedirected;
     }
 
@@ -42,12 +45,16 @@ public final class SettingsMenu extends Menu {
     @Override
     public void setMenuItems() {
         inventory.setItem(10, getToggleItem());
-        inventory.setItem(13, getParticlesItem());
-        inventory.setItem(16, getSoundsItem());
 
-        inventory.setItem(28, getNameItem());
-        inventory.setItem(31, getAutofarmsItem());
-        inventory.setItem(34, getWorldsItem());
+        if (supportsParticles) {
+            inventory.setItem(13, getParticlesItem());
+        }
+
+        inventory.setItem(supportsParticles ? 16 : 13, getSoundsItem());
+
+        inventory.setItem(supportsParticles ? 28 : 16, getNameItem());
+        inventory.setItem(supportsParticles ? 31 : 28, getAutofarmsItem());
+        inventory.setItem(supportsParticles ? 34 : 31, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -65,7 +72,7 @@ public final class SettingsMenu extends Menu {
             return;
         }
 
-        if (clicked.equals(getParticlesItem())) {
+        if (supportsParticles && clicked.equals(getParticlesItem())) {
             new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
         }
 

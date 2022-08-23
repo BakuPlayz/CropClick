@@ -3,7 +3,6 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
+ * @see Crop
  * @since 2.0.0
  */
 public abstract class RoofCrop extends BaseCrop {
@@ -56,21 +56,7 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
-        int height = getCurrentAge(block);
-        for (int i = height; i > 0; --i) {
-            Block currentBlock = block.getWorld().getBlockAt(
-                    block.getX(),
-                    block.getY() + i,
-                    block.getZ()
-            );
-            currentBlock.setType(Material.AIR);
-        }
-
-        if (!shouldReplant()) {
-            block.setType(Material.AIR);
-        }
-    }
+    public void replant(@NotNull Block block) {}
 
 
     /**
@@ -82,7 +68,7 @@ public abstract class RoofCrop extends BaseCrop {
      */
     public void harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
         int height = getCurrentAge(block);
-        for (int i = height; i > 0; --i) {
+        for (int i = 0; i < height; ++i) {
             crop.harvest(player);
         }
     }
@@ -97,7 +83,7 @@ public abstract class RoofCrop extends BaseCrop {
      */
     public void harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
         int height = getCurrentAge(block);
-        for (int i = height; i > 0; --i) {
+        for (int i = 0; i < height; ++i) {
             crop.harvest(container);
         }
     }

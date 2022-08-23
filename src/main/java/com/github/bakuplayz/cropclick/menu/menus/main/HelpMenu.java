@@ -45,7 +45,9 @@ public final class HelpMenu extends Menu {
             inventory.addItem(getSubCommandItem(subCommand));
         }
 
-        if (isRedirected) setBackItem();
+        if (isRedirected) {
+            setBackItem();
+        }
     }
 
 
@@ -57,14 +59,15 @@ public final class HelpMenu extends Menu {
             return;
         }
 
-        if (clicked.equals(getBackItem())) {
-            new MainMenu(plugin, player).open();
-            return;
+        if (isRedirected) {
+            handleBack(clicked, new MainMenu(plugin, player));
         }
 
         if (event.getSlot() > 0) {
             player.closeInventory();
-            player.performCommand(commands.get(event.getSlot() - 1).getUsage());
+            player.performCommand(
+                    commands.get(event.getSlot() - 1).getUsage()
+            );
             return;
         }
 
