@@ -135,7 +135,7 @@ menu:
   updates:
     updates:
       itemName: "&eUpdates"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows the current update status, updates every 30 minutes."
       itemState: "&7Status: &r%state%"
 
     player:
