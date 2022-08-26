@@ -89,19 +89,19 @@ public final class AddonsMenu extends Menu {
         }
 
         if (clicked.equals(getGrowthItem())) {
-            if (growthPresent) new OfflineGrowthMenu(plugin, player).open();
+            if (growthPresent || true) new OfflineGrowthMenu(plugin, player).open();
         }
 
         if (clicked.equals(getResidenceItem())) {
-            if (residencePresent) new ResidenceMenu(plugin, player).open();
+            if (residencePresent || true) new ResidenceMenu(plugin, player).open();
         }
 
         if (clicked.equals(getTownyItem())) {
-            if (townyPresent) new TownyMenu(plugin, player).open();
+            if (townyPresent || true) new TownyMenu(plugin, player).open();
         }
 
         if (clicked.equals(getGuardItem())) {
-            if (guardPresent) new WorldGuardMenu(plugin, player).open();
+            if (guardPresent || true) new WorldGuardMenu(plugin, player).open();
         }
     }
 

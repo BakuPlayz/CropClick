@@ -8,6 +8,7 @@ import com.github.bakuplayz.cropclick.menu.menus.main.AddonsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -59,10 +60,10 @@ public final class WorldGuardMenu extends AddonMenu {
     @Override
     protected @NotNull ItemStack getToggleItem() {
         return new ItemUtil(Material.GRASS)
-                .setName(plugin, LanguageAPI.Menu.ADDON_GUARD_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.ADDON_GUARD_ITEM_TIPS.getAsList(plugin,
-                        LanguageAPI.Menu.ADDON_GUARD_ITEM_STATUS.get(plugin, isAddonEnabled)
+                .setName(LanguageAPI.Menu.ADDON_GUARD_ITEM_NAME.get(plugin,
+                        MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))
+                .setLore(LanguageAPI.Menu.ADDON_GUARD_ITEM_TIPS.getAsList(plugin))
                 .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }

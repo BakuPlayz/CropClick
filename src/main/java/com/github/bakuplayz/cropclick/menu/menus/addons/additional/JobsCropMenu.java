@@ -191,7 +191,7 @@ public final class JobsCropMenu extends Menu {
     private @NotNull ItemStack getMoneyRemoveItem(int amount) {
         double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
-        return new ItemUtil(Material.RED_STAINED_GLASS)
+        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

@@ -111,7 +111,7 @@ public abstract class AddonMenu extends Menu {
     protected final @NotNull ItemStack getWorldsItem() {
         Addon addon = addonManager.findByName(addonName);
 
-        return new ItemUtil(Material.GRASS)
+        return new ItemUtil(Material.GRASS_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(

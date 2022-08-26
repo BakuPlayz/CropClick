@@ -272,58 +272,54 @@ public final class LanguageAPI {
         GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
 
         ADDONS_GROWTH_ITEM_NAME(Category.ADDONS, SubCategory.OFFLINE_GROWTH, "itemName"),
-
         ADDONS_GROWTH_ITEM_STATUS(Category.ADDONS, SubCategory.OFFLINE_GROWTH, "itemStatus", "%status%"),
         ADDONS_GROWTH_ITEM_TIPS(Category.ADDONS, SubCategory.OFFLINE_GROWTH, "itemTips"),
-        ADDONS_GUARD_ITEM_NAME(Category.ADDONS, SubCategory.WORLD_GUARD, "itemName"),
 
+        ADDONS_GUARD_ITEM_NAME(Category.ADDONS, SubCategory.WORLD_GUARD, "itemName"),
         ADDONS_GUARD_ITEM_STATUS(Category.ADDONS, SubCategory.WORLD_GUARD, "itemStatus", "%status%"),
         ADDONS_GUARD_ITEM_TIPS(Category.ADDONS, SubCategory.WORLD_GUARD, "itemTips"),
 
         ADDONS_JOBS_ITEM_NAME(Category.ADDONS, SubCategory.JOBS_REBORN, "itemName"),
         ADDONS_JOBS_ITEM_STATUS(Category.ADDONS, SubCategory.JOBS_REBORN, "itemStatus", "%status%"),
         ADDONS_JOBS_ITEM_TIPS(Category.ADDONS, SubCategory.JOBS_REBORN, "itemTips"),
-        ADDONS_MCMMO_ITEM_NAME(Category.ADDONS, SubCategory.MCMMO, "itemName"),
 
+        ADDONS_MCMMO_ITEM_NAME(Category.ADDONS, SubCategory.MCMMO, "itemName"),
         ADDONS_MCMMO_ITEM_STATUS(Category.ADDONS, SubCategory.MCMMO, "itemStatus", "%status%"),
         ADDONS_MCMMO_ITEM_TIPS(Category.ADDONS, SubCategory.MCMMO, "itemTips"),
+
         ADDONS_RESIDENCE_ITEM_NAME(Category.ADDONS, SubCategory.RESIDENCE, "itemName"),
         ADDONS_RESIDENCE_ITEM_STATUS(Category.ADDONS, SubCategory.RESIDENCE, "itemStatus", "%status%"),
-
         ADDONS_RESIDENCE_ITEM_TIPS(Category.ADDONS, SubCategory.RESIDENCE, "itemTips"),
-        ADDONS_TOWNY_ITEM_NAME(Category.ADDONS, SubCategory.TOWNY, "itemName"),
 
+        ADDONS_TOWNY_ITEM_NAME(Category.ADDONS, SubCategory.TOWNY, "itemName"),
         ADDONS_TOWNY_ITEM_STATUS(Category.ADDONS, SubCategory.TOWNY, "itemStatus", "%status%"),
         ADDONS_TOWNY_ITEM_TIPS(Category.ADDONS, SubCategory.TOWNY, "itemTips"),
+
         ADDON_CROP_SETTINGS_ITEM_NAME(Category.ADDON, SubCategory.CROP_SETTINGS, "itemName"),
         ADDON_CROP_SETTINGS_ITEM_TIPS(Category.ADDON, SubCategory.CROP_SETTINGS, "itemTips"),
 
-        ADDON_GROWTH_ITEM_NAME(Category.ADDON, SubCategory.OFFLINE_GROWTH, "itemName"),
-        ADDON_GROWTH_ITEM_STATUS(Category.ADDON, SubCategory.OFFLINE_GROWTH, "itemStatus", "%status%"),
+        ADDON_GROWTH_ITEM_NAME(Category.ADDON, SubCategory.OFFLINE_GROWTH, "itemName", "%status%"),
         ADDON_GROWTH_ITEM_TIPS(Category.ADDON, SubCategory.OFFLINE_GROWTH, "itemTips"),
-        ADDON_GUARD_ITEM_NAME(Category.ADDON, SubCategory.WORLD_GUARD, "itemName"),
-        ADDON_GUARD_ITEM_STATUS(Category.ADDON, SubCategory.WORLD_GUARD, "itemStatus", "%status%"),
+
+        ADDON_GUARD_ITEM_NAME(Category.ADDON, SubCategory.WORLD_GUARD, "itemName", "%status%"),
         ADDON_GUARD_ITEM_TIPS(Category.ADDON, SubCategory.WORLD_GUARD, "itemTips"),
-        ADDON_JOBS_ITEM_NAME(Category.ADDON, SubCategory.JOBS_REBORN, "itemName"),
-        ADDON_JOBS_ITEM_STATUS(Category.ADDON, SubCategory.JOBS_REBORN, "itemStatus", "%status%"),
+
+        ADDON_JOBS_ITEM_NAME(Category.ADDON, SubCategory.JOBS_REBORN, "itemName", "%status%"),
         ADDON_JOBS_ITEM_TIPS(Category.ADDON, SubCategory.JOBS_REBORN, "itemTips"),
 
-        ADDON_MCMMO_ITEM_NAME(Category.ADDON, SubCategory.MCMMO, "itemName"),
-        ADDON_MCMMO_ITEM_STATUS(Category.ADDON, SubCategory.MCMMO, "itemStatus", "%status%"),
+        ADDON_MCMMO_ITEM_NAME(Category.ADDON, SubCategory.MCMMO, "itemName", "%status%"),
         ADDON_MCMMO_ITEM_TIPS(Category.ADDON, SubCategory.MCMMO, "itemTips"),
-        ADDON_RESIDENCE_ITEM_NAME(Category.ADDON, SubCategory.RESIDENCE, "itemName"),
 
-        ADDON_RESIDENCE_ITEM_STATUS(Category.ADDON, SubCategory.RESIDENCE, "itemStatus", "%status%"),
+        ADDON_RESIDENCE_ITEM_NAME(Category.ADDON, SubCategory.RESIDENCE, "itemName", "%status%"),
         ADDON_RESIDENCE_ITEM_TIPS(Category.ADDON, SubCategory.RESIDENCE, "itemTips"),
 
-        ADDON_TOWNY_ITEM_NAME(Category.ADDON, SubCategory.TOWNY, "itemName"),
-        ADDON_TOWNY_ITEM_STATUS(Category.ADDON, SubCategory.TOWNY, "itemStatus", "%status%"),
-
+        ADDON_TOWNY_ITEM_NAME(Category.ADDON, SubCategory.TOWNY, "itemName", "%status%"),
         ADDON_TOWNY_ITEM_TIPS(Category.ADDON, SubCategory.TOWNY, "itemTips"),
-        ADDON_WORLDS_ITEM_NAME(Category.ADDON, SubCategory.WORLDS, "itemName"),
 
+        ADDON_WORLDS_ITEM_NAME(Category.ADDON, SubCategory.WORLDS, "itemName"),
         ADDON_WORLDS_ITEM_STATUS(Category.ADDON, SubCategory.WORLDS, "itemStatus", "%status%"),
         ADDON_WORLDS_ITEM_TIPS(Category.ADDON, SubCategory.WORLDS, "itemTips"),
+
         AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%", "%status%"),
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
 
@@ -333,7 +329,6 @@ public final class LanguageAPI {
         CROPS_ITEM_JOBS_MONEY(Category.CROPS, SubCategory.ITEM, "jobsMoney", "%status%"),
         CROPS_ITEM_JOBS_POINTS(Category.CROPS, SubCategory.ITEM, "jobsPoints", "%status%"),
         CROPS_ITEM_MMO_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "mcMMOExperience", "%status%"),
-        CROPS_ITEM_MMO_EXPERIENCE_REASON(Category.CROPS, SubCategory.ITEM, "mcMMOExperienceReason", "%reason%"),
         CROPS_ITEM_NAME(Category.CROPS, SubCategory.ITEM, "name", "%name%", "%status%"),
         CROPS_ITEM_PARTICLES(Category.CROPS, SubCategory.ITEM, "particles", "%status%"),
         CROPS_ITEM_SOUNDS(Category.CROPS, SubCategory.ITEM, "sounds", "%status%"),
@@ -540,7 +535,6 @@ public final class LanguageAPI {
             DROP_CHANCE("dropChance"),
             GENERAL,
             HELP,
-            INTERACT,
             JOBS_CROP("jobsCrop"),
             LINK,
             MAIN,
@@ -599,9 +593,7 @@ public final class LanguageAPI {
             DISPENSER,
             DROP_CHANCE("dropChance"),
             EXPERIENCE,
-            EXPERIENCE_ADD("experienceAdd"),
             EXPERIENCE_REASON("experienceReason"),
-            EXPERIENCE_REMOVE("experienceRemove"),
             FORMAT,
             INCREASE_ORDER("increaseOrder"),
             DECREASE_ORDER("decreaseOrder"),
@@ -612,8 +604,6 @@ public final class LanguageAPI {
             LINKABLE,
             MCMMO("mcMMO"),
             MONEY,
-            MONEY_ADD("moneyAdd"),
-            MONEY_REMOVE("moneyRemove"),
             NAME,
             OFFLINE_GROWTH("offlineGrowth"),
             PAGINATION,
@@ -622,8 +612,6 @@ public final class LanguageAPI {
             PLAYER,
             PLAYERS,
             POINTS,
-            POINTS_ADD("pointsAdd"),
-            POINTS_REMOVE("pointsRemove"),
             REASON_RESPONSE("reasonResponse"),
             REMOVE,
             REPLANT,

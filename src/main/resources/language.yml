@@ -31,7 +31,7 @@ command:
   reset:
     delete: "&cDeleting &7CropClick files..."
     failed: "&cFailed &7to reset CropClick files."
-    success: "&aSuccessfully &7reset CropClick files, to initial settings."
+    success: "&aSuccessfully &7reset CropClick files, to its initial settings."
     description: "&7Resets CropClick, to its initial settings."
 
   reload:
@@ -266,76 +266,70 @@ menu:
     itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
 
+  addons:
+    jobsReborn:
+      itemName: "&eJobs Reborn"
+      itemTips: "&7Addon specific settings for the &e'title-named' &7plugin, to configure worlds and crops."
+      itemStatus: "&7Enabled: &e%status%"
+    
+    mcMMO:
+      itemName: "&emcMMO"
+      itemTips: "&7Addon specific settings for the &e'title-named' &7plugin, to configure worlds and crops."
+      itemStatus: "&7Enabled: &e%status%"
+
+    offlineGrowth:
+      itemName: "&eOffline Growth"
+      itemTips: "&7Addon specific settings for the &e'title-named' &7plugin, to configure worlds."
+      itemStatus: "&7Enabled: &e%status%"
+
+    residence:
+      itemName: "&eResidence"
+      itemTips: "&7Addon specific settings for the &e'title-named' &7plugin, to configure worlds."
+      itemStatus: "&7Enabled: &e%status%"
+
+    towny:
+      itemName: "&eTowny"
+      itemTips: "&7Addon specific settings for the &e'title-named' &7plugin, to configure worlds."
+      itemStatus: "&7Enabled: &e%status%"
+
+    worldGuard:
+      itemName: "&eWorldGuard"
+      itemTips: "&7Addon specific settings for the &e'title-named' &7plugin, to configure worlds."
+      itemStatus: "&7Enabled: &e%status%"
+
   addon:
     worlds:
       itemName: "&eWorlds"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Shows addon specific, world settings."
       itemStatus: "&7Amount of Banished: &e%status%"
 
     cropSettings:
       itemName: "&eCrop Settings"
-      itemTips: "&7<placeholder>"
-
-    towny:
-      itemName: "&eTowny"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    mcMMO:
-      itemName: "&emcMMO"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    residence:
-      itemName: "&eResidence"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
+      itemTips: "&7Shows addon specific, crop settings."
 
     jobsReborn:
-      itemName: "&eJobs Reborn"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    worldGuard:
-      itemName: "&eWorldGuard"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    offlineGrowth:
-      itemName: "&eOffline Growth"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-  addons:
-    towny:
-      itemName: "&eTowny"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
+      itemName: "&eJobs Reborn &7(%status%)"
+      itemTips: "&7Toggles the &e'title-named' &7plugin's functionality and interactivity with &eCropClick&7."
 
     mcMMO:
-      itemName: "&emcMMO"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    residence:
-      itemName: "&eResidence"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    jobsReborn:
-      itemName: "&eJobs Reborn"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
-
-    worldGuard:
-      itemName: "&eWorldGuard"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
+      itemName: "&emcMMO &7(%status%)"
+      itemTips: "&7Toggles the &e'title-named' &7plugin's functionality and interactivity with &eCropClick&7."
 
     offlineGrowth:
-      itemName: "&eOffline Growth"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Enabled: &e%status%"
+      itemName: "&eOffline Growth &7(%status%)"
+      itemTips: "&7Toggles the &e'title-named' &7plugin's functionality and interactivity with &eCropClick&7."
+
+    residence:
+      itemName: "&eResidence &7(%status%)"
+      itemTips: "&7Toggles the &e'title-named' &7plugin's functionality and interactivity with &eCropClick&7."
+
+    towny:
+      itemName: "&eTowny &7(%status%)"
+      itemTips: "&7Toggles the &e'title-named' &7plugin's functionality and interactivity with &eCropClick&7."
+
+    worldGuard:
+      itemName: "&eWorldGuard &7(%status%)"
+      itemTips: "&7Toggles the &e'title-named' &7plugin's functionality and interactivity with &eCropClick&7."
 
   jobsCrop:
     add:
@@ -374,59 +368,42 @@ menu:
     experienceReason:
       itemName: "&eExperience Reason"
       itemValue: "&7Reason: &e%value%"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7The shown experience reason, &emcMMO &7should display when harvesting the crop."
 
     reasonResponse:
       changed: "&7Changed the experience reason to &r%name%&7."
       unchanged: "&cExperience reason unchanged!"
 
   settings:
-    autofarms:
-      itemName: "&eAutofarms"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Status: &e%status%"
+    toggle:
+      itemName: "&eToggle"
+      itemTips: "&7Settings to toggle &eCropClick &7for specific users."
+      itemStatus: "&7Amount of Enabled: &e%status%"
 
     particles:
       itemName: "&eParticles"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Settings to toggle, harvesting &eParticles &7for crops."
       itemStatus: "&7Amount of Particles: &e%status%"
 
     sounds:
       itemName: "&eSounds"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Settings to toggle, harvesting &eSounds &7for crops."
       itemStatus: "&7Amount of Sounds: &e%status%"
-
-    toggle:
-      itemName: "&eToggle"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Amount of Enabled: &e%status%"
 
     name:
       itemName: "&eName"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7Settings to rename &eDrop &enames &7for crops."
       itemStatus: "&7Amount of Renamed: &e%status%"
-
-    worlds:
-      itemName: "&eWorlds"
-      itemTips: "&7<placeholder>"
-      itemStatus: "&7Amount of Banished: &e%status%"
-
-  world:
-    world:
-      itemName: "&e%name%"
-      itemStatus: "&7Banished: &e%status%"
-
-    players:
-      itemName: "&ePlayers"
-      itemStatus: "&7Allowed: &e%status%"
 
     autofarms:
       itemName: "&eAutofarms"
-      itemStatus: "&7Allowed: &e%status%"
+      itemTips: "&7Setting to toggle CropClick's &eAutofarm &7functionality."
+      itemStatus: "&7Status: &e%status%"
 
-  worlds:
-    itemName: "&e%name%"
-    itemStatus: "&7Banished: &e%status%"
+    worlds:
+      itemName: "&eWorlds"
+      itemTips: "&7Settings to banish &eCropClick, &ePlayers and Autofarms&7, in specific worlds."
+      itemStatus: "&7Amount of Banished: &e%status%"
 
   toggle:
     itemName: "&e%name%"
@@ -456,17 +433,17 @@ menu:
     delay:
       itemName: "&eDelay"
       itemValue: "&7Delay: &e%value%"
-      itemTips: "&7<placeholder> in milliseconds."
+      itemTips: "&7The specific delay or time, &ein &emilliseconds&7, before running the effect."
 
     speed:
       itemName: "&eSpeed"
       itemValue: "&7Speed: &e%value%"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7The specific, &espeed &emultiplier&7, applied to the effects."
 
     amount:
       itemName: "&eAmount"
       itemValue: "&7Amount: &e%value%"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7The specific &eamount &eof, same type, effects&7 at a time."
 
   sounds:
     itemName: "&e%name% &7(%status%)"
@@ -492,17 +469,17 @@ menu:
     delay:
       itemName: "&eDelay"
       itemValue: "&7Delay: &e%value%"
-      itemTips: "&7<placeholder> in milliseconds."
+      itemTips: "&7The specific delay or time, &ein &emilliseconds&7, before running the sound."
 
     volume:
       itemName: "&eVolume"
       itemValue: "&7Volume: &e%value%"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7The specific range, &ein &eblocks&7, the sound is played."
 
     pitch:
       itemName: "&ePitch"
       itemValue: "&7Pitch: &e%value%"
-      itemTips: "&7<placeholder>"
+      itemTips: "&7The specific &epitch&7, the sound is played in."
 
   name:
     crop:
@@ -520,3 +497,22 @@ menu:
     response:
       changed: "&7Changed the name of the crop to &r%name%&7."
       unchanged: "&cName unchanged!"
+
+  worlds:
+    itemName: "&e%name%"
+    itemStatus: "&7Banished: &e%status%"
+
+  world:
+    world:
+      itemName: "&e%name%"
+      itemStatus: "&7Banished: &e%status%"
+
+    players:
+      itemName: "&ePlayers"
+      itemStatus: "&7Allowed: &e%status%"
+      itemTips: "&7Toggles &ePlayers usability&7, in the world." # Add to LANGUAGEAPI
+
+    autofarms:
+      itemName: "&eAutofarms"
+      itemStatus: "&7Allowed: &e%status%"
+      itemTips: "&7Toggles &eAutofarms functionality&7, in the world." # Add to LANGUAGEAPI

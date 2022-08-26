@@ -30,14 +30,14 @@ public final class SoundMenu extends Menu {
     private final int DELAY_MIN_CHANGE = 100; // in milliseconds
     private final int DELAY_MAX_CHANGE = 500; // in milliseconds
 
-    private final int MIN_VOLUME = 0;
-    private final int MAX_VOLUME = 500;
+    private final int MIN_VOLUME = 0; // range in blocks
+    private final int MAX_VOLUME = 500; // range in blocks
 
     private final int VOLUME_MIN_CHANGE = 1;
     private final int VOLUME_MAX_CHANGE = 5;
 
     private final int MIN_PITCH = 0;
-    private final int MAX_PITCH = 1;
+    private final int MAX_PITCH = 2;
 
     private final double PITCH_MIN_CHANGE = 0.1;
     private final double PITCH_MAX_CHANGE = 0.2;
