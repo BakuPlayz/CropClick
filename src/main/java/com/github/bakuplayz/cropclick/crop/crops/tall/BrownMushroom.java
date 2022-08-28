@@ -99,12 +99,6 @@ public final class BrownMushroom extends TallCrop {
     }
 
 
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
-    }
-
-
     /**
      * Returns true if the block is any type of Brown Mushroom.
      *

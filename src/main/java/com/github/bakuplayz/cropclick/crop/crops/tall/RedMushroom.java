@@ -113,12 +113,6 @@ public final class RedMushroom extends TallCrop {
     }
 
 
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
-    }
-
-
     /**
      * Returns true if the block is any type of Red Mushroom.
      *

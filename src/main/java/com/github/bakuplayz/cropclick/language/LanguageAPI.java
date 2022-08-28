@@ -335,34 +335,41 @@ public final class LanguageAPI {
         CROPS_STATUS_DISABLED(Category.CROPS, SubCategory.STATUS, "disabled"),
         CROPS_STATUS_ENABLED(Category.CROPS, SubCategory.STATUS, "enabled"),
 
-        CROP_ADD_ITEM_AFTER(Category.CROP, SubCategory.ADD, "itemAfter", "%value%"),
-        CROP_ADD_ITEM_NAME(Category.CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
-        CROP_AT_LEAST_ITEM_NAME(Category.CROP, SubCategory.AT_LEAST, "itemName"),
-        CROP_AT_LEAST_ITEM_STATUS(Category.CROP, SubCategory.AT_LEAST, "itemStatus", "%status%"),
         CROP_CHANCE_ITEM_CROP_STATUS(Category.CROP, SubCategory.DROP_CHANCE, "itemCropStatus", "%chance%"),
         CROP_CHANCE_ITEM_NAME(Category.CROP, SubCategory.DROP_CHANCE, "itemName"),
         CROP_CHANCE_ITEM_SEED_STATUS(Category.CROP, SubCategory.DROP_CHANCE, "itemSeedStatus", "%chance%"),
-        CROP_ITEM_DROP_VALUE(Category.CROP, SubCategory.CROP, "itemDropValue", "%value%"),
-        CROP_ITEM_NAME(Category.CROP, SubCategory.CROP, "itemName", "%name%", "%status%"),
+        CROP_CROP_ITEM_DROP_VALUE(Category.CROP, SubCategory.CROP, "itemDropValue", "%value%"),
+        CROP_CROP_ITEM_NAME(Category.CROP, SubCategory.CROP, "itemName", "%name%", "%status%"),
+        CROP_CROP_ITEM_TIPS(Category.CROP, SubCategory.CROP, "itemTips"),
+        CROP_AT_LEAST_ITEM_NAME(Category.CROP, SubCategory.AT_LEAST, "itemName"),
+        CROP_AT_LEAST_ITEM_TIPS(Category.CROP, SubCategory.AT_LEAST, "itemTips"),
+        CROP_AT_LEAST_ITEM_STATUS(Category.CROP, SubCategory.AT_LEAST, "itemStatus", "%status%"),
         CROP_LINKABLE_ITEM_NAME(Category.CROP, SubCategory.LINKABLE, "itemName"),
+        CROP_LINKABLE_ITEM_TIPS(Category.CROP, SubCategory.LINKABLE, "itemTips"),
         CROP_LINKABLE_ITEM_STATUS(Category.CROP, SubCategory.LINKABLE, "itemStatus", "%status%"),
-        CROP_REMOVE_ITEM_AFTER(Category.CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
-        CROP_REMOVE_ITEM_NAME(Category.CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
         CROP_REPLANT_ITEM_NAME(Category.CROP, SubCategory.REPLANT, "itemName"),
+        CROP_REPLANT_ITEM_TIPS(Category.CROP, SubCategory.REPLANT, "itemTips"),
         CROP_REPLANT_ITEM_STATUS(Category.CROP, SubCategory.REPLANT, "itemStatus", "%status%"),
         CROP_SEED_ITEM_DROP_VALUE(Category.CROP, SubCategory.SEED, "itemDropValue", "%value%"),
         CROP_SEED_ITEM_NAME(Category.CROP, SubCategory.SEED, "itemName", "%name%", "%status%"),
+        CROP_SEED_ITEM_TIPS(Category.CROP, SubCategory.SEED, "itemTips"),
+        CROP_ADD_ITEM_AFTER(Category.CROP, SubCategory.ADD, "itemAfter", "%value%"),
+        CROP_ADD_ITEM_NAME(Category.CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
+        CROP_REMOVE_ITEM_AFTER(Category.CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
+        CROP_REMOVE_ITEM_NAME(Category.CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
         CROP_STATUS_DISABLED(Category.CROP, SubCategory.STATUS, "disabled"),
         CROP_STATUS_ENABLED(Category.CROP, SubCategory.STATUS, "enabled"),
 
+        DROP_CHANCE_CROP_ITEM_NAME(Category.DROP_CHANCE, SubCategory.CROP, "itemName", "%name%", "%status%"),
+        DROP_CHANCE_CROP_ITEM_TIPS(Category.DROP_CHANCE, SubCategory.CROP, "itemTips"),
+        DROP_CHANCE_CROP_ITEM_DROP_CHANCE(Category.DROP_CHANCE, SubCategory.CROP, "itemDropChance", "%chance%"),
+        DROP_CHANCE_SEED_ITEM_NAME(Category.DROP_CHANCE, SubCategory.SEED, "itemName", "%name%", "%status%"),
+        DROP_CHANCE_SEED_ITEM_TIPS(Category.DROP_CHANCE, SubCategory.SEED, "itemTips"),
+        DROP_CHANCE_SEED_ITEM_DROP_CHANCE(Category.DROP_CHANCE, SubCategory.SEED, "itemDropChance", "%chance%"),
         DROP_CHANCE_ADD_ITEM_AFTER(Category.DROP_CHANCE, SubCategory.ADD, "itemAfter", "%value%"),
         DROP_CHANCE_ADD_ITEM_NAME(Category.DROP_CHANCE, SubCategory.ADD, "itemName", "%amount%", "%type%"),
-        DROP_CHANCE_CROP_ITEM_DROP_CHANCE(Category.DROP_CHANCE, SubCategory.CROP, "itemDropChance", "%chance%"),
-        DROP_CHANCE_CROP_ITEM_NAME(Category.DROP_CHANCE, SubCategory.CROP, "itemName", "%name%", "%status%"),
         DROP_CHANCE_REMOVE_ITEM_AFTER(Category.DROP_CHANCE, SubCategory.REMOVE, "itemAfter", "%value%"),
         DROP_CHANCE_REMOVE_ITEM_NAME(Category.DROP_CHANCE, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
-        DROP_CHANCE_SEED_ITEM_DROP_CHANCE(Category.DROP_CHANCE, SubCategory.SEED, "itemDropChance", "%chance%"),
-        DROP_CHANCE_SEED_ITEM_NAME(Category.DROP_CHANCE, SubCategory.SEED, "itemName", "%name%", "%status%"),
         DROP_CHANCE_STATUS_DISABLED(Category.DROP_CHANCE, SubCategory.STATUS, "disabled"),
         DROP_CHANCE_STATUS_ENABLED(Category.DROP_CHANCE, SubCategory.STATUS, "enabled"),
 
@@ -371,23 +378,27 @@ public final class LanguageAPI {
         HELP_ITEM_PERMISSION(Category.HELP, "itemPermission", "%permission%"),
         HELP_ITEM_USAGE(Category.HELP, "itemUsage", "%usage%"),
 
-        JOBS_CROP_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.ADD, "itemAfter", "%value%"),
-        JOBS_CROP_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
-
         JOBS_CROP_EXPERIENCE_ITEM_NAME(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemName"),
+        JOBS_CROP_EXPERIENCE_ITEM_TIPS(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemTips"),
         JOBS_CROP_EXPERIENCE_ITEM_VALUE(Category.JOBS_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
         JOBS_CROP_MONEY_ITEM_NAME(Category.JOBS_CROP, SubCategory.MONEY, "itemName"),
+        JOBS_CROP_MONEY_ITEM_TIPS(Category.JOBS_CROP, SubCategory.MONEY, "itemTips"),
         JOBS_CROP_MONEY_ITEM_VALUE(Category.JOBS_CROP, SubCategory.MONEY, "itemValue", "%value%"),
         JOBS_CROP_POINTS_ITEM_NAME(Category.JOBS_CROP, SubCategory.POINTS, "itemName"),
+        JOBS_CROP_POINTS_ITEM_TIPS(Category.JOBS_CROP, SubCategory.POINTS, "itemTips"),
         JOBS_CROP_POINTS_ITEM_VALUE(Category.JOBS_CROP, SubCategory.POINTS, "itemValue", "%value%"),
+        JOBS_CROP_ADD_ITEM_AFTER(Category.JOBS_CROP, SubCategory.ADD, "itemAfter", "%value%"),
+        JOBS_CROP_ADD_ITEM_NAME(Category.JOBS_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         JOBS_CROP_REMOVE_ITEM_AFTER(Category.JOBS_CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
         JOBS_CROP_REMOVE_ITEM_NAME(Category.JOBS_CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
 
         LINK_ACTION_FAILURE(Category.LINK, SubCategory.ACTIONS, "linkFailure"),
         LINK_ACTION_SUCCESS(Category.LINK, SubCategory.ACTIONS, "linkSuccess"),
-        LINK_CONTAINER_NAME(Category.LINK, SubCategory.CONTAINER, "itemName"),
         LINK_CROP_NAME(Category.LINK, SubCategory.CROP, "itemName"),
+        LINK_CONTAINER_NAME(Category.LINK, SubCategory.CONTAINER, "itemName"),
+        LINK_CONTAINER_TIPS(Category.LINK, SubCategory.CONTAINER, "itemTips"),
         LINK_DISPENSER_NAME(Category.LINK, SubCategory.DISPENSER, "itemName"),
+        LINK_DISPENSER_TIPS(Category.LINK, SubCategory.DISPENSER, "itemTips"),
         LINK_FORMAT_STATE(Category.LINK, SubCategory.FORMAT, "state", "%state%"),
         LINK_FORMAT_X(Category.LINK, SubCategory.FORMAT, "x", "%x%"),
         LINK_FORMAT_Y(Category.LINK, SubCategory.FORMAT, "y", "%y%"),
@@ -420,25 +431,28 @@ public final class LanguageAPI {
         MAIN_UPDATES_ITEM_STATE(Category.MAIN, SubCategory.UPDATES, "itemState", "%state%"),
         MAIN_UPDATES_ITEM_TIPS(Category.MAIN, SubCategory.UPDATES, "itemTips"),
 
-        MCMMO_CROP_ADD_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.ADD, "itemAfter", "%value%"),
-        MCMMO_CROP_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         MCMMO_CROP_EXPERIENCE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemName"),
+        MCMMO_CROP_EXPERIENCE_ITEM_TIPS(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemTips"),
         MCMMO_CROP_EXPERIENCE_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemName"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemTips"),
         MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE(Category.MCMMO_CROP, SubCategory.EXPERIENCE_REASON, "itemValue", "%value%"),
         MCMMO_CROP_REASON_RESPONSE_CHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "changed", "%name%"),
         MCMMO_CROP_REASON_RESPONSE_UNCHANGED(Category.MCMMO_CROP, SubCategory.REASON_RESPONSE, "unchanged"),
+        MCMMO_CROP_ADD_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.ADD, "itemAfter", "%value%"),
+        MCMMO_CROP_ADD_ITEM_NAME(Category.MCMMO_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
         MCMMO_CROP_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
         MCMMO_CROP_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
 
         NAME_COLOR_ITEM_CODE(Category.NAME, SubCategory.COLOR_CODE, "itemColor", "%code%", "%color%", "%name%"),
         NAME_COLOR_ITEM_NAME(Category.NAME, SubCategory.COLOR_CODE, "itemName"),
 
-        NAME_CROP_DROP_NAME(Category.NAME, SubCategory.CROP, "dropName", "%name%"),
         NAME_CROP_ITEM_NAME(Category.NAME, SubCategory.CROP, "itemName", "%name%", "%status%"),
-        NAME_SEED_DROP_NAME(Category.NAME, SubCategory.SEED, "dropName", "%name%"),
+        NAME_CROP_ITEM_TIPS(Category.NAME, SubCategory.CROP, "itemTips"),
+        NAME_CROP_ITEM_DROP_NAME(Category.NAME, SubCategory.CROP, "itemDropName", "%name%"),
         NAME_SEED_ITEM_NAME(Category.NAME, SubCategory.SEED, "itemName", "%name%", "%status%"),
+        NAME_SEED_ITEM_TIPS(Category.NAME, SubCategory.SEED, "itemTips"),
+        NAME_SEED_ITEM_DROP_NAME(Category.NAME, SubCategory.SEED, "itemDropName", "%name%"),
         NAME_RESPONSE_CHANGED(Category.NAME, SubCategory.RESPONSE, "changed", "%name%"),
         NAME_RESPONSE_UNCHANGED(Category.NAME, SubCategory.RESPONSE, "unchanged"),
 
@@ -519,11 +533,21 @@ public final class LanguageAPI {
 
         WORLDS_ITEM_NAME(Category.WORLDS, "itemName", "%name%"),
         WORLDS_ITEM_STATUS(Category.WORLDS, "itemStatus", "%status%"),
+        WORLDS_ITEM_JOBS_TIPS(Category.WORLDS, "itemJobsTips"),
+        WORLDS_ITEM_MCMMO_TIPS(Category.WORLDS, "itemMcMMOTips"),
+        WORLDS_ITEM_GROWTH_TIPS(Category.WORLDS, "itemOfflineGrowthTips"),
+        WORLDS_ITEM_RESIDENCE_TIPS(Category.WORLDS, "itemResidenceTips"),
+        WORLDS_ITEM_TOWNY_TIPS(Category.WORLDS, "itemTownyTips"),
+        WORLDS_ITEM_GUARD_TIPS(Category.WORLDS, "itemWorldGuardTips"),
+
         WORLD_AUTOFARMS_ITEM_NAME(Category.WORLD, SubCategory.AUTOFARMS, "itemName"),
+        WORLD_AUTOFARMS_ITEM_TIPS(Category.WORLD, SubCategory.AUTOFARMS, "itemTips"),
         WORLD_AUTOFARMS_ITEM_STATUS(Category.WORLD, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
         WORLD_PLAYERS_ITEM_NAME(Category.WORLD, SubCategory.PLAYERS, "itemName"),
+        WORLD_PLAYERS_ITEM_TIPS(Category.WORLD, SubCategory.PLAYERS, "itemTips"),
         WORLD_PLAYERS_ITEM_STATUS(Category.WORLD, SubCategory.PLAYERS, "itemStatus", "%status%"),
         WORLD_WORLD_ITEM_NAME(Category.WORLD, SubCategory.WORLD, "itemName", "%name%"),
+        WORLD_WORLD_ITEM_TIPS(Category.WORLD, SubCategory.WORLD, "itemTips"),
         WORLD_WORLD_ITEM_STATUS(Category.WORLD, SubCategory.WORLD, "itemStatus", "%status%");
 
         private enum Category {
@@ -748,6 +772,23 @@ public final class LanguageAPI {
             List<String> messages = getAsList(plugin);
             messages.add("");
             messages.addAll(Arrays.asList(appendable));
+            return messages;
+        }
+
+
+        /**
+         * It returns a list of strings that are the messages in the message file, with a blank line and the appendable
+         * list appended to the end.
+         *
+         * @param plugin     The plugin instance.
+         * @param appendable The list of strings to append to the end of the list of messages.
+         *
+         * @return A list of strings.
+         */
+        public @NotNull List<String> getAsList(@NotNull CropClick plugin, List<String> appendable) {
+            List<String> messages = getAsList(plugin);
+            messages.add("");
+            messages.addAll(appendable);
             return messages;
         }
 

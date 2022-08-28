@@ -101,12 +101,6 @@ public final class Kelp extends TallCrop {
     }
 
 
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
-    }
-
-
     /**
      * Returns true if the block is any type of kelp.
      *

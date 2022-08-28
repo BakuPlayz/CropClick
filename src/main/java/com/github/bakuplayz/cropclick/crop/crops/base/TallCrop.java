@@ -88,6 +88,12 @@ public abstract class TallCrop extends BaseCrop {
     }
 
 
+    @Override
+    public boolean isLinkable() {
+        return cropSection.isLinkable(getName(), false);
+    }
+
+
     /**
      * Harvest all the crops, stacked on each other, starting from the top.
      *

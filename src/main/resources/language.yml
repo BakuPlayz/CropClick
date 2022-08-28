@@ -98,8 +98,8 @@ menu:
     world: "World"
     name: "Name"
 
-    containerPreview: "View - &9%id%&r"
-    dispenserPreview: "View - &9%id%&r"
+    containerPreview: "View - &9%id%"
+    dispenserPreview: "View - &9%id%"
 
   main:
     updates:
@@ -154,6 +154,22 @@ menu:
     itemPermission: "&7Permission: &e%permission%"
     itemDescription: "&7Description: &e%description%"
 
+  crops:
+    status:
+      enabled: "Harvestable"
+      disabled: "Disabled"
+
+    item:
+      name: "&e%name% &7(%status%)"
+      dropName: "&7Drop Name: &r%name%"
+      dropValue: "&7Drop Value: &e%value%"
+      particles: "&7Amount of Particles: &e%status%"
+      sounds: "&7Amount of Sounds: &e%status%"
+      mcMMOExperience: "&7Experience: &e%status%"
+      jobsExperience: "&7Experience: &e%status%"
+      jobsMoney: "&7Money: &e%status%"
+      jobsPoints: "&7Points: &e%status%"
+
   crop:
     status:
       enabled: "Harvestable"
@@ -169,10 +185,12 @@ menu:
 
     crop:
       itemName: "&e%name% &7(%status%)"
+      itemTips: "&7The &emaximum &7amount dropped, when harvesting one."
       itemDropValue: "&7Drop Value: &e%value%"
 
     seed:
       itemName: "&e%name% &7(%status%)"
+      itemTips: "&7The &emaximum &7amount dropped, when harvesting one."
       itemDropValue: "&7Drop Value: &e%value%"
 
     dropChance:
@@ -182,14 +200,17 @@ menu:
 
     linkable:
       itemName: "&eLinkable"
+      itemTips: "&7Make you able to &elink &7the crop, to autofarms."
       itemStatus: "&7Status: &e%status%"
 
     atLeastOne:
-      itemName: "&eAtLeastOne"
+      itemName: "&eAt Least One"
+      itemTips: "&7Makes sure &eat least &eone &7is dropped, when harvesting one."
       itemStatus: "&7Status: &e%status%"
 
     replant:
       itemName: "&eReplant"
+      itemTips: "&7Makes sure the crop is being &ereplanted&7, when harvested."
       itemStatus: "&7Status: &e%status%"
 
   dropChance:
@@ -207,27 +228,13 @@ menu:
 
     crop:
       itemName: "&e%name% &7(%status%)"
+      itemTips: "&7The &echance &7of receiving the drop, when harvesting one."
       itemDropChance: "&7Drop Chance: &e%chance%%"
 
     seed:
       itemName: "&e%name% &7(%status%)"
+      itemTips: "&7The &echance &7of receiving the drop, when harvesting the crop."
       itemDropChance: "&7Drop Chance: &e%chance%%"
-
-  crops:
-    status:
-      enabled: "Harvestable"
-      disabled: "Disabled"
-
-    item:
-      name: "&e%name% &7(%status%)"
-      dropName: "&7Drop Name: &r%name%"
-      dropValue: "&7Drop Value: &e%value%"
-      particles: "&7Amount of Particles: &e%status%"
-      sounds: "&7Amount of Sounds: &e%status%"
-      mcMMOExperience: "&7Experience: &e%status%"
-      jobsExperience: "&7Experience: &e%status%"
-      jobsMoney: "&7Money: &e%status%"
-      jobsPoints: "&7Points: &e%status%"
 
   link:
     format:
@@ -258,10 +265,12 @@ menu:
 
     container:
       itemName: "&eContainer"
+      itemTips: "&7Click to view &econtainer's &7inventory."
 
     dispenser:
       itemName: "&eDispenser"
-
+      itemTips: "&7Click to view &edispenser's &7inventory."
+  
   autofarms:
     itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
@@ -342,14 +351,17 @@ menu:
 
     points:
       itemName: "&ePoints"
+      itemTips: "&7The given &epoints&7, when harvesting one."
       itemValue: "&7Points: &e%value%"
 
     money:
       itemName: "&eMoney"
+      itemTips: "&7The given &emoney&7, when harvesting one."
       itemValue: "&7Money: &e%value%"
 
     experience:
       itemName: "&eExperience"
+      itemTips: "&7The given &eexperience&7, when harvesting one."
       itemValue: "&7Experience: &e%value%"
 
   mcMMOCrop:
@@ -363,12 +375,13 @@ menu:
 
     experience:
       itemName: "&eExperience"
+      itemTips: "&7The given &eexperience&7, when harvesting one."
       itemValue: "&7Experience: &e%value%"
 
     experienceReason:
       itemName: "&eExperience Reason"
-      itemValue: "&7Reason: &e%value%"
       itemTips: "&7The shown experience reason, &emcMMO &7should display when harvesting the crop."
+      itemValue: "&7Reason: &e%value%"
 
     reasonResponse:
       changed: "&7Changed the experience reason to &r%name%&7."
@@ -432,18 +445,18 @@ menu:
 
     delay:
       itemName: "&eDelay"
-      itemValue: "&7Delay: &e%value%"
       itemTips: "&7The specific delay or time, &ein &emilliseconds&7, before running the effect."
+      itemValue: "&7Delay: &e%value%"
 
     speed:
       itemName: "&eSpeed"
-      itemValue: "&7Speed: &e%value%"
       itemTips: "&7The specific, &espeed &emultiplier&7, applied to the effects."
+      itemValue: "&7Speed: &e%value%"
 
     amount:
       itemName: "&eAmount"
-      itemValue: "&7Amount: &e%value%"
       itemTips: "&7The specific &eamount &eof, same type, effects&7 at a time."
+      itemValue: "&7Amount: &e%value%"
 
   sounds:
     itemName: "&e%name% &7(%status%)"
@@ -468,27 +481,29 @@ menu:
 
     delay:
       itemName: "&eDelay"
-      itemValue: "&7Delay: &e%value%"
       itemTips: "&7The specific delay or time, &ein &emilliseconds&7, before running the sound."
+      itemValue: "&7Delay: &e%value%"
 
     volume:
       itemName: "&eVolume"
-      itemValue: "&7Volume: &e%value%"
       itemTips: "&7The specific range, &ein &eblocks&7, the sound is played."
+      itemValue: "&7Volume: &e%value%"
 
     pitch:
       itemName: "&ePitch"
-      itemValue: "&7Pitch: &e%value%"
       itemTips: "&7The specific &epitch&7, the sound is played in."
+      itemValue: "&7Pitch: &e%value%"
 
   name:
     crop:
       itemName: "&e%name% &7(%status%)"
-      dropName: "&7Drop Name: &r%name%"
+      itemTips: "&7The &edrop's name&7, when harvesting one."
+      itemDropName: "&7Drop Name: &r%name%"
 
     seed:
       itemName: "&e%name% &7(%status%)"
-      dropName: "&7Drop Name: &r%name%"
+      itemTips: "&7The &edrop's name&7, when harvesting the crop."
+      itemDropName: "&7Drop Name: &r%name%"
 
     colorCode:
       itemName: "&eColor Codes"
@@ -500,19 +515,26 @@ menu:
 
   worlds:
     itemName: "&e%name%"
+    itemJobsTips: "&7Toggles the &eJobs Reborn &7addon, in the world."
+    itemMcMMOTips: "&7Toggles the &emcMMO &7addon, in the world."
+    itemOfflineGrowthTips: "&7Toggles the &eOffline Growth &7addon, in the world."
+    itemResidenceTips: "&7Toggles the &eResidence &7addon, in the world."
+    itemTownyTips: "&7Toggles the &eTowny &7addon, in the world."
+    itemWorldGuardTips: "&7Toggles the &eWorldGuard &7addon, in the world."
     itemStatus: "&7Banished: &e%status%"
 
   world:
     world:
       itemName: "&e%name%"
+      itemTips: "&7Toggles the World's &einteractivity&7 with CropClick."
       itemStatus: "&7Banished: &e%status%"
 
     players:
       itemName: "&ePlayers"
+      itemTips: "&7Toggles Players &einteractivity&7 with CropClick, in the world."
       itemStatus: "&7Allowed: &e%status%"
-      itemTips: "&7Toggles &ePlayers usability&7, in the world." # Add to LANGUAGEAPI
 
     autofarms:
       itemName: "&eAutofarms"
+      itemTips: "&7Toggles Autofarms &efunctionality&7 with CropClick, in the world."
       itemStatus: "&7Allowed: &e%status%"
-      itemTips: "&7Toggles &eAutofarms functionality&7, in the world." # Add to LANGUAGEAPI

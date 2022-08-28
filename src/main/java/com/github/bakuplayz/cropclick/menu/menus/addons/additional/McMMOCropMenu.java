@@ -94,6 +94,7 @@ public final class McMMOCropMenu extends Menu {
 
     private @NotNull ItemStack getReasonItem() {
         String reason = addonSection.getMcMMOExperienceReason(cropName);
+        
         return new ItemUtil(Material.PAPER)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS.getAsList(plugin,
@@ -104,9 +105,12 @@ public final class McMMOCropMenu extends Menu {
 
     private @NotNull ItemStack getExperienceItem() {
         double experience = addonSection.getMcMMOExperience(cropName);
+
         return new ItemUtil(Material.EXPERIENCE_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience))
+                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience)
+                ))
                 .toItemStack();
     }
 
@@ -114,6 +118,7 @@ public final class McMMOCropMenu extends Menu {
     private @NotNull ItemStack getExperienceAddItem(int amount) {
         double beforeValue = addonSection.getMcMMOExperience(cropName);
         double afterValue = Math.min(beforeValue + amount, EXPERIENCE_MAX);
+
         return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
@@ -124,6 +129,7 @@ public final class McMMOCropMenu extends Menu {
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
         double beforeValue = addonSection.getMcMMOExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, EXPERIENCE_MIN);
+
         return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))

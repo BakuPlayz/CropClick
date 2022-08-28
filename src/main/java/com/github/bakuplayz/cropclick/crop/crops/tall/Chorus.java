@@ -2,6 +2,8 @@ package com.github.bakuplayz.cropclick.crop.crops.tall;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Bukkit;
@@ -21,6 +23,8 @@ import java.util.List;
  *
  * @author BakuPlayz
  * @version 2.0.0
+ * @see BaseCrop
+ * @see Crop
  * @since 2.0.0
  */
 public final class Chorus extends TallCrop {
@@ -205,12 +209,6 @@ public final class Chorus extends TallCrop {
     @Override
     public @NotNull Material getMenuType() {
         return Material.CHORUS_FRUIT;
-    }
-
-
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
     }
 
 

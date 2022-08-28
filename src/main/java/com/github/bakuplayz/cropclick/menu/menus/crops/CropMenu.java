@@ -161,8 +161,10 @@ public final class CropMenu extends Menu {
                         : LanguageAPI.Menu.CROP_STATUS_DISABLED.get(plugin);
 
         return new ItemUtil(crop.getMenuType())
-                .setName(LanguageAPI.Menu.CROP_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount()))
+                .setName(LanguageAPI.Menu.CROP_CROP_ITEM_NAME.get(plugin, name, status))
+                .setLore(LanguageAPI.Menu.CROP_CROP_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount())
+                ))
                 .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
@@ -174,7 +176,9 @@ public final class CropMenu extends Menu {
 
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_SEED_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount()))
+                .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount())
+                ))
                 .setMaterial(seed.isEnabled() ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
@@ -204,8 +208,9 @@ public final class CropMenu extends Menu {
 
         return new ItemUtil(Material.STONE_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
+                ).toItemStack();
     }
 
 
@@ -214,8 +219,9 @@ public final class CropMenu extends Menu {
 
         return new ItemUtil(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_REPLANT_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
+                ).toItemStack();
     }
 
 
@@ -224,8 +230,9 @@ public final class CropMenu extends Menu {
 
         return new ItemUtil(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_AT_LEAST_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
+                ).toItemStack();
     }
 
 

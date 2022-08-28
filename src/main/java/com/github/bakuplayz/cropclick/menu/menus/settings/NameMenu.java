@@ -11,6 +11,7 @@ import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -100,7 +101,9 @@ public final class NameMenu extends Menu {
 
         return new ItemUtil(crop.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
+                .setLore(LanguageAPI.Menu.NAME_CROP_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.NAME_CROP_ITEM_DROP_NAME.get(plugin, getDropName(true))
+                ))
                 .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
@@ -118,7 +121,9 @@ public final class NameMenu extends Menu {
 
         return new ItemUtil(seed.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.NAME_SEED_DROP_NAME.get(plugin, getDropName(false)))
+                .setLore(LanguageAPI.Menu.NAME_SEED_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.NAME_SEED_ITEM_DROP_NAME.get(plugin, getDropName(false))
+                ))
                 .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
@@ -133,7 +138,11 @@ public final class NameMenu extends Menu {
      * the lore being the color codes.
      */
     private @NotNull ItemStack getCodesItem(int start) {
-        return new ItemUtil(Material.OAK_SIGN)
+        Material sign = VersionUtils.between(0.0, 13.9)
+                        ? Material.LEGACY_SIGN
+                        : Material.OAK_SIGN;
+
+        return new ItemUtil(sign)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
                 .setLore(getCodesLore(start))
                 .toItemStack();

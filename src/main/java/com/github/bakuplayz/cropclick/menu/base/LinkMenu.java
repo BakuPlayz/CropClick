@@ -20,8 +20,10 @@ import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -452,11 +454,7 @@ public abstract class LinkMenu extends Menu {
      */
     private @NotNull List<String> getLocationAsLore(Location location, @NotNull Component component) {
         if (location == null) {
-            return Collections.singletonList(
-                    LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
-                            LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)
-                    )
-            );
+            return getUnlinkedLocationLore();
         }
 
         if (location instanceof DoublyLocation) {
@@ -471,12 +469,71 @@ public abstract class LinkMenu extends Menu {
             }
         }
 
-        ArrayList<String> locationAsLore = new ArrayList<>(
-                Arrays.asList(
-                        LanguageAPI.Menu.LINK_FORMAT_X.get(plugin, location.getBlockX()),
-                        LanguageAPI.Menu.LINK_FORMAT_Y.get(plugin, location.getBlockY()),
-                        LanguageAPI.Menu.LINK_FORMAT_Z.get(plugin, location.getBlockZ())
+        switch (component) {
+            case CROP:
+                if (isCropSelected) {
+                    return getSelectedLocationLore(location);
+                }
+                return getLinkedLocationLore(location, component);
+
+            case CONTAINER:
+                if (isContainerSelected) {
+                    return getSelectedLocationLore(location);
+                }
+                return getLinkedLocationLore(location, component);
+
+            case DISPENSER:
+                if (isDispenserSelected) {
+                    return getSelectedLocationLore(location);
+                }
+                return getLinkedLocationLore(location, component);
+        }
+
+        return Collections.emptyList();
+    }
+
+
+    /**
+     * It returns a list of strings that contain the X, Y, and Z coordinates of a location.
+     *
+     * @param location The location of the base.
+     *
+     * @return A list of strings.
+     */
+    private @NotNull List<String> getBaseLocationLore(@NotNull Location location) {
+        return Arrays.asList(
+                LanguageAPI.Menu.LINK_FORMAT_X.get(plugin, location.getBlockX()),
+                LanguageAPI.Menu.LINK_FORMAT_Y.get(plugin, location.getBlockY()),
+                LanguageAPI.Menu.LINK_FORMAT_Z.get(plugin, location.getBlockZ())
+        );
+    }
+
+
+    /**
+     * This function returns a list of strings that contains a single string that says the location is unlinked.
+     *
+     * @return A list of strings.
+     */
+    @Contract(" -> new")
+    private @NotNull @Unmodifiable List<String> getUnlinkedLocationLore() {
+        return Collections.singletonList(
+                LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
+                        LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)
                 )
+        );
+    }
+
+
+    /**
+     * It returns a list of strings that are the base location lore, with the selected state added to the end.
+     *
+     * @param location The location to get the lore for.
+     *
+     * @return A list of strings that are the lore of the location.
+     */
+    private @NotNull @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
+        ArrayList<String> baseState = new ArrayList<>(
+                getBaseLocationLore(location)
         );
 
         List<String> selectedState = Collections.singletonList(
@@ -485,30 +542,32 @@ public abstract class LinkMenu extends Menu {
                 )
         );
 
-        switch (component) {
-            case CROP:
-                if (isCropSelected) {
-                    locationAsLore.addAll(selectedState);
-                    return locationAsLore;
-                }
-                break;
+        baseState.add("");
+        baseState.addAll(selectedState);
+        return baseState;
+    }
 
+
+    /**
+     * It returns a list of strings that are used to display the location of a linked block.
+     *
+     * @param location  The location of the block that is being linked.
+     * @param component The component that the location is linked to.
+     *
+     * @return A list of strings.
+     */
+    private @NotNull List<String> getLinkedLocationLore(@NotNull Location location, @NotNull Component component) {
+        switch (component) {
             case CONTAINER:
-                if (isContainerSelected) {
-                    locationAsLore.addAll(selectedState);
-                    return locationAsLore;
-                }
-                break;
+                return LanguageAPI.Menu.LINK_CONTAINER_TIPS.getAsList(plugin, getBaseLocationLore(location));
 
             case DISPENSER:
-                if (isDispenserSelected) {
-                    locationAsLore.addAll(selectedState);
-                    return locationAsLore;
-                }
-                break;
-        }
+                return LanguageAPI.Menu.LINK_DISPENSER_TIPS.getAsList(plugin, getBaseLocationLore(location));
 
-        return locationAsLore;
+            case CROP:
+                return getBaseLocationLore(location);
+        }
+        return Collections.emptyList();
     }
 
 
