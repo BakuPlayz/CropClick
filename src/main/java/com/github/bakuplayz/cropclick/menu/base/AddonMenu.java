@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -111,7 +111,7 @@ public abstract class AddonMenu extends Menu {
     protected final @NotNull ItemStack getWorldsItem() {
         Addon addon = addonManager.findByName(addonName);
 
-        return new ItemUtil(Material.GRASS_BLOCK)
+        return new ItemBuilder(Material.GRASS_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.ADDON_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDON_WORLDS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDON_WORLDS_ITEM_STATUS.get(

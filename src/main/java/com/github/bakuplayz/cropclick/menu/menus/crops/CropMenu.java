@@ -10,7 +10,7 @@ import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crop.DropChanceMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -160,7 +160,7 @@ public final class CropMenu extends Menu {
                         ? LanguageAPI.Menu.CROP_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROP_STATUS_DISABLED.get(plugin);
 
-        return new ItemUtil(crop.getMenuType())
+        return new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount())
@@ -174,7 +174,7 @@ public final class CropMenu extends Menu {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
 
-        return new ItemUtil(seed.getMenuType())
+        return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.CROP_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount())
@@ -187,7 +187,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getChanceItem() {
         int cropChance = getDropChanceAsPercent(true);
 
-        ItemUtil item = new ItemUtil(Material.OAK_PRESSURE_PLATE)
+        ItemBuilder item = new ItemBuilder(Material.OAK_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_CHANCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, cropChance));
 
@@ -206,7 +206,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getLinkableItem() {
         boolean isLinkable = cropSection.isLinkable(cropName);
 
-        return new ItemUtil(Material.STONE_PRESSURE_PLATE)
+        return new ItemBuilder(Material.STONE_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
@@ -217,7 +217,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getReplantItem() {
         boolean shouldReplant = cropSection.shouldReplant(cropName);
 
-        return new ItemUtil(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_REPLANT_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
@@ -228,7 +228,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getAtLeastItem() {
         boolean atLeastOne = cropSection.shouldDropAtLeastOne(cropName);
 
-        return new ItemUtil(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_AT_LEAST_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
@@ -240,7 +240,7 @@ public final class CropMenu extends Menu {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -251,7 +251,7 @@ public final class CropMenu extends Menu {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -262,7 +262,7 @@ public final class CropMenu extends Menu {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -273,7 +273,7 @@ public final class CropMenu extends Menu {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

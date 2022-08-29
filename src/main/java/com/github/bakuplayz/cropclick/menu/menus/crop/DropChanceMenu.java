@@ -8,7 +8,7 @@ import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
@@ -130,7 +130,7 @@ public final class DropChanceMenu extends Menu {
                 crop.getDrop().getChance() * DECIMAL_TO_PERCENT
         );
 
-        return new ItemUtil(crop.getMenuType())
+        return new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance)
@@ -147,7 +147,7 @@ public final class DropChanceMenu extends Menu {
                 seed.getDrop().getChance() * DECIMAL_TO_PERCENT
         );
 
-        return new ItemUtil(seed.getMenuType())
+        return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance)
@@ -163,7 +163,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -176,7 +176,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -189,7 +189,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemUtil(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -202,7 +202,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemUtil(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

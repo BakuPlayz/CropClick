@@ -16,12 +16,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 
 /**
  * (DESCRIPTION)
  *
- * @author BakuPlayz
+ * @author BakuPlayz, Hannes Blåman
  * @version 2.0.0
  * @see BaseCrop
  * @see Crop
@@ -58,134 +59,45 @@ public final class Chorus extends TallCrop {
 
     @Override
     public void replant(@NotNull Block block) {
-        choruses.sort(
-                (c1, c2) -> c2.getY() - c1.getY()
-        );
+        // It's sorting the list of chorus blocks in reverse order, then setting them to air.
+        choruses.stream()
+                .sorted((o1, o2) -> -1)
+                .forEach(b -> b.setType(Material.AIR));
 
-        int i = 0;
-        for (Block chorus : choruses) {
-            int cooldown = i++ * 20;
-            scheduler.runTaskLater(plugin,
-                    () -> {
-                        chorus.setType(Material.STONE);
-                        System.out.println("rann!!!");
-                    },
-                    cooldown
-            );
-        }
         choruses = new ArrayList<>();
     }
 
 
+    /**
+     * Get the height of a chorus plant by pushing the block onto a stack, then popping it off and pushing its neighbors
+     * onto the stack until the stack is empty.
+     *
+     * @param block The block that the player clicked, harvested.
+     *
+     * @return The number of chorus blocks in the tree.
+     *
+     * @apiNote Written by <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
+     */
     private int getTallness(@NotNull Block block) {
-        int amount = 2;
+        Stack<Block> stack = new Stack<>();
+        stack.push(block);
 
-        Block above = block.getRelative(BlockFace.UP);
-        boolean isAbove = isChorus(above);
+        while (stack.size() > 0) {
+            Block b = stack.pop();
 
-        choruses.add(block);
-        choruses.add(above);
+            if (!isChorus(b) || choruses.contains(b)) {
+                continue;
+            }
 
-        int y = 0;
-        while (isAbove) {
-            ++amount;
-            isAbove = isChorus(above);
-            above = block.getRelative(BlockFace.UP, ++y);
-            choruses.add(above);
+            choruses.add(b);
+            stack.push(b.getRelative(BlockFace.UP));
+            stack.push(b.getRelative(BlockFace.EAST));
+            stack.push(b.getRelative(BlockFace.SOUTH));
+            stack.push(b.getRelative(BlockFace.WEST));
+            stack.push(b.getRelative(BlockFace.NORTH));
         }
 
-        Block west = above.getRelative(BlockFace.WEST, 1);
-        Block east = above.getRelative(BlockFace.EAST, 1);
-        Block north = above.getRelative(BlockFace.NORTH, 1);
-        Block south = above.getRelative(BlockFace.SOUTH, 1);
-
-        boolean isWest = isChorus(west);
-        boolean isEast = isChorus(east);
-        boolean isNorth = isChorus(north);
-        boolean isSouth = isChorus(south);
-
-        if (isWest && isEast && isNorth && isSouth) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            choruses.add(above.getRelative(BlockFace.EAST));
-            choruses.add(above.getRelative(BlockFace.NORTH));
-            choruses.add(above.getRelative(BlockFace.SOUTH));
-            return getTallness(west)
-                    + getTallness(east)
-                    + getTallness(north)
-                    + getTallness(south);
-        }
-
-        if (isWest && isEast && isNorth) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            choruses.add(above.getRelative(BlockFace.EAST));
-            choruses.add(above.getRelative(BlockFace.NORTH));
-            return getTallness(west) + getTallness(east) + getTallness(north);
-        }
-
-        if (isWest && isEast && isSouth) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            choruses.add(above.getRelative(BlockFace.EAST));
-            choruses.add(above.getRelative(BlockFace.SOUTH));
-            return getTallness(west) + getTallness(east) + getTallness(south);
-        }
-
-        if (isWest && isEast) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            choruses.add(above.getRelative(BlockFace.EAST));
-            return getTallness(west) + getTallness(east);
-        }
-
-        if (isWest && isNorth) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            choruses.add(above.getRelative(BlockFace.NORTH));
-            return getTallness(west) + getTallness(north);
-        }
-
-        if (isWest && isSouth) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            choruses.add(above.getRelative(BlockFace.SOUTH));
-            return getTallness(west) + getTallness(south);
-        }
-
-        if (isEast && isNorth) {
-            choruses.add(above.getRelative(BlockFace.EAST));
-            choruses.add(above.getRelative(BlockFace.NORTH));
-            return getTallness(east) + getTallness(north);
-        }
-
-        if (isEast && isSouth) {
-            choruses.add(above.getRelative(BlockFace.EAST));
-            choruses.add(above.getRelative(BlockFace.SOUTH));
-            return getTallness(east) + getTallness(south);
-        }
-
-        if (isNorth && isSouth) {
-            choruses.add(above.getRelative(BlockFace.NORTH));
-            choruses.add(above.getRelative(BlockFace.SOUTH));
-            return getTallness(north) + getTallness(south);
-        }
-
-        if (isWest) {
-            choruses.add(above.getRelative(BlockFace.WEST));
-            return getTallness(west);
-        }
-
-        if (isEast) {
-            choruses.add(above.getRelative(BlockFace.EAST));
-            return getTallness(east);
-        }
-
-        if (isNorth) {
-            choruses.add(above.getRelative(BlockFace.NORTH));
-            return getTallness(north);
-        }
-
-        if (isSouth) {
-            choruses.add(above.getRelative(BlockFace.SOUTH));
-            return getTallness(south);
-        }
-
-        return amount;
+        return choruses.size() + 1;
     }
 
 

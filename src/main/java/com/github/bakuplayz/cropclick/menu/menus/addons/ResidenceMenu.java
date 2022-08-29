@@ -7,7 +7,7 @@ import com.github.bakuplayz.cropclick.menu.base.AddonMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AddonsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,7 +59,7 @@ public final class ResidenceMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemUtil(Material.OAK_FENCE)
+        return new ItemBuilder(Material.OAK_FENCE)
                 .setName(LanguageAPI.Menu.ADDON_RESIDENCE_ITEM_NAME.get(plugin,
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))

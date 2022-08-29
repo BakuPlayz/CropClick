@@ -39,9 +39,11 @@ public final class CropManager {
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
     private final AddonConfigSection addonSection;
-    
+
     private final @Getter List<Crop> crops;
 
+
+    private final CropClick plugin;
 
     /**
      * A map of the crops that have been harvested and the time they were harvested,
@@ -57,6 +59,7 @@ public final class CropManager {
         this.cropSection = cropsConfig.getCropSection();
         this.harvestedCrops = new HashMap<>();
         this.crops = new ArrayList<>();
+        this.plugin = plugin;
 
         registerVanillaCrops();
     }
@@ -75,6 +78,7 @@ public final class CropManager {
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
         registerCrop(new CocoaBean(cropsConfig));
+        registerCrop(new Chorus(plugin));
 
         if (VersionUtils.supportsDripleaves()) {
             registerCrop(new Dripleaf(cropsConfig));

@@ -20,7 +20,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class ItemUtil {
+public final class ItemBuilder {
 
     private @Getter int amount;
 
@@ -31,27 +31,27 @@ public final class ItemUtil {
     private @Getter List<String> lore;
 
 
-    public ItemUtil(@NotNull Material material) {
+    public ItemBuilder(@NotNull Material material) {
         this(material, "", 1, null);
     }
 
 
-    public ItemUtil(@NotNull Material material, int amount) {
+    public ItemBuilder(@NotNull Material material, int amount) {
         this(material, "", amount, null);
     }
 
 
-    public ItemUtil(@NotNull Material material, @NotNull String name) {
+    public ItemBuilder(@NotNull Material material, @NotNull String name) {
         this(material, name, 1, null);
     }
 
 
-    public ItemUtil(@NotNull Material material, @NotNull String name, int amount) {
+    public ItemBuilder(@NotNull Material material, @NotNull String name, int amount) {
         this(material, name, amount, null);
     }
 
 
-    public ItemUtil(@NotNull Material material, @NotNull String name, int amount, List<String> lore) {
+    public ItemBuilder(@NotNull Material material, @NotNull String name, int amount, List<String> lore) {
         this.lore = lore == null ? Collections.emptyList() : lore;
         this.material = material;
         this.amount = amount;
@@ -59,7 +59,7 @@ public final class ItemUtil {
     }
 
 
-    public ItemUtil(@NotNull ItemStack stack) {
+    public ItemBuilder(@NotNull ItemStack stack) {
         if (stack.hasItemMeta()) {
             this.meta = stack.getItemMeta();
         }
@@ -71,25 +71,25 @@ public final class ItemUtil {
     }
 
 
-    public ItemUtil(@NotNull ItemStack stack, int amount) {
+    public ItemBuilder(@NotNull ItemStack stack, int amount) {
         this(stack);
         this.amount = amount;
     }
 
 
-    public ItemUtil(@NotNull ItemStack stack, @NotNull String name) {
+    public ItemBuilder(@NotNull ItemStack stack, @NotNull String name) {
         this(stack);
         this.name = name;
     }
 
 
-    public ItemUtil(@NotNull ItemStack stack, @NotNull String name, int amount) {
+    public ItemBuilder(@NotNull ItemStack stack, @NotNull String name, int amount) {
         this(stack, amount);
         this.name = name;
     }
 
 
-    public ItemUtil(@NotNull ItemStack stack, @NotNull String name, int amount, List<String> lore) {
+    public ItemBuilder(@NotNull ItemStack stack, @NotNull String name, int amount, List<String> lore) {
         this(stack, name, amount);
         this.lore = lore;
     }
@@ -103,7 +103,7 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object.
      */
-    public ItemUtil setAmount(int amount) {
+    public ItemBuilder setAmount(int amount) {
         this.amount = amount <= -1 ? this.amount : amount;
         return this;
     }
@@ -116,7 +116,7 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object
      */
-    public ItemUtil setMaterial(Material material) {
+    public ItemBuilder setMaterial(Material material) {
         this.material = material == null ? this.material : material;
         return this;
     }
@@ -129,7 +129,7 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object itself.
      */
-    public ItemUtil setName(String name) {
+    public ItemBuilder setName(String name) {
         this.name = name == null ? this.name : name;
         return this;
     }
@@ -143,7 +143,7 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object.
      */
-    public ItemUtil setName(@NotNull CropClick plugin, @NotNull LanguageAPI.Menu name) {
+    public ItemBuilder setName(@NotNull CropClick plugin, @NotNull LanguageAPI.Menu name) {
         this.name = name.get(plugin);
         return this;
     }
@@ -156,7 +156,7 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object.
      */
-    public ItemUtil setLore(List<String> lore) {
+    public ItemBuilder setLore(List<String> lore) {
         this.lore = lore == null ? this.lore : lore;
         return this;
     }
@@ -168,7 +168,7 @@ public final class ItemUtil {
      *
      * @return The ItemUtil object.
      */
-    public ItemUtil setLore(String... lore) {
+    public ItemBuilder setLore(String... lore) {
         this.lore = lore == null ? this.lore : Arrays.asList(lore);
         return this;
     }
@@ -188,7 +188,7 @@ public final class ItemUtil {
         if (lore != null) meta.setLore(lore);
         if (name != null) meta.setDisplayName(name);
         if (name != null || lore != null) {
-            //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            //TODO: meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             stack.setItemMeta(meta);
         }
 

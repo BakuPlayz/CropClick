@@ -8,7 +8,7 @@ import com.github.bakuplayz.cropclick.menu.menus.settings.ToggleMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
@@ -100,7 +100,7 @@ public final class SettingsMenu extends Menu {
                 getAutofarmsState()
         );
 
-        return new ItemUtil(Material.DISPENSER)
+        return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, status)))
@@ -109,7 +109,7 @@ public final class SettingsMenu extends Menu {
 
 
     private @NotNull ItemStack getParticlesItem() {
-        return new ItemUtil(Material.FIREWORK_ROCKET)
+        return new ItemBuilder(Material.FIREWORK_ROCKET)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles())))
@@ -118,7 +118,7 @@ public final class SettingsMenu extends Menu {
 
 
     private @NotNull ItemStack getSoundsItem() {
-        return new ItemUtil(Material.NOTE_BLOCK)
+        return new ItemBuilder(Material.NOTE_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds())))
@@ -128,7 +128,7 @@ public final class SettingsMenu extends Menu {
 
     //TODO: Get as skull item with the players head
     private @NotNull ItemStack getToggleItem() {
-        return new ItemUtil(Material.PLAYER_HEAD)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
@@ -137,7 +137,7 @@ public final class SettingsMenu extends Menu {
 
 
     private @NotNull ItemStack getNameItem() {
-        return new ItemUtil(Material.NAME_TAG)
+        return new ItemBuilder(Material.NAME_TAG)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_NAME_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_NAME_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_NAME_ITEM_STATUS.get(plugin, getAmountOfRenamed())))
@@ -146,7 +146,7 @@ public final class SettingsMenu extends Menu {
 
 
     private @NotNull ItemStack getWorldsItem() {
-        return new ItemUtil(Material.GRASS_BLOCK)
+        return new ItemBuilder(Material.GRASS_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished())))

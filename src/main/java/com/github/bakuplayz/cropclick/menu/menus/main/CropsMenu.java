@@ -19,7 +19,7 @@ import com.github.bakuplayz.cropclick.menu.menus.settings.NameMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -167,7 +167,7 @@ public final class CropsMenu extends PaginatedMenu {
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.CROPS_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROPS_STATUS_DISABLED.get(plugin);
-        ItemUtil menuItem = new ItemUtil(crop.getMenuType())
+        ItemBuilder menuItem = new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
                 .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE);
 

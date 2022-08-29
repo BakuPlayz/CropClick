@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.*;
 import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -79,7 +79,7 @@ public final class MainMenu extends Menu {
      */
     private @NotNull ItemStack getUpdatesItem() {
         String updateState = plugin.getUpdateManager().getUpdateStateMessage();
-        return new ItemUtil(Material.ANVIL)
+        return new ItemBuilder(Material.ANVIL)
                 .setName(plugin, LanguageAPI.Menu.MAIN_UPDATES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_UPDATES_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.MAIN_UPDATES_ITEM_STATE.get(plugin, updateState)
@@ -93,7 +93,7 @@ public final class MainMenu extends Menu {
      * @return An ItemStack
      */
     private @NotNull ItemStack getAddonsItem() {
-        return new ItemUtil(Material.ENDER_CHEST)
+        return new ItemBuilder(Material.ENDER_CHEST)
                 .setName(plugin, LanguageAPI.Menu.MAIN_ADDONS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_ADDONS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.MAIN_ADDONS_ITEM_STATUS.get(plugin, 6)
@@ -107,7 +107,7 @@ public final class MainMenu extends Menu {
      * @return An ItemStack
      */
     private @NotNull ItemStack getSettingsItem() {
-        return new ItemUtil(Material.CHEST)
+        return new ItemBuilder(Material.CHEST)
                 .setName(plugin, LanguageAPI.Menu.MAIN_SETTINGS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_SETTINGS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.MAIN_SETTINGS_ITEM_STATUS.get(plugin, 6)
@@ -122,7 +122,7 @@ public final class MainMenu extends Menu {
      */
     private @NotNull ItemStack getCropsItem() {
         int amountOfCrops = plugin.getCropManager().getAmountOfCrops();
-        return new ItemUtil(Material.WHEAT)
+        return new ItemBuilder(Material.WHEAT)
                 .setName(plugin, LanguageAPI.Menu.MAIN_CROPS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_CROPS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.MAIN_CROPS_ITEM_STATUS.get(plugin, amountOfCrops)
@@ -137,7 +137,7 @@ public final class MainMenu extends Menu {
      */
     private @NotNull ItemStack getAutofarmsItem() {
         int amountOfFarms = plugin.getAutofarmManager().getAmountOfFarms();
-        return new ItemUtil(Material.DISPENSER)
+        return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.MAIN_AUTOFARMS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.MAIN_AUTOFARMS_ITEM_STATUS.get(plugin, amountOfFarms)
@@ -152,7 +152,7 @@ public final class MainMenu extends Menu {
      */
     private @NotNull ItemStack getHelpItem() {
         int amountOfCommands = plugin.getCommandManager().getAmountOfCommands();
-        return new ItemUtil(Material.BOOK)
+        return new ItemBuilder(Material.BOOK)
                 .setName(plugin, LanguageAPI.Menu.MAIN_HELP_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.MAIN_HELP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.MAIN_HELP_ITEM_STATUS.get(plugin, amountOfCommands)

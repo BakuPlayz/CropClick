@@ -35,6 +35,7 @@ public final class RedMushroom extends TallCrop {
     }
 
 
+    //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
     public int getCurrentAge(@NotNull Block block) {
         return isRedMushroom(block) ? 45 : 0;
@@ -58,6 +59,7 @@ public final class RedMushroom extends TallCrop {
     }
 
 
+    //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
     public void replant(@NotNull Block block) {
         Block start = block;

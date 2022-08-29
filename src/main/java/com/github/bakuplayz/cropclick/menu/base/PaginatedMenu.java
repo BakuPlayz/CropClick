@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.base;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -129,7 +129,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getPreviousPageItem() {
-        return new ItemUtil(Material.ARROW)
+        return new ItemBuilder(Material.ARROW)
                 .setName(plugin, LanguageAPI.Menu.GENERAL_PREVIOUS_PAGE_ITEM_NAME)
                 .toItemStack();
     }
@@ -141,7 +141,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return The current page item.
      */
     private @NotNull ItemStack getCurrentPageItem() {
-        return new ItemUtil(Material.BOOK)
+        return new ItemBuilder(Material.BOOK)
                 .setName(LanguageAPI.Menu.GENERAL_CURRENT_PAGE_ITEM_NAME.get(plugin, page + 1))
                 .toItemStack();
     }
@@ -154,7 +154,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getNextPageItem() {
-        return new ItemUtil(Material.ARROW)
+        return new ItemBuilder(Material.ARROW)
                 .setName(plugin, LanguageAPI.Menu.GENERAL_NEXT_PAGE_ITEM_NAME)
                 .toItemStack();
     }

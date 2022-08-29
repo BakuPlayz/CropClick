@@ -9,7 +9,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import net.wesjd.anvilgui.AnvilGUI;
@@ -99,7 +99,7 @@ public final class NameMenu extends Menu {
                         ? LanguageAPI.Menu.CROP_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROP_STATUS_DISABLED.get(plugin);
 
-        return new ItemUtil(crop.getMenuType())
+        return new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.NAME_CROP_ITEM_DROP_NAME.get(plugin, getDropName(true))
@@ -119,7 +119,7 @@ public final class NameMenu extends Menu {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
 
-        return new ItemUtil(seed.getMenuType())
+        return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.NAME_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.NAME_SEED_ITEM_DROP_NAME.get(plugin, getDropName(false))
@@ -142,7 +142,7 @@ public final class NameMenu extends Menu {
                         ? Material.LEGACY_SIGN
                         : Material.OAK_SIGN;
 
-        return new ItemUtil(sign)
+        return new ItemBuilder(sign)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
                 .setLore(getCodesLore(start))
                 .toItemStack();

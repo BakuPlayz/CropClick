@@ -9,7 +9,7 @@ import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.sounds.SoundMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -114,7 +114,7 @@ public final class SoundsMenu extends PaginatedMenu {
         String status = MessageUtils.getEnabledStatus(plugin, isEnabled);
         String name = MessageUtils.beautify(sound, true);
 
-        ItemUtil item = new ItemUtil(Material.NOTE_BLOCK)
+        ItemBuilder item = new ItemBuilder(Material.NOTE_BLOCK)
                 .setName(LanguageAPI.Menu.SOUNDS_ITEM_NAME.get(
                         plugin,
                         name,

@@ -90,7 +90,6 @@ public final class PlayerHarvestCropListener implements Listener {
 
         if (!addonManager.canModify(player)) {
             return;
-
         }
 
         Crop crop = cropManager.findByBlock(block);

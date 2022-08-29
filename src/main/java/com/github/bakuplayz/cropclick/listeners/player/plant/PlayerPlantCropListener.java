@@ -66,8 +66,6 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
-        // TODO: Check for the #getMaterial and then validate for placing...
-
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;

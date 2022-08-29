@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -128,7 +128,7 @@ public abstract class Menu implements InventoryHolder {
      * @return An ItemStack.
      */
     protected final @NotNull ItemStack getBackItem() {
-        return new ItemUtil(Material.BARRIER)
+        return new ItemBuilder(Material.BARRIER)
                 .setName(plugin, LanguageAPI.Menu.GENERAL_BACK_ITEM_NAME)
                 .toItemStack();
     }

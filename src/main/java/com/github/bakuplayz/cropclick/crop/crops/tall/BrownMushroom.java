@@ -35,6 +35,7 @@ public final class BrownMushroom extends TallCrop {
     }
 
 
+    //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
     public int getCurrentAge(@NotNull Block block) {
         return isBrownMushroom(block) ? 45 : 0;
@@ -58,6 +59,7 @@ public final class BrownMushroom extends TallCrop {
     }
 
 
+    //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
     public void replant(@NotNull Block block) {
         Block start = block;
@@ -75,11 +77,17 @@ public final class BrownMushroom extends TallCrop {
 
         for (int x = -4; x < 4; ++x) {
             for (int z = -4; z < 4; ++z) {
-                start.getWorld().getBlockAt(
+
+                Block mushroom = start.getWorld().getBlockAt(
                         start.getX() + x,
                         start.getY(),
                         start.getZ() + z
-                ).setType(Material.AIR);
+                );
+
+                if (isMushroomBlock(mushroom)) {
+                    //start =
+                }
+
             }
         }
 
