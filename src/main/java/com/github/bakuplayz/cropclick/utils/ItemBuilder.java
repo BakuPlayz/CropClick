@@ -5,6 +5,8 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -187,10 +189,19 @@ public final class ItemBuilder {
 
         assert meta != null; // Only here for the compiler.
 
-        if (lore != null) meta.setLore(lore);
-        if (name != null) meta.setDisplayName(name);
+        if (lore != null) {
+            meta.setLore(lore);
+        }
+
+        if (name != null) {
+            meta.setDisplayName(name);
+        }
+
+        if (isTool(stack)) {
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        }
+
         if (name != null || lore != null) {
-            //TODO: meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             stack.setItemMeta(meta);
         }
 
@@ -213,14 +224,32 @@ public final class ItemBuilder {
 
         assert meta != null; // Only here for the compiler.
 
-        if (lore != null) meta.setLore(lore);
-        if (name != null) meta.setDisplayName(name);
+        if (lore != null) {
+            meta.setLore(lore);
+        }
+
+        if (name != null) {
+            meta.setDisplayName(name);
+        }
+
         if (name != null || lore != null) {
             meta.setOwningPlayer(player);
             stack.setItemMeta(meta);
         }
 
         return stack;
+    }
+
+
+    /**
+     * Returns true if the given item is a tool.
+     *
+     * @param item The item to check
+     *
+     * @return A boolean value.
+     */
+    private boolean isTool(@NotNull ItemStack item) {
+        return EnchantmentTarget.TOOL.includes(item);
     }
 
 }
