@@ -102,7 +102,6 @@ public final class ToggleMenu extends PaginatedMenu {
      *
      * @return An ItemStack.
      */
-    //TODO: Get as skull item with the players head
     private @NotNull ItemStack getMenuItem(@NotNull String playerID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(
                 UUID.fromString(playerID)
@@ -115,7 +114,7 @@ public final class ToggleMenu extends PaginatedMenu {
         return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
                 .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, status))
-                .toItemStack();
+                .toSkullStack(offlinePlayer);
     }
 
 
@@ -124,6 +123,7 @@ public final class ToggleMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
+    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return players.stream()
                       .map(this::getMenuItem)

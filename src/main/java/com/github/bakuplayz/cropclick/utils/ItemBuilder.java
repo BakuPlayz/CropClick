@@ -4,8 +4,10 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import lombok.Getter;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -175,7 +177,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Converts the ItemUtil to an ItemStack, with a given name, material, amount and lore (if there is one).
+     * Converts the ItemBuilder to an ItemStack, with a given name, material, amount and lore (if there is one).
      *
      * @return An ItemStack.
      */
@@ -189,6 +191,32 @@ public final class ItemBuilder {
         if (name != null) meta.setDisplayName(name);
         if (name != null || lore != null) {
             //TODO: meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            stack.setItemMeta(meta);
+        }
+
+        return stack;
+    }
+
+
+    /**
+     * Converts the ItemBuilder to a Skull ItemStack, with a given name of a player.
+     *
+     * @param player The player whose head you want to use.
+     *
+     * @return A new ItemStack with the given properties.
+     */
+    public @NotNull ItemStack toSkullStack(@NotNull OfflinePlayer player) {
+        ItemStack stack = new ItemStack(Material.PLAYER_HEAD, amount);
+        SkullMeta meta = this.meta != null
+                         ? (SkullMeta) this.meta
+                         : (SkullMeta) stack.getItemMeta();
+
+        assert meta != null; // Only here for the compiler.
+
+        if (lore != null) meta.setLore(lore);
+        if (name != null) meta.setDisplayName(name);
+        if (name != null || lore != null) {
+            meta.setOwningPlayer(player);
             stack.setItemMeta(meta);
         }
 

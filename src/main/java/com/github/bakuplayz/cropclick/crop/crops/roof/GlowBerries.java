@@ -120,7 +120,6 @@ public final class GlowBerries extends RoofCrop {
     }
 
 
-    //TODO: Needs to check for CAVE_VINES as well.
     @Override
     public @NotNull Material getClickableType() {
         return Material.CAVE_VINES_PLANT;

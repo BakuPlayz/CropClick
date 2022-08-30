@@ -126,13 +126,12 @@ public final class SettingsMenu extends Menu {
     }
 
 
-    //TODO: Get as skull item with the players head
     private @NotNull ItemStack getToggleItem() {
         return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
-                .toItemStack();
+                .toSkullStack(player);
     }
 
 

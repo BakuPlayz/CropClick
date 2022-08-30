@@ -71,13 +71,12 @@ public final class WorldMenu extends Menu {
      *
      * @return An ItemStack.
      */
-    //TODO: Get as skull item with the player's head.
     private @NotNull ItemStack getPlayersItem() {
         return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers())
-                )).toItemStack();
+                )).toSkullStack(player);
     }
 
 
