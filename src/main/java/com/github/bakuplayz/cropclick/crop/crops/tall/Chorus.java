@@ -1,16 +1,14 @@
 package com.github.bakuplayz.cropclick.crop.crops.tall;
 
-import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,15 +30,9 @@ public final class Chorus extends TallCrop {
 
     private List<Block> choruses;
 
-    private final CropClick plugin;
 
-    private final BukkitScheduler scheduler = Bukkit.getScheduler();
-
-
-    public Chorus(@NotNull CropClick plugin) {
-        super(plugin.getCropsConfig());
-        this.choruses = new ArrayList<>();
-        this.plugin = plugin;
+    public Chorus(@NotNull CropsConfig cropsConfig) {
+        super(cropsConfig);
     }
 
 
@@ -53,6 +45,7 @@ public final class Chorus extends TallCrop {
     @Override
     public int getCurrentAge(@NotNull Block block) {
         choruses = new ArrayList<>();
+
         return getTallness(block);
     }
 
@@ -72,29 +65,29 @@ public final class Chorus extends TallCrop {
      * Get the height of a chorus plant by pushing the block onto a stack, then popping it off and pushing its neighbors
      * onto the stack until the stack is empty.
      *
-     * @param block The block that the player clicked, harvested.
+     * @param clickedBlock The block that the player clicked, harvested.
      *
      * @return The number of chorus blocks in the tree.
      *
      * @apiNote Written by <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
-    private int getTallness(@NotNull Block block) {
+    private int getTallness(@NotNull Block clickedBlock) {
         Stack<Block> stack = new Stack<>();
-        stack.push(block);
+        stack.push(clickedBlock);
 
         while (stack.size() > 0) {
-            Block b = stack.pop();
+            Block chorus = stack.pop();
 
-            if (!isChorus(b) || choruses.contains(b)) {
+            if (!isChorus(chorus) || choruses.contains(chorus)) {
                 continue;
             }
 
-            choruses.add(b);
-            stack.push(b.getRelative(BlockFace.UP));
-            stack.push(b.getRelative(BlockFace.EAST));
-            stack.push(b.getRelative(BlockFace.SOUTH));
-            stack.push(b.getRelative(BlockFace.WEST));
-            stack.push(b.getRelative(BlockFace.NORTH));
+            choruses.add(chorus);
+            stack.push(chorus.getRelative(BlockFace.UP));
+            stack.push(chorus.getRelative(BlockFace.EAST));
+            stack.push(chorus.getRelative(BlockFace.SOUTH));
+            stack.push(chorus.getRelative(BlockFace.WEST));
+            stack.push(chorus.getRelative(BlockFace.NORTH));
         }
 
         return choruses.size() + 1;
