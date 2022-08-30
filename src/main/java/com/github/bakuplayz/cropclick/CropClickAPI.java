@@ -56,7 +56,6 @@ public final class CropClickAPI {
     }
 
 
-    //TODO: Make protected for testing?
     private CropClickAPI(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
         this.cropsConfig = plugin.getCropsConfig();

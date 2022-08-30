@@ -34,10 +34,8 @@ public final class SoundRunnable {
     }
 
 
-    //TODO: Update the comment.
-
     /**
-     * This function adds a sound to the sounds list.
+     * This function queues a sound to the queuedSounds list, when harvesting a crop.
      *
      * @param name   The name of the sound.
      * @param pitch  The pitch of the sound.
