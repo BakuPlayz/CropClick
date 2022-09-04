@@ -42,25 +42,6 @@ public final class Chorus extends TallCrop {
     }
 
 
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        choruses = new ArrayList<>();
-
-        return getTallness(block);
-    }
-
-
-    @Override
-    public void replant(@NotNull Block block) {
-        // It's sorting the list of chorus blocks in reverse order, then setting them to air.
-        choruses.stream()
-                .sorted((o1, o2) -> -1)
-                .forEach(b -> b.setType(Material.AIR));
-
-        choruses = new ArrayList<>();
-    }
-
-
     /**
      * Get the height of a chorus plant by pushing the block onto a stack, then popping it off and pushing its neighbors
      * onto the stack until the stack is empty.
@@ -71,7 +52,10 @@ public final class Chorus extends TallCrop {
      *
      * @apiNote Written by <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
-    private int getTallness(@NotNull Block clickedBlock) {
+    @Override
+    public int getCurrentAge(@NotNull Block clickedBlock) {
+        choruses = new ArrayList<>();
+
         Stack<Block> stack = new Stack<>();
         stack.push(clickedBlock);
 
@@ -95,13 +79,30 @@ public final class Chorus extends TallCrop {
 
 
     @Override
+    public void replant(@NotNull Block block) {
+        // It's sorting the list of chorus blocks in reverse order, then setting them to air.
+        choruses.stream()
+                .sorted((unused1, unused2) -> -1)
+                .forEach(b -> b.setType(Material.AIR));
+
+        choruses = new ArrayList<>();
+    }
+
+
+    @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
         return new Drop(Material.CHORUS_FRUIT,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
+                cropSection.getDropChance(getName(), 80)
         );
+    }
+
+
+    @Override
+    public boolean dropAtLeastOne() {
+        return cropSection.shouldDropAtLeastOne(getName(), false);
     }
 
 

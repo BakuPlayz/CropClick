@@ -30,7 +30,6 @@ public final class MenuListener implements Listener {
 
         if (holder instanceof Menu) {
             if (event.getCurrentItem() == null) {
-                event.getWhoClicked().closeInventory();
                 event.setCancelled(true);
                 return;
             }
@@ -55,7 +54,9 @@ public final class MenuListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onMenuDrag(@NotNull InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof Menu) event.setCancelled(true);
+        if (event.getInventory().getHolder() instanceof Menu) {
+            event.setCancelled(true);
+        }
     }
 
 }

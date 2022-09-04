@@ -41,6 +41,10 @@ public final class PlayerHarvestCropListener implements Listener {
     private final WorldManager worldManager;
     private final PlayersConfig playersConfig;
 
+    /**
+     * A map of the crops that have been harvested and the time they were harvested,
+     * in order to render a duplication issue, with crops, obsolete.
+     */
     private final HashMap<Crop, Long> harvestedCrops;
 
 

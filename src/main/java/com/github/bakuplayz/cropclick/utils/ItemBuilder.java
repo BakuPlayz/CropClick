@@ -249,7 +249,7 @@ public final class ItemBuilder {
      * @return A boolean value.
      */
     private boolean isTool(@NotNull ItemStack item) {
-        return EnchantmentTarget.TOOL.includes(item);
+        return EnchantmentTarget.WEAPON.includes(item) || EnchantmentTarget.TOOL.includes(item);
     }
 
 }

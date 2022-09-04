@@ -10,6 +10,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.SeaPickle;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -34,11 +35,16 @@ import java.util.HashMap;
  */
 public final class AutofarmHarvestCropListener implements Listener {
 
+    private final CropClick plugin;
+
     private final CropManager cropManager;
     private final WorldManager worldManager;
     private final AutofarmManager autofarmManager;
 
-
+    /**
+     * A map of the crops that have been harvested and the time they were harvested,
+     * in order to render a duplication issue, with crops, obsolete.
+     */
     private final HashMap<Crop, Long> harvestedCrops;
 
 
@@ -46,6 +52,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
+        this.plugin = plugin;
         this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 
@@ -80,6 +87,10 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         if (!autofarm.isEnabled()) {
             return;
+        }
+
+        if (AutofarmUtils.componentHasMeta(block)) {
+            AutofarmUtils.addMeta(plugin, autofarm);
         }
 
         Block facing = findDispenserFacing(block);
