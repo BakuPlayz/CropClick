@@ -48,6 +48,10 @@ public final class BrownMushroom extends TallCrop {
 
         Block topBlock = getTopBlock(clickedBlock);
 
+        if (topBlock == clickedBlock) {
+            return 0;
+        }
+
         for (int x = -4; x < 4; ++x) {
             for (int z = -4; z < 4; ++z) {
 
@@ -64,7 +68,7 @@ public final class BrownMushroom extends TallCrop {
             }
         }
 
-        return mushrooms.size() - 1;
+        return mushrooms.size() + 1;
     }
 
 
@@ -77,14 +81,17 @@ public final class BrownMushroom extends TallCrop {
      */
     private Block getTopBlock(@NotNull Block block) {
         if (!isMushroomBlock(block)) {
-            mushrooms.add(block);
-            return block;
+            if (mushrooms.size() == 0) {
+                return block;
+            }
+
+            return mushrooms.get(mushrooms.size() - 1);
         }
 
         mushrooms.add(block);
 
         return getTopBlock(
-                block.getRelative(BlockFace.UP, 1)
+                block.getRelative(BlockFace.UP)
         );
     }
 
@@ -141,7 +148,7 @@ public final class BrownMushroom extends TallCrop {
         for (int y = 0; y < 30; ++y) {
             Block above = block.getRelative(BlockFace.UP, y);
 
-            if (isMushroomBlock(above)) {
+            if (isBrownMushroomBlock(above)) {
                 return true;
             }
         }
@@ -156,8 +163,20 @@ public final class BrownMushroom extends TallCrop {
      *
      * @return A boolean value.
      */
-    private boolean isMushroomBlock(@NotNull Block block) {
+    private boolean isBrownMushroomBlock(@NotNull Block block) {
         return BlockUtils.isSameType(block, Material.BROWN_MUSHROOM_BLOCK);
+    }
+
+
+    /**
+     * Returns true if the block is any type of Brown Mushroom Block or Mushroom Stem.
+     *
+     * @param block The block to check
+     *
+     * @return A boolean value.
+     */
+    private boolean isMushroomBlock(@NotNull Block block) {
+        return BlockUtils.isAnyType(block, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK);
     }
 
 }
