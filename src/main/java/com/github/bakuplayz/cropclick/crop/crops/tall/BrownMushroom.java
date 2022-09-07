@@ -81,7 +81,7 @@ public final class BrownMushroom extends TallCrop {
      */
     private Block getTopBlock(@NotNull Block block) {
         if (!isMushroomBlock(block)) {
-            if (mushrooms.size() == 0) {
+            if (mushrooms.isEmpty()) {
                 return block;
             }
 
