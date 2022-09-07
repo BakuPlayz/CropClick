@@ -12,6 +12,9 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * (DESCRIPTION)
@@ -23,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 public final class BrownMushroom extends TallCrop {
+
+    private List<Block> mushrooms;
+
 
     public BrownMushroom(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -37,8 +43,49 @@ public final class BrownMushroom extends TallCrop {
 
     //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return isBrownMushroom(block) ? 45 : 0;
+    public int getCurrentAge(@NotNull Block clickedBlock) {
+        mushrooms = new ArrayList<>();
+
+        Block topBlock = getTopBlock(clickedBlock);
+
+        for (int x = -4; x < 4; ++x) {
+            for (int z = -4; z < 4; ++z) {
+
+                Block mushroom = topBlock.getWorld().getBlockAt(
+                        topBlock.getX() + x,
+                        topBlock.getY(),
+                        topBlock.getZ() + z
+                );
+
+                if (isMushroomBlock(mushroom)) {
+                    mushrooms.add(mushroom);
+                }
+
+            }
+        }
+
+        return mushrooms.size() - 1;
+    }
+
+
+    /**
+     * Recursively goes up till it finds the top mushroom block.
+     *
+     * @param block The block to check
+     *
+     * @return The top block of a mushroom block.
+     */
+    private Block getTopBlock(@NotNull Block block) {
+        if (!isMushroomBlock(block)) {
+            mushrooms.add(block);
+            return block;
+        }
+
+        mushrooms.add(block);
+
+        return getTopBlock(
+                block.getRelative(BlockFace.UP, 1)
+        );
     }
 
 
@@ -62,36 +109,12 @@ public final class BrownMushroom extends TallCrop {
     //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
     public void replant(@NotNull Block block) {
-        Block start = block;
+        // It's sorting the list of chorus blocks in reverse order, then setting them to air.
+        mushrooms.stream()
+                 .sorted((unused1, unused2) -> -1)
+                 .forEach(b -> b.setType(Material.AIR));
 
-        for (int y = 0; y < 30; ++y) {
-            Block above = block.getRelative(BlockFace.UP, y);
-
-            if (isMushroomBlock(above)) {
-                start = above;
-                break;
-            }
-
-            above.setType(Material.AIR);
-        }
-
-        for (int x = -4; x < 4; ++x) {
-            for (int z = -4; z < 4; ++z) {
-
-                Block mushroom = start.getWorld().getBlockAt(
-                        start.getX() + x,
-                        start.getY(),
-                        start.getZ() + z
-                );
-
-                if (isMushroomBlock(mushroom)) {
-                    //start =
-                }
-
-            }
-        }
-
-        block.setType(Material.AIR);
+        mushrooms = new ArrayList<>();
     }
 
 
