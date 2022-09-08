@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Mushroom;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
@@ -12,8 +13,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 
 /**
@@ -21,13 +21,12 @@ import java.util.List;
  *
  * @author BakuPlayz
  * @version 2.0.0
+ * @see TallCrop
  * @see BaseCrop
  * @see Crop
  * @since 2.0.0
  */
-public final class BrownMushroom extends TallCrop {
-
-    private List<Block> mushrooms;
+public final class BrownMushroom extends Mushroom {
 
 
     public BrownMushroom(@NotNull CropsConfig cropsConfig) {
@@ -43,55 +42,27 @@ public final class BrownMushroom extends TallCrop {
 
     @Override
     public int getCurrentAge(@NotNull Block clickedBlock) {
-        mushrooms = new ArrayList<>();
+        mushrooms = new Stack<>();
 
-        Block topBlock = getTopBlock(clickedBlock);
+        Stack<Block> stack = new Stack<>();
+        stack.push(clickedBlock);
 
-        if (topBlock == clickedBlock) {
-            return 0;
-        }
+        while (stack.size() > 0) {
+            Block mushroom = stack.pop();
 
-        for (int x = -4; x < 4; ++x) {
-            for (int z = -4; z < 4; ++z) {
-
-                Block mushroom = topBlock.getWorld().getBlockAt(
-                        topBlock.getX() + x,
-                        topBlock.getY(),
-                        topBlock.getZ() + z
-                );
-
-                if (isMushroomBlock(mushroom)) {
-                    mushrooms.add(mushroom);
-                }
-
+            if (!isMushroomBlock(mushroom) || mushrooms.contains(mushroom)) {
+                continue;
             }
+
+            mushrooms.add(mushroom);
+            stack.push(mushroom.getRelative(BlockFace.UP));
+            stack.push(mushroom.getRelative(BlockFace.EAST));
+            stack.push(mushroom.getRelative(BlockFace.SOUTH));
+            stack.push(mushroom.getRelative(BlockFace.WEST));
+            stack.push(mushroom.getRelative(BlockFace.NORTH));
         }
 
         return mushrooms.size() + 1;
-    }
-
-
-    /**
-     * Recursively goes up till it finds the top mushroom block.
-     *
-     * @param block The block that was originally clicked.
-     *
-     * @return The top block of a mushroom block.
-     */
-    private Block getTopBlock(@NotNull Block block) {
-        if (!isMushroomBlock(block)) {
-            if (mushrooms.isEmpty()) {
-                return block;
-            }
-
-            return mushrooms.get(mushrooms.size() - 1);
-        }
-
-        mushrooms.add(block);
-
-        return getTopBlock(
-                block.getRelative(BlockFace.UP)
-        );
     }
 
 
@@ -103,24 +74,6 @@ public final class BrownMushroom extends TallCrop {
                 cropSection.getDropAmount(getName(), 1),
                 cropSection.getDropChance(getName(), 15)
         );
-    }
-
-
-    @Override
-    public boolean dropAtLeastOne() {
-        return cropSection.shouldDropAtLeastOne(getName(), false);
-    }
-
-
-    //TODO: Check for actual mushrooms, and not a predefined amount.
-    @Override
-    public void replant(@NotNull Block block) {
-        // It's sorting the list of chorus blocks in reverse order, then setting them to air.
-        mushrooms.stream()
-                 .sorted((unused1, unused2) -> -1)
-                 .forEach(b -> b.setType(Material.AIR));
-
-        mushrooms = new ArrayList<>();
     }
 
 
@@ -137,7 +90,8 @@ public final class BrownMushroom extends TallCrop {
 
 
     /**
-     * Returns true if the block is any type of Brown Mushroom.
+     * Returns true if the function ultimately figures out if, the clicked block,
+     * is included in a brown mushroom structure.
      *
      * @param block The block to check
      *
@@ -145,12 +99,13 @@ public final class BrownMushroom extends TallCrop {
      */
     public boolean isBrownMushroom(@NotNull Block block) {
         for (int y = 0; y < 30; ++y) {
-            Block above = block.getRelative(BlockFace.UP, y);
+            Block above = block.getRelative(0, y, 0);
 
             if (isBrownMushroomBlock(above)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -166,16 +121,5 @@ public final class BrownMushroom extends TallCrop {
         return BlockUtils.isSameType(block, Material.BROWN_MUSHROOM_BLOCK);
     }
 
-
-    /**
-     * Returns true if the block is any type of Brown Mushroom Block or Mushroom Stem.
-     *
-     * @param block The block to check
-     *
-     * @return A boolean value.
-     */
-    private boolean isMushroomBlock(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, Material.MUSHROOM_STEM, Material.BROWN_MUSHROOM_BLOCK);
-    }
 
 }

@@ -4,13 +4,15 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Mushroom;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Stack;
 
 
 /**
@@ -22,7 +24,8 @@ import org.jetbrains.annotations.NotNull;
  * @see Crop
  * @since 2.0.0
  */
-public final class RedMushroom extends TallCrop {
+public final class RedMushroom extends Mushroom {
+
 
     public RedMushroom(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -35,10 +38,36 @@ public final class RedMushroom extends TallCrop {
     }
 
 
-    //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return isRedMushroom(block) ? 45 : 0;
+    public int getCurrentAge(@NotNull Block clickedBlock) {
+        mushrooms = new Stack<>();
+
+        Stack<Block> stack = new Stack<>();
+        stack.push(clickedBlock);
+
+        while (stack.size() > 0) {
+            Block mushroom = stack.pop();
+
+            if (!isMushroomBlock(mushroom) || mushrooms.contains(mushroom)) {
+                continue;
+            }
+
+            mushrooms.add(mushroom);
+            stack.push(mushroom.getRelative(BlockFace.UP));
+            stack.push(mushroom.getRelative(BlockFace.EAST));
+            stack.push(mushroom.getRelative(BlockFace.SOUTH));
+            stack.push(mushroom.getRelative(BlockFace.WEST));
+            stack.push(mushroom.getRelative(BlockFace.NORTH));
+
+            stack.push(mushroom.getRelative(1, -1, 0));
+            stack.push(mushroom.getRelative(-1, -1, 0));
+            stack.push(mushroom.getRelative(0, -1, 1));
+            stack.push(mushroom.getRelative(0, -1, -1));
+
+            stack.push(mushroom.getRelative(BlockFace.DOWN));
+        }
+
+        return mushrooms.size() + 1;
     }
 
 
@@ -50,56 +79,6 @@ public final class RedMushroom extends TallCrop {
                 cropSection.getDropAmount(getName(), 1),
                 cropSection.getDropChance(getName(), 15)
         );
-    }
-
-
-    @Override
-    public boolean dropAtLeastOne() {
-        return cropSection.shouldDropAtLeastOne(getName(), false);
-    }
-
-
-    //TODO: Check for actual mushrooms, and not a predefined amount.
-    @Override
-    public void replant(@NotNull Block block) {
-        Block start = block;
-
-        for (int y = 0; y < 30; ++y) {
-            Block above = block.getRelative(BlockFace.UP, y);
-
-            if (isMushroomBlock(above)) {
-                start = above;
-                break;
-            }
-
-            above.setType(Material.AIR);
-        }
-
-        for (int x = -3; x < 3; ++x) {
-            for (int z = -3; z < 3; ++z) {
-                start.getWorld().getBlockAt(
-                        start.getX() + x,
-                        start.getY(),
-                        start.getZ() + z
-                ).setType(Material.AIR);
-            }
-        }
-
-        for (int i = 0; i < 4; ++i) {
-            for (int y = -3; y < 3; ++y) {
-                for (int z = -3; z < 3; ++z) {
-                    for (int x = -3; x < 3; ++x) {
-                        start.getWorld().getBlockAt(
-                                start.getX() + x,
-                                start.getY() + y,
-                                start.getZ() + z
-                        ).setType(Material.AIR);
-                    }
-                }
-            }
-        }
-
-        block.setType(Material.AIR);
     }
 
 
@@ -116,7 +95,8 @@ public final class RedMushroom extends TallCrop {
 
 
     /**
-     * Returns true if the block is any type of Red Mushroom.
+     * Returns true if the function ultimately figures out if, the clicked block,
+     * is included in a red mushroom structure.
      *
      * @param block The block to check
      *
@@ -124,12 +104,13 @@ public final class RedMushroom extends TallCrop {
      */
     public boolean isRedMushroom(@NotNull Block block) {
         for (int y = 0; y < 30; ++y) {
-            Block above = block.getRelative(BlockFace.UP, y);
+            Block above = block.getRelative(0, y, 0);
 
-            if (isMushroomBlock(above)) {
+            if (isRedMushroomBlock(above)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -141,7 +122,7 @@ public final class RedMushroom extends TallCrop {
      *
      * @return A boolean value.
      */
-    public boolean isMushroomBlock(@NotNull Block block) {
+    public boolean isRedMushroomBlock(@NotNull Block block) {
         return BlockUtils.isSameType(block, Material.RED_MUSHROOM_BLOCK);
     }
 
