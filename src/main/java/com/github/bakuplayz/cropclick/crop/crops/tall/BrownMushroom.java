@@ -41,7 +41,6 @@ public final class BrownMushroom extends TallCrop {
     }
 
 
-    //TODO: Check for actual mushrooms, and not a predefined amount.
     @Override
     public int getCurrentAge(@NotNull Block clickedBlock) {
         mushrooms = new ArrayList<>();
@@ -75,7 +74,7 @@ public final class BrownMushroom extends TallCrop {
     /**
      * Recursively goes up till it finds the top mushroom block.
      *
-     * @param block The block to check
+     * @param block The block that was originally clicked.
      *
      * @return The top block of a mushroom block.
      */
