@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MenuUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -74,7 +74,7 @@ public final class HelpMenu extends Menu {
 
 
     private @NotNull ItemStack getSubCommandItem(@NotNull Subcommand cmd) {
-        return new ItemUtil(Material.BOOK)
+        return new ItemBuilder(Material.BOOK)
                 .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, cmd.getName()))
                 .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, cmd.getDescription()),
                         LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, cmd.getPermission()),
@@ -85,7 +85,7 @@ public final class HelpMenu extends Menu {
 
     private @NotNull ItemStack getDefaultCommandItem() {
         String description = LanguageAPI.Command.DEFAULT_DESCRIPTION.get(plugin);
-        return new ItemUtil(Material.BOOK)
+        return new ItemBuilder(Material.BOOK)
                 .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, ""))
                 .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, description),
                         LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, "cropclick.command.general"),

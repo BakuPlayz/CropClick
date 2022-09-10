@@ -23,7 +23,7 @@ public interface Crop {
 
     int getHarvestAge();
 
-    int getCurrentAge(@NotNull Block block);
+    int getCurrentAge(@NotNull Block clickedBlock);
 
     Drop getDrop();
 
@@ -41,13 +41,13 @@ public interface Crop {
     void harvest(@NotNull Container container);
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    boolean isHarvestAge(@NotNull Block block);
+    boolean isHarvestAge(@NotNull Block clickedBlock);
 
     boolean canHarvest(@NotNull Player player);
 
     boolean isHarvestable();
 
-    void replant(@NotNull Block block);
+    void replant(@NotNull Block clickedBlock);
 
     boolean shouldReplant();
 

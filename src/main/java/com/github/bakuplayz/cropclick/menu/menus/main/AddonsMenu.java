@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -113,7 +113,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "Jobs Reborn" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getJobsItem() {
-        return new ItemUtil(Material.STONE_HOE)
+        return new ItemBuilder(Material.STONE_HOE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_JOBS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_JOBS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_JOBS_ITEM_STATUS.get(plugin, jobsEnabled)
@@ -134,7 +134,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "mcMMO" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getMCMMOItem() {
-        return new ItemUtil(Material.GOLD_SWORD)
+        return new ItemBuilder(Material.GOLD_SWORD)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_MCMMO_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_MCMMO_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)
@@ -155,7 +155,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "Offline Growth" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getGrowthItem() {
-        return new ItemUtil(Material.LONG_GRASS)
+        return new ItemBuilder(Material.LONG_GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_GROWTH_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_GROWTH_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_GROWTH_ITEM_STATUS.get(plugin, growthEnabled)
@@ -176,7 +176,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "Residence" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getResidenceItem() {
-        return new ItemUtil(Material.FENCE)
+        return new ItemBuilder(Material.FENCE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, residenceEnabled)
@@ -197,7 +197,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "Towny" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getTownyItem() {
-        return new ItemUtil(Material.FENCE_GATE)
+        return new ItemBuilder(Material.FENCE_GATE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_TOWNY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_TOWNY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_TOWNY_ITEM_STATUS.get(plugin, townyEnabled)
@@ -218,7 +218,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "World Guard" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getGuardItem() {
-        return new ItemUtil(Material.GRASS)
+        return new ItemBuilder(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_GUARD_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_GUARD_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_GUARD_ITEM_STATUS.get(plugin, guardEnabled)

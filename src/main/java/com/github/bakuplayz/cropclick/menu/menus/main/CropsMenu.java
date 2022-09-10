@@ -5,8 +5,8 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigS
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
@@ -20,7 +20,7 @@ import com.github.bakuplayz.cropclick.menu.menus.settings.NameMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -168,7 +168,7 @@ public final class CropsMenu extends PaginatedMenu {
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.CROPS_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROPS_STATUS_DISABLED.get(plugin);
-        ItemUtil menuItem = new ItemUtil(crop.getMenuType())
+        ItemBuilder menuItem = new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
                 .setDamage(crop.isHarvestable() ? -1 : 15)

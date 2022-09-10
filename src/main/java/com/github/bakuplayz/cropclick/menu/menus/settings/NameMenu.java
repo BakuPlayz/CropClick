@@ -3,14 +3,14 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
@@ -99,9 +99,11 @@ public final class NameMenu extends Menu {
                         ? LanguageAPI.Menu.CROP_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROP_STATUS_DISABLED.get(plugin);
 
-        return new ItemUtil(crop.getMenuType())
+        return new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_CROP_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.NAME_CROP_DROP_NAME.get(plugin, getDropName(true)))
+                .setLore(LanguageAPI.Menu.NAME_CROP_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.NAME_CROP_ITEM_DROP_NAME.get(plugin, getDropName(true))
+                ))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
                 .setDamage(crop.isHarvestable() ? -1 : 15)
                 .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
@@ -119,9 +121,11 @@ public final class NameMenu extends Menu {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
 
-        return new ItemUtil(seed.getMenuType())
+        return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.NAME_SEED_DROP_NAME.get(plugin, getDropName(false)))
+                .setLore(LanguageAPI.Menu.NAME_SEED_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.NAME_SEED_ITEM_DROP_NAME.get(plugin, getDropName(false))
+                ))
                 .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(seed.isEnabled() ? -1 : 15).toItemStack();
     }
@@ -136,7 +140,7 @@ public final class NameMenu extends Menu {
      * the lore being the color codes.
      */
     private @NotNull ItemStack getCodesItem(int start) {
-        return new ItemUtil(Material.SIGN)
+        return new ItemBuilder(Material.SIGN)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
                 .setLore(getCodesLore(start))
                 .toItemStack();

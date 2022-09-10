@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.crop;
 
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -71,7 +71,7 @@ public final class Drop {
      */
     public @NotNull ItemStack toItemStack(boolean nameChanged) {
         int randomAmount = (int) Math.round(amount * randomChance);
-        return new ItemUtil(type)
+        return new ItemBuilder(type)
                 .setName(nameChanged ? name : null)
                 .setAmount(randomAmount)
                 .setDamage(damage)

@@ -1,9 +1,11 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.WheatSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
  * @see BaseCrop
  * @since 2.0.0
  */
-public final class SugarCane extends TallCrop {
+public final class Wheat extends GroundCrop {
 
-    public SugarCane(@NotNull CropsConfig config) {
+    public Wheat(@NotNull CropsConfig config) {
         super(config);
     }
 
@@ -27,29 +29,36 @@ public final class SugarCane extends TallCrop {
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
-        return "sugarCane";
+        return "wheat";
     }
 
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.SUGAR_CANE,
+        return new Drop(Material.WHEAT,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
+                cropSection.getDropChance(getName(), 80)
         );
     }
 
 
     @Override
+    @Contract(value = " -> new", pure = true)
+    public @NotNull Seed getSeed() {
+        return new WheatSeed(cropsConfig);
+    }
+
+
+    @Override
     public @NotNull Material getClickableType() {
-        return Material.SUGAR_CANE_BLOCK;
+        return Material.CROPS;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.SUGAR_CANE;
+        return Material.WHEAT;
     }
 
 }

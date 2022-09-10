@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,31 +20,31 @@ import org.jetbrains.annotations.Nullable;
  * @see BaseCrop
  * @since 2.0.0
  */
-public final class NetherWart extends GroundCrop {
+public final class Melon extends GroundCrop {
 
-    public NetherWart(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public Melon(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
     @Override
     public @NotNull String getName() {
-        return "netherWart";
+        return "melon";
     }
 
 
     @Override
     public int getHarvestAge() {
-        return 3;
+        return 0;
     }
 
 
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.NETHER_STALK,
+        return new Drop(Material.MELON,
                 cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 3),
+                cropSection.getDropAmount(getName(), 7),
                 cropSection.getDropChance(getName(), 80)
         );
     }
@@ -57,14 +58,26 @@ public final class NetherWart extends GroundCrop {
 
 
     @Override
+    public void replant(@NotNull Block clickedBlock) {
+        clickedBlock.setType(Material.AIR);
+    }
+
+
+    @Override
     public @NotNull Material getClickableType() {
-        return Material.NETHER_WARTS;
+        return Material.MELON_BLOCK;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.NETHER_STALK;
+        return Material.MELON;
+    }
+
+
+    @Override
+    public boolean isLinkable() {
+        return cropSection.isLinkable(getName(), false);
     }
 
 }

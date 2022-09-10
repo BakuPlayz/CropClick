@@ -5,8 +5,10 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.*;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.ground.*;
+import com.github.bakuplayz.cropclick.crop.crops.tall.*;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
@@ -67,14 +69,22 @@ public final class CropManager {
         if (VersionUtils.supportsBeetroots()) {
             registerCrop(new Beetroot(cropsConfig));
         }
+
+        registerCrop(new BrownMushroom(cropsConfig));
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
+
+        if (VersionUtils.supportsChorus()) {
+            registerCrop(new Chorus(cropsConfig));
+        }
+
         registerCrop(new CocoaBean(cropsConfig));
         registerCrop(new Melon(cropsConfig));
         registerCrop(new NetherWart(cropsConfig));
         registerCrop(new Potato(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
         registerCrop(new SugarCane(cropsConfig));
+        registerCrop(new RedMushroom(cropsConfig));
         registerCrop(new Wheat(cropsConfig));
     }
 
@@ -249,6 +259,14 @@ public final class CropManager {
      * @return A boolean value.
      */
     private boolean filterByType(@NotNull Crop crop, @NotNull Block block) {
+        if (crop instanceof BrownMushroom) {
+            return ((BrownMushroom) crop).isBrownMushroom(block);
+        }
+
+        if (crop instanceof RedMushroom) {
+            return ((RedMushroom) crop).isRedMushroom(block);
+        }
+
         return crop.getClickableType() == block.getType();
     }
 

@@ -28,8 +28,8 @@ public abstract class GroundCrop extends BaseCrop {
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getCurrentAge(@NotNull Block block) {
-        return block.getData();
+    public int getCurrentAge(@NotNull Block clickedBlock) {
+        return clickedBlock.getData();
     }
-    
+
 }

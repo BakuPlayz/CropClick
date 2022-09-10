@@ -1,1 +1,0 @@
-mvn deploy:deploy-file -Dfile=./local-maven-repo/MockBukkit-0.0.1.jar -DgroupId=be.seeseemelk.mockbukkit -DartifactId=MockBukkit -Dversion=0.0.1 -Dpackaging=jar -Durl=file:./local-maven-repo/ -DrepositoryId=local-maven-repo -DupdateReleaseInfo=true

@@ -9,7 +9,7 @@ import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.worlds.WorldMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Material;
@@ -165,7 +165,7 @@ public final class WorldsMenu extends PaginatedMenu {
      */
     private @NotNull ItemStack getMenuItem(@NotNull FarmWorld world) {
         String name = MessageUtils.beautify(world.getName(), true);
-        ItemUtil menuItem = new ItemUtil(Material.GRASS)
+        ItemBuilder menuItem = new ItemBuilder(Material.GRASS)
                 .setName(LanguageAPI.Menu.WORLDS_ITEM_NAME.get(plugin, name))
                 .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
                 .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null);

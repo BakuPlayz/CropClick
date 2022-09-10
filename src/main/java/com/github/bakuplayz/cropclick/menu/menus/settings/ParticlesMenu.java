@@ -9,7 +9,7 @@ import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -126,7 +126,7 @@ public final class ParticlesMenu extends PaginatedMenu {
         String status = MessageUtils.getEnabledStatus(plugin, isEnabled);
         String name = MessageUtils.beautify(particle, true);
 
-        ItemUtil item = new ItemUtil(Material.FIREWORK)
+        ItemBuilder item = new ItemBuilder(Material.FIREWORK)
                 .setName(LanguageAPI.Menu.PARTICLES_ITEM_NAME.get(
                         plugin,
                         name,

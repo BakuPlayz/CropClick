@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -80,7 +80,7 @@ public final class UpdatesMenu extends Menu {
     private @NotNull ItemStack getUpdateItem() {
         String updateState = updateManager.getUpdateStateMessage();
 
-        return new ItemUtil(Material.ANVIL)
+        return new ItemBuilder(Material.ANVIL)
                 .setName(plugin, LanguageAPI.Menu.UPDATES_UPDATES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.UPDATES_UPDATES_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.UPDATES_UPDATES_ITEM_STATE.get(plugin, updateState)
@@ -94,7 +94,7 @@ public final class UpdatesMenu extends Menu {
                 updateManager.getPlayerMessageState()
         );
 
-        return new ItemUtil(Material.ITEM_FRAME)
+        return new ItemBuilder(Material.ITEM_FRAME)
                 .setName(plugin, LanguageAPI.Menu.UPDATES_PLAYER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.UPDATES_PLAYER_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.UPDATES_PLAYER_ITEM_STATUS.get(plugin, status)
@@ -108,7 +108,7 @@ public final class UpdatesMenu extends Menu {
                 updateManager.getConsoleMessageState()
         );
 
-        return new ItemUtil(Material.ITEM_FRAME)
+        return new ItemBuilder(Material.ITEM_FRAME)
                 .setName(plugin, LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.UPDATES_CONSOLE_ITEM_STATUS.get(plugin, status)

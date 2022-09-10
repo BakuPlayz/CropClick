@@ -1,12 +1,11 @@
 package com.github.bakuplayz.cropclick.commands;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.commands.subcommands.HelpCommand;
-import com.github.bakuplayz.cropclick.commands.subcommands.ReloadCommand;
-import com.github.bakuplayz.cropclick.commands.subcommands.ResetCommand;
-import com.github.bakuplayz.cropclick.commands.subcommands.SettingsCommand;
+import com.github.bakuplayz.cropclick.commands.subcommands.*;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
+import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -46,6 +45,7 @@ public final class CommandManager implements TabExecutor {
      * Registers all the commands, by adding them to the commands list.
      */
     private void registerCommands() {
+        commands.add(new AutofarmCommand(plugin));
         commands.add(new HelpCommand(plugin));
         commands.add(new ReloadCommand(plugin));
         commands.add(new ResetCommand(plugin));
@@ -76,6 +76,13 @@ public final class CommandManager implements TabExecutor {
         Player player = (Player) sender;
 
         if (args.length == 0) {
+            if (!PermissionUtils.canPlayerExecuteGeneralCommand(player)) {
+                LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(
+                        plugin, player, CommandPermission.GENERAL_COMMAND.getName()
+                );
+                return true;
+            }
+
             new MainMenu(plugin, player).open();
             return true;
         }
@@ -86,7 +93,9 @@ public final class CommandManager implements TabExecutor {
             }
 
             if (!command.hasPermission(player)) {
-                LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(plugin, player, command.getPermission());
+                LanguageAPI.Command.PLAYER_LACK_PERMISSION.send(
+                        plugin, player, command.getPermission()
+                );
                 return true;
             }
 

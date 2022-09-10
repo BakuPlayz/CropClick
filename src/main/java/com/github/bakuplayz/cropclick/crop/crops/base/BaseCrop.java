@@ -108,11 +108,11 @@ public abstract class BaseCrop implements Crop {
 
 
     @Override
-    public boolean isHarvestAge(@NotNull Block block) {
+    public boolean isHarvestAge(@NotNull Block clickedBlock) {
         if (!isHarvestable()) {
             return false;
         }
-        return getHarvestAge() <= getCurrentAge(block);
+        return getHarvestAge() <= getCurrentAge(clickedBlock);
     }
 
 
@@ -123,11 +123,11 @@ public abstract class BaseCrop implements Crop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
+    public void replant(@NotNull Block clickedBlock) {
         if (shouldReplant()) {
-            block.setType(getClickableType());
+            clickedBlock.setType(getClickableType());
         } else {
-            block.setType(Material.AIR);
+            clickedBlock.setType(Material.AIR);
         }
     }
 

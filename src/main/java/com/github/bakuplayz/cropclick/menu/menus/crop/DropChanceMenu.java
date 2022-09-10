@@ -3,13 +3,13 @@ package com.github.bakuplayz.cropclick.menu.menus.crop;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtil;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
@@ -131,7 +131,7 @@ public final class DropChanceMenu extends Menu {
                 crop.getDrop().getChance() * DECIMAL_TO_PERCENT
         );
 
-        return new ItemUtil(crop.getMenuType())
+        return new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
@@ -148,7 +148,7 @@ public final class DropChanceMenu extends Menu {
                 seed.getDrop().getChance() * DECIMAL_TO_PERCENT
         );
 
-        return new ItemUtil(seed.getMenuType())
+        return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_NAME.get(plugin, name, status))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance))
                 .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
@@ -163,7 +163,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -176,7 +176,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -189,7 +189,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -202,7 +202,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

@@ -11,7 +11,7 @@ import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewDispenserMenu;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Bukkit;
@@ -316,7 +316,7 @@ public abstract class LinkMenu extends Menu {
                 autofarm.isEnabled()
         );
 
-        return new ItemUtil(Material.IRON_PLATE)
+        return new ItemBuilder(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
                 .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, status))
                 .toItemStack();
@@ -329,7 +329,7 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getCropItem() {
-        return new ItemUtil(Material.WHEAT)
+        return new ItemBuilder(Material.WHEAT)
                 .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
                 .setMaterial(
@@ -347,7 +347,7 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getContainerItem() {
-        return new ItemUtil(Material.CHEST)
+        return new ItemBuilder(Material.CHEST)
                 .setName(plugin, LanguageAPI.Menu.LINK_CONTAINER_NAME)
                 .setLore(getLocationAsLore(containerLocation, Component.CONTAINER))
                 .setMaterial(
@@ -368,7 +368,7 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getDispenserItem() {
-        return new ItemUtil(Material.DISPENSER)
+        return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
                 .setMaterial(
@@ -386,7 +386,7 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getGlassItem() {
-        return new ItemUtil(Material.STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE)
                 .setDamage(isUnlinked ? 15 : 4)
                 .setDamage(isClickedSelected ? 3 : -1)
                 .setName(plugin, LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_LINKED)

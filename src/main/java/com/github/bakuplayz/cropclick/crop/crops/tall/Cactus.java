@@ -1,11 +1,9 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.tall;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.PoisonousPotato;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
  * @see BaseCrop
  * @since 2.0.0
  */
-public final class Potato extends GroundCrop {
+public final class Cactus extends TallCrop {
 
-    public Potato(@NotNull CropsConfig config) {
+    public Cactus(@NotNull CropsConfig config) {
         super(config);
     }
 
@@ -29,37 +27,29 @@ public final class Potato extends GroundCrop {
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
-        return "potato";
+        return "cactus";
     }
 
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.POTATO_ITEM,
+        return new Drop(Material.CACTUS,
                 cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 4),
-                cropSection.getDropChance(getName(), 80)
+                cropSection.getDropAmount(getName(), 1),
+                cropSection.getDropChance(getName(), 100)
         );
     }
 
 
     @Override
-    @Contract(value = " -> new", pure = true)
-    public @NotNull Seed getSeed() {
-        return new PoisonousPotato(cropsConfig);
-    }
-
-
-    @Override
     public @NotNull Material getClickableType() {
-        return Material.POTATO;
+        return Material.CACTUS;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.POTATO_ITEM;
+        return Material.CACTUS;
     }
-
 
 }

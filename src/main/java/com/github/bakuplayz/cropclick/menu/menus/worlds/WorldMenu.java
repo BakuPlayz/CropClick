@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Material;
@@ -72,7 +72,7 @@ public final class WorldMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getPlayersItem() {
-        return new ItemUtil(Material.SKULL_ITEM)
+        return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin,
                         world.allowsPlayers()
@@ -87,7 +87,7 @@ public final class WorldMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getAutofarmsItem() {
-        return new ItemUtil(Material.DISPENSER)
+        return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin,
                         world.allowsAutofarms()
@@ -102,7 +102,7 @@ public final class WorldMenu extends Menu {
      */
     private @NotNull ItemStack getWorldItem() {
         String name = MessageUtils.beautify(world.getName(), true);
-        return new ItemUtil(Material.GRASS)
+        return new ItemBuilder(Material.GRASS)
                 .setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
                 .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
                 .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)

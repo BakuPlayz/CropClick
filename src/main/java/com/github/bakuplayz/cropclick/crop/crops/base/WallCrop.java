@@ -35,27 +35,27 @@ public abstract class WallCrop extends BaseCrop {
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getCurrentAge(@NotNull Block block) {
-        return block.getData();
+    public int getCurrentAge(@NotNull Block clickedBlock) {
+        return clickedBlock.getData();
     }
 
 
     @Override
-    public void replant(@NotNull Block block) {
+    public void replant(@NotNull Block clickedBlock) {
         if (shouldReplant()) {
-            Directional initialDirect = (Directional) block.getState().getData();
+            Directional initialDirect = (Directional) clickedBlock.getState().getData();
             BlockFace initialFace = initialDirect.getFacing();
 
-            block.setType(getClickableType());
+            clickedBlock.setType(getClickableType());
 
-            Directional changedDirect = (Directional) block.getState().getData();
+            Directional changedDirect = (Directional) clickedBlock.getState().getData();
             changedDirect.setFacingDirection(initialFace);
 
-            BlockState state = block.getState();
+            BlockState state = clickedBlock.getState();
             state.setData((MaterialData) changedDirect);
             state.update();
         } else {
-            block.setType(Material.AIR);
+            clickedBlock.setType(Material.AIR);
         }
     }
 

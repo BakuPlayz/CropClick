@@ -266,7 +266,20 @@ public final class CropConfigSection extends ConfigSection {
      * @return A boolean value.
      */
     public boolean shouldDropAtLeastOne(@NotNull String cropName) {
-        return config.getBoolean("crops." + cropName + ".atLeastOne", true);
+        return config.getBoolean("crops." + cropName + ".drop.atLeastOne", true);
+    }
+
+
+    /**
+     * Returns whether the crop should drop at least one item when harvested.
+     *
+     * @param cropName The name of the crop.
+     * @param def      The default value to return if the config doesn't have the value.
+     *
+     * @return A boolean value.
+     */
+    public boolean shouldDropAtLeastOne(@NotNull String cropName, boolean def) {
+        return config.getBoolean("crops." + cropName + ".drop.atLeastOne", def);
     }
 
 

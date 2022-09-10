@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
@@ -58,8 +58,8 @@ public final class Pumpkin extends GroundCrop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
-        block.setType(Material.AIR);
+    public void replant(@NotNull Block clickedBlock) {
+        clickedBlock.setType(Material.AIR);
     }
 
 

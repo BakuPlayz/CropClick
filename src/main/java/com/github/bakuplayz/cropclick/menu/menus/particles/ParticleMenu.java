@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
-import com.github.bakuplayz.cropclick.utils.ItemUtil;
+import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -179,7 +179,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.WATCH)
+        return new ItemBuilder(Material.WATCH)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DELAY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_DELAY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_DELAY_ITEM_VALUE.get(plugin, delay)
@@ -194,7 +194,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.FEATHER)
+        return new ItemBuilder(Material.FEATHER)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_SPEED_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_SPEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_SPEED_ITEM_VALUE.get(plugin, speed)
@@ -209,7 +209,7 @@ public final class ParticleMenu extends Menu {
                 particleName
         );
 
-        return new ItemUtil(Material.CHEST)
+        return new ItemBuilder(Material.CHEST)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_AMOUNT_ITEM_VALUE.get(plugin, amount)
@@ -221,7 +221,7 @@ public final class ParticleMenu extends Menu {
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
-        return new ItemUtil(Material.IRON_PLATE)
+        return new ItemBuilder(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -231,7 +231,7 @@ public final class ParticleMenu extends Menu {
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
-        return new ItemUtil(Material.GOLD_PLATE)
+        return new ItemBuilder(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -245,7 +245,7 @@ public final class ParticleMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, DELAY_MAX);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -259,7 +259,7 @@ public final class ParticleMenu extends Menu {
         );
         double delayAfter = Math.max(delayBefore - delayChange, DELAY_MIN);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -273,7 +273,7 @@ public final class ParticleMenu extends Menu {
         );
         double speedAfter = Math.min(speedBefore + speedChange, MAX_SPEED);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
@@ -287,7 +287,7 @@ public final class ParticleMenu extends Menu {
         );
         double speedAfter = Math.max(speedBefore - speedChange, MIN_SPEED);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
@@ -301,7 +301,7 @@ public final class ParticleMenu extends Menu {
         );
         int amountAfter = Math.min(amountBefore + amountChange, MAX_AMOUNT);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amountChange, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();
@@ -315,7 +315,7 @@ public final class ParticleMenu extends Menu {
         );
         int amountAfter = Math.max(amountBefore - amountChange, MIN_AMOUNT);
 
-        return new ItemUtil(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amountChange, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();

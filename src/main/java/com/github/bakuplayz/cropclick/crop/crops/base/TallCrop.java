@@ -33,23 +33,23 @@ public abstract class TallCrop extends BaseCrop {
 
 
     @Override
-    public int getCurrentAge(@NotNull Block block) {
-        int minHeight = block.getLocation().getBlockY();
-        int maxHeight = block.getWorld().getMaxHeight();
+    public int getCurrentAge(@NotNull Block clickedBlock) {
+        int minHeight = clickedBlock.getLocation().getBlockY();
+        int maxHeight = clickedBlock.getWorld().getMaxHeight();
 
         int height = 0;
         for (int y = minHeight; y <= maxHeight; ++y) {
-            Block currentBlock = block.getWorld().getBlockAt(
-                    block.getX(),
+            Block currentBlock = clickedBlock.getWorld().getBlockAt(
+                    clickedBlock.getX(),
                     y,
-                    block.getZ()
+                    clickedBlock.getZ()
             );
 
             if (BlockUtils.isAir(currentBlock)) {
                 break;
             }
 
-            if (BlockUtils.isSameType(block, currentBlock)) {
+            if (BlockUtils.isSameType(clickedBlock, currentBlock)) {
                 ++height;
             }
         }
@@ -71,19 +71,19 @@ public abstract class TallCrop extends BaseCrop {
 
 
     @Override
-    public void replant(@NotNull Block block) {
-        int height = getCurrentAge(block);
+    public void replant(@NotNull Block clickedBlock) {
+        int height = getCurrentAge(clickedBlock);
         for (int i = height; i > 0; --i) {
-            Block currentBlock = block.getWorld().getBlockAt(
-                    block.getX(),
-                    block.getY() + i,
-                    block.getZ()
+            Block currentBlock = clickedBlock.getWorld().getBlockAt(
+                    clickedBlock.getX(),
+                    clickedBlock.getY() + i,
+                    clickedBlock.getZ()
             );
             currentBlock.setType(Material.AIR);
         }
 
         if (!shouldReplant()) {
-            block.setType(Material.AIR);
+            clickedBlock.setType(Material.AIR);
         }
     }
 

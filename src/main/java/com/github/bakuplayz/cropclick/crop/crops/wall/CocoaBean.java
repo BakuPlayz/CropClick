@@ -1,9 +1,9 @@
-package com.github.bakuplayz.cropclick.crop.crops;
+package com.github.bakuplayz.cropclick.crop.crops.wall;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.WallCrop;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
  * @see BaseCrop
  * @since 2.0.0
  */
-public final class Cactus extends TallCrop {
+public final class CocoaBean extends WallCrop {
 
-    public Cactus(@NotNull CropsConfig config) {
+    public CocoaBean(@NotNull CropsConfig config) {
         super(config);
     }
 
@@ -27,29 +27,36 @@ public final class Cactus extends TallCrop {
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
-        return "cactus";
+        return "cocoaBean";
     }
 
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.CACTUS,
+        return new Drop(Material.INK_SACK,
                 cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
+                cropSection.getDropAmount(getName(), 3),
+                cropSection.getDropChance(getName(), 80),
+                (short) 3
         );
     }
 
 
     @Override
     public @NotNull Material getClickableType() {
-        return Material.CACTUS;
+        return Material.COCOA;
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.CACTUS;
+        return Material.INK_SACK;
+    }
+
+
+    @Override
+    public boolean isLinkable() {
+        return cropSection.isLinkable(getName(), false);
     }
 
 }
