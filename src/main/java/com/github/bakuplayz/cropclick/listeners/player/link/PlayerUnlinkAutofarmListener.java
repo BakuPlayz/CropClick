@@ -76,7 +76,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        if (!PermissionUtils.canUnlinkOthersFarm(player, autofarm.getOwnerID())) {
+        if (!PermissionUtils.canUnlinkOthersFarm(player, autofarm)) {
             return;
         }
 

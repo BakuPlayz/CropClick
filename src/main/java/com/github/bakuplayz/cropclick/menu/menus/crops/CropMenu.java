@@ -212,8 +212,9 @@ public final class CropMenu extends Menu {
 
         return new ItemBuilder(Material.STONE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
+                ).toItemStack();
     }
 
 
@@ -222,8 +223,9 @@ public final class CropMenu extends Menu {
 
         return new ItemBuilder(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_REPLANT_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
+                ).toItemStack();
     }
 
 
@@ -232,8 +234,9 @@ public final class CropMenu extends Menu {
 
         return new ItemBuilder(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_AT_LEAST_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
-                .toItemStack();
+                .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
+                ).toItemStack();
     }
 
 

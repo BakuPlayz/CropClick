@@ -121,10 +121,7 @@ public final class Autofarm {
      * @return A container object.
      */
     public @Nullable Container getContainer() {
-        if (container != null) {
-            return container;
-        }
-
+        if (container != null) return container;
         if (!isEnabled()) return null;
         if (!isLinked()) return null;
 

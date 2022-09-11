@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class MenuUtils {
+public final class MenuUtil {
 
     /**
      * If the item is null or the item is air, return true.

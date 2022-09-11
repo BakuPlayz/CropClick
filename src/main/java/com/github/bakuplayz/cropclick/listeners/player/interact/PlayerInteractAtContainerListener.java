@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.menu.menus.links.ContainerLinkMenu;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -50,6 +51,10 @@ public final class PlayerInteractAtContainerListener implements Listener {
             if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm.getOwnerID())) {
                 event.setCancelled(true);
                 return;
+            }
+
+            if (AutofarmUtils.componentHasMeta(block)) {
+                AutofarmUtils.addMeta(plugin, autofarm);
             }
         }
 

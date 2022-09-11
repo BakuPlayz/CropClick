@@ -119,7 +119,7 @@ public final class AddonsMenu extends Menu {
                         LanguageAPI.Menu.ADDONS_JOBS_ITEM_STATUS.get(plugin, jobsEnabled)
                 ))
                 .setMaterial(
-                        jobsPresent && jobsEnabled ? null : Material.STAINED_GLASS_PANE
+                        jobsPresent || jobsEnabled ? null : Material.STAINED_GLASS_PANE
                 )
                 .setDamage(jobsEnabled ? -1 : 7)
                 .setDamage(jobsPresent ? -1 : 1)
@@ -140,7 +140,7 @@ public final class AddonsMenu extends Menu {
                         LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)
                 ))
                 .setMaterial(
-                        mmoPresent && mmoEnabled ? null : Material.STAINED_GLASS_PANE
+                        mmoPresent || mmoEnabled ? null : Material.STAINED_GLASS_PANE
                 )
                 .setDamage(mmoEnabled ? -1 : 7)
                 .setDamage(mmoPresent ? -1 : 1)
@@ -161,7 +161,7 @@ public final class AddonsMenu extends Menu {
                         LanguageAPI.Menu.ADDONS_GROWTH_ITEM_STATUS.get(plugin, growthEnabled)
                 ))
                 .setMaterial(
-                        growthPresent && growthEnabled ? null : Material.STAINED_GLASS_PANE
+                        growthPresent || growthEnabled ? null : Material.STAINED_GLASS_PANE
                 )
                 .setDamage(growthEnabled ? -1 : 7)
                 .setDamage(growthPresent ? -1 : 1)
@@ -182,7 +182,7 @@ public final class AddonsMenu extends Menu {
                         LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, residenceEnabled)
                 ))
                 .setMaterial(
-                        residencePresent && residenceEnabled ? null : Material.STAINED_GLASS_PANE
+                        residencePresent || residenceEnabled ? null : Material.STAINED_GLASS_PANE
                 )
                 .setDamage(residenceEnabled ? -1 : 7)
                 .setDamage(residencePresent ? -1 : 1)
@@ -203,7 +203,7 @@ public final class AddonsMenu extends Menu {
                         LanguageAPI.Menu.ADDONS_TOWNY_ITEM_STATUS.get(plugin, townyEnabled)
                 ))
                 .setMaterial(
-                        townyPresent && townyEnabled ? null : Material.STAINED_GLASS_PANE
+                        townyPresent || townyEnabled ? null : Material.STAINED_GLASS_PANE
                 )
                 .setDamage(townyEnabled ? -1 : 7)
                 .setDamage(townyPresent ? -1 : 1)
@@ -224,7 +224,7 @@ public final class AddonsMenu extends Menu {
                         LanguageAPI.Menu.ADDONS_GUARD_ITEM_STATUS.get(plugin, guardEnabled)
                 ))
                 .setMaterial(
-                        guardPresent && guardEnabled ? null : Material.STAINED_GLASS_PANE
+                        guardPresent || guardEnabled ? null : Material.STAINED_GLASS_PANE
                 )
                 .setDamage(guardEnabled ? -1 : 7)
                 .setDamage(guardPresent ? -1 : 1)

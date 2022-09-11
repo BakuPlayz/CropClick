@@ -74,7 +74,9 @@ public final class RequestUtil {
      */
     public RequestUtil setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
         this.headers = headers;
-        if (addDefault) setDefaultHeaders();
+        if (addDefault) {
+            setDefaultHeaders();
+        }
         return this;
     }
 
@@ -89,7 +91,7 @@ public final class RequestUtil {
      * @return The RequestUtil object
      */
     public RequestUtil post(boolean doOutput)
-            throws Exception {
+            throws IOException {
         connection.setRequestMethod("POST");
         connection.setDoOutput(doOutput);
 

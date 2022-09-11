@@ -67,8 +67,6 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
-        // TODO: Check for the #getMaterial and then validate for placing...
-
         Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;
@@ -77,8 +75,6 @@ public final class PlayerPlantCropListener implements Listener {
         if (!PermissionUtils.canPlantCrop(player, crop.getName())) {
             return;
         }
-
-        // Maybe needs to cache a plant for some time...
 
         Bukkit.getPluginManager().callEvent(
                 new PlayerPlantCropEvent(crop, block, player)

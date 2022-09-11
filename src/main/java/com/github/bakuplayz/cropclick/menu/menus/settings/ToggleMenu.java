@@ -75,12 +75,7 @@ public final class ToggleMenu extends PaginatedMenu {
 
 
     /**
-     * "Get the index of the player item that was clicked on."
-     * <p>
-     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
-     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
-     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
-     * </p>
+     * Get the index of the player item that was clicked on.
      *
      * @param clicked The item that was clicked.
      *
@@ -107,7 +102,9 @@ public final class ToggleMenu extends PaginatedMenu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getMenuItem(@NotNull String playerID) {
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerID));
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(
+                UUID.fromString(playerID)
+        );
         String status = MessageUtils.getEnabledStatus(
                 plugin,
                 playersConfig.isEnabled(playerID)
@@ -125,6 +122,7 @@ public final class ToggleMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
+    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return players.stream()
                       .map(this::getMenuItem)

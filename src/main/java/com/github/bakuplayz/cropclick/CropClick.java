@@ -194,9 +194,9 @@ public class CropClick extends JavaPlugin {
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
         this.autofarmManager = new AutofarmManager(this);
+        this.addonManager = new AddonManager(this);
 
         if (!isReset) {
-            this.addonManager = new AddonManager(this);
             this.updateManager = new UpdateManager(this);
             this.commandManager = new CommandManager(this);
             this.permissionManager = new PermissionManager(this);

@@ -43,7 +43,7 @@ public final class BlockUtils {
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isPlantableSurface(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, Material.SAND, Material.SOIL); //TODO: Material.ENDER_STONE for chorus
+        return BlockUtils.isAnyType(block, Material.SAND, Material.SOIL, Material.ENDER_STONE);
     }
 
 

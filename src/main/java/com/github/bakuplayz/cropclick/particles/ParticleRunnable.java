@@ -35,9 +35,8 @@ public final class ParticleRunnable {
     }
 
 
-    // TODO: Update comment
     /**
-     * Adds a particle to the list of particles to be spawned.
+     * This function queues a particle to the queuedParticles list, when harvesting a crop.
      *
      * @param name   The name of the particle.
      * @param amount The amount of particles to spawn

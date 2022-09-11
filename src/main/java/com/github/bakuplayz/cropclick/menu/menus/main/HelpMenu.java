@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
-import com.github.bakuplayz.cropclick.utils.MenuUtils;
+import com.github.bakuplayz.cropclick.utils.MenuUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -45,7 +45,9 @@ public final class HelpMenu extends Menu {
             inventory.addItem(getSubCommandItem(subCommand));
         }
 
-        if (isRedirected) setBackItem();
+        if (isRedirected) {
+            setBackItem();
+        }
     }
 
 
@@ -53,18 +55,19 @@ public final class HelpMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
-        if (MenuUtils.isAir(clicked)) {
+        if (MenuUtil.isAir(clicked)) {
             return;
         }
 
-        if (clicked.equals(getBackItem())) {
-            new MainMenu(plugin, player).open();
-            return;
+        if (isRedirected) {
+            handleBack(clicked, new MainMenu(plugin, player));
         }
 
         if (event.getSlot() > 0) {
             player.closeInventory();
-            player.performCommand(commands.get(event.getSlot() - 1).getUsage());
+            player.performCommand(
+                    commands.get(event.getSlot() - 1).getUsage()
+            );
             return;
         }
 

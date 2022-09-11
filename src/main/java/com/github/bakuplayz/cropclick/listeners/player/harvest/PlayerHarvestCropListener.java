@@ -93,6 +93,10 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
+        if (harvestedCrops.containsKey(crop)) {
+            return;
+        }
+
         if (!PermissionUtils.canHarvestCrop(player, crop.getName())) {
             return;
         }
@@ -102,10 +106,6 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         if (!crop.isHarvestAge(block)) {
-            return;
-        }
-
-        if (harvestedCrops.containsKey(crop)) {
             return;
         }
 

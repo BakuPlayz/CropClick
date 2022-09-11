@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Mushroom;
+import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,6 +21,7 @@ import java.util.Stack;
  *
  * @author BakuPlayz
  * @version 2.0.0
+ * @see TallCrop
  * @see BaseCrop
  * @see Crop
  * @since 2.0.0
@@ -81,7 +83,7 @@ public final class RedMushroom extends Mushroom {
         );
     }
 
-    
+
     @Override
     public @NotNull Material getClickableType() {
         return Material.HUGE_MUSHROOM_2;

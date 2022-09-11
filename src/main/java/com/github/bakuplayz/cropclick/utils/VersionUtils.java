@@ -48,7 +48,7 @@ public final class VersionUtils {
 
 
     /**
-     * If the server version supports chorus, return true;
+     * If the server version supports chorus, return true.
      *
      * @return A boolean value.
      */

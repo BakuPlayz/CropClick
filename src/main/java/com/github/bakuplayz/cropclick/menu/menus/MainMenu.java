@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.*;
+import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
@@ -50,7 +51,7 @@ public final class MainMenu extends Menu {
         }
 
         if (clicked.equals(getAutofarmsItem())) {
-            new AutofarmsMenu(plugin, player).open();
+            new AutofarmsMenu(plugin, player, AutofarmsMenuState.MENU_REDIRECT).open();
         }
 
         if (clicked.equals(getUpdatesItem())) {

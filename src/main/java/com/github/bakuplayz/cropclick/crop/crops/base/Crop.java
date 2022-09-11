@@ -18,8 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Crop {
 
-    @NotNull
-    String getName();
+    @NotNull String getName();
 
     int getHarvestAge();
 
@@ -55,11 +54,9 @@ public interface Crop {
 
     void playParticles(@NotNull Block block);
 
-    @NotNull
-    Material getClickableType();
+    @NotNull Material getClickableType();
 
-    @NotNull
-    Material getMenuType();
+    @NotNull Material getMenuType();
 
     boolean isLinkable();
 

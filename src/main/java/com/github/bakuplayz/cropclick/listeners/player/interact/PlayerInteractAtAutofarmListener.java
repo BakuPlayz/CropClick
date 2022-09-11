@@ -71,7 +71,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
         Action action = event.getAction();
         Player player = event.getPlayer();
-        if (!EventUtils.isRightShift(player, action)) {
+        if (!EventUtils.isLeftShift(player, action)) {
             return;
         }
 

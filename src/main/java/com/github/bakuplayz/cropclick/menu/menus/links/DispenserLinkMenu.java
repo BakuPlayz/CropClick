@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.LinkMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AutofarmsMenu;
+import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,16 +24,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class DispenserLinkMenu extends LinkMenu {
 
-    private final boolean isRedirected;
+    private final AutofarmsMenuState menuState;
 
 
     public DispenserLinkMenu(@NotNull CropClick plugin,
                              @NotNull Player player,
                              @NotNull Block block,
                              Autofarm autofarm,
-                             boolean isRedirected) {
+                             AutofarmsMenuState state) {
         super(plugin, player, block, autofarm, LanguageAPI.Menu.DISPENSER_LINK_TITLE, Component.DISPENSER);
-        this.isRedirected = isRedirected;
+        this.menuState = state;
     }
 
 
@@ -40,7 +41,7 @@ public final class DispenserLinkMenu extends LinkMenu {
     public void setMenuItems() {
         super.setMenuItems();
 
-        if (isRedirected) {
+        if (menuState != AutofarmsMenuState.LINK) {
             setBackItem();
         }
     }
@@ -50,7 +51,7 @@ public final class DispenserLinkMenu extends LinkMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
-        handleBack(clicked, new AutofarmsMenu(plugin, player));
+        handleBack(clicked, new AutofarmsMenu(plugin, player, menuState));
 
         if (!isUnlinked) {
             handlePreviews(clicked);

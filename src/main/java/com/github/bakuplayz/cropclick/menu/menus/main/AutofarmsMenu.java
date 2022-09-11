@@ -7,7 +7,9 @@ import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.links.DispenserLinkMenu;
+import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
+import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,11 +35,14 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
     private final List<Autofarm> autofarms;
 
+    private final AutofarmsMenuState menuState;
 
-    public AutofarmsMenu(@NotNull CropClick plugin, @NotNull Player player) {
+
+    public AutofarmsMenu(@NotNull CropClick plugin, @NotNull Player player, AutofarmsMenuState state) {
         super(plugin, player, LanguageAPI.Menu.AUTOFARMS_TITLE);
-        this.autofarms = plugin.getAutofarmManager().getAutofarms();
+        this.autofarms = getAutofarms(plugin, player);
         this.menuItems = getMenuItems();
+        this.menuState = state;
     }
 
 
@@ -45,7 +50,10 @@ public final class AutofarmsMenu extends PaginatedMenu {
     public void setMenuItems() {
         setPaginatedItems();
         setPageItems();
-        setBackItems();
+
+        if (menuState == AutofarmsMenuState.MENU_REDIRECT) {
+            setBackItems();
+        }
     }
 
 
@@ -54,7 +62,10 @@ public final class AutofarmsMenu extends PaginatedMenu {
         ItemStack clicked = event.getCurrentItem();
 
         handlePagination(clicked);
-        handleBack(clicked, new MainMenu(plugin, player));
+
+        if (menuState == AutofarmsMenuState.MENU_REDIRECT) {
+            handleBack(clicked, new MainMenu(plugin, player));
+        }
 
         int index = getIndexOfFarm(clicked);
         if (index == -1) {
@@ -68,7 +79,7 @@ public final class AutofarmsMenu extends PaginatedMenu {
                 player,
                 dispenser.getBlock(),
                 autofarm,
-                true
+                menuState
         ).open();
     }
 
@@ -95,10 +106,19 @@ public final class AutofarmsMenu extends PaginatedMenu {
     }
 
 
+    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return autofarms.stream()
                         .map(this::getMenuItem)
                         .collect(Collectors.toList());
+    }
+
+
+    @NotNull
+    private List<Autofarm> getAutofarms(@NotNull CropClick plugin, @NotNull Player player) {
+        return plugin.getAutofarmManager().getAutofarms().stream()
+                     .filter(autofarm -> PermissionUtils.canUnlinkOthersFarm(player, autofarm))
+                     .collect(Collectors.toList());
     }
 
 }

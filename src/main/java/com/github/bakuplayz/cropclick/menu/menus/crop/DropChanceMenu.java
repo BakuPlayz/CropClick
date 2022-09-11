@@ -133,7 +133,9 @@ public final class DropChanceMenu extends Menu {
 
         return new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance))
+                .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance)
+                ))
                 .setDamage(crop instanceof CocoaBean ? 3 : -1)
                 .setDamage(crop.isHarvestable() ? -1 : 15)
                 .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
@@ -150,7 +152,9 @@ public final class DropChanceMenu extends Menu {
 
         return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_NAME.get(plugin, name, status))
-                .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance))
+                .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance)
+                ))
                 .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
                 .setDamage(seed.isEnabled() ? -1 : 15)
                 .toItemStack();

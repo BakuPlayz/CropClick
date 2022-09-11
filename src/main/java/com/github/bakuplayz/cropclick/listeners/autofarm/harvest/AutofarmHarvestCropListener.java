@@ -8,6 +8,7 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
+import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -32,6 +33,8 @@ import java.util.HashMap;
  */
 public final class AutofarmHarvestCropListener implements Listener {
 
+    private final CropClick plugin;
+
     private final CropManager cropManager;
     private final WorldManager worldManager;
     private final AutofarmManager autofarmManager;
@@ -44,6 +47,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
+        this.plugin = plugin;
         this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 
@@ -80,20 +84,25 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
+        if (AutofarmUtils.componentHasMeta(block)) {
+            AutofarmUtils.addMeta(plugin, autofarm);
+        }
+
         Block facing = findDispenserFacing(block);
         Crop crop = cropManager.findByBlock(facing);
         if (!cropManager.validate(crop, facing)) {
             return;
         }
+
+        if (harvestedCrops.containsKey(crop)) {
+            return;
+        }
+
         if (!crop.isHarvestable()) {
             return;
         }
 
         if (!crop.isHarvestAge(facing)) {
-            return;
-        }
-
-        if (harvestedCrops.containsKey(crop)) {
             return;
         }
 

@@ -108,7 +108,9 @@ public final class McMMOCropMenu extends Menu {
 
         return new ItemBuilder(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience))
+                .setLore(LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.MCMMO_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience)
+                ))
                 .toItemStack();
     }
 

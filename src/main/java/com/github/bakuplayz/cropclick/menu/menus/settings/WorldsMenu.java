@@ -170,35 +170,71 @@ public final class WorldsMenu extends PaginatedMenu {
                 .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
                 .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null);
 
-        boolean status = world.isBanished();
+        boolean status;
 
         switch (menuState) {
             case JOBS_REBORN:
                 status = world.isBanishedAddon(addonManager, "JobsReborn");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_JOBS_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
                 break;
 
             case MCMMO:
                 status = world.isBanishedAddon(addonManager, "mcMMO");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_MCMMO_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
                 break;
 
             case WORLD_GUARD:
                 status = world.isBanishedAddon(addonManager, "WorldGuard");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_GUARD_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
                 break;
 
             case RESIDENCE:
                 status = world.isBanishedAddon(addonManager, "Residence");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_RESIDENCE_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
                 break;
 
             case TOWNY:
                 status = world.isBanishedAddon(addonManager, "Towny");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_TOWNY_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
                 break;
 
             case OFFLINE_GROWTH:
                 status = world.isBanishedAddon(addonManager, "OfflineGrowth");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_GROWTH_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
+                break;
+
+            default:
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, world.isBanished())
+                );
                 break;
         }
 
-        return menuItem.setLore(LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)).toItemStack();
+        return menuItem.toItemStack();
     }
 
 

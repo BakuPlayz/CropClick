@@ -120,7 +120,7 @@ public final class ItemBuilder {
      *
      * @param amount The amount of the item.
      *
-     * @return The ItemUtil object.
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setAmount(int amount) {
         this.amount = amount <= -1 ? this.amount : amount;
@@ -134,7 +134,7 @@ public final class ItemBuilder {
      *
      * @param damage The damage value of the item.
      *
-     * @return The ItemUtil object
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setDamage(int damage) {
         this.damage = damage <= -1 ? this.damage : (short) damage;
@@ -147,7 +147,7 @@ public final class ItemBuilder {
      *
      * @param id The ID of the item.
      *
-     * @return The ItemUtil object.
+     * @return The ItemBuilder object.
      */
     @Deprecated
     public ItemBuilder setMaterial(int id) {
@@ -161,7 +161,7 @@ public final class ItemBuilder {
      *
      * @param material The material of the item.
      *
-     * @return The ItemUtil object
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setMaterial(Material material) {
         this.material = material == null ? this.material : material;
@@ -174,7 +174,7 @@ public final class ItemBuilder {
      *
      * @param name The name of the item.
      *
-     * @return The ItemUtil object itself.
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setName(String name) {
         this.name = name == null ? this.name : name;
@@ -185,10 +185,10 @@ public final class ItemBuilder {
     /**
      * This function sets the name of the item.
      *
-     * @param plugin The plugin instance
+     * @param plugin The plugin instance.
      * @param name   The name of the item.
      *
-     * @return The ItemUtil object.
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setName(@NotNull CropClick plugin, @NotNull LanguageAPI.Menu name) {
         this.name = name.get(plugin);
@@ -201,7 +201,7 @@ public final class ItemBuilder {
      *
      * @param lore The lore of the item.
      *
-     * @return The ItemUtil object.
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setLore(List<String> lore) {
         this.lore = lore == null ? this.lore : lore;
@@ -213,7 +213,7 @@ public final class ItemBuilder {
      * This function sets the lore of the item to the given lore, or if the given lore is null, it sets the lore to the
      * current lore.
      *
-     * @return The ItemUtil object.
+     * @return The ItemBuilder object.
      */
     public ItemBuilder setLore(String... lore) {
         this.lore = lore == null ? this.lore : Arrays.asList(lore);
@@ -222,7 +222,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Converts the ItemUtil to an ItemStack, with a given name, material, amount, damage and lore (if there is one).
+     * Converts the ItemBuilder to an ItemStack, with a given name, material, amount, damage and lore (if there is one).
      *
      * @return An ItemStack.
      */
