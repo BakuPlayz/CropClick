@@ -1,5 +1,13 @@
 package com.github.bakuplayz.cropclick.configs.converter;
 
+import com.google.gson.JsonObject;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.util.List;
+
+
 /**
  * (DESCRIPTION)
  *
@@ -44,6 +52,7 @@ public final class AutofarmsConverter {
         }
     **/
 
+
     /* OLD CONFIG:
      * Chests:
      *   '1':
@@ -78,4 +87,17 @@ public final class AutofarmsConverter {
      *         World: world
      * AmountOfDispensers: 2
      */
+    public static JsonObject convertFormat(YamlConfiguration legacyFormat) {
+        JsonObject newFormat = new JsonObject();
+
+        ConfigurationSection chests = legacyFormat.getConfigurationSection("Chests");
+        ConfigurationSection crops = legacyFormat.getConfigurationSection("Crops");
+        ConfigurationSection dispenser = legacyFormat.getConfigurationSection("Dispenser");
+
+        List<Location>
+
+        Location chestLocation = legacyFormat.getLocation();
+
+    }
+
 }
