@@ -30,6 +30,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public final class Autofarm {
 
+    public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
     @SerializedName("owner")
     private final @NotNull @Getter UUID ownerID;
 
