@@ -1,11 +1,17 @@
 package com.github.bakuplayz.cropclick.configs.converter;
 
+import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.google.gson.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -15,89 +21,86 @@ import java.util.List;
  * @version 2.0.0
  * @since 2.0.0
  */
-// TODO: Converts from the old autofarm config system to the new one.
 public final class AutofarmsConverter {
 
-    /*  NEW CONFIG:
-        {
-            "UUID": {
-                "ownerID": "0",
-                "container": {
-                    "singly": {
-                        "x": -311,
-                        "y": 63,
-                        "z": 234,
-                        "world": "world"
-                    },
-                    "doubly": {
-                        "x": -311,
-                        "y": 63,
-                        "z": 233,
-                        "world": "world"
-                    }
-                },
-                "dispenser": {
-                    "x": -313,
-                    "y": 64,
-                    "z": 236,
-                    "world": "world"
-                },
-                "crop": {
-                    "x": -312,
-                    "y": 63,
-                    "z": 236,
-                    "world": "world"
-                }
-            }
-        }
-    **/
-
-
-    /* OLD CONFIG:
-     * Chests:
-     *   '1':
-     *     X: -311.0
-     *     Y: 63.0
-     *     Z: 234.0
-     *     World: world
-     * AmountOfChests: 2
-     * Crops:
-     *   '1':
-     *     X: -312.0
-     *     Y: 63.0
-     *     Z: 236.0
-     *     World: world
-     * AmountOfCrops: 2
-     * Dispenser:
-     *   '1':
-     *     X: -313.0
-     *     Y: 64.0
-     *     Z: 236.0
-     *     World: world
-     *     Linked:
-     *       Chest:
-     *         X: -311
-     *         Y: 63
-     *         Z: 234
-     *         World: world
-     *       Crop:
-     *         X: -312
-     *         Y: 63
-     *         Z: 236
-     *         World: world
-     * AmountOfDispensers: 2
+    /**
+     * It converts a legacy format to the new format.
+     *
+     * @param legacyFormat The configuration section that contains the legacy format.
+     *
+     * @return A JsonObject
      */
-    public static JsonObject convertFormat(YamlConfiguration legacyFormat) {
-        JsonObject newFormat = new JsonObject();
+    public static @NotNull JsonObject convertFormat(@NotNull ConfigurationSection legacyFormat) {
+        JsonObject output = new JsonObject();
 
-        ConfigurationSection chests = legacyFormat.getConfigurationSection("Chests");
-        ConfigurationSection crops = legacyFormat.getConfigurationSection("Crops");
-        ConfigurationSection dispenser = legacyFormat.getConfigurationSection("Dispenser");
+        ConfigurationSection dispenserSection = legacyFormat.getConfigurationSection("Dispenser");
 
-        List<Location>
+        if (dispenserSection == null) {
+            return output;
+        }
 
-        Location chestLocation = legacyFormat.getLocation();
+        Set<String> dispenserIndices = dispenserSection.getKeys(false);
+        for (String index : dispenserIndices) {
+            ConfigurationSection dispenser = dispenserSection.getConfigurationSection(index);
 
+            if (dispenser == null) {
+                continue;
+            }
+
+            Location dispenserLocation = toLocation(dispenser);
+
+            ConfigurationSection linkedSection = dispenser.getConfigurationSection("Linked");
+            if (linkedSection == null) {
+                continue;
+            }
+
+            ConfigurationSection linkedCropSection = linkedSection.getConfigurationSection("Crop");
+            ConfigurationSection linkedContainerSection = linkedSection.getConfigurationSection("Chest");
+            if (linkedCropSection == null) {
+                continue;
+            }
+
+            if (linkedContainerSection == null) {
+                continue;
+            }
+
+            Location cropLocation = toLocation(linkedCropSection);
+            Location containerLocation = toLocation(linkedContainerSection);
+            DoublyLocation doublyLocation = LocationUtils.getAsDoubly(containerLocation);
+
+            JsonObject sossarna = new JsonObject(); // får vi nya mandat, kanske det dubbla? det tycker jag.
+
+            sossarna.addProperty("ownerID", "-1");
+            sossarna.add("dispenser", LocationTypeAdapter.serialize(dispenserLocation));
+            sossarna.add("crop", LocationTypeAdapter.serialize(cropLocation));
+            sossarna.add("container", LocationTypeAdapter.serialize(
+                    doublyLocation != null ? doublyLocation : containerLocation
+            ));
+
+            output.add(UUID.randomUUID().toString(), sossarna);
+        }
+
+        return output;
+    }
+
+
+    /**
+     * Returns the Location represented by this ConfigurationSection
+     *
+     * @param section The ConfigurationSection to get the Location from.
+     *
+     * @return A Location object
+     */
+    private static @NotNull Location toLocation(@NotNull ConfigurationSection section) {
+        int x = section.getInt("X");
+        int y = section.getInt("Y");
+        int z = section.getInt("Z");
+        String worldName = section.getString("World");
+        World world = worldName != null
+                      ? Bukkit.getWorld(worldName)
+                      : Bukkit.getWorlds().get(0);
+
+        return new Location(world, x, y, z);
     }
 
 }

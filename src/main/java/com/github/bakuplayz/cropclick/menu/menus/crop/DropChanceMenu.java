@@ -9,7 +9,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
-import com.github.bakuplayz.cropclick.utils.MathUtil;
+import com.github.bakuplayz.cropclick.utils.MathUtils;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -126,7 +126,7 @@ public final class DropChanceMenu extends Menu {
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.DROP_CHANCE_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.DROP_CHANCE_STATUS_DISABLED.get(plugin);
-        double chance = MathUtil.round(
+        double chance = MathUtils.round(
                 crop.getDrop().getChance() * DECIMAL_TO_PERCENT
         );
 
@@ -143,7 +143,7 @@ public final class DropChanceMenu extends Menu {
     private @NotNull ItemStack getSeedItem() {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
-        double chance = MathUtil.round(
+        double chance = MathUtils.round(
                 seed.getDrop().getChance() * DECIMAL_TO_PERCENT
         );
 
@@ -158,7 +158,7 @@ public final class DropChanceMenu extends Menu {
 
 
     private @NotNull ItemStack getCropAddItem(int amount) {
-        double beforeValue = MathUtil.round(
+        double beforeValue = MathUtils.round(
                 cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
@@ -171,7 +171,7 @@ public final class DropChanceMenu extends Menu {
 
 
     private @NotNull ItemStack getCropRemoveItem(int amount) {
-        double beforeValue = MathUtil.round(
+        double beforeValue = MathUtils.round(
                 cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
@@ -184,7 +184,7 @@ public final class DropChanceMenu extends Menu {
 
 
     private @NotNull ItemStack getSeedAddItem(int amount) {
-        double beforeValue = MathUtil.round(
+        double beforeValue = MathUtils.round(
                 seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
@@ -197,7 +197,7 @@ public final class DropChanceMenu extends Menu {
 
 
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
-        double beforeValue = MathUtil.round(
+        double beforeValue = MathUtils.round(
                 seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);

@@ -3,10 +3,8 @@ package com.github.bakuplayz.cropclick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
-import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configs.config.LanguageConfig;
-import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
+import com.github.bakuplayz.cropclick.configs.config.*;
+import com.github.bakuplayz.cropclick.configs.converter.AutofarmsConverter;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
@@ -32,12 +30,19 @@ import com.github.bakuplayz.cropclick.permissions.PermissionManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 /**
@@ -57,6 +62,8 @@ public class CropClick extends JavaPlugin {
     private @Getter AutofarmManager autofarmManager;
     private @Getter PermissionManager permissionManager;
 
+
+    private @Getter UsageConfig usageConfig;
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
     private @Getter PlayersConfig playersConfig;
@@ -79,6 +86,11 @@ public class CropClick extends JavaPlugin {
 
         CropClick.plugin = this;
 
+        this.usageConfig = new UsageConfig(this);
+        usageConfig.setup();
+
+        handleLegacyConfigs();
+
         registerConfigs();
         setupConfigs();
 
@@ -91,6 +103,8 @@ public class CropClick extends JavaPlugin {
         registerListeners();
 
         loadConfigSections();
+
+//        usageConfig.updateUsageInfo();
     }
 
 
@@ -124,9 +138,54 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    public void handleLegacyConfigs() {
+        String lastOpenedIn = usageConfig.getLastOpenedIn();
+
+        if (usageConfig.isNewFormatVersion()) {
+            return;
+        }
+
+        {
+            File inFile = new File(getDataFolder(), "autofarm.yml");
+            YamlConfiguration legacyAutofarms = YamlConfiguration.loadConfiguration(inFile);
+
+            JsonObject newAutofarms = AutofarmsConverter.convertFormat(legacyAutofarms);
+            File outFile = new File(getDataFolder().getAbsolutePath() + "/datastorage", "autofarms.json");
+
+            System.out.println(outFile.getAbsolutePath());
+            System.out.println(new Gson().toJson(newAutofarms));
+
+            outFile.getParentFile().mkdirs();
+            try {
+                outFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            Gson gson = new Gson();
+
+            try {
+                FileWriter writer = new FileWriter(outFile);
+                writer.write(gson.toJson(newAutofarms));
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_REMOVED.send(outFile.getName()); // TODO ganska cringe att jag bara kopierade från AutofarmDataStorage, fixa
+            } catch (Exception e) {
+                e.printStackTrace();
+                LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(outFile.getName()); // TODO ganska cringe att jag bara kopierade från AutofarmDataStorage, fixa
+            }
+
+//            inFile.renameTo(new File(inFile.getAbsolutePath() + "-old"));
+
+        }
+    }
+
+
     public void setupConfigs() {
         LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
-        //getConfig().options().copyDefaults(true);
+        getConfig().options().copyDefaults(true);
         saveConfig();
 
         cropsConfig.setup();

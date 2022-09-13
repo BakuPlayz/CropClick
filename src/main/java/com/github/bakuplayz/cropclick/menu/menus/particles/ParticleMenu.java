@@ -7,7 +7,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
-import com.github.bakuplayz.cropclick.utils.MathUtil;
+import com.github.bakuplayz.cropclick.utils.MathUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -38,8 +38,9 @@ public final class ParticleMenu extends Menu {
     private final int MIN_SPEED = 0;
     private final int MAX_SPEED = 50;
 
-    private final int MIN_AMOUNT = 0;
-    private final int MAX_AMOUNT = 20;
+    // TODO make everything static and public
+    public static final int MIN_AMOUNT = 0;
+    public static final int MAX_AMOUNT = 20;
 
 
     private final Crop crop;
@@ -323,7 +324,7 @@ public final class ParticleMenu extends Menu {
 
 
     public void addParticleDelay(int delay) {
-        double oldDelay = MathUtil.round(
+        double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) + delay
         );
         double newDelay = Math.min(oldDelay, DELAY_MAX);
@@ -332,7 +333,7 @@ public final class ParticleMenu extends Menu {
 
 
     public void removeParticleDelay(int delay) {
-        double oldDelay = MathUtil.round(
+        double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) - delay
         );
         double newDelay = Math.max(oldDelay, DELAY_MIN);
@@ -341,7 +342,7 @@ public final class ParticleMenu extends Menu {
 
 
     public void addParticleSpeed(int speed) {
-        double oldSpeed = MathUtil.round(
+        double oldSpeed = MathUtils.round(
                 particleSection.getSpeed(cropName, particleName) + speed
         );
         double newSpeed = Math.min(oldSpeed, MAX_SPEED);
@@ -350,7 +351,7 @@ public final class ParticleMenu extends Menu {
 
 
     public void removeParticleSpeed(int speed) {
-        double oldSpeed = MathUtil.round(
+        double oldSpeed = MathUtils.round(
                 particleSection.getSpeed(cropName, particleName) - speed
         );
         double newSpeed = Math.max(oldSpeed, MIN_SPEED);
