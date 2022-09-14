@@ -107,7 +107,7 @@ public final class CropConverter {
      *
      * @param legacyFormat The configuration section that contains the legacy format.
      *
-     * @return A JsonObject
+     * @return A JsonObject.
      */
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();

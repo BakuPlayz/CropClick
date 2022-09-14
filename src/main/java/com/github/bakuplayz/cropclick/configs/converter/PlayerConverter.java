@@ -22,7 +22,7 @@ import java.nio.file.Files;
 public final class PlayerConverter {
 
     /**
-     * It loads the old config.yml file, converts it to the new format, and saves it to the new file.
+     * It loads the old player.yml file, converts it to the new format, and saves it to the new file.
      *
      * @param plugin The plugin instance.
      *

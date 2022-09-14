@@ -95,6 +95,8 @@ public final class AutofarmsConverter {
      *
      * @param legacyFormat The configuration section that contains the legacy format.
      *
+     * @apiNote Written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
+     *
      * @return A JsonObject
      */
     private static @NotNull JsonObject convertFormat(@NotNull ConfigurationSection legacyFormat) {
@@ -135,16 +137,16 @@ public final class AutofarmsConverter {
             Location containerLocation = AutofarmsConverter.toLocation(linkedContainerSection);
             DoublyLocation doublyLocation = LocationUtils.getAsDoubly(containerLocation);
 
-            JsonObject sossarna = new JsonObject(); // får vi nya mandat, kanske det dubbla? det tycker jag.
+            JsonObject autofarmObj = new JsonObject();
 
-            sossarna.addProperty("ownerID", "-1");
-            sossarna.add("dispenser", LocationTypeAdapter.serialize(dispenserLocation));
-            sossarna.add("crop", LocationTypeAdapter.serialize(cropLocation));
-            sossarna.add("container", LocationTypeAdapter.serialize(
+            autofarmObj.addProperty("ownerID", "-1");
+            autofarmObj.add("dispenser", LocationTypeAdapter.serialize(dispenserLocation));
+            autofarmObj.add("crop", LocationTypeAdapter.serialize(cropLocation));
+            autofarmObj.add("container", LocationTypeAdapter.serialize(
                     doublyLocation != null ? doublyLocation : containerLocation
             ));
 
-            output.add(UUID.randomUUID().toString(), sossarna);
+            output.add(UUID.randomUUID().toString(), autofarmObj);
         }
 
         return output;
