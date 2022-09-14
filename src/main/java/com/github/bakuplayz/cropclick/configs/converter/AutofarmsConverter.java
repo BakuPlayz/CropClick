@@ -18,7 +18,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +35,6 @@ import java.util.UUID;
  * @since 2.0.0
  */
 public final class AutofarmsConverter {
-
 
     private final static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final static Type AUTOFARM_MAP_TYPE = new TypeToken<HashMap<UUID, Autofarm>>() {}.getType();
@@ -51,13 +52,16 @@ public final class AutofarmsConverter {
                 plugin.getDataFolder(),
                 "autofarm.yml"
         );
+        File oldFolder = new File(
+                plugin.getDataFolder() + "/old"
+        );
 
         YamlConfiguration legacyAutofarms = YamlConfiguration.loadConfiguration(inFile);
         JsonObject newAutofarms = AutofarmsConverter.convertFormat(legacyAutofarms);
 
-        HashMap<UUID, Autofarm> data = GSON.fromJson(
+        HashMap<UUID, Autofarm> data = AutofarmsConverter.GSON.fromJson(
                 newAutofarms,
-                AUTOFARM_MAP_TYPE
+                AutofarmsConverter.AUTOFARM_MAP_TYPE
         );
 
         AutofarmDataStorage storage = plugin.getFarmData();
@@ -77,7 +81,12 @@ public final class AutofarmsConverter {
         }
         storage.saveData();
 
-        //inFile.renameTo(new File(inFile.getAbsolutePath() + "-old"));
+        try {
+            Files.move(inFile.toPath(), oldFolder.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(""); //TODO: Make up a good error response message.
+        }
     }
 
 
@@ -105,7 +114,7 @@ public final class AutofarmsConverter {
                 continue;
             }
 
-            Location dispenserLocation = toLocation(dispenser);
+            Location dispenserLocation = AutofarmsConverter.toLocation(dispenser);
 
             ConfigurationSection linkedSection = dispenser.getConfigurationSection("Linked");
             if (linkedSection == null) {
@@ -122,8 +131,8 @@ public final class AutofarmsConverter {
                 continue;
             }
 
-            Location cropLocation = toLocation(linkedCropSection);
-            Location containerLocation = toLocation(linkedContainerSection);
+            Location cropLocation = AutofarmsConverter.toLocation(linkedCropSection);
+            Location containerLocation = AutofarmsConverter.toLocation(linkedContainerSection);
             DoublyLocation doublyLocation = LocationUtils.getAsDoubly(containerLocation);
 
             JsonObject sossarna = new JsonObject(); // får vi nya mandat, kanske det dubbla? det tycker jag.

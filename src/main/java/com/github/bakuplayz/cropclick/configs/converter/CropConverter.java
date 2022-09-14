@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.configs.converter;
 
+import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.converter.base.ExactValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.SourceValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.YamlConverter;
@@ -10,6 +11,9 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -64,13 +68,48 @@ public final class CropConverter {
 
 
     /**
+     * It loads the old crops.yml file, converts it to the new format, and saves it to the new file.
+     *
+     * @param plugin The plugin instance.
+     *
+     * @apiNote Written by BakuPlayz.
+     */
+    public static void makeConversion(@NotNull CropClick plugin) {
+        File inFile = new File(
+                plugin.getDataFolder(),
+                "crop.yml"
+        );
+        File oldFolder = new File(
+                plugin.getDataFolder() + "/old"
+        );
+
+        YamlConfiguration legacyCrops = YamlConfiguration.loadConfiguration(inFile);
+        ConfigurationSection newCrops = CropConverter.convertFormat(legacyCrops);
+
+        try {
+            plugin.getCropsConfig().getConfig().save(newCrops.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(""); //TODO: Make up a good error response message.
+        }
+
+        try {
+            Files.move(inFile.toPath(), oldFolder.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(""); //TODO: Make up a good error response message.
+        }
+    }
+
+
+    /**
      * It converts a legacy format to the new format.
      *
      * @param legacyFormat The configuration section that contains the legacy format.
      *
      * @return A JsonObject
      */
-    public static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
+    private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();
 
         Map<String, String> cropNames = new HashMap<>();
@@ -99,8 +138,8 @@ public final class CropConverter {
             converter.addConversion(SourceValue.of("Settings.Jobs.Money"), "crops." + toId + ".addons.jobsReborn.money");
             converter.addConversion(SourceValue.of("Settings.Jobs.Points"), "crops." + toId + ".addons.jobsReborn.points");
 
-            converter.addConversion(SourceValue.of("Settings.Particles", PARTICLE_CONVERTER), "crops." + toId + ".particles");
-            converter.addConversion(SourceValue.of("Settings.Sounds", SOUND_CONVERTER), "crops." + toId + ".sounds");
+            converter.addConversion(SourceValue.of("Settings.Particles", CropConverter.PARTICLE_CONVERTER), "crops." + toId + ".particles");
+            converter.addConversion(SourceValue.of("Settings.Sounds", CropConverter.SOUND_CONVERTER), "crops." + toId + ".sounds");
         }
 
         Map<String, String> seedNames = new HashMap<>();
