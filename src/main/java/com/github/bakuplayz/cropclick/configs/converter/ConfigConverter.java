@@ -3,13 +3,12 @@ package com.github.bakuplayz.cropclick.configs.converter;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.converter.base.SourceValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.YamlConverter;
+import com.github.bakuplayz.cropclick.utils.FileUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 
 /**
@@ -33,27 +32,19 @@ public final class ConfigConverter {
                 plugin.getDataFolder(),
                 "config.yml"
         );
-        File oldFolder = new File(
-                plugin.getDataFolder() + "/old"
+        File outFile = new File(
+                plugin.getDataFolder() + "/old",
+                "config.yml"
         );
+        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyConfig = YamlConfiguration.loadConfiguration(inFile);
         ConfigurationSection newConfig = ConfigConverter.convertFormat(legacyConfig);
 
-        try {
-            plugin.getConfig().save(newConfig.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
-
-        try {
-            Files.move(inFile.toPath(), oldFolder.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
+        FileUtils.copyYamlTo(plugin.getConfig(), newConfig);
+        FileUtils.moveFile(inFile, outFile);
     }
+
 
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();

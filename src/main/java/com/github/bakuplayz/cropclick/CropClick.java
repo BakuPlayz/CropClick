@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
 import com.github.bakuplayz.cropclick.configs.config.*;
 import com.github.bakuplayz.cropclick.configs.converter.AutofarmsConverter;
+import com.github.bakuplayz.cropclick.configs.converter.ConfigConverter;
 import com.github.bakuplayz.cropclick.configs.converter.CropConverter;
 import com.github.bakuplayz.cropclick.configs.converter.PlayerConverter;
 import com.github.bakuplayz.cropclick.crop.CropManager;
@@ -137,8 +138,8 @@ public class CropClick extends JavaPlugin {
         }
 
         CropConverter.makeConversion(this);
-        CropConverter.makeConversion(this);
         PlayerConverter.makeConversion(this);
+        ConfigConverter.makeConversion(this);
         AutofarmsConverter.makeConversion(this);
     }
 

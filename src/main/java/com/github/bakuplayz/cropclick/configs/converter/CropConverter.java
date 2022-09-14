@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.configs.converter.base.ExactValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.SourceValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.YamlConverter;
 import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
+import com.github.bakuplayz.cropclick.utils.FileUtils;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -12,8 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -79,26 +78,17 @@ public final class CropConverter {
                 plugin.getDataFolder(),
                 "crop.yml"
         );
-        File oldFolder = new File(
-                plugin.getDataFolder() + "/old"
+        File outFile = new File(
+                plugin.getDataFolder() + "/old",
+                "crop.yml"
         );
+        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyCrops = YamlConfiguration.loadConfiguration(inFile);
         ConfigurationSection newCrops = CropConverter.convertFormat(legacyCrops);
 
-        try {
-            plugin.getCropsConfig().getConfig().save(newCrops.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
-
-        try {
-            Files.move(inFile.toPath(), oldFolder.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
+        FileUtils.copyYamlTo(plugin.getCropsConfig().getConfig(), newCrops);
+        FileUtils.moveFile(inFile, outFile);
     }
 
 

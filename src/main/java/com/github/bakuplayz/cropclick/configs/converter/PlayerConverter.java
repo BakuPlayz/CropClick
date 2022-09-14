@@ -3,13 +3,12 @@ package com.github.bakuplayz.cropclick.configs.converter;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.converter.base.SourceValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.YamlConverter;
+import com.github.bakuplayz.cropclick.utils.FileUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 
 /**
@@ -33,26 +32,17 @@ public final class PlayerConverter {
                 plugin.getDataFolder(),
                 "player.yml"
         );
-        File oldFolder = new File(
-                plugin.getDataFolder() + "/old"
+        File outFile = new File(
+                plugin.getDataFolder() + "/old",
+                "player.yml"
         );
+        outFile.getParentFile().mkdirs();
 
-        YamlConfiguration legacyConfig = YamlConfiguration.loadConfiguration(inFile);
-        ConfigurationSection newConfig = PlayerConverter.convertFormat(legacyConfig);
+        YamlConfiguration legacyPlayer = YamlConfiguration.loadConfiguration(inFile);
+        ConfigurationSection newPlayer = PlayerConverter.convertFormat(legacyPlayer);
 
-        try {
-            plugin.getPlayersConfig().getConfig().save(newConfig.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
-
-        try {
-            Files.move(inFile.toPath(), oldFolder.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
+        FileUtils.copyYamlTo(plugin.getPlayersConfig().getConfig(), newPlayer);
+        FileUtils.moveFile(inFile, outFile);
     }
 
 

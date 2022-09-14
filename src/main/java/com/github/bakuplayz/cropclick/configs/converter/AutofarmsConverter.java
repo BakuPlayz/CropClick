@@ -5,6 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
+import com.github.bakuplayz.cropclick.utils.FileUtils;
 import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,9 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -52,9 +51,11 @@ public final class AutofarmsConverter {
                 plugin.getDataFolder(),
                 "autofarm.yml"
         );
-        File oldFolder = new File(
-                plugin.getDataFolder() + "/old"
+        File outFile = new File(
+                plugin.getDataFolder() + "/old",
+                "autofarm.yml"
         );
+        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyAutofarms = YamlConfiguration.loadConfiguration(inFile);
         JsonObject newAutofarms = AutofarmsConverter.convertFormat(legacyAutofarms);
@@ -81,12 +82,7 @@ public final class AutofarmsConverter {
         }
         storage.saveData();
 
-        try {
-            Files.move(inFile.toPath(), oldFolder.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(""); //TODO: Make up a good error response message.
-        }
+        FileUtils.moveFile(inFile, outFile);
     }
 
 
@@ -95,9 +91,9 @@ public final class AutofarmsConverter {
      *
      * @param legacyFormat The configuration section that contains the legacy format.
      *
-     * @apiNote Written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
-     *
      * @return A JsonObject
+     *
+     * @apiNote Written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     private static @NotNull JsonObject convertFormat(@NotNull ConfigurationSection legacyFormat) {
         JsonObject output = new JsonObject();
