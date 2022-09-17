@@ -27,20 +27,18 @@ public final class LanguageAPI {
         FILE_RELOAD("Reloading &e%s&7."),
         FILE_SETUP_LOAD("Loading &e%s&7."),
         FILE_SAVE_FAILED("Could not save &e%s&7."),
-
         FILE_SETUP_FAILED("Could not setup &e%s&7."),
 
+        FILE_MOVE_FAILED("Could not move &e%s&7."),
+        FILE_COPY_FAILED("Could not copy &e%s&7."),
+
         DATA_STORAGE_LOADING_SETUP("Loading &e%s&7."),
-
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save &e%s&7, due to unknown reasons."),
-
         DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save &e%s&7, due to it being previously removed."),
-
         DATA_STORAGE_LOADED_DATA("Loaded &e%s's &7data."),
-
         DATA_STORAGE_FAILED_LOAD("Could not load &e%s&7."),
-
         DATA_STORAGE_FAILED_SETUP("Could not setup &e%s&7."),
+
         AUTOFARM_STORAGE_FAILED_REMOVE("Unlinked autofarms were unsuccessfully removed."),
 
         FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),

@@ -3,10 +3,11 @@ package com.github.bakuplayz.cropclick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
-import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configs.config.LanguageConfig;
-import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
+import com.github.bakuplayz.cropclick.configs.config.*;
+import com.github.bakuplayz.cropclick.configs.converter.AutofarmsConverter;
+import com.github.bakuplayz.cropclick.configs.converter.ConfigConverter;
+import com.github.bakuplayz.cropclick.configs.converter.CropConverter;
+import com.github.bakuplayz.cropclick.configs.converter.PlayerConverter;
 import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
@@ -57,6 +58,8 @@ public class CropClick extends JavaPlugin {
     private @Getter AutofarmManager autofarmManager;
     private @Getter PermissionManager permissionManager;
 
+
+    private @Getter UsageConfig usageConfig;
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
     private @Getter PlayersConfig playersConfig;
@@ -84,6 +87,9 @@ public class CropClick extends JavaPlugin {
 
         registerStorages();
         setupStorages();
+
+        handleLegacyConfigs();
+
         startStoragesSaveInterval();
 
         registerManagers();
@@ -91,6 +97,8 @@ public class CropClick extends JavaPlugin {
         registerListeners();
 
         loadConfigSections();
+
+        usageConfig.updateUsageInfo();
     }
 
 
@@ -124,14 +132,27 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    private void handleLegacyConfigs() {
+        if (usageConfig.isNewFormatVersion()) {
+            return;
+        }
+
+        CropConverter.makeConversion(this);
+        PlayerConverter.makeConversion(this);
+        ConfigConverter.makeConversion(this);
+        AutofarmsConverter.makeConversion(this);
+    }
+
+
     public void setupConfigs() {
         LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
-        //getConfig().options().copyDefaults(true);
+        getConfig().options().copyDefaults(true);
         saveConfig();
 
         cropsConfig.setup();
         cropsConfig.setupSections();
 
+        usageConfig.setup();
         addonsConfig.setup();
         playersConfig.setup();
         languageConfig.setup();
@@ -144,6 +165,7 @@ public class CropClick extends JavaPlugin {
 
 
     private void registerConfigs() {
+        this.usageConfig = new UsageConfig(this);
         this.cropsConfig = new CropsConfig(this);
         this.addonsConfig = new AddonsConfig(this);
         this.playersConfig = new PlayersConfig(this);

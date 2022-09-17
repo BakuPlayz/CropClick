@@ -457,6 +457,7 @@ public abstract class LinkMenu extends Menu {
             return getUnlinkedLocationLore();
         }
 
+        // TODO fix this mf
         if (location instanceof DoublyLocation) {
             DoublyLocation doublyLocation = LocationUtils.getAsDoubly(location);
 

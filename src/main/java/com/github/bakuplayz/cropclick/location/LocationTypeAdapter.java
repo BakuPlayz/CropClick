@@ -84,6 +84,11 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      */
     @Override
     public @NotNull JsonElement serialize(Location location, Type type, JsonSerializationContext context) {
+        return serialize(location);
+    }
+
+
+    public static JsonElement serialize(Location location) {
         if (location instanceof DoublyLocation) {
             return serializeDoublyLocation((DoublyLocation) location);
         }
@@ -98,7 +103,7 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      *
      * @return A JsonObject.
      */
-    private @NotNull JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
+    private static @NotNull JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
         JsonObject body = new JsonObject();
         JsonObject singly = serializeLocation(location.getSingly());
         JsonObject doubly = serializeLocation(location.getDoubly());
@@ -115,7 +120,7 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      *
      * @return A JsonObject.
      */
-    private @NotNull JsonObject serializeLocation(@NotNull Location location) {
+    private static @NotNull JsonObject serializeLocation(@NotNull Location location) {
         JsonObject body = new JsonObject();
         body.add("world", new JsonPrimitive(location.getWorld().getName()));
         body.add("x", new JsonPrimitive(location.getX()));
