@@ -82,7 +82,6 @@ public final class CropConverter {
                 plugin.getDataFolder() + "/old",
                 "crop.yml"
         );
-        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyCrops = YamlConfiguration.loadConfiguration(inFile);
         ConfigurationSection newCrops = CropConverter.convertFormat(legacyCrops);

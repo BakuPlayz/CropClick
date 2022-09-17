@@ -88,16 +88,16 @@ public abstract class BaseCrop implements Crop {
                 hasNameChanged()
         );
 
-        boolean hasDropped = dropItem.getAmount() != 0;
+        boolean isNotZero = dropItem.getAmount() != 0;
 
         if (drop.willDrop()) {
-            if (hasDropped) {
+            if (isNotZero) {
                 inventory.addItem(dropItem);
             }
         }
 
         if (dropAtLeastOne()) {
-            if (!hasDropped) {
+            if (!isNotZero) {
                 dropItem.setAmount(1);
                 inventory.addItem(dropItem);
             }

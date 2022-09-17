@@ -55,7 +55,6 @@ public final class AutofarmsConverter {
                 plugin.getDataFolder() + "/old",
                 "autofarm.yml"
         );
-        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyAutofarms = YamlConfiguration.loadConfiguration(inFile);
         JsonObject newAutofarms = AutofarmsConverter.convertFormat(legacyAutofarms);
