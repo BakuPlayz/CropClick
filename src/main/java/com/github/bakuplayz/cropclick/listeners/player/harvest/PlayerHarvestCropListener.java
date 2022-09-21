@@ -149,20 +149,27 @@ public final class PlayerHarvestCropListener implements Listener {
 
         System.out.println("Player -- Harvest");
 
+        boolean wasHarvested;
+
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
-            tallCrop.harvestAll(player, block, crop);
+            wasHarvested = tallCrop.harvestAll(player, block, crop);
 
         } else if (crop instanceof RoofCrop) {
             RoofCrop roofCrop = (RoofCrop) crop;
-            roofCrop.harvestAll(player, block, crop);
+            wasHarvested = roofCrop.harvestAll(player, block, crop);
 
         } else if (crop instanceof SeaPickle) {
             SeaPickle seaPickle = (SeaPickle) crop;
-            seaPickle.harvestAll(player, block, crop);
+            wasHarvested = seaPickle.harvestAll(player, block, crop);
 
         } else {
-            crop.harvest(player);
+            wasHarvested = crop.harvest(player);
+        }
+
+        if (!wasHarvested) {
+            event.setCancelled(true);
+            return;
         }
 
         crop.replant(block);

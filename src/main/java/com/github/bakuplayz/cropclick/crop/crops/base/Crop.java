@@ -35,9 +35,25 @@ public interface Crop {
 
     boolean hasSeed();
 
-    void harvest(@NotNull Player player);
+    /**
+     * Checks wheaten or not the crop can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param player The player to add the drops to.
+     *
+     * @return The harvest state.
+     */
+    boolean harvest(@NotNull Player player);
 
-    void harvest(@NotNull Container container);
+    /**
+     * Checks wheaten or not the crop can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param container The container to add the drops to.
+     *
+     * @return The harvest state.
+     */
+    boolean harvest(@NotNull Container container);
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isHarvestAge(@NotNull Block block);

@@ -35,21 +35,34 @@ public abstract class BaseSeed implements Seed {
     }
 
 
+    /**
+     * Checks wheaten or not the seed can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param inventory The inventory to add the drops to.
+     *
+     * @return The harvest state.
+     */
     @Override
-    public void harvest(@NotNull Inventory inventory) {
-        if (!hasDrop()) return;
+    public boolean harvest(@NotNull Inventory inventory) {
+        if (!hasDrop()) {
+            return false;
+        }
 
         Drop drop = getDrop();
         if (!drop.willDrop()) {
-            return;
+            return false;
         }
 
         ItemStack dropItem = drop.toItemStack(
                 hasNameChanged()
         );
+
         if (dropItem.getAmount() != 0) {
             inventory.addItem(dropItem);
         }
+
+        return true;
     }
 
 

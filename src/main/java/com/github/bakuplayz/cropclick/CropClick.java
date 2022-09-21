@@ -48,7 +48,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @version 2.0.0
  * @since 2.0.0
  */
-public class CropClick extends JavaPlugin {
+public final class CropClick extends JavaPlugin {
+
+    private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
     private @Getter CropManager cropManager;
     private @Getter WorldManager worldManager;
@@ -58,7 +60,6 @@ public class CropClick extends JavaPlugin {
     private @Getter AutofarmManager autofarmManager;
     private @Getter PermissionManager permissionManager;
 
-
     private @Getter UsageConfig usageConfig;
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
@@ -67,8 +68,6 @@ public class CropClick extends JavaPlugin {
 
     private @Getter WorldDataStorage worldData;
     private @Getter AutofarmDataStorage farmData;
-
-    private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
     private boolean isReset;
 

@@ -1,0 +1,169 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": false
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.github.bakuplayz.cropclick.configs.converter.base.YamlValueProvider",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1245635613 { 
+   	label=github
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1276858162 { 
+   	label=bakuplayz
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   ExactValue1898072641[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ExactValue</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   value: Object [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ ExactValue(value: Object)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(source: ConfigurationSection): Object</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(value: Object): ExactValue</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SourceValue1898072641[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SourceValue</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   converter: Function&lt;Object, Object&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ SourceValue(key: String, converter: Function&lt;Object, Object&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(source: ConfigurationSection): Object</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String, converter: Function&lt;Object, Object&gt;): SourceValue</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String): SourceValue</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlConversion1898072641[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlConversion</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   targetPath: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   valueProvider: YamlValueProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ YamlConversion(valueProvider: YamlValueProvider, targetPath: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ execute(source: ConfigurationSection, target: ConfigurationSection)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlValueProvider1898072641[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)YamlValueProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(source: ConfigurationSection): Object</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+} 
+} 
+
+'edges    
+YamlConversion1898072641 -> YamlValueProvider1898072641[label="valueProvider
+[0..1]"];
+YamlValueProvider1898072641 -> ExactValue1898072641[arrowhead=none, arrowtail=empty, dir=both];
+YamlValueProvider1898072641 -> SourceValue1898072641[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml

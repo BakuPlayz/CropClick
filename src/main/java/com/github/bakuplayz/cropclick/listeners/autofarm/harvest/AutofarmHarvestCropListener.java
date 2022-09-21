@@ -137,20 +137,27 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
+        boolean wasHarvested;
+
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
-            tallCrop.harvestAll(container, block, crop);
+            wasHarvested = tallCrop.harvestAll(container, block, crop);
 
         } else if (crop instanceof RoofCrop) {
             RoofCrop roofCrop = (RoofCrop) crop;
-            roofCrop.harvestAll(container, block, crop);
+            wasHarvested = roofCrop.harvestAll(container, block, crop);
 
         } else if (crop instanceof SeaPickle) {
             SeaPickle seaPickle = (SeaPickle) crop;
-            seaPickle.harvestAll(container, block, crop);
+            wasHarvested = seaPickle.harvestAll(container, block, crop);
 
         } else {
-            crop.harvest(container);
+            wasHarvested = crop.harvest(container);
+        }
+
+        if (!wasHarvested) {
+            event.setCancelled(true);
+            return;
         }
 
         crop.replant(block);

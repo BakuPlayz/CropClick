@@ -124,7 +124,7 @@ public final class SoundConfigSection extends ConfigSection {
     public double getDelay(@NotNull String cropName, @NotNull String soundName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (!isEnabledAndThere(soundName, indexedSounds)) {
+        if (!isEnabledAndPresent(soundName, indexedSounds)) {
             return config.getDouble(
                     "crops." + cropName + ".sounds." + soundName + ".delay",
                     0
@@ -167,7 +167,7 @@ public final class SoundConfigSection extends ConfigSection {
     public double getPitch(@NotNull String cropName, @NotNull String soundName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (!isEnabledAndThere(soundName, indexedSounds)) {
+        if (!isEnabledAndPresent(soundName, indexedSounds)) {
             return config.getDouble(
                     "crops." + cropName + ".sounds." + soundName + ".pitch",
                     0
@@ -210,7 +210,7 @@ public final class SoundConfigSection extends ConfigSection {
     public double getVolume(@NotNull String cropName, @NotNull String soundName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (!isEnabledAndThere(soundName, indexedSounds)) {
+        if (!isEnabledAndPresent(soundName, indexedSounds)) {
             return config.getDouble(
                     "crops." + cropName + ".sounds." + soundName + ".volume",
                     0
@@ -303,7 +303,7 @@ public final class SoundConfigSection extends ConfigSection {
      * @return The method is returning a boolean value.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isEnabledAndThere(@NotNull String soundName, IndexedYamlMap<SoundYaml> indexedSounds) {
+    private boolean isEnabledAndPresent(@NotNull String soundName, IndexedYamlMap<SoundYaml> indexedSounds) {
         if (indexedSounds == null) {
             return false;
         }

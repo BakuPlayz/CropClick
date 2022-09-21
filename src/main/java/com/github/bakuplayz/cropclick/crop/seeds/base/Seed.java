@@ -23,7 +23,15 @@ public interface Seed {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean hasDrop();
 
-    void harvest(@NotNull Inventory inventory);
+    /**
+     * Checks wheaten or not the seed can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param inventory The inventory to add the drops to.
+     *
+     * @return The harvest state.
+     */
+    boolean harvest(@NotNull Inventory inventory);
 
     @NotNull
     Material getMenuType();

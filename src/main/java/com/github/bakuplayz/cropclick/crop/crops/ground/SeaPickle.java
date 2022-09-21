@@ -92,32 +92,58 @@ public final class SeaPickle extends GroundCrop {
 
 
     /**
-     * Harvest all the sea pickles on the block.
+     * "Harvesting all the sea pickles."
+     * <p>
+     * Checks wheaten or not the sea pickles can be harvested,
+     * returning true if it successfully harvested them.
      *
-     * @param player The player who is harvesting the crop
-     * @param block  The block that was harvested
+     * @param player The player to add the drops to.
+     * @param block  The block that was harvested.
      * @param crop   The crop that is being harvested.
+     *
+     * @return The harvest state.
      */
-    public void harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+        boolean wasHarvested = true;
+
         int height = getCurrentAge(block);
         for (int i = height; i > 0; --i) {
-            crop.harvest(player);
+            if (!wasHarvested) {
+                return false;
+            }
+
+            wasHarvested = crop.harvest(player);
         }
+
+        return wasHarvested;
     }
 
 
     /**
-     * Harvest all the sea pickles on the block.
+     * "Harvesting all the sea pickles."
+     * <p>
+     * Checks wheaten or not the sea pickles can be harvested,
+     * returning true if it successfully harvested them.
      *
-     * @param container The container that the crop is in.
-     * @param block     The block that is being harvested.
+     * @param container The container to add the drops to.
+     * @param block     The block that was harvested.
      * @param crop      The crop that is being harvested.
+     *
+     * @return The harvest state.
      */
-    public void harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+        boolean wasHarvested = true;
+
         int height = getCurrentAge(block);
         for (int i = height; i > 0; --i) {
-            crop.harvest(container);
+            if (!wasHarvested) {
+                return false;
+            }
+
+            wasHarvested = crop.harvest(container);
         }
+
+        return wasHarvested;
     }
 
 }

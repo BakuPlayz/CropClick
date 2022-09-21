@@ -9,6 +9,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.particles.ParticleRunnable;
 import com.github.bakuplayz.cropclick.sounds.SoundRunnable;
+import com.github.bakuplayz.cropclick.utils.InventoryUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -67,26 +68,58 @@ public abstract class BaseCrop implements Crop {
     }
 
 
+    /**
+     * Checks wheaten or not the crop can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param player The player to add the drops to.
+     *
+     * @return The harvest state.
+     */
     @Override
-    public void harvest(@NotNull Player player) {
-        harvest(player.getInventory());
+    public boolean harvest(@NotNull Player player) {
+        return harvest(player.getInventory());
     }
 
 
+    /**
+     * Checks wheaten or not the crop can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param container The container to add the drops to.
+     *
+     * @return The harvest state.
+     */
     @Override
-    public void harvest(@NotNull Container container) {
-        harvest(container.getInventory());
+    public boolean harvest(@NotNull Container container) {
+        return harvest(container.getInventory());
     }
 
 
-    private void harvest(@NotNull Inventory inventory) {
-        if (!isHarvestable()) return;
-        if (!hasDrop()) return;
+    /**
+     * Checks wheaten or not the crop can be harvested, returning
+     * true if it successfully harvested it.
+     *
+     * @param inventory The inventory to add the drops to.
+     *
+     * @return The harvest state.
+     */
+    private boolean harvest(@NotNull Inventory inventory) {
+        if (!isHarvestable()) {
+            return false;
+        }
+        if (!hasDrop()) {
+            return false;
+        }
 
         Drop drop = getDrop();
         ItemStack dropItem = drop.toItemStack(
                 hasNameChanged()
         );
+
+        if (!InventoryUtils.canFit(inventory, dropItem)) {
+            return false;
+        }
 
         boolean isNotZero = dropItem.getAmount() != 0;
 
@@ -103,13 +136,19 @@ public abstract class BaseCrop implements Crop {
             }
         }
 
-        if (!hasSeed()) return;
+        if (!hasSeed()) {
+            return true;
+        }
 
         Seed seed = getSeed();
-        if (!seed.isEnabled()) return;
-        if (!seed.hasDrop()) return;
+        if (!seed.isEnabled()) {
+            return false;
+        }
+        if (!seed.hasDrop()) {
+            return false;
+        }
 
-        seed.harvest(inventory);
+        return seed.harvest(inventory);
     }
 
 
