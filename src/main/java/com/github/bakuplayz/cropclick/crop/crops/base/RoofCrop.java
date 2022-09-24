@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public abstract class RoofCrop extends BaseCrop {
+public abstract class RoofCrop extends Crop {
 
     public RoofCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -71,7 +71,7 @@ public abstract class RoofCrop extends BaseCrop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -99,7 +99,7 @@ public abstract class RoofCrop extends BaseCrop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);

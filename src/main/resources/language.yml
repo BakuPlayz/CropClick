@@ -252,9 +252,14 @@ menu:
       linkFailure: "&cYour link failed to be established!"
 
     glass:
+      itemNameUnclaimed: "&f-"
       itemNameUnlinked: "&7*"
       itemNameSelected: "&b**"
       itemNameLinked: "&e***"
+
+    claim:
+      itemName: "&eClaim"
+      itemStatus: "&7Click to &eclaim &7the autofarm."
 
     toggle:
       itemName: "&eAutofarm"
@@ -274,6 +279,7 @@ menu:
   autofarms:
     itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
+    itemOwnerUnclaimed: "Unclaimed"
 
   addons:
     jobsReborn:

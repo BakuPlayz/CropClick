@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,8 +20,8 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class SeaPickle extends GroundCrop {
@@ -62,7 +62,7 @@ public final class SeaPickle extends GroundCrop {
 
     @Override
     @Contract(pure = true)
-    public @Nullable Seed getSeed() {
+    public @Nullable BaseSeed getSeed() {
         return null;
     }
 
@@ -103,7 +103,7 @@ public final class SeaPickle extends GroundCrop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -131,7 +131,7 @@ public final class SeaPickle extends GroundCrop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);

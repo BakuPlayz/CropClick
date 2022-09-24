@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.particles;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
@@ -43,7 +43,7 @@ public final class ParticleMenu extends Menu {
     public static final int MAX_AMOUNT = 20;
 
 
-    private final Crop crop;
+    private final BaseCrop crop;
     private final String cropName;
     private final String particleName;
     private final ParticleConfigSection particleSection;
@@ -54,7 +54,7 @@ public final class ParticleMenu extends Menu {
 
     public ParticleMenu(@NotNull CropClick plugin,
                         @NotNull Player player,
-                        @NotNull Crop crop,
+                        @NotNull BaseCrop crop,
                         @NotNull String particleName) {
         super(plugin, player, LanguageAPI.Menu.PARTICLE_TITLE);
         this.particleSection = plugin.getCropsConfig().getParticleSection();
@@ -170,7 +170,7 @@ public final class ParticleMenu extends Menu {
             removeParticleAmount(MAX_CHANGE);
         }
 
-        updateMenu();
+        refresh();
     }
 
 

@@ -48,11 +48,11 @@ public final class PlayerInteractAtContainerListener implements Listener {
         Autofarm autofarm = autofarmManager.findAutofarm(block);
 
         if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm.getOwnerID())) {
+            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
                 event.setCancelled(true);
                 return;
             }
-            
+
             if (AutofarmUtils.componentHasMeta(block)) {
                 AutofarmUtils.addMeta(plugin, autofarm);
             }

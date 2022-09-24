@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class NetherWart extends GroundCrop {
@@ -53,7 +53,7 @@ public final class NetherWart extends GroundCrop {
 
     @Override
     @Contract(pure = true)
-    public @Nullable Seed getSeed() {
+    public @Nullable BaseSeed getSeed() {
         return null;
     }
 

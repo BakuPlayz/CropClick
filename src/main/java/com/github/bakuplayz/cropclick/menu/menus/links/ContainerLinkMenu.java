@@ -3,8 +3,8 @@ package com.github.bakuplayz.cropclick.menu.menus.links;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.LinkMenu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -34,10 +34,16 @@ public final class ContainerLinkMenu extends LinkMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        if (isUnclaimed) {
+            handleUnclaimed(clicked);
+            refresh();
+            return;
+        }
+
         if (!isUnlinked) {
             handlePreviews(clicked);
             handleToggle(clicked);
-            updateMenu();
+            refresh();
         }
 
         if (!clicked.equals(containerItem)) {
@@ -46,7 +52,7 @@ public final class ContainerLinkMenu extends LinkMenu {
 
         if (isUnlinked) {
             handleSelect();
-            updateMenu();
+            refresh();
             handleLink();
         }
     }

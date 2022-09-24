@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.seeds;
+package com.github.bakuplayz.cropclick.crop.seeds.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
@@ -14,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Seed
+ * @see BaseSeed
  * @since 2.0.0
  */
-public final class BeetrootSeed extends BaseSeed {
+public final class BeetrootSeed extends Seed {
 
     public BeetrootSeed(@NotNull CropsConfig config) {
         super(config);

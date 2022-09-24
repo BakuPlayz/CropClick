@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -155,7 +155,7 @@ public final class AutofarmUtils {
      *
      * @return A Crop object
      */
-    public static @Nullable Crop getCrop(@NotNull CropManager manager, @NotNull Block block) {
+    public static @Nullable BaseCrop getCrop(@NotNull CropManager manager, @NotNull Block block) {
         return manager.findByBlock(block);
     }
 

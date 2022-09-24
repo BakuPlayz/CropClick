@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.listeners.harvest;
 
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.harvest.HarvestCropEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +21,7 @@ public final class HarvestCropListener implements Listener {
     public void onHarvestCrop(@NotNull HarvestCropEvent event) {
         if (event.isCancelled()) return;
 
-        Crop crop = event.getCrop();
+        BaseCrop crop = event.getCrop();
 
         if (!crop.hasDrop()) {
             event.setCancelled(true);

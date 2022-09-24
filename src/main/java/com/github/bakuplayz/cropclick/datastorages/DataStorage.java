@@ -19,7 +19,7 @@ import java.io.IOException;
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class DataStorage {
+public abstract class DataStorage implements Storageable {
 
     protected CropClick plugin;
 

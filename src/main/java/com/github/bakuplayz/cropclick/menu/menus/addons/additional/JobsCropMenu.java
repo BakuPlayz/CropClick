@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -39,7 +39,7 @@ public final class JobsCropMenu extends Menu {
     private final AddonConfigSection addonSection;
 
 
-    public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.JOBS_CROP_TITLE);
         this.addonSection = plugin.getCropsConfig().getAddonSection();
         this.cropName = crop.getName();
@@ -127,7 +127,7 @@ public final class JobsCropMenu extends Menu {
             removeJobsExperience(MAX_CHANGE);
         }
 
-        updateMenu();
+        refresh();
     }
 
 

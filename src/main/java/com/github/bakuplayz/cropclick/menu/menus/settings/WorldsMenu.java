@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
@@ -131,7 +131,7 @@ public final class WorldsMenu extends PaginatedMenu {
                 break;
         }
 
-        updateMenu();
+        refresh();
     }
 
 

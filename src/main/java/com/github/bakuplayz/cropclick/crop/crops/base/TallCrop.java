@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,10 +16,10 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public abstract class TallCrop extends BaseCrop {
+public abstract class TallCrop extends Crop {
 
     public TallCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -59,7 +59,7 @@ public abstract class TallCrop extends BaseCrop {
 
 
     @Override
-    public @Nullable Seed getSeed() {
+    public @Nullable BaseSeed getSeed() {
         return null;
     }
 
@@ -106,7 +106,7 @@ public abstract class TallCrop extends BaseCrop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -135,7 +135,7 @@ public abstract class TallCrop extends BaseCrop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -160,7 +160,7 @@ public abstract class TallCrop extends BaseCrop {
      *
      * @return The height of the crop.
      */
-    public int getActualHeight(@NotNull Crop crop, int height) {
+    public int getActualHeight(@NotNull BaseCrop crop, int height) {
         return crop.shouldReplant() ? height - 1 : height;
     }
 

@@ -20,8 +20,8 @@ import java.util.Stack;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class RedMushroom extends Mushroom {

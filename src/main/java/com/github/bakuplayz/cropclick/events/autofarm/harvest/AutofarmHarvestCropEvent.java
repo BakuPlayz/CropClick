@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.events.autofarm.harvest;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.harvest.HarvestCropEvent;
 import lombok.Getter;
 import org.bukkit.block.Block;
@@ -20,7 +20,7 @@ public final class AutofarmHarvestCropEvent extends HarvestCropEvent {
     private final @Getter Autofarm autofarm;
 
 
-    public AutofarmHarvestCropEvent(@NotNull Crop crop, @NotNull Block block, @NotNull Autofarm autofarm) {
+    public AutofarmHarvestCropEvent(@NotNull BaseCrop crop, @NotNull Block block, @NotNull Autofarm autofarm) {
         super(crop, block);
         this.autofarm = autofarm;
     }

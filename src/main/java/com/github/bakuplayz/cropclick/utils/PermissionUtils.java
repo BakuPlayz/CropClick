@@ -121,10 +121,17 @@ public final class PermissionUtils {
      * @return A boolean value.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull UUID other) {
-        if (!player.getUniqueId().equals(other)) {
+    public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull Autofarm farm) {
+        UUID other = player.getUniqueId();
+
+        if (other.equals(Autofarm.UNKNOWN_OWNER)) {
+            return player.isOp() || player.hasPermission("cropclick.autofarm.claim");
+        }
+
+        if (!other.equals(farm.getOwnerID())) {
             return player.isOp() || player.hasPermission("cropclick.autofarm.interact.others");
         }
+        
         return canInteractAtFarm(player);
     }
 

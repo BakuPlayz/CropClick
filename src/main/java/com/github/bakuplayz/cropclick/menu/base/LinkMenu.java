@@ -6,7 +6,6 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewDispenserMenu;
@@ -40,15 +39,16 @@ import java.util.List;
  */
 public abstract class LinkMenu extends Menu {
 
-    private final AutofarmManager autofarmManager;
-    private final Autofarm autofarm;
     private final Block block;
+    protected final Autofarm autofarm;
+    private final AutofarmManager autofarmManager;
 
     private boolean isCropSelected;
     private boolean isContainerSelected;
     private boolean isDispenserSelected;
 
     protected boolean isUnlinked;
+    protected boolean isUnclaimed;
     private boolean isClickedSelected;
 
     private Location cropLocation;
@@ -59,6 +59,7 @@ public abstract class LinkMenu extends Menu {
     protected ItemStack containerItem;
     protected ItemStack dispenserItem;
 
+    private ItemStack claimItem;
     private ItemStack toggleItem;
 
     private final Component clickedComponent;
@@ -72,7 +73,6 @@ public abstract class LinkMenu extends Menu {
                     @NotNull Component clickedComponent) {
         super(plugin, player, menuTitle);
         this.autofarmManager = plugin.getAutofarmManager();
-        this.isUnlinked = !autofarmManager.isLinked(autofarm);
         this.clickedComponent = clickedComponent;
         this.autofarm = autofarm;
         this.block = block;
@@ -83,19 +83,25 @@ public abstract class LinkMenu extends Menu {
 
     @Override
     public void setMenuItems() {
+        assignLinked();
+        assignClaimed();
         assignClicked();
         assignToggle();
         assignCrop();
         assignContainer();
         assignDispenser();
 
-        if (!isUnlinked) {
-            inventory.setItem(13, toggleItem);
-        }
+        if (!isUnclaimed) {
+            if (!isUnlinked) {
+                inventory.setItem(13, toggleItem);
+            }
 
-        inventory.setItem(isUnlinked ? 20 : 29, cropItem);
-        inventory.setItem(isUnlinked ? 22 : 31, dispenserItem);
-        inventory.setItem(isUnlinked ? 24 : 33, containerItem);
+            inventory.setItem(isUnlinked ? 20 : 29, cropItem);
+            inventory.setItem(isUnlinked ? 22 : 31, dispenserItem);
+            inventory.setItem(isUnlinked ? 24 : 33, containerItem);
+        } else {
+            inventory.setItem(22, claimItem);
+        }
 
         for (int i = 0; i < 54; ++i) {
             boolean isBottomSide = i > 45;
@@ -119,6 +125,29 @@ public abstract class LinkMenu extends Menu {
         if (!AutofarmUtils.hasMeta(autofarm)) {
             AutofarmUtils.addMeta(plugin, autofarm);
         }
+    }
+
+
+    /**
+     * Assigns the isUnclaimed wheaten autofarm is unclaimed, and its
+     * item variable, claimItem.
+     */
+    private void assignClaimed() {
+        if (autofarm == null) {
+            this.isUnclaimed = false;
+            return;
+        }
+
+        this.claimItem = getClaimItem();
+        this.isUnclaimed = Autofarm.UNKNOWN_OWNER.equals(autofarm.getOwnerID());
+    }
+
+
+    /**
+     * Assigns the isUnlinked wheaten autofarm is unlinked.
+     */
+    private void assignLinked() {
+        this.isUnlinked = !autofarmManager.isLinked(autofarm);
     }
 
 
@@ -207,6 +236,18 @@ public abstract class LinkMenu extends Menu {
                     autofarm.getShortenedID(),
                     ((ShulkerBox) containerState).getInventory()
             ).open();
+        }
+    }
+
+
+    /**
+     * If the player clicks on the claim item, it set the owner of the autofarm to the player.
+     *
+     * @param clicked The item that was clicked.
+     */
+    protected void handleUnclaimed(@NotNull ItemStack clicked) {
+        if (clicked.equals(claimItem)) {
+            autofarm.setOwnerID(player.getUniqueId());
         }
     }
 
@@ -307,6 +348,14 @@ public abstract class LinkMenu extends Menu {
     }
 
 
+    private @NotNull ItemStack getClaimItem() {
+        return new ItemBuilder(Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+                .setName(plugin, LanguageAPI.Menu.LINK_CLAIM_NAME)
+                .setLore(LanguageAPI.Menu.LINK_CLAIM_STATUS.getAsList(plugin))
+                .toItemStack();
+    }
+
+
     /**
      * It returns an ItemStack that represents the Autofarm state.
      *
@@ -399,12 +448,19 @@ public abstract class LinkMenu extends Menu {
                 .setMaterial(
                         isClickedSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
                 )
+                .setMaterial(
+                        isUnclaimed ? Material.WHITE_STAINED_GLASS_PANE : null
+                )
                 .setName(isUnlinked
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNLINKED.get(plugin)
                          : null
                 )
                 .setName(isClickedSelected
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_SELECTED.get(plugin)
+                         : null
+                )
+                .setName(isUnclaimed
+                         ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNCLAIMED.get(plugin)
                          : null
                 )
                 .toItemStack();
@@ -457,7 +513,6 @@ public abstract class LinkMenu extends Menu {
             return getUnlinkedLocationLore();
         }
 
-        // TODO fix this mf
         if (location instanceof DoublyLocation) {
             DoublyLocation doublyLocation = LocationUtils.getAsDoubly(location);
 

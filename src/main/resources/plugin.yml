@@ -33,6 +33,8 @@ permissions:
     description: Permission to use all the autofarm features.
     default: op
     children:
+      cropclick.autofarm.claim:
+        description: Permission to claim an unknown own-owned autofarms.
       cropclick.autofarm.link:
         description: Permission to link your own autofarms.
       cropclick.autofarm.unlink:

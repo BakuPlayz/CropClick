@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.SeaPickle;
@@ -45,7 +45,7 @@ public final class PlayerHarvestCropListener implements Listener {
      * A map of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
-    private final HashMap<Crop, Long> harvestedCrops;
+    private final HashMap<BaseCrop, Long> harvestedCrops;
 
 
     public PlayerHarvestCropListener(@NotNull CropClick plugin) {
@@ -96,7 +96,7 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        Crop crop = cropManager.findByBlock(block);
+        BaseCrop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;
         }
@@ -140,7 +140,7 @@ public final class PlayerHarvestCropListener implements Listener {
 
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        Crop crop = event.getCrop();
+        BaseCrop crop = event.getCrop();
 
         if (!crop.canHarvest(player)) {
             event.setCancelled(true);

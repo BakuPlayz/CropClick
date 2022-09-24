@@ -4,7 +4,6 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,7 +40,7 @@ public abstract class AddonMenu extends Menu {
      * This function updates the menu by clearing the inventory and then setting the menu items.
      */
     @Override
-    public void updateMenu() {
+    public void refresh() {
         inventory.clear();
         setMenuItems();
     }

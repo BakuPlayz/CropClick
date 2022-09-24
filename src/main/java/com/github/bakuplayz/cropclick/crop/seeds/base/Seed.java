@@ -1,8 +1,10 @@
 package com.github.bakuplayz.cropclick.crop.seeds.base;
 
+import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -13,15 +15,25 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public interface Seed {
+public abstract class Seed implements BaseSeed {
 
-    @NotNull
-    String getName();
+    protected final CropsConfig cropsConfig;
 
-    Drop getDrop();
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    boolean hasDrop();
+    protected final SeedConfigSection seedSection;
+
+
+    public Seed(@NotNull CropsConfig config) {
+        this.seedSection = config.getSeedSection();
+        this.cropsConfig = config;
+    }
+
+
+    @Override
+    public boolean hasDrop() {
+        return getDrop() != null;
+    }
+
 
     /**
      * Checks wheaten or not the seed can be harvested, returning
@@ -31,11 +43,37 @@ public interface Seed {
      *
      * @return The harvest state.
      */
-    boolean harvest(@NotNull Inventory inventory);
+    @Override
+    public boolean harvest(@NotNull Inventory inventory) {
+        if (!hasDrop()) {
+            return false;
+        }
 
-    @NotNull
-    Material getMenuType();
+        Drop drop = getDrop();
+        if (!drop.willDrop()) {
+            return false;
+        }
 
-    boolean isEnabled();
+        ItemStack dropItem = drop.toItemStack(
+                hasNameChanged()
+        );
+
+        if (dropItem.getAmount() != 0) {
+            inventory.addItem(dropItem);
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return seedSection.isEnabled(getName());
+    }
+
+
+    private boolean hasNameChanged() {
+        return !getName().equals(getDrop().getName());
+    }
 
 }

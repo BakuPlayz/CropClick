@@ -3,10 +3,10 @@ package com.github.bakuplayz.cropclick.menu.menus.crop;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
@@ -36,15 +36,15 @@ public final class DropChanceMenu extends Menu {
     private final double PERCENT_TO_DECIMAL = 0.01;
 
 
-    private final Crop crop;
-    private final Seed seed;
+    private final BaseCrop crop;
+    private final BaseSeed seed;
     private final boolean hasSeed;
 
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
 
 
-    public DropChanceMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public DropChanceMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.DROP_CHANCE_TITLE);
         this.cropSection = plugin.getCropsConfig().getCropSection();
         this.seedSection = plugin.getCropsConfig().getSeedSection();
@@ -117,7 +117,7 @@ public final class DropChanceMenu extends Menu {
             }
         }
 
-        updateMenu();
+        refresh();
     }
 
 

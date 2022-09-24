@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public interface WaterloggedCrop {
+public interface Waterlogged {
 
     /**
      * Returns true if the block is waterlogged.
@@ -21,7 +21,7 @@ public interface WaterloggedCrop {
      * @return A boolean value.
      */
     boolean isWaterLogged(@NotNull Block block);
-    
+
     /**
      * Set the waterlogged state of the block to the provided waterlogged state.
      *

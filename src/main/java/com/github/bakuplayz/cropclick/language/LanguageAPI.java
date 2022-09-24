@@ -320,6 +320,7 @@ public final class LanguageAPI {
 
         AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%", "%status%"),
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
+        AUTOFARMS_ITEM_OWNER_UNCLAIMED(Category.AUTOFARMS, "itemOwnerUnclaimed"),
 
         CROPS_ITEM_DROP_NAME(Category.CROPS, SubCategory.ITEM, "dropName", "%name%"),
         CROPS_ITEM_DROP_VALUE(Category.CROPS, SubCategory.ITEM, "dropValue", "%value%"),
@@ -405,10 +406,13 @@ public final class LanguageAPI {
         LINK_GLASS_ITEM_NAME_LINKED(Category.LINK, SubCategory.GLASS, "itemNameLinked"),
         LINK_GLASS_ITEM_NAME_SELECTED(Category.LINK, SubCategory.GLASS, "itemNameSelected"),
         LINK_GLASS_ITEM_NAME_UNLINKED(Category.LINK, SubCategory.GLASS, "itemNameUnlinked"),
+        LINK_GLASS_ITEM_NAME_UNCLAIMED(Category.LINK, SubCategory.GLASS, "itemNameUnclaimed"),
         LINK_STATES_SELECTED(Category.LINK, SubCategory.STATES, "selected"),
         LINK_STATES_UNLINKED(Category.LINK, SubCategory.STATES, "unlinked"),
         LINK_TOGGLE_NAME(Category.LINK, SubCategory.TOGGLE, "itemName"),
         LINK_TOGGLE_STATUS(Category.LINK, SubCategory.TOGGLE, "itemStatus", "%status%"),
+        LINK_CLAIM_NAME(Category.LINK, SubCategory.CLAIM, "itemName"),
+        LINK_CLAIM_STATUS(Category.LINK, SubCategory.CLAIM, "itemStatus"),
 
         MAIN_ADDONS_ITEM_NAME(Category.MAIN, SubCategory.ADDONS, "itemName"),
         MAIN_ADDONS_ITEM_STATUS(Category.MAIN, SubCategory.ADDONS, "itemStatus", "%status%"),
@@ -608,6 +612,7 @@ public final class LanguageAPI {
             COLOR_CODE("colorCode"),
             CONSOLE,
             CONTAINER,
+            CLAIM,
             CROP,
             CROPS,
             CROP_SETTINGS("cropSettings"),

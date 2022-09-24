@@ -29,7 +29,7 @@ public final class SettingsCommand extends Subcommand {
      * @param args   The arguments that the player typed in.
      */
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(@NotNull Player player, String[] args) {
         new SettingsMenu(plugin, player, false).open();
     }
 

@@ -7,7 +7,7 @@ import com.gamingmesh.jobs.container.JobsPlayer;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ public final class JobsRebornAddon extends Addon {
      *
      * @param player The player who is being updated.
      */
-    public void updateStats(@NotNull Player player, @NotNull Crop crop) {
+    public void updateStats(@NotNull Player player, @NotNull BaseCrop crop) {
         JobsPlayer jobsPlayer = new JobsPlayer(player.getName());
         if (!jobsPlayer.isInJob(farmerJob)) {
             return;

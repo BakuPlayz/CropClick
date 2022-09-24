@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -61,7 +61,7 @@ public final class WorldMenu extends Menu {
             world.allowsPlayers(!world.allowsPlayers());
         }
 
-        updateMenu();
+        refresh();
     }
 
 
