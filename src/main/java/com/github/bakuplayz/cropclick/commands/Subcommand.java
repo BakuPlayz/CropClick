@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class Subcommand {
+public abstract class Subcommand implements Commandable {
 
     protected final CropClick plugin;
 
@@ -36,7 +36,7 @@ public abstract class Subcommand {
      *
      * @return The description of the command.
      */
-    public final @NotNull String getDescription() {
+    public @NotNull String getDescription() {
         return description.get(plugin);
     }
 
@@ -46,7 +46,7 @@ public abstract class Subcommand {
      *
      * @return The usage of the command.
      */
-    public final @NotNull String getUsage() {
+    public @NotNull String getUsage() {
         return "cropclick " + name;
     }
 
@@ -56,7 +56,7 @@ public abstract class Subcommand {
      *
      * @return The permission for the command.
      */
-    public final @NotNull String getPermission() {
+    public @NotNull String getPermission() {
         return "cropclick.command." + name;
     }
 
@@ -68,7 +68,7 @@ public abstract class Subcommand {
      *
      * @return A boolean value.
      */
-    public final boolean hasPermission(@NotNull Player player) {
+    public boolean hasPermission(@NotNull Player player) {
         return player.hasPermission(getPermission());
     }
 
@@ -83,6 +83,6 @@ public abstract class Subcommand {
      * @param player The player who executed the command.
      * @param args   The arguments passed to the command.
      */
-    public abstract void perform(Player player, String[] args);
+    public abstract void perform(@NotNull Player player, String[] args);
 
 }

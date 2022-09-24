@@ -36,7 +36,7 @@ public final class ResetCommand extends Subcommand {
      * @param args   The arguments that the player typed in.
      */
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(@NotNull Player player, String[] args) {
         try {
             deleteConfigs();
             deleteDataStorages();

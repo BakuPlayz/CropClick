@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.menu.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.AddonMenu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AddonsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
@@ -47,7 +47,7 @@ public final class ResidenceMenu extends AddonMenu {
         handleWorlds(clicked, new WorldsMenu(plugin, player, WorldMenuState.RESIDENCE));
         handleToggle(clicked, getToggleItem());
 
-        updateMenu();
+        refresh();
     }
 
 

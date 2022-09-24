@@ -45,7 +45,7 @@ public final class CommandManager implements TabExecutor {
      * Registers all the commands, by adding them to the commands list.
      */
     private void registerCommands() {
-        commands.add(new AutofarmCommand(plugin));
+        commands.add(new AutofarmsCommand(plugin));
         commands.add(new HelpCommand(plugin));
         commands.add(new ReloadCommand(plugin));
         commands.add(new ResetCommand(plugin));

@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
  */
 public final class ParticlesMenu extends PaginatedMenu {
 
-    private final Crop crop;
+    private final BaseCrop crop;
 
     private final List<String> particles;
     private final ParticleConfigSection particleSection;
 
 
-    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.PARTICLES_TITLE);
         this.particleSection = plugin.getCropsConfig().getParticleSection();
         this.particles = getParticles();

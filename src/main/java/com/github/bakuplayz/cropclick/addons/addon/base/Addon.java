@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 @ToString
 @EqualsAndHashCode
-public abstract class Addon {
+public abstract class Addon implements Enableable {
 
     protected final @Getter String name;
 
@@ -31,8 +31,8 @@ public abstract class Addon {
 
 
     public Addon(@NotNull CropClick plugin, @NotNull String name) {
-        this.addonsConfig = plugin.getAddonsConfig();
         this.worlds = plugin.getWorldManager().getWorlds();
+        this.addonsConfig = plugin.getAddonsConfig();
         this.plugin = plugin;
         this.name = name;
     }

@@ -124,7 +124,7 @@ public final class ParticleConfigSection extends ConfigSection {
     public double getDelay(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!isEnabledAndThere(particleName, indexedParticles)) {
+        if (!isEnabledAndPresent(particleName, indexedParticles)) {
             return config.getDouble(
                     "crops." + cropName + ".particles." + particleName + ".delay",
                     0
@@ -167,7 +167,7 @@ public final class ParticleConfigSection extends ConfigSection {
     public double getSpeed(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!isEnabledAndThere(particleName, indexedParticles)) {
+        if (!isEnabledAndPresent(particleName, indexedParticles)) {
             return config.getDouble(
                     "crops." + cropName + ".particles." + particleName + ".speed",
                     0
@@ -210,7 +210,7 @@ public final class ParticleConfigSection extends ConfigSection {
     public int getAmount(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!isEnabledAndThere(particleName, indexedParticles)) {
+        if (!isEnabledAndPresent(particleName, indexedParticles)) {
             return config.getInt(
                     "crops." + cropName + ".particles." + particleName + ".amount",
                     0
@@ -303,7 +303,7 @@ public final class ParticleConfigSection extends ConfigSection {
      * @return A boolean value.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isEnabledAndThere(@NotNull String particleName, IndexedYamlMap<ParticleYaml> indexedParticles) {
+    private boolean isEnabledAndPresent(@NotNull String particleName, IndexedYamlMap<ParticleYaml> indexedParticles) {
         if (indexedParticles == null) {
             return false;
         }

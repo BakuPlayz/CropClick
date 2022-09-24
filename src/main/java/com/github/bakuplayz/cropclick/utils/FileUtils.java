@@ -27,6 +27,7 @@ public final class FileUtils {
      */
     public static void moveFile(@NotNull File inFile, @NotNull File outFile) {
         try {
+            outFile.getParentFile().mkdirs();
             Files.move(inFile.toPath(), outFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();

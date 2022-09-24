@@ -29,7 +29,7 @@ public final class HelpCommand extends Subcommand {
      * @param args   The arguments that the player typed in.
      */
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(@NotNull Player player, String[] args) {
         new HelpMenu(plugin, player, false).open();
     }
 

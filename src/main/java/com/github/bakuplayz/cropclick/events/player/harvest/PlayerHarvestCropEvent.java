@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.events.player.harvest;
 
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.harvest.HarvestCropEvent;
 import lombok.Getter;
 import org.bukkit.block.Block;
@@ -20,7 +20,7 @@ public final class PlayerHarvestCropEvent extends HarvestCropEvent {
     private final @Getter Player player;
 
 
-    public PlayerHarvestCropEvent(@NotNull Crop crop, @NotNull Block block, @NotNull Player player) {
+    public PlayerHarvestCropEvent(@NotNull BaseCrop crop, @NotNull Block block, @NotNull Player player) {
         super(crop, block);
         this.player = player;
     }

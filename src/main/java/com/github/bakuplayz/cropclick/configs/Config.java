@@ -18,7 +18,7 @@ import java.io.IOException;
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class Config {
+public abstract class Config implements Configurable {
 
     protected CropClick plugin;
 

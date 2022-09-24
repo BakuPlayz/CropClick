@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,10 +16,10 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public abstract class TallCrop extends BaseCrop {
+public abstract class TallCrop extends Crop {
 
     public TallCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -59,7 +59,7 @@ public abstract class TallCrop extends BaseCrop {
 
 
     @Override
-    public @Nullable Seed getSeed() {
+    public @Nullable BaseSeed getSeed() {
         return null;
     }
 
@@ -95,34 +95,60 @@ public abstract class TallCrop extends BaseCrop {
 
 
     /**
-     * Harvest all the crops, stacked on each other, starting from the top.
+     * "Harvest all the crops, stacked on each other, starting from the top."
+     * <p>
+     * Checks wheaten or not the tall crop can be harvested,
+     * returning true if it successfully harvested them.
      *
-     * @param player The player who is harvesting the crop
-     * @param block  The block that was clicked.
+     * @param player The player  to add the drops to.
+     * @param block  The block that was harvested.
      * @param crop   The crop that is being harvested.
+     *
+     * @return The harvest state.
      */
-    public void harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
+        boolean wasHarvested = true;
+
         int height = getCurrentAge(block);
         int actualHeight = getActualHeight(crop, height);
         for (int i = actualHeight; i > 0; --i) {
-            crop.harvest(player);
+            if (!wasHarvested) {
+                return false;
+            }
+
+            wasHarvested = crop.harvest(player);
         }
+
+        return wasHarvested;
     }
 
 
     /**
-     * Harvest all the crops, stacked on each other, starting from the top.
+     * "Harvest all the crops, stacked on each other, starting from the top."
+     * <p>
+     * Checks wheaten or not the tall crop can be harvested,
+     * returning true if it successfully harvested them.
      *
-     * @param container The container that the crop is in.
-     * @param block     The block that was clicked.
+     * @param container The container  to add the drops to.
+     * @param block     The block that was harvested.
      * @param crop      The crop that is being harvested.
+     *
+     * @return The harvest state.
      */
-    public void harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
+        boolean wasHarvested = true;
+
         int height = getCurrentAge(block);
         int actualHeight = getActualHeight(crop, height);
         for (int i = actualHeight; i > 0; --i) {
-            crop.harvest(container);
+            if (!wasHarvested) {
+                return false;
+            }
+
+            wasHarvested = crop.harvest(container);
         }
+
+        return wasHarvested;
     }
 
 
@@ -134,7 +160,7 @@ public abstract class TallCrop extends BaseCrop {
      *
      * @return The height of the crop.
      */
-    public int getActualHeight(@NotNull Crop crop, int height) {
+    public int getActualHeight(@NotNull BaseCrop crop, int height) {
         return crop.shouldReplant() ? height - 1 : height;
     }
 

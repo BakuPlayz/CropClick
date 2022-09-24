@@ -5,11 +5,10 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.WaterloggedCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Waterlogged;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Waterlogged;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public final class Dripleaf extends TallCrop implements WaterloggedCrop {
+public final class Dripleaf extends TallCrop implements Waterlogged {
 
     public Dripleaf(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -153,7 +152,7 @@ public final class Dripleaf extends TallCrop implements WaterloggedCrop {
      */
     @Override
     public void setWaterLogged(@NotNull Block block, boolean waterlogged) {
-        Waterlogged dripleaf = (Waterlogged) block.getBlockData();
+        org.bukkit.block.data.Waterlogged dripleaf = (org.bukkit.block.data.Waterlogged) block.getBlockData();
         dripleaf.setWaterlogged(waterlogged);
         block.setBlockData(dripleaf);
     }

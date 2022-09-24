@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.links.DispenserLinkMenu;
@@ -101,7 +101,11 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
         return new ItemBuilder(Material.DISPENSER)
                 .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, farm.getShortenedID(), status))
-                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin, player.getName()))
+                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin,
+                        player.getUniqueId().equals(Autofarm.UNKNOWN_OWNER)
+                        ? LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER_UNCLAIMED.get(plugin)
+                        : player.getName()
+                ))
                 .toItemStack();
     }
 

@@ -36,7 +36,6 @@ public final class ConfigConverter {
                 plugin.getDataFolder() + "/old",
                 "config.yml"
         );
-        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyConfig = YamlConfiguration.loadConfiguration(inFile);
         ConfigurationSection newConfig = ConfigConverter.convertFormat(legacyConfig);

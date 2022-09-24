@@ -36,7 +36,6 @@ public final class PlayerConverter {
                 plugin.getDataFolder() + "/old",
                 "player.yml"
         );
-        outFile.getParentFile().mkdirs();
 
         YamlConfiguration legacyPlayer = YamlConfiguration.loadConfiguration(inFile);
         ConfigurationSection newPlayer = PlayerConverter.convertFormat(legacyPlayer);

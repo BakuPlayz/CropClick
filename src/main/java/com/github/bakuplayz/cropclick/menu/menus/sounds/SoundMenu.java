@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.sounds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
@@ -43,7 +43,7 @@ public final class SoundMenu extends Menu {
     private final double PITCH_MAX_CHANGE = 0.2;
 
 
-    private final Crop crop;
+    private final BaseCrop crop;
     private final String cropName;
     private final String soundName;
     private final SoundConfigSection soundSection;
@@ -54,7 +54,7 @@ public final class SoundMenu extends Menu {
 
     public SoundMenu(@NotNull CropClick plugin,
                      @NotNull Player player,
-                     @NotNull Crop crop,
+                     @NotNull BaseCrop crop,
                      @NotNull String soundName) {
         super(plugin, player, LanguageAPI.Menu.SOUND_TITLE);
         this.soundSection = plugin.getCropsConfig().getSoundSection();
@@ -169,7 +169,7 @@ public final class SoundMenu extends Menu {
             decreasePitch(PITCH_MAX_CHANGE);
         }
 
-        updateMenu();
+        refresh();
     }
 
 

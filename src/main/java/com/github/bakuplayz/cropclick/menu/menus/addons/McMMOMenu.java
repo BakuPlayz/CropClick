@@ -2,8 +2,8 @@ package com.github.bakuplayz.cropclick.menu.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.base.AddonMenu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AddonsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
@@ -56,7 +56,7 @@ public final class McMMOMenu extends AddonMenu {
             new CropsMenu(plugin, player, CropMenuState.MCMMO).open();
         }
 
-        updateMenu();
+        refresh();
     }
 
 

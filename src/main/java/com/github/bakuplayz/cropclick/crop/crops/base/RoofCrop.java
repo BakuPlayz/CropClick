@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public abstract class RoofCrop extends BaseCrop {
+public abstract class RoofCrop extends Crop {
 
     public RoofCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -60,32 +60,58 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     /**
-     * Harvest all the crops, stacked on each other, starting from the bottom.
+     * "Harvest all the crops, stacked on each other, starting from the bottom."
+     * <p>
+     * Checks wheaten or not the roof crop can be harvested,
+     * returning true if it successfully harvested them.
      *
-     * @param player The player who is harvesting the crop
-     * @param block  The block that was clicked.
+     * @param player The player to add the drops to.
+     * @param block  The block that was harvested
      * @param crop   The crop that is being harvested.
+     *
+     * @return The harvest state.
      */
-    public void harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
+        boolean wasHarvested = true;
+
         int height = getCurrentAge(block);
-        for (int i = 0; i < height; ++i) {
-            crop.harvest(player);
+        for (int i = height; i > 0; --i) {
+            if (!wasHarvested) {
+                return false;
+            }
+
+            wasHarvested = crop.harvest(player);
         }
+
+        return wasHarvested;
     }
 
 
     /**
-     * Harvest all the crops, stacked on each other, starting from the bottom.
+     * "Harvest all the crops, stacked on each other, starting from the bottom."
+     * <p>
+     * Checks wheaten or not the roof crop can be harvested,
+     * returning true if it successfully harvested them.
      *
-     * @param container The container that the crop is in.
-     * @param block     The block that was clicked.
+     * @param container The container to add the drops to.
+     * @param block     The block that was harvested
      * @param crop      The crop that is being harvested.
+     *
+     * @return The harvest state.
      */
-    public void harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
+        boolean wasHarvested = true;
+
         int height = getCurrentAge(block);
-        for (int i = 0; i < height; ++i) {
-            crop.harvest(container);
+        for (int i = height; i > 0; --i) {
+            if (!wasHarvested) {
+                return false;
+            }
+
+            wasHarvested = crop.harvest(container);
         }
+
+        return wasHarvested;
     }
 
 }

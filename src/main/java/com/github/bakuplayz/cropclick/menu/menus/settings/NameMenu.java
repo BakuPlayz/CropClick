@@ -3,10 +3,10 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 public final class NameMenu extends Menu {
 
-    private final Crop crop;
+    private final BaseCrop crop;
     private final boolean hasSeed;
 
     private final CropConfigSection cropSection;
@@ -44,7 +44,7 @@ public final class NameMenu extends Menu {
     private final Map<Character, String> colorCodes;
 
 
-    public NameMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public NameMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.NAME_TITLE);
         this.cropSection = plugin.getCropsConfig().getCropSection();
         this.seedSection = plugin.getCropsConfig().getSeedSection();
@@ -115,7 +115,7 @@ public final class NameMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getSeedItem() {
-        Seed seed = crop.getSeed();
+        BaseSeed seed = crop.getSeed();
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
 

@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.SeaPickle;
@@ -45,7 +45,7 @@ public final class AutofarmHarvestCropListener implements Listener {
      * A map of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
-    private final HashMap<Crop, Long> harvestedCrops;
+    private final HashMap<BaseCrop, Long> harvestedCrops;
 
 
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
@@ -94,7 +94,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         }
 
         Block facing = findDispenserFacing(block);
-        Crop crop = cropManager.findByBlock(facing);
+        BaseCrop crop = cropManager.findByBlock(facing);
         if (!cropManager.validate(crop, facing)) {
             return;
         }
@@ -128,7 +128,7 @@ public final class AutofarmHarvestCropListener implements Listener {
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {
         if (event.isCancelled()) return;
 
-        Crop crop = event.getCrop();
+        BaseCrop crop = event.getCrop();
         Block block = event.getBlock();
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
@@ -137,20 +137,27 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
+        boolean wasHarvested;
+
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
-            tallCrop.harvestAll(container, block, crop);
+            wasHarvested = tallCrop.harvestAll(container, block, crop);
 
         } else if (crop instanceof RoofCrop) {
             RoofCrop roofCrop = (RoofCrop) crop;
-            roofCrop.harvestAll(container, block, crop);
+            wasHarvested = roofCrop.harvestAll(container, block, crop);
 
         } else if (crop instanceof SeaPickle) {
             SeaPickle seaPickle = (SeaPickle) crop;
-            seaPickle.harvestAll(container, block, crop);
+            wasHarvested = seaPickle.harvestAll(container, block, crop);
 
         } else {
-            crop.harvest(container);
+            wasHarvested = crop.harvest(container);
+        }
+
+        if (!wasHarvested) {
+            event.setCancelled(true);
+            return;
         }
 
         crop.replant(block);

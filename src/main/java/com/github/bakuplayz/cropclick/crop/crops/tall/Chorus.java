@@ -22,8 +22,8 @@ import java.util.Stack;
  *
  * @author BakuPlayz, Hannes Blåman
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class Chorus extends TallCrop {

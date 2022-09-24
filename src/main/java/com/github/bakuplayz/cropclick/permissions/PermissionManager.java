@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.permissions;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.WallCrop;
@@ -30,7 +30,7 @@ public final class PermissionManager {
     private final PluginManager pluginManager;
 
     private final List<Subcommand> subcommands;
-    private final List<Crop> crops;
+    private final List<BaseCrop> crops;
 
 
     public PermissionManager(@NotNull CropClick plugin) {

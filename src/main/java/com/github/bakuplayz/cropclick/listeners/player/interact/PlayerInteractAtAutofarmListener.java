@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
@@ -119,7 +119,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         }
 
         if (AutofarmUtils.isCrop(cropManager, block)) {
-            Crop crop = AutofarmUtils.getCrop(cropManager, block);
+            BaseCrop crop = AutofarmUtils.getCrop(cropManager, block);
             Event cropEvent = new PlayerInteractAtCropEvent(player, block, crop);
             Bukkit.getPluginManager().callEvent(cropEvent);
         }

@@ -5,9 +5,9 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigS
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
@@ -44,7 +44,7 @@ public final class CropsMenu extends PaginatedMenu {
 
     //TODO: Check all the comments... since they are a bit weird..
 
-    private final List<Crop> crops;
+    private final List<BaseCrop> crops;
 
     private final CropMenuState menuState;
 
@@ -106,7 +106,7 @@ public final class CropsMenu extends PaginatedMenu {
             return;
         }
 
-        Crop crop = crops.get(index);
+        BaseCrop crop = crops.get(index);
         switch (menuState) {
             case CROP:
                 new CropMenu(plugin, player, crop).open();
@@ -162,7 +162,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return An ItemStack.
      */
-    private @NotNull ItemStack getMenuItem(@NotNull Crop crop) {
+    private @NotNull ItemStack getMenuItem(@NotNull BaseCrop crop) {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.CROPS_STATUS_ENABLED.get(plugin)
@@ -223,7 +223,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The McMMO experience for the crop.
      */
-    private double getMcMMOExperience(@NotNull Crop crop) {
+    private double getMcMMOExperience(@NotNull BaseCrop crop) {
         return addonSection.getMcMMOExperience(crop.getName());
     }
 
@@ -235,7 +235,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The amount of money that the player will receive for harvesting the crop.
      */
-    private double getJobsMoney(@NotNull Crop crop) {
+    private double getJobsMoney(@NotNull BaseCrop crop) {
         return addonSection.getJobsMoney(crop.getName());
     }
 
@@ -247,7 +247,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The jobs point for the crop.
      */
-    private double getJobsPoints(@NotNull Crop crop) {
+    private double getJobsPoints(@NotNull BaseCrop crop) {
         return addonSection.getJobsPoints(crop.getName());
     }
 
@@ -259,7 +259,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The experience gained from harvesting a crop.
      */
-    private double getJobsExperience(@NotNull Crop crop) {
+    private double getJobsExperience(@NotNull BaseCrop crop) {
         return addonSection.getJobsExperience(crop.getName());
     }
 
@@ -271,7 +271,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The amount of sounds for a crop.
      */
-    private int getAmountOfSounds(@NotNull Crop crop) {
+    private int getAmountOfSounds(@NotNull BaseCrop crop) {
         return soundSection.getAmountOfSounds(crop.getName());
     }
 
@@ -283,7 +283,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The amount of particles that are in the config file for the crop.
      */
-    private int getAmountOfParticles(@NotNull Crop crop) {
+    private int getAmountOfParticles(@NotNull BaseCrop crop) {
         return particleSection.getAmountOfSounds(crop.getName());
     }
 
@@ -295,7 +295,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return The amount of the drop.
      */
-    private int getDropValue(@NotNull Crop crop) {
+    private int getDropValue(@NotNull BaseCrop crop) {
         return crop.getDrop().getAmount();
     }
 
@@ -308,7 +308,7 @@ public final class CropsMenu extends PaginatedMenu {
      * @return The name of the crop or the name of the drop.
      */
     @Contract("_ -> new")
-    private @NotNull String getDropName(@NotNull Crop crop) {
+    private @NotNull String getDropName(@NotNull BaseCrop crop) {
         return cropSection.getDropName(crop.getName());
     }
 

@@ -9,10 +9,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public abstract class GroundCrop extends BaseCrop {
+public abstract class GroundCrop extends Crop {
 
     public GroundCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);

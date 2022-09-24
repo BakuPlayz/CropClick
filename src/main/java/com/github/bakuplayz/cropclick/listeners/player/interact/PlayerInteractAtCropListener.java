@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.listeners.player.interact;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.menu.menus.links.CropLinkMenu;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
@@ -44,7 +44,7 @@ public final class PlayerInteractAtCropListener implements Listener {
     public void onPlayerInteractAtCrop(@NotNull PlayerInteractAtCropEvent event) {
         if (event.isCancelled()) return;
 
-        Crop crop = event.getCrop();
+        BaseCrop crop = event.getCrop();
 
         if (!crop.isHarvestable()) {
             event.setCancelled(true);
@@ -61,11 +61,11 @@ public final class PlayerInteractAtCropListener implements Listener {
         Autofarm autofarm = autofarmManager.findAutofarm(block);
 
         if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm.getOwnerID())) {
+            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
                 event.setCancelled(true);
                 return;
             }
-            
+
             if (AutofarmUtils.componentHasMeta(block)) {
                 AutofarmUtils.addMeta(plugin, autofarm);
             }

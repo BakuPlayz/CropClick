@@ -16,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AddonConfigSection extends ConfigSection {
 
-    // TODO: Check through all the comments... I cannot be bothered right now.
-
     private final CropsConfig cropsConfig;
 
 
@@ -28,7 +26,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the mcMMO experience value from the config.
+     * It gets the mcMMO experience value, from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -40,7 +38,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the mcMMO experience for a crop.
+     * It sets the mcMMO experience value for a crop, in the config.
      *
      * @param cropName The name of the crop.
      * @param amount   The amount of experience to give.
@@ -52,7 +50,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the mcMMO experience reason for the crop with the given name.
+     * It gets the mcMMO experience reason for the crop with the given name, from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -70,10 +68,10 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the mcMMO experience reason for the crop with the given name.
+     * Sets the mcMMO experience reason for the crop with the given name, in the config.
      *
      * @param cropName The name of the crop.
-     * @param reason   The reason to send to the player when they harvest the crop.
+     * @param reason   The experience reason to send to the player when they harvest the crop.
      */
     public void setMcMMOExperienceReason(@NotNull String cropName, @NotNull String reason) {
         config.set("crops." + cropName + ".addons.mcMMO.experienceReason", reason);
@@ -82,7 +80,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Get the points for the specified crop.
+     * Get the points for the specified crop from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -94,7 +92,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of points a player will get for harvesting a crop.
+     * It sets the amount of points a player will get for harvesting a crop, to the config.
      *
      * @param cropName The name of the crop.
      * @param amount   The amount of points to give to the player.
@@ -106,7 +104,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Get the money value for the specified crop.
+     * Get the money value for the specified crop, from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -118,7 +116,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of money a player will get for harvesting a crop.
+     * It sets the amount of money a player will get for harvesting a crop, to the config.
      *
      * @param cropName The name of the crop.
      * @param amount   The amount of money to give when the specified crop, is harvested.
@@ -130,7 +128,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Get the experience value for the specified crop.
+     * Get the Jobs experience value for the specified crop, from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -142,7 +140,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the experience amount for the specified crop
+     * It sets the Jobs experience amount for the specified crop, to the config.
      *
      * @param cropName The name of the crop.
      * @param amount   The amount of experience to give to the player.

@@ -66,8 +66,8 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
-                                    <pattern>net.wesjd.anvilgui</pattern>
-                                    <shadedPattern>com.github.bakuplayz.anvilgui</shadedPattern>
+                                    <pattern>^((?!bakuplayz).)*$</pattern>
+                                    <shadedPattern>com.shaded.bakuplayz</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>false</minimizeJar>
