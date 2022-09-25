@@ -1,5 +1,7 @@
 package com.github.bakuplayz.cropclick.yaml;
 
+import com.github.bakuplayz.cropclick.utils.Enableable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,7 +21,8 @@ import java.util.Map;
  * @since 2.0.0
  */
 @ToString
-public final class ParticleYaml extends YamlItem {
+@EqualsAndHashCode
+public final class ParticleYaml implements Yamlable, Enableable {
 
     private @Setter @Getter @Accessors(chain = true) double delay;
     private @Setter @Getter @Accessors(chain = true) double speed;

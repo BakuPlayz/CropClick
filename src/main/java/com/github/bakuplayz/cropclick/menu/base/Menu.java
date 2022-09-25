@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class Menu implements DefaultMenu, InventoryHolder {
 
-    protected Player player;
-    protected CropClick plugin;
+    protected final Player player;
+    protected final CropClick plugin;
 
     protected @Getter Inventory inventory;
     protected @Setter InventoryType inventoryType;

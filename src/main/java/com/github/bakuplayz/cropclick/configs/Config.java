@@ -20,11 +20,10 @@ import java.io.IOException;
  */
 public abstract class Config implements Configurable {
 
-    protected CropClick plugin;
-
+    protected final CropClick plugin;
+    
     private File file;
     private final String fileName;
-
     protected @Getter FileConfiguration config;
 
 

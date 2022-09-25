@@ -68,7 +68,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the mcMMO experience reason for the crop with the given name, in the config.
+     * It sets the mcMMO experience reason for the crop with the given name, in the config.
      *
      * @param cropName The name of the crop.
      * @param reason   The experience reason to send to the player when they harvest the crop.
@@ -80,7 +80,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Get the points for the specified crop from the config.
+     * It gets the points for the specified crop from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -104,7 +104,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Get the money value for the specified crop, from the config.
+     * It gets the money value for the specified crop, from the config.
      *
      * @param cropName The name of the crop.
      *
@@ -128,7 +128,7 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * Get the Jobs experience value for the specified crop, from the config.
+     * It gets the Jobs experience value for the specified crop, from the config.
      *
      * @param cropName The name of the crop.
      *

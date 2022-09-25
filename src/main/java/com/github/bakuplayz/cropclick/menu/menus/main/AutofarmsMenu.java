@@ -61,6 +61,8 @@ public final class AutofarmsMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handlePagination(clicked);
 
         if (menuState == AutofarmsMenuState.MENU_REDIRECT) {
@@ -93,6 +95,7 @@ public final class AutofarmsMenu extends PaginatedMenu {
     }
 
 
+    @SuppressWarnings("ConstantConditions")
     private @NotNull ItemStack getMenuItem(@NotNull Autofarm farm) {
         String status = farm.isEnabled()
                         ? LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin)

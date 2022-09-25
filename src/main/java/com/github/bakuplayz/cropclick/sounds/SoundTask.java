@@ -27,6 +27,8 @@ public final class SoundTask extends TimerTask {
 
     @Override
     public void run() {
+        assert location.getWorld() != null; // Only here for the compiler, since the location cannot be null and therefore not the world either.
+
         location.getWorld().playSound(
                 location,
                 org.bukkit.Sound.valueOf(sound.getName()),

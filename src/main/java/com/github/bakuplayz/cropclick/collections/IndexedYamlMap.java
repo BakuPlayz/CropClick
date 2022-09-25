@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.collections;
 
-import com.github.bakuplayz.cropclick.yaml.YamlItem;
+import com.github.bakuplayz.cropclick.yaml.Yamlable;
 import org.apache.commons.collections4.map.ListOrderedMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public final class IndexedYamlMap<Item> extends IndexedMap<Item> {
         for (Map.Entry<String, Item> entry : map.entrySet()) {
             yamlMapped.put(
                     entry.getKey(),
-                    ((YamlItem) entry.getValue()).toYaml()
+                    ((Yamlable) entry.getValue()).toYaml()
             );
         }
 

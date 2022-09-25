@@ -26,19 +26,18 @@ import java.util.List;
  */
 public final class ParticleMenu extends Menu {
 
-    private final int MIN_CHANGE = 1;
-    private final int MAX_CHANGE = 5;
+    public static final int MIN_CHANGE = 1;
+    public static final int MAX_CHANGE = 5;
 
-    private final int DELAY_MIN_CHANGE = 100; // in milliseconds
-    private final int DELAY_MAX_CHANGE = 500; // in milliseconds
+    public static final int DELAY_MIN_CHANGE = 100; // in milliseconds
+    public static final int DELAY_MAX_CHANGE = 500; // in milliseconds
 
-    private final int DELAY_MIN = 0; // in milliseconds
-    private final int DELAY_MAX = 5000; // in milliseconds
+    public static final int DELAY_MIN = 0; // in milliseconds
+    public static final int DELAY_MAX = 5000; // in milliseconds
 
-    private final int MIN_SPEED = 0;
-    private final int MAX_SPEED = 50;
+    public static final int MIN_SPEED = 0;
+    public static final int MAX_SPEED = 50;
 
-    // TODO make everything static and public
     public static final int MIN_AMOUNT = 0;
     public static final int MAX_AMOUNT = 20;
 
@@ -107,6 +106,8 @@ public final class ParticleMenu extends Menu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new ParticlesMenu(plugin, player, crop));
 

@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.events;
 
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -22,7 +23,7 @@ public abstract class Event extends org.bukkit.event.Event {
 
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 

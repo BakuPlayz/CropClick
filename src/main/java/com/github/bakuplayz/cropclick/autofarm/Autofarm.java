@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.Enableable;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
@@ -28,7 +29,7 @@ import java.util.UUID;
  */
 @ToString
 @EqualsAndHashCode
-public final class Autofarm {
+public final class Autofarm implements Enableable {
 
     public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 

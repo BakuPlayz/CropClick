@@ -43,6 +43,8 @@ public final class ResidenceMenu extends AddonMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new AddonsMenu(plugin, player));
         handleWorlds(clicked, new WorldsMenu(plugin, player, WorldMenuState.RESIDENCE));
         handleToggle(clicked, getToggleItem());

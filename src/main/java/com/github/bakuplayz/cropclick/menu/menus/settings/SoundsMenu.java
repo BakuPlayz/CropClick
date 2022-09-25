@@ -61,6 +61,8 @@ public final class SoundsMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.SOUNDS));
         handlePagination(clicked);
 
@@ -88,7 +90,7 @@ public final class SoundsMenu extends PaginatedMenu {
      *
      * @param clicked The item that was clicked.
      *
-     * @return The index of the sound in the menuItems list.
+     * @return The index of the sound in the {@link #menuItems menuItems list}.
      */
     private int getIndexOfSound(@NotNull ItemStack clicked) {
         return menuItems.stream()

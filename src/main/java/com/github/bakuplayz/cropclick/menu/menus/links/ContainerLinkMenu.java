@@ -34,6 +34,8 @@ public final class ContainerLinkMenu extends LinkMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         if (isUnclaimed) {
             handleUnclaimed(clicked);
             refresh();

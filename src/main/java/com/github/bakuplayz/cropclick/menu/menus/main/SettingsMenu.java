@@ -64,6 +64,8 @@ public final class SettingsMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getAutofarmsItem())) {

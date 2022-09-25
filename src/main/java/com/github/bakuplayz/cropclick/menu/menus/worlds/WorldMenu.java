@@ -47,6 +47,8 @@ public final class WorldMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new WorldsMenu(plugin, player, WorldMenuState.SETTINGS));
 
         if (clicked.equals(getWorldItem())) {

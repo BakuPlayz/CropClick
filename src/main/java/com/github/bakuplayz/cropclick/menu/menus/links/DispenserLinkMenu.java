@@ -51,6 +51,8 @@ public final class DispenserLinkMenu extends LinkMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         if (menuState != AutofarmsMenuState.LINK) {
             handleBack(clicked, new AutofarmsMenu(plugin, player, menuState));
         }

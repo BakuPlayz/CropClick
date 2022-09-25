@@ -21,13 +21,13 @@ import java.io.IOException;
  */
 public abstract class DataStorage implements Storageable {
 
-    protected CropClick plugin;
+    protected final CropClick plugin;
 
     protected File file;
-    protected String fileName;
+    protected final String fileName;
     protected @Getter JsonObject fileData;
 
-    protected JsonParser jsonParser;
+    protected final JsonParser jsonParser;
 
     protected Gson gson;
 

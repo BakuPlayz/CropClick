@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.addons.addon.base;
+package com.github.bakuplayz.cropclick.utils;
 
 /**
  * (DESCRIPTION)
@@ -10,7 +10,7 @@ package com.github.bakuplayz.cropclick.addons.addon.base;
 public interface Enableable {
 
     /**
-     * Checks if its enabled.
+     * Checks if it itself is enabled.
      *
      * @return A boolean value.
      */

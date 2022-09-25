@@ -24,7 +24,7 @@ public final class InventoryUtils {
      * and if the result is empty, then the item fits.
      *
      * @param inventory The inventory to check if the item fits in.
-     * @param drop      The itemstack you want to check if it fits in the inventory.
+     * @param drop      The ItemStack you want to check if it fits in the inventory.
      *
      * @return A boolean value.
      */
@@ -41,7 +41,7 @@ public final class InventoryUtils {
         }
 
         Map<Integer, ItemStack> leftOver = temporary.addItem(drop);
-        
+
         for (ItemStack stack : leftOver.values()) {
             if (stack.getAmount() == 0) {
                 return true;

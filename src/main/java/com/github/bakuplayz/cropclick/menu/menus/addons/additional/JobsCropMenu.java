@@ -74,6 +74,8 @@ public final class JobsCropMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.JOBS_REBORN));
 
         // Points

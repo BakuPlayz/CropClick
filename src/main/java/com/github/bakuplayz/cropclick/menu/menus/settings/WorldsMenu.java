@@ -63,6 +63,8 @@ public final class WorldsMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         switch (menuState) {
             case SETTINGS:
                 handleBack(clicked, new SettingsMenu(plugin, player, true));

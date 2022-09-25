@@ -280,6 +280,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+            <!--suppress MavenPackageUpdate -->
             <version>2.8.0</version>
             <scope>compile</scope>
         </dependency>

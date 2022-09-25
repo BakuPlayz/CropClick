@@ -66,6 +66,8 @@ public final class McMMOCropMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.MCMMO));
 
         if (clicked.equals(getExperienceAddItem(MIN_CHANGE))) {

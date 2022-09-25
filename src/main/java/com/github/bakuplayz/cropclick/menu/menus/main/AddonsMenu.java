@@ -78,30 +78,32 @@ public final class AddonsMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getJobsItem())) {
-            if (jobsPresent || true) new JobsRebornMenu(plugin, player).open();
+            if (jobsPresent) new JobsRebornMenu(plugin, player).open();
         }
 
         if (clicked.equals(getMCMMOItem())) {
-            if (mmoPresent || true) new McMMOMenu(plugin, player).open();
+            if (mmoPresent) new McMMOMenu(plugin, player).open();
         }
 
         if (clicked.equals(getGrowthItem())) {
-            if (growthPresent || true) new OfflineGrowthMenu(plugin, player).open();
+            if (growthPresent) new OfflineGrowthMenu(plugin, player).open();
         }
 
         if (clicked.equals(getResidenceItem())) {
-            if (residencePresent || true) new ResidenceMenu(plugin, player).open();
+            if (residencePresent) new ResidenceMenu(plugin, player).open();
         }
 
         if (clicked.equals(getTownyItem())) {
-            if (townyPresent || true) new TownyMenu(plugin, player).open();
+            if (townyPresent) new TownyMenu(plugin, player).open();
         }
 
         if (clicked.equals(getGuardItem())) {
-            if (guardPresent || true) new WorldGuardMenu(plugin, player).open();
+            if (guardPresent) new WorldGuardMenu(plugin, player).open();
         }
     }
 

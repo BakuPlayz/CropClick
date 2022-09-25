@@ -116,7 +116,7 @@ public final class PermissionUtils {
      * "cropclick.autofarm.interact.others" to interact with the farm.
      *
      * @param player The player who is trying to interact with the farm.
-     * @param other  The UUID of the player who owns the farm.
+     * @param farm   The given autofarm.
      *
      * @return A boolean value.
      */
@@ -131,7 +131,7 @@ public final class PermissionUtils {
         if (!other.equals(farm.getOwnerID())) {
             return player.isOp() || player.hasPermission("cropclick.autofarm.interact.others");
         }
-        
+
         return canInteractAtFarm(player);
     }
 

@@ -46,6 +46,8 @@ public final class MainMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         if (clicked.equals(getCropsItem())) {
             new CropsMenu(plugin, player, CropMenuState.CROP).open();
         }

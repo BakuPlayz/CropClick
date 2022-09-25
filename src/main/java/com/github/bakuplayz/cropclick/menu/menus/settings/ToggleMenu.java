@@ -58,6 +58,8 @@ public final class ToggleMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new SettingsMenu(plugin, player, true));
         handlePagination(clicked);
 
@@ -110,6 +112,8 @@ public final class ToggleMenu extends PaginatedMenu {
                 plugin,
                 playersConfig.isEnabled(playerID)
         );
+
+        assert offlinePlayer.getName() != null; // Cannot be null since the playerID grantee a valid ID.
 
         return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))

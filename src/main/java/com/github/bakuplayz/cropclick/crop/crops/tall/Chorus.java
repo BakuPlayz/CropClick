@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.CollectionUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -80,10 +81,8 @@ public final class Chorus extends TallCrop {
 
     @Override
     public void replant(@NotNull Block block) {
-        // It's sorting the list of chorus blocks in reverse order, then setting them to air.
-        choruses.stream()
-                .sorted((unused1, unused2) -> -1)
-                .forEach(b -> b.setType(Material.AIR));
+        CollectionUtil.reverseOrder(choruses)
+                      .forEach(b -> b.setType(Material.AIR));
 
         choruses = new ArrayList<>();
     }

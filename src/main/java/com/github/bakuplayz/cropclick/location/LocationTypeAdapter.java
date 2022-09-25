@@ -64,12 +64,15 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      */
     private @NotNull Location deserializeLocation(@NotNull JsonElement element) {
         JsonObject body = element.getAsJsonObject();
-        String worldName = body.get("world").getAsString();
-        double x = body.get("x").getAsDouble();
-        double y = body.get("y").getAsDouble();
-        double z = body.get("z").getAsDouble();
-        World world = Bukkit.getWorld(worldName);
-        return new Location(world, x, y, z);
+        World world = Bukkit.getWorld(
+                body.get("world").getAsString()
+        );
+        return new Location(
+                world == null ? Bukkit.getWorlds().get(0) : world,
+                body.get("x").getAsDouble(),
+                body.get("y").getAsDouble(),
+                body.get("z").getAsDouble()
+        );
     }
 
 
@@ -122,6 +125,9 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      */
     private static @NotNull JsonObject serializeLocation(@NotNull Location location) {
         JsonObject body = new JsonObject();
+
+        assert location.getWorld() != null; // Only here for compiler, since a location cannot exist without a world.
+
         body.add("world", new JsonPrimitive(location.getWorld().getName()));
         body.add("x", new JsonPrimitive(location.getX()));
         body.add("y", new JsonPrimitive(location.getY()));

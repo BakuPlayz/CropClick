@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.addons.addon.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
+import com.github.bakuplayz.cropclick.utils.Enableable;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

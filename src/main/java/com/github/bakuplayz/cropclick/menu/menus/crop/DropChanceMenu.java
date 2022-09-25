@@ -78,6 +78,8 @@ public final class DropChanceMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new CropMenu(plugin, player, crop));
 
         String cropName = crop.getName();

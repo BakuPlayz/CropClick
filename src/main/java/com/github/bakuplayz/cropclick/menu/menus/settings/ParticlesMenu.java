@@ -60,6 +60,8 @@ public final class ParticlesMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.PARTICLES));
         handlePagination(clicked);
 
@@ -78,18 +80,6 @@ public final class ParticlesMenu extends PaginatedMenu {
 
 
     /**
-     * It returns a list of all the particle names.
-     *
-     * @return A list of all the particle effects.
-     */
-    private @NotNull List<String> getParticles() {
-        return ParticleEffect.getAvailableEffects().stream()
-                             .map(ParticleEffect::name)
-                             .collect(Collectors.toList());
-    }
-
-
-    /**
      * "Get the index of the particle item that was clicked on."
      * <p>
      * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
@@ -99,7 +89,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      *
      * @param clicked The item that was clicked.
      *
-     * @return The index of the particle in the menuItems list.
+     * @return The index of the particle in the {@link #menuItems menuItems list}.
      */
     private int getIndexOfParticle(@NotNull ItemStack clicked) {
         return menuItems
@@ -155,6 +145,18 @@ public final class ParticlesMenu extends PaginatedMenu {
         return particles.stream()
                         .map(this::getMenuItem)
                         .collect(Collectors.toList());
+    }
+
+
+    /**
+     * It returns a list of all the particle names.
+     *
+     * @return A list of all the particle effects.
+     */
+    private @NotNull List<String> getParticles() {
+        return ParticleEffect.getAvailableEffects().stream()
+                             .map(ParticleEffect::name)
+                             .collect(Collectors.toList());
     }
 
 

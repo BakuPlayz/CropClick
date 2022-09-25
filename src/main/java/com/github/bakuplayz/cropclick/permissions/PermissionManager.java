@@ -81,6 +81,9 @@ public final class PermissionManager {
      */
     private void registerCropType(@NotNull CropPermissionType type) {
         Permission allPermission = type.getAllPermission();
+
+        assert allPermission != null; // Only here for the compiler, since type cannot be a null instance when passed.
+
         pluginManager.addPermission(allPermission);
 
         Permission groundPermission = new CropPermission(CropPermissionBase.GROUND, type);

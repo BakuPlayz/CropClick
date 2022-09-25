@@ -24,23 +24,23 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SoundMenu extends Menu {
 
-    private final int MIN_DELAY = 0; // in milliseconds
-    private final int MAX_DELAY = 5000; // in milliseconds
+    public static final int MIN_DELAY = 0; // in milliseconds
+    public static final int MAX_DELAY = 5000; // in milliseconds
 
-    private final int DELAY_MIN_CHANGE = 100; // in milliseconds
-    private final int DELAY_MAX_CHANGE = 500; // in milliseconds
+    public static final int DELAY_MIN_CHANGE = 100; // in milliseconds
+    public static final int DELAY_MAX_CHANGE = 500; // in milliseconds
 
-    private final int MIN_VOLUME = 0; // range in blocks
-    private final int MAX_VOLUME = 500; // range in blocks
+    public static final int MIN_VOLUME = 0; // range in blocks
+    public static final int MAX_VOLUME = 500; // range in blocks
 
-    private final int VOLUME_MIN_CHANGE = 1;
-    private final int VOLUME_MAX_CHANGE = 5;
+    public static final int VOLUME_MIN_CHANGE = 1;
+    public static final int VOLUME_MAX_CHANGE = 5;
 
-    private final int MIN_PITCH = 0;
-    private final int MAX_PITCH = 2;
+    public static final int MIN_PITCH = 0;
+    public static final int MAX_PITCH = 2;
 
-    private final double PITCH_MIN_CHANGE = 0.1;
-    private final double PITCH_MAX_CHANGE = 0.2;
+    public static final double PITCH_MIN_CHANGE = 0.1;
+    public static final double PITCH_MAX_CHANGE = 0.2;
 
 
     private final BaseCrop crop;
@@ -106,6 +106,8 @@ public final class SoundMenu extends Menu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new SoundsMenu(plugin, player, crop));
 

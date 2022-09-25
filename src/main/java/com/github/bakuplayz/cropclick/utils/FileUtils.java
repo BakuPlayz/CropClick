@@ -25,6 +25,7 @@ public final class FileUtils {
      * @param inFile  The file to move
      * @param outFile The file to move the inFile to.
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void moveFile(@NotNull File inFile, @NotNull File outFile) {
         try {
             outFile.getParentFile().mkdirs();
