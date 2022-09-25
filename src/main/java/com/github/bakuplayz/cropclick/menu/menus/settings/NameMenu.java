@@ -139,6 +139,7 @@ public final class NameMenu extends Menu {
      * @return A new ItemStack with the material of a sign, with the name of the item being the color code item name, and
      * the lore being the color codes.
      */
+    @SuppressWarnings("deprecation")
     private @NotNull ItemStack getCodesItem(int start) {
         Material sign = VersionUtils.between(0.0, 13.9)
                         ? Material.LEGACY_SIGN

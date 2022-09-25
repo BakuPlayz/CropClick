@@ -241,6 +241,7 @@ public final class PlayersConfig extends Config {
     }
 
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isEnabled(@NotNull Player player) {
         return isEnabled(player.getUniqueId().toString());
     }
