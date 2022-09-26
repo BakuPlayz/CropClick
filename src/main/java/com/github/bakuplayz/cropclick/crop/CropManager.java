@@ -44,7 +44,7 @@ public final class CropManager {
 
 
     /**
-     * A map of the crops that have been harvested and the time they were harvested,
+     * A {@link HashMap map} of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
     private final @Getter HashMap<BaseCrop, Long> harvestedCrops;

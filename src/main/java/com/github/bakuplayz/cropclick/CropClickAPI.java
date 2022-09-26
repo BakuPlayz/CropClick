@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * Represents a communication tunnel for {@link CropClick} and other plugins.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -48,12 +48,6 @@ public final class CropClickAPI {
      * Gets the AddonManager, which controls all the active and inactive addons.
      */
     private final @Getter AddonManager addonManager;
-
-
-    @SuppressWarnings("unused")
-    public CropClickAPI() {
-        this(CropClick.getPlugin());
-    }
 
 
     private CropClickAPI(@NotNull CropClick plugin) {
