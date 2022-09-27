@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 /**
- * (DESCRIPTION)
+ * Represents an Particle object, as YAML.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -24,6 +24,9 @@ import java.util.Map;
 @EqualsAndHashCode
 public final class ParticleYaml implements Yamlable, Enableable {
 
+    /**
+     * A variable
+     */
     private @Setter @Getter @Accessors(chain = true) double delay;
     private @Setter @Getter @Accessors(chain = true) double speed;
     private @Setter @Getter @Accessors(chain = true) int amount;
