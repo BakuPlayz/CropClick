@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.yaml;
 
+import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
 import com.github.bakuplayz.cropclick.utils.Enableable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 
 /**
- * Represents an Particle object, as YAML.
+ * Represents an Particle object as YAML.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -25,10 +26,18 @@ import java.util.Map;
 public final class ParticleYaml implements Yamlable, Enableable {
 
     /**
-     * A variable
+     * The given delay before playing the particle effect ({@link ParticleMenu#MIN_DELAY min delay} & {@link ParticleMenu#MAX_DELAY max delay}).
      */
     private @Setter @Getter @Accessors(chain = true) double delay;
+
+    /**
+     * The given speed the particle effect should be played at ({@link ParticleMenu#MIN_SPEED min speed} & {@link ParticleMenu#MAX_SPEED max speed}).
+     */
     private @Setter @Getter @Accessors(chain = true) double speed;
+
+    /**
+     * The given amount of this particle effect to play at once ({@link ParticleMenu#MIN_AMOUNT min amount} & {@link ParticleMenu#MAX_AMOUNT max amount}).
+     */
     private @Setter @Getter @Accessors(chain = true) int amount;
 
 
@@ -40,9 +49,9 @@ public final class ParticleYaml implements Yamlable, Enableable {
 
 
     /**
-     * It converts the implementing object to a yaml-styled map.
+     * It converts the object to a YAML-styled map.
      *
-     * @return A HashMap<String, Object>
+     * @return A {@link HashMap YAML-formatted HashMap}.
      */
     @Override
     @Contract(" -> new")
@@ -56,11 +65,13 @@ public final class ParticleYaml implements Yamlable, Enableable {
 
 
     /**
+     * It checks wheaten the Particle is enabled, by validating only ones with one or more {@link #amount}.
      *
+     * @return An enabled state, wheaten the Particle is enabled or not.
      */
     @Override
     public boolean isEnabled() {
-        return amount != 0;
+        return amount > 0;
     }
 
 }

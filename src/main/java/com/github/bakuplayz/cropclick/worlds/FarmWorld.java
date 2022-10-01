@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * TODO: (DESCRIPTION)
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -31,6 +31,9 @@ public final class FarmWorld {
     private @Setter @Getter @Accessors(fluent = true) boolean allowsPlayers;
     private @Setter @Getter @Accessors(fluent = true) boolean allowsAutofarms;
 
+    /**
+     *
+     */
     private final @Getter List<Addon> banishedAddons;
 
 
