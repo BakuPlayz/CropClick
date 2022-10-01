@@ -571,8 +571,7 @@ public abstract class LinkMenu extends Menu {
      * @return A list of strings.
      */
     @Contract(" -> new")
-    private @NotNull
-    @Unmodifiable List<String> getUnlinkedLocationLore() {
+    private @NotNull @Unmodifiable List<String> getUnlinkedLocationLore() {
         return Collections.singletonList(
                 LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
                         LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)

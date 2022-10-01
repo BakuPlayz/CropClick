@@ -39,6 +39,11 @@ public final class ParticleYaml implements Yamlable, Enableable {
     }
 
 
+    /**
+     * It converts the implementing object to a yaml-styled map.
+     *
+     * @return A HashMap<String, Object>
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Map<String, Object> toYaml() {
@@ -50,6 +55,9 @@ public final class ParticleYaml implements Yamlable, Enableable {
     }
 
 
+    /**
+     *
+     */
     @Override
     public boolean isEnabled() {
         return amount != 0;
