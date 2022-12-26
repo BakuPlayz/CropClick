@@ -31,6 +31,9 @@ public final class FarmWorld {
     private @Setter @Getter @Accessors(fluent = true) boolean allowsPlayers;
     private @Setter @Getter @Accessors(fluent = true) boolean allowsAutofarms;
 
+    /**
+     * Contains all the banished addons in the world.
+     */
     private final @Getter List<Addon> banishedAddons;
 
 

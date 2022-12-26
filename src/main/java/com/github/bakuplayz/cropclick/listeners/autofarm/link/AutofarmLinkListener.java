@@ -9,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 
 /**
  * (DESCRIPTION)
@@ -19,13 +21,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AutofarmLinkListener implements Listener {
 
+    private final Logger logger;
+    private final boolean isDebugging;
+
     private final AutofarmDataStorage farmData;
     private final AutofarmManager autofarmManager;
 
 
     public AutofarmLinkListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
+        this.isDebugging = plugin.isDebugging();
         this.farmData = plugin.getFarmData();
+        this.logger = plugin.getLogger();
     }
 
 
@@ -43,7 +50,9 @@ public final class AutofarmLinkListener implements Listener {
             return;
         }
 
-        System.out.println("Autofarm -- Linked");
+        if (isDebugging) {
+            logger.info(String.format("%s (Autofarm): Called the link event!", event.getAutofarm().getShortenedID()));
+        }
 
         farmData.addFarm(event.getAutofarm());
     }

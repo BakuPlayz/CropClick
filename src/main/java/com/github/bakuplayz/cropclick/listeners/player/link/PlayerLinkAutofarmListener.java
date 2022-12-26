@@ -47,7 +47,9 @@ public final class PlayerLinkAutofarmListener implements Listener {
 
         LanguageAPI.Menu.LINK_ACTION_SUCCESS.send(plugin, player);
 
-        System.out.println("Player -- Linked");
+        if (plugin.isDebugging()) {
+            plugin.getLogger().info(String.format("%s (Player): Called the link event!", player.getName()));
+        }
 
         Bukkit.getPluginManager().callEvent(
                 new AutofarmLinkEvent(event.getAutofarm())

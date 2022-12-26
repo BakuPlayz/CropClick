@@ -24,8 +24,19 @@ import java.util.Map;
 @EqualsAndHashCode
 public final class SoundYaml implements Yamlable, Enableable {
 
+    /**
+     * A variable indicating how many milliseconds before the sound should be played.
+     */
     private @Setter @Getter @Accessors(chain = true) double delay;
+
+    /**
+     * A variable indicating at what pitch the sound should be played at.
+     */
     private @Setter @Getter @Accessors(chain = true) double pitch;
+
+    /**
+     * A variable indicating at what volume (or block radius) the sound should be played in.
+     */
     private @Setter @Getter @Accessors(chain = true) double volume;
 
 
@@ -35,7 +46,19 @@ public final class SoundYaml implements Yamlable, Enableable {
         this.volume = volume;
     }
 
+    /**
+     * It checks wheaten or not the {@link SoundYaml sound} is enabled in the yaml file.
+     */
+    @Override
+    public boolean isEnabled() {
+        return volume != 0.0 & pitch != 0.0;
+    }
 
+    /**
+     * It converts {@link SoundYaml this} object to a yaml-styled map.
+     *
+     * @return A HashMap<String, Object>
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Map<String, Object> toYaml() {
@@ -44,12 +67,6 @@ public final class SoundYaml implements Yamlable, Enableable {
             put("pitch", pitch);
             put("volume", volume);
         }};
-    }
-
-
-    @Override
-    public boolean isEnabled() {
-        return volume != 0.0 & pitch != 0.0;
     }
 
 }

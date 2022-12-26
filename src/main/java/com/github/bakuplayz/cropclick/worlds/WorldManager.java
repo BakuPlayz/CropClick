@@ -23,13 +23,15 @@ public final class WorldManager {
 
     private final @NotNull WorldDataStorage worldData;
 
+    /**
+     * Contains all the registered bukkit worlds.
+     */
     private final @Getter HashMap<String, FarmWorld> worlds;
 
 
     public WorldManager(@NotNull CropClick plugin) {
         this.worldData = plugin.getWorldData();
         this.worlds = worldData.getWorlds();
-
         registerWorlds();
     }
 
@@ -61,7 +63,6 @@ public final class WorldManager {
      *
      * @return A FarmWorld object
      */
-    @SuppressWarnings("unused")
     public @Nullable FarmWorld findByName(@NotNull String name) {
         return worldData.findWorldByName(name);
     }
@@ -86,7 +87,6 @@ public final class WorldManager {
      *
      * @return A boolean value.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isAccessible(FarmWorld world) {
         return world != null && !world.isBanished();
     }

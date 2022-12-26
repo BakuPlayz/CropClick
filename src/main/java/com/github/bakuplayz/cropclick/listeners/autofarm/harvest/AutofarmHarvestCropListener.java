@@ -133,6 +133,8 @@ public final class AutofarmHarvestCropListener implements Listener {
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
 
+        harvestedCrops.remove(crop);
+
         if (container == null) {
             return;
         }
@@ -162,9 +164,9 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         crop.replant(block);
 
-        System.out.println("Autofarm -- Harvest");
-
-        harvestedCrops.remove(crop);
+        if (plugin.isDebugging()) {
+            plugin.getLogger().info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
+        }
     }
 
 
@@ -175,7 +177,7 @@ public final class AutofarmHarvestCropListener implements Listener {
      *
      * @return The block that the dispenser is facing.
      */
-    private Block findDispenserFacing(@NotNull Block block) {
+    private @NotNull Block findDispenserFacing(@NotNull Block block) {
         return block.getRelative(
                 ((Directional) block.getState().getData()).getFacing()
         );

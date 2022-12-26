@@ -58,7 +58,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
                 event.getPlayer(),
                 event.getBlock()
         );
-        
+
         Bukkit.getScheduler().runTaskLater(
                 plugin,
                 chestRunnable,
@@ -94,7 +94,9 @@ public final class PlayerUpdateAutofarmListener implements Listener {
                 newFarm
         );
 
-        System.out.println("Player -- Update");
+        if (plugin.isDebugging()) {
+            plugin.getLogger().info(String.format("%s (Player): Called the update event!", player.getName()));
+        }
 
         Bukkit.getPluginManager().callEvent(updateEvent);
     }

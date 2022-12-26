@@ -20,7 +20,7 @@ public final class Particle {
     private final @Getter String name;
 
     private final @Getter int amount;
-    private final @Getter float speed;
+    private final @Getter double speed;
     private final @Getter double delay;
 
 

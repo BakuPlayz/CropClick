@@ -19,6 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 
 /**
  * (DESCRIPTION)
@@ -29,6 +31,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerUnlinkAutofarmListener implements Listener {
 
+    private final Logger logger;
+    private final boolean isDebugging;
+
     private final WorldManager worldManager;
     private final AddonManager addonManager;
     private final AutofarmManager autofarmManager;
@@ -38,6 +43,8 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
+        this.isDebugging = plugin.isDebugging();
+        this.logger = plugin.getLogger();
     }
 
 
@@ -101,7 +108,9 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        System.out.println("Player -- Unlinked");
+        if (isDebugging) {
+            logger.info(String.format("%s (Player): Called the unlinked event!", player.getName()));
+        }
 
         Bukkit.getPluginManager().callEvent(
                 new AutofarmUnlinkEvent(event.getAutofarm())

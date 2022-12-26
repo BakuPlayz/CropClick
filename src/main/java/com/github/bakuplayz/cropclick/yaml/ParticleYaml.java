@@ -25,10 +25,18 @@ import java.util.Map;
 public final class ParticleYaml implements Yamlable, Enableable {
 
     /**
-     * A variable
+     * A variable indicating how many milliseconds before the particle should be displayed.
      */
     private @Setter @Getter @Accessors(chain = true) double delay;
+
+    /**
+     * A variable indicating at what speed the particle should be displayed at.
+     */
     private @Setter @Getter @Accessors(chain = true) double speed;
+
+    /**
+     * A variable indicating how many particles should be displayed, when displayed.
+     */
     private @Setter @Getter @Accessors(chain = true) int amount;
 
 
@@ -40,7 +48,15 @@ public final class ParticleYaml implements Yamlable, Enableable {
 
 
     /**
-     * It converts the implementing object to a yaml-styled map.
+     * It checks wheaten or not the {@link ParticleYaml particle} is enabled in the yaml file.
+     */
+    @Override
+    public boolean isEnabled() {
+        return amount != 0;
+    }
+
+    /**
+     * It converts {@link ParticleYaml this} object to a yaml-styled map.
      *
      * @return A HashMap<String, Object>
      */
@@ -52,15 +68,6 @@ public final class ParticleYaml implements Yamlable, Enableable {
             put("speed", speed);
             put("amount", amount);
         }};
-    }
-
-
-    /**
-     *
-     */
-    @Override
-    public boolean isEnabled() {
-        return amount != 0;
     }
 
 }

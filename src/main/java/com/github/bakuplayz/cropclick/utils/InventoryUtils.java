@@ -2,12 +2,11 @@ package com.github.bakuplayz.cropclick.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 
 /**
@@ -29,8 +28,13 @@ public final class InventoryUtils {
      * @return A boolean value.
      */
     public static boolean canFit(@NotNull Inventory inventory, @NotNull ItemStack drop) {
-        Inventory temporary = Bukkit.createInventory(null, inventory.getType());
-        temporary.setStorageContents(inventory.getStorageContents());
+        Inventory temporary = inventory instanceof DoubleChestInventory
+                              ? Bukkit.createInventory(null, 54)
+                              : Bukkit.createInventory(null, inventory.getType());
+
+        for (int i = 0; i < inventory.getSize(); ++i) {
+            temporary.setItem(i, inventory.getItem(i));
+        }
 
         if (inventory instanceof PlayerInventory) {
             temporary.setItem(36, new ItemStack(Material.STONE, 64));
@@ -40,15 +44,7 @@ public final class InventoryUtils {
             temporary.setItem(40, new ItemStack(Material.STONE, 64));
         }
 
-        Map<Integer, ItemStack> leftOver = temporary.addItem(drop);
-
-        for (ItemStack stack : leftOver.values()) {
-            if (stack.getAmount() == 0) {
-                return true;
-            }
-        }
-
-        return leftOver.isEmpty();
+        return temporary.addItem(drop).isEmpty();
     }
 
 }

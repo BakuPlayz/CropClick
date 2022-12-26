@@ -79,6 +79,11 @@ public final class CropClick extends JavaPlugin {
      */
     private boolean isReset;
 
+    /**
+     * A variable used for debugging purposes, when enabled it will, for instance log every event call.
+     */
+    private final @Getter boolean isDebugging = true;
+
 
     /**
      * It starts the execution of the CropClick, conceptually equivalent to an 'main(args)' run.
@@ -89,6 +94,8 @@ public final class CropClick extends JavaPlugin {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
             return;
         }
+
+        CropClick.plugin = this;
 
         registerConfigs();
         setupConfigs();
@@ -227,9 +234,9 @@ public final class CropClick extends JavaPlugin {
      * It initializes the {@link DataStorage#saveData() saveData} interval/task for all the referenced storages, JSON files.
      */
     private void startStoragesSaveInterval() {
-        int TEN_MINUTES_PERIOD = 10 * 60 * 20; // Written as ticks (20 per second).
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, farmData::saveData, 0, TEN_MINUTES_PERIOD);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, worldData::saveData, 0, TEN_MINUTES_PERIOD);
+        final int TEN_MINUTES_PERIOD = 10 * 60 * 20; // Written as ticks (20 per second).
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::saveData, 0, TEN_MINUTES_PERIOD);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::saveData, 0, TEN_MINUTES_PERIOD);
     }
 
 
@@ -278,7 +285,7 @@ public final class CropClick extends JavaPlugin {
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);
 
-        manager.registerEvents(new HarvestCropListener(), this);
+        manager.registerEvents(new HarvestCropListener(this), this);
         manager.registerEvents(new PlayerHarvestCropListener(this), this);
         manager.registerEvents(new AutofarmHarvestCropListener(this), this);
 

@@ -53,7 +53,6 @@ public final class SoundRunnable {
      * For each sound, schedule a task to run after the sound's delay.
      */
     public void run() {
-        long start = System.nanoTime();
         long delay = 0;
         for (Sound sound : queuedSounds) {
             delay += sound.getDelay();
@@ -63,7 +62,6 @@ public final class SoundRunnable {
             );
         }
         runnable.schedule(clean(), delay + 10);
-        System.out.println(System.nanoTime() - start);
     }
 
 

@@ -32,16 +32,16 @@ public final class RequestUtil {
     private @Getter boolean isDataChanged;
 
 
-    public RequestUtil(@NotNull String URL)
+    public RequestUtil(@NotNull String url)
             throws IOException {
-        this.connection = (HttpURLConnection) new URL(URL).openConnection();
+        this.connection = (HttpURLConnection) new URL(url).openConnection();
         this.headers = new HashMap<>();
         this.params = "";
     }
 
 
     /**
-     * This function sets the default headers for the request.
+     * It sets the default headers for the request.
      *
      * @return The RequestUtil object.
      */
@@ -54,7 +54,7 @@ public final class RequestUtil {
     /**
      * It takes a list of Param objects and converts them to a string.
      *
-     * @return A RequestUtil object
+     * @return A RequestUtil object.
      */
     public RequestUtil setParams(@NotNull Param... param) {
         this.params = Arrays.stream(param)
@@ -70,7 +70,7 @@ public final class RequestUtil {
      * @param headers    The headers to be sent with the request.
      * @param addDefault Adds the default request headers.
      *
-     * @return The RequestUtil object
+     * @return The RequestUtil object.
      */
     public RequestUtil setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
         this.headers = headers;
@@ -88,7 +88,7 @@ public final class RequestUtil {
      * @param doOutput If true, the request will be sent to the server. If false, the request will not be sent to the
      *                 server.
      *
-     * @return The RequestUtil object
+     * @return The RequestUtil object.
      */
     public RequestUtil post(boolean doOutput)
             throws IOException {

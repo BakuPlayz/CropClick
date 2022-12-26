@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 
 /**
@@ -35,6 +36,9 @@ import java.util.HashMap;
  * @since 2.0.0
  */
 public final class PlayerHarvestCropListener implements Listener {
+
+    private final Logger logger;
+    private final boolean isDebugging;
 
     private final CropManager cropManager;
     private final AddonManager addonManager;
@@ -49,6 +53,8 @@ public final class PlayerHarvestCropListener implements Listener {
 
 
     public PlayerHarvestCropListener(@NotNull CropClick plugin) {
+        this.logger = plugin.getLogger();
+        this.isDebugging = plugin.isDebugging();
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
@@ -74,7 +80,7 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         Action action = event.getAction();
-        if (!EventUtils.isRightClick(action)) {
+        if (EventUtils.isLeftClick(action)) {
             return;
         }
 
@@ -136,18 +142,24 @@ public final class PlayerHarvestCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerHarvestCrop(@NotNull PlayerHarvestCropEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled()) {
+            return;
+        }
 
         Player player = event.getPlayer();
         Block block = event.getBlock();
         BaseCrop crop = event.getCrop();
+
+        harvestedCrops.remove(crop);
 
         if (!crop.canHarvest(player)) {
             event.setCancelled(true);
             return;
         }
 
-        System.out.println("Player -- Harvest");
+        if (isDebugging) {
+            logger.info(String.format("%s (Player): Called the harvest event!", player.getName()));
+        }
 
         boolean wasHarvested;
 
@@ -177,8 +189,6 @@ public final class PlayerHarvestCropListener implements Listener {
         crop.playParticles(block);
 
         addonManager.applyEffects(player, crop);
-
-        harvestedCrops.remove(crop);
     }
 
 
