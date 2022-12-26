@@ -32,8 +32,8 @@ public final class ParticleMenu extends Menu {
     public static final int DELAY_MIN_CHANGE = 100; // in milliseconds
     public static final int DELAY_MAX_CHANGE = 500; // in milliseconds
 
-    public static final int DELAY_MIN = 0; // in milliseconds
-    public static final int DELAY_MAX = 5000; // in milliseconds
+    public static final int MIN_DELAY = 0; // in milliseconds
+    public static final int MAX_DELAY = 5000; // in milliseconds
 
     public static final int MIN_SPEED = 0;
     public static final int MAX_SPEED = 50;
@@ -245,7 +245,7 @@ public final class ParticleMenu extends Menu {
                 cropName,
                 particleName
         );
-        double delayAfter = Math.min(delayBefore + delayChange, DELAY_MAX);
+        double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
@@ -259,7 +259,7 @@ public final class ParticleMenu extends Menu {
                 cropName,
                 particleName
         );
-        double delayAfter = Math.max(delayBefore - delayChange, DELAY_MIN);
+        double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
@@ -328,7 +328,7 @@ public final class ParticleMenu extends Menu {
         double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) + delay
         );
-        double newDelay = Math.min(oldDelay, DELAY_MAX);
+        double newDelay = Math.min(oldDelay, MAX_DELAY);
         particleSection.setDelay(cropName, particleName, newDelay);
     }
 
@@ -337,7 +337,7 @@ public final class ParticleMenu extends Menu {
         double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) - delay
         );
-        double newDelay = Math.max(oldDelay, DELAY_MIN);
+        double newDelay = Math.max(oldDelay, MIN_DELAY);
         particleSection.setDelay(cropName, particleName, newDelay);
     }
 
