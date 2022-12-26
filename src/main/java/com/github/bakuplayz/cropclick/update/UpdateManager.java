@@ -69,7 +69,7 @@ public final class UpdateManager {
      * It fetches the new update state and message from the server, defined in the URL variable above.
      */
     private void fetch() {
-        String UPDATE_URL = "https://api.github.com/repos/Bakuplayz/CropClick/releases";
+        String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
         try {
             JsonElement response = new RequestUtil(UPDATE_URL)
                     .setDefaultHeaders()
