@@ -1,10 +1,10 @@
 package com.github.bakuplayz.cropclick.update;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.http.HttpParam;
+import com.github.bakuplayz.cropclick.http.HttpRequestBuilder;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import com.github.bakuplayz.cropclick.utils.Param;
-import com.github.bakuplayz.cropclick.utils.RequestUtil;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -71,11 +71,11 @@ public final class UpdateManager {
     private void fetch() {
         final String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
         try {
-            JsonElement response = new RequestUtil(UPDATE_URL)
+            JsonElement response = new HttpRequestBuilder(UPDATE_URL)
                     .setDefaultHeaders()
                     .setParams(
-                            new Param("serverVersion", getServerVersion()),
-                            new Param("pluginVersion", getPluginVersion())
+                            new HttpParam("serverVersion", getServerVersion()),
+                            new HttpParam("pluginVersion", getPluginVersion())
                     )
                     .post(true)
                     .getResponse();

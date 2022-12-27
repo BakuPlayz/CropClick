@@ -1,6 +1,6 @@
-package com.github.bakuplayz.cropclick.sounds;
+package com.github.bakuplayz.cropclick.runnables.sounds;
 
-import com.github.bakuplayz.cropclick.utils.RunnableTask;
+import com.github.bakuplayz.cropclick.runnables.RunnableTask;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +26,9 @@ public final class SoundTask extends TimerTask implements RunnableTask {
     }
 
 
+    /**
+     * Plays the {@link #sound provided sound} at the {@link #location provided location}, as a {@link RunnableTask}.
+     * */
     @Override
     public void run() {
         assert location.getWorld() != null; // Only here for the compiler, since the location cannot be null and therefore not the world either.
@@ -33,8 +36,8 @@ public final class SoundTask extends TimerTask implements RunnableTask {
         location.getWorld().playSound(
                 location,
                 org.bukkit.Sound.valueOf(sound.getName()),
-                (float) sound.getVolume(),
-                (float) sound.getPitch()
+                sound.getVolume(),
+                sound.getPitch()
         );
     }
 

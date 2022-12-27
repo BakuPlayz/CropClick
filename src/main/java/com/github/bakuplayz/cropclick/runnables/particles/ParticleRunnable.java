@@ -1,6 +1,6 @@
-package com.github.bakuplayz.cropclick.sounds;
+package com.github.bakuplayz.cropclick.runnables.particles;
 
-import com.github.bakuplayz.cropclick.utils.Runnable;
+import com.github.bakuplayz.cropclick.runnables.Runnable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
@@ -19,46 +19,48 @@ import java.util.TimerTask;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class SoundRunnable implements Runnable {
+public final class ParticleRunnable implements Runnable {
+
 
     private final Timer runnable;
 
     private final Location location;
 
-    private final List<Sound> queuedSounds;
+    private final List<Particle> queuedParticles;
 
 
-    public SoundRunnable(@NotNull Block block) {
+    public ParticleRunnable(@NotNull Block block) {
+        this.queuedParticles = new ArrayList<>();
         this.runnable = new Timer(true);
-        this.queuedSounds = new ArrayList<>();
         this.location = block.getLocation();
     }
 
 
     /**
-     * This function queues a sound to the queuedSounds list, when harvesting a crop.
+     * This function queues a particle to the queuedParticles list, when harvesting a crop.
      *
-     * @param name   The name of the sound.
-     * @param pitch  The pitch of the sound.
-     * @param volume The volume of the sound.
-     * @param delay  The delay in milliseconds before the sound is played.
+     * @param name   The name of the particle.
+     * @param amount The amount of particles to spawn
+     * @param speed  The speed of the particle.
+     * @param delay  The delay in milliseconds before the particle is played
      */
-    public void queueSound(@NotNull String name, double pitch, double volume, double delay) {
-        queuedSounds.add(
-                new Sound(name, pitch, volume, delay)
+    public void queueParticle(@NotNull String name, int amount, double speed, double delay) {
+        queuedParticles.add(
+                new Particle(name, amount, speed, delay)
         );
     }
 
 
     /**
-     * For each sound, schedule a task to run after the sound's delay.
+     * For each particle, schedule a task to run after the particle's delay.
      */
+    @Override
     public void run() {
         long delay = 0;
-        for (Sound sound : queuedSounds) {
-            delay += sound.getDelay();
+        for (Particle particle : queuedParticles) {
+            delay += particle.getDelay();
             runnable.schedule(
-                    new SoundTask(sound, location),
+                    new ParticleTask(particle, location),
                     delay
             );
         }
@@ -72,6 +74,7 @@ public final class SoundRunnable implements Runnable {
      *
      * @return A new TimerTask object.
      */
+    @Override
     @Contract(value = " -> new", pure = true)
     public @NotNull TimerTask clean() {
         return new TimerTask() {

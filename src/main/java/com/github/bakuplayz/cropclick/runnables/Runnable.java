@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.utils;
+package com.github.bakuplayz.cropclick.runnables;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,13 +15,13 @@ import java.util.TimerTask;
 public interface Runnable {
 
     /**
-     *
-     * */
+     * Executes the implementing object's runnable when called.
+     */
     void run();
 
     /**
-     *
-     * */
+     * Clears the implementing object's runnable when called.
+     */
     @NotNull TimerTask clean();
 
 }

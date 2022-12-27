@@ -3,11 +3,12 @@ package com.github.bakuplayz.cropclick.utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Collection collections}.
  *
  * @author BakuPlayz
  * @version 2.0.0

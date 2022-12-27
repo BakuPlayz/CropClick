@@ -1,6 +1,6 @@
-package com.github.bakuplayz.cropclick.particles;
+package com.github.bakuplayz.cropclick.runnables.particles;
 
-import com.github.bakuplayz.cropclick.utils.RunnableTask;
+import com.github.bakuplayz.cropclick.runnables.RunnableTask;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.particle.ParticleEffect;
@@ -30,6 +30,9 @@ public final class ParticleTask extends TimerTask implements RunnableTask {
     }
 
 
+    /**
+     * Displays the {@link #particle provided particle} at the {@link #location provided location}, as a {@link RunnableTask}.
+     * */
     @Override
     public void run() {
         ParticleEffect effect = ParticleEffect.valueOf(

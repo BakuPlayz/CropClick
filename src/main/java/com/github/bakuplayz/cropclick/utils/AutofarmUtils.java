@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Autofarm autofarms}, its {@link AutofarmManager manager} and its events.
  *
  * @author BakuPlayz
  * @version 2.0.0

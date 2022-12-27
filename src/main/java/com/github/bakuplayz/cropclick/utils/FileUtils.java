@@ -11,7 +11,7 @@ import java.nio.file.Files;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link File files}.
  *
  * @author BakuPlayz
  * @version 2.0.0

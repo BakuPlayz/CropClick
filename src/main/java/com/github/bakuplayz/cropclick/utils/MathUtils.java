@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for mathematics.
  *
  * @author BakuPlayz
  * @version 2.0.0

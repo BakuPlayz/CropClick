@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class to manufacture {@link ItemStack items} easier.
  *
  * @author BakuPlayz
  * @version 2.0.0

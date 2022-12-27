@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.utils;
 
+import com.github.bakuplayz.cropclick.events.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Event events}.
  *
  * @author BakuPlayz
  * @version 2.0.0

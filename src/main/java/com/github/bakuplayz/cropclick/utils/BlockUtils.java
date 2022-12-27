@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Block blocks}.
  *
  * @author BakuPlayz
  * @version 2.0.0

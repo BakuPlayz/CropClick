@@ -2,13 +2,14 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Permission permissions}.
  *
  * @author BakuPlayz
  * @version 2.0.0

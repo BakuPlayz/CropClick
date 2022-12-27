@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.utils;
+package com.github.bakuplayz.cropclick.runnables;
 
 /**
  * (DESCRIPTION)
@@ -10,7 +10,7 @@ package com.github.bakuplayz.cropclick.utils;
 public interface RunnableTask {
 
     /**
-     *
+     * Executes the implementing object's runnable task.
      * */
     void run();
 

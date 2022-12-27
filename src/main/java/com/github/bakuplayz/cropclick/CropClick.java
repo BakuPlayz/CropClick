@@ -43,7 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
- * Represents the core of CropClick, my precious.
+ * Represents the core of CropClick -- my precious.
  *
  * @author BakuPlayz
  * @version 2.0.0

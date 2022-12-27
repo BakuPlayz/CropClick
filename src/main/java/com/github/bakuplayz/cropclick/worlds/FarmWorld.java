@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * Represent a {@link World Bukkit World} as an {@link FarmWorld Farm World}.
  *
  * @author BakuPlayz
  * @version 2.0.0
