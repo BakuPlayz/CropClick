@@ -49,7 +49,7 @@ public final class ParticleYaml implements Yamlable, Enableable {
 
 
     /**
-     * It converts the object to a YAML-styled map.
+     * It converts {@link ParticleYaml this} object to a YAML-styled map.
      *
      * @return A {@link HashMap YAML-formatted HashMap}.
      */

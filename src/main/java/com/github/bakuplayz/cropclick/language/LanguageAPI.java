@@ -266,6 +266,7 @@ public final class LanguageAPI {
         GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
 
         GENERAL_STATES_NEW_UPDATE(Category.GENERAL, SubCategory.UPDATE_STATES, "newUpdate"),
+        GENERAL_STATES_NO_UPDATE_FOUND(Category.GENERAL, SubCategory.UPDATE_STATES, "noUpdateFound"),
         GENERAL_STATES_NOT_YET_FETCHED(Category.GENERAL, SubCategory.UPDATE_STATES, "notYetFetched"),
         GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
 
@@ -742,8 +743,8 @@ public final class LanguageAPI {
         @SafeVarargs
         public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
-                                             .map(Object::toString)
-                                             .toArray(String[]::new);
+                                                   .map(Object::toString)
+                                                   .toArray(String[]::new);
             return fastReplace(get(plugin), valuesAsStrings);
         }
 

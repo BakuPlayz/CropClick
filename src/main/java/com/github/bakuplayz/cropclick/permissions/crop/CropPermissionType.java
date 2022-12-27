@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.0.0
  */
 public enum CropPermissionType {
+    
     PLANT,
     HARVEST,
     DESTROY;

@@ -38,7 +38,7 @@ public final class UpdateManager {
         setUpdateMessage("");
         this.plugin = plugin;
 
-        //startInterval();
+        startInterval();
     }
 
 
@@ -69,7 +69,7 @@ public final class UpdateManager {
      * It fetches the new update state and message from the server, defined in the URL variable above.
      */
     private void fetch() {
-        String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
+        final String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
         try {
             JsonElement response = new RequestUtil(UPDATE_URL)
                     .setDefaultHeaders()
@@ -81,25 +81,38 @@ public final class UpdateManager {
                     .getResponse();
 
             if (response.isJsonNull()) {
+                setUpdateState(UpdateState.FAILED_TO_FETCH);
+                setUpdateMessage("");
+                setUpdateURL("");
+            }
+
+            if (response.getAsJsonObject().has("status")) {
                 setUpdateState(UpdateState.UP_TO_DATE);
                 setUpdateMessage("");
                 setUpdateURL("");
                 return;
             }
 
-            JsonArray updates = response.getAsJsonArray();
-            JsonObject update = updates.get(0).getAsJsonObject();
-            JsonElement updateMsg = update.get("message");
-            JsonElement updateUrl = update.get("url");
-            if (updateMsg.isJsonNull() || updateUrl.isJsonNull()) {
+            JsonArray versions = response.getAsJsonObject().get("versions").getAsJsonArray();
+            if (versions.size() == 0) {
+                setUpdateState(UpdateState.NO_UPDATE_FOUND);
+                setUpdateMessage("");
+                setUpdateURL("");
+                return;
+            }
+
+            JsonObject version = versions.get(0).getAsJsonObject();
+            JsonElement versionMsg = version.get("message");
+            JsonElement versionUrl = version.get("url");
+            if (versionMsg.isJsonNull() || versionUrl.isJsonNull()) {
                 setUpdateState(UpdateState.FAILED_TO_FETCH);
                 setUpdateMessage("");
                 setUpdateURL("");
                 return;
             }
 
-            setUpdateURL(updateUrl.getAsString());
-            setUpdateMessage(updateMsg.getAsString());
+            setUpdateURL(versionUrl.getAsString());
+            setUpdateMessage(versionMsg.getAsString());
             setUpdateState(UpdateState.NEW_UPDATE);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,13 +163,15 @@ public final class UpdateManager {
             case NEW_UPDATE:
                 return LanguageAPI.Menu.GENERAL_STATES_NEW_UPDATE.get(plugin);
 
+            case NO_UPDATE_FOUND:
+                return LanguageAPI.Menu.GENERAL_STATES_NO_UPDATE_FOUND.get(plugin);
+
             case UP_TO_DATE:
                 return LanguageAPI.Menu.GENERAL_STATES_UP_TO_DATE.get(plugin);
 
             case NOT_FETCHED_YET:
                 return LanguageAPI.Menu.GENERAL_STATES_NOT_YET_FETCHED.get(plugin);
 
-            case FAILED_TO_FETCH:
             default:
                 return LanguageAPI.Menu.GENERAL_STATES_FAILED_TO_FETCH.get(plugin);
         }

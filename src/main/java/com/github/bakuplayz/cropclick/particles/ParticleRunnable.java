@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.particles;
 
+import com.github.bakuplayz.cropclick.utils.Runnable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
@@ -18,7 +19,7 @@ import java.util.TimerTask;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class ParticleRunnable {
+public final class ParticleRunnable implements Runnable {
 
 
     private final Timer runnable;

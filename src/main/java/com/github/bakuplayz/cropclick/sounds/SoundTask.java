@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.sounds;
 
+import com.github.bakuplayz.cropclick.utils.RunnableTask;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +14,7 @@ import java.util.TimerTask;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class SoundTask extends TimerTask {
+public final class SoundTask extends TimerTask implements RunnableTask {
 
     private final Sound sound;
     private final Location location;

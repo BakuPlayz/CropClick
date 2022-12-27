@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 public enum CropPermissionBase {
+
     GROUND("(e.g. wheat)."),
     TALL("(e.g. cactus)."),
     WALL("(e.g. cocoa bean).");
