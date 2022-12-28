@@ -175,6 +175,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the delay at which particles should be displayed at.
+     *
+     * @return The delay at which particles should be displayed at.
+     */
     private @NotNull ItemStack getDelayItem() {
         double delay = particleSection.getDelay(
                 cropName,
@@ -190,6 +195,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the speed of particles to be displayed.
+     *
+     * @return The speed of particles to be displayed.
+     */
     private @NotNull ItemStack getSpeedItem() {
         double speed = particleSection.getSpeed(
                 cropName,
@@ -205,6 +215,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of particles to be displayed.
+     *
+     * @return The amount of particles to be displayed.
+     */
     private @NotNull ItemStack getAmountItem() {
         int amount = particleSection.getAmount(
                 cropName,
@@ -220,6 +235,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that increases the order of the particle.
+     *
+     * @return An item representing an increase in order for the particle.
+     */
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
@@ -230,6 +250,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that decreases the order of the particle.
+     *
+     * @return An item representing a decrease in order for the particle.
+     */
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
@@ -240,6 +265,13 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of delay to add.
+     *
+     * @param delayChange the given delay to add.
+     *
+     * @return An item representing the delay of particles to add.
+     */
     private @NotNull ItemStack getDelayAddItem(int delayChange) {
         double delayBefore = particleSection.getDelay(
                 cropName,
@@ -254,6 +286,13 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of delay to remove.
+     *
+     * @param delayChange the given delay to remove.
+     *
+     * @return An item representing the delay of particles to remove.
+     */
     private @NotNull ItemStack getDelayRemoveItem(int delayChange) {
         double delayBefore = particleSection.getDelay(
                 cropName,
@@ -268,6 +307,13 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of speed to add.
+     *
+     * @param speedChange the given speed to add.
+     *
+     * @return An item representing the speed of particles to add.
+     */
     private @NotNull ItemStack getSpeedAddItem(int speedChange) {
         double speedBefore = particleSection.getSpeed(
                 cropName,
@@ -282,6 +328,13 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of speed to remove.
+     *
+     * @param speedChange the given speed to remove.
+     *
+     * @return An item representing the speed of particles to remove.
+     */
     private @NotNull ItemStack getSpeedRemoveItem(int speedChange) {
         double speedBefore = particleSection.getSpeed(
                 cropName,
@@ -296,6 +349,13 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the add amount.
+     *
+     * @param amountChange the given amount to add.
+     *
+     * @return An item representing the amount of particles to add.
+     */
     private @NotNull ItemStack getAmountAddItem(int amountChange) {
         int amountBefore = particleSection.getAmount(
                 cropName,
@@ -310,6 +370,13 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the remove amount.
+     *
+     * @param amountChange the given amount to remove.
+     *
+     * @return An item representing the amount of particles to remove.
+     */
     private @NotNull ItemStack getAmountRemoveItem(int amountChange) {
         int amountBefore = particleSection.getAmount(
                 cropName,
@@ -324,6 +391,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Adds the given delay from the current delay of the particle.
+     *
+     * @param delay The delay of the particle.
+     */
     public void addParticleDelay(int delay) {
         double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) + delay
@@ -333,6 +405,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Removes the given delay from the current delay of the particle.
+     *
+     * @param delay The delay of the particle.
+     */
     public void removeParticleDelay(int delay) {
         double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) - delay
@@ -342,6 +419,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Adds the given speed to the current speed of the particle.
+     *
+     * @param speed The speed of the particle.
+     */
     public void addParticleSpeed(int speed) {
         double oldSpeed = MathUtils.round(
                 particleSection.getSpeed(cropName, particleName) + speed
@@ -351,6 +433,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Removes the given speed from the current speed of the particle.
+     *
+     * @param speed The speed of the particle.
+     */
     public void removeParticleSpeed(int speed) {
         double oldSpeed = MathUtils.round(
                 particleSection.getSpeed(cropName, particleName) - speed
@@ -360,6 +447,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Adds the given amount of particles from the given crop and particle name.
+     *
+     * @param amount The amount of particles to add.
+     */
     public void addParticleAmount(int amount) {
         int oldAmount = particleSection.getAmount(cropName, particleName) + amount;
         int newAmount = Math.min(oldAmount, MAX_AMOUNT);
@@ -367,6 +459,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Removes the given amount of particles from the given crop and particle name.
+     *
+     * @param amount The amount of particles to remove.
+     */
     public void removeParticleAmount(int amount) {
         int oldAmount = particleSection.getAmount(cropName, particleName) - amount;
         int newAmount = Math.max(oldAmount, MIN_AMOUNT);

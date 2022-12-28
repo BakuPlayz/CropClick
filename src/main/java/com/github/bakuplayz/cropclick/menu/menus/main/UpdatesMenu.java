@@ -79,6 +79,11 @@ public final class UpdatesMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the current update state.
+     *
+     * @return An item representing the current update state.
+     */
     private @NotNull ItemStack getUpdateItem() {
         String updateState = updateManager.getUpdateStateMessage();
 
@@ -90,6 +95,11 @@ public final class UpdatesMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the player update message.
+     *
+     * @return An item representing the player update message.
+     */
     private @NotNull ItemStack getPlayerItem() {
         String status = MessageUtils.getEnabledStatus(
                 plugin,
@@ -104,6 +114,11 @@ public final class UpdatesMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the console update message.
+     *
+     * @return An item representing the console update message.
+     */
     private @NotNull ItemStack getConsoleItem() {
         String status = MessageUtils.getEnabledStatus(
                 plugin,

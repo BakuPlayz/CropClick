@@ -133,6 +133,11 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It returns an ItemStack that represents the points that the crop will give you on harvest.
+     *
+     * @return An ItemStack that represents the points the crop will give you.
+     */
     private @NotNull ItemStack getPointsItem() {
         double points = addonSection.getJobsPoints(cropName);
 
@@ -145,6 +150,11 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It returns an ItemStack that represents the money that the crop will give you on harvest.
+     *
+     * @return An ItemStack that represents the money the crop will give you.
+     */
     private @NotNull ItemStack getMoneyItem() {
         double money = addonSection.getJobsMoney(cropName);
 
@@ -157,6 +167,11 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It returns an ItemStack that represents the experience that the crop will give you on harvest.
+     *
+     * @return An ItemStack that represents the experience the crop will give you.
+     */
     private @NotNull ItemStack getExperienceItem() {
         double experience = addonSection.getJobsExperience(cropName);
 
@@ -169,6 +184,13 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that adds points to the crop.
+     *
+     * @param amount The amount of points to add to the crop.
+     *
+     * @return An ItemStack that will be used to add points to the crop.
+     */
     private @NotNull ItemStack getPointsAddItem(int amount) {
         double beforeValue = addonSection.getJobsPoints(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
@@ -180,6 +202,13 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that removes points to the crop.
+     *
+     * @param amount The amount of points to remove to the crop.
+     *
+     * @return An ItemStack that will be used to remove points to the crop.
+     */
     private @NotNull ItemStack getPointsRemoveItem(int amount) {
         double beforeValue = addonSection.getJobsPoints(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
@@ -191,6 +220,13 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that adds money to the crop.
+     *
+     * @param amount The amount of money to add to the crop.
+     *
+     * @return An ItemStack that will be used to add money to the crop.
+     */
     private @NotNull ItemStack getMoneyAddItem(int amount) {
         double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
@@ -202,6 +238,13 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that removes money to the crop.
+     *
+     * @param amount The amount of money to remove to the crop.
+     *
+     * @return An ItemStack that will be used to remove money to the crop.
+     */
     private @NotNull ItemStack getMoneyRemoveItem(int amount) {
         double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
@@ -213,6 +256,13 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that adds experience to the crop.
+     *
+     * @param amount The amount of experience to add to the crop.
+     *
+     * @return An ItemStack that will be used to add experience to the crop.
+     */
     private @NotNull ItemStack getExperienceAddItem(int amount) {
         double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
@@ -224,6 +274,13 @@ public final class JobsCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that removes experience to the crop.
+     *
+     * @param amount The amount of experience to remove to the crop.
+     *
+     * @return An ItemStack that will be used to remove experience to the crop.
+     */
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
         double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);

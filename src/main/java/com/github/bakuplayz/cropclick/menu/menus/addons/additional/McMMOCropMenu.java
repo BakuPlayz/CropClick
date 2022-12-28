@@ -94,6 +94,11 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that displays the reason why the crop gives experience.
+     *
+     * @return The item that will be used to display the reason for the experience.
+     */
     private @NotNull ItemStack getReasonItem() {
         String reason = addonSection.getMcMMOExperienceReason(cropName);
 
@@ -105,6 +110,11 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
+    /**
+     * It returns an ItemStack that represents the experience that the crop will give you on harvest.
+     *
+     * @return An ItemStack that represents the experience the crop will give you.
+     */
     private @NotNull ItemStack getExperienceItem() {
         double experience = addonSection.getMcMMOExperience(cropName);
 
@@ -117,6 +127,13 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that adds experience to the crop.
+     *
+     * @param amount The amount of experience to add to the crop.
+     *
+     * @return An ItemStack that will be used to add experience to the crop.
+     */
     private @NotNull ItemStack getExperienceAddItem(int amount) {
         double beforeValue = addonSection.getMcMMOExperience(cropName);
         double afterValue = Math.min(beforeValue + amount, EXPERIENCE_MAX);
@@ -128,6 +145,13 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that removes experience to the crop.
+     *
+     * @param amount The amount of experience to remove to the crop.
+     *
+     * @return An ItemStack that will be used to remove experience to the crop.
+     */
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
         double beforeValue = addonSection.getMcMMOExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, EXPERIENCE_MIN);
@@ -139,6 +163,11 @@ public final class McMMOCropMenu extends Menu {
     }
 
 
+    /**
+     * It creates a menu that allows the player to change the reason for the McMMO experience.
+     *
+     * @return the reason menu.
+     */
     private @NotNull AnvilGUI.Builder getReasonMenu() {
         String currentReason = addonSection.getMcMMOExperienceReason(cropName);
         return new AnvilGUI.Builder()

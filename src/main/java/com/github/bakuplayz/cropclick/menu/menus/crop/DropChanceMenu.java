@@ -32,9 +32,8 @@ public final class DropChanceMenu extends Menu {
 
     private final int PERCENTAGE_MIN = 0;
     private final int PERCENTAGE_MAX = 100;
-    private final double DECIMAL_TO_PERCENT = 10_000;
     private final double PERCENT_TO_DECIMAL = 0.01;
-
+    private final double DECIMAL_TO_PERCENT = 10_000;
 
     private final BaseCrop crop;
     private final BaseSeed seed;
@@ -123,6 +122,11 @@ public final class DropChanceMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing showing the crop drop chance.
+     *
+     * @return an item representing the chance of a crop dropping.
+     */
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = crop.isHarvestable()
@@ -142,6 +146,11 @@ public final class DropChanceMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing showing the seed drop chance.
+     *
+     * @return an item representing the chance of a crop dropping.
+     */
     private @NotNull ItemStack getSeedItem() {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
@@ -159,6 +168,13 @@ public final class DropChanceMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of crop chance to add.
+     *
+     * @param amount the given crop chance to add.
+     *
+     * @return an item representing the amount of crop chance to add.
+     */
     private @NotNull ItemStack getCropAddItem(int amount) {
         double beforeValue = MathUtils.round(
                 cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
@@ -172,6 +188,13 @@ public final class DropChanceMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of crop chance to remove.
+     *
+     * @param amount the given crop chance to remove.
+     *
+     * @return an item representing the amount of crop chance to remove.
+     */
     private @NotNull ItemStack getCropRemoveItem(int amount) {
         double beforeValue = MathUtils.round(
                 cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
@@ -185,6 +208,13 @@ public final class DropChanceMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of seed chance to add.
+     *
+     * @param amount the given seed chance to add.
+     *
+     * @return an item representing the amount of seed chance to add.
+     */
     private @NotNull ItemStack getSeedAddItem(int amount) {
         double beforeValue = MathUtils.round(
                 seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
@@ -198,6 +228,13 @@ public final class DropChanceMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of seed chance to remove.
+     *
+     * @param amount the given seed chance to remove.
+     *
+     * @return an item representing the amount of seed chance to remove.
+     */
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
         double beforeValue = MathUtils.round(
                 seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT

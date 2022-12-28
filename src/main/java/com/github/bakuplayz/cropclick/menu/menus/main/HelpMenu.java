@@ -76,6 +76,14 @@ public final class HelpMenu extends Menu {
     }
 
 
+    /**
+     * It creates an ItemStack with a book as the material, sets the name to the subcommand's name, and sets the lore to
+     * the subcommand's description, permission, and usage.
+     *
+     * @param cmd The subcommand to get the item for.
+     *
+     * @return An ItemStack representing a command.
+     */
     private @NotNull ItemStack getSubCommandItem(@NotNull Subcommand cmd) {
         return new ItemBuilder(Material.BOOK)
                 .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, cmd.getName()))
@@ -86,6 +94,11 @@ public final class HelpMenu extends Menu {
     }
 
 
+    /**
+     * It creates an ItemStack with a book that shows how to use the default command.
+     *
+     * @return An ItemStack representing the default command.
+     */
     private @NotNull ItemStack getDefaultCommandItem() {
         String description = LanguageAPI.Command.DEFAULT_DESCRIPTION.get(plugin);
         return new ItemBuilder(Material.BOOK)

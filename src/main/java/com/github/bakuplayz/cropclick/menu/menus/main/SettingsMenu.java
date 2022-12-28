@@ -96,6 +96,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing autofarms.
+     *
+     * @return An ItemStack representing autofarms.
+     */
     private @NotNull ItemStack getAutofarmsItem() {
         String status = MessageUtils.getEnabledStatus(
                 plugin,
@@ -110,6 +115,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing particles.
+     *
+     * @return An ItemStack representing particles.
+     */
     private @NotNull ItemStack getParticlesItem() {
         return new ItemBuilder(Material.FIREWORK_ROCKET)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
@@ -119,6 +129,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing sounds.
+     *
+     * @return An ItemStack representing sounds.
+     */
     private @NotNull ItemStack getSoundsItem() {
         return new ItemBuilder(Material.NOTE_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_NAME)
@@ -128,6 +143,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the toggle.
+     *
+     * @return An ItemStack representing the toggle.
+     */
     private @NotNull ItemStack getToggleItem() {
         return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
@@ -137,6 +157,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the name.
+     *
+     * @return An ItemStack representing the name.
+     */
     private @NotNull ItemStack getNameItem() {
         return new ItemBuilder(Material.NAME_TAG)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_NAME_ITEM_NAME)
@@ -146,6 +171,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the worlds.
+     *
+     * @return An ItemStack representing the worlds.
+     */
     private @NotNull ItemStack getWorldsItem() {
         return new ItemBuilder(Material.GRASS_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_NAME)

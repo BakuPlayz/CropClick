@@ -34,7 +34,6 @@ public final class CropMenu extends Menu {
     private final int MIN_VALUE = 0;
     private final int MAX_VALUE = 576;
 
-
     private final BaseCrop crop;
     private final BaseSeed seed;
     private final String cropName;
@@ -156,6 +155,11 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the crop item.
+     *
+     * @return an item representing the crop item.
+     */
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(cropName, false);
         String status = crop.isHarvestable()
@@ -172,6 +176,11 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the seed item.
+     *
+     * @return an item representing the seed item.
+     */
     private @NotNull ItemStack getSeedItem() {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
@@ -186,6 +195,11 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the drop chances.
+     *
+     * @return an item representing the drop chances.
+     */
     private @NotNull ItemStack getChanceItem() {
         int cropChance = getDropChanceAsPercent(true);
 
@@ -205,6 +219,11 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the linkable item.
+     *
+     * @return an item representing the linkable item.
+     */
     private @NotNull ItemStack getLinkableItem() {
         boolean isLinkable = cropSection.isLinkable(cropName);
 
@@ -216,6 +235,11 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the "should" replant crop item.
+     *
+     * @return an item representing the "should" replant crop item.
+     */
     private @NotNull ItemStack getReplantItem() {
         boolean shouldReplant = cropSection.shouldReplant(cropName);
 
@@ -227,6 +251,11 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the at least one drop item.
+     *
+     * @return an item representing the at least one drop item.
+     */
     private @NotNull ItemStack getAtLeastItem() {
         boolean atLeastOne = cropSection.shouldDropAtLeastOne(cropName);
 
@@ -238,6 +267,13 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of crop to add.
+     *
+     * @param amount the given crop to add.
+     *
+     * @return an item representing the amount of crop to add.
+     */
     private @NotNull ItemStack getCropAddItem(int amount) {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
@@ -249,6 +285,13 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of crop to remove.
+     *
+     * @param amount the given crop to remove.
+     *
+     * @return an item representing the amount of crop to remove.
+     */
     private @NotNull ItemStack getCropRemoveItem(int amount) {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
@@ -260,6 +303,13 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of seed to add.
+     *
+     * @param amount the given seed to add.
+     *
+     * @return an item representing the amount of seed to add.
+     */
     private @NotNull ItemStack getSeedAddItem(int amount) {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
@@ -271,6 +321,13 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of seed to remove.
+     *
+     * @param amount the given seed to remove.
+     *
+     * @return an item representing the amount of seed to remove.
+     */
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
