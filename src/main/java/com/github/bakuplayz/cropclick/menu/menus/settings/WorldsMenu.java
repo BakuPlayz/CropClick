@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * Represents the Worlds menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

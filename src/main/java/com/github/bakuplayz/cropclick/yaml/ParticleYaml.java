@@ -28,17 +28,17 @@ public final class ParticleYaml implements Yamlable, Enableable {
     /**
      * The given delay before playing the particle effect ({@link ParticleMenu#MIN_DELAY min delay} & {@link ParticleMenu#MAX_DELAY max delay}).
      */
-    private @Setter @Getter double delay;
+    private @Setter @Getter @Accessors(chain = true) double delay;
 
     /**
      * The given speed the particle effect should be played at ({@link ParticleMenu#MIN_SPEED min speed} & {@link ParticleMenu#MAX_SPEED max speed}).
      */
-    private @Setter @Getter double speed;
+    private @Setter @Getter @Accessors(chain = true) double speed;
 
     /**
      * The given amount of this particle effect to play at once ({@link ParticleMenu#MIN_AMOUNT min amount} & {@link ParticleMenu#MAX_AMOUNT max amount}).
      */
-    private @Setter @Getter int amount;
+    private @Setter @Getter @Accessors(chain = true) int amount;
 
 
     public ParticleYaml(double delay, double speed, int amount) {

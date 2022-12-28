@@ -19,7 +19,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A manager controlling the plugin's permissions.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 
 
 /**
- * (DESCRIPTION)
+ * A conversion adapter for Locations to JSON, and wise versa.
  *
  * @author BakuPlayz
  * @version 2.0.0

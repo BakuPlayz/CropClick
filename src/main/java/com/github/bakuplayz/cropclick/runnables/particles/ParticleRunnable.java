@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.runnables.particles;
 
 import com.github.bakuplayz.cropclick.runnables.Runnable;
+import com.github.bakuplayz.cropclick.runnables.RunnableTask;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
@@ -13,7 +14,7 @@ import java.util.TimerTask;
 
 
 /**
- * (DESCRIPTION)
+ * Represents a Particle as a {@link RunnableTask}.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -31,7 +31,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * Represents the base of a Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

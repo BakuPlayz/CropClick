@@ -7,14 +7,14 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * Acts as a specific action for a crop permission, or all crop permissions.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public enum CropPermissionType {
-    
+
     PLANT,
     HARVEST,
     DESTROY;

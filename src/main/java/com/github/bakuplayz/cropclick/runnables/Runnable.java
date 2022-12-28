@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 
 /**
- * (DESCRIPTION)
+ * An interface designed to handle a Runnable.
  *
  * @author BakuPlayz
  * @version 2.0.0

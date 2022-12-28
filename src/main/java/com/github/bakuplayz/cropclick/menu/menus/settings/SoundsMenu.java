@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * Represents the Sounds menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

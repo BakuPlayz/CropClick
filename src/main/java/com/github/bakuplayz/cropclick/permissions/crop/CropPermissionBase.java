@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * Acts as a specific base for a crop permission for a crop.
  *
  * @author BakuPlayz
  * @version 2.0.0

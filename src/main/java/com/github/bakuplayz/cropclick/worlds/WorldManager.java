@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 
 /**
- * Represents a manager holding and controlling all the {@link #worldData world data} and {@link #worlds}.
+ * A manager holding and controlling all the {@link #worldData world data} and {@link #worlds}.
  *
  * @author BakuPlayz
  * @version 2.0.0

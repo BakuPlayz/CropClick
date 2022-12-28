@@ -28,17 +28,17 @@ public final class SoundYaml implements Yamlable, Enableable {
     /**
      * The given delay before playing the sound ({@link SoundMenu#MIN_DELAY min delay} & {@link SoundMenu#MAX_DELAY max delay}).
      */
-    private @Setter @Getter double delay;
+    private @Setter @Getter @Accessors(chain = true) double delay;
 
     /**
      * The given pitch the sound should be played at ({@link SoundMenu#MIN_PITCH min pitch} & {@link SoundMenu#MAX_PITCH max pitch}).
      */
-    private @Setter @Getter double pitch;
+    private @Setter @Getter @Accessors(chain = true) double pitch;
 
     /**
      * The given range-in-blocks or volume the sound should be played at ({@link SoundMenu#MIN_VOLUME min volume} & {@link SoundMenu#MAX_VOLUME max volume}).
      */
-    private @Setter @Getter double volume;
+    private @Setter @Getter @Accessors(chain = true) double volume;
 
 
     public SoundYaml(double delay, double pitch, double volume) {

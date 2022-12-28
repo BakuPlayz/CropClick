@@ -13,7 +13,7 @@ import java.util.TimerTask;
 
 
 /**
- * (DESCRIPTION)
+ * Represents a Sound as a {@link Runnable}.
  *
  * @author BakuPlayz
  * @version 2.0.0

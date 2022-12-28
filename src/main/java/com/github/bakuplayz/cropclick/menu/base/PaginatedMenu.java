@@ -12,7 +12,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * Represents the base of a Paginated menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -20,11 +20,14 @@ import java.util.List;
  */
 public abstract class PaginatedMenu extends Menu {
 
+    /**
+     * The maximum amount of items per a paginated page.
+     */
     protected final int MAX_ITEMS_PER_PAGE = 21;
 
 
-    protected int itemIndex;
     protected int page;
+    protected int itemIndex;
 
     protected List<ItemStack> menuItems;
 

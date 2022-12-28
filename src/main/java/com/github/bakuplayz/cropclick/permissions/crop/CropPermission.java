@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * Represents a crop permission.
  *
  * @author BakuPlayz
  * @version 2.0.0

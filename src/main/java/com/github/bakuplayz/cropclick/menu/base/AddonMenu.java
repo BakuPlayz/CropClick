@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * Represents the base of an Addon menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

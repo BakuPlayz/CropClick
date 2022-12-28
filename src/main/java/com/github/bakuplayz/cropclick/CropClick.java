@@ -30,6 +30,7 @@ import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmLi
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
+import com.github.bakuplayz.cropclick.metric.Metrics;
 import com.github.bakuplayz.cropclick.permissions.PermissionManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
@@ -83,6 +84,11 @@ public final class CropClick extends JavaPlugin {
      * A variable used for debugging purposes, when enabled it will, for instance log every event call.
      */
     private final @Getter boolean isDebugging = true;
+
+    /**
+     * A variable used for getting statistics using bStats.
+     */
+    private final @Getter(AccessLevel.PACKAGE) Metrics metrics = new Metrics(this, 5160);
 
 
     /**

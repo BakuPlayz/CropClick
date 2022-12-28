@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * The base interface for a menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

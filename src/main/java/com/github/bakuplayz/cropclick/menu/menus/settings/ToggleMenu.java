@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * Represents the Toggle menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

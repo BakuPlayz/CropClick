@@ -10,7 +10,7 @@ import java.util.TimerTask;
 
 
 /**
- * (DESCRIPTION)
+ * Represents a Particle as a {@link RunnableTask}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -31,8 +31,8 @@ public final class ParticleTask extends TimerTask implements RunnableTask {
 
 
     /**
-     * Displays the {@link #particle provided particle} at the {@link #location provided location}, as a {@link RunnableTask}.
-     * */
+     * Displays the {@link #particle} at the {@link #location} as a {@link RunnableTask}.
+     */
     @Override
     public void run() {
         ParticleEffect effect = ParticleEffect.valueOf(

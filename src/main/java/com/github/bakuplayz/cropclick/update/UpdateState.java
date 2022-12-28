@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.update;
 
 /**
- * (DESCRIPTION)
+ * Represents all the possible update states the plugin can be in.
  *
  * @author BakuPlayz
  * @version 2.0.0

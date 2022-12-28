@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 
 /**
- * (DESCRIPTION)
+ * Represents a Sound as a {@link RunnableTask}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -27,8 +27,8 @@ public final class SoundTask extends TimerTask implements RunnableTask {
 
 
     /**
-     * Plays the {@link #sound provided sound} at the {@link #location provided location}, as a {@link RunnableTask}.
-     * */
+     * Plays the {@link #sound} at the {@link #location} as a {@link RunnableTask}.
+     */
     @Override
     public void run() {
         assert location.getWorld() != null; // Only here for the compiler, since the location cannot be null and therefore not the world either.

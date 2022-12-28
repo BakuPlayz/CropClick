@@ -35,7 +35,6 @@ public final class WorldGuardAddon extends Addon {
         this.worldGuard = WorldGuard.getInstance();
         this.cropFlag = new StateFlag("cropclick", true);
 
-
         registerFlag();
     }
 
@@ -60,11 +59,19 @@ public final class WorldGuardAddon extends Addon {
     public boolean regionAllowsPlayer(@NotNull Player player) {
         RegionContainer container = worldGuard.getPlatform().getRegionContainer();
         RegionManager manager = container.get((World) player.getWorld());
-        if (manager == null) return false;
+        if (manager == null) {
+            return false;
+        }
 
         Location location = player.getLocation();
-        BlockVector3 position = BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-        if (position == null) return false;
+        BlockVector3 position = BlockVector3.at(
+                location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ()
+        );
+        if (position == null) {
+            return false;
+        }
 
         ApplicableRegionSet foundRegions = manager.getApplicableRegions(position);
         for (ProtectedRegion region : foundRegions) {

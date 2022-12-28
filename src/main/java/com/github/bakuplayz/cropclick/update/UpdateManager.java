@@ -14,11 +14,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A manager controlling the plugin's updates.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -26,7 +28,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class UpdateManager {
 
+    private final static String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
+
     private final CropClick plugin;
+
 
     private @Getter @Setter(AccessLevel.PRIVATE) String updateURL;
     private @Getter @Setter(AccessLevel.PRIVATE) String updateMessage;
@@ -45,10 +50,28 @@ public final class UpdateManager {
     /**
      * It sends the update message to the sender.
      *
-     * @param sender The CommandSender to send the message to.
+     * @param sender The sender to send the message to.
      */
-    public void sendAlert(@NotNull CommandSender sender) {
-        sender.sendMessage(MessageUtils.colorize(updateMessage));
+    public void sendAlert(CommandSender sender) {
+        if (sender instanceof Player) {
+            if (!getPlayerMessageState()) {
+                return;
+            }
+        }
+
+        if (sender instanceof ConsoleCommandSender) {
+            if (!getConsoleMessageState()) {
+                return;
+            }
+        }
+
+        if (updateMessage.equals("")) {
+            //TODO: LanuageAPI later
+            sender.sendMessage(MessageUtils.colorize("[&aCropClick&r] Searched for updates and found none. You are up to date :)"));
+            return;
+        }
+
+        sender.sendMessage(MessageUtils.colorize("[&aCropClick&r] " + updateMessage));
     }
 
 
@@ -69,7 +92,6 @@ public final class UpdateManager {
      * It fetches the new update state and message from the server, defined in the URL variable above.
      */
     private void fetch() {
-        final String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
         try {
             JsonElement response = new HttpRequestBuilder(UPDATE_URL)
                     .setDefaultHeaders()
@@ -118,8 +140,9 @@ public final class UpdateManager {
             e.printStackTrace();
             setUpdateState(UpdateState.FAILED_TO_FETCH);
             LanguageAPI.Console.UPDATE_FETCH_FAILED.send();
+        } finally {
+            sendAlert(Bukkit.getConsoleSender());
         }
-
     }
 
 
