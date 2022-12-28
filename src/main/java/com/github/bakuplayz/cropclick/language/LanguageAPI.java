@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class handling all the shown messages, found in the {@link Console console}, {@link Menu menus} and {@link Command commands}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public final class LanguageAPI {
 
     public enum Console {
+
         FILE_RELOAD("Reloading &e%s&7."),
         FILE_SETUP_LOAD("Loading &e%s&7."),
         FILE_SAVE_FAILED("Could not save &e%s&7."),
@@ -46,6 +47,7 @@ public final class LanguageAPI {
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
 
         NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.13 to the latest version. In order to run the plugin, please change to the correct jar for your server version.");
+
 
         private final String message;
 
@@ -99,6 +101,7 @@ public final class LanguageAPI {
     }
 
     public enum Command {
+
         PLAYER_ONLY_COMMAND(Category.GENERAL, "playerOnlyCommand"),
         PLAYER_LACK_PERMISSION(Category.GENERAL, "playerLackPermission", "%permission%"),
 
@@ -116,7 +119,9 @@ public final class LanguageAPI {
         RELOAD_FAILED(Category.RELOAD, "failed"),
         RELOAD_SUCCESS(Category.RELOAD, "success");
 
+
         private enum Category {
+
             GENERAL,
             AUTOFARM,
             HELP,
@@ -219,6 +224,7 @@ public final class LanguageAPI {
     }
 
     public enum Menu {
+
         MAIN_TITLE(Category.TITLE, "main"),
         ADDONS_TITLE(Category.TITLE, "addons"),
         HELP_TITLE(Category.TITLE, "help"),
@@ -553,7 +559,9 @@ public final class LanguageAPI {
         WORLD_WORLD_ITEM_TIPS(Category.WORLD, SubCategory.WORLD, "itemTips"),
         WORLD_WORLD_ITEM_STATUS(Category.WORLD, SubCategory.WORLD, "itemStatus", "%status%");
 
+
         private enum Category {
+
             ADDON,
             ADDONS,
             AUTOFARMS,
@@ -604,6 +612,7 @@ public final class LanguageAPI {
         }
 
         private enum SubCategory {
+
             ACTIONS,
             ADD,
             ADDONS,
@@ -660,6 +669,7 @@ public final class LanguageAPI {
             WORLDS,
             WORLD_GUARD("worldGuard");
 
+            
             private final String altName;
 
 
@@ -743,8 +753,8 @@ public final class LanguageAPI {
         @SafeVarargs
         public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
-                                                   .map(Object::toString)
-                                                   .toArray(String[]::new);
+                                             .map(Object::toString)
+                                             .toArray(String[]::new);
             return fastReplace(get(plugin), valuesAsStrings);
         }
 

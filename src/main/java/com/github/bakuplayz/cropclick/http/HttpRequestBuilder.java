@@ -72,6 +72,7 @@ public final class HttpRequestBuilder {
      *
      * @return The RequestUtil object.
      */
+    @SuppressWarnings("unused")
     public HttpRequestBuilder setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
         this.headers = headers;
         if (addDefault) {
@@ -79,6 +80,7 @@ public final class HttpRequestBuilder {
         }
         return this;
     }
+
 
     /**
      * Makes a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">GET request</a>.
@@ -92,6 +94,7 @@ public final class HttpRequestBuilder {
         return doRequest("GET", doOutput);
     }
 
+
     /**
      * Makes a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST">POST request</a>.
      *
@@ -103,6 +106,7 @@ public final class HttpRequestBuilder {
             throws IOException {
         return doRequest("POST", doOutput);
     }
+
 
     /**
      * Makes a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/UPDATE">UPDATE request</a>.
@@ -116,6 +120,7 @@ public final class HttpRequestBuilder {
         return doRequest("UPDATE", doOutput);
     }
 
+
     /**
      * Makes a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE">DELETE request</a>.
      *
@@ -123,10 +128,12 @@ public final class HttpRequestBuilder {
      *
      * @return a builder instance.
      */
+    @SuppressWarnings("unused")
     public HttpRequestBuilder delete(boolean doOutput)
             throws IOException {
         return doRequest("DELETE", doOutput);
     }
+
 
     /**
      * Makes an <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">HTTP request</a> with the given method.
