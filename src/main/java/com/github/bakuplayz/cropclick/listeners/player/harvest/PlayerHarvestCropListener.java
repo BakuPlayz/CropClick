@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link BaseCrop crop} harvest events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0

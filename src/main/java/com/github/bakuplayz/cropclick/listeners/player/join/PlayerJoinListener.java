@@ -1,10 +1,11 @@
 package com.github.bakuplayz.cropclick.listeners.player.join;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 
 /**
- * TODO: (DESCRIPTION)
+ * A listener handling all the {@link Player} join events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0

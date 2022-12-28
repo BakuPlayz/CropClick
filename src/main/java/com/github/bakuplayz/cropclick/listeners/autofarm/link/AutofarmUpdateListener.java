@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.listeners.autofarm.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the update {@link Autofarm} events caused by a {@link Autofarm}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -61,7 +62,9 @@ public final class AutofarmUpdateListener implements Listener {
         );
 
         if (isDebugging) {
-            logger.info(String.format("%s (Autofarm): Called the update event!", event.getOldAutofarm().getShortenedID()));
+            logger.info(String.format("%s (Autofarm): Called the update event!", event
+                    .getOldAutofarm()
+                    .getShortenedID()));
         }
 
         Bukkit.getPluginManager().callEvent(unlinkEvent);

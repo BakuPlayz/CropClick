@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the listener of all the registered menus.
+ * A listener handling all the {@link Menu} events.
  *
  * @author BakuPlayz
  * @version 2.0.0

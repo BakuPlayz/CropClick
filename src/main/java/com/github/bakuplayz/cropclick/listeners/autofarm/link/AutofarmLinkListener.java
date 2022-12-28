@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.listeners.autofarm.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the link {@link Autofarm} events caused by a {@link Autofarm}.
  *
  * @author BakuPlayz
  * @version 2.0.0

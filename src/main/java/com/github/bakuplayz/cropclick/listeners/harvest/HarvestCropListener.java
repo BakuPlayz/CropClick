@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link BaseCrop crop} harvest events.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -29,6 +29,12 @@ public final class HarvestCropListener implements Listener {
         this.logger = plugin.getLogger();
     }
 
+
+    /**
+     * If the crop has no drop, cancel the event.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onHarvestCrop(@NotNull HarvestCropEvent event) {
         if (event.isCancelled()) return;

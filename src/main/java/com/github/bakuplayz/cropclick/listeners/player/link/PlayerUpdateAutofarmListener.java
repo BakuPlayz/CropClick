@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the update {@link Autofarm} events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0

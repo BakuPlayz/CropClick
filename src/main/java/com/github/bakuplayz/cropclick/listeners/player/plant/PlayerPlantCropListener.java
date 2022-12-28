@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link BaseCrop crop} plant events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -45,6 +45,11 @@ public final class PlayerPlantCropListener implements Listener {
     }
 
 
+    /**
+     * If the player is planting a crop, and has the right to, then it calls the PlayerPlantCropEvent.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
         if (!EventUtils.isMainHand(event)) {
@@ -74,8 +79,6 @@ public final class PlayerPlantCropListener implements Listener {
         if (!PermissionUtils.canPlantCrop(player, crop.getName())) {
             return;
         }
-
-        // Maybe needs to cache a plant for some time...
 
         Bukkit.getPluginManager().callEvent(
                 new PlayerPlantCropEvent(crop, block, player)

@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the harvest {@link BaseCrop crop} events caused by a {@link Autofarm}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -165,7 +165,9 @@ public final class AutofarmHarvestCropListener implements Listener {
         crop.replant(block);
 
         if (plugin.isDebugging()) {
-            plugin.getLogger().info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
+            plugin
+                    .getLogger()
+                    .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
         }
     }
 

@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link Autofarm} linking events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
