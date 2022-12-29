@@ -10,15 +10,14 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Towny addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class TownyAddon extends Addon {
-
-
+    
     public TownyAddon(@NotNull CropClick plugin) {
         super(plugin, "Towny");
     }

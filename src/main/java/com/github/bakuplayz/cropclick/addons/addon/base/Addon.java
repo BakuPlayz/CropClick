@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -28,6 +28,9 @@ public abstract class Addon implements Enableable {
     protected transient final CropClick plugin;
     protected transient final AddonsConfig addonsConfig;
 
+    /**
+     * A variable containing all the registered worlds.
+     */
     private transient final HashMap<String, FarmWorld> worlds;
 
 

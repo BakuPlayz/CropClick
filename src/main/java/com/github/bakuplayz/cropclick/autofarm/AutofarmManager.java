@@ -19,7 +19,7 @@ import java.util.List;
 
 
 /**
- * A class representing a manager handling {@link Autofarm Autofarms}.
+ * A class managing {@link Autofarm Autofarms}.
  *
  * @author BakuPlayz
  * @version 2.0.0

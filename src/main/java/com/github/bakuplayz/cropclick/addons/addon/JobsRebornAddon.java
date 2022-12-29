@@ -13,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the JobsReborn addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class JobsRebornAddon extends Addon {
-
+    
     private final Job farmerJob;
 
     private final AddonConfigSection addonSection;

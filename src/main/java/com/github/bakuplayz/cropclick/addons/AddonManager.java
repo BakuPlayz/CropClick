@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class managing the {@link Addon addons}.
  *
  * @author BakuPlayz
  * @version 2.0.0
