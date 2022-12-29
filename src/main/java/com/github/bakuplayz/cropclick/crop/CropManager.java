@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A manager controlling all the {@link BaseCrop crops}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -34,12 +34,15 @@ import java.util.stream.Collectors;
  */
 public final class CropManager {
 
-
     private final CropsConfig cropsConfig;
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
     private final AddonConfigSection addonSection;
 
+
+    /**
+     * A variable containing all the registered crops.
+     */
     private final @Getter List<BaseCrop> crops;
 
 

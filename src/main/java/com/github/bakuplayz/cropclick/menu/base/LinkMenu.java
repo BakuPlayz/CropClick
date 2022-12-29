@@ -129,7 +129,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the isUnclaimed wheaten autofarm is unclaimed, and its
+     * Assigns the isUnclaimed whether autofarm is unclaimed, and its
      * item variable, claimItem.
      */
     private void assignClaimed() {
@@ -144,7 +144,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the isUnlinked wheaten autofarm is unlinked.
+     * Assigns the isUnlinked whether autofarm is unlinked.
      */
     private void assignLinked() {
         this.isUnlinked = !autofarmManager.isLinked(autofarm);
@@ -152,7 +152,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assign wheaten the clickedComponent is selected or not.
+     * Assign whether the clickedComponent is selected or not.
      */
     private void assignClicked() {
         this.isClickedSelected = isClickedSelected(clickedComponent);

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an exception for duplicated {@link BaseCrop crop} types.
  *
  * @author BakuPlayz
  * @version 2.0.0

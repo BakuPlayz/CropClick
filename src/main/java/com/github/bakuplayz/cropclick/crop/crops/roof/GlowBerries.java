@@ -19,7 +19,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the glow berries crop.
  *
  * @author BakuPlayz
  * @version 2.0.0

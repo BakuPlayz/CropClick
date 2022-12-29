@@ -16,7 +16,7 @@ import java.util.Stack;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the red mushroom crop.
  *
  * @author BakuPlayz
  * @version 2.0.0

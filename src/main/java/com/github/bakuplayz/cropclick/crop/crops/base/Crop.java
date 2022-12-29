@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the base of a crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -69,7 +69,7 @@ public abstract class Crop implements BaseCrop {
 
 
     /**
-     * Checks wheaten or not the crop can be harvested, returning
+     * Checks whether the crop can be harvested, returning
      * true if it successfully harvested it.
      *
      * @param player The player to add the drops to.
@@ -83,7 +83,7 @@ public abstract class Crop implements BaseCrop {
 
 
     /**
-     * Checks wheaten or not the crop can be harvested, returning
+     * Checks whether the crop can be harvested, returning
      * true if it successfully harvested it.
      *
      * @param container The container to add the drops to.
@@ -97,7 +97,7 @@ public abstract class Crop implements BaseCrop {
 
 
     /**
-     * Checks wheaten or not the crop can be harvested, returning
+     * Checks whether the crop can be harvested, returning
      * true if it successfully harvested it.
      *
      * @param inventory The inventory to add the drops to.

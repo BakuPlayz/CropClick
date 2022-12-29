@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the base of a tall crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -97,7 +97,7 @@ public abstract class TallCrop extends Crop {
     /**
      * "Harvest all the crops, stacked on each other, starting from the top."
      * <p>
-     * Checks wheaten or not the tall crop can be harvested,
+     * Checks whether the tall crop can be harvested,
      * returning true if it successfully harvested them.
      *
      * @param player The player  to add the drops to.
@@ -126,7 +126,7 @@ public abstract class TallCrop extends Crop {
     /**
      * "Harvest all the crops, stacked on each other, starting from the top."
      * <p>
-     * Checks wheaten or not the tall crop can be harvested,
+     * Checks whether the tall crop can be harvested,
      * returning true if it successfully harvested them.
      *
      * @param container The container  to add the drops to.

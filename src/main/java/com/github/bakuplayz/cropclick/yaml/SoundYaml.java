@@ -65,9 +65,9 @@ public final class SoundYaml implements Yamlable, Enableable {
 
 
     /**
-     * It checks wheaten the Sound is enabled, by validating only ones with a {@link #volume} and {@link #pitch} more than zero.
+     * It checks whether the Sound is enabled, by validating only ones with a {@link #volume} and {@link #pitch} more than zero.
      *
-     * @return An enabled state, wheaten the Sound is enabled or not.
+     * @return An enabled state, whether the Sound is enabled or not.
      */
     @Override
     public boolean isEnabled() {

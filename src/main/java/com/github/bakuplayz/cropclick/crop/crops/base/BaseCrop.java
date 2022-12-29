@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * The base interface for a crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -18,8 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface BaseCrop {
 
-    @NotNull
-    String getName();
+    @NotNull String getName();
 
     int getHarvestAge();
 
@@ -37,7 +36,7 @@ public interface BaseCrop {
     boolean hasSeed();
 
     /**
-     * Checks wheaten or not the crop can be harvested, returning
+     * Checks whether the crop can be harvested, returning
      * true if it successfully harvested it.
      *
      * @param player The player to add the drops to.
@@ -47,7 +46,7 @@ public interface BaseCrop {
     boolean harvest(@NotNull Player player);
 
     /**
-     * Checks wheaten or not the crop can be harvested, returning
+     * Checks whether the crop can be harvested, returning
      * true if it successfully harvested it.
      *
      * @param container The container to add the drops to.

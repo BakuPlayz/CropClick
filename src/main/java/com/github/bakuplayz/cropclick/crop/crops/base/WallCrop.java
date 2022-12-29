@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the base of a wall crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -21,12 +21,22 @@ public abstract class WallCrop extends Crop {
     }
 
 
+    /**
+     * Returns the crop's seed.
+     *
+     * @return the crop's seed or null (default: null).
+     */
     @Override
     public @Nullable BaseSeed getSeed() {
         return null;
     }
 
 
+    /**
+     * Checks whether the crop has a seed.
+     *
+     * @return true if it has a seed, otherwise false (default: false).
+     */
     @Override
     public boolean hasSeed() {
         return false;

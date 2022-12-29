@@ -65,9 +65,9 @@ public final class ParticleYaml implements Yamlable, Enableable {
 
 
     /**
-     * It checks wheaten the Particle is enabled, by validating only ones with one or more {@link #amount}.
+     * It checks whether the Particle is enabled, by validating only ones with one or more {@link #amount}.
      *
-     * @return An enabled state, wheaten the Particle is enabled or not.
+     * @return An enabled state, whether the Particle is enabled or not.
      */
     @Override
     public boolean isEnabled() {

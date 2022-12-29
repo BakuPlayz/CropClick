@@ -10,7 +10,7 @@ import java.util.Random;
 
 
 /**
- * (DESCRIPTION)
+ * Represents an {@link ItemStack item} drop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -22,8 +22,8 @@ public final class Drop {
     private @Getter final String name;
     private @Getter final Material type;
 
-    private final double randomChance;
     private @Getter final double chance;
+    private @Getter final double randomChance;
 
 
     public Drop(@NotNull Material type,

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * An interface representing waterlogged crops.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 public interface Waterlogged {
 
     /**
-     * Returns true if the block is waterlogged.
+     * Checks if the block is waterlogged.
      *
-     * @param block The block to check
+     * @param block The block to check.
      *
-     * @return A boolean value.
+     * @return true if waterlogged, otherwise false.
      */
     boolean isWaterLogged(@NotNull Block block);
 
@@ -26,7 +26,7 @@ public interface Waterlogged {
      * Set the waterlogged state of the block to the provided waterlogged state.
      *
      * @param block       The block you want to set the waterlogged state of.
-     * @param waterlogged Whether the dripleaf is waterlogged.
+     * @param waterlogged The waterlogged state.
      */
     void setWaterLogged(@NotNull Block block, boolean waterlogged);
 

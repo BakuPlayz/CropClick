@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 
 /**
- * (DESCRIPTION)
+ * Represents {@link FarmWorld FarmWorlds} as a JSON file.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -26,6 +26,9 @@ public final class WorldDataStorage extends DataStorage {
 
     private @Getter HashMap<String, FarmWorld> worlds;
 
+    /**
+     * A variable used to save the {@link #worlds hashmap of worlds} appropriately, when using GSON.
+     */
     private final Type type;
 
 

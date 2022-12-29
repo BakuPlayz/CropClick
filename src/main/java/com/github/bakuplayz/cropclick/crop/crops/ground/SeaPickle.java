@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the sea pickle crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -94,7 +94,7 @@ public final class SeaPickle extends GroundCrop {
     /**
      * "Harvesting all the sea pickles."
      * <p>
-     * Checks wheaten or not the sea pickles can be harvested,
+     * Checks whether the sea pickles can be harvested,
      * returning true if it successfully harvested them.
      *
      * @param player The player to add the drops to.
@@ -122,7 +122,7 @@ public final class SeaPickle extends GroundCrop {
     /**
      * "Harvesting all the sea pickles."
      * <p>
-     * Checks wheaten or not the sea pickles can be harvested,
+     * Checks whether the sea pickles can be harvested,
      * returning true if it successfully harvested them.
      *
      * @param container The container to add the drops to.

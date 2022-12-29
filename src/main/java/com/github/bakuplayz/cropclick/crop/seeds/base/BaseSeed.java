@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * The base interface for a seed.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -15,16 +15,30 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface BaseSeed {
 
-    @NotNull
-    String getName();
+    /**
+     * Gets the name of the seed.
+     *
+     * @return the name of the seed.
+     */
+    @NotNull String getName();
 
+    /**
+     * Gets the drop of the seed.
+     *
+     * @return the drop of the seed.
+     */
     Drop getDrop();
 
+    /**
+     * Checks whether the seed has a drop.
+     *
+     * @return true if the seed has a drop, otherwise false.
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean hasDrop();
 
     /**
-     * Checks wheaten or not the seed can be harvested, returning
+     * Checks whether the seed can be harvested, returning
      * true if it successfully harvested it.
      *
      * @param inventory The inventory to add the drops to.
@@ -33,9 +47,18 @@ public interface BaseSeed {
      */
     boolean harvest(@NotNull Inventory inventory);
 
-    @NotNull
-    Material getMenuType();
+    /**
+     * Gets the menu type to display of the seed in menu.
+     *
+     * @return the menu type of the seed.
+     */
+    @NotNull Material getMenuType();
 
+    /**
+     * Checks whether the seed is enabled.
+     *
+     * @return true if the seed is enabled, otherwise false.
+     */
     boolean isEnabled();
 
 }

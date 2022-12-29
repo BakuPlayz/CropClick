@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.datastorages;
 
 /**
- * (DESCRIPTION)
+ * An interface for handling data fetching and data saving.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -9,8 +9,14 @@ package com.github.bakuplayz.cropclick.datastorages;
  */
 public interface Storageable {
 
+    /**
+     * Fetches the data according to the implementing object.
+     */
     void fetchData();
 
+    /**
+     * Saves the data according to the implementing object.
+     */
     void saveData();
 
 }

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the carrot crop.
  *
  * @author BakuPlayz
  * @version 2.0.0

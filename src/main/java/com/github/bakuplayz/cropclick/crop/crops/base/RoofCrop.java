@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the base of a roof crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -62,7 +62,7 @@ public abstract class RoofCrop extends Crop {
     /**
      * "Harvest all the crops, stacked on each other, starting from the bottom."
      * <p>
-     * Checks wheaten or not the roof crop can be harvested,
+     * Checks whether the roof crop can be harvested,
      * returning true if it successfully harvested them.
      *
      * @param player The player to add the drops to.
@@ -90,7 +90,7 @@ public abstract class RoofCrop extends Crop {
     /**
      * "Harvest all the crops, stacked on each other, starting from the bottom."
      * <p>
-     * Checks wheaten or not the roof crop can be harvested,
+     * Checks whether the roof crop can be harvested,
      * returning true if it successfully harvested them.
      *
      * @param container The container to add the drops to.
