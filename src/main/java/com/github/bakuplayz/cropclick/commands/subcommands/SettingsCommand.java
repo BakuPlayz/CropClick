@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the '/crop settings' command.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -23,10 +23,10 @@ public final class SettingsCommand extends Subcommand {
 
 
     /**
-     * It opens the settings menu for the player, when performed.
+     * Performs the '/crop settings' command, showing the {@link SettingsMenu}.
      *
      * @param player The player who executed the command.
-     * @param args   The arguments that the player typed in.
+     * @param args   The arguments passed to the command.
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {

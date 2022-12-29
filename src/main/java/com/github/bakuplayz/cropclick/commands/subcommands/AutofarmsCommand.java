@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the '/crop autofarms' command.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -23,6 +23,12 @@ public final class AutofarmsCommand extends Subcommand {
     }
 
 
+    /**
+     * Performs the '/crop autofarms' command, opening the {@link AutofarmsMenu}.
+     *
+     * @param player The player who executed the command.
+     * @param args   The arguments passed to the command.
+     */
     @Override
     public void perform(@NotNull Player player, String[] args) {
         new AutofarmsMenu(

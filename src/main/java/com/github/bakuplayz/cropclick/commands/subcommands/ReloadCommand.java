@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the '/crop reload' command.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -36,10 +36,10 @@ public final class ReloadCommand extends Subcommand {
 
 
     /**
-     * Reloads the config files and sends the status of reloading to the player, when performed.
+     * Performs the '/crop reload' command, reloading the plugin.
      *
      * @param player The player who executed the command.
-     * @param args   The arguments that the player typed in.
+     * @param args   The arguments passed to the command.
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {

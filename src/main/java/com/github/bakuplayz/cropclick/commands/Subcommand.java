@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing a subcommand.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -32,9 +32,9 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * It returns a string that is the description of the command.
+     * Gets the description of the command.
      *
-     * @return The description of the command.
+     * @return the description of the command.
      */
     public @NotNull String getDescription() {
         return description.get(plugin);
@@ -42,9 +42,9 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * It returns a string that is the usage of the command.
+     * Gets the usage of the command.
      *
-     * @return The usage of the command.
+     * @return the usage of the command.
      */
     public @NotNull String getUsage() {
         return "cropclick " + name;
@@ -52,9 +52,9 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * It returns the permission to execute the command.
+     * Gets the permission for the command.
      *
-     * @return The permission for the command.
+     * @return the permission for the command, as a string.
      */
     public @NotNull String getPermission() {
         return "cropclick.command." + name;
@@ -62,11 +62,11 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * Returns true if the player has the permission, false otherwise.
+     * Checks whether a player has permission to {@link #perform(Player, String[]) perform} the command.
      *
-     * @param player The player to check the permission for.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if it has, otherwise false.
      */
     public boolean hasPermission(@NotNull Player player) {
         return player.hasPermission(getPermission());
@@ -74,14 +74,10 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * "This function is called when the command is executed."
-     * <p>
-     * The first parameter is the player who executed the command. The second parameter is an array of strings that
-     * contains the arguments that were passed to the command.
-     * </p>
+     * Performs the command.
      *
-     * @param player The player who executed the command.
-     * @param args   The arguments passed to the command.
+     * @param player the player executing the command.
+     * @param args   the arguments passed along the command.
      */
     public abstract void perform(@NotNull Player player, String[] args);
 

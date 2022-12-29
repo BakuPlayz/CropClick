@@ -21,7 +21,7 @@ import java.util.UUID;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an Autofarm.
  *
  * @author BakuPlayz
  * @version 2.0.0

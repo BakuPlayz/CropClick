@@ -8,18 +8,23 @@ import java.util.Map;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an indexable YAML map.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class IndexedYamlMap<Item> extends IndexedMap<Item> {
+public final class IndexedYamlMap<E> extends IndexedMap<E> {
 
+    /**
+     * Converts the map to a YAML-styled {@link Map}.
+     *
+     * @return the map as an YAML-styled {@link Map}.
+     */
     public @NotNull Map<String, Object> toYaml() {
         Map<String, Object> yamlMapped = new ListOrderedMap<>();
 
-        for (Map.Entry<String, Item> entry : map.entrySet()) {
+        for (Map.Entry<String, E> entry : map.entrySet()) {
             yamlMapped.put(
                     entry.getKey(),
                     ((Yamlable) entry.getValue()).toYaml()
