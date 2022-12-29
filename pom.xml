@@ -161,6 +161,7 @@
             </exclusions>
         </dependency>
 
+        <!-- Produces four errors that can be ignored. -->
         <dependency>
             <groupId>com.github.Zrips</groupId>
             <artifactId>Jobs</artifactId>
