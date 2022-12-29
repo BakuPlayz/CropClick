@@ -69,6 +69,14 @@
                                     <pattern>^((?!bakuplayz).)*$</pattern>
                                     <shadedPattern>com.shaded.bakuplayz</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>net.wesjd.anvilgui</pattern>
+                                    <shadedPattern>com.github.bakuplayz.anvilgui</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>xyz.xenondevs.particle</pattern>
+                                    <shadedPattern>com.github.bakuplayz.particle</shadedPattern>
+                                </relocation>
                             </relocations>
                             <minimizeJar>false</minimizeJar>
                         </configuration>
@@ -266,7 +274,7 @@
         <dependency>
             <groupId>xyz.xenondevs</groupId>
             <artifactId>particle</artifactId>
-            <version>1.8.1</version>
+            <version>1.8.3</version>
             <scope>compile</scope>
         </dependency>
 
