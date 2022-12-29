@@ -45,7 +45,7 @@ public final class ParticleConfigSection extends ConfigSection {
 
             if (particleNames.isEmpty()) {
                 particles.put(cropName, new IndexedYamlMap<>());
-                return;
+                continue;
             }
 
             particles.put(cropName, getExistingParticles(cropName, particleNames));
@@ -252,7 +252,8 @@ public final class ParticleConfigSection extends ConfigSection {
      * @return The index of the particleName in the {@link #particles map of particles} for the cropName.
      */
     public int getOrder(@NotNull String cropName, @NotNull String particleName) {
-        return particles.get(cropName).indexOf(particleName);
+        IndexedYamlMap<ParticleYaml> particlesOfCrop = particles.get(cropName);
+        return particlesOfCrop == null ? -1 : particlesOfCrop.indexOf(particleName);
     }
 
 
@@ -290,7 +291,8 @@ public final class ParticleConfigSection extends ConfigSection {
      * @return The particle's enable status.
      */
     public boolean isEnabled(@NotNull String cropName, @NotNull String particleName) {
-        return particles.get(cropName).hasKey(particleName);
+        IndexedYamlMap<ParticleYaml> particlesOfCrop = particles.get(cropName);
+        return particlesOfCrop != null && particlesOfCrop.hasKey(particleName);
     }
 
 
@@ -303,7 +305,6 @@ public final class ParticleConfigSection extends ConfigSection {
      *
      * @return The enabled and present status of a particle, in the given map.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isEnabledAndPresent(@NotNull String particleName, IndexedYamlMap<ParticleYaml> indexedParticles) {
         if (indexedParticles == null) {
             return false;

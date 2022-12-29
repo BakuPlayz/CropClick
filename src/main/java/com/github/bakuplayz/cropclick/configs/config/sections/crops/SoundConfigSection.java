@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 import com.github.bakuplayz.cropclick.collections.IndexedYamlMap;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
+import com.github.bakuplayz.cropclick.yaml.ParticleYaml;
 import com.github.bakuplayz.cropclick.yaml.SoundYaml;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,7 @@ public final class SoundConfigSection extends ConfigSection {
 
             if (soundNames.isEmpty()) {
                 sounds.put(cropName, new IndexedYamlMap<>());
-                return;
+                continue;
             }
 
             sounds.put(cropName, getExistingSounds(cropName, soundNames));
@@ -252,7 +253,8 @@ public final class SoundConfigSection extends ConfigSection {
      * @return The index of the soundName in the {@link #sounds map of sounds} for the cropName.
      */
     public int getOrder(@NotNull String cropName, @NotNull String soundName) {
-        return sounds.get(cropName).indexOf(soundName);
+        IndexedYamlMap<SoundYaml> soundsOfCrop = sounds.get(cropName);
+        return soundsOfCrop == null ? -1 : soundsOfCrop.indexOf(soundName);
     }
 
 
@@ -290,7 +292,8 @@ public final class SoundConfigSection extends ConfigSection {
      * @return The sound's enabled status.
      */
     public boolean isEnabled(@NotNull String cropName, @NotNull String soundName) {
-        return sounds.get(cropName).hasKey(soundName);
+        IndexedYamlMap<SoundYaml> soundsOfCrop = sounds.get(cropName);
+        return soundsOfCrop != null && soundsOfCrop.hasKey(soundName);
     }
 
 
@@ -303,7 +306,6 @@ public final class SoundConfigSection extends ConfigSection {
      *
      * @return The enabled and present status of a sound, in the given map.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isEnabledAndPresent(@NotNull String soundName, IndexedYamlMap<SoundYaml> indexedSounds) {
         if (indexedSounds == null) {
             return false;
