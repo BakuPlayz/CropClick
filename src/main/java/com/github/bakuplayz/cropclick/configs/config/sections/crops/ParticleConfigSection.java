@@ -12,7 +12,7 @@ import java.util.*;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the particle configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -22,6 +22,9 @@ public final class ParticleConfigSection extends ConfigSection {
 
     private final CropsConfig cropsConfig;
 
+    /**
+     * A variable containing every crop's particles.
+     */
     private final Map<String, IndexedYamlMap<ParticleYaml>> particles;
 
 

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the base configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -14,6 +14,9 @@ import org.jetbrains.annotations.NotNull;
 public abstract class ConfigSection {
 
 
+    /**
+     * The configuration file associated with the configuration section.
+     */
     protected final FileConfiguration config;
 
 

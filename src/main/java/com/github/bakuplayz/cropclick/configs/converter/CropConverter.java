@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents a configuration converter for the file 'crop.yml'.
  *
  * @author <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
  * @version 2.0.0

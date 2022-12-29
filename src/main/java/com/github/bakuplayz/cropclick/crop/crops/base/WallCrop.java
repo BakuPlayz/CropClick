@@ -22,9 +22,9 @@ public abstract class WallCrop extends Crop {
 
 
     /**
-     * Returns the crop's seed.
+     * Gets the seed of the wall crop.
      *
-     * @return the crop's seed or null (default: null).
+     * @return the wall crop's seed or null (default: null).
      */
     @Override
     public @Nullable BaseSeed getSeed() {

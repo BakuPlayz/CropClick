@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the YAML file: 'usage.yml'.
  *
  * @author <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
  * @version 2.0.0
@@ -19,19 +19,22 @@ public final class UsageConfig extends Config {
     }
 
 
-    public String getLastOpenedIn() {
-        return config.getString("last-opened-in");
-    }
-
-
+    /**
+     * Updates the usage information, used to handle legacy configuration.
+     */
     public void updateUsageInfo() {
         config.set("last-opened-in", plugin.getDescription().getVersion());
         saveConfig();
     }
 
 
+    /**
+     * Checks whether the current configuration format is the latest.
+     *
+     * @return true if it is, otherwise false.
+     */
     public boolean isNewFormatVersion() {
-        String lastOpenedIn = getLastOpenedIn();
+        String lastOpenedIn = config.getString("last-opened-in", "");
         return !lastOpenedIn.startsWith("0") && !lastOpenedIn.startsWith("1");
     }
 

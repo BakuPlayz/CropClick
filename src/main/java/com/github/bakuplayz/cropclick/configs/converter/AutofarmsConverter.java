@@ -27,7 +27,7 @@ import java.util.UUID;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents a configuration converter for the file 'autofarm.yml'.
  *
  * @author <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
  * @version 2.0.0

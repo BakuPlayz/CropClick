@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the YAML file: 'players.yml'.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -13,7 +13,7 @@ import java.util.Set;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the YAML file: 'crops.yml'.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -42,6 +42,9 @@ public final class CropsConfig extends Config {
     }
 
 
+    /**
+     * Loads all the sections related to the config.
+     */
     public void loadSections() {
         particleSection.loadParticles();
         soundSection.loadSounds();

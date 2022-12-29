@@ -19,6 +19,11 @@ public abstract class GroundCrop extends Crop {
     }
 
 
+    /**
+     * Gets the harvest age for the crop.
+     *
+     * @return the harvest age (default: 7).
+     */
     @Override
     public int getHarvestAge() {
         return 7;

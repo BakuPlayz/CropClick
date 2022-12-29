@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the crop configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0

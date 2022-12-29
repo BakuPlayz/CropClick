@@ -21,7 +21,7 @@ import java.util.Stack;
 /**
  * A class that represents the chorus crop.
  *
- * @author BakuPlayz, Hannes Blåman
+ * @author BakuPlayz, <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
  * @version 2.0.0
  * @see Crop
  * @see BaseCrop

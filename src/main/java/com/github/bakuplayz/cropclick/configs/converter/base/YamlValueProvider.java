@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 
 /**
- * (DESCRIPTION)
+ * An interface used to convert YAML values to {@link Object objects}.
  *
  * @author <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
  * @version 2.0.0
@@ -12,6 +12,13 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public interface YamlValueProvider {
 
+    /**
+     * Gets the configuration value based on the configuration section.
+     *
+     * @param source the source section/path to the value.
+     *
+     * @return the value found at the section/path.
+     */
     Object get(ConfigurationSection source);
 
 }

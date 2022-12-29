@@ -23,12 +23,24 @@ public abstract class RoofCrop extends Crop {
     }
 
 
+    /**
+     * Gets the harvest age of a roof crop.
+     *
+     * @return the harvest age (default: 2).
+     */
     @Override
     public int getHarvestAge() {
         return 2;
     }
 
 
+    /**
+     * Gets the current age of a roof crop.
+     *
+     * @param block the crop block.
+     *
+     * @return the current age.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         int minHeight = block.getLocation().getBlockY();
@@ -53,10 +65,6 @@ public abstract class RoofCrop extends Crop {
 
         return height;
     }
-
-
-    @Override
-    public void replant(@NotNull Block block) {}
 
 
     /**

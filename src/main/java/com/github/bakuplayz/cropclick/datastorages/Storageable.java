@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.datastorages;
 
 /**
- * An interface for handling data fetching and data saving.
+ * An interface for handling JSON data fetching and data saving.
  *
  * @author BakuPlayz
  * @version 2.0.0

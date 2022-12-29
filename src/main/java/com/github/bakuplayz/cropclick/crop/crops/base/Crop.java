@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
@@ -44,24 +45,46 @@ public abstract class Crop implements BaseCrop {
     }
 
 
+    /**
+     * Gets the current age of the crop.
+     *
+     * @param block the crop block.
+     *
+     * @return the current age.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         return ((Ageable) block.getBlockData()).getAge();
     }
 
 
+    /**
+     * Checks whether the crop has a drop.
+     *
+     * @return true if it has a drop, otherwise false.
+     */
     @Override
     public boolean hasDrop() {
         return getDrop() != null;
     }
 
 
+    /**
+     * Checks whether the crop should drop at least one drop.
+     *
+     * @return true if it should, otherwise false.
+     */
     @Override
     public boolean dropAtLeastOne() {
         return cropSection.shouldDropAtLeastOne(getName());
     }
 
 
+    /**
+     * Checks whether a crop has a seed.
+     *
+     * @return true if it has a seed, otherwise false.
+     */
     @Override
     public boolean hasSeed() {
         return getSeed() != null;
@@ -139,6 +162,9 @@ public abstract class Crop implements BaseCrop {
         }
 
         BaseSeed seed = getSeed();
+        if (seed == null) {
+            return false;
+        }
         if (!seed.isEnabled()) {
             return false;
         }
@@ -150,6 +176,13 @@ public abstract class Crop implements BaseCrop {
     }
 
 
+    /**
+     * Checks whether the crop is its harvest age.
+     *
+     * @param block the crop block.
+     *
+     * @return true if it is, otherwise false.
+     */
     @Override
     public boolean isHarvestAge(@NotNull Block block) {
         if (!isHarvestable()) {
@@ -159,12 +192,24 @@ public abstract class Crop implements BaseCrop {
     }
 
 
+    /**
+     * Checks whether the crop can be harvested by the given player.
+     *
+     * @param player the player to be checked.
+     *
+     * @return true if the player can harvest, otherwise false.
+     */
     @Override
     public boolean canHarvest(@NotNull Player player) {
         return PermissionUtils.canHarvestCrop(player, getName());
     }
 
 
+    /**
+     * Replants the crop.
+     *
+     * @param block the crop block.
+     */
     @Override
     public void replant(@NotNull Block block) {
         if (!shouldReplant()) {
@@ -177,18 +222,33 @@ public abstract class Crop implements BaseCrop {
     }
 
 
+    /**
+     * Checks whether the crop should be replanted.
+     *
+     * @return true if it should, otherwise false.
+     */
     @Override
     public boolean shouldReplant() {
         return cropSection.shouldReplant(getName());
     }
 
 
+    /**
+     * Checks whether the crop is harvestable at all.
+     *
+     * @return true if it is, otherwise false.
+     */
     @Override
     public boolean isHarvestable() {
         return cropSection.isHarvestable(getName());
     }
 
 
+    /**
+     * Plays the sounds assigned to the crop.
+     *
+     * @param block the crop block.
+     */
     @Override
     public void playSounds(@NotNull Block block) {
         SoundRunnable runnable = new SoundRunnable(block);
@@ -210,6 +270,11 @@ public abstract class Crop implements BaseCrop {
     }
 
 
+    /**
+     * Plays the effects assigned to the crop.
+     *
+     * @param block the crop block.
+     */
     @Override
     public void playParticles(@NotNull Block block) {
         ParticleRunnable runnable = new ParticleRunnable(block);
@@ -231,12 +296,22 @@ public abstract class Crop implements BaseCrop {
     }
 
 
+    /**
+     * Checks whether the crop is linkable to an {@link Autofarm}.
+     *
+     * @return true if it is, otherwise false.
+     */
     @Override
     public boolean isLinkable() {
         return cropSection.isLinkable(getName());
     }
 
 
+    /**
+     * Checks whether the name of the crop has changed.
+     *
+     * @return true if changed, otherwise false.
+     */
     private boolean hasNameChanged() {
         return !getName().equals(getDrop().getName());
     }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the YAML file: 'language.yml'.
  *
  * @author BakuPlayz
  * @version 2.0.0

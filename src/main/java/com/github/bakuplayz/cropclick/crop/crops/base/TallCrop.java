@@ -26,12 +26,24 @@ public abstract class TallCrop extends Crop {
     }
 
 
+    /**
+     * Gets the harvest age of the tall crop.
+     *
+     * @return the harvest age (default: 2).
+     */
     @Override
     public int getHarvestAge() {
         return 2;
     }
 
 
+    /**
+     * Gets the current age of the tall crop.
+     *
+     * @param block the crop block.
+     *
+     * @return the current age.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         int minHeight = block.getLocation().getBlockY();
@@ -58,18 +70,33 @@ public abstract class TallCrop extends Crop {
     }
 
 
+    /**
+     * Gets the seed of the tall crop.
+     *
+     * @return the seed of the crop, or null (default: null).
+     */
     @Override
     public @Nullable BaseSeed getSeed() {
         return null;
     }
 
 
+    /**
+     * Checks whether the tall crop has a seed.
+     *
+     * @return true if it has, otherwise false (default: false).
+     */
     @Override
     public boolean hasSeed() {
         return false;
     }
 
 
+    /**
+     * Replants the tall crop.
+     *
+     * @param block the crop block.
+     */
     @Override
     public void replant(@NotNull Block block) {
         int height = getCurrentAge(block);
@@ -88,6 +115,11 @@ public abstract class TallCrop extends Crop {
     }
 
 
+    /**
+     * Checks whether the tall crop is linkable.
+     *
+     * @return true if it is, otherwise false (default: false).
+     */
     @Override
     public boolean isLinkable() {
         return cropSection.isLinkable(getName(), false);
@@ -153,12 +185,12 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * If the crop should be replanted, return the height minus one, otherwise return the height.
+     * Gets the actual height/age of a tall crop.
      *
      * @param crop   The crop to be planted
      * @param height The height of the crop.
      *
-     * @return The height of the crop.
+     * @return The height/age of the crop.
      */
     public int getActualHeight(@NotNull BaseCrop crop, int height) {
         return crop.shouldReplant() ? height - 1 : height;

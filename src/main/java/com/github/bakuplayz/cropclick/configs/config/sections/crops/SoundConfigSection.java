@@ -12,16 +12,19 @@ import java.util.*;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the sound configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class SoundConfigSection extends ConfigSection {
-    
+
     private final CropsConfig cropsConfig;
 
+    /**
+     * A variable containing every crop's sounds.
+     */
     private final Map<String, IndexedYamlMap<SoundYaml>> sounds;
 
 
