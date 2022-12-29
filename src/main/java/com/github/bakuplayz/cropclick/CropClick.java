@@ -84,7 +84,7 @@ public final class CropClick extends JavaPlugin {
     /**
      * A variable used for debugging purposes, when enabled it will, for instance log every event call.
      */
-    private final @Getter boolean isDebugging = true;
+    private final @Getter boolean isDebugging = false;
 
     /**
      * A variable used for getting statistics using bStats.
