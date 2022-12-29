@@ -12,7 +12,7 @@ import java.util.List;
 
 
 /**
- * Represents the base of a Paginated menu.
+ * A class representing the base of a Paginated menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

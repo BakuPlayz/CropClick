@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Updates menu.
+ * A class representing the Updates menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

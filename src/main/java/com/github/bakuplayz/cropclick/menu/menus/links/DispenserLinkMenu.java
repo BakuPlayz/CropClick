@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Dispenser Link menu.
+ * A class representing the Dispenser Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

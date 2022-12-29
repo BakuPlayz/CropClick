@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the mcMMO menu.
+ * A class representing the mcMMO menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

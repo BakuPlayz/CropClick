@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 /**
- * Represents a Sound object as YAML.
+ * A class representing a Sound object as YAML.
  *
  * @author BakuPlayz
  * @version 2.0.0

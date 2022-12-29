@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the base of a Preview menu.
+ * A class representing the base of a Preview menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Preview Container menu.
+ * A class representing the Preview Container menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

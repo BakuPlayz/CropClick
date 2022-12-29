@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.menu.base.LinkMenu;
 
 
 /**
- * Represents all the different components in an autofarm.
+ * An enumeration representing all the different components in an autofarm.
  *
  * @author BakuPlayz
  * @version 2.0.0

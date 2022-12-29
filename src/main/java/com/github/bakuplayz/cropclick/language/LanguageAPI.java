@@ -23,6 +23,9 @@ import java.util.stream.Collectors;
  */
 public final class LanguageAPI {
 
+    /**
+     * An enumeration handling all the Console messages.
+     */
     public enum Console {
 
         FILE_RELOAD("Reloading &e%s&7."),
@@ -100,6 +103,9 @@ public final class LanguageAPI {
 
     }
 
+    /**
+     * An enumeration handling all the Command messages.
+     */
     public enum Command {
 
         PLAYER_ONLY_COMMAND(Category.GENERAL, "playerOnlyCommand"),
@@ -119,7 +125,7 @@ public final class LanguageAPI {
         RELOAD_FAILED(Category.RELOAD, "failed"),
         RELOAD_SUCCESS(Category.RELOAD, "success");
 
-
+        
         private enum Category {
 
             GENERAL,
@@ -223,6 +229,9 @@ public final class LanguageAPI {
 
     }
 
+    /**
+     * An enumeration handling all the Menu messages.
+     */
     public enum Menu {
 
         MAIN_TITLE(Category.TITLE, "main"),
@@ -669,7 +678,7 @@ public final class LanguageAPI {
             WORLDS,
             WORLD_GUARD("worldGuard");
 
-            
+
             private final String altName;
 
 

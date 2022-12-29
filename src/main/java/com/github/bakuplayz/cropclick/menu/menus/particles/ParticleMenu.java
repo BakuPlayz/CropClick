@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * Represents the Particle menu.
+ * A class representing the Particle menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

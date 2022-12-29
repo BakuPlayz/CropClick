@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents a crop permission.
+ * A class representing a crop permission.
  *
  * @author BakuPlayz
  * @version 2.0.0

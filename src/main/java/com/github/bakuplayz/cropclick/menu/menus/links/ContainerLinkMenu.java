@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Container Link menu.
+ * A class representing the Container Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

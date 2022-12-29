@@ -31,7 +31,7 @@ import java.util.List;
 
 
 /**
- * Represents the base of a Link menu.
+ * A class representing the base of a Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -571,7 +571,8 @@ public abstract class LinkMenu extends Menu {
      * @return A list of strings.
      */
     @Contract(" -> new")
-    private @NotNull @Unmodifiable List<String> getUnlinkedLocationLore() {
+    private @NotNull
+    @Unmodifiable List<String> getUnlinkedLocationLore() {
         return Collections.singletonList(
                 LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
                         LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)

@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
 
 
 /**
- * Represents all the states the {@link CropMenu} could be in.
+ * An enumeration representing all the states the {@link CropMenu} could be in.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -18,5 +18,5 @@ public enum CropMenuState {
     CROP,
     SOUNDS,
     PARTICLES
-    
+
 }

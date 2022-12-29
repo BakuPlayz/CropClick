@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * Represents the Crops menu.
+ * A class representing the Crops menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

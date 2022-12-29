@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.menu.menus.main.AutofarmsMenu;
 
 
 /**
- * Represents all the states the {@link AutofarmsMenu} could be in.
+ * An enumeration representing all the states the {@link AutofarmsMenu} could be in.
  *
  * @author BakuPlayz
  * @version 2.0.0

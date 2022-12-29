@@ -12,7 +12,7 @@ import java.io.IOException;
 
 
 /**
- * Represents a YAML file.
+ * A clas representing a YAML file.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -22,7 +22,7 @@ public abstract class Config implements Configurable {
 
     protected final CropClick plugin;
 
-    
+
     protected @Getter FileConfiguration config;
     private final String fileName;
     private File file;

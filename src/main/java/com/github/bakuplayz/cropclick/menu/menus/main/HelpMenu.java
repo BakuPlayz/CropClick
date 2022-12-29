@@ -17,7 +17,7 @@ import java.util.List;
 
 
 /**
- * Represents the Help menu.
+ * A class representing the Help menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

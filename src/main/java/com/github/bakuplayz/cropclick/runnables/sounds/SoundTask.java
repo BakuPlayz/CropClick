@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 
 /**
- * Represents a Sound as a {@link RunnableTask}.
+ * A class representing a Sound as a {@link RunnableTask}.
  *
  * @author BakuPlayz
  * @version 2.0.0

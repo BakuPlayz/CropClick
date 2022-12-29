@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the OfflineGrowth menu.
+ * A class representing the OfflineGrowth menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

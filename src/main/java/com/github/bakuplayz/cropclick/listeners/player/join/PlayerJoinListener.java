@@ -1,7 +1,13 @@
 package com.github.bakuplayz.cropclick.listeners.player.join;
 
+import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.update.UpdateManager;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -12,9 +18,27 @@ import org.bukkit.event.Listener;
  * @since 2.0.0
  */
 public final class PlayerJoinListener implements Listener {
+    
+    private final UpdateManager updateManager;
 
-    /*
-     *   TODO: Should call the com.github.bakuplayz.cropclick.update.UpdateManager#sendAlert();
+
+    public PlayerJoinListener(@NotNull CropClick plugin) {
+        this.updateManager = plugin.getUpdateManager();
+    }
+
+
+    /**
+     * Sends the update message to OP players upon joining the server.
+     *
+     * @param event the event that was called.
      */
+    @EventHandler(priority = EventPriority.LOW)
+    public void onOperatorJoin(@NotNull PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        if (player.isOp()) {
+            updateManager.sendAlert(player);
+        }
+    }
 
 }

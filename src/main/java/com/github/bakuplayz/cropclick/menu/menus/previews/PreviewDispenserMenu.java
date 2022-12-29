@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Preview Dispenser menu.
+ * A class representing the Preview Dispenser menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

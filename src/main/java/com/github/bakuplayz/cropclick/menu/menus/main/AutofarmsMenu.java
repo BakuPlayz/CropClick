@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * Represents the Autofarms menu.
+ * A class representing the Autofarms menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

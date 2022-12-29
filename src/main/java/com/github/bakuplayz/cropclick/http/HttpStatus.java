@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.http;
 
 /**
- * A class representing common <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">HTTP responses</a> when working with plugin updates.
+ * An enumeration representing common <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">HTTP responses</a> when working with plugin updates.
  *
  * @author BakuPlayz
  * @version 2.0.0

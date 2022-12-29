@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents a Sound in Bukkit.
+ * A class representing a Sound in Bukkit.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -23,7 +23,7 @@ import java.util.UUID;
 
 
 /**
- * Represents {@link Autofarm Autofarms} as a JSON file.
+ * A class representing {@link Autofarm Autofarms} as a JSON file.
  *
  * @author BakuPlayz
  * @version 2.0.0

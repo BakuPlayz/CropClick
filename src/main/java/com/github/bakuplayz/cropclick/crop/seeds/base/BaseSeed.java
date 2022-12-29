@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * The base interface for a seed.
+ * An interface acting as a base for a seed.
  *
  * @author BakuPlayz
  * @version 2.0.0

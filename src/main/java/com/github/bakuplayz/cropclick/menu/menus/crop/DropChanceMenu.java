@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Drop Chance menu.
+ * A class representing the Drop Chance menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

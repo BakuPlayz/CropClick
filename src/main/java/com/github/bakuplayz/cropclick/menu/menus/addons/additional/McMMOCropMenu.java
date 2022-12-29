@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the mcMMO Crop menu.
+ * A class representing the mcMMO Crop menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * Acts as a specific action for a crop permission, or all crop permissions.
+ * An enumeration that acts as a specific action for a crop permission, or all crop permissions.
  *
  * @author BakuPlayz
  * @version 2.0.0

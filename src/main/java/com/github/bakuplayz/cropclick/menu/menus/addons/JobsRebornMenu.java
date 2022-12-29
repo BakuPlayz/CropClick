@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the JobsReborn menu.
+ * A class representing the JobsReborn menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

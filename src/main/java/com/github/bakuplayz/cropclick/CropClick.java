@@ -26,6 +26,7 @@ import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAt
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtContainerListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
+import com.github.bakuplayz.cropclick.listeners.player.join.PlayerJoinListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
@@ -44,7 +45,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
- * Represents the core of CropClick -- my precious.
+ * The class representing the core of CropClick -- my precious.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -285,6 +286,8 @@ public final class CropClick extends JavaPlugin {
         PluginManager manager = Bukkit.getPluginManager();
 
         manager.registerEvents(new MenuListener(), this);
+
+        manager.registerEvents(new PlayerJoinListener(this), this);
 
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * The base interface for a crop.
+ * An interface acting as a base for a crop.
  *
  * @author BakuPlayz
  * @version 2.0.0

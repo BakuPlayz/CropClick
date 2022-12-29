@@ -23,7 +23,7 @@ import xyz.xenondevs.particle.ParticleEffect;
 
 
 /**
- * Represents the Settings menu.
+ * A class representing the Settings menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

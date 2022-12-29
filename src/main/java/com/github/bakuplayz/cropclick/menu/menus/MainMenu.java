@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Main menu.
+ * A class representing the Main menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

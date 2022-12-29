@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents a communication tunnel for {@link CropClick} and other plugins.
+ * A class acting a communication tunnel (API) for {@link CropClick} and other plugins.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Towny menu.
+ * A class representing the Towny menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

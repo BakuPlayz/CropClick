@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the WorldGuard menu.
+ * A class representing the WorldGuard menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

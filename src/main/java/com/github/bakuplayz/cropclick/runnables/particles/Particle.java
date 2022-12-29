@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents a Particle in Bukkit.
+ * A class representing a Particle in Bukkit.
  *
  * @author BakuPlayz
  * @version 2.0.0

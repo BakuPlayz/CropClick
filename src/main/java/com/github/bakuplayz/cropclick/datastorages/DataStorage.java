@@ -13,7 +13,7 @@ import java.io.IOException;
 
 
 /**
- * Represents an JSON file (with the help of the GSON API).
+ * A class representing an JSON file (with the help of the GSON API).
  *
  * @author BakuPlayz
  * @version 2.0.0

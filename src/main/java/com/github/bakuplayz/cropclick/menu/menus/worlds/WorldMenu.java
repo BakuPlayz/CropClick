@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the World menu.
+ * A class representing the World menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

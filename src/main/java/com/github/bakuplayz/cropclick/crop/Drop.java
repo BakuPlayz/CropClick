@@ -10,7 +10,7 @@ import java.util.Random;
 
 
 /**
- * Represents an {@link ItemStack item} drop.
+ * A class representing an {@link ItemStack item} drop.
  *
  * @author BakuPlayz
  * @version 2.0.0

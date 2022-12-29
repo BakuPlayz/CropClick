@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 
 /**
- * Represents {@link FarmWorld FarmWorlds} as a JSON file.
+ * A class representing {@link FarmWorld FarmWorlds} as a JSON file.
  *
  * @author BakuPlayz
  * @version 2.0.0

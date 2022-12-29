@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Addons menu.
+ * A class representing the Addons menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

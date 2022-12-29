@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Sound menu.
+ * A class representing the Sound menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

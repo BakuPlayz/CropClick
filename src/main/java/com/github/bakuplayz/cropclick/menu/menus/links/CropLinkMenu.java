@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Crop Link menu.
+ * A class representing the Crop Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

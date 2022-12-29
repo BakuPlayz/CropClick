@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents a command permission.
+ * A class representing a command permission.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the Crop menu.
+ * A class representing the Crop menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

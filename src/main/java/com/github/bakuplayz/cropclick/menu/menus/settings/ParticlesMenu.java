@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * Represents the Particles menu.
+ * A class representing the Particles menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

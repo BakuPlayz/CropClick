@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the base of a menu.
+ * A class representing the base of a menu.
  *
  * @author BakuPlayz
  * @version 2.0.0

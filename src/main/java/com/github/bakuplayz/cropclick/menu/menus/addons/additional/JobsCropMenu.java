@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the JobsReborn Crop menu.
+ * A class representing the JobsReborn Crop menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
