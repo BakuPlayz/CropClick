@@ -9,7 +9,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.EventUtils;
-import com.github.bakuplayz.cropclick.utils.InventoryUtil;
+import com.github.bakuplayz.cropclick.utils.InventoryUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -137,7 +137,7 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         // TODO: Needs to somehow check this sooner.. or well before when it should.
-        if (InventoryUtil.willFlood(
+        if (InventoryUtils.willFlood(
                 player.getInventory(),
                 crop.getDrop().toItemStack(true)
         )) {

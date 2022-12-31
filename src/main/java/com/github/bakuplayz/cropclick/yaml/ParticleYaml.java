@@ -1,5 +1,8 @@
 package com.github.bakuplayz.cropclick.yaml;
 
+import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
+import com.github.bakuplayz.cropclick.utils.Enableable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,17 +15,29 @@ import java.util.Map;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an Particle object as YAML.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 @ToString
-public final class ParticleYaml extends YamlItem {
+@EqualsAndHashCode
+public final class ParticleYaml implements Yamlable, Enableable {
 
+    /**
+     * The given delay before playing the particle effect ({@link ParticleMenu#MIN_DELAY min delay} & {@link ParticleMenu#MAX_DELAY max delay}).
+     */
     private @Setter @Getter @Accessors(chain = true) double delay;
+
+    /**
+     * The given speed the particle effect should be played at ({@link ParticleMenu#MIN_SPEED min speed} & {@link ParticleMenu#MAX_SPEED max speed}).
+     */
     private @Setter @Getter @Accessors(chain = true) double speed;
+
+    /**
+     * The given amount of this particle effect to play at once ({@link ParticleMenu#MIN_AMOUNT min amount} & {@link ParticleMenu#MAX_AMOUNT max amount}).
+     */
     private @Setter @Getter @Accessors(chain = true) int amount;
 
 
@@ -33,6 +48,11 @@ public final class ParticleYaml extends YamlItem {
     }
 
 
+    /**
+     * It converts {@link ParticleYaml this} object to a YAML-styled map.
+     *
+     * @return A {@link HashMap YAML-formatted HashMap}.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Map<String, Object> toYaml() {
@@ -44,9 +64,14 @@ public final class ParticleYaml extends YamlItem {
     }
 
 
+    /**
+     * It checks whether the Particle is enabled, by validating only ones with one or more {@link #amount}.
+     *
+     * @return An enabled state, whether the Particle is enabled or not.
+     */
     @Override
     public boolean isEnabled() {
-        return amount != 0;
+        return amount > 0;
     }
 
 }

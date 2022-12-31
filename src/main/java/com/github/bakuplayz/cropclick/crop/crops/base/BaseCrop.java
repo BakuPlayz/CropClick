@@ -7,8 +7,8 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConf
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
-import com.github.bakuplayz.cropclick.particles.ParticleRunnable;
-import com.github.bakuplayz.cropclick.sounds.SoundRunnable;
+import com.github.bakuplayz.cropclick.runnables.particles.ParticleRunnable;
+import com.github.bakuplayz.cropclick.runnables.sounds.SoundRunnable;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

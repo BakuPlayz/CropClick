@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 import com.github.bakuplayz.cropclick.collections.IndexedYamlMap;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
+import com.github.bakuplayz.cropclick.yaml.ParticleYaml;
 import com.github.bakuplayz.cropclick.yaml.SoundYaml;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import java.util.*;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the sound configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -20,11 +21,11 @@ import java.util.*;
  */
 public final class SoundConfigSection extends ConfigSection {
 
-
-    // TODO: Check through all the comments... I cannot be bothered right now.
-
     private final CropsConfig cropsConfig;
 
+    /**
+     * A variable containing every crop's sounds.
+     */
     private final Map<String, IndexedYamlMap<SoundYaml>> sounds;
 
 
@@ -36,24 +37,25 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * It loads the sounds for each crop.
+     * It loads the sounds for each crop, and saved them to the {@link #sounds sounds map}
+     * with the crop's name as key and sounds in a {@link IndexedYamlMap<SoundYaml> map} as values.
      */
     public void loadSounds() {
-        cropsConfig.getCropsNames().forEach(cropName -> {
+        for (String cropName : cropsConfig.getCropsNames()) {
             Set<String> soundNames = getSoundNames(cropName);
 
             if (soundNames.isEmpty()) {
                 sounds.put(cropName, new IndexedYamlMap<>());
-                return;
+                continue;
             }
 
             sounds.put(cropName, getExistingSounds(cropName, soundNames));
-        });
+        }
     }
 
 
     /**
-     * If the sound is enabled, add it to the sounds map.
+     * If the sound is enabled, add it to the crop's {@link IndexedYamlMap map}.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -77,7 +79,7 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * If the sound is disabled, remove it from the map. Otherwise, add it to the map.
+     * If the sound is disabled, remove it from the {@link #sounds sounds map}. Otherwise, add it to the {@link IndexedYamlMap map}.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -114,7 +116,7 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Get the delay between the sound being played and the next sound being played.
+     * It gets the delay, between the previous sound and this sound being played, for the given crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -124,7 +126,7 @@ public final class SoundConfigSection extends ConfigSection {
     public double getDelay(@NotNull String cropName, @NotNull String soundName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (!isEnabledAndThere(soundName, indexedSounds)) {
+        if (!isEnabledAndPresent(soundName, indexedSounds)) {
             return config.getDouble(
                     "crops." + cropName + ".sounds." + soundName + ".delay",
                     0
@@ -136,11 +138,11 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the delay of a sound for a crop.
+     * It sets the delay, between the previous sound and this sound being played, of a sound for the given crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound you want to set the delay for.
-     * @param delay     The delay between each sound.
+     * @param delay     The delay between each sound being played.
      */
     public void setDelay(@NotNull String cropName, @NotNull String soundName, double delay) {
         config.set("crops." + cropName + ".sounds." + soundName + ".delay", delay);
@@ -157,7 +159,7 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Get the pitch of a sound for a crop.
+     * It gets the pitch of a sound for the given crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -167,7 +169,7 @@ public final class SoundConfigSection extends ConfigSection {
     public double getPitch(@NotNull String cropName, @NotNull String soundName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (!isEnabledAndThere(soundName, indexedSounds)) {
+        if (!isEnabledAndPresent(soundName, indexedSounds)) {
             return config.getDouble(
                     "crops." + cropName + ".sounds." + soundName + ".pitch",
                     0
@@ -179,7 +181,7 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the pitch of the sound for the specified crop.
+     * It sets the pitch of the sound for the given crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -200,7 +202,7 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Get the volume of a sound for a crop.
+     * It gets the volume (or range in blocks) of a sound for the given crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -210,7 +212,7 @@ public final class SoundConfigSection extends ConfigSection {
     public double getVolume(@NotNull String cropName, @NotNull String soundName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
 
-        if (!isEnabledAndThere(soundName, indexedSounds)) {
+        if (!isEnabledAndPresent(soundName, indexedSounds)) {
             return config.getDouble(
                     "crops." + cropName + ".sounds." + soundName + ".volume",
                     0
@@ -222,7 +224,7 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the volume of a sound for a crop.
+     * It sets the volume (or range in blocks) of a sound for the given crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
@@ -243,23 +245,24 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Returns the order of the sound in the list of sounds for the crop.
+     * It returns the order (index) of the sound in the {@link #sounds map of sounds} for the crop.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound you want to get the order of.
      *
-     * @return The index of the soundName in the list of sounds for the cropName.
+     * @return The index of the soundName in the {@link #sounds map of sounds} for the cropName.
      */
     public int getOrder(@NotNull String cropName, @NotNull String soundName) {
-        return sounds.get(cropName).indexOf(soundName);
+        IndexedYamlMap<SoundYaml> soundsOfCrop = sounds.get(cropName);
+        return soundsOfCrop == null ? -1 : soundsOfCrop.indexOf(soundName);
     }
 
 
     /**
-     * Swap the order of two sounds in the config file.
+     * It swaps the order of two sounds in the given crop's {@link #sounds sounds map}.
      *
      * @param cropName The name of the crop to swap the sound order of.
-     * @param oldOrder The old order of the sound.
+     * @param oldOrder The old (previous) order of the sound.
      * @param newOrder The new order of the sound.
      */
     public void swapOrder(@NotNull String cropName, int oldOrder, int newOrder) {
@@ -281,29 +284,29 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Returns true if the sound is enabled, false otherwise.
+     * It returns true if the sound is enabled, false otherwise.
      *
      * @param cropName  The name of the crop.
      * @param soundName The name of the sound.
      *
-     * @return A boolean value.
+     * @return The sound's enabled status.
      */
     public boolean isEnabled(@NotNull String cropName, @NotNull String soundName) {
-        return sounds.get(cropName).hasKey(soundName);
+        IndexedYamlMap<SoundYaml> soundsOfCrop = sounds.get(cropName);
+        return soundsOfCrop != null && soundsOfCrop.hasKey(soundName);
     }
 
 
     /**
-     * If the indexedSounds map is null, return false. Otherwise, return true if the soundName key is not in the
-     * indexedSounds map.
+     * If the {@link IndexedYamlMap<SoundYaml> sounds map} is null, return false. Otherwise, return whether the given map
+     * has the given sound name (as a key).
      *
      * @param soundName     The name of the sound to check.
-     * @param indexedSounds The sounds that are currently enabled.
+     * @param indexedSounds The {@link IndexedYamlMap} that contains all currently enabled sounds.
      *
-     * @return The method is returning a boolean value.
+     * @return The enabled and present status of a sound, in the given map.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isEnabledAndThere(@NotNull String soundName, IndexedYamlMap<SoundYaml> indexedSounds) {
+    private boolean isEnabledAndPresent(@NotNull String soundName, IndexedYamlMap<SoundYaml> indexedSounds) {
         if (indexedSounds == null) {
             return false;
         }
@@ -313,11 +316,11 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Returns the amount of sounds a crop has.
+     * It returns the amount of sounds a crop has.
      *
      * @param cropName The name of the crop you want to get the sounds for.
      *
-     * @return The amount of sounds for a crop.
+     * @return The amount of sounds for the given crop.
      */
     public int getAmountOfSounds(@NotNull String cropName) {
         return getSounds(cropName).size();
@@ -325,11 +328,11 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Get the sounds for a crop, or null if the crop doesn't exist.
+     * It gets the sounds for the given crop.
      *
      * @param cropName The name of the crop to get the sounds for.
      *
-     * @return A list of strings.
+     * @return Sounds associated with the given crop, as a {@link List<String> string list}.
      */
     public @NotNull List<String> getSounds(@NotNull String cropName) {
         IndexedYamlMap<SoundYaml> indexedSounds = sounds.get(cropName);
@@ -343,11 +346,11 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * Get the names of all the sounds for a given crop.
+     * It gets the names of all the sounds for a given crop.
      *
-     * @param cropName The name of the crop to get the particle names for.
+     * @param cropName The name of the crop to get the sound names for.
      *
-     * @return A set of particle names.
+     * @return Sound names associated with the given crop, as a {@link Set<String> string set}.
      */
     private @NotNull @Unmodifiable Set<String> getSoundNames(@NotNull String cropName) {
         ConfigurationSection soundSection = config.getConfigurationSection(
@@ -363,12 +366,12 @@ public final class SoundConfigSection extends ConfigSection {
 
 
     /**
-     * This function gets all the sounds for a crop from the config file and returns them in an IndexedYamlMap.
+     * It retrieves the enabled sounds for the given crop.
      *
      * @param cropName   The name of the crop.
-     * @param soundNames The names of the sounds that are already in the config.
+     * @param soundNames The names of the sounds to search for.
      *
-     * @return A map of sound names to sound objects.
+     * @return {@link IndexedYamlMap<SoundYaml> Maps} populated by the enabled {@link SoundYaml sounds}, that was searched for the given crop.
      */
     private @NotNull IndexedYamlMap<SoundYaml> getExistingSounds(@NotNull String cropName,
                                                                  @NotNull Set<String> soundNames) {

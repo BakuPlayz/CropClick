@@ -1,11 +1,12 @@
 package com.github.bakuplayz.cropclick.utils;
 
+import com.github.bakuplayz.cropclick.menu.Menu;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Menu menus}.
  *
  * @author BakuPlayz
  * @version 2.0.0

@@ -2,13 +2,14 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Permission permissions}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -116,15 +117,22 @@ public final class PermissionUtils {
      * "cropclick.autofarm.interact.others" to interact with the farm.
      *
      * @param player The player who is trying to interact with the farm.
-     * @param other  The UUID of the player who owns the farm.
+     * @param farm   The given autofarm.
      *
      * @return A boolean value.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull UUID other) {
-        if (!player.getUniqueId().equals(other)) {
+    public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull Autofarm farm) {
+        UUID other = player.getUniqueId();
+
+        if (other.equals(Autofarm.UNKNOWN_OWNER)) {
+            return player.isOp() || player.hasPermission("cropclick.autofarm.claim");
+        }
+
+        if (!other.equals(farm.getOwnerID())) {
             return player.isOp() || player.hasPermission("cropclick.autofarm.interact.others");
         }
+
         return canInteractAtFarm(player);
     }
 

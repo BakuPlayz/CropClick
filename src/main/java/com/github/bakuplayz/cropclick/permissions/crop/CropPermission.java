@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing a crop permission.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -17,7 +17,7 @@ public final class CropPermission extends Permission {
     /**
      * Permission to harvest all the crops.
      */
-    public static Permission HARVEST_ALL_CROPS = new Permission(
+    public static final Permission HARVEST_ALL_CROPS = new Permission(
             "cropclick.harvest.*",
             "Permission to harvest all crops.",
             PermissionDefault.OP
@@ -26,7 +26,7 @@ public final class CropPermission extends Permission {
     /**
      * Permission to plant all the crops.
      */
-    public static Permission PLANT_ALL_CROPS = new Permission(
+    public static final Permission PLANT_ALL_CROPS = new Permission(
             "cropclick.plant.*",
             "Permission to plant all crops.",
             PermissionDefault.OP
@@ -35,7 +35,7 @@ public final class CropPermission extends Permission {
     /**
      * Permission to destroy all the crops.
      */
-    public static Permission DESTROY_ALL_CROPS = new Permission(
+    public static final Permission DESTROY_ALL_CROPS = new Permission(
             "cropclick.destroy.*",
             "Permission to destroy all crops.",
             PermissionDefault.OP

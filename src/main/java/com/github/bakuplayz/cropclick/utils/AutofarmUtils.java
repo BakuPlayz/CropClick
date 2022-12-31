@@ -2,11 +2,12 @@ package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Autofarm autofarms}, its {@link AutofarmManager manager} and its events.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -70,7 +71,7 @@ public final class AutofarmUtils {
         if (onlyDoubleChest) {
             return BlockUtils.isDoubleChest(block);
         }
-        return isContainer(block);
+        return AutofarmUtils.isContainer(block);
     }
 
 
@@ -155,7 +156,7 @@ public final class AutofarmUtils {
      *
      * @return A Crop object
      */
-    public static @Nullable Crop getCrop(@NotNull CropManager manager, @NotNull Block block) {
+    public static @Nullable BaseCrop getCrop(@NotNull CropManager manager, @NotNull Block block) {
         return manager.findByBlock(block);
     }
 
@@ -178,16 +179,16 @@ public final class AutofarmUtils {
             Block singly = doublyLocation.getSingly().getBlock();
             Block doubly = doublyLocation.getDoubly().getBlock();
 
-            singly.setMetadata(FARMER_ID_META, farmerMeta);
-            doubly.setMetadata(FARMER_ID_META, farmerMeta);
+            singly.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
+            doubly.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
 
             autofarm.setContainerLocation(doublyLocation);
         } else {
-            container.setMetadata(FARMER_ID_META, farmerMeta);
+            container.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
         }
 
-        dispenser.setMetadata(FARMER_ID_META, farmerMeta);
-        crop.setMetadata(FARMER_ID_META, farmerMeta);
+        dispenser.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
+        crop.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
     }
 
 
@@ -205,16 +206,16 @@ public final class AutofarmUtils {
         DoublyLocation doublyContainer = LocationUtils.getAsDoubly(container);
         if (doublyContainer != null) {
             Block singly = doublyContainer.getSingly().getBlock();
-            Block doubly = doublyContainer.getSingly().getBlock();
+            Block doubly = doublyContainer.getDoubly().getBlock();
 
-            singly.removeMetadata(FARMER_ID_META, plugin);
-            doubly.removeMetadata(FARMER_ID_META, plugin);
+            singly.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
+            doubly.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
         } else {
-            container.removeMetadata(FARMER_ID_META, plugin);
+            container.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
         }
 
-        dispenser.removeMetadata(FARMER_ID_META, plugin);
-        crop.removeMetadata(FARMER_ID_META, plugin);
+        dispenser.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
+        crop.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
     }
 
 
@@ -230,11 +231,11 @@ public final class AutofarmUtils {
         Block container = autofarm.getContainerLocation().getBlock();
         Block crop = autofarm.getCropLocation().getBlock();
 
-        if (!componentHasMeta(dispenser)) {
+        if (!AutofarmUtils.componentHasMeta(dispenser)) {
             return false;
         }
 
-        if (!componentHasMeta(crop)) {
+        if (!AutofarmUtils.componentHasMeta(crop)) {
             return false;
         }
 
@@ -243,16 +244,16 @@ public final class AutofarmUtils {
             Block singly = doublyContainer.getSingly().getBlock();
             Block doubly = doublyContainer.getSingly().getBlock();
 
-            if (!componentHasMeta(singly)) {
+            if (!AutofarmUtils.componentHasMeta(singly)) {
                 return false;
             }
 
-            if (!componentHasMeta(doubly)) {
+            if (!AutofarmUtils.componentHasMeta(doubly)) {
                 return false;
             }
         }
 
-        return componentHasMeta(container);
+        return AutofarmUtils.componentHasMeta(container);
     }
 
 
@@ -264,8 +265,8 @@ public final class AutofarmUtils {
      * @return A boolean value.
      */
     public static boolean componentHasMeta(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(FARMER_ID_META);
-        return block.hasMetadata(FARMER_ID_META) && !metas.isEmpty();
+        List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_META);
+        return block.hasMetadata(AutofarmUtils.FARMER_ID_META) && !metas.isEmpty();
     }
 
 
@@ -277,7 +278,7 @@ public final class AutofarmUtils {
      * @return The farmerID of the block.
      */
     public static @Nullable String getMetaValue(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(FARMER_ID_META);
+        List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_META);
         return metas.isEmpty() ? null : metas.get(0).asString();
     }
 

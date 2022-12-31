@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing a command permission.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -18,13 +18,13 @@ public final class CommandPermission extends Permission {
     /**
      * Permission to use all the commands.
      */
-    public static Permission ALL_COMMANDS = new Permission(
+    public static final Permission ALL_COMMANDS = new Permission(
             "cropclick.command.*",
             "Permission to use every command.",
             PermissionDefault.OP
     );
 
-    public static Permission GENERAL_COMMAND = new Permission(
+    public static final Permission GENERAL_COMMAND = new Permission(
             "cropclick.command.general",
             "Permission to use the general command.",
             PermissionDefault.OP

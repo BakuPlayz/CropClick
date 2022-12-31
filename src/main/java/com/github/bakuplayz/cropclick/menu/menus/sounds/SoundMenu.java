@@ -7,7 +7,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
-import com.github.bakuplayz.cropclick.utils.MathUtil;
+import com.github.bakuplayz.cropclick.utils.MathUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -299,7 +299,7 @@ public final class SoundMenu extends Menu {
                 cropName,
                 soundName
         );
-        double pitchAfter = MathUtil.round(
+        double pitchAfter = MathUtils.round(
                 Math.min(pitchBefore + pitchChange, MAX_PITCH)
         );
 
@@ -315,7 +315,7 @@ public final class SoundMenu extends Menu {
                 cropName,
                 soundName
         );
-        double pitchAfter = MathUtil.round(
+        double pitchAfter = MathUtils.round(
                 Math.max(pitchBefore - pitchChange, MIN_PITCH)
         );
 
@@ -327,7 +327,7 @@ public final class SoundMenu extends Menu {
 
 
     private void addSoundDelay(int delay) {
-        double oldDelay = MathUtil.round(
+        double oldDelay = MathUtils.round(
                 soundSection.getDelay(cropName, soundName) + delay
         );
         double newDelay = Math.min(oldDelay, MAX_DELAY);
@@ -336,7 +336,7 @@ public final class SoundMenu extends Menu {
 
 
     private void removeSoundDelay(int delay) {
-        double oldDelay = MathUtil.round(
+        double oldDelay = MathUtils.round(
                 soundSection.getDelay(cropName, soundName) - delay
         );
         double newDelay = Math.max(oldDelay, MIN_DELAY);
@@ -345,7 +345,7 @@ public final class SoundMenu extends Menu {
 
 
     private void increaseVolume(int volume) {
-        double oldVolume = MathUtil.round(
+        double oldVolume = MathUtils.round(
                 soundSection.getVolume(cropName, soundName) + volume
         );
         double newVolume = Math.min(oldVolume, MAX_VOLUME);
@@ -354,7 +354,7 @@ public final class SoundMenu extends Menu {
 
 
     private void decreaseVolume(int volume) {
-        double oldVolume = MathUtil.round(
+        double oldVolume = MathUtils.round(
                 soundSection.getVolume(cropName, soundName) - volume
         );
         double newVolume = Math.max(oldVolume, MIN_VOLUME);
@@ -363,7 +363,7 @@ public final class SoundMenu extends Menu {
 
 
     private void increasePitch(double pitch) {
-        double oldPitch = MathUtil.round(
+        double oldPitch = MathUtils.round(
                 soundSection.getPitch(cropName, soundName) + pitch
         );
         double newPitch = Math.min(oldPitch, MAX_PITCH);
@@ -372,7 +372,7 @@ public final class SoundMenu extends Menu {
 
 
     private void decreasePitch(double pitch) {
-        double oldPitch = MathUtil.round(
+        double oldPitch = MathUtils.round(
                 soundSection.getPitch(cropName, soundName) - pitch
         );
         double newPitch = Math.max(oldPitch, MIN_PITCH);
