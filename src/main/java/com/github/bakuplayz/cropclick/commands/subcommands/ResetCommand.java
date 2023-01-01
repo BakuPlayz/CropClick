@@ -12,7 +12,7 @@ import java.nio.file.Files;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the '/crop reset' command.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -30,13 +30,13 @@ public final class ResetCommand extends Subcommand {
 
 
     /**
-     * It deletes all the configs and data storages, then sets up the configs and data storages again, when performed.
+     * Performs the '/crop reset' command, resetting all settings to default.
      *
      * @param player The player who executed the command.
-     * @param args   The arguments that the player typed in.
+     * @param args   The arguments passed to the command.
      */
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(@NotNull Player player, String[] args) {
         try {
             deleteConfigs();
             deleteDataStorages();

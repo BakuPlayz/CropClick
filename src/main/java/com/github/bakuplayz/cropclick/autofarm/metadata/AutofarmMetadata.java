@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.autofarm.metadata;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +9,7 @@ import java.util.concurrent.Callable;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing a {@link Autofarm Autofarm's} metadata.
  *
  * @author BakuPlayz
  * @version 2.0.0

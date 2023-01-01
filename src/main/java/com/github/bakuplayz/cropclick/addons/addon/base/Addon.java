@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.addons.addon.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
+import com.github.bakuplayz.cropclick.utils.Enableable;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -20,19 +21,22 @@ import java.util.HashMap;
  */
 @ToString
 @EqualsAndHashCode
-public abstract class Addon {
+public abstract class Addon implements Enableable {
 
     protected final @Getter String name;
 
     protected transient final CropClick plugin;
     protected transient final AddonsConfig addonsConfig;
 
+    /**
+     * A variable containing all the registered worlds.
+     */
     private transient final HashMap<String, FarmWorld> worlds;
 
 
     public Addon(@NotNull CropClick plugin, @NotNull String name) {
-        this.addonsConfig = plugin.getAddonsConfig();
         this.worlds = plugin.getWorldManager().getWorlds();
+        this.addonsConfig = plugin.getAddonsConfig();
         this.plugin = plugin;
         this.name = name;
     }

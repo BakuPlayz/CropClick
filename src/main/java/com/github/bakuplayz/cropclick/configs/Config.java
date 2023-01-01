@@ -12,7 +12,7 @@ import java.io.IOException;
 
 
 /**
- * A clas representing a YAML file.
+ * A class representing a YAML file.
  *
  * @author BakuPlayz
  * @version 2.0.0

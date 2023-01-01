@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing a subcommand.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class Subcommand {
+public abstract class Subcommand implements Commandable {
 
     protected final CropClick plugin;
 
@@ -32,57 +32,53 @@ public abstract class Subcommand {
 
 
     /**
-     * It returns a string that is the description of the command.
+     * Gets the description of the command.
      *
-     * @return The description of the command.
+     * @return the description of the command.
      */
-    public final @NotNull String getDescription() {
+    public @NotNull String getDescription() {
         return description.get(plugin);
     }
 
 
     /**
-     * It returns a string that is the usage of the command.
+     * Gets the usage of the command.
      *
-     * @return The usage of the command.
+     * @return the usage of the command.
      */
-    public final @NotNull String getUsage() {
+    public @NotNull String getUsage() {
         return "cropclick " + name;
     }
 
 
     /**
-     * It returns the permission to execute the command.
+     * Gets the permission for the command.
      *
-     * @return The permission for the command.
+     * @return the permission for the command, as a string.
      */
-    public final @NotNull String getPermission() {
+    public @NotNull String getPermission() {
         return "cropclick.command." + name;
     }
 
 
     /**
-     * Returns true if the player has the permission, false otherwise.
+     * Checks whether a player has permission to {@link #perform(Player, String[]) perform} the command.
      *
-     * @param player The player to check the permission for.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if it has, otherwise false.
      */
-    public final boolean hasPermission(@NotNull Player player) {
+    public boolean hasPermission(@NotNull Player player) {
         return player.hasPermission(getPermission());
     }
 
 
     /**
-     * "This function is called when the command is executed."
-     * <p>
-     * The first parameter is the player who executed the command. The second parameter is an array of strings that
-     * contains the arguments that were passed to the command.
-     * </p>
+     * Performs the command.
      *
-     * @param player The player who executed the command.
-     * @param args   The arguments passed to the command.
+     * @param player the player executing the command.
+     * @param args   the arguments passed along the command.
      */
-    public abstract void perform(Player player, String[] args);
+    public abstract void perform(@NotNull Player player, String[] args);
 
 }
