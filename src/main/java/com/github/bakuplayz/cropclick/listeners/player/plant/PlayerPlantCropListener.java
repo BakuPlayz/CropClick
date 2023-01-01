@@ -4,9 +4,10 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.EventUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link BaseCrop crop} plant events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -44,16 +45,19 @@ public final class PlayerPlantCropListener implements Listener {
     }
 
 
+    /**
+     * If the player is planting a crop, and has the right to, then it calls the PlayerPlantCropEvent.
+     *
+     * @param event The event that was called.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
-        if (event.isCancelled()) return;
-
-        Block block = event.getClickedBlock();
-        if (BlockUtils.isAir(block)) {
+        if (!EventUtils.isMainHand(event)) {
             return;
         }
 
-        if (!BlockUtils.isPlantableSurface(block)) {
+        Block block = event.getClickedBlock();
+        if (BlockUtils.isAir(block)) {
             return;
         }
 
@@ -67,7 +71,7 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
-        Crop crop = cropManager.findByBlock(block);
+        BaseCrop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;
         }

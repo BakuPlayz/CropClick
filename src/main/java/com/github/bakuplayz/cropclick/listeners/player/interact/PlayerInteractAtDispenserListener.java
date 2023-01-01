@@ -9,6 +9,7 @@ import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link Dispenser} interactions caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -49,7 +50,7 @@ public final class PlayerInteractAtDispenserListener implements Listener {
         Autofarm autofarm = autofarmManager.findAutofarm(block);
 
         if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm.getOwnerID())) {
+            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
                 event.setCancelled(true);
                 return;
             }

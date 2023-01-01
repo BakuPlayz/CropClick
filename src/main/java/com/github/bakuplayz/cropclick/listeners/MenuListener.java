@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.listeners;
 
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link Menu} events.
  *
  * @author BakuPlayz
  * @version 2.0.0

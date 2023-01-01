@@ -2,11 +2,12 @@ package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link Autofarm} interactions caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -62,7 +63,9 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtBlock(@NotNull PlayerInteractEvent event) {
-        if (event.isCancelled()) return;
+        if (!EventUtils.isMainHand(event)) {
+            return;
+        }
 
         Block block = event.getClickedBlock();
         if (BlockUtils.isAir(block)) {
@@ -117,7 +120,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         }
 
         if (AutofarmUtils.isCrop(cropManager, block)) {
-            Crop crop = AutofarmUtils.getCrop(cropManager, block);
+            BaseCrop crop = AutofarmUtils.getCrop(cropManager, block);
             Event cropEvent = new PlayerInteractAtCropEvent(player, block, crop);
             Bukkit.getPluginManager().callEvent(cropEvent);
         }

@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link Entity} destroy {@link Autofarm} events.
  *
  * @author BakuPlayz
  * @version 2.0.0

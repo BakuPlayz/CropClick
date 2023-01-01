@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the update {@link Autofarm} events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerUpdateAutofarmListener implements Listener {
 
     private final CropClick plugin;
+
     private final AutofarmManager autofarmManager;
 
 
@@ -93,7 +94,9 @@ public final class PlayerUpdateAutofarmListener implements Listener {
                 newFarm
         );
 
-        System.out.println("Player -- Update");
+        if (plugin.isDebugging()) {
+            plugin.getLogger().info(String.format("%s (Player): Called the update event!", player.getName()));
+        }
 
         Bukkit.getPluginManager().callEvent(updateEvent);
     }

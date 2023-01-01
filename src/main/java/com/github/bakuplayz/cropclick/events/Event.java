@@ -1,10 +1,12 @@
 package com.github.bakuplayz.cropclick.events;
 
+import com.github.bakuplayz.cropclick.CropClick;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A base class for all {@link CropClick} events.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -12,6 +14,9 @@ import org.bukkit.event.HandlerList;
  */
 public abstract class Event extends org.bukkit.event.Event {
 
+    /**
+     * A variable containing all the events related to {@link CropClick}.
+     */
     private static final HandlerList HANDLERS = new HandlerList();
 
 
@@ -22,7 +27,7 @@ public abstract class Event extends org.bukkit.event.Event {
 
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 
