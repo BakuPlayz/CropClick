@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Worlds menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -62,6 +62,8 @@ public final class WorldsMenu extends PaginatedMenu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         switch (menuState) {
             case SETTINGS:
@@ -131,7 +133,7 @@ public final class WorldsMenu extends PaginatedMenu {
                 break;
         }
 
-        updateMenu();
+        refresh();
     }
 
 
@@ -243,6 +245,7 @@ public final class WorldsMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
+    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return worlds.stream()
                      .map(this::getMenuItem)

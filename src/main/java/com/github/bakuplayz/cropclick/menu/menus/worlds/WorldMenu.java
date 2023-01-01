@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the World menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -47,6 +47,8 @@ public final class WorldMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new WorldsMenu(plugin, player, WorldMenuState.SETTINGS));
 
         if (clicked.equals(getWorldItem())) {
@@ -61,7 +63,7 @@ public final class WorldMenu extends Menu {
             world.allowsPlayers(!world.allowsPlayers());
         }
 
-        updateMenu();
+        refresh();
     }
 
 
@@ -74,9 +76,9 @@ public final class WorldMenu extends Menu {
     private @NotNull ItemStack getPlayersItem() {
         return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin,
-                        world.allowsPlayers()
-                )).toItemStack();
+                .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers())
+                )).toSkullStack(player);
     }
 
 
@@ -89,8 +91,8 @@ public final class WorldMenu extends Menu {
     private @NotNull ItemStack getAutofarmsItem() {
         return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_NAME)
-                .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin,
-                        world.allowsAutofarms()
+                .setLore(LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.WORLD_AUTOFARMS_ITEM_STATUS.get(plugin, world.allowsAutofarms())
                 )).toItemStack();
     }
 
@@ -102,11 +104,14 @@ public final class WorldMenu extends Menu {
      */
     private @NotNull ItemStack getWorldItem() {
         String name = MessageUtils.beautify(world.getName(), true);
+
         return new ItemBuilder(Material.GRASS)
                 .setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
                 .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
                 .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
-                .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished()))
+                .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished())
+                ))
                 .toItemStack();
     }
 

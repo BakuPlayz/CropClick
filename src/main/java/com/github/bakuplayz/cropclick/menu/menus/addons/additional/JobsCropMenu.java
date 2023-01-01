@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -225,7 +225,7 @@ public final class JobsCropMenu extends Menu {
     private @NotNull ItemStack getExperienceRemoveItem(int amount) {
         double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
-        
+
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))

@@ -7,7 +7,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crop.DropChanceMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -342,7 +342,7 @@ public final class CropMenu extends Menu {
      * @return The drop chance of the crop or seed.
      */
     private int getDropChanceAsPercent(boolean isCrop) {
-        double DECIMAL_TO_PERCENT = 10_000;
+        final double DECIMAL_TO_PERCENT = 10_000;
         if (isCrop) {
             return (int) Math.round(cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
         }

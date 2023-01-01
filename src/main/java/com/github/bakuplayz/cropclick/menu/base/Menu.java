@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.menu;
+package com.github.bakuplayz.cropclick.menu.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
@@ -17,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the base of a menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class Menu implements InventoryHolder {
+public abstract class Menu implements DefaultMenu, InventoryHolder {
 
-    protected Player player;
-    protected CropClick plugin;
+    protected final Player player;
+    protected final CropClick plugin;
 
     protected @Getter Inventory inventory;
     protected @Setter InventoryType inventoryType;
@@ -68,12 +68,12 @@ public abstract class Menu implements InventoryHolder {
 
 
     /**
-     * If the item clicked is the back item, open the menu.
+     * If the item clicked is the back item, open the passed menu.
      *
      * @param clicked The item that was clicked.
      * @param menu    The menu that the item is in.
      */
-    protected final void handleBack(@NotNull ItemStack clicked, @NotNull Menu menu) {
+    public final void handleBack(@NotNull ItemStack clicked, @NotNull Menu menu) {
         if (!clicked.equals(getBackItem())) {
             return;
         }
@@ -114,9 +114,9 @@ public abstract class Menu implements InventoryHolder {
 
 
     /**
-     * It clears the inventory, then sets the menu items.
+     * It refreshes the menu.
      */
-    public void updateMenu() {
+    public void refresh() {
         inventory.clear();
         setMenuItems();
     }

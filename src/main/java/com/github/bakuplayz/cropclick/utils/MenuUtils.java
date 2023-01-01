@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class MenuUtil {
+public final class MenuUtils {
 
     /**
      * If the item is null or the item is air, return true.

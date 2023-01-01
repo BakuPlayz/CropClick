@@ -6,7 +6,6 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menu.menus.previews.PreviewDispenserMenu;
@@ -32,7 +31,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the base of a Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -40,15 +39,16 @@ import java.util.List;
  */
 public abstract class LinkMenu extends Menu {
 
-    private final AutofarmManager autofarmManager;
-    private final Autofarm autofarm;
     private final Block block;
+    protected final Autofarm autofarm;
+    private final AutofarmManager autofarmManager;
 
     private boolean isCropSelected;
     private boolean isContainerSelected;
     private boolean isDispenserSelected;
 
     protected boolean isUnlinked;
+    protected boolean isUnclaimed;
     private boolean isClickedSelected;
 
     private Location cropLocation;
@@ -59,6 +59,7 @@ public abstract class LinkMenu extends Menu {
     protected ItemStack containerItem;
     protected ItemStack dispenserItem;
 
+    private ItemStack claimItem;
     private ItemStack toggleItem;
 
     private final Component clickedComponent;
@@ -72,7 +73,6 @@ public abstract class LinkMenu extends Menu {
                     @NotNull Component clickedComponent) {
         super(plugin, player, menuTitle);
         this.autofarmManager = plugin.getAutofarmManager();
-        this.isUnlinked = !autofarmManager.isLinked(autofarm);
         this.clickedComponent = clickedComponent;
         this.autofarm = autofarm;
         this.block = block;
@@ -83,19 +83,25 @@ public abstract class LinkMenu extends Menu {
 
     @Override
     public void setMenuItems() {
+        assignLinked();
+        assignClaimed();
         assignClicked();
         assignToggle();
         assignCrop();
         assignContainer();
         assignDispenser();
 
-        if (!isUnlinked) {
-            inventory.setItem(13, toggleItem);
-        }
+        if (!isUnclaimed) {
+            if (!isUnlinked) {
+                inventory.setItem(13, toggleItem);
+            }
 
-        inventory.setItem(isUnlinked ? 20 : 29, cropItem);
-        inventory.setItem(isUnlinked ? 22 : 31, dispenserItem);
-        inventory.setItem(isUnlinked ? 24 : 33, containerItem);
+            inventory.setItem(isUnlinked ? 20 : 29, cropItem);
+            inventory.setItem(isUnlinked ? 22 : 31, dispenserItem);
+            inventory.setItem(isUnlinked ? 24 : 33, containerItem);
+        } else {
+            inventory.setItem(22, claimItem);
+        }
 
         for (int i = 0; i < 54; ++i) {
             boolean isBottomSide = i > 45;
@@ -123,7 +129,30 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assign wheaten the clickedComponent is selected or not.
+     * Assigns the isUnclaimed whether autofarm is unclaimed, and its
+     * item variable, claimItem.
+     */
+    private void assignClaimed() {
+        if (autofarm == null) {
+            this.isUnclaimed = false;
+            return;
+        }
+
+        this.claimItem = getClaimItem();
+        this.isUnclaimed = Autofarm.UNKNOWN_OWNER.equals(autofarm.getOwnerID());
+    }
+
+
+    /**
+     * Assigns the isUnlinked whether autofarm is unlinked.
+     */
+    private void assignLinked() {
+        this.isUnlinked = !autofarmManager.isLinked(autofarm);
+    }
+
+
+    /**
+     * Assign whether the clickedComponent is selected or not.
      */
     private void assignClicked() {
         this.isClickedSelected = isClickedSelected(clickedComponent);
@@ -207,6 +236,18 @@ public abstract class LinkMenu extends Menu {
                     autofarm.getShortenedID(),
                     ((ShulkerBox) containerState).getInventory()
             ).open();
+        }
+    }
+
+
+    /**
+     * If the player clicks on the claim item, it set the owner of the autofarm to the player.
+     *
+     * @param clicked The item that was clicked.
+     */
+    protected void handleUnclaimed(@NotNull ItemStack clicked) {
+        if (clicked.equals(claimItem)) {
+            autofarm.setOwnerID(player.getUniqueId());
         }
     }
 
@@ -307,6 +348,14 @@ public abstract class LinkMenu extends Menu {
     }
 
 
+    private @NotNull ItemStack getClaimItem() {
+        return new ItemBuilder(Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+                .setName(plugin, LanguageAPI.Menu.LINK_CLAIM_NAME)
+                .setLore(LanguageAPI.Menu.LINK_CLAIM_STATUS.getAsList(plugin))
+                .toItemStack();
+    }
+
+
     /**
      * It returns an ItemStack that represents the Autofarm state.
      *
@@ -318,7 +367,7 @@ public abstract class LinkMenu extends Menu {
                 autofarm.isEnabled()
         );
 
-        return new ItemBuilder(Material.IRON_PLATE)
+        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
                 .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, status))
                 .toItemStack();
@@ -335,10 +384,11 @@ public abstract class LinkMenu extends Menu {
                 .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
                 .setMaterial(
-                        isCropSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
                 )
-                .setDamage(isUnlinked ? 15 : -1)
-                .setDamage(isCropSelected ? 3 : -1)
+                .setMaterial(
+                        isCropSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .toItemStack();
     }
 
@@ -356,10 +406,11 @@ public abstract class LinkMenu extends Menu {
                         containerLocation != null ? containerLocation.getBlock().getType() : null
                 )
                 .setMaterial(
-                        isContainerSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
                 )
-                .setDamage(isUnlinked ? 15 : -1)
-                .setDamage(isContainerSelected ? 3 : -1)
+                .setMaterial(
+                        isContainerSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .toItemStack();
     }
 
@@ -374,10 +425,11 @@ public abstract class LinkMenu extends Menu {
                 .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
                 .setMaterial(
-                        isDispenserSelected || isUnlinked ? Material.STAINED_GLASS_PANE : null
+                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
                 )
-                .setDamage(isUnlinked ? 15 : -1)
-                .setDamage(isDispenserSelected ? 3 : -1)
+                .setMaterial(
+                        isDispenserSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
                 .toItemStack();
     }
 
@@ -388,16 +440,27 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getGlassItem() {
-        return new ItemBuilder(Material.STAINED_GLASS_PANE)
-                .setDamage(isUnlinked ? 15 : 4)
-                .setDamage(isClickedSelected ? 3 : -1)
+        return new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
                 .setName(plugin, LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_LINKED)
+                .setMaterial(
+                        !isUnlinked ? Material.YELLOW_STAINED_GLASS_PANE : null
+                )
+                .setMaterial(
+                        isClickedSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
+                )
+                .setMaterial(
+                        isUnclaimed ? Material.WHITE_STAINED_GLASS_PANE : null
+                )
                 .setName(isUnlinked
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNLINKED.get(plugin)
                          : null
                 )
                 .setName(isClickedSelected
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_SELECTED.get(plugin)
+                         : null
+                )
+                .setName(isUnclaimed
+                         ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNCLAIMED.get(plugin)
                          : null
                 )
                 .toItemStack();
@@ -508,7 +571,8 @@ public abstract class LinkMenu extends Menu {
      * @return A list of strings.
      */
     @Contract(" -> new")
-    private @NotNull @Unmodifiable List<String> getUnlinkedLocationLore() {
+    private @NotNull
+    @Unmodifiable List<String> getUnlinkedLocationLore() {
         return Collections.singletonList(
                 LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
                         LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)
@@ -524,7 +588,8 @@ public abstract class LinkMenu extends Menu {
      *
      * @return A list of strings that are the lore of the location.
      */
-    private @NotNull @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
+    private @NotNull
+    @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
         ArrayList<String> baseState = new ArrayList<>(
                 getBaseLocationLore(location)
         );

@@ -14,7 +14,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class CollectionUtil {
+public final class CollectionUtils {
 
     /**
      * Return a new list with the elements of the given list in reverse order.

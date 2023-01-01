@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.sounds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Sound menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -24,26 +24,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SoundMenu extends Menu {
 
-    private final int MIN_DELAY = 0; // in milliseconds
-    private final int MAX_DELAY = 5000; // in milliseconds
+    public static final int MIN_DELAY = 0; // in milliseconds
+    public static final int MAX_DELAY = 5000; // in milliseconds
 
-    private final int DELAY_MIN_CHANGE = 100; // in milliseconds
-    private final int DELAY_MAX_CHANGE = 500; // in milliseconds
+    public static final int DELAY_MIN_CHANGE = 100; // in milliseconds
+    public static final int DELAY_MAX_CHANGE = 500; // in milliseconds
 
-    private final int MIN_VOLUME = 0; // range in blocks
-    private final int MAX_VOLUME = 500; // range in blocks
+    public static final int MIN_VOLUME = 0; // range in blocks
+    public static final int MAX_VOLUME = 500; // range in blocks
 
-    private final int VOLUME_MIN_CHANGE = 1;
-    private final int VOLUME_MAX_CHANGE = 5;
+    public static final int VOLUME_MIN_CHANGE = 1;
+    public static final int VOLUME_MAX_CHANGE = 5;
 
-    private final int MIN_PITCH = 0;
-    private final int MAX_PITCH = 2;
+    public static final int MIN_PITCH = 0;
+    public static final int MAX_PITCH = 2;
 
-    private final double PITCH_MIN_CHANGE = 0.1;
-    private final double PITCH_MAX_CHANGE = 0.2;
+    public static final double PITCH_MIN_CHANGE = 0.1;
+    public static final double PITCH_MAX_CHANGE = 0.2;
 
 
-    private final Crop crop;
+    private final BaseCrop crop;
     private final String cropName;
     private final String soundName;
     private final SoundConfigSection soundSection;
@@ -54,7 +54,7 @@ public final class SoundMenu extends Menu {
 
     public SoundMenu(@NotNull CropClick plugin,
                      @NotNull Player player,
-                     @NotNull Crop crop,
+                     @NotNull BaseCrop crop,
                      @NotNull String soundName) {
         super(plugin, player, LanguageAPI.Menu.SOUND_TITLE);
         this.soundSection = plugin.getCropsConfig().getSoundSection();
@@ -106,6 +106,8 @@ public final class SoundMenu extends Menu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new SoundsMenu(plugin, player, crop));
 
@@ -169,7 +171,7 @@ public final class SoundMenu extends Menu {
             decreasePitch(PITCH_MAX_CHANGE);
         }
 
-        updateMenu();
+        refresh();
     }
 
 
@@ -179,7 +181,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemBuilder(Material.WATCH)
+        return new ItemBuilder(Material.CLOCK)
                 .setName(plugin, LanguageAPI.Menu.SOUND_DELAY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_DELAY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_DELAY_ITEM_VALUE.get(plugin, delay)
@@ -221,7 +223,7 @@ public final class SoundMenu extends Menu {
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
-        return new ItemBuilder(Material.IRON_PLATE)
+        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.SOUND_INCREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -231,7 +233,7 @@ public final class SoundMenu extends Menu {
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
-        return new ItemBuilder(Material.GOLD_PLATE)
+        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.SOUND_DECREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -245,7 +247,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -259,7 +261,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -273,7 +275,7 @@ public final class SoundMenu extends Menu {
         );
         double volumeAfter = Math.min(volumeBefore + volumeChange, MAX_VOLUME);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volumeChange, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
@@ -287,7 +289,7 @@ public final class SoundMenu extends Menu {
         );
         double volumeAfter = Math.max(volumeBefore - volumeChange, MIN_VOLUME);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volumeChange, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
@@ -303,7 +305,7 @@ public final class SoundMenu extends Menu {
                 Math.min(pitchBefore + pitchChange, MAX_PITCH)
         );
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
@@ -319,7 +321,7 @@ public final class SoundMenu extends Menu {
                 Math.max(pitchBefore - pitchChange, MIN_PITCH)
         );
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();

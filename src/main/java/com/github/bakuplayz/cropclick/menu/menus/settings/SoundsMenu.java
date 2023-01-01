@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.sounds.SoundMenu;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Sounds menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -33,13 +33,13 @@ import java.util.stream.Collectors;
  */
 public final class SoundsMenu extends PaginatedMenu {
 
-    private final Crop crop;
+    private final BaseCrop crop;
 
     private final List<String> sounds;
     private final SoundConfigSection soundSection;
 
 
-    public SoundsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public SoundsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.SOUNDS_TITLE);
         this.soundSection = plugin.getCropsConfig().getSoundSection();
         this.sounds = getSounds();
@@ -60,6 +60,8 @@ public final class SoundsMenu extends PaginatedMenu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.SOUNDS));
         handlePagination(clicked);
@@ -88,7 +90,7 @@ public final class SoundsMenu extends PaginatedMenu {
      *
      * @param clicked The item that was clicked.
      *
-     * @return The index of the sound in the menuItems list.
+     * @return The index of the sound in the {@link #menuItems menuItems list}.
      */
     private int getIndexOfSound(@NotNull ItemStack clicked) {
         return menuItems.stream()
@@ -122,8 +124,7 @@ public final class SoundsMenu extends PaginatedMenu {
                 ));
 
         if (isEnabled) {
-            item.setDamage(5)
-                .setMaterial(Material.STAINED_GLASS_PANE)
+            item.setMaterial(Material.LIME_STAINED_GLASS_PANE)
                 .setLore(LanguageAPI.Menu.SOUNDS_ITEM_ORDER.get(
                         plugin,
                         getOrderOfSound(sound)

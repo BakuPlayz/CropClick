@@ -8,7 +8,7 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigS
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
@@ -212,6 +212,7 @@ public final class CropsMenu extends PaginatedMenu {
      *
      * @return A list of ItemStacks.
      */
+    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return crops.stream()
                     .map(this::getMenuItem)
