@@ -14,12 +14,12 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the pumpkin crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class Pumpkin extends GroundCrop {

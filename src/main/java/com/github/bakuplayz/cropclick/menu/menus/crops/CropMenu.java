@@ -203,7 +203,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getChanceItem() {
         int cropChance = getDropChanceAsPercent(true);
 
-        ItemBuilder item = new ItemBuilder(Material.OAK_PRESSURE_PLATE)
+        ItemBuilder item = new ItemBuilder(Material.WOOD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_CHANCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, cropChance));
 
@@ -227,7 +227,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getLinkableItem() {
         boolean isLinkable = cropSection.isLinkable(cropName);
 
-        return new ItemBuilder(Material.STONE_PRESSURE_PLATE)
+        return new ItemBuilder(Material.STONE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
@@ -397,7 +397,7 @@ public final class CropMenu extends Menu {
      * @return The drop chance of the crop or seed.
      */
     private int getDropChanceAsPercent(boolean isCrop) {
-        double DECIMAL_TO_PERCENT = 10_000;
+        final double DECIMAL_TO_PERCENT = 10_000;
         if (isCrop) {
             return (int) (cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
         }

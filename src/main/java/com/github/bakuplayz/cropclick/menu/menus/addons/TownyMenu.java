@@ -61,7 +61,7 @@ public final class TownyMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemBuilder(Material.OAK_FENCE_GATE)
+        return new ItemBuilder(Material.FENCE_GATE)
                 .setName(LanguageAPI.Menu.ADDON_TOWNY_ITEM_NAME.get(plugin,
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))

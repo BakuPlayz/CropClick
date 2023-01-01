@@ -69,23 +69,23 @@ public final class SoundMenu extends Menu {
         this.currentOrder = soundSection.getOrder(cropName, soundName);
         this.maxOrder = soundSection.getSounds(cropName).size() - 1;
 
-        inventory.setItem(10, getDelayRemoveItem(DELAY_MAX_CHANGE));
-        inventory.setItem(11, getDelayRemoveItem(DELAY_MIN_CHANGE));
+        inventory.setItem(10, getDelayRemoveItem(SoundMenu.DELAY_MAX_CHANGE));
+        inventory.setItem(11, getDelayRemoveItem(SoundMenu.DELAY_MIN_CHANGE));
         inventory.setItem(13, getDelayItem());
-        inventory.setItem(15, getDelayAddItem(DELAY_MIN_CHANGE));
-        inventory.setItem(16, getDelayAddItem(DELAY_MAX_CHANGE));
+        inventory.setItem(15, getDelayAddItem(SoundMenu.DELAY_MIN_CHANGE));
+        inventory.setItem(16, getDelayAddItem(SoundMenu.DELAY_MAX_CHANGE));
 
-        inventory.setItem(19, getVolumeRemoveItem(VOLUME_MAX_CHANGE));
-        inventory.setItem(20, getVolumeRemoveItem(VOLUME_MIN_CHANGE));
+        inventory.setItem(19, getVolumeRemoveItem(SoundMenu.VOLUME_MAX_CHANGE));
+        inventory.setItem(20, getVolumeRemoveItem(SoundMenu.VOLUME_MIN_CHANGE));
         inventory.setItem(22, getVolumeItem());
-        inventory.setItem(24, getVolumeAddItem(VOLUME_MIN_CHANGE));
-        inventory.setItem(25, getVolumeAddItem(VOLUME_MAX_CHANGE));
+        inventory.setItem(24, getVolumeAddItem(SoundMenu.VOLUME_MIN_CHANGE));
+        inventory.setItem(25, getVolumeAddItem(SoundMenu.VOLUME_MAX_CHANGE));
 
-        inventory.setItem(28, getPitchRemoveItem(PITCH_MAX_CHANGE));
-        inventory.setItem(29, getPitchRemoveItem(PITCH_MIN_CHANGE));
+        inventory.setItem(28, getPitchRemoveItem(SoundMenu.PITCH_MAX_CHANGE));
+        inventory.setItem(29, getPitchRemoveItem(SoundMenu.PITCH_MIN_CHANGE));
         inventory.setItem(31, getPitchItem());
-        inventory.setItem(33, getPitchAddItem(PITCH_MIN_CHANGE));
-        inventory.setItem(34, getPitchAddItem(PITCH_MAX_CHANGE));
+        inventory.setItem(33, getPitchAddItem(SoundMenu.PITCH_MIN_CHANGE));
+        inventory.setItem(34, getPitchAddItem(SoundMenu.PITCH_MAX_CHANGE));
 
         setBackItem();
 
@@ -121,54 +121,54 @@ public final class SoundMenu extends Menu {
         }
 
         // DELAY
-        if (clicked.equals(getDelayAddItem(DELAY_MIN_CHANGE))) {
-            addSoundDelay(DELAY_MIN_CHANGE);
+        if (clicked.equals(getDelayAddItem(SoundMenu.DELAY_MIN_CHANGE))) {
+            addSoundDelay(SoundMenu.DELAY_MIN_CHANGE);
         }
 
-        if (clicked.equals(getDelayAddItem(DELAY_MAX_CHANGE))) {
-            addSoundDelay(DELAY_MAX_CHANGE);
+        if (clicked.equals(getDelayAddItem(SoundMenu.DELAY_MAX_CHANGE))) {
+            addSoundDelay(SoundMenu.DELAY_MAX_CHANGE);
         }
 
-        if (clicked.equals(getDelayRemoveItem(DELAY_MIN_CHANGE))) {
-            removeSoundDelay(DELAY_MIN_CHANGE);
+        if (clicked.equals(getDelayRemoveItem(SoundMenu.DELAY_MIN_CHANGE))) {
+            removeSoundDelay(SoundMenu.DELAY_MIN_CHANGE);
         }
 
-        if (clicked.equals(getDelayRemoveItem(DELAY_MAX_CHANGE))) {
-            removeSoundDelay(DELAY_MAX_CHANGE);
+        if (clicked.equals(getDelayRemoveItem(SoundMenu.DELAY_MAX_CHANGE))) {
+            removeSoundDelay(SoundMenu.DELAY_MAX_CHANGE);
         }
 
         // VOLUME
-        if (clicked.equals(getVolumeAddItem(VOLUME_MIN_CHANGE))) {
-            increaseVolume(VOLUME_MIN_CHANGE);
+        if (clicked.equals(getVolumeAddItem(SoundMenu.VOLUME_MIN_CHANGE))) {
+            increaseVolume(SoundMenu.VOLUME_MIN_CHANGE);
         }
 
-        if (clicked.equals(getVolumeAddItem(VOLUME_MAX_CHANGE))) {
-            increaseVolume(VOLUME_MAX_CHANGE);
+        if (clicked.equals(getVolumeAddItem(SoundMenu.VOLUME_MAX_CHANGE))) {
+            increaseVolume(SoundMenu.VOLUME_MAX_CHANGE);
         }
 
-        if (clicked.equals(getVolumeRemoveItem(VOLUME_MIN_CHANGE))) {
-            decreaseVolume(VOLUME_MIN_CHANGE);
+        if (clicked.equals(getVolumeRemoveItem(SoundMenu.VOLUME_MIN_CHANGE))) {
+            decreaseVolume(SoundMenu.VOLUME_MIN_CHANGE);
         }
 
-        if (clicked.equals(getVolumeRemoveItem(VOLUME_MAX_CHANGE))) {
-            decreaseVolume(VOLUME_MAX_CHANGE);
+        if (clicked.equals(getVolumeRemoveItem(SoundMenu.VOLUME_MAX_CHANGE))) {
+            decreaseVolume(SoundMenu.VOLUME_MAX_CHANGE);
         }
 
         // PITCH
-        if (clicked.equals(getPitchAddItem(PITCH_MIN_CHANGE))) {
-            increasePitch(PITCH_MIN_CHANGE);
+        if (clicked.equals(getPitchAddItem(SoundMenu.PITCH_MIN_CHANGE))) {
+            increasePitch(SoundMenu.PITCH_MIN_CHANGE);
         }
 
-        if (clicked.equals(getPitchAddItem(PITCH_MAX_CHANGE))) {
-            increasePitch(PITCH_MAX_CHANGE);
+        if (clicked.equals(getPitchAddItem(SoundMenu.PITCH_MAX_CHANGE))) {
+            increasePitch(SoundMenu.PITCH_MAX_CHANGE);
         }
 
-        if (clicked.equals(getPitchRemoveItem(PITCH_MIN_CHANGE))) {
-            decreasePitch(PITCH_MIN_CHANGE);
+        if (clicked.equals(getPitchRemoveItem(SoundMenu.PITCH_MIN_CHANGE))) {
+            decreasePitch(SoundMenu.PITCH_MIN_CHANGE);
         }
 
-        if (clicked.equals(getPitchRemoveItem(PITCH_MAX_CHANGE))) {
-            decreasePitch(PITCH_MAX_CHANGE);
+        if (clicked.equals(getPitchRemoveItem(SoundMenu.PITCH_MAX_CHANGE))) {
+            decreasePitch(SoundMenu.PITCH_MAX_CHANGE);
         }
 
         refresh();
@@ -181,7 +181,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
 
-        return new ItemBuilder(Material.CLOCK)
+        return new ItemBuilder(Material.WATCH)
                 .setName(plugin, LanguageAPI.Menu.SOUND_DELAY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_DELAY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SOUND_DELAY_ITEM_VALUE.get(plugin, delay)
@@ -245,7 +245,7 @@ public final class SoundMenu extends Menu {
                 cropName,
                 soundName
         );
-        double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
+        double delayAfter = Math.min(delayBefore + delayChange, SoundMenu.MAX_DELAY);
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
@@ -259,7 +259,7 @@ public final class SoundMenu extends Menu {
                 cropName,
                 soundName
         );
-        double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
+        double delayAfter = Math.max(delayBefore - delayChange, SoundMenu.MIN_DELAY);
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
@@ -273,7 +273,7 @@ public final class SoundMenu extends Menu {
                 cropName,
                 soundName
         );
-        double volumeAfter = Math.min(volumeBefore + volumeChange, MAX_VOLUME);
+        double volumeAfter = Math.min(volumeBefore + volumeChange, SoundMenu.MAX_VOLUME);
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volumeChange, "Volume"))
@@ -287,7 +287,7 @@ public final class SoundMenu extends Menu {
                 cropName,
                 soundName
         );
-        double volumeAfter = Math.max(volumeBefore - volumeChange, MIN_VOLUME);
+        double volumeAfter = Math.max(volumeBefore - volumeChange, SoundMenu.MIN_VOLUME);
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volumeChange, "Volume"))
@@ -302,7 +302,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
         double pitchAfter = MathUtils.round(
-                Math.min(pitchBefore + pitchChange, MAX_PITCH)
+                Math.min(pitchBefore + pitchChange, SoundMenu.MAX_PITCH)
         );
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
@@ -318,7 +318,7 @@ public final class SoundMenu extends Menu {
                 soundName
         );
         double pitchAfter = MathUtils.round(
-                Math.max(pitchBefore - pitchChange, MIN_PITCH)
+                Math.max(pitchBefore - pitchChange, SoundMenu.MIN_PITCH)
         );
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
@@ -332,7 +332,7 @@ public final class SoundMenu extends Menu {
         double oldDelay = MathUtils.round(
                 soundSection.getDelay(cropName, soundName) + delay
         );
-        double newDelay = Math.min(oldDelay, MAX_DELAY);
+        double newDelay = Math.min(oldDelay, SoundMenu.MAX_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
     }
 
@@ -341,7 +341,7 @@ public final class SoundMenu extends Menu {
         double oldDelay = MathUtils.round(
                 soundSection.getDelay(cropName, soundName) - delay
         );
-        double newDelay = Math.max(oldDelay, MIN_DELAY);
+        double newDelay = Math.max(oldDelay, SoundMenu.MIN_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
     }
 
@@ -350,7 +350,7 @@ public final class SoundMenu extends Menu {
         double oldVolume = MathUtils.round(
                 soundSection.getVolume(cropName, soundName) + volume
         );
-        double newVolume = Math.min(oldVolume, MAX_VOLUME);
+        double newVolume = Math.min(oldVolume, SoundMenu.MAX_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
     }
 
@@ -359,7 +359,7 @@ public final class SoundMenu extends Menu {
         double oldVolume = MathUtils.round(
                 soundSection.getVolume(cropName, soundName) - volume
         );
-        double newVolume = Math.max(oldVolume, MIN_VOLUME);
+        double newVolume = Math.max(oldVolume, SoundMenu.MIN_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
     }
 
@@ -368,7 +368,7 @@ public final class SoundMenu extends Menu {
         double oldPitch = MathUtils.round(
                 soundSection.getPitch(cropName, soundName) + pitch
         );
-        double newPitch = Math.min(oldPitch, MAX_PITCH);
+        double newPitch = Math.min(oldPitch, SoundMenu.MAX_PITCH);
         soundSection.setPitch(cropName, soundName, newPitch);
     }
 
@@ -377,7 +377,7 @@ public final class SoundMenu extends Menu {
         double oldPitch = MathUtils.round(
                 soundSection.getPitch(cropName, soundName) - pitch
         );
-        double newPitch = Math.max(oldPitch, MIN_PITCH);
+        double newPitch = Math.max(oldPitch, SoundMenu.MIN_PITCH);
         soundSection.setPitch(cropName, soundName, newPitch);
     }
 

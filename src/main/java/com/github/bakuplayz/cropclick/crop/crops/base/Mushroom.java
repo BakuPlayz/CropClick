@@ -10,17 +10,19 @@ import java.util.Stack;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the base of a mushroom crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see TallCrop
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public abstract class Mushroom extends TallCrop {
 
+    /**
+     * A variable containing all the mushroom blocks as a stack instead of a list, due to their in-game structure.
+     */
     protected Stack<Block> mushrooms;
 
 
@@ -31,14 +33,24 @@ public abstract class Mushroom extends TallCrop {
     }
 
 
+    /**
+     * Checks whether at least one mushroom should drop.
+     *
+     * @return true if it should, otherwise false (default: false).
+     */
     @Override
     public boolean dropAtLeastOne() {
         return cropSection.shouldDropAtLeastOne(getName(), false);
     }
 
 
+    /**
+     * Replants the mushroom.
+     *
+     * @param block the mushroom crop block.
+     */
     @Override
-    public void replant(@NotNull Block clickedBlock) {
+    public void replant(@NotNull Block block) {
         mushrooms.forEach(b -> b.setType(Material.AIR));
 
         mushrooms = new Stack<>();

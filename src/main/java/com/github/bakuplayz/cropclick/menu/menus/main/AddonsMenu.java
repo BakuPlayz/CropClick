@@ -137,7 +137,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "mcMMO" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getMCMMOItem() {
-        return new ItemBuilder(Material.GOLDEN_SWORD)
+        return new ItemBuilder(Material.GOLD_SWORD)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_MCMMO_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_MCMMO_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)
@@ -182,7 +182,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "Residence" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getResidenceItem() {
-        return new ItemBuilder(Material.OAK_FENCE)
+        return new ItemBuilder(Material.FENCE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, residenceEnabled)
@@ -204,7 +204,7 @@ public final class AddonsMenu extends Menu {
      * @return An ItemStack with the name "Towny" and the lore of ex: "Enabled: true".
      */
     public @NotNull ItemStack getTownyItem() {
-        return new ItemBuilder(Material.OAK_FENCE_GATE)
+        return new ItemBuilder(Material.FENCE_GATE)
                 .setName(plugin, LanguageAPI.Menu.ADDONS_TOWNY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.ADDONS_TOWNY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_TOWNY_ITEM_STATUS.get(plugin, townyEnabled)
