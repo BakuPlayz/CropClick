@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Dispenser Link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -51,12 +51,22 @@ public final class DispenserLinkMenu extends LinkMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
-        handleBack(clicked, new AutofarmsMenu(plugin, player, menuState));
+        assert clicked != null; // Only here for the compiler.
+
+        if (menuState != AutofarmsMenuState.LINK) {
+            handleBack(clicked, new AutofarmsMenu(plugin, player, menuState));
+        }
+
+        if (isUnclaimed) {
+            handleUnclaimed(clicked);
+            refresh();
+            return;
+        }
 
         if (!isUnlinked) {
             handlePreviews(clicked);
             handleToggle(clicked);
-            updateMenu();
+            refresh();
         }
 
         if (!clicked.equals(dispenserItem)) {
@@ -65,7 +75,7 @@ public final class DispenserLinkMenu extends LinkMenu {
 
         if (isUnlinked) {
             handleSelect();
-            updateMenu();
+            refresh();
             handleLink();
         }
     }

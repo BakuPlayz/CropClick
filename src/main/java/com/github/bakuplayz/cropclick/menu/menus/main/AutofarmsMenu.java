@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Autofarms menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -61,6 +61,8 @@ public final class AutofarmsMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handlePagination(clicked);
 
         if (menuState == AutofarmsMenuState.MENU_REDIRECT) {
@@ -93,6 +95,7 @@ public final class AutofarmsMenu extends PaginatedMenu {
     }
 
 
+    @SuppressWarnings("ConstantConditions")
     private @NotNull ItemStack getMenuItem(@NotNull Autofarm farm) {
         String status = farm.isEnabled()
                         ? LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin)
@@ -101,12 +104,15 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
         return new ItemBuilder(Material.DISPENSER)
                 .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, farm.getShortenedID(), status))
-                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin, player.getName()))
+                .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin,
+                        player.getUniqueId().equals(Autofarm.UNKNOWN_OWNER)
+                        ? LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER_UNCLAIMED.get(plugin)
+                        : player.getName()
+                ))
                 .toItemStack();
     }
 
 
-    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return autofarms.stream()
                         .map(this::getMenuItem)

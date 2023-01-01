@@ -3,9 +3,8 @@ package com.github.bakuplayz.cropclick.menu.menus.crops;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crop.DropChanceMenu;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Crop menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -35,9 +34,8 @@ public final class CropMenu extends Menu {
     private final int MIN_VALUE = 0;
     private final int MAX_VALUE = 576;
 
-
-    private final Crop crop;
-    private final Seed seed;
+    private final BaseCrop crop;
+    private final BaseSeed seed;
     private final String cropName;
     private final boolean hasSeed;
 
@@ -45,7 +43,7 @@ public final class CropMenu extends Menu {
     private final SeedConfigSection seedSection;
 
 
-    public CropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public CropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.CROP_TITLE);
         this.cropSection = plugin.getCropsConfig().getCropSection();
         this.seedSection = plugin.getCropsConfig().getSeedSection();
@@ -84,6 +82,8 @@ public final class CropMenu extends Menu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.CROP));
 
@@ -151,10 +151,15 @@ public final class CropMenu extends Menu {
             }
         }
 
-        updateMenu();
+        refresh();
     }
 
 
+    /**
+     * It creates an item representing the crop item.
+     *
+     * @return an item representing the crop item.
+     */
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(cropName, false);
         String status = crop.isHarvestable()
@@ -166,13 +171,16 @@ public final class CropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.CROP_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount())
                 ))
-                .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isHarvestable() ? -1 : 15)
-                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
+                .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the seed item.
+     *
+     * @return an item representing the seed item.
+     */
     private @NotNull ItemStack getSeedItem() {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
@@ -182,16 +190,20 @@ public final class CropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount())
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(seed.isEnabled() ? -1 : 15)
+                .setMaterial(seed.isEnabled() ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the drop chances.
+     *
+     * @return an item representing the drop chances.
+     */
     private @NotNull ItemStack getChanceItem() {
         int cropChance = getDropChanceAsPercent(true);
 
-        ItemBuilder item = new ItemBuilder(Material.WOOD_PLATE)
+        ItemBuilder item = new ItemBuilder(Material.OAK_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_CHANCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, cropChance));
 
@@ -207,10 +219,15 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the linkable item.
+     *
+     * @return an item representing the linkable item.
+     */
     private @NotNull ItemStack getLinkableItem() {
         boolean isLinkable = cropSection.isLinkable(cropName);
 
-        return new ItemBuilder(Material.STONE_PLATE)
+        return new ItemBuilder(Material.STONE_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_LINKABLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_LINKABLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable))
@@ -218,10 +235,15 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the "should" replant crop item.
+     *
+     * @return an item representing the "should" replant crop item.
+     */
     private @NotNull ItemStack getReplantItem() {
         boolean shouldReplant = cropSection.shouldReplant(cropName);
 
-        return new ItemBuilder(Material.IRON_PLATE)
+        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_REPLANT_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
@@ -229,10 +251,15 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the at least one drop item.
+     *
+     * @return an item representing the at least one drop item.
+     */
     private @NotNull ItemStack getAtLeastItem() {
         boolean atLeastOne = cropSection.shouldDropAtLeastOne(cropName);
 
-        return new ItemBuilder(Material.GOLD_PLATE)
+        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_AT_LEAST_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
@@ -240,44 +267,72 @@ public final class CropMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of crop to add.
+     *
+     * @param amount the given crop to add.
+     *
+     * @return an item representing the amount of crop to add.
+     */
     private @NotNull ItemStack getCropAddItem(int amount) {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of crop to remove.
+     *
+     * @param amount the given crop to remove.
+     *
+     * @return an item representing the amount of crop to remove.
+     */
     private @NotNull ItemStack getCropRemoveItem(int amount) {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of seed to add.
+     *
+     * @param amount the given seed to add.
+     *
+     * @return an item representing the amount of seed to add.
+     */
     private @NotNull ItemStack getSeedAddItem(int amount) {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of seed to remove.
+     *
+     * @param amount the given seed to remove.
+     *
+     * @return an item representing the amount of seed to remove.
+     */
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -342,11 +397,11 @@ public final class CropMenu extends Menu {
      * @return The drop chance of the crop or seed.
      */
     private int getDropChanceAsPercent(boolean isCrop) {
-        final double DECIMAL_TO_PERCENT = 10_000;
+        double DECIMAL_TO_PERCENT = 10_000;
         if (isCrop) {
-            return (int) Math.round(cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
+            return (int) (cropSection.getDropChance(cropName) * DECIMAL_TO_PERCENT);
         }
-        return (int) Math.round(seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
+        return (int) (seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT);
     }
 
 }

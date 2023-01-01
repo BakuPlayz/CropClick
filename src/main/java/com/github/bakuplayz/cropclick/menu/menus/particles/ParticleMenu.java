@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.particles;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ParticlesMenu;
@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Particle menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -26,23 +26,23 @@ import java.util.List;
  */
 public final class ParticleMenu extends Menu {
 
-    private final int MIN_CHANGE = 1;
-    private final int MAX_CHANGE = 5;
+    public static final int MIN_CHANGE = 1;
+    public static final int MAX_CHANGE = 5;
 
-    private final int DELAY_MIN_CHANGE = 100; // in milliseconds
-    private final int DELAY_MAX_CHANGE = 500; // in milliseconds
+    public static final int DELAY_MIN_CHANGE = 100; // in milliseconds
+    public static final int DELAY_MAX_CHANGE = 500; // in milliseconds
 
-    private final int DELAY_MIN = 0; // in milliseconds
-    private final int DELAY_MAX = 5000; // in milliseconds
+    public static final int MIN_DELAY = 0; // in milliseconds
+    public static final int MAX_DELAY = 5000; // in milliseconds
 
-    private final int MIN_SPEED = 0;
-    private final int MAX_SPEED = 50;
+    public static final int MIN_SPEED = 0;
+    public static final int MAX_SPEED = 50;
 
-    private final int MIN_AMOUNT = 0;
-    private final int MAX_AMOUNT = 20;
+    public static final int MIN_AMOUNT = 0;
+    public static final int MAX_AMOUNT = 20;
 
 
-    private final Crop crop;
+    private final BaseCrop crop;
     private final String cropName;
     private final String particleName;
     private final ParticleConfigSection particleSection;
@@ -53,7 +53,7 @@ public final class ParticleMenu extends Menu {
 
     public ParticleMenu(@NotNull CropClick plugin,
                         @NotNull Player player,
-                        @NotNull Crop crop,
+                        @NotNull BaseCrop crop,
                         @NotNull String particleName) {
         super(plugin, player, LanguageAPI.Menu.PARTICLE_TITLE);
         this.particleSection = plugin.getCropsConfig().getParticleSection();
@@ -106,6 +106,8 @@ public final class ParticleMenu extends Menu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new ParticlesMenu(plugin, player, crop));
 
@@ -169,17 +171,22 @@ public final class ParticleMenu extends Menu {
             removeParticleAmount(MAX_CHANGE);
         }
 
-        updateMenu();
+        refresh();
     }
 
 
+    /**
+     * It creates an item representing the delay at which particles should be displayed at.
+     *
+     * @return The delay at which particles should be displayed at.
+     */
     private @NotNull ItemStack getDelayItem() {
         double delay = particleSection.getDelay(
                 cropName,
                 particleName
         );
 
-        return new ItemBuilder(Material.WATCH)
+        return new ItemBuilder(Material.CLOCK)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DELAY_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_DELAY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.PARTICLE_DELAY_ITEM_VALUE.get(plugin, delay)
@@ -188,6 +195,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the speed of particles to be displayed.
+     *
+     * @return The speed of particles to be displayed.
+     */
     private @NotNull ItemStack getSpeedItem() {
         double speed = particleSection.getSpeed(
                 cropName,
@@ -203,6 +215,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the amount of particles to be displayed.
+     *
+     * @return The amount of particles to be displayed.
+     */
     private @NotNull ItemStack getAmountItem() {
         int amount = particleSection.getAmount(
                 cropName,
@@ -218,54 +235,85 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item that increases the order of the particle.
+     *
+     * @return An item representing an increase in order for the particle.
+     */
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
-        return new ItemBuilder(Material.IRON_PLATE)
+        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item that decreases the order of the particle.
+     *
+     * @return An item representing a decrease in order for the particle.
+     */
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
-        return new ItemBuilder(Material.GOLD_PLATE)
+        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of delay to add.
+     *
+     * @param delayChange the given delay to add.
+     *
+     * @return An item representing the delay of particles to add.
+     */
     private @NotNull ItemStack getDelayAddItem(int delayChange) {
         double delayBefore = particleSection.getDelay(
                 cropName,
                 particleName
         );
-        double delayAfter = Math.min(delayBefore + delayChange, DELAY_MAX);
+        double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of delay to remove.
+     *
+     * @param delayChange the given delay to remove.
+     *
+     * @return An item representing the delay of particles to remove.
+     */
     private @NotNull ItemStack getDelayRemoveItem(int delayChange) {
         double delayBefore = particleSection.getDelay(
                 cropName,
                 particleName
         );
-        double delayAfter = Math.max(delayBefore - delayChange, DELAY_MIN);
+        double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of speed to add.
+     *
+     * @param speedChange the given speed to add.
+     *
+     * @return An item representing the speed of particles to add.
+     */
     private @NotNull ItemStack getSpeedAddItem(int speedChange) {
         double speedBefore = particleSection.getSpeed(
                 cropName,
@@ -273,13 +321,20 @@ public final class ParticleMenu extends Menu {
         );
         double speedAfter = Math.min(speedBefore + speedChange, MAX_SPEED);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of speed to remove.
+     *
+     * @param speedChange the given speed to remove.
+     *
+     * @return An item representing the speed of particles to remove.
+     */
     private @NotNull ItemStack getSpeedRemoveItem(int speedChange) {
         double speedBefore = particleSection.getSpeed(
                 cropName,
@@ -287,13 +342,20 @@ public final class ParticleMenu extends Menu {
         );
         double speedAfter = Math.max(speedBefore - speedChange, MIN_SPEED);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the add amount.
+     *
+     * @param amountChange the given amount to add.
+     *
+     * @return An item representing the amount of particles to add.
+     */
     private @NotNull ItemStack getAmountAddItem(int amountChange) {
         int amountBefore = particleSection.getAmount(
                 cropName,
@@ -301,13 +363,20 @@ public final class ParticleMenu extends Menu {
         );
         int amountAfter = Math.min(amountBefore + amountChange, MAX_AMOUNT);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amountChange, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the remove amount.
+     *
+     * @param amountChange the given amount to remove.
+     *
+     * @return An item representing the amount of particles to remove.
+     */
     private @NotNull ItemStack getAmountRemoveItem(int amountChange) {
         int amountBefore = particleSection.getAmount(
                 cropName,
@@ -315,31 +384,46 @@ public final class ParticleMenu extends Menu {
         );
         int amountAfter = Math.max(amountBefore - amountChange, MIN_AMOUNT);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amountChange, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();
     }
 
 
+    /**
+     * Adds the given delay from the current delay of the particle.
+     *
+     * @param delay The delay of the particle.
+     */
     public void addParticleDelay(int delay) {
         double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) + delay
         );
-        double newDelay = Math.min(oldDelay, DELAY_MAX);
+        double newDelay = Math.min(oldDelay, MAX_DELAY);
         particleSection.setDelay(cropName, particleName, newDelay);
     }
 
 
+    /**
+     * Removes the given delay from the current delay of the particle.
+     *
+     * @param delay The delay of the particle.
+     */
     public void removeParticleDelay(int delay) {
         double oldDelay = MathUtils.round(
                 particleSection.getDelay(cropName, particleName) - delay
         );
-        double newDelay = Math.max(oldDelay, DELAY_MIN);
+        double newDelay = Math.max(oldDelay, MIN_DELAY);
         particleSection.setDelay(cropName, particleName, newDelay);
     }
 
 
+    /**
+     * Adds the given speed to the current speed of the particle.
+     *
+     * @param speed The speed of the particle.
+     */
     public void addParticleSpeed(int speed) {
         double oldSpeed = MathUtils.round(
                 particleSection.getSpeed(cropName, particleName) + speed
@@ -349,6 +433,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Removes the given speed from the current speed of the particle.
+     *
+     * @param speed The speed of the particle.
+     */
     public void removeParticleSpeed(int speed) {
         double oldSpeed = MathUtils.round(
                 particleSection.getSpeed(cropName, particleName) - speed
@@ -358,6 +447,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Adds the given amount of particles from the given crop and particle name.
+     *
+     * @param amount The amount of particles to add.
+     */
     public void addParticleAmount(int amount) {
         int oldAmount = particleSection.getAmount(cropName, particleName) + amount;
         int newAmount = Math.min(oldAmount, MAX_AMOUNT);
@@ -365,6 +459,11 @@ public final class ParticleMenu extends Menu {
     }
 
 
+    /**
+     * Removes the given amount of particles from the given crop and particle name.
+     *
+     * @param amount The amount of particles to remove.
+     */
     public void removeParticleAmount(int amount) {
         int oldAmount = particleSection.getAmount(cropName, particleName) - amount;
         int newAmount = Math.max(oldAmount, MIN_AMOUNT);

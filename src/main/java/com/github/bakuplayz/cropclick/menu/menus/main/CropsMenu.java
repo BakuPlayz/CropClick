@@ -5,8 +5,7 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigS
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Crops menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -43,9 +42,7 @@ import java.util.stream.Collectors;
  */
 public final class CropsMenu extends PaginatedMenu {
 
-    //TODO: Check all the comments... since they are a bit weird..
-
-    private final List<Crop> crops;
+    private final List<BaseCrop> crops;
 
     private final CropMenuState menuState;
 
@@ -80,6 +77,8 @@ public final class CropsMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         switch (menuState) {
             case CROP:
                 handleBack(clicked, new MainMenu(plugin, player));
@@ -107,7 +106,7 @@ public final class CropsMenu extends PaginatedMenu {
             return;
         }
 
-        Crop crop = crops.get(index);
+        BaseCrop crop = crops.get(index);
         switch (menuState) {
             case CROP:
                 new CropMenu(plugin, player, crop).open();
@@ -137,15 +136,16 @@ public final class CropsMenu extends PaginatedMenu {
 
 
     /**
-     * "Get the index of the clicked item in the menuItems list, or -1 if it's not in the list."
+     * "Get the index of the crop item that was clicked on."
      * <p>
-     * The first line of the function is the return statement. It's returning an int, which is the index of the clicked
-     * item in the menuItems list.
+     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
+     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
+     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
      * </p>
      *
      * @param clicked The item that was clicked.
      *
-     * @return The index of the item in the menuItems list.
+     * @return The index of the crop in the {@link #menuItems menuItems list}.
      */
     private int getIndexOfCrop(@NotNull ItemStack clicked) {
         return menuItems.stream()
@@ -157,22 +157,20 @@ public final class CropsMenu extends PaginatedMenu {
 
 
     /**
-     * It creates an item for the menu.
+     * It creates a crop item for the menu.
      *
      * @param crop The crop that the item is being created for.
      *
-     * @return An ItemStack.
+     * @return The given crop as a menu item.
      */
-    private @NotNull ItemStack getMenuItem(@NotNull Crop crop) {
+    private @NotNull ItemStack getMenuItem(@NotNull BaseCrop crop) {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.CROPS_STATUS_ENABLED.get(plugin)
                         : LanguageAPI.Menu.CROPS_STATUS_DISABLED.get(plugin);
         ItemBuilder menuItem = new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
-                .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isHarvestable() ? -1 : 15)
-                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE);
+                .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE);
 
         switch (menuState) {
             case CROP:
@@ -208,11 +206,10 @@ public final class CropsMenu extends PaginatedMenu {
 
 
     /**
-     * Get a list of menu items by mapping each crop to a menu item.
+     * It gets a list of menu items by mapping each crop to a menu item.
      *
-     * @return A list of ItemStacks.
+     * @return A list of crops as menuItems.
      */
-    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return crops.stream()
                     .map(this::getMenuItem)
@@ -221,98 +218,98 @@ public final class CropsMenu extends PaginatedMenu {
 
 
     /**
-     * Get the McMMO experience for the given crop.
+     * It gets the <a href="https://www.spigotmc.org/resources/official-mcmmo-original-author-returns.64348/">mcMMO</a> experience for the given crop.
      *
      * @param crop The crop that is being harvested.
      *
-     * @return The McMMO experience for the crop.
+     * @return The <a href="https://www.spigotmc.org/resources/official-mcmmo-original-author-returns.64348/">mcMMO</a> experience given when harvesting a crop.
      */
-    private double getMcMMOExperience(@NotNull Crop crop) {
+    private double getMcMMOExperience(@NotNull BaseCrop crop) {
         return addonSection.getMcMMOExperience(crop.getName());
     }
 
 
     /**
-     * It gets the money that a player gets from a job.
+     * It gets the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> money for the given crop.
      *
-     * @param crop The crop that the player is harvesting.
+     * @param crop The crop that is being harvested.
      *
-     * @return The amount of money that the player will receive for harvesting the crop.
+     * @return The <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> money given when harvesting a crop.
      */
-    private double getJobsMoney(@NotNull Crop crop) {
+    private double getJobsMoney(@NotNull BaseCrop crop) {
         return addonSection.getJobsMoney(crop.getName());
     }
 
 
     /**
-     * It returns the amount of points a player gets for harvesting a crop.
+     * It gets the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> points for the given crop.
      *
      * @param crop The crop that is being harvested.
      *
-     * @return The jobs point for the crop.
+     * @return The <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> points given when harvesting a crop.
      */
-    private double getJobsPoints(@NotNull Crop crop) {
+    private double getJobsPoints(@NotNull BaseCrop crop) {
         return addonSection.getJobsPoints(crop.getName());
     }
 
 
     /**
-     * This function returns the experience gained from harvesting a crop.
+     * It gets the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> experience for the given crop.
      *
-     * @param crop The crop that was harvested.
+     * @param crop The crop that is being harvested.
      *
-     * @return The experience gained from harvesting a crop.
+     * @return The <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> experience given when harvesting a crop.
      */
-    private double getJobsExperience(@NotNull Crop crop) {
+    private double getJobsExperience(@NotNull BaseCrop crop) {
         return addonSection.getJobsExperience(crop.getName());
     }
 
 
     /**
-     * Returns the amount of sounds for a crop.
+     * It returns the amount of sounds the given crop has.
      *
      * @param crop The crop that is being harvested.
      *
-     * @return The amount of sounds for a crop.
+     * @return The amount of sounds the crop has.
      */
-    private int getAmountOfSounds(@NotNull Crop crop) {
+    private int getAmountOfSounds(@NotNull BaseCrop crop) {
         return soundSection.getAmountOfSounds(crop.getName());
     }
 
 
     /**
-     * This function returns the amount of particles a crop has.
+     * It returns the amount of particles the given crop has.
      *
      * @param crop The crop that is being harvested.
      *
-     * @return The amount of particles that are in the config file for the crop.
+     * @return The amount of particles the crop has.
      */
-    private int getAmountOfParticles(@NotNull Crop crop) {
-        return particleSection.getAmountOfSounds(crop.getName());
+    private int getAmountOfParticles(@NotNull BaseCrop crop) {
+        return particleSection.getAmountOfParticles(crop.getName());
     }
 
 
     /**
-     * This function returns the amount of items that a crop will drop.
+     * It returns the amount of drops the given crop will drop.
      *
      * @param crop The crop that is being harvested.
      *
-     * @return The amount of the drop.
+     * @return The amount of drop.
      */
-    private int getDropValue(@NotNull Crop crop) {
+    private int getDropValue(@NotNull BaseCrop crop) {
         return crop.getDrop().getAmount();
     }
 
 
     /**
-     * If the crop has a drop, return the drop's name, otherwise return the crop's name.
+     * It gets the drop's name or the crop's name, if no drop name is set.
      *
      * @param crop The crop to get the drop name of.
      *
      * @return The name of the crop or the name of the drop.
      */
     @Contract("_ -> new")
-    private @NotNull String getDropName(@NotNull Crop crop) {
+    private @NotNull String getDropName(@NotNull BaseCrop crop) {
         return cropSection.getDropName(crop.getName());
     }
 

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Updates menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -46,6 +46,8 @@ public final class UpdatesMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getPlayerItem())) {
@@ -73,10 +75,15 @@ public final class UpdatesMenu extends Menu {
             player.sendMessage(MessageUtils.colorize("&7" + updateURL));
         }
 
-        updateMenu();
+        refresh();
     }
 
 
+    /**
+     * It creates an item representing the current update state.
+     *
+     * @return An item representing the current update state.
+     */
     private @NotNull ItemStack getUpdateItem() {
         String updateState = updateManager.getUpdateStateMessage();
 
@@ -88,6 +95,11 @@ public final class UpdatesMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the player update message.
+     *
+     * @return An item representing the player update message.
+     */
     private @NotNull ItemStack getPlayerItem() {
         String status = MessageUtils.getEnabledStatus(
                 plugin,
@@ -102,6 +114,11 @@ public final class UpdatesMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the console update message.
+     *
+     * @return An item representing the console update message.
+     */
     private @NotNull ItemStack getConsoleItem() {
         String status = MessageUtils.getEnabledStatus(
                 plugin,

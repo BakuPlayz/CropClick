@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the mcMMO menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -48,6 +48,8 @@ public final class McMMOMenu extends AddonMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new AddonsMenu(plugin, player));
         handleWorlds(clicked, new WorldsMenu(plugin, player, WorldMenuState.MCMMO));
         handleToggle(clicked, getToggleItem());
@@ -56,7 +58,7 @@ public final class McMMOMenu extends AddonMenu {
             new CropsMenu(plugin, player, CropMenuState.MCMMO).open();
         }
 
-        updateMenu();
+        refresh();
     }
 
 
@@ -82,13 +84,12 @@ public final class McMMOMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemBuilder(Material.GOLD_SWORD)
+        return new ItemBuilder(Material.GOLDEN_SWORD)
                 .setName(LanguageAPI.Menu.ADDON_MCMMO_ITEM_NAME.get(plugin,
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_MCMMO_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(isAddonEnabled ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(isAddonEnabled ? -1 : 7)
+                .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

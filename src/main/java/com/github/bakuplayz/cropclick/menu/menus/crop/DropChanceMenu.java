@@ -3,9 +3,8 @@ package com.github.bakuplayz.cropclick.menu.menus.crop;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Drop Chance menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -33,19 +32,18 @@ public final class DropChanceMenu extends Menu {
 
     private final int PERCENTAGE_MIN = 0;
     private final int PERCENTAGE_MAX = 100;
-    private final double DECIMAL_TO_PERCENT = 10_000;
     private final double PERCENT_TO_DECIMAL = 0.01;
+    private final double DECIMAL_TO_PERCENT = 10_000;
 
-
-    private final Crop crop;
-    private final Seed seed;
+    private final BaseCrop crop;
+    private final BaseSeed seed;
     private final boolean hasSeed;
 
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
 
 
-    public DropChanceMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public DropChanceMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.DROP_CHANCE_TITLE);
         this.cropSection = plugin.getCropsConfig().getCropSection();
         this.seedSection = plugin.getCropsConfig().getSeedSection();
@@ -78,6 +76,8 @@ public final class DropChanceMenu extends Menu {
     @Override
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
+
+        assert clicked != null; // Only here for the compiler.
 
         handleBack(clicked, new CropMenu(plugin, player, crop));
 
@@ -118,10 +118,15 @@ public final class DropChanceMenu extends Menu {
             }
         }
 
-        updateMenu();
+        refresh();
     }
 
 
+    /**
+     * It creates an item representing showing the crop drop chance.
+     *
+     * @return an item representing the chance of a crop dropping.
+     */
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = crop.isHarvestable()
@@ -136,13 +141,16 @@ public final class DropChanceMenu extends Menu {
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
-                .setDamage(crop instanceof CocoaBean ? 3 : -1)
-                .setDamage(crop.isHarvestable() ? -1 : 15)
-                .setMaterial(crop.isHarvestable() ? null : Material.STAINED_GLASS_PANE)
+                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing showing the seed drop chance.
+     *
+     * @return an item representing the chance of a crop dropping.
+     */
     private @NotNull ItemStack getSeedItem() {
         String name = MessageUtils.beautify(seed.getName(), false);
         String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
@@ -155,58 +163,85 @@ public final class DropChanceMenu extends Menu {
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(seed.isEnabled() ? -1 : 15)
+                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of crop chance to add.
+     *
+     * @param amount the given crop chance to add.
+     *
+     * @return an item representing the amount of crop chance to add.
+     */
     private @NotNull ItemStack getCropAddItem(int amount) {
         double beforeValue = MathUtils.round(
                 cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of crop chance to remove.
+     *
+     * @param amount the given crop chance to remove.
+     *
+     * @return an item representing the amount of crop chance to remove.
+     */
     private @NotNull ItemStack getCropRemoveItem(int amount) {
         double beforeValue = MathUtils.round(
                 cropSection.getDropChance(crop.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of seed chance to add.
+     *
+     * @param amount the given seed chance to add.
+     *
+     * @return an item representing the amount of seed chance to add.
+     */
     private @NotNull ItemStack getSeedAddItem(int amount) {
         double beforeValue = MathUtils.round(
                 seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
+    /**
+     * It creates an item representing the amount of seed chance to remove.
+     *
+     * @param amount the given seed chance to remove.
+     *
+     * @return an item representing the amount of seed chance to remove.
+     */
     private @NotNull ItemStack getSeedRemoveItem(int amount) {
         double beforeValue = MathUtils.round(
                 seedSection.getDropChance(seed.getName()) * DECIMAL_TO_PERCENT
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
+        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -220,10 +255,8 @@ public final class DropChanceMenu extends Menu {
      * @param amount The amount to increase the drop chance by.
      */
     public void increaseCropDropChance(@NotNull String name, int amount) {
-        double oldChance = MathUtils.round(
-                cropSection.getDropChance(name) * DECIMAL_TO_PERCENT + amount
-        );
-        double newChance = Math.min(oldChance, PERCENTAGE_MAX);
+        int oldChance = (int) (cropSection.getDropChance(name) * DECIMAL_TO_PERCENT + amount);
+        int newChance = Math.min(oldChance, PERCENTAGE_MAX);
         cropSection.setDropChance(name, newChance * PERCENT_TO_DECIMAL);
     }
 
@@ -235,10 +268,8 @@ public final class DropChanceMenu extends Menu {
      * @param amount The amount to decrease the chance by.
      */
     public void decreaseCropDropChance(@NotNull String name, int amount) {
-        double oldChance = MathUtils.round(
-                cropSection.getDropChance(name) * DECIMAL_TO_PERCENT - amount
-        );
-        double newChance = Math.max(oldChance, PERCENTAGE_MIN);
+        int oldChance = (int) (cropSection.getDropChance(name) * DECIMAL_TO_PERCENT - amount);
+        int newChance = Math.max(oldChance, PERCENTAGE_MIN);
         cropSection.setDropChance(name, newChance * PERCENT_TO_DECIMAL);
     }
 
@@ -250,10 +281,8 @@ public final class DropChanceMenu extends Menu {
      * @param amount The amount to increase the seed drop chance by.
      */
     public void increaseSeedDropAmount(@NotNull String name, int amount) {
-        double oldChance = MathUtils.round(
-                seedSection.getDropChance(name) * DECIMAL_TO_PERCENT + amount
-        );
-        double newChance = Math.min(oldChance, PERCENTAGE_MAX);
+        int oldChance = (int) (seedSection.getDropChance(name) * DECIMAL_TO_PERCENT + amount);
+        int newChance = Math.min(oldChance, PERCENTAGE_MAX);
         seedSection.setDropChance(name, newChance * PERCENT_TO_DECIMAL);
     }
 
@@ -265,10 +294,8 @@ public final class DropChanceMenu extends Menu {
      * @param amount The amount to add to the current amount.
      */
     public void decreaseSeedDropAmount(@NotNull String name, int amount) {
-        double oldChance = MathUtils.round(
-                seedSection.getDropChance(name) * DECIMAL_TO_PERCENT - amount
-        );
-        double newChance = Math.max(oldChance, PERCENTAGE_MIN);
+        int oldChance = (int) (seedSection.getDropChance(name) * DECIMAL_TO_PERCENT - amount);
+        int newChance = Math.max(oldChance, PERCENTAGE_MIN);
         seedSection.setDropChance(name, newChance * PERCENT_TO_DECIMAL);
     }
 

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the OfflineGrowth menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -43,11 +43,13 @@ public final class OfflineGrowthMenu extends AddonMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new AddonsMenu(plugin, player));
         handleWorlds(clicked, new WorldsMenu(plugin, player, WorldMenuState.OFFLINE_GROWTH));
         handleToggle(clicked, getToggleItem());
 
-        updateMenu();
+        refresh();
     }
 
 
@@ -59,13 +61,12 @@ public final class OfflineGrowthMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemBuilder(Material.LONG_GRASS)
+        return new ItemBuilder(Material.TALL_GRASS)
                 .setName(LanguageAPI.Menu.ADDON_GROWTH_ITEM_NAME.get(plugin,
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_GROWTH_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(isAddonEnabled ? null : Material.STAINED_GLASS_PANE)
-                .setDamage(isAddonEnabled ? 1 : 7)
+                .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
