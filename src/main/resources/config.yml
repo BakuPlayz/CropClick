@@ -1,12 +1,35 @@
-# ~~~~~~~~~~~~
-# Developer: BakuPlayz
-# Discord-Server: https://discord.gg/HqQqz2Z
-# Spigot-Resource: https://www.spigotmc.org/resources/craftinggui.72420/
-# ~~~~~~~~~~~~
-# Issue reports:
-# 1. Report issue via spigot (Response takes at max a week)
-# 2. Report issue via discord (Response takes at max three days)
-# ~~~~~~~~~~~~
+##################################################################################
+#                                                                                #
+#  $$$$$$\                                 $$$$$$\  $$\ $$\           $$\        #
+# $$  __$$\                               $$  __$$\ $$ |\__|          $$ |       #
+# $$ /  \__| $$$$$$\   $$$$$$\   $$$$$$\  $$ /  \__|$$ |$$\  $$$$$$$\ $$ |  $$\  #
+# $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  | #
+# $$ |      $$ |  \__|$$ /  $$ |$$ /  $$ |$$ |      $$ |$$ |$$ /      $$$$$$  /  #
+# $$ |  $$\ $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$\ $$ |$$ |$$ |      $$  _$$<   #
+# \$$$$$$  |$$ |      \$$$$$$  |$$$$$$$  |\$$$$$$  |$$ |$$ |\$$$$$$$\ $$ | \$$\  #
+#  \______/ \__|       \______/ $$  ____/  \______/ \__|\__| \_______|\__|  \__| #
+#                               $$ |                                             #
+#                               $$ |                                             #
+#                               \__|                                             #
+#                                                                                #
+##################################################################################
+#                                                                                #
+#   DEVELOPER CONTACT:                                                           #
+#                                                                                #
+#   You can reach me via the links below. May it be an issue with CropClick or   #
+#   anything code related you can find me here:                                  #
+#                                                                                #
+#   Discord: https://discord.gg/HqQqz2Z (Usually faster responses)               #
+#   Spigot: https://www.spigotmc.org/resources/craftinggui.72420/                #
+#                                                                                #
+##################################################################################
+#                                                                                #
+#   USAGE:                                                                       #
+#                                                                                #
+#   This configuration is used to configure [PLACEHOLDER]                        #
+#                                                                                #
+#                                                                                #
+##################################################################################
 
 updateMessage:
   player: true

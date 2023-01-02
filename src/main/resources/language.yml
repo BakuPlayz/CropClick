@@ -3,15 +3,35 @@
 #  $$$$$$\                                 $$$$$$\  $$\ $$\           $$\        #
 # $$  __$$\                               $$  __$$\ $$ |\__|          $$ |       #
 # $$ /  \__| $$$$$$\   $$$$$$\   $$$$$$\  $$ /  \__|$$ |$$\  $$$$$$$\ $$ |  $$\  #
-# $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  | # 
+# $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  | #
 # $$ |      $$ |  \__|$$ /  $$ |$$ /  $$ |$$ |      $$ |$$ |$$ /      $$$$$$  /  #
 # $$ |  $$\ $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$\ $$ |$$ |$$ |      $$  _$$<   #
 # \$$$$$$  |$$ |      \$$$$$$  |$$$$$$$  |\$$$$$$  |$$ |$$ |\$$$$$$$\ $$ | \$$\  #
 #  \______/ \__|       \______/ $$  ____/  \______/ \__|\__| \_______|\__|  \__| #
 #                               $$ |                                             #
 #                               $$ |                                             #
-#                               \__|                                             # 
-#                                                                                #       
+#                               \__|                                             #
+#                                                                                #
+##################################################################################
+#                                                                                #
+#   DEVELOPER CONTACT:                                                           #
+#                                                                                #
+#   You can reach me via the links below. May it be an issue with CropClick or   #
+#   anything code related you can find me here:                                  #
+#                                                                                #
+#   Discord: https://discord.gg/HqQqz2Z (Often faster responses)                 #
+#   Spigot: https://www.spigotmc.org/resources/craftinggui.72420/                #
+#                                                                                #
+##################################################################################
+#                                                                                #
+#   USAGE:                                                                       #
+#                                                                                #
+#   This configuration is used to configure the language in menus as well as     #
+#   commands, allowing you to translate CropClick to your own tongue. It can     #
+#   currently only be found in English, however, in the future you may find      #
+#   more.                                                                        #
+#                                                                                #
+#                                                                                #
 ##################################################################################
 
 command:
