@@ -66,7 +66,8 @@ public final class TownyMenu extends AddonMenu {
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_TOWNY_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!isAddonEnabled, Material.STAINED_GLASS_PANE)
+                .setDamage(!isAddonEnabled, 7)
                 .toItemStack();
     }
 

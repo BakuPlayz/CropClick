@@ -243,7 +243,7 @@ public final class ParticleMenu extends Menu {
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
-        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -258,7 +258,7 @@ public final class ParticleMenu extends Menu {
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
-        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.PARTICLE_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -279,7 +279,7 @@ public final class ParticleMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, ParticleMenu.MAX_DELAY);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -300,7 +300,7 @@ public final class ParticleMenu extends Menu {
         );
         double delayAfter = Math.max(delayBefore - delayChange, ParticleMenu.MIN_DELAY);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -321,7 +321,7 @@ public final class ParticleMenu extends Menu {
         );
         double speedAfter = Math.min(speedBefore + speedChange, ParticleMenu.MAX_SPEED);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
@@ -342,7 +342,7 @@ public final class ParticleMenu extends Menu {
         );
         double speedAfter = Math.max(speedBefore - speedChange, ParticleMenu.MIN_SPEED);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, speedChange, "Speed"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, speedAfter))
                 .toItemStack();
@@ -363,7 +363,7 @@ public final class ParticleMenu extends Menu {
         );
         int amountAfter = Math.min(amountBefore + amountChange, ParticleMenu.MAX_AMOUNT);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.PARTICLE_ADD_ITEM_NAME.get(plugin, amountChange, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_ADD_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();
@@ -384,7 +384,7 @@ public final class ParticleMenu extends Menu {
         );
         int amountAfter = Math.max(amountBefore - amountChange, ParticleMenu.MIN_AMOUNT);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_NAME.get(plugin, amountChange, "Amount"))
                 .setLore(LanguageAPI.Menu.PARTICLE_REMOVE_ITEM_AFTER.get(plugin, amountAfter))
                 .toItemStack();

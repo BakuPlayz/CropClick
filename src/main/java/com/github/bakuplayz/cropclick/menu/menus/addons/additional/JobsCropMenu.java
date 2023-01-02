@@ -175,7 +175,7 @@ public final class JobsCropMenu extends Menu {
     private @NotNull ItemStack getExperienceItem() {
         double experience = addonSection.getJobsExperience(cropName);
 
-        return new ItemBuilder(Material.EXPERIENCE_BOTTLE)
+        return new ItemBuilder(Material.EXP_BOTTLE)
                 .setName(plugin, LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.JOBS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, experience))
@@ -195,7 +195,7 @@ public final class JobsCropMenu extends Menu {
         double beforeValue = addonSection.getJobsPoints(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Points"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -213,7 +213,7 @@ public final class JobsCropMenu extends Menu {
         double beforeValue = addonSection.getJobsPoints(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Points"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -231,7 +231,7 @@ public final class JobsCropMenu extends Menu {
         double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -249,7 +249,7 @@ public final class JobsCropMenu extends Menu {
         double beforeValue = addonSection.getJobsMoney(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -267,7 +267,7 @@ public final class JobsCropMenu extends Menu {
         double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -285,7 +285,7 @@ public final class JobsCropMenu extends Menu {
         double beforeValue = addonSection.getJobsExperience(cropName);
         double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

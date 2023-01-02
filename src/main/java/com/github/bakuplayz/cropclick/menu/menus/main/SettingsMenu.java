@@ -121,7 +121,7 @@ public final class SettingsMenu extends Menu {
      * @return An ItemStack representing particles.
      */
     private @NotNull ItemStack getParticlesItem() {
-        return new ItemBuilder(Material.FIREWORK_ROCKET)
+        return new ItemBuilder(Material.FIREWORK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles())))
@@ -149,7 +149,7 @@ public final class SettingsMenu extends Menu {
      * @return An ItemStack representing the toggle.
      */
     private @NotNull ItemStack getToggleItem() {
-        return new ItemBuilder(Material.PLAYER_HEAD)
+        return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
@@ -177,7 +177,7 @@ public final class SettingsMenu extends Menu {
      * @return An ItemStack representing the worlds.
      */
     private @NotNull ItemStack getWorldsItem() {
-        return new ItemBuilder(Material.GRASS_BLOCK)
+        return new ItemBuilder(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished())))

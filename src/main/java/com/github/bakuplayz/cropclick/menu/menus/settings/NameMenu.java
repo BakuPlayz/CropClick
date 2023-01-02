@@ -106,7 +106,8 @@ public final class NameMenu extends Menu {
                 .setLore(LanguageAPI.Menu.NAME_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.NAME_CROP_ITEM_DROP_NAME.get(plugin, getDropName(true))
                 ))
-                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!crop.isHarvestable(), Material.STAINED_GLASS_PANE)
+                .setDamage(!crop.isHarvestable(), 14)
                 .toItemStack();
     }
 
@@ -126,7 +127,8 @@ public final class NameMenu extends Menu {
                 .setLore(LanguageAPI.Menu.NAME_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.NAME_SEED_ITEM_DROP_NAME.get(plugin, getDropName(false))
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!seed.isEnabled(), Material.STAINED_GLASS_PANE)
+                .setDamage(!seed.isEnabled(), 14)
                 .toItemStack();
     }
 
@@ -139,7 +141,6 @@ public final class NameMenu extends Menu {
      * @return A new ItemStack with the material of a sign, with the name of the item being the color code item name, and
      * the lore being the color codes.
      */
-    @SuppressWarnings("deprecation")
     private @NotNull ItemStack getCodesItem(int start) {
         return new ItemBuilder(Material.SIGN)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)

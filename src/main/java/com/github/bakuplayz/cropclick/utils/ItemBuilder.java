@@ -146,6 +146,21 @@ public final class ItemBuilder {
 
 
     /**
+     * Sets the damage to the provided damage, if it matches the condition.
+     *
+     * @param condition the condition to check
+     * @param damage the damage to set, if the condition is true.
+     * @return the ItemBuilder object.
+     */
+    public ItemBuilder setDamage(boolean condition, int damage) {
+        if (condition) {
+            setDamage(damage);
+        }
+        return this;
+    }
+
+
+    /**
      * Sets the material of the item, if the id is greater than -1.
      *
      * @param id The ID of the item.
@@ -168,6 +183,21 @@ public final class ItemBuilder {
      */
     public ItemBuilder setMaterial(Material material) {
         this.material = material == null ? this.material : material;
+        return this;
+    }
+
+
+    /**
+     * Sets the material to the provided material, if it matches the condition.
+     *
+     * @param condition the condition to check
+     * @param material the material to set, if the condition is true.
+     * @return the ItemBuilder object.
+     */
+    public ItemBuilder setMaterial(boolean condition, Material material) {
+        if (condition) {
+            setMaterial(material);
+        }
         return this;
     }
 

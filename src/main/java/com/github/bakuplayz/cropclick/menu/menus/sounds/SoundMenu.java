@@ -223,7 +223,7 @@ public final class SoundMenu extends Menu {
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
-        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.SOUND_INCREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_INCREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -233,7 +233,7 @@ public final class SoundMenu extends Menu {
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
-        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.SOUND_DECREASE_ORDER_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SOUND_DECREASE_ORDER_ITEM_AFTER.get(plugin, orderAfter))
                 .toItemStack();
@@ -247,7 +247,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.min(delayBefore + delayChange, SoundMenu.MAX_DELAY);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -261,7 +261,7 @@ public final class SoundMenu extends Menu {
         );
         double delayAfter = Math.max(delayBefore - delayChange, SoundMenu.MIN_DELAY);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
@@ -275,7 +275,7 @@ public final class SoundMenu extends Menu {
         );
         double volumeAfter = Math.min(volumeBefore + volumeChange, SoundMenu.MAX_VOLUME);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volumeChange, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
@@ -289,7 +289,7 @@ public final class SoundMenu extends Menu {
         );
         double volumeAfter = Math.max(volumeBefore - volumeChange, SoundMenu.MIN_VOLUME);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volumeChange, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
@@ -305,7 +305,7 @@ public final class SoundMenu extends Menu {
                 Math.min(pitchBefore + pitchChange, SoundMenu.MAX_PITCH)
         );
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
@@ -321,7 +321,7 @@ public final class SoundMenu extends Menu {
                 Math.max(pitchBefore - pitchChange, SoundMenu.MIN_PITCH)
         );
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();

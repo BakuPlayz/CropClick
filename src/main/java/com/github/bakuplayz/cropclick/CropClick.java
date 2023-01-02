@@ -26,6 +26,7 @@ import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAt
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtContainerListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
+import com.github.bakuplayz.cropclick.listeners.player.join.PlayerJoinListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;

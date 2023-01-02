@@ -349,7 +349,7 @@ public abstract class LinkMenu extends Menu {
 
 
     private @NotNull ItemStack getClaimItem() {
-        return new ItemBuilder(Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 3)
                 .setName(plugin, LanguageAPI.Menu.LINK_CLAIM_NAME)
                 .setLore(LanguageAPI.Menu.LINK_CLAIM_STATUS.getAsList(plugin))
                 .toItemStack();
@@ -367,7 +367,7 @@ public abstract class LinkMenu extends Menu {
                 autofarm.isEnabled()
         );
 
-        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.LINK_TOGGLE_NAME)
                 .setLore(LanguageAPI.Menu.LINK_TOGGLE_STATUS.get(plugin, status))
                 .toItemStack();
@@ -383,12 +383,9 @@ public abstract class LinkMenu extends Menu {
         return new ItemBuilder(Material.WHEAT)
                 .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
-                .setMaterial(
-                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isCropSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(isUnlinked || isCropSelected, Material.STAINED_GLASS_PANE)
+                .setDamage(isCropSelected, 3)
+                .setDamage(isUnlinked, 15)
                 .toItemStack();
     }
 
@@ -405,12 +402,9 @@ public abstract class LinkMenu extends Menu {
                 .setMaterial(
                         containerLocation != null ? containerLocation.getBlock().getType() : null
                 )
-                .setMaterial(
-                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isContainerSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(isUnlinked || isContainerSelected, Material.STAINED_GLASS_PANE)
+                .setDamage(isContainerSelected, 3)
+                .setDamage(isUnlinked, 15)
                 .toItemStack();
     }
 
@@ -424,12 +418,9 @@ public abstract class LinkMenu extends Menu {
         return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
-                .setMaterial(
-                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isDispenserSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(isUnlinked || isDispenserSelected, Material.STAINED_GLASS_PANE)
+                .setDamage(isDispenserSelected, 3)
+                .setDamage(isUnlinked, 15)
                 .toItemStack();
     }
 
@@ -440,17 +431,11 @@ public abstract class LinkMenu extends Menu {
      * @return An ItemStack.
      */
     private @NotNull ItemStack getGlassItem() {
-        return new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 7)
                 .setName(plugin, LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_LINKED)
-                .setMaterial(
-                        !isUnlinked ? Material.YELLOW_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isClickedSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isUnclaimed ? Material.WHITE_STAINED_GLASS_PANE : null
-                )
+                .setDamage(!isUnlinked, 4)
+                .setDamage(isClickedSelected, 3)
+                .setDamage(isUnclaimed, 0)
                 .setName(isUnlinked
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNLINKED.get(plugin)
                          : null

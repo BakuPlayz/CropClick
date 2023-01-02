@@ -171,7 +171,8 @@ public final class CropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.CROP_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount())
                 ))
-                .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!crop.isHarvestable(), Material.STAINED_GLASS_PANE)
+                .setDamage(!crop.isHarvestable(), 7)
                 .toItemStack();
     }
 
@@ -190,7 +191,8 @@ public final class CropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount())
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!seed.isEnabled(), Material.STAINED_GLASS_PANE)
+                .setDamage(!seed.isEnabled(), 7)
                 .toItemStack();
     }
 
@@ -243,7 +245,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getReplantItem() {
         boolean shouldReplant = cropSection.shouldReplant(cropName);
 
-        return new ItemBuilder(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.IRON_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_REPLANT_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_REPLANT_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant))
@@ -259,7 +261,7 @@ public final class CropMenu extends Menu {
     private @NotNull ItemStack getAtLeastItem() {
         boolean atLeastOne = cropSection.shouldDropAtLeastOne(cropName);
 
-        return new ItemBuilder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE)
+        return new ItemBuilder(Material.GOLD_PLATE)
                 .setName(plugin, LanguageAPI.Menu.CROP_AT_LEAST_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.CROP_AT_LEAST_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_AT_LEAST_ITEM_STATUS.get(plugin, atLeastOne))
@@ -278,7 +280,7 @@ public final class CropMenu extends Menu {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -296,7 +298,7 @@ public final class CropMenu extends Menu {
         int beforeValue = cropSection.getDropAmount(cropName);
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -314,7 +316,7 @@ public final class CropMenu extends Menu {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.min(beforeValue + amount, MAX_VALUE);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.CROP_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -332,7 +334,7 @@ public final class CropMenu extends Menu {
         int beforeValue = seedSection.getDropAmount(seed.getName());
         int afterValue = Math.max(beforeValue - amount, MIN_VALUE);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

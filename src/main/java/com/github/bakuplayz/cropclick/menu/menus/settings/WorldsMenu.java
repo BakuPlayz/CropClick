@@ -169,8 +169,8 @@ public final class WorldsMenu extends PaginatedMenu {
         String name = MessageUtils.beautify(world.getName(), true);
         ItemBuilder menuItem = new ItemBuilder(Material.GRASS)
                 .setName(LanguageAPI.Menu.WORLDS_ITEM_NAME.get(plugin, name))
-                .setMaterial(name.contains("End") ? Material.ENDER_STONE : null)
-                .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null);
+                .setMaterial(name.contains("End"), Material.ENDER_STONE)
+                .setMaterial(name.contains("Nether"), Material.NETHERRACK);
 
         boolean status;
 

@@ -141,7 +141,8 @@ public final class DropChanceMenu extends Menu {
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
-                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!crop.isHarvestable(), Material.STAINED_GLASS_PANE)
+                .setDamage(!crop.isHarvestable(), 14)
                 .toItemStack();
     }
 
@@ -163,7 +164,8 @@ public final class DropChanceMenu extends Menu {
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!seed.isEnabled(), Material.STAINED_GLASS_PANE)
+                .setDamage(!seed.isEnabled(), 14)
                 .toItemStack();
     }
 
@@ -181,7 +183,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -201,7 +203,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Crop"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -221,7 +223,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.min(beforeValue + amount, PERCENTAGE_MAX);
 
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
@@ -241,7 +243,7 @@ public final class DropChanceMenu extends Menu {
         );
         double afterValue = Math.max(beforeValue - amount, PERCENTAGE_MIN);
 
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+        return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
                 .setName(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, amount, "Seed"))
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();

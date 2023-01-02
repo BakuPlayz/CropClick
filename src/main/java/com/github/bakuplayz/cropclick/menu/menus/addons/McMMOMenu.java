@@ -84,12 +84,13 @@ public final class McMMOMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemBuilder(Material.GOLDEN_SWORD)
+        return new ItemBuilder(Material.GOLD_SWORD)
                 .setName(LanguageAPI.Menu.ADDON_MCMMO_ITEM_NAME.get(plugin,
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_MCMMO_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!isAddonEnabled, Material.STAINED_GLASS_PANE)
+                .setDamage(!isAddonEnabled, 7)
                 .toItemStack();
     }
 

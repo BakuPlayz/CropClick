@@ -61,12 +61,13 @@ public final class ResidenceMenu extends AddonMenu {
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
-        return new ItemBuilder(Material.OAK_FENCE)
+        return new ItemBuilder(Material.FENCE)
                 .setName(LanguageAPI.Menu.ADDON_RESIDENCE_ITEM_NAME.get(plugin,
                         MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_RESIDENCE_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(isAddonEnabled ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!isAddonEnabled, Material.STAINED_GLASS_PANE)
+                .setDamage(!isAddonEnabled, 7)
                 .toItemStack();
     }
 

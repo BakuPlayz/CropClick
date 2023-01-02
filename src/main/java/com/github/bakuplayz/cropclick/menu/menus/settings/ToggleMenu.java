@@ -115,7 +115,7 @@ public final class ToggleMenu extends PaginatedMenu {
 
         assert offlinePlayer.getName() != null; // Cannot be null since the playerID grantee a valid ID.
 
-        return new ItemBuilder(Material.SKULL_ITEMs)
+        return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
                 .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, status))
                 .toSkullStack(offlinePlayer);
