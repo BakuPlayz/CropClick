@@ -141,7 +141,7 @@ public final class DropChanceMenu extends Menu {
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
-                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!crop.isHarvestable(), Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -163,7 +163,7 @@ public final class DropChanceMenu extends Menu {
                 .setLore(LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.DROP_CHANCE_SEED_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!seed.isEnabled(), Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

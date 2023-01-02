@@ -171,7 +171,7 @@ public final class CropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.CROP_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_CROP_ITEM_DROP_VALUE.get(plugin, crop.getDrop().getAmount())
                 ))
-                .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!crop.isHarvestable(), Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -190,7 +190,7 @@ public final class CropMenu extends Menu {
                 .setLore(LanguageAPI.Menu.CROP_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.CROP_SEED_ITEM_DROP_VALUE.get(plugin, seed.getDrop().getAmount())
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!seed.isEnabled(), Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

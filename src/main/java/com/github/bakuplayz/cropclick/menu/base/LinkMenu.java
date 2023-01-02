@@ -383,12 +383,8 @@ public abstract class LinkMenu extends Menu {
         return new ItemBuilder(Material.WHEAT)
                 .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
-                .setMaterial(
-                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isCropSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(isUnlinked, Material.BLACK_STAINED_GLASS_PANE)
+                .setMaterial(isCropSelected, Material.LIGHT_BLUE_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -405,12 +401,8 @@ public abstract class LinkMenu extends Menu {
                 .setMaterial(
                         containerLocation != null ? containerLocation.getBlock().getType() : null
                 )
-                .setMaterial(
-                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isContainerSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(isUnlinked, Material.BLACK_STAINED_GLASS_PANE)
+                .setMaterial(isContainerSelected, Material.LIGHT_BLUE_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -424,12 +416,8 @@ public abstract class LinkMenu extends Menu {
         return new ItemBuilder(Material.DISPENSER)
                 .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
-                .setMaterial(
-                        isUnlinked ? Material.BLACK_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isDispenserSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(isUnlinked, Material.BLACK_STAINED_GLASS_PANE)
+                .setMaterial(isDispenserSelected, Material.LIGHT_BLUE_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -442,15 +430,9 @@ public abstract class LinkMenu extends Menu {
     private @NotNull ItemStack getGlassItem() {
         return new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
                 .setName(plugin, LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_LINKED)
-                .setMaterial(
-                        !isUnlinked ? Material.YELLOW_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isClickedSelected ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : null
-                )
-                .setMaterial(
-                        isUnclaimed ? Material.WHITE_STAINED_GLASS_PANE : null
-                )
+                .setMaterial(!isUnlinked, Material.YELLOW_STAINED_GLASS_PANE)
+                .setMaterial(isClickedSelected, Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+                .setMaterial(isUnclaimed, Material.WHITE_STAINED_GLASS_PANE)
                 .setName(isUnlinked
                          ? LanguageAPI.Menu.LINK_GLASS_ITEM_NAME_UNLINKED.get(plugin)
                          : null

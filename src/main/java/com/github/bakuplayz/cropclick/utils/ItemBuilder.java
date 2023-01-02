@@ -127,6 +127,21 @@ public final class ItemBuilder {
 
 
     /**
+     * Sets the material to the provided material, if it matches the condition.
+     *
+     * @param condition the condition to check
+     * @param material the material to set, if the condition is true.
+     * @return the ItemBuilder object.
+     */
+    public ItemBuilder setMaterial(boolean condition, Material material) {
+        if (condition) {
+            setMaterial(material);
+        }
+        return this;
+    }
+
+
+    /**
      * Sets the name of the item and returns the ItemUtil instance.
      *
      * @param name The name of the item.

@@ -170,7 +170,7 @@ public final class CropsMenu extends PaginatedMenu {
                         : LanguageAPI.Menu.CROPS_STATUS_DISABLED.get(plugin);
         ItemBuilder menuItem = new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
-                .setMaterial(crop.isHarvestable() ? null : Material.GRAY_STAINED_GLASS_PANE);
+                .setMaterial(!crop.isHarvestable(), Material.GRAY_STAINED_GLASS_PANE);
 
         switch (menuState) {
             case CROP:

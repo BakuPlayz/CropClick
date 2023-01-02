@@ -106,7 +106,7 @@ public final class NameMenu extends Menu {
                 .setLore(LanguageAPI.Menu.NAME_CROP_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.NAME_CROP_ITEM_DROP_NAME.get(plugin, getDropName(true))
                 ))
-                .setMaterial(crop.isHarvestable() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!crop.isHarvestable(), Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 
@@ -126,7 +126,7 @@ public final class NameMenu extends Menu {
                 .setLore(LanguageAPI.Menu.NAME_SEED_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.NAME_SEED_ITEM_DROP_NAME.get(plugin, getDropName(false))
                 ))
-                .setMaterial(seed.isEnabled() ? null : Material.RED_STAINED_GLASS_PANE)
+                .setMaterial(!seed.isEnabled(), Material.RED_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

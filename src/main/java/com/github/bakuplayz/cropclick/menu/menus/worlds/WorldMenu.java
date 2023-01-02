@@ -107,8 +107,8 @@ public final class WorldMenu extends Menu {
 
         return new ItemBuilder(Material.GRASS_BLOCK)
                 .setName(LanguageAPI.Menu.WORLD_WORLD_ITEM_NAME.get(plugin, name))
-                .setMaterial(name.contains("End") ? Material.END_STONE : null)
-                .setMaterial(name.contains("Nether") ? Material.NETHERRACK : null)
+                .setMaterial(name.contains("End"), Material.END_STONE)
+                .setMaterial(name.contains("Nether"), Material.NETHERRACK)
                 .setLore(LanguageAPI.Menu.WORLD_WORLD_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.WORLD_WORLD_ITEM_STATUS.get(plugin, world.isBanished())
                 ))
