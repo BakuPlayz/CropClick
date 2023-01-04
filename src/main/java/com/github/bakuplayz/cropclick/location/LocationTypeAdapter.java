@@ -19,13 +19,13 @@ import java.lang.reflect.Type;
 public final class LocationTypeAdapter implements JsonSerializer<Location>, JsonDeserializer<Location> {
 
     /**
-     * It takes a JsonElement, and returns a Location
+     * Deserializes any {@link Location location}.
      *
-     * @param element The JsonElement to deserialize.
-     * @param type    The type of the object being deserialized.
-     * @param context The context of the deserialization.
+     * @param element the JSON object to deserialize to.
+     * @param type    the type to deserialize to.
+     * @param context the context of the deserialization.
      *
-     * @return A Location object.
+     * @return the deserialized location.
      */
     @Override
     public @NotNull Location deserialize(@NotNull JsonElement element, Type type, JsonDeserializationContext context)
@@ -38,12 +38,11 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
 
 
     /**
-     * It takes a JsonElement, gets the JsonObject from it, gets the JsonObjects from the JsonObject, deserializes the
-     * JsonObjects into Locations, and returns a DoublyLocation.
+     * Deserializes {@link DoublyLocation doubly locations}.
      *
-     * @param element The JsonElement that is being deserialized.
+     * @param element the JSON object to deserialize to.
      *
-     * @return A DoublyLocation object.
+     * @return the deserialized doubly location.
      */
     private @NotNull DoublyLocation deserializeDoublyLocation(@NotNull JsonElement element) {
         JsonObject body = element.getAsJsonObject();
@@ -56,11 +55,11 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
 
 
     /**
-     * It takes a JsonElement, which is a part of the Gson library, and returns a Location object
+     * Deserializes {@link Location locations}.
      *
-     * @param element The JsonElement that is being deserialized.
+     * @param element the JSON object to deserialize to.
      *
-     * @return A Location object
+     * @return the deserialized location.
      */
     private @NotNull Location deserializeLocation(@NotNull JsonElement element) {
         JsonObject body = element.getAsJsonObject();
@@ -77,21 +76,16 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
 
 
     /**
-     * This function serializes a location into a JsonElement.
+     * Serializes any {@link Location location}.
      *
-     * @param location The location to serialize.
-     * @param type     The type of the object being serialized/deserialized.
-     * @param context  The context of the serialization.
+     * @param location the object to serialize.
+     * @param type     the type to serialize to.
+     * @param context  the context of the serialization.
      *
-     * @return A JsonElement.
+     * @return the serialized location.
      */
     @Override
     public @NotNull JsonElement serialize(Location location, Type type, JsonSerializationContext context) {
-        return serialize(location);
-    }
-
-
-    public static JsonElement serialize(Location location) {
         if (location instanceof DoublyLocation) {
             return serializeDoublyLocation((DoublyLocation) location);
         }
@@ -100,11 +94,11 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
 
 
     /**
-     * It takes a doubly location and returns a JSON object that contains the singly and doubly locations.
+     * Serializes {@link DoublyLocation doubly locations}.
      *
-     * @param location The location to serialize.
+     * @param location the location object to serialize to.
      *
-     * @return A JsonObject.
+     * @return the serialized doubly location.
      */
     private static @NotNull JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
         JsonObject body = new JsonObject();
@@ -117,11 +111,11 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
 
 
     /**
-     * It takes a Bukkit Location object and returns a JsonObject that contains the world name, x, y, and z coordinates.
+     * Serializes {@link Location locations}.
      *
-     * @param location The location to serialize.
+     * @param location the location object to serialize to.
      *
-     * @return A JsonObject.
+     * @return the serialized location.
      */
     private static @NotNull JsonObject serializeLocation(@NotNull Location location) {
         JsonObject body = new JsonObject();

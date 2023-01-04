@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class UpdatesMenu extends Menu {
+public final class UpdatesMenu extends BaseMenu {
 
     private final UpdateManager updateManager;
 
@@ -51,7 +51,7 @@ public final class UpdatesMenu extends Menu {
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getPlayerItem())) {
-            updateManager.togglePlayerMessage();
+            updateManager.toggleUpdatesPlayer();
         }
 
         if (clicked.equals(getConsoleItem())) {
@@ -75,14 +75,14 @@ public final class UpdatesMenu extends Menu {
             player.sendMessage(MessageUtils.colorize("&7" + updateURL));
         }
 
-        refresh();
+        refreshMenu();
     }
 
 
     /**
-     * It creates an item representing the current update state.
+     * Gets the update {@link ItemStack item}.
      *
-     * @return An item representing the current update state.
+     * @return the update item.
      */
     private @NotNull ItemStack getUpdateItem() {
         String updateState = updateManager.getUpdateStateMessage();
@@ -96,14 +96,14 @@ public final class UpdatesMenu extends Menu {
 
 
     /**
-     * It creates an item representing the player update message.
+     * Gets the player {@link ItemStack item}.
      *
-     * @return An item representing the player update message.
+     * @return the player item.
      */
     private @NotNull ItemStack getPlayerItem() {
-        String status = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getStatusMessage(
                 plugin,
-                updateManager.getPlayerMessageState()
+                updateManager.canPlayerReceiveUpdates()
         );
 
         return new ItemBuilder(Material.ITEM_FRAME)
@@ -115,14 +115,14 @@ public final class UpdatesMenu extends Menu {
 
 
     /**
-     * It creates an item representing the console update message.
+     * Gets the console {@link ItemStack item}.
      *
-     * @return An item representing the console update message.
+     * @return the console item.
      */
     private @NotNull ItemStack getConsoleItem() {
-        String status = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getStatusMessage(
                 plugin,
-                updateManager.getConsoleMessageState()
+                updateManager.canConsoleReceiveUpdates()
         );
 
         return new ItemBuilder(Material.ITEM_FRAME)

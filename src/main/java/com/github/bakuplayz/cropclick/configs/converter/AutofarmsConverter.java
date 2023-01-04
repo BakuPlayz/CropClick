@@ -81,7 +81,7 @@ public final class AutofarmsConverter {
         }
         storage.saveData();
 
-        FileUtils.moveFile(inFile, outFile);
+        FileUtils.move(inFile, outFile);
     }
 
 
@@ -130,7 +130,7 @@ public final class AutofarmsConverter {
 
             Location cropLocation = AutofarmsConverter.toLocation(linkedCropSection);
             Location containerLocation = AutofarmsConverter.toLocation(linkedContainerSection);
-            DoublyLocation doublyLocation = LocationUtils.getAsDoubly(containerLocation);
+            DoublyLocation doublyLocation = LocationUtils.findDoubly(containerLocation);
 
             JsonObject autofarmObj = new JsonObject();
 

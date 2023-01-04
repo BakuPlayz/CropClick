@@ -201,7 +201,7 @@ public final class AutofarmManager implements Enableable {
      * @return The ID of the block.
      */
     private @Nullable String getCachedID(@NotNull Block block) {
-        return AutofarmUtils.getMetaValue(block);
+        return AutofarmUtils.findCachedID(block);
     }
 
 
@@ -213,7 +213,7 @@ public final class AutofarmManager implements Enableable {
      * @return A boolean value.
      */
     private boolean hasCachedID(@NotNull Block block) {
-        return AutofarmUtils.componentHasMeta(block);
+        return AutofarmUtils.hasCachedID(block);
     }
 
 

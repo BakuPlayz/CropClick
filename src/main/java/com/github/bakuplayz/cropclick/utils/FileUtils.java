@@ -20,28 +20,28 @@ import java.nio.file.Files;
 public final class FileUtils {
 
     /**
-     * It moves a file from one location to another.
+     * Moves the {@link File source file} to the {@link File target file}.
      *
-     * @param inFile  The file to move
-     * @param outFile The file to move the inFile to.
+     * @param source the source file.
+     * @param target the target file.
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void moveFile(@NotNull File inFile, @NotNull File outFile) {
+    public static void move(@NotNull File source, @NotNull File target) {
         try {
-            outFile.getParentFile().mkdirs();
-            Files.move(inFile.toPath(), outFile.toPath());
+            target.getParentFile().mkdirs();
+            Files.move(source.toPath(), target.toPath());
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.FILE_MOVE_FAILED.send(inFile.getName());
+            LanguageAPI.Console.FILE_MOVE_FAILED.send(source.getName());
         }
     }
-
+    
 
     /**
-     * It copies the contents of a YAML file to another YAML file.
+     * Copies the contents of the {@link FileConfiguration YAML configuration} to the {@link ConfigurationSection provided section}.
      *
-     * @param config  The FileConfiguration you want to copy.
-     * @param section The section to copy the file to.
+     * @param config  the config to copy.
+     * @param section the section to copy it to.
      */
     public static void copyYamlTo(@NotNull FileConfiguration config, @NotNull ConfigurationSection section) {
         try {

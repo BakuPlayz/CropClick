@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.*;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -176,7 +176,7 @@ public final class AddonManager {
      * @param player The player who harvested the crop.
      * @param crop   The crop that was harvested.
      */
-    public void applyEffects(@NotNull Player player, @NotNull BaseCrop crop) {
+    public void applyEffects(@NotNull Player player, @NotNull Crop crop) {
         if (isPresentAndEnabled(jobsRebornAddon)) {
             jobsRebornAddon.updateStats(player, crop);
         }

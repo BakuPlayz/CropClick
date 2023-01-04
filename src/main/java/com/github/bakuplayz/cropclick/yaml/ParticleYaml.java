@@ -51,7 +51,7 @@ public final class ParticleYaml implements Yamlable, Enableable {
     /**
      * It converts {@link ParticleYaml this} object to a YAML-styled map.
      *
-     * @return A {@link HashMap YAML-formatted HashMap}.
+     * @return a {@link HashMap YAML-formatted HashMap}.
      */
     @Override
     @Contract(" -> new")
@@ -67,7 +67,7 @@ public final class ParticleYaml implements Yamlable, Enableable {
     /**
      * It checks whether the Particle is enabled, by validating only ones with one or more {@link #amount}.
      *
-     * @return An enabled state, whether the Particle is enabled or not.
+     * @return true if the sound is enabled, otherwise false.
      */
     @Override
     public boolean isEnabled() {

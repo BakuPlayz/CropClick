@@ -3,8 +3,8 @@ package com.github.bakuplayz.cropclick.menu.menus.links;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.LinkMenu;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class CropLinkMenu extends LinkMenu {
@@ -38,14 +38,14 @@ public final class CropLinkMenu extends LinkMenu {
 
         if (isUnclaimed) {
             handleUnclaimed(clicked);
-            refresh();
+            refreshMenu();
             return;
         }
 
         if (!isUnlinked) {
             handlePreviews(clicked);
             handleToggle(clicked);
-            refresh();
+            refreshMenu();
         }
 
         if (!clicked.equals(cropItem)) {
@@ -54,7 +54,7 @@ public final class CropLinkMenu extends LinkMenu {
 
         if (isUnlinked) {
             handleSelect();
-            refresh();
+            refreshMenu();
             handleLink();
         }
     }

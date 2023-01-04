@@ -10,14 +10,14 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the Towny addon.
+ * A class representing the <a href="https://www.spigotmc.org/resources/towny-advanced.72694/">Towny</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class TownyAddon extends Addon {
-    
+
     public TownyAddon(@NotNull CropClick plugin) {
         super(plugin, "Towny");
     }

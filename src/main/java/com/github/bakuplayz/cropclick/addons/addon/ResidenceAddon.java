@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the Residence addon.
+ * A class representing the <a href="https://www.spigotmc.org/resources/residence-1-7-10-up-to-1-19.11480/">Residence</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0

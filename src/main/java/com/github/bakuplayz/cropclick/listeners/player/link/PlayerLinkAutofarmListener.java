@@ -32,9 +32,9 @@ public final class PlayerLinkAutofarmListener implements Listener {
 
 
     /**
-     * When a player links an autofarm, call the AutofarmLinkEvent.
+     * Handles all {@link Player players} linking an {@link Autofarm} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLinkAutofarm(@NotNull PlayerLinkAutofarmEvent event) {

@@ -2,10 +2,11 @@ package com.github.bakuplayz.cropclick.menu.menus.sounds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.SoundsMenu;
+import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
 import org.bukkit.Material;
@@ -22,39 +23,52 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class SoundMenu extends Menu {
+public final class SoundMenu extends BaseMenu {
 
-    public static final int MIN_DELAY = 0; // in milliseconds
-    public static final int MAX_DELAY = 5000; // in milliseconds
+    /**
+     * A variable measured in milliseconds.
+     */
+    private static final int DELAY_MIN_CHANGE = 100;
 
-    public static final int DELAY_MIN_CHANGE = 100; // in milliseconds
-    public static final int DELAY_MAX_CHANGE = 500; // in milliseconds
+    /**
+     * A variable measured in milliseconds.
+     */
+    private static final int DELAY_MAX_CHANGE = 500;
 
-    public static final int MIN_VOLUME = 0; // range in blocks
-    public static final int MAX_VOLUME = 500; // range in blocks
+    /**
+     * A variable measured in range-of-blocks.
+     */
+    private static final int VOLUME_MIN_CHANGE = 1;
 
-    public static final int VOLUME_MIN_CHANGE = 1;
-    public static final int VOLUME_MAX_CHANGE = 5;
+    /**
+     * A variable measured in range-of-blocks.
+     */
+    private static final int VOLUME_MAX_CHANGE = 5;
 
-    public static final int MIN_PITCH = 0;
-    public static final int MAX_PITCH = 2;
-
-    public static final double PITCH_MIN_CHANGE = 0.1;
-    public static final double PITCH_MAX_CHANGE = 0.2;
+    private static final double PITCH_MIN_CHANGE = 0.1;
+    private static final double PITCH_MAX_CHANGE = 0.2;
 
 
-    private final BaseCrop crop;
+    private final Crop crop;
     private final String cropName;
     private final String soundName;
     private final SoundConfigSection soundSection;
 
+
+    /**
+     * A variable containing the maximum order allowed.
+     */
     private int maxOrder;
+
+    /**
+     * A variable containing the current order (or index) of the pressed sound.
+     */
     private int currentOrder;
 
 
     public SoundMenu(@NotNull CropClick plugin,
                      @NotNull Player player,
-                     @NotNull BaseCrop crop,
+                     @NotNull Crop crop,
                      @NotNull String soundName) {
         super(plugin, player, LanguageAPI.Menu.SOUND_TITLE);
         this.soundSection = plugin.getCropsConfig().getSoundSection();
@@ -69,23 +83,23 @@ public final class SoundMenu extends Menu {
         this.currentOrder = soundSection.getOrder(cropName, soundName);
         this.maxOrder = soundSection.getSounds(cropName).size() - 1;
 
-        inventory.setItem(10, getDelayRemoveItem(DELAY_MAX_CHANGE));
-        inventory.setItem(11, getDelayRemoveItem(DELAY_MIN_CHANGE));
+        inventory.setItem(10, getDelayDecreaseItem(DELAY_MAX_CHANGE));
+        inventory.setItem(11, getDelayDecreaseItem(DELAY_MIN_CHANGE));
         inventory.setItem(13, getDelayItem());
-        inventory.setItem(15, getDelayAddItem(DELAY_MIN_CHANGE));
-        inventory.setItem(16, getDelayAddItem(DELAY_MAX_CHANGE));
+        inventory.setItem(15, getDelayIncreaseItem(DELAY_MIN_CHANGE));
+        inventory.setItem(16, getDelayIncreaseItem(DELAY_MAX_CHANGE));
 
-        inventory.setItem(19, getVolumeRemoveItem(VOLUME_MAX_CHANGE));
-        inventory.setItem(20, getVolumeRemoveItem(VOLUME_MIN_CHANGE));
+        inventory.setItem(19, getVolumeDecreaseItem(VOLUME_MAX_CHANGE));
+        inventory.setItem(20, getVolumeDecreaseItem(VOLUME_MIN_CHANGE));
         inventory.setItem(22, getVolumeItem());
-        inventory.setItem(24, getVolumeAddItem(VOLUME_MIN_CHANGE));
-        inventory.setItem(25, getVolumeAddItem(VOLUME_MAX_CHANGE));
+        inventory.setItem(24, getVolumeIncreaseItem(VOLUME_MIN_CHANGE));
+        inventory.setItem(25, getVolumeIncreaseItem(VOLUME_MAX_CHANGE));
 
-        inventory.setItem(28, getPitchRemoveItem(PITCH_MAX_CHANGE));
-        inventory.setItem(29, getPitchRemoveItem(PITCH_MIN_CHANGE));
+        inventory.setItem(28, getPitchDecreaseItem(PITCH_MAX_CHANGE));
+        inventory.setItem(29, getPitchDecreaseItem(PITCH_MIN_CHANGE));
         inventory.setItem(31, getPitchItem());
-        inventory.setItem(33, getPitchAddItem(PITCH_MIN_CHANGE));
-        inventory.setItem(34, getPitchAddItem(PITCH_MAX_CHANGE));
+        inventory.setItem(33, getPitchIncreaseItem(PITCH_MIN_CHANGE));
+        inventory.setItem(34, getPitchIncreaseItem(PITCH_MAX_CHANGE));
 
         setBackItem();
 
@@ -121,60 +135,65 @@ public final class SoundMenu extends Menu {
         }
 
         // DELAY
-        if (clicked.equals(getDelayAddItem(DELAY_MIN_CHANGE))) {
-            addSoundDelay(DELAY_MIN_CHANGE);
+        if (clicked.equals(getDelayIncreaseItem(DELAY_MIN_CHANGE))) {
+            increaseSoundDelay(DELAY_MIN_CHANGE);
         }
 
-        if (clicked.equals(getDelayAddItem(DELAY_MAX_CHANGE))) {
-            addSoundDelay(DELAY_MAX_CHANGE);
+        if (clicked.equals(getDelayIncreaseItem(DELAY_MAX_CHANGE))) {
+            increaseSoundDelay(DELAY_MAX_CHANGE);
         }
 
-        if (clicked.equals(getDelayRemoveItem(DELAY_MIN_CHANGE))) {
-            removeSoundDelay(DELAY_MIN_CHANGE);
+        if (clicked.equals(getDelayDecreaseItem(DELAY_MIN_CHANGE))) {
+            decreaseSoundDelay(DELAY_MIN_CHANGE);
         }
 
-        if (clicked.equals(getDelayRemoveItem(DELAY_MAX_CHANGE))) {
-            removeSoundDelay(DELAY_MAX_CHANGE);
+        if (clicked.equals(getDelayDecreaseItem(DELAY_MAX_CHANGE))) {
+            decreaseSoundDelay(DELAY_MAX_CHANGE);
         }
 
         // VOLUME
-        if (clicked.equals(getVolumeAddItem(VOLUME_MIN_CHANGE))) {
+        if (clicked.equals(getVolumeIncreaseItem(VOLUME_MIN_CHANGE))) {
             increaseVolume(VOLUME_MIN_CHANGE);
         }
 
-        if (clicked.equals(getVolumeAddItem(VOLUME_MAX_CHANGE))) {
+        if (clicked.equals(getVolumeIncreaseItem(VOLUME_MAX_CHANGE))) {
             increaseVolume(VOLUME_MAX_CHANGE);
         }
 
-        if (clicked.equals(getVolumeRemoveItem(VOLUME_MIN_CHANGE))) {
+        if (clicked.equals(getVolumeDecreaseItem(VOLUME_MIN_CHANGE))) {
             decreaseVolume(VOLUME_MIN_CHANGE);
         }
 
-        if (clicked.equals(getVolumeRemoveItem(VOLUME_MAX_CHANGE))) {
+        if (clicked.equals(getVolumeDecreaseItem(VOLUME_MAX_CHANGE))) {
             decreaseVolume(VOLUME_MAX_CHANGE);
         }
 
         // PITCH
-        if (clicked.equals(getPitchAddItem(PITCH_MIN_CHANGE))) {
+        if (clicked.equals(getPitchIncreaseItem(PITCH_MIN_CHANGE))) {
             increasePitch(PITCH_MIN_CHANGE);
         }
 
-        if (clicked.equals(getPitchAddItem(PITCH_MAX_CHANGE))) {
+        if (clicked.equals(getPitchIncreaseItem(PITCH_MAX_CHANGE))) {
             increasePitch(PITCH_MAX_CHANGE);
         }
 
-        if (clicked.equals(getPitchRemoveItem(PITCH_MIN_CHANGE))) {
+        if (clicked.equals(getPitchDecreaseItem(PITCH_MIN_CHANGE))) {
             decreasePitch(PITCH_MIN_CHANGE);
         }
 
-        if (clicked.equals(getPitchRemoveItem(PITCH_MAX_CHANGE))) {
+        if (clicked.equals(getPitchDecreaseItem(PITCH_MAX_CHANGE))) {
             decreasePitch(PITCH_MAX_CHANGE);
         }
 
-        refresh();
+        refreshMenu();
     }
 
 
+    /**
+     * Gets the delay {@link ItemStack item}.
+     *
+     * @return the delay item.
+     */
     private @NotNull ItemStack getDelayItem() {
         double delay = soundSection.getDelay(
                 cropName,
@@ -190,6 +209,11 @@ public final class SoundMenu extends Menu {
     }
 
 
+    /**
+     * Gets the volume {@link ItemStack item}.
+     *
+     * @return the volume item.
+     */
     private @NotNull ItemStack getVolumeItem() {
         double volume = soundSection.getVolume(
                 cropName,
@@ -205,6 +229,11 @@ public final class SoundMenu extends Menu {
     }
 
 
+    /**
+     * Gets the pitch {@link ItemStack item}.
+     *
+     * @return the pitch item.
+     */
     private @NotNull ItemStack getPitchItem() {
         double pitch = soundSection.getPitch(
                 cropName,
@@ -220,6 +249,11 @@ public final class SoundMenu extends Menu {
     }
 
 
+    /**
+     * Gets the increase order {@link ItemStack item}.
+     *
+     * @return the increase order item.
+     */
     private @NotNull ItemStack getIncreaseOrderItem() {
         int orderAfter = Math.min(currentOrder + 1, maxOrder);
 
@@ -230,6 +264,11 @@ public final class SoundMenu extends Menu {
     }
 
 
+    /**
+     * Gets the decrease order {@link ItemStack item}.
+     *
+     * @return the decrease order item.
+     */
     private @NotNull ItemStack getDecreaseOrderItem() {
         int orderAfter = Math.max(currentOrder - 1, 0);
 
@@ -240,144 +279,216 @@ public final class SoundMenu extends Menu {
     }
 
 
-    private @NotNull ItemStack getDelayAddItem(int delayChange) {
+    /**
+     * Gets the delay increase {@link ItemStack item} based on the provided delay.
+     *
+     * @param delay the delay to be increased with when clicked.
+     *
+     * @return the delay increase item.
+     */
+    private @NotNull ItemStack getDelayIncreaseItem(int delay) {
         double delayBefore = soundSection.getDelay(
                 cropName,
                 soundName
         );
-        double delayAfter = Math.min(delayBefore + delayChange, MAX_DELAY);
+        double delayAfter = Math.min(delayBefore + delay, Sound.MAX_DELAY);
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delayChange, "Delay"))
+                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, delay, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getDelayRemoveItem(int delayChange) {
+    /**
+     * Gets the delay decrease {@link ItemStack item} based on the provided delay.
+     *
+     * @param delay the delay to be decreased with when clicked.
+     *
+     * @return the delay decrease item.
+     */
+    private @NotNull ItemStack getDelayDecreaseItem(int delay) {
         double delayBefore = soundSection.getDelay(
                 cropName,
                 soundName
         );
-        double delayAfter = Math.max(delayBefore - delayChange, MIN_DELAY);
+        double delayAfter = Math.max(delayBefore - delay, Sound.MIN_DELAY);
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delayChange, "Delay"))
+                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, delay, "Delay"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, delayAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getVolumeAddItem(int volumeChange) {
+    /**
+     * Gets the volume increase {@link ItemStack item} based on the provided volume.
+     *
+     * @param volume the volume to be increase with when clicked.
+     *
+     * @return the volume increase item.
+     */
+    private @NotNull ItemStack getVolumeIncreaseItem(int volume) {
         double volumeBefore = soundSection.getVolume(
                 cropName,
                 soundName
         );
-        double volumeAfter = Math.min(volumeBefore + volumeChange, MAX_VOLUME);
+        double volumeAfter = Math.min(volumeBefore + volume, Sound.MAX_VOLUME);
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volumeChange, "Volume"))
+                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, volume, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getVolumeRemoveItem(int volumeChange) {
+    /**
+     * Gets the volume decrease {@link ItemStack item} based on the provided volume.
+     *
+     * @param volume the volume to be decreased with when clicked.
+     *
+     * @return the volume decrease item.
+     */
+    private @NotNull ItemStack getVolumeDecreaseItem(int volume) {
         double volumeBefore = soundSection.getVolume(
                 cropName,
                 soundName
         );
-        double volumeAfter = Math.max(volumeBefore - volumeChange, MIN_VOLUME);
+        double volumeAfter = Math.max(volumeBefore - volume, Sound.MIN_VOLUME);
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volumeChange, "Volume"))
+                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, volume, "Volume"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, volumeAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getPitchAddItem(double pitchChange) {
+    /**
+     * Gets the pitch increase {@link ItemStack item} based on the provided pitch.
+     *
+     * @param pitch the pitch to be increased with when clicked.
+     *
+     * @return the pitch increase item.
+     */
+    private @NotNull ItemStack getPitchIncreaseItem(double pitch) {
         double pitchBefore = soundSection.getPitch(
                 cropName,
                 soundName
         );
         double pitchAfter = MathUtils.round(
-                Math.min(pitchBefore + pitchChange, MAX_PITCH)
+                Math.min(pitchBefore + pitch, Sound.MAX_PITCH)
         );
 
         return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
+                .setName(LanguageAPI.Menu.SOUND_ADD_ITEM_NAME.get(plugin, pitch, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_ADD_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
     }
 
 
-    private @NotNull ItemStack getPitchRemoveItem(double pitchChange) {
+    /**
+     * Gets the pitch decrease {@link ItemStack item} based on the provided pitch.
+     *
+     * @param pitch the pitch to be decreased with when clicked.
+     *
+     * @return the pitch decrease item.
+     */
+    private @NotNull ItemStack getPitchDecreaseItem(double pitch) {
         double pitchBefore = soundSection.getPitch(
                 cropName,
                 soundName
         );
         double pitchAfter = MathUtils.round(
-                Math.max(pitchBefore - pitchChange, MIN_PITCH)
+                Math.max(pitchBefore - pitch, Sound.MIN_PITCH)
         );
 
         return new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, pitchChange, "Pitch"))
+                .setName(LanguageAPI.Menu.SOUND_REMOVE_ITEM_NAME.get(plugin, pitch, "Pitch"))
                 .setLore(LanguageAPI.Menu.SOUND_REMOVE_ITEM_AFTER.get(plugin, pitchAfter))
                 .toItemStack();
     }
 
 
-    private void addSoundDelay(int delay) {
+    /**
+     * Increases the {@link #soundName current sound} with the provided delay.
+     *
+     * @param delay the delay to be increased with.
+     */
+    private void increaseSoundDelay(int delay) {
         double oldDelay = MathUtils.round(
                 soundSection.getDelay(cropName, soundName) + delay
         );
-        double newDelay = Math.min(oldDelay, MAX_DELAY);
+        double newDelay = Math.min(oldDelay, Sound.MAX_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
     }
 
 
-    private void removeSoundDelay(int delay) {
+    /**
+     * Decreases the {@link #soundName current sound} with the provided delay.
+     *
+     * @param delay the delay to be decreased with.
+     */
+    private void decreaseSoundDelay(int delay) {
         double oldDelay = MathUtils.round(
                 soundSection.getDelay(cropName, soundName) - delay
         );
-        double newDelay = Math.max(oldDelay, MIN_DELAY);
+        double newDelay = Math.max(oldDelay, Sound.MIN_DELAY);
         soundSection.setDelay(cropName, soundName, newDelay);
     }
 
 
+    /**
+     * Increases the {@link #soundName current sound} with the provided volume.
+     *
+     * @param volume the volume to be increased with.
+     */
     private void increaseVolume(int volume) {
         double oldVolume = MathUtils.round(
                 soundSection.getVolume(cropName, soundName) + volume
         );
-        double newVolume = Math.min(oldVolume, MAX_VOLUME);
+        double newVolume = Math.min(oldVolume, Sound.MAX_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
     }
 
 
+    /**
+     * Decreases the {@link #soundName current sound} with the provided volume.
+     *
+     * @param volume the volume to be decreased with.
+     */
     private void decreaseVolume(int volume) {
         double oldVolume = MathUtils.round(
                 soundSection.getVolume(cropName, soundName) - volume
         );
-        double newVolume = Math.max(oldVolume, MIN_VOLUME);
+        double newVolume = Math.max(oldVolume, Sound.MIN_VOLUME);
         soundSection.setVolume(cropName, soundName, newVolume);
     }
 
 
+    /**
+     * Increases the {@link #soundName current sound} with the provided pitch.
+     *
+     * @param pitch the pitch to be increased with.
+     */
     private void increasePitch(double pitch) {
         double oldPitch = MathUtils.round(
                 soundSection.getPitch(cropName, soundName) + pitch
         );
-        double newPitch = Math.min(oldPitch, MAX_PITCH);
+        double newPitch = Math.min(oldPitch, Sound.MAX_PITCH);
         soundSection.setPitch(cropName, soundName, newPitch);
     }
 
 
+    /**
+     * Decreases the {@link #soundName current sound} with the provided pitch.
+     *
+     * @param pitch the pitch to be decreased with.
+     */
     private void decreasePitch(double pitch) {
         double oldPitch = MathUtils.round(
                 soundSection.getPitch(cropName, soundName) - pitch
         );
-        double newPitch = Math.max(oldPitch, MIN_PITCH);
+        double newPitch = Math.max(oldPitch, Sound.MIN_PITCH);
         soundSection.setPitch(cropName, soundName, newPitch);
     }
 

@@ -3,8 +3,8 @@ package com.github.bakuplayz.cropclick.menu.menus.links;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.LinkMenu;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AutofarmsMenu;
 import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import org.bukkit.block.Block;
@@ -19,11 +19,14 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class DispenserLinkMenu extends LinkMenu {
 
+    /**
+     * A variable containing the state or menu to return to when clicking the {@link #getBackItem() back item}.
+     */
     private final AutofarmsMenuState menuState;
 
 
@@ -41,7 +44,7 @@ public final class DispenserLinkMenu extends LinkMenu {
     public void setMenuItems() {
         super.setMenuItems();
 
-        if (menuState != AutofarmsMenuState.LINK) {
+        if (menuState != AutofarmsMenuState.DISPENSER) {
             setBackItem();
         }
     }
@@ -53,20 +56,20 @@ public final class DispenserLinkMenu extends LinkMenu {
 
         assert clicked != null; // Only here for the compiler.
 
-        if (menuState != AutofarmsMenuState.LINK) {
+        if (menuState != AutofarmsMenuState.DISPENSER) {
             handleBack(clicked, new AutofarmsMenu(plugin, player, menuState));
         }
 
         if (isUnclaimed) {
             handleUnclaimed(clicked);
-            refresh();
+            refreshMenu();
             return;
         }
 
         if (!isUnlinked) {
             handlePreviews(clicked);
             handleToggle(clicked);
-            refresh();
+            refreshMenu();
         }
 
         if (!clicked.equals(dispenserItem)) {
@@ -75,7 +78,7 @@ public final class DispenserLinkMenu extends LinkMenu {
 
         if (isUnlinked) {
             handleSelect();
-            refresh();
+            refreshMenu();
             handleLink();
         }
     }

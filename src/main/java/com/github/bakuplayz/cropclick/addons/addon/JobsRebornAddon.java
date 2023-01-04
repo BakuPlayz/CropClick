@@ -7,20 +7,20 @@ import com.gamingmesh.jobs.container.JobsPlayer;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the JobsReborn addon.
+ * A class representing the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class JobsRebornAddon extends Addon {
-    
+
     private final Job farmerJob;
 
     private final AddonConfigSection addonSection;
@@ -38,7 +38,7 @@ public final class JobsRebornAddon extends Addon {
      *
      * @param player The player who is being updated.
      */
-    public void updateStats(@NotNull Player player, @NotNull BaseCrop crop) {
+    public void updateStats(@NotNull Player player, @NotNull Crop crop) {
         JobsPlayer jobsPlayer = new JobsPlayer(player.getName());
         if (!jobsPlayer.isInJob(farmerJob)) {
             return;

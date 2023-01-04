@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.EventUtils;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A listener handling all the {@link BaseCrop crop} plant events caused by a {@link Player}.
+ * A listener handling all the {@link Crop crop} plant events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -46,13 +46,13 @@ public final class PlayerPlantCropListener implements Listener {
 
 
     /**
-     * If the player is planting a crop, and has the right to, then it calls the PlayerPlantCropEvent.
+     * Handles all {@link Player players} interacting at a plant events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
-        if (!EventUtils.isMainHand(event)) {
+        if (!EventUtils.isMainHand(event.getHand())) {
             return;
         }
 
@@ -71,7 +71,7 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
-        BaseCrop crop = cropManager.findByBlock(block);
+        Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;
         }
@@ -87,9 +87,9 @@ public final class PlayerPlantCropListener implements Listener {
 
 
     /**
-     * If the growth addon is enabled, add the crop to the growth addon's list of crops.
+     * Handles all {@link Player player} crop planting events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {

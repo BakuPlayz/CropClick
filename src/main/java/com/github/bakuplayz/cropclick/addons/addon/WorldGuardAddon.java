@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the WorldGuard addon.
+ * A class representing the <a href="https://dev.bukkit.org/projects/worldguard">WorldGuard</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0

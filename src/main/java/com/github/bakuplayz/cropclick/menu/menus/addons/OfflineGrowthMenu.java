@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.addons;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.AddonMenu;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AddonsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class OfflineGrowthMenu extends AddonMenu {
@@ -49,24 +49,23 @@ public final class OfflineGrowthMenu extends AddonMenu {
         handleWorlds(clicked, new WorldsMenu(plugin, player, WorldMenuState.OFFLINE_GROWTH));
         handleToggle(clicked, getToggleItem());
 
-        refresh();
+        this.refreshMenu();
     }
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the OfflineGrowth item's name and lore, and the material set to either
-     * a long grass or stained-glass pane depending on whether OfflineGrowth is enabled.
+     * Gets the toggle {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "OfflineGrowth" and the lore of ex: "Enabled: true".
+     * @return the toggle item.
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
         return new ItemBuilder(Material.TALL_GRASS)
                 .setName(LanguageAPI.Menu.ADDON_GROWTH_ITEM_NAME.get(plugin,
-                        MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
+                        MessageUtils.getStatusMessage(plugin, isEnabled())
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_GROWTH_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(!isAddonEnabled, Material.GRAY_STAINED_GLASS_PANE)
+                .setMaterial(!isEnabled(), Material.GRAY_STAINED_GLASS_PANE)
                 .toItemStack();
     }
 

@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.language;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import org.apache.commons.lang.StringUtils;
+import com.github.bakuplayz.cropclick.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -47,8 +47,6 @@ public final class LanguageAPI {
 
         FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),
 
-        UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
-
         NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.13 to the latest version. In order to run the plugin, please change to the correct jar for your server version.");
 
 
@@ -74,7 +72,7 @@ public final class LanguageAPI {
          * @param value The value to replace the placeholder with.
          */
         public void send(@NotNull String value) {
-            Bukkit.getConsoleSender().sendMessage(fastReplace(get(), value));
+            Bukkit.getConsoleSender().sendMessage(StringUtils.replace(get(), "%s", value));
         }
 
 
@@ -88,17 +86,43 @@ public final class LanguageAPI {
             return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
         }
 
+    }
+
+    /**
+     * An enumeration handling some Update messages.
+     */
+    public enum Update {
+
+        UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
+        UPDATE_FOUND_NO_UPDATES("Searched for updates and found none. You are up to date :)"),
+        UPDATE_FOUND_NEW_UPDATE("Searched for updates and found one.");
+
+        private final String message;
+
+
+        Update(@NotNull String message) {
+            this.message = message;
+        }
+
 
         /**
-         * Replaces the first occurrence of %s in the given message with the given value.
+         * It returns a string with the prefix and the message.
          *
-         * @param message The message to be formatted.
-         * @param value   The value to be replaced.
-         *
-         * @return A String.
+         * @return The message is being returned.
          */
-        private @NotNull String fastReplace(@NotNull String message, @NotNull String value) {
-            return StringUtils.replace(message, "%s", value, 1);
+        @Contract(" -> new")
+        public @NotNull String get() {
+            return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
+        }
+
+
+        /**
+         * This function sends the message to the sender.
+         *
+         * @param sender The CommandSender to send the message to.
+         */
+        public void send(@NotNull CommandSender sender) {
+            sender.sendMessage(get());
         }
 
     }
@@ -125,7 +149,7 @@ public final class LanguageAPI {
         RELOAD_FAILED(Category.RELOAD, "failed"),
         RELOAD_SUCCESS(Category.RELOAD, "success");
 
-        
+
         private enum Category {
 
             GENERAL,
@@ -188,7 +212,7 @@ public final class LanguageAPI {
          * @return The value of the key in the config.yml file.
          */
         public @NotNull String get(@NotNull CropClick plugin, @NotNull String value) {
-            return fastReplace(get(plugin), value);
+            return StringUtils.replace(get(plugin), placeholder, value);
         }
 
 
@@ -212,19 +236,6 @@ public final class LanguageAPI {
          */
         public void send(@NotNull CropClick plugin, @NotNull CommandSender sender, @NotNull String value) {
             sender.sendMessage(get(plugin, value));
-        }
-
-
-        /**
-         * Replace the first occurrence of a placeholder with a value.
-         *
-         * @param message The message to replace the placeholder in.
-         * @param value   The value to be replaced.
-         *
-         * @return A string with the placeholder replaced with the value.
-         */
-        private @NotNull String fastReplace(@NotNull String message, @NotNull String value) {
-            return StringUtils.replaceOnce(message, placeholder, value);
         }
 
     }
@@ -886,9 +897,8 @@ public final class LanguageAPI {
             }
 
             String returned = message;
-            int amountOfValues = values.length;
-            for (int i = 0; i < amountOfValues; ++i) {
-                returned = StringUtils.replaceOnce(returned, placeholders[i], values[i]);
+            for (int i = 0; i < values.length; ++i) {
+                returned = StringUtils.replace(returned, placeholders[i], values[i]);
             }
             return returned;
         }

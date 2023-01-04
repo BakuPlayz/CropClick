@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,10 +11,10 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
+ * @see Crop
  * @since 2.0.0
  */
-public abstract class WallCrop extends Crop {
+public abstract class WallCrop extends BaseCrop {
 
     public WallCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -27,7 +27,7 @@ public abstract class WallCrop extends Crop {
      * @return the wall crop's seed or null (default: null).
      */
     @Override
-    public @Nullable BaseSeed getSeed() {
+    public @Nullable Seed getSeed() {
         return null;
     }
 

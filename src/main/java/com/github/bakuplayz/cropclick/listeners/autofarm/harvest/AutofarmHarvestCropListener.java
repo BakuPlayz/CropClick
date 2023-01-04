@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.SeaPickle;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 
 /**
- * A listener handling all the harvest {@link BaseCrop crop} events caused by a {@link Autofarm}.
+ * A listener handling all the harvest {@link Crop crop} events caused by a {@link Autofarm}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -45,7 +45,7 @@ public final class AutofarmHarvestCropListener implements Listener {
      * A map of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
-    private final HashMap<BaseCrop, Long> harvestedCrops;
+    private final HashMap<Crop, Long> harvestedCrops;
 
 
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
@@ -89,12 +89,12 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        if (AutofarmUtils.componentHasMeta(block)) {
-            AutofarmUtils.addMeta(plugin, autofarm);
+        if (AutofarmUtils.hasCachedID(block)) {
+            AutofarmUtils.addCachedID(plugin, autofarm);
         }
 
         Block facing = findDispenserFacing(block);
-        BaseCrop crop = cropManager.findByBlock(facing);
+        Crop crop = cropManager.findByBlock(facing);
         if (!cropManager.validate(crop, facing)) {
             return;
         }
@@ -128,7 +128,7 @@ public final class AutofarmHarvestCropListener implements Listener {
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {
         if (event.isCancelled()) return;
 
-        BaseCrop crop = event.getCrop();
+        Crop crop = event.getCrop();
         Block block = event.getBlock();
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
@@ -165,9 +165,8 @@ public final class AutofarmHarvestCropListener implements Listener {
         crop.replant(block);
 
         if (plugin.isDebugging()) {
-            plugin
-                    .getLogger()
-                    .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
+            plugin.getLogger()
+                  .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
         }
     }
 

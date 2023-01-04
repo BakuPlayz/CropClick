@@ -133,7 +133,7 @@ public final class Autofarm implements Enableable {
         if (!isEnabled()) return null;
         if (!isLinked()) return null;
 
-        return this.container = AutofarmUtils.getContainer(
+        return this.container = AutofarmUtils.findContainer(
                 containerLocation.getBlock()
         );
     }

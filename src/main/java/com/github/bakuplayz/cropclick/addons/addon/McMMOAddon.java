@@ -3,21 +3,21 @@ package com.github.bakuplayz.cropclick.addons.addon;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.gmail.nossr50.api.ExperienceAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the mcMMO addon.
+ * A class representing the <a href="https://www.spigotmc.org/resources/official-mcmmo-original-author-returns.64348/">mcMMO</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class McMMOAddon extends Addon {
-    
+
     private final AddonConfigSection addonSection;
 
 
@@ -33,7 +33,7 @@ public final class McMMOAddon extends Addon {
      * @param player The player to add experience to.
      * @param crop   The crop that was harvested.
      */
-    public void addExperience(@NotNull Player player, @NotNull BaseCrop crop) {
+    public void addExperience(@NotNull Player player, @NotNull Crop crop) {
         ExperienceAPI.addXP(player,
                 "Herbalism",
                 getExperience(crop.getName()),

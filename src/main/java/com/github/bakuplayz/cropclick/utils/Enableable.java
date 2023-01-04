@@ -10,7 +10,7 @@ package com.github.bakuplayz.cropclick.utils;
 public interface Enableable {
 
     /**
-     * Checks if the implement object itself is enabled.
+     * Checks whether the implementing object is enabled.
      *
      * @return true if enabled, otherwise false.
      */

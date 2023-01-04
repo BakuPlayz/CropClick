@@ -1,6 +1,5 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -8,7 +7,6 @@ import org.bukkit.block.Chest;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -23,11 +21,11 @@ import java.util.Arrays;
 public final class BlockUtils {
 
     /**
-     * If the block is null or the block's type is air, return true.
+     * Checks whether the {@link Block passed block} is {@link Material#AIR air}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if air, otherwise false.
      */
     public static boolean isAir(Block block) {
         return block == null || block.getType() == Material.AIR;
@@ -35,12 +33,11 @@ public final class BlockUtils {
 
 
     /**
-     * If the block is a chest, and the inventory of the chest is a double chest inventory, then the block is a double
-     * chest.
+     * Checks whether the {@link Block provided block} is a double chest.
      *
-     * @param block The block that you want to check if it's a double chest.
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public static boolean isDoubleChest(@NotNull Block block) {
         BlockState blockState = block.getState();
@@ -55,54 +52,42 @@ public final class BlockUtils {
 
 
     /**
-     * Returns the location of the double chest that the given block is a part of, or null if the block is not a double
-     * chest.
+     * Checks whether two different {@link Block blocks} are of the {@link Material same type}.
      *
-     * @param block The block you want to get the double chest of.
+     * @param first  the first block to check.
+     * @param second the second block to check.
      *
-     * @return A DoublyLocation object.
+     * @return true if they are the same, otherwise false.
      */
-    public static @Nullable DoublyLocation getAsDoubleChest(@NotNull Block block) {
-        return LocationUtils.getAsDoubly(block.getLocation());
+    public static boolean isSameType(@NotNull Block first, @NotNull Block second) {
+        return first.getType() == second.getType();
     }
 
 
     /**
-     * Returns true if the two blocks are the same type.
+     * Checks whether the {@link Block provided block} matches the {@link Material provided type}.
      *
-     * @param b1 The first block to compare.
-     * @param b2 The block to compare to.
+     * @param block the block to check.
+     * @param type  the type to match.
      *
-     * @return A boolean value.
+     * @return true if they are the same, otherwise false.
      */
-    public static boolean isSameType(@NotNull Block b1, @NotNull Block b2) {
-        return b1.getType() == b2.getType();
+    public static boolean isSameType(@NotNull Block block, @NotNull Material type) {
+        return block.getType() == type;
     }
 
 
     /**
-     * Returns true if the block is of the same type as the material.
+     * Checks whether the {@link Block provided block} matches any of the {@link Material passed materials}.
      *
-     * @param b The block you want to check
-     * @param m The material to check against
+     * @param block the block to check.
+     * @param types the types to match.
      *
-     * @return A boolean value.
-     */
-    public static boolean isSameType(@NotNull Block b, @NotNull Material m) {
-        return b.getType() == m;
-    }
-
-
-    /**
-     * Returns true if the block is any of the given types.
-     *
-     * @param b The block to check
-     *
-     * @return A boolean value.
+     * @return true if it matches any, otherwise false.
      */
     @SuppressWarnings("unused")
-    public static boolean isAnyType(@NotNull Block b, @NotNull Material @NotNull ... types) {
-        return Arrays.stream(types).anyMatch(type -> type == b.getType());
+    public static boolean isAnyType(@NotNull Block block, @NotNull Material @NotNull ... types) {
+        return Arrays.stream(types).anyMatch(type -> type == block.getType());
     }
 
 }

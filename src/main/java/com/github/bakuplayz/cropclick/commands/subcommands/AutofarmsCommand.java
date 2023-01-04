@@ -34,8 +34,8 @@ public final class AutofarmsCommand extends Subcommand {
         new AutofarmsMenu(
                 plugin,
                 player,
-                AutofarmsMenuState.COMMAND_REDIRECT
-        ).open();
+                AutofarmsMenuState.COMMAND
+        ).openMenu();
     }
 
 }

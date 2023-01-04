@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A listener handling all the {@link BaseCrop crop} destroy events caused by a {@link Player}.
+ * A listener handling all the {@link Crop crop} destroy events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -75,7 +75,7 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        BaseCrop crop = cropManager.findByBlock(block);
+        Crop crop = cropManager.findByBlock(block);
         if (!cropManager.validate(crop, block)) {
             return;
         }

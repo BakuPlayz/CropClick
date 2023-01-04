@@ -45,18 +45,18 @@ public final class CropPermission extends Permission {
     /**
      * Constructor for creating a crop permission.
      */
-    public CropPermission(@NotNull String cropName, @NotNull CropPermissionType type) {
-        super("cropclick." + type.getName() + "." + cropName, PermissionDefault.OP);
-        setDescription("Permission to " + type.getName() + " the " + cropName + " crop.");
+    public CropPermission(@NotNull String cropName, @NotNull CropPermissionAction action) {
+        super("cropclick." + action.getName() + "." + cropName, PermissionDefault.OP);
+        setDescription("Permission to " + action.getName() + " the " + cropName + " crop.");
     }
 
 
     /**
      * Constructor for creating a crop base permission (i.e. ground, tall or wall).
      */
-    public CropPermission(@NotNull CropPermissionBase base, @NotNull CropPermissionType type) {
-        super("cropclick." + type.getName() + "." + base.getName(), PermissionDefault.OP);
-        setDescription(base.getDescription(type));
+    public CropPermission(@NotNull CropPermissionBase base, @NotNull CropPermissionAction action) {
+        super("cropclick." + action.getName() + "." + base.getName(), PermissionDefault.OP);
+        setDescription(base.getDescription(action));
     }
 
 }

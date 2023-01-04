@@ -24,6 +24,9 @@ public final class CommandPermission extends Permission {
             PermissionDefault.OP
     );
 
+    /**
+     * Permission to use the '/crop' command.
+     */
     public static final Permission GENERAL_COMMAND = new Permission(
             "cropclick.command.general",
             "Permission to use the general command.",

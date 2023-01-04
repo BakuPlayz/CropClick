@@ -5,14 +5,12 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.RoofCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.CaveVinesPlant;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,13 +90,6 @@ public final class GlowBerries extends RoofCrop {
                 cropSection.getDropAmount(getName(), 1),
                 cropSection.getDropChance(getName(), 100)
         );
-    }
-
-
-    @Override
-    @Contract(pure = true)
-    public @Nullable BaseSeed getSeed() {
-        return null;
     }
 
 

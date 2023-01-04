@@ -55,8 +55,8 @@ public final class PlayerInteractAtDispenserListener implements Listener {
                 return;
             }
 
-            if (AutofarmUtils.componentHasMeta(block)) {
-                AutofarmUtils.addMeta(plugin, autofarm);
+            if (AutofarmUtils.hasCachedID(block)) {
+                AutofarmUtils.addCachedID(plugin, autofarm);
             }
         }
 
@@ -65,8 +65,8 @@ public final class PlayerInteractAtDispenserListener implements Listener {
                 player,
                 block,
                 autofarm,
-                AutofarmsMenuState.LINK
-        ).open();
+                AutofarmsMenuState.DISPENSER
+        ).openMenu();
     }
 
 }

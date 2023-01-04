@@ -7,10 +7,13 @@ import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUpdateEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUpdateAutofarmEvent;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,10 +44,9 @@ public final class PlayerUpdateAutofarmListener implements Listener {
 
 
     /**
-     * If a player places a block, and that block is a double chest, and that double chest is part of an autofarm, then
-     * update the autofarm to use the double chest.
+     * Handles all {@link Player players} placing a chest events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceDoubleChest(@NotNull BlockPlaceEvent event) {
@@ -54,7 +56,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
             return;
         }
 
-        Runnable chestRunnable = placeDoubleChestRunnable(
+        Runnable chestRunnable = getDoubleChestRunnable(
                 event.getPlayer(),
                 event.getBlock()
         );
@@ -68,9 +70,9 @@ public final class PlayerUpdateAutofarmListener implements Listener {
 
 
     /**
-     * If the player has permission to update their autofarm, then unlink the old autofarm and link the new autofarm.
+     * Handles all {@link Player players} updating a {@link Autofarm autofarm} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerUpdateAutofarm(@NotNull PlayerUpdateAutofarmEvent event) {
@@ -103,15 +105,15 @@ public final class PlayerUpdateAutofarmListener implements Listener {
 
 
     /**
-     * It returns a runnable that calls an event when a player places a double chest.
+     * Gets the runnable for checking updating an {@link Autofarm autofarm's} container {@link Component} based on the created {@link DoubleChest double chest}.
      *
-     * @param player The player who placed the block.
-     * @param block  The block that the player is placing.
+     * @param player the player updating the autofarm.
+     * @param block  the block where the chest was placed.
      *
-     * @return A Runnable.
+     * @return a runnable for updating the chest component.
      */
     @Contract(pure = true)
-    private @NotNull Runnable placeDoubleChestRunnable(@NotNull Player player, @NotNull Block block) {
+    private @NotNull Runnable getDoubleChestRunnable(@NotNull Player player, @NotNull Block block) {
         return () -> {
             if (!BlockUtils.isDoubleChest(block)) {
                 return;
@@ -122,7 +124,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
                 return;
             }
 
-            DoublyLocation doubleChest = BlockUtils.getAsDoubleChest(block);
+            DoublyLocation doubleChest = LocationUtils.findDoubly(block.getLocation());
 
             if (doubleChest == null) {
                 return;

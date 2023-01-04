@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import com.github.bakuplayz.cropclick.utils.CollectionUtil;
+import com.github.bakuplayz.cropclick.utils.CollectionUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -63,7 +63,11 @@ public final class Chorus extends TallCrop {
         while (stack.size() > 0) {
             Block chorus = stack.pop();
 
-            if (!isChorus(chorus) || choruses.contains(chorus)) {
+            if (!isChorus(chorus)) {
+                continue;
+            }
+
+            if (choruses.contains(chorus)) {
                 continue;
             }
 
@@ -81,8 +85,8 @@ public final class Chorus extends TallCrop {
 
     @Override
     public void replant(@NotNull Block block) {
-        CollectionUtil.reverseOrder(choruses)
-                      .forEach(b -> b.setType(Material.AIR));
+        CollectionUtils.reverseOrder(choruses)
+                       .forEach(b -> b.setType(Material.AIR));
 
         choruses = new ArrayList<>();
     }

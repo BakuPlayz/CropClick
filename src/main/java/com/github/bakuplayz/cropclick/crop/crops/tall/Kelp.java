@@ -3,7 +3,6 @@ package com.github.bakuplayz.cropclick.crop.crops.tall;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;

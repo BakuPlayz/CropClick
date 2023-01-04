@@ -30,7 +30,7 @@ public final class SettingsCommand extends Subcommand {
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {
-        new SettingsMenu(plugin, player, false).open();
+        new SettingsMenu(plugin, player, false).openMenu();
     }
 
 }

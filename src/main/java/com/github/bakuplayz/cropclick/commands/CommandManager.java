@@ -86,7 +86,7 @@ public final class CommandManager implements TabExecutor {
                 return true;
             }
 
-            new MainMenu(plugin, player).open();
+            new MainMenu(plugin, player).openMenu();
             return true;
         }
 

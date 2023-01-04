@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 public final class PlayerJoinListener implements Listener {
-    
+
     private final UpdateManager updateManager;
 
 
@@ -28,9 +28,9 @@ public final class PlayerJoinListener implements Listener {
 
 
     /**
-     * Sends the update message to OP players upon joining the server.
+     * Handles all {@link Player operators} joining events.
      *
-     * @param event the event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onOperatorJoin(@NotNull PlayerJoinEvent event) {

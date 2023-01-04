@@ -19,22 +19,15 @@ import org.jetbrains.annotations.NotNull;
 public final class InventoryUtils {
 
     /**
-     * Create a temporary inventory, add all the items from the original inventory to it, then add the item to drop to it,
-     * and if the result is empty, then the item fits.
+     * Checks whether the {@link Inventory provided inventory} can contain the {@link ItemStack provided item}.
      *
-     * @param inventory The inventory to check if the item fits in.
-     * @param drop      The ItemStack you want to check if it fits in the inventory.
+     * @param inventory the inventory to check.
+     * @param item      the item to add.
      *
-     * @return A boolean value.
+     * @return true if it could, otherwise false.
      */
-    public static boolean canFit(@NotNull Inventory inventory, @NotNull ItemStack drop) {
-        Inventory temporary = inventory instanceof DoubleChestInventory
-                              ? Bukkit.createInventory(null, 54)
-                              : Bukkit.createInventory(null, inventory.getType());
-
-        for (int i = 0; i < inventory.getSize(); ++i) {
-            temporary.setItem(i, inventory.getItem(i));
-        }
+    public static boolean canContain(@NotNull Inventory inventory, @NotNull ItemStack item) {
+        Inventory temporary = cloneInventory(inventory);
 
         if (inventory instanceof PlayerInventory) {
             temporary.setItem(36, new ItemStack(Material.STONE, 64));
@@ -44,7 +37,27 @@ public final class InventoryUtils {
             temporary.setItem(40, new ItemStack(Material.STONE, 64));
         }
 
-        return temporary.addItem(drop).isEmpty();
+        return temporary.addItem(item).isEmpty();
+    }
+
+
+    /**
+     * Clones the {@link Inventory passed inventory}.
+     *
+     * @param inventory the inventory to clone.
+     *
+     * @return the cloned inventory.
+     */
+    private static @NotNull Inventory cloneInventory(@NotNull Inventory inventory) {
+        Inventory temporary = inventory instanceof DoubleChestInventory
+                              ? Bukkit.createInventory(null, 54)
+                              : Bukkit.createInventory(null, inventory.getType());
+
+        for (int i = 0; i < inventory.getSize(); ++i) {
+            temporary.setItem(i, inventory.getItem(i));
+        }
+
+        return temporary;
     }
 
 }

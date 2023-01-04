@@ -51,7 +51,7 @@ public final class SoundYaml implements Yamlable, Enableable {
     /**
      * It converts {@link SoundYaml this} object to a YAML-styled map.
      *
-     * @return A {@link HashMap YAML-formatted HashMap}.
+     * @return a {@link HashMap YAML-formatted HashMap}.
      */
     @Override
     @Contract(" -> new")
@@ -67,7 +67,7 @@ public final class SoundYaml implements Yamlable, Enableable {
     /**
      * It checks whether the Sound is enabled, by validating only ones with a {@link #volume} and {@link #pitch} more than zero.
      *
-     * @return An enabled state, whether the Sound is enabled or not.
+     * @return true if the sound is enabled, otherwise false.
      */
     @Override
     public boolean isEnabled() {

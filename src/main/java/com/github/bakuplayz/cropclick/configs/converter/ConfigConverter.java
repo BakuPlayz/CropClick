@@ -41,7 +41,7 @@ public final class ConfigConverter {
         ConfigurationSection newConfig = ConfigConverter.convertFormat(legacyConfig);
 
         FileUtils.copyYamlTo(plugin.getConfig(), newConfig);
-        FileUtils.moveFile(inFile, outFile);
+        FileUtils.move(inFile, outFile);
     }
 
 

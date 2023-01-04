@@ -3,10 +3,10 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
-import com.github.bakuplayz.cropclick.utils.MenuUtil;
+import com.github.bakuplayz.cropclick.utils.MenuUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,10 +23,16 @@ import java.util.List;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class HelpMenu extends Menu {
+public final class HelpMenu extends BaseMenu {
 
+    /**
+     * A variable checking if the menu request to {@link HelpMenu} was a redirect.
+     */
     private final boolean isRedirected;
 
+    /**
+     * A variable containing all the {@link Subcommand commands}.
+     */
     private final List<Subcommand> commands;
 
 
@@ -55,7 +61,7 @@ public final class HelpMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
-        if (MenuUtil.isAir(clicked)) {
+        if (MenuUtils.isAir(clicked)) {
             return;
         }
 
@@ -77,27 +83,26 @@ public final class HelpMenu extends Menu {
 
 
     /**
-     * It creates an ItemStack with a book as the material, sets the name to the subcommand's name, and sets the lore to
-     * the subcommand's description, permission, and usage.
+     * Gets the subcommand {@link ItemStack item}.
      *
-     * @param cmd The subcommand to get the item for.
+     * @param command the subcommand to base the item on.
      *
-     * @return An ItemStack representing a command.
+     * @return the subcommand item.
      */
-    private @NotNull ItemStack getSubCommandItem(@NotNull Subcommand cmd) {
+    private @NotNull ItemStack getSubCommandItem(@NotNull Subcommand command) {
         return new ItemBuilder(Material.BOOK)
-                .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, cmd.getName()))
-                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, cmd.getDescription()),
-                        LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, cmd.getPermission()),
-                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, cmd.getUsage()))
+                .setName(LanguageAPI.Menu.HELP_ITEM_NAME.get(plugin, command.getName()))
+                .setLore(LanguageAPI.Menu.HELP_ITEM_DESCRIPTION.get(plugin, command.getDescription()),
+                        LanguageAPI.Menu.HELP_ITEM_PERMISSION.get(plugin, command.getPermission()),
+                        LanguageAPI.Menu.HELP_ITEM_USAGE.get(plugin, command.getUsage()))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an ItemStack with a book that shows how to use the default command.
+     * Gets the default command {@link ItemStack item}.
      *
-     * @return An ItemStack representing the default command.
+     * @return the default command item.
      */
     private @NotNull ItemStack getDefaultCommandItem() {
         String description = LanguageAPI.Command.DEFAULT_DESCRIPTION.get(plugin);

@@ -1,6 +1,5 @@
 package com.github.bakuplayz.cropclick.runnables.sounds;
 
-import com.github.bakuplayz.cropclick.menu.menus.sounds.SoundMenu;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -18,21 +17,44 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class Sound {
 
-    private final @Getter String name;
-
+    /**
+     * A variable measured in milliseconds.
+     */
+    public static final int MIN_DELAY = 0;
 
     /**
-     * The given delay before playing the sound ({@link SoundMenu#MIN_DELAY min delay} & {@link SoundMenu#MAX_DELAY max delay}).
+     * A variable measured in milliseconds.
+     */
+    public static final int MAX_DELAY = 5000;
+
+    /**
+     * A variable measured in range-of-blocks.
+     */
+    public static final int MIN_VOLUME = 0;
+
+    /**
+     * A variable measured in range-of-blocks.
+     */
+    public static final int MAX_VOLUME = 500;
+
+    public static final int MIN_PITCH = 0;
+    public static final int MAX_PITCH = 2;
+
+    
+    private final @Getter String name;
+
+    /**
+     * The given delay before playing the sound ({@link #MIN_DELAY min delay} & {@link #MAX_DELAY max delay}).
      */
     private final @Getter double delay;
 
     /**
-     * The given pitch the sound should be played at ({@link SoundMenu#MIN_PITCH min pitch} & {@link SoundMenu#MAX_PITCH max pitch}).
+     * The given pitch the sound should be played at ({@link #MIN_PITCH min pitch} & {@link #MAX_PITCH max pitch}).
      */
     private final @Getter float pitch;
 
     /**
-     * The given range-in-blocks or volume the sound should be played at ({@link SoundMenu#MIN_VOLUME min volume} & {@link SoundMenu#MAX_VOLUME max volume}).
+     * The given range-in-blocks or volume the sound should be played at ({@link #MIN_VOLUME min volume} & {@link #MAX_VOLUME max volume}).
      */
     private final @Getter float volume;
 

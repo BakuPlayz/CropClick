@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A location that contains two positions, a doubly location.
+ * A location that contains two positions, viz. a doubly location.
  *
  * @author BakuPlayz
  * @version 2.0.0

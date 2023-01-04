@@ -7,7 +7,7 @@ import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
@@ -63,7 +63,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtBlock(@NotNull PlayerInteractEvent event) {
-        if (!EventUtils.isMainHand(event)) {
+        if (!EventUtils.isMainHand(event.getHand())) {
             return;
         }
 
@@ -108,19 +108,19 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         }
 
         if (AutofarmUtils.isContainer(block)) {
-            Container container = AutofarmUtils.getContainer(block);
+            Container container = AutofarmUtils.findContainer(block);
             Event containerEvent = new PlayerInteractAtContainerEvent(player, block, container);
             Bukkit.getPluginManager().callEvent(containerEvent);
         }
 
         if (AutofarmUtils.isDispenser(block)) {
-            Dispenser dispenser = AutofarmUtils.getDispenser(block);
+            Dispenser dispenser = AutofarmUtils.findDispenser(block);
             Event dispenserEvent = new PlayerInteractAtDispenserEvent(player, dispenser);
             Bukkit.getPluginManager().callEvent(dispenserEvent);
         }
 
         if (AutofarmUtils.isCrop(cropManager, block)) {
-            BaseCrop crop = AutofarmUtils.getCrop(cropManager, block);
+            Crop crop = AutofarmUtils.findCrop(cropManager, block);
             Event cropEvent = new PlayerInteractAtCropEvent(player, block, crop);
             Bukkit.getPluginManager().callEvent(cropEvent);
         }

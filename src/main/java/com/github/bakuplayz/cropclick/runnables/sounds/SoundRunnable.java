@@ -21,7 +21,7 @@ import java.util.TimerTask;
  */
 public final class SoundRunnable implements Runnable {
 
-    private final Timer runnable;
+    private final Timer timer;
 
     private final Location location;
 
@@ -29,49 +29,46 @@ public final class SoundRunnable implements Runnable {
 
 
     public SoundRunnable(@NotNull Block block) {
-        this.runnable = new Timer(true);
+        this.timer = new Timer(true);
         this.queuedSounds = new ArrayList<>();
         this.location = block.getLocation();
     }
 
 
     /**
-     * This function queues a sound to the queuedSounds list, when harvesting a crop.
+     * Adds a sound to the {@link #queuedSounds queue of sounds}.
      *
-     * @param name   The name of the sound.
-     * @param pitch  The pitch of the sound.
-     * @param volume The volume of the sound.
-     * @param delay  The delay in milliseconds before the sound is played.
+     * @param name   the name of the sound.
+     * @param pitch  the pitch of the sound.
+     * @param volume the volume of the sound.
+     * @param delay  the delay in milliseconds before playing the sound.
      */
     public void queueSound(@NotNull String name, double pitch, double volume, double delay) {
-        queuedSounds.add(
-                new Sound(name, pitch, volume, delay)
-        );
+        queuedSounds.add(new Sound(name, pitch, volume, delay));
     }
 
 
     /**
-     * For each sound, schedule a task to run after the sound's delay.
+     * Runs each {@link Sound} one by one till done.
      */
     @Override
     public void run() {
         long delay = 0;
         for (Sound sound : queuedSounds) {
             delay += sound.getDelay();
-            runnable.schedule(
+            timer.schedule(
                     new SoundTask(sound, location),
                     delay
             );
         }
-        runnable.schedule(clean(), delay + 10);
+        timer.schedule(clean(), delay + 10);
     }
 
 
     /**
-     * This function returns a new TimerTask that calls the purge() method of the RunnableScheduledFuture that was passed
-     * to the constructor.
+     * Clears the {@link Timer timer} and removes the {@link SoundTask} when called.
      *
-     * @return A new TimerTask object.
+     * @return a cleaning task.
      */
     @Override
     @Contract(value = " -> new", pure = true)
@@ -80,7 +77,7 @@ public final class SoundRunnable implements Runnable {
 
             @Override
             public void run() {
-                runnable.purge();
+                timer.purge();
             }
 
         };

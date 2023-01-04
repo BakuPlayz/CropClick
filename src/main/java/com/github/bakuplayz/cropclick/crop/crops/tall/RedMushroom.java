@@ -26,7 +26,6 @@ import java.util.Stack;
  */
 public final class RedMushroom extends Mushroom {
 
-
     public RedMushroom(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
     }
@@ -48,7 +47,11 @@ public final class RedMushroom extends Mushroom {
         while (stack.size() > 0) {
             Block mushroom = stack.pop();
 
-            if (!isMushroomBlock(mushroom) || mushrooms.contains(mushroom)) {
+            if (!isMushroomBlock(mushroom)) {
+                continue;
+            }
+
+            if (mushrooms.contains(mushroom)) {
                 continue;
             }
 

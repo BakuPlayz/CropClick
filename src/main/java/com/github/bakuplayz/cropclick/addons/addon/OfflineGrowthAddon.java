@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the OfflineGrowth addon.
+ * A class representing the <a href="https://www.spigotmc.org/resources/offlinegrowth-plants-grow-on-unloaded-chunks-1-8x-1-19x.87615/">OfflineGrowth</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0

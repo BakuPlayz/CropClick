@@ -26,8 +26,9 @@
 #                                                                                  #
 #   USAGE:                                                                         #
 #                                                                                  #
-#   This configuration is used to configure player settings, such as toggling      #
-#   CropClick for different players.                                               #
+#   This configuration is used to configure player settings, and is therefore      #
+#   mostly configured by CropClick. Unless it comes to disabling CropClick         #
+#   for different players.                                                         #
 #                                                                                  #
 ####################################################################################
 

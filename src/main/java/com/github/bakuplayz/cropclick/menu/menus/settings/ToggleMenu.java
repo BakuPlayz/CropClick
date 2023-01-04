@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -27,13 +27,16 @@ import java.util.stream.Collectors;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class ToggleMenu extends PaginatedMenu {
 
     private final PlayersConfig playersConfig;
 
+    /**
+     * A variable containing all the {@link Player players'} UUIDS.
+     */
     private final List<String> players;
 
 
@@ -63,7 +66,7 @@ public final class ToggleMenu extends PaginatedMenu {
         handleBack(clicked, new SettingsMenu(plugin, player, true));
         handlePagination(clicked);
 
-        int index = getIndexOfPlayer(clicked);
+        int index = indexOfPlayer(clicked);
         if (index == -1) {
             return;
         }
@@ -72,23 +75,18 @@ public final class ToggleMenu extends PaginatedMenu {
                 players.get(index)
         );
 
-        refresh();
+        refreshMenu();
     }
 
 
     /**
-     * "Get the index of the player item that was clicked on."
-     * <p>
-     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
-     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
-     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
-     * </p>
+     * Finds the index of the {@link OfflinePlayer#getUniqueId() player's ID} based on the {@link ItemStack clicked item}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      *
-     * @return The index of the sound in the menuItems list.
+     * @return the index of the player's ID, otherwise -1.
      */
-    private int getIndexOfPlayer(@NotNull ItemStack clicked) {
+    private int indexOfPlayer(@NotNull ItemStack clicked) {
         return menuItems.stream()
                         .filter(clicked::equals)
                         .mapToInt(item -> menuItems.indexOf(item))
@@ -98,17 +96,17 @@ public final class ToggleMenu extends PaginatedMenu {
 
 
     /**
-     * It returns an ItemStack with the name of the player.
+     * Creates a menu {@link ItemStack item} based on the {@link OfflinePlayer#getUniqueId() provided player's ID}.
      *
-     * @param playerID The UUID of the player to get the menu item for.
+     * @param playerID the UUID to base the item on.
      *
-     * @return An ItemStack.
+     * @return the created menu item.
      */
-    private @NotNull ItemStack getMenuItem(@NotNull String playerID) {
+    private @NotNull ItemStack createMenuItem(@NotNull String playerID) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(
                 UUID.fromString(playerID)
         );
-        String status = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getStatusMessage(
                 plugin,
                 playersConfig.isEnabled(playerID)
         );
@@ -118,27 +116,27 @@ public final class ToggleMenu extends PaginatedMenu {
         return new ItemBuilder(Material.PLAYER_HEAD)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
                 .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, status))
-                .toSkullStack(offlinePlayer);
+                .toPlayerHead(offlinePlayer);
     }
 
 
     /**
-     * Get a list of menu items for each player, and return them.
+     * Gets all the {@link #players players' IDs} as {@link #menuItems menu items}.
      *
-     * @return A list of ItemStacks.
+     * @return {@link #players} as {@link #menuItems menu items}.
      */
     @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return players.stream()
-                      .map(this::getMenuItem)
+                      .map(this::createMenuItem)
                       .collect(Collectors.toList());
     }
 
 
     /**
-     * Get a list of all the players on the server.
+     * Gets all the {@link OfflinePlayer#getUniqueId() players' IDs} that ever joined the server.
      *
-     * @return A list of all the players on the server.
+     * @return the found {@link OfflinePlayer#getUniqueId() players' IDs}.
      */
     private @NotNull List<String> getPlayers() {
         return Arrays.stream(Bukkit.getOfflinePlayers())

@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.listeners;
 
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.Menu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,16 +20,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MenuListener implements Listener {
 
+
     /**
-     * If the inventory holder is a Menu, cancel the event and call the handleMenu function.
+     * Handles all {@link Menu menu} click events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onMenuClick(@NotNull InventoryClickEvent event) {
         InventoryHolder holder = event.getInventory().getHolder();
 
-        if (holder instanceof Menu) {
+        if (holder instanceof BaseMenu) {
             if (event.getCurrentItem() == null) {
                 event.setCancelled(true);
                 return;
@@ -48,9 +50,9 @@ public final class MenuListener implements Listener {
 
 
     /**
-     * If the inventory that the event is happening in is a Menu, cancel the event.
+     * Handles all {@link Menu menu} drag events.
      *
-     * @param event The event that is being called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onMenuDrag(@NotNull InventoryDragEvent event) {

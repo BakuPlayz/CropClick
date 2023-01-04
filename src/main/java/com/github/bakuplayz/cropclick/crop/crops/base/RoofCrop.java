@@ -2,10 +2,12 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -13,10 +15,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
+ * @see Crop
  * @since 2.0.0
  */
-public abstract class RoofCrop extends Crop {
+public abstract class RoofCrop extends BaseCrop {
 
     public RoofCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -68,6 +70,28 @@ public abstract class RoofCrop extends Crop {
 
 
     /**
+     * Gets the seed of the tall crop.
+     *
+     * @return the seed of the crop, or null (default: null).
+     */
+    @Override
+    public @Nullable Seed getSeed() {
+        return null;
+    }
+
+
+    /**
+     * Checks whether the tall crop has a seed.
+     *
+     * @return true if it has, otherwise false (default: false).
+     */
+    @Override
+    public boolean hasSeed() {
+        return false;
+    }
+
+
+    /**
      * "Harvest all the crops, stacked on each other, starting from the bottom."
      * <p>
      * Checks whether the roof crop can be harvested,
@@ -79,7 +103,7 @@ public abstract class RoofCrop extends Crop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -107,7 +131,7 @@ public abstract class RoofCrop extends Crop {
      *
      * @return The harvest state.
      */
-    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);

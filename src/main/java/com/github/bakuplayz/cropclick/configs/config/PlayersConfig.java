@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.configs.config;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.CollectionUtils;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -275,13 +276,10 @@ public final class PlayersConfig extends Config {
      * @param playerID The player's UUID.
      */
     public void togglePlayer(@NotNull String playerID) {
-        List<String> toggles = getDisabledPlayers();
-        if (toggles.contains(playerID)) {
-            toggles.remove(playerID);
-        } else {
-            toggles.add(playerID);
-        }
-        config.set("disabled", toggles);
+        config.set("disabled", CollectionUtils.toggleItem(
+                getDisabledPlayers(),
+                playerID
+        ));
         saveConfig();
     }
 

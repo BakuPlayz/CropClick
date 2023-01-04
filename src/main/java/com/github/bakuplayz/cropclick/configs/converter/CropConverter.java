@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.converter.base.ExactValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.SourceValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.YamlConverter;
-import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
+import com.github.bakuplayz.cropclick.runnables.particles.Particle;
 import com.github.bakuplayz.cropclick.utils.FileUtils;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,8 +37,8 @@ public final class CropConverter {
         particleObj.set("amount",
                 MathUtils.clamp(
                         section.getInt("Amount"),
-                        ParticleMenu.MIN_AMOUNT,
-                        ParticleMenu.MAX_AMOUNT
+                        Particle.MIN_AMOUNT,
+                        Particle.MAX_AMOUNT
                 )
         );
 
@@ -87,7 +87,7 @@ public final class CropConverter {
         ConfigurationSection newCrops = CropConverter.convertFormat(legacyCrops);
 
         FileUtils.copyYamlTo(plugin.getCropsConfig().getConfig(), newCrops);
-        FileUtils.moveFile(inFile, outFile);
+        FileUtils.move(inFile, outFile);
     }
 
 

@@ -21,13 +21,12 @@ import java.util.Stack;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see TallCrop
  * @see Crop
  * @see BaseCrop
+ * @see TallCrop
  * @since 2.0.0
  */
 public final class BrownMushroom extends Mushroom {
-
 
     public BrownMushroom(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -50,7 +49,11 @@ public final class BrownMushroom extends Mushroom {
         while (stack.size() > 0) {
             Block mushroom = stack.pop();
 
-            if (!isMushroomBlock(mushroom) || mushrooms.contains(mushroom)) {
+            if (!isMushroomBlock(mushroom)) {
+                continue;
+            }
+
+            if (mushrooms.contains(mushroom)) {
                 continue;
             }
 

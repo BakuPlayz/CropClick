@@ -8,6 +8,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -80,7 +81,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * @param autofarm The autofarm object that we're adding metadata to.
      */
     private void addFarmerMeta(@NotNull Autofarm autofarm) {
-        AutofarmUtils.addMeta(plugin, autofarm);
+        AutofarmUtils.addCachedID(plugin, autofarm);
     }
 
 
@@ -101,7 +102,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * @param autofarm The autofarm object that is being removed.
      */
     private void removeFarmerMeta(@NotNull Autofarm autofarm) {
-        AutofarmUtils.removeMeta(plugin, autofarm);
+        AutofarmUtils.removeCachedID(plugin, autofarm);
     }
 
 
@@ -256,7 +257,7 @@ public final class AutofarmDataStorage extends DataStorage {
             return false;
         }
 
-        DoublyLocation doubleChest = BlockUtils.getAsDoubleChest(block);
+        DoublyLocation doubleChest = LocationUtils.findDoubly(block.getLocation());
 
         if (doubleChest == null) {
             return false;

@@ -22,8 +22,7 @@ import java.util.TimerTask;
  */
 public final class ParticleRunnable implements Runnable {
 
-
-    private final Timer runnable;
+    private final Timer timer;
 
     private final Location location;
 
@@ -32,48 +31,45 @@ public final class ParticleRunnable implements Runnable {
 
     public ParticleRunnable(@NotNull Block block) {
         this.queuedParticles = new ArrayList<>();
-        this.runnable = new Timer(true);
+        this.timer = new Timer(true);
         this.location = block.getLocation();
     }
 
 
     /**
-     * This function queues a particle to the queuedParticles list, when harvesting a crop.
+     * Adds a particle to the {@link #queuedParticles queue of particles}.
      *
-     * @param name   The name of the particle.
-     * @param amount The amount of particles to spawn
-     * @param speed  The speed of the particle.
-     * @param delay  The delay in milliseconds before the particle is played
+     * @param name   the name of the particle.
+     * @param amount the amount of the particle to spawn.
+     * @param speed  the speed at which the particle should be played.
+     * @param delay  the delay in milliseconds before playing the particle.
      */
     public void queueParticle(@NotNull String name, int amount, double speed, double delay) {
-        queuedParticles.add(
-                new Particle(name, amount, speed, delay)
-        );
+        queuedParticles.add(new Particle(name, amount, speed, delay));
     }
 
 
     /**
-     * For each particle, schedule a task to run after the particle's delay.
+     * Runs each {@link Particle} one by one till done.
      */
     @Override
     public void run() {
         long delay = 0;
         for (Particle particle : queuedParticles) {
             delay += particle.getDelay();
-            runnable.schedule(
+            timer.schedule(
                     new ParticleTask(particle, location),
                     delay
             );
         }
-        runnable.schedule(clean(), delay + 10);
+        timer.schedule(clean(), delay + 10);
     }
 
 
     /**
-     * This function returns a new TimerTask that calls the purge() method of the RunnableScheduledFuture that was passed
-     * to the constructor.
+     * Clears the {@link Timer timer} and removes the {@link ParticleTask} when called.
      *
-     * @return A new TimerTask object.
+     * @return a cleaning task.
      */
     @Override
     @Contract(value = " -> new", pure = true)
@@ -82,7 +78,7 @@ public final class ParticleRunnable implements Runnable {
 
             @Override
             public void run() {
-                runnable.purge();
+                timer.purge();
             }
 
         };

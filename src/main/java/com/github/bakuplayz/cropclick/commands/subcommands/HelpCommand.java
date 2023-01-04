@@ -30,7 +30,7 @@ public final class HelpCommand extends Subcommand {
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {
-        new HelpMenu(plugin, player, false).open();
+        new HelpMenu(plugin, player, false).openMenu();
     }
 
 }

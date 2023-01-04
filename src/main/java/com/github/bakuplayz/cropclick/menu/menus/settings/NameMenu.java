@@ -3,10 +3,10 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -33,38 +33,42 @@ import java.util.stream.Collectors;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class NameMenu extends Menu {
+public final class NameMenu extends BaseMenu {
 
-    private final BaseCrop crop;
-    private final boolean hasSeed;
+    /**
+     * A variable containing the {@link Crop selected crop}.
+     */
+    private final Crop crop;
 
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
 
+    /**
+     * A variable containing all the color codes.
+     */
     private final Map<Character, String> colorCodes;
 
 
-    public NameMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
+    public NameMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.NAME_TITLE);
         this.cropSection = plugin.getCropsConfig().getCropSection();
         this.seedSection = plugin.getCropsConfig().getSeedSection();
         this.colorCodes = getColorCodes();
-        this.hasSeed = crop.hasSeed();
         this.crop = crop;
     }
 
 
     @Override
     public void setMenuItems() {
-        if (hasSeed) {
+        if (crop.hasSeed()) {
             inventory.setItem(31, getSeedItem());
             inventory.setItem(13, getCropItem());
         } else {
             inventory.setItem(22, getCropItem());
         }
 
-        inventory.setItem(47, getCodesItem(0));
-        inventory.setItem(51, getCodesItem(11));
+        inventory.setItem(47, getColorItem(0));
+        inventory.setItem(51, getColorItem(11));
 
         setBackItem();
     }
@@ -79,21 +83,23 @@ public final class NameMenu extends Menu {
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.NAME));
 
         if (clicked.equals(getCropItem())) {
-            getNameChangeMenu(true).open(player);
+            createChangeNameMenu(true).open(player);
         }
 
-        if (!hasSeed) return;
+        if (!crop.hasSeed()) {
+            return;
+        }
 
         if (clicked.equals(getSeedItem())) {
-            getNameChangeMenu(false).open(player);
+            createChangeNameMenu(false).open(player);
         }
     }
 
 
     /**
-     * It creates an ItemStack with the name of the crop, the drop value, and the enabled status.
+     * Gets the crop {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the crop item.
      */
     private @NotNull ItemStack getCropItem() {
         String name = MessageUtils.beautify(crop.getName(), false);
@@ -112,14 +118,17 @@ public final class NameMenu extends Menu {
 
 
     /**
-     * It creates an ItemStack with the name of seed crop, the drop value, and the enabled status.
+     * Gets the seed {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the seed item.
      */
     private @NotNull ItemStack getSeedItem() {
-        BaseSeed seed = crop.getSeed();
+        Seed seed = crop.getSeed();
+
+        assert seed != null; // Only here for the compiler.
+
         String name = MessageUtils.beautify(seed.getName(), false);
-        String status = MessageUtils.getEnabledStatus(plugin, seed.isEnabled());
+        String status = MessageUtils.getStatusMessage(plugin, seed.isEnabled());
 
         return new ItemBuilder(seed.getMenuType())
                 .setName(LanguageAPI.Menu.NAME_SEED_ITEM_NAME.get(plugin, name, status))
@@ -132,34 +141,33 @@ public final class NameMenu extends Menu {
 
 
     /**
-     * It creates a sign item with the color codes on it.
+     * Gets the color codes {@link ItemStack item}.
      *
-     * @param start The starting index of the color codes to display.
+     * @param startIndex the index at which to begin the looping.
      *
-     * @return A new ItemStack with the material of a sign, with the name of the item being the color code item name, and
-     * the lore being the color codes.
+     * @return the color codes item.
      */
     @SuppressWarnings("deprecation")
-    private @NotNull ItemStack getCodesItem(int start) {
+    private @NotNull ItemStack getColorItem(int startIndex) {
         Material sign = VersionUtils.between(0.0, 13.9)
                         ? Material.LEGACY_SIGN
                         : Material.OAK_SIGN;
 
         return new ItemBuilder(sign)
                 .setName(plugin, LanguageAPI.Menu.NAME_COLOR_ITEM_NAME)
-                .setLore(getCodesLore(start))
+                .setLore(getCodesAsLore(startIndex))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an anvil menu that allows the player to change the name of the crop or seed.
+     * Creates the change name {@link AnvilGUI anvil menu}.
      *
-     * @param isCrop Whether the item is a crop or a seed.
+     * @param isCrop true if a crop, otherwise false.
      *
-     * @return AnvilGUI.Builder.
+     * @return the change name menu.
      */
-    private @NotNull AnvilGUI.Builder getNameChangeMenu(boolean isCrop) {
+    private @NotNull AnvilGUI.Builder createChangeNameMenu(boolean isCrop) {
         String currentName = getDropName(isCrop);
 
         return new AnvilGUI.Builder()
@@ -170,7 +178,8 @@ public final class NameMenu extends Menu {
                     if (isCrop) {
                         cropSection.setDropName(crop.getName(), text);
                     } else {
-                        seedSection.setDropName(crop.getSeed().getName(), text);
+                        assert crop.getSeed() != null; // Only here for the compiler.
+                        seedSection.setDropName(crop.hasSeed() ? crop.getSeed().getName() : "", text);
                     }
 
                     return AnvilGUI.Response.close();
@@ -187,23 +196,25 @@ public final class NameMenu extends Menu {
 
 
     /**
-     * If the crop is a crop, return the crop's drop name, otherwise return the seed's drop name.
+     * Gets the drop's name of either the {@link Crop} or {@link Seed}.
      *
-     * @param isCrop Whether the drop is a crop or a seed.
+     * @param isCrop true if a crop, otherwise false.
      *
-     * @return The name of the drop.
+     * @return the drop's name.
      */
     private @NotNull String getDropName(boolean isCrop) {
-        return isCrop
-               ? cropSection.getDropName(crop.getName())
-               : seedSection.getDropName(crop.getSeed().getName());
+        if (isCrop) {
+            return cropSection.getDropName(crop.getName());
+        }
+        assert crop.getSeed() != null; // Only here for the compiler.
+        return seedSection.getDropName(crop.getSeed().getName());
     }
 
 
     /**
-     * It returns a map of all the chat colors and their corresponding color codes.
+     * Gets all the {@link ChatColor#name() color codes}.
      *
-     * @return A map of all the color codes.
+     * @return color codes.
      */
     private @NotNull Map<Character, String> getColorCodes() {
         return Arrays.stream(ChatColor.values())
@@ -215,13 +226,13 @@ public final class NameMenu extends Menu {
 
 
     /**
-     * It takes a start index, and returns a list of 11 color codes, starting at the start index.
+     * Gets color codes in lore format.
      *
-     * @param start The starting index of the list of codes to display.
+     * @param startIndex the index at which to begin the looping.
      *
-     * @return A list of strings that are color codes.
+     * @return color codes as a lore.
      */
-    private List<String> getCodesLore(int start) {
+    private List<String> getCodesAsLore(int startIndex) {
         return colorCodes.entrySet().stream()
                          .map(colorMap -> MessageUtils.colorize(
                                  LanguageAPI.Menu.NAME_COLOR_ITEM_CODE.get(
@@ -230,7 +241,8 @@ public final class NameMenu extends Menu {
                                          colorMap.getKey(),
                                          colorMap.getValue())
                          ).replace("#", "&")) // Some wizardry formatting
-                         .skip(start).limit(11)
+                         .skip(startIndex)
+                         .limit(11)
                          .collect(Collectors.toList());
     }
 

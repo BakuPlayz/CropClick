@@ -2,8 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.addons.addon.*;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -21,24 +22,66 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class AddonsMenu extends Menu {
+public final class AddonsMenu extends BaseMenu {
 
+    /**
+     * A variable checking if the {@link McMMOAddon} is on the server.
+     */
     private final boolean mmoPresent;
+
+    /**
+     * A variable checking if the {@link McMMOAddon} is enabled in {@link CropClick}.
+     */
     private final boolean mmoEnabled;
 
+    /**
+     * A variable checking if the {@link JobsRebornAddon} is on the server.
+     */
     private final boolean jobsPresent;
+
+    /**
+     * A variable checking if the {@link JobsRebornAddon} is enabled in {@link CropClick}.
+     */
     private final boolean jobsEnabled;
 
+    /**
+     * A variable checking if the {@link TownyAddon} is on the server.
+     */
     private final boolean townyPresent;
+
+    /**
+     * A variable checking if the {@link TownyAddon} is enabled in {@link CropClick}.
+     */
     private final boolean townyEnabled;
 
+    /**
+     * A variable checking if the {@link WorldGuardAddon} is on the server.
+     */
     private final boolean guardPresent;
+
+    /**
+     * A variable checking if the {@link WorldGuardAddon} is enabled in {@link CropClick}.
+     */
     private final boolean guardEnabled;
 
+    /**
+     * A variable checking if the {@link OfflineGrowthAddon} is on the server.
+     */
     private final boolean growthPresent;
+
+    /**
+     * A variable checking if the {@link OfflineGrowthAddon} is enabled in {@link CropClick}.
+     */
     private final boolean growthEnabled;
 
+    /**
+     * A variable checking if the {@link ResidenceAddon} is on the server.
+     */
     private final boolean residencePresent;
+
+    /**
+     * A variable checking if the {@link ResidenceAddon} is enabled in {@link CropClick}.
+     */
     private final boolean residenceEnabled;
 
 
@@ -83,36 +126,35 @@ public final class AddonsMenu extends Menu {
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getJobsItem())) {
-            if (jobsPresent) new JobsRebornMenu(plugin, player).open();
+            if (jobsPresent) new JobsRebornMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getMCMMOItem())) {
-            if (mmoPresent) new McMMOMenu(plugin, player).open();
+            if (mmoPresent) new McMMOMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getGrowthItem())) {
-            if (growthPresent) new OfflineGrowthMenu(plugin, player).open();
+            if (growthPresent) new OfflineGrowthMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getResidenceItem())) {
-            if (residencePresent) new ResidenceMenu(plugin, player).open();
+            if (residencePresent) new ResidenceMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getTownyItem())) {
-            if (townyPresent) new TownyMenu(plugin, player).open();
+            if (townyPresent) new TownyMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getGuardItem())) {
-            if (guardPresent) new WorldGuardMenu(plugin, player).open();
+            if (guardPresent) new WorldGuardMenu(plugin, player).openMenu();
         }
     }
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the Jobs Reborn item's name and lore, and the material set to either
-     * a stone hoe or stained-glass pane depending on whether Jobs Reborn present and/or enabled.
+     * Gets the JobsReborn {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "Jobs Reborn" and the lore of ex: "Enabled: true".
+     * @return the jobs item.
      */
     public @NotNull ItemStack getJobsItem() {
         return new ItemBuilder(Material.STONE_HOE)
@@ -131,10 +173,9 @@ public final class AddonsMenu extends Menu {
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the mcMMO item's name and lore, and the material set to either
-     * a gold sword or stained-glass pane depending on whether mcMMO present and/or enabled.
+     * Gets the mcMMO {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "mcMMO" and the lore of ex: "Enabled: true".
+     * @return the mcMMO item.
      */
     public @NotNull ItemStack getMCMMOItem() {
         return new ItemBuilder(Material.GOLDEN_SWORD)
@@ -154,10 +195,9 @@ public final class AddonsMenu extends Menu {
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the OfflineGrowth item's name and lore, and the material set to either
-     * a long grass or stained-glass pane depending on whether OfflineGrowth present and/or enabled.
+     * Gets the OfflineGrowth {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "Offline Growth" and the lore of ex: "Enabled: true".
+     * @return the growth item.
      */
     public @NotNull ItemStack getGrowthItem() {
         return new ItemBuilder(Material.TALL_GRASS)
@@ -176,10 +216,9 @@ public final class AddonsMenu extends Menu {
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the Residence item's name and lore, and the material set to either
-     * a fence post or stained-glass pane depending on whether Residence present and/or enabled.
+     * Gets the Residence {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "Residence" and the lore of ex: "Enabled: true".
+     * @return the residence item.
      */
     public @NotNull ItemStack getResidenceItem() {
         return new ItemBuilder(Material.OAK_FENCE)
@@ -198,10 +237,9 @@ public final class AddonsMenu extends Menu {
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the Towny item's name and lore, and the material set to either
-     * a fence gate or stained-glass pane depending on whether Towny present and/or enabled.
+     * Gets the Towny {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "Towny" and the lore of ex: "Enabled: true".
+     * @return the towny item.
      */
     public @NotNull ItemStack getTownyItem() {
         return new ItemBuilder(Material.OAK_FENCE_GATE)
@@ -220,10 +258,9 @@ public final class AddonsMenu extends Menu {
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the WorldGuard item's name and lore, and the material set to either
-     * a grass-block or stained-glass pane depending on whether WorldGuard present and/or enabled.
+     * Gets the WorldGuard {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "World Guard" and the lore of ex: "Enabled: true".
+     * @return the guard item.
      */
     public @NotNull ItemStack getGuardItem() {
         return new ItemBuilder(Material.GRASS)

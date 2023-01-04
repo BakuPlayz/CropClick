@@ -12,23 +12,33 @@ import java.util.List;
 
 
 /**
- * A class representing the base of a Paginated menu.
+ * A class representing the base of a paginated menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class PaginatedMenu extends Menu {
+public abstract class PaginatedMenu extends BaseMenu {
 
     /**
-     * The maximum amount of items per a paginated page.
+     * The maximum amount of items per paginated page.
      */
-    protected final int MAX_ITEMS_PER_PAGE = 21;
+    public static final int MAX_ITEMS_PER_PAGE = 21;
 
 
+    /**
+     * The current page being displayed.
+     */
     protected int page;
+
+    /**
+     * The current index where the pointer currently pointing at in the {@link #menuItems}.
+     */
     protected int itemIndex;
 
+    /**
+     * A variable containing all the {@link ItemStack menu items}.
+     */
     protected List<ItemStack> menuItems;
 
 
@@ -40,7 +50,7 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * Set the back items in the inventory.
+     * Sets the {@link ItemStack back items} to their designated places in the {@link #inventory}.
      */
     protected final void setBackItems() {
         inventory.setItem(46, getBackItem());
@@ -49,8 +59,7 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * If the page is greater than 0, set the previous page item. Set the current page item. If the menu items size is
-     * greater than the item index, set the next page item.
+     * Sets the {@link ItemStack page items} to their designated places in the {@link #inventory}.
      */
     protected final void setPageItems() {
         if (page > 0) {
@@ -66,7 +75,7 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * If the item is not in the top row, the left column, or the right column, then add it to the inventory.
+     * Sets the {@link ItemStack paginated items} to their designated places in the {@link #inventory}.
      */
     protected final void setPaginatedItems() {
         int index = 0;
@@ -74,50 +83,51 @@ public abstract class PaginatedMenu extends Menu {
             boolean isLeft = i % 9 == 0;
             boolean isRight = i % 9 == 8;
             boolean isTop = (i / 9.0) <= 1.0;
-            boolean isForbidden = isLeft || isRight || isTop;
-            if (isForbidden) continue;
+            if (isLeft || isRight || isTop) {
+                continue;
+            }
 
             updateIndex(index++);
-            if (isIndexOutOfBounds()) break;
+            if (isIndexOutOfBounds()) {
+                break;
+            }
             inventory.setItem(i, menuItems.get(itemIndex));
         }
     }
 
 
     /**
-     * If the player clicks the previous page item, and the page is greater than 0, then subtract 1 from the page and
-     * update the menu. If the player clicks the next page item, and the page is not above the bounds, then add 1 to the
-     * page and update the menu.
+     * Handles all the clicks related to {@link #setPaginatedItems() the paginated items}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      */
     protected final void handlePagination(@NotNull ItemStack clicked) {
         if (clicked.equals(getPreviousPageItem())) {
             if (page > 0) page -= 1;
-            refresh();
+            refreshMenu();
         }
 
         if (clicked.equals(getNextPageItem())) {
             if (!isIndexOutOfBounds()) page += 1;
-            refresh();
+            refreshMenu();
         }
     }
 
 
     /**
-     * Update the item index to the index of the item in the current page.
+     * Updates the pointer of the {@link #itemIndex}.
      *
-     * @param i the index of the item in the current page.
+     * @param currentIndex the current index of the pointer.
      */
-    private void updateIndex(int i) {
-        this.itemIndex = MAX_ITEMS_PER_PAGE * page + i;
+    private void updateIndex(int currentIndex) {
+        this.itemIndex = MAX_ITEMS_PER_PAGE * page + currentIndex;
     }
 
 
     /**
-     * If the item index is greater than or equal to the number of items in the menu, then the index is out of bounds.
+     * Checks whether the {@link #itemIndex current index pointer} is pointing out of bounds.
      *
-     * @return The method is returning a boolean value.
+     * @return true if it is, otherwise false.
      */
     private boolean isIndexOutOfBounds() {
         return itemIndex >= menuItems.size();
@@ -125,10 +135,9 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack with the material of an arrow, the name of the previous page item, and the lore of the
-     * previous page item.
+     * Gets the previous page {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the previous page item.
      */
     private @NotNull ItemStack getPreviousPageItem() {
         return new ItemBuilder(Material.ARROW)
@@ -138,9 +147,9 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the current page.
+     * Gets the current page {@link ItemStack item}.
      *
-     * @return The current page item.
+     * @return the current page item.
      */
     private @NotNull ItemStack getCurrentPageItem() {
         return new ItemBuilder(Material.BOOK)
@@ -150,10 +159,9 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack with the material of an arrow, the name of the next page item, and the lore of the next page
-     * item.
+     * Gets the next page {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the next page item.
      */
     private @NotNull ItemStack getNextPageItem() {
         return new ItemBuilder(Material.ARROW)
@@ -163,9 +171,9 @@ public abstract class PaginatedMenu extends Menu {
 
 
     /**
-     * Return a list of items that will be displayed in the menu.
+     * Gets all the {@link #menuItems menu items}.
      *
-     * @return A list of items.
+     * @return all menu items.
      */
     protected abstract List<ItemStack> getMenuItems();
 

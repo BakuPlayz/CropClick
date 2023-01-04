@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the base of a Preview menu.
+ * A class representing the base of a preview menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class PreviewMenu extends Menu {
+public abstract class PreviewMenu extends BaseMenu {
 
     public PreviewMenu(@NotNull CropClick plugin,
                        @NotNull Player player,
