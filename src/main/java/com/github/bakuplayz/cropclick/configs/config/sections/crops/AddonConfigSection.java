@@ -1,7 +1,10 @@
 package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 
+import com.github.bakuplayz.cropclick.addons.addon.JobsRebornAddon;
+import com.github.bakuplayz.cropclick.addons.addon.McMMOAddon;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,18 +22,18 @@ public final class AddonConfigSection extends ConfigSection {
     private final CropsConfig cropsConfig;
 
 
-    public AddonConfigSection(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig.getConfig());
-        this.cropsConfig = cropsConfig;
+    public AddonConfigSection(@NotNull CropsConfig config) {
+        super(config.getConfig());
+        this.cropsConfig = config;
     }
 
 
     /**
-     * It gets the mcMMO experience value, from the config.
+     * Gets the {@link McMMOAddon mcMMO} experience for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The amount of mcMMO experience that is given when the crop is harvested.
+     * @return the experience for the crop.
      */
     public int getMcMMOExperience(@NotNull String cropName) {
         return config.getInt("crops." + cropName + ".addons.mcMMO.experience", 0);
@@ -38,23 +41,23 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the mcMMO experience value for a crop, in the config.
+     * Sets the {@link McMMOAddon mcMMO} experience for the {@link Crop provided crop} to the provided amount.
      *
-     * @param cropName The name of the crop.
-     * @param amount   The amount of experience to give.
+     * @param cropName   the name of the crop.
+     * @param experience the experience to set.
      */
-    public void setMcMMOExperience(@NotNull String cropName, double amount) {
-        config.set("crops." + cropName + ".addons.mcMMO.experience", amount);
+    public void setMcMMOExperience(@NotNull String cropName, double experience) {
+        config.set("crops." + cropName + ".addons.mcMMO.experience", experience);
         cropsConfig.saveConfig();
     }
 
 
     /**
-     * It gets the mcMMO experience reason for the crop with the given name, from the config.
+     * Gets the {@link McMMOAddon mcMMO} experience reason for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The message that is displayed when a player receives mcMMO experience.
+     * @return the experience reason for the crop.
      */
     @Contract("_ -> new")
     public @NotNull String getMcMMOExperienceReason(@NotNull String cropName) {
@@ -68,10 +71,10 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the mcMMO experience reason for the crop with the given name, in the config.
+     * Sets the {@link McMMOAddon mcMMO} experience reason for the {@link Crop provided crop} to the provided reason.
      *
-     * @param cropName The name of the crop.
-     * @param reason   The experience reason to send to the player when they harvest the crop.
+     * @param cropName the name of the crop.
+     * @param reason   the reason to set.
      */
     public void setMcMMOExperienceReason(@NotNull String cropName, @NotNull String reason) {
         config.set("crops." + cropName + ".addons.mcMMO.experienceReason", reason);
@@ -80,11 +83,11 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the points for the specified crop from the config.
+     * Gets the {@link JobsRebornAddon JobsReborn} points for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The amount of points the player will receive for harvesting the specified crop.
+     * @return the points for the crop.
      */
     public double getJobsPoints(@NotNull String cropName) {
         return config.getDouble("crops." + cropName + ".addons.jobsReborn.points", 0);
@@ -92,23 +95,23 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of points a player will get for harvesting a crop, to the config.
+     * Sets the {@link JobsRebornAddon JobsReborn} points for the {@link Crop provided crop} to the provided points.
      *
-     * @param cropName The name of the crop.
-     * @param amount   The amount of points to give to the player.
+     * @param cropName the name of the crop.
+     * @param points   the points to set.
      */
-    public void setJobsPoints(@NotNull String cropName, double amount) {
-        config.set("crops." + cropName + ".addons.jobsReborn.points", amount);
+    public void setJobsPoints(@NotNull String cropName, double points) {
+        config.set("crops." + cropName + ".addons.jobsReborn.points", points);
         cropsConfig.saveConfig();
     }
 
 
     /**
-     * It gets the money value for the specified crop, from the config.
+     * Gets the {@link JobsRebornAddon JobsReborn} money for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The amount of money that the player will receive when they harvest the specified crop.
+     * @return the money for the crop.
      */
     public double getJobsMoney(@NotNull String cropName) {
         return config.getDouble("crops." + cropName + ".addons.jobsReborn.money", 0);
@@ -116,23 +119,23 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of money a player will get for harvesting a crop, to the config.
+     * Sets the {@link JobsRebornAddon JobsReborn} money for the {@link Crop provided crop} to the provided money.
      *
-     * @param cropName The name of the crop.
-     * @param amount   The amount of money to give when the specified crop, is harvested.
+     * @param cropName the name of the crop.
+     * @param money    the money to set.
      */
-    public void setJobsMoney(@NotNull String cropName, double amount) {
-        config.set("crops." + cropName + ".addons.jobsReborn.money", amount);
+    public void setJobsMoney(@NotNull String cropName, double money) {
+        config.set("crops." + cropName + ".addons.jobsReborn.money", money);
         cropsConfig.saveConfig();
     }
 
 
     /**
-     * It gets the Jobs experience value for the specified crop, from the config.
+     * Gets the {@link JobsRebornAddon JobsReborn} experience for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The experience gained from harvesting the specified crop.
+     * @return the experience for the crop.
      */
     public double getJobsExperience(@NotNull String cropName) {
         return config.getDouble("crops." + cropName + ".addons.jobsReborn.experience", 0);
@@ -140,13 +143,13 @@ public final class AddonConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the Jobs experience amount for the specified crop, to the config.
+     * Sets the {@link JobsRebornAddon JobsReborn} experience for the {@link Crop provided crop} to the provided experience.
      *
-     * @param cropName The name of the crop.
-     * @param amount   The amount of experience to give to the player.
+     * @param cropName   the name of the crop.
+     * @param experience the experience to set.
      */
-    public void setJobsExperience(@NotNull String cropName, double amount) {
-        config.set("crops." + cropName + ".addons.jobsReborn.experience", amount);
+    public void setJobsExperience(@NotNull String cropName, double experience) {
+        config.set("crops." + cropName + ".addons.jobsReborn.experience", experience);
         cropsConfig.saveConfig();
     }
 

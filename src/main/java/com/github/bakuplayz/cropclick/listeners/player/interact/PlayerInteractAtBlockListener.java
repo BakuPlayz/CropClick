@@ -85,7 +85,7 @@ public final class PlayerInteractAtBlockListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             return;
         }
 

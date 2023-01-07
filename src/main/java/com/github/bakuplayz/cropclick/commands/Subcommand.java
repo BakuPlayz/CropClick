@@ -32,9 +32,9 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * Gets the description of the command.
+     * Gets the description of the {@link Subcommand extending command}.
      *
-     * @return the description of the command.
+     * @return the command's description.
      */
     public @NotNull String getDescription() {
         return description.get(plugin);
@@ -42,9 +42,9 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * Gets the usage of the command.
+     * Gets the usage of the {@link Subcommand extending command}.
      *
-     * @return the usage of the command.
+     * @return the command's usage.
      */
     public @NotNull String getUsage() {
         return "cropclick " + name;
@@ -52,9 +52,9 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * Gets the permission for the command.
+     * Gets the permission for the {@link Subcommand extending command}.
      *
-     * @return the permission for the command, as a string.
+     * @return the command's permission.
      */
     public @NotNull String getPermission() {
         return "cropclick.command." + name;
@@ -62,7 +62,7 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * Checks whether a player has permission to {@link #perform(Player, String[]) perform} the command.
+     * Checks whether the {@link Player provided player} has permission to perform the {@link Subcommand extending command}.
      *
      * @param player the player to check.
      *
@@ -74,7 +74,7 @@ public abstract class Subcommand implements Commandable {
 
 
     /**
-     * Performs the command.
+     * Performs the {@link Subcommand extending command}.
      *
      * @param player the player executing the command.
      * @param args   the arguments passed along the command.

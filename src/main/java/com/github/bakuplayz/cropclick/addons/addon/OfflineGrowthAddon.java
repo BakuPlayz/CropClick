@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.addons.addon;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import es.yellowzaki.offlinegrowth.api.OfflineGrowthAPI;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -22,21 +23,21 @@ public final class OfflineGrowthAddon extends Addon {
 
 
     /**
-     * Adds a plant to the OfflineGrowth database/config.
+     * Registers the {@link Crop crop} at the {@link Location provided location}.
      *
-     * @param location The location of the crop.
+     * @param location the location of the crop to register.
      */
-    public void addCrop(@NotNull Location location) {
+    public void registerCrop(@NotNull Location location) {
         OfflineGrowthAPI.addPlant(location);
     }
 
 
     /**
-     * Removes a plant from the OfflineGrowth database/config.
+     * Unregisters the {@link Crop crop} at the {@link Location provided location}.
      *
-     * @param location The location of the crop
+     * @param location the location of the crop to unregister.
      */
-    public void removeCrop(@NotNull Location location) {
+    public void unregisterCrop(@NotNull Location location) {
         OfflineGrowthAPI.removePlant(location);
     }
 

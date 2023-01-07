@@ -8,6 +8,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,9 @@ public final class AddonManager {
     private @Getter WorldGuardAddon worldGuardAddon;
     private @Getter OfflineGrowthAddon offlineGrowthAddon;
 
+    /**
+     * A variable containing all the {@link Addon registed addons}.
+     */
     private final List<Addon> registeredAddons;
 
 
@@ -46,7 +50,7 @@ public final class AddonManager {
 
 
     /**
-     * If the config file says the addon is installed, then create a new instance of the addon class.
+     * Registers the all the {@link Addon installed addons}.
      */
     private void registerAddons() {
         if (addonsConfig.isInstalled("mcMMO")) {
@@ -82,24 +86,23 @@ public final class AddonManager {
 
 
     /**
-     * Toggle the addon with the given name.
+     * Toggles the {@link Addon addon} based on the provided name.
      *
-     * @param name The name of the addon.
+     * @param addonName the name of the addon.
      */
-    public void toggle(@NotNull String name) {
-        addonsConfig.toggle(name);
+    public void toggleAddon(@NotNull String addonName) {
+        addonsConfig.toggleAddon(addonName);
     }
 
 
     /**
-     * Return the first addon in the list of registered addons that has the same name as the given name, or null if no such
-     * addon exists.
+     * Finds the {@link Addon addon} based on the provided name.
      *
-     * @param name The name of the addon you want to find.
+     * @param name the name of the addon.
      *
-     * @return The first Addon that matches the name.
+     * @return the found addon, otherwise null.
      */
-    public Addon findByName(@NotNull String name) {
+    public @Nullable Addon findByName(@NotNull String name) {
         return registeredAddons.stream()
                                .filter(addon -> addon.getName().equals(name))
                                .findFirst().orElse(null);
@@ -107,61 +110,60 @@ public final class AddonManager {
 
 
     /**
-     * If the addon is not null (aka. present) and is enabled, return true.
+     * Checks whether the {@link Addon provided addon} is installed and enabled.
      *
-     * @param addon The addon to check.
+     * @param addon the addon to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    public boolean isPresentAndEnabled(Addon addon) {
+    public boolean isInstalledAndEnabled(Addon addon) {
         return addon != null && addon.isEnabled();
     }
 
 
     /**
-     * Returns true if the given name is present in the list of registered addons.
+     * Checks whether the {@link Addon addon} isInstalled based on the provided name.
      *
-     * @param name The name of the addon to check for.
+     * @param addonName the name of the addon.
      *
-     * @return A boolean value.
+     * @return true if installed, otherwise false.
      */
-    public boolean isPresent(@NotNull String name) {
-        return registeredAddons.stream().anyMatch(addon -> addon.getName().equals(name));
+    public boolean isInstalled(@NotNull String addonName) {
+        return registeredAddons.stream().anyMatch(addon -> addon.getName().equals(addonName));
     }
 
 
     /**
-     * Return true if any enabled addon has the given name.
+     * Checks whether the {@link Addon addon} is enabled based on the provided name.
      *
-     * @param name The name of the addon to check.
+     * @param addonName the name of the addon.
      *
-     * @return A boolean value.
+     * @return true if enabled, otherwise false.
      */
-    public boolean isEnabled(@NotNull String name) {
-        return addonsConfig.isEnabled(name);
+    public boolean isEnabled(@NotNull String addonName) {
+        return addonsConfig.isEnabled(addonName);
     }
 
 
     /**
-     * If the player is in a Towny region, check if they can destroy crops. If they're in a Residence region, check if they
-     * can destroy crops. If they're in a WorldGuard region, check if they can destroy crops. If they're not in any region,
-     * return true.
+     * Checks if the {@link Player provided player} is allowed to modify the current region.
      *
-     * @param player The player who is trying to modify the block.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean canModify(@NotNull Player player) {
-        if (isPresentAndEnabled(townyAddon)) {
+    public boolean canModifyRegion(@NotNull Player player) {
+        if (isInstalledAndEnabled(townyAddon)) {
             return townyAddon.canDestroyCrop(player);
         }
 
-        if (isPresentAndEnabled(residenceAddon)) {
-            return residenceAddon.regionOrPlayerHasFlag(player);
+        if (isInstalledAndEnabled(residenceAddon)) {
+            return residenceAddon.isMemberOfRegion(player)
+                    || residenceAddon.hasRegionFlag(player.getLocation());
         }
 
-        if (isPresentAndEnabled(worldGuardAddon)) {
+        if (isInstalledAndEnabled(worldGuardAddon)) {
             return worldGuardAddon.regionAllowsPlayer(player);
         }
 
@@ -170,18 +172,17 @@ public final class AddonManager {
 
 
     /**
-     * If the JobsReborn addon is present and enabled, update the player's stats. If the mcMMO addon is present and
-     * enabled, add experience to the player
+     * Applies the effects of all the {@link Addon addons}.
      *
-     * @param player The player who harvested the crop.
-     * @param crop   The crop that was harvested.
+     * @param player the player to receive the effects.
+     * @param crop   the crop to find the effects with.
      */
     public void applyEffects(@NotNull Player player, @NotNull Crop crop) {
-        if (isPresentAndEnabled(jobsRebornAddon)) {
+        if (isInstalledAndEnabled(jobsRebornAddon)) {
             jobsRebornAddon.updateStats(player, crop);
         }
 
-        if (isPresentAndEnabled(mcMMOAddon)) {
+        if (isInstalledAndEnabled(mcMMOAddon)) {
             mcMMOAddon.addExperience(player, crop);
         }
     }

@@ -45,7 +45,7 @@ public final class CommandManager implements TabExecutor {
 
 
     /**
-     * Registers all the commands, by adding them to the commands list.
+     * Register all the {@link #commands}.
      */
     private void registerCommands() {
         commands.add(new AutofarmsCommand(plugin));
@@ -57,14 +57,14 @@ public final class CommandManager implements TabExecutor {
 
 
     /**
-     * If the sender is a player, and the command is valid, then perform the command.
+     * Checks for {@link CommandSender senders} performing commands.
      *
-     * @param sender The player who sent the command.
-     * @param cmd    The command that was executed.
-     * @param label  The command label.
-     * @param args   The arguments that the player typed in.
+     * @param sender the sender sending the command.
+     * @param cmd    the command that was sent.
+     * @param label  the label of the command.
+     * @param args   the arguments passed along the command.
      *
-     * @return A boolean.
+     * @return true if the command executed successfully, otherwise false.
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender,
@@ -111,14 +111,14 @@ public final class CommandManager implements TabExecutor {
 
 
     /**
-     * If the command has only one argument, return a list of all commands that start with the first argument.
+     * Checks for {@link CommandSender senders} tab completing commands.
      *
-     * @param sender The CommandSender who executed the command.
-     * @param cmd    The command that was executed.
-     * @param alias  The alias that was used to call the command.
-     * @param args   The arguments that the player has typed in.
+     * @param sender the sender tab completing the command.
+     * @param cmd    the command to tab complete.
+     * @param alias  the alternative name for the command.
+     * @param args   the arguments passed along the command.
      *
-     * @return A list of commands that start with the first argument.
+     * @return the tab completed suggestions.
      */
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender,
@@ -134,12 +134,12 @@ public final class CommandManager implements TabExecutor {
                        .filter(command -> command.startsWith(args[0]))
                        .sorted().collect(Collectors.toList());
     }
-
+    
 
     /**
-     * Returns the number of *actual* commands in the command list.
+     * Gets the amount of {@link #commands}.
      *
-     * @return The amount of commands in the list.
+     * @return the amount of commands.
      */
     public int getAmountOfCommands() {
         return getCommands().size() + 1;

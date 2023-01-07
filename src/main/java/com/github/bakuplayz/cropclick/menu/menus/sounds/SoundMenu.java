@@ -81,7 +81,7 @@ public final class SoundMenu extends BaseMenu {
     @Override
     public void setMenuItems() {
         this.currentOrder = soundSection.getOrder(cropName, soundName);
-        this.maxOrder = soundSection.getSounds(cropName).size() - 1;
+        this.maxOrder = soundSection.getAmountOfSounds(cropName) - 1;
 
         inventory.setItem(10, getDelayDecreaseItem(DELAY_MAX_CHANGE));
         inventory.setItem(11, getDelayDecreaseItem(DELAY_MIN_CHANGE));

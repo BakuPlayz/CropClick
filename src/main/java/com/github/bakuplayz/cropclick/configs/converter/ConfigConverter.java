@@ -21,11 +21,11 @@ import java.io.File;
 public final class ConfigConverter {
 
     /**
-     * It loads the old config.yml file, converts it to the new format, and saves it to the new file.
+     * Makes the configuration conversion.
      *
-     * @param plugin The plugin instance.
+     * @param plugin the plugin instance.
      *
-     * @apiNote Written by BakuPlayz.
+     * @apiNote written by BakuPlayz.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
@@ -45,6 +45,15 @@ public final class ConfigConverter {
     }
 
 
+    /**
+     * Converts the {@link ConfigurationSection provided "legacy" format} to a {@link ConfigurationSection new format}.
+     *
+     * @param legacyFormat the legacy format.
+     *
+     * @return the converted format.
+     *
+     * @apiNote written by BakuPlayz.
+     */
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();
 

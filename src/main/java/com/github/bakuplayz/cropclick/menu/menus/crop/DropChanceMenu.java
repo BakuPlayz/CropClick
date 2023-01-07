@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
@@ -37,7 +37,7 @@ public final class DropChanceMenu extends BaseMenu {
 
 
     private final Crop crop;
-    private final BaseSeed seed;
+    private final Seed seed;
     private final boolean hasSeed;
 
     private final CropConfigSection cropSection;

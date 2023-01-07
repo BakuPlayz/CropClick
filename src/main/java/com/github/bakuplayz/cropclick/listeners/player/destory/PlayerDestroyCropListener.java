@@ -82,7 +82,7 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             event.setCancelled(true);
             return;
         }
@@ -105,18 +105,18 @@ public final class PlayerDestroyCropListener implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        if (addonManager.isPresentAndEnabled(growthAddon)) {
-            growthAddon.removeCrop(block.getLocation());
+        if (addonManager.isInstalledAndEnabled(growthAddon)) {
+            growthAddon.unregisterCrop(block.getLocation());
         }
 
-        Autofarm farm = autofarmManager.findAutofarm(block);
-        if (!autofarmManager.isUsable(farm)) {
+        Autofarm autofarm = autofarmManager.findAutofarm(block);
+        if (!autofarmManager.isUsable(autofarm)) {
             event.setCancelled(true);
             return;
         }
 
         Bukkit.getPluginManager().callEvent(
-                new PlayerUnlinkAutofarmEvent(player, farm)
+                new PlayerUnlinkAutofarmEvent(player, autofarm)
         );
     }
 

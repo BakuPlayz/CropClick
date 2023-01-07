@@ -67,11 +67,11 @@ public final class CropConverter {
 
 
     /**
-     * It loads the old crops.yml file, converts it to the new format, and saves it to the new file.
+     * Makes the configuration conversion.
      *
-     * @param plugin The plugin instance.
+     * @param plugin the plugin instance.
      *
-     * @apiNote Written by BakuPlayz.
+     * @apiNote written by BakuPlayz.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
@@ -92,11 +92,13 @@ public final class CropConverter {
 
 
     /**
-     * It converts a legacy format to the new format.
+     * Converts the {@link ConfigurationSection provided "legacy" format} to a {@link ConfigurationSection new format}.
      *
-     * @param legacyFormat The configuration section that contains the legacy format.
+     * @param legacyFormat the legacy format.
      *
-     * @return A JsonObject.
+     * @return the converted format.
+     *
+     * @apiNote written by BakuPlayz.
      */
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();

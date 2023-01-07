@@ -15,8 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 
 /**
  * A class representing the Particle menu.
@@ -72,9 +70,8 @@ public final class ParticleMenu extends BaseMenu {
 
     @Override
     public void setMenuItems() {
-        List<String> particles = particleSection.getParticles(cropName);
-        this.currentOrder = particles.indexOf(particleName);
-        this.maxOrder = particles.size() - 1;
+        this.currentOrder = particleSection.getOrder(cropName, particleName);
+        this.maxOrder = particleSection.getAmountOfParticles(cropName) - 1;
 
         inventory.setItem(10, getDelayDecreaseItem(DELAY_MAX_CHANGE));
         inventory.setItem(11, getDelayDecreaseItem(DELAY_MIN_CHANGE));

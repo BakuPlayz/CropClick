@@ -91,7 +91,7 @@ public abstract class AddonMenu extends BaseMenu implements Enableable {
             return;
         }
 
-        addonManager.toggle(addonName);
+        addonManager.toggleAddon(addonName);
     }
 
 

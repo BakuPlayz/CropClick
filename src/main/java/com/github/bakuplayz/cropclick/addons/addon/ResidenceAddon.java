@@ -9,8 +9,10 @@ import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -22,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ResidenceAddon extends Addon {
 
-    private Flags flag;
+    private Flags cropFlag;
 
 
     public ResidenceAddon(@NotNull CropClick plugin) {
@@ -33,49 +35,72 @@ public final class ResidenceAddon extends Addon {
 
 
     /**
-     * Register the flag with the plugin.
+     * Registers the {@link #cropFlag CropClick flag}.
      */
     private void registerFlag() {
         FlagPermissions.addFlag("cropclick");
-        flag = Flags.getFlag("cropclick");
+        cropFlag = Flags.getFlag("cropclick");
+    }
+
+    
+    /**
+     * Checks whether the {@link Player provided player} is a member of the region it is in.
+     *
+     * @param player the player to check.
+     *
+     * @return true if member, otherwise false.
+     */
+    public boolean isMemberOfRegion(@NotNull Player player) {
+        ResidencePermissions permissions = findPermissionsByLocation(player.getLocation());
+        return permissions != null && permissions.playerHas(player, cropFlag, true);
     }
 
 
     /**
-     * If the player is in a residence, and that residence or the player has the flag, return true.
+     * Checks whether the {@link Location provided location} or region has the {@link #cropFlag crop flag}.
      *
-     * @param player The player who is trying to use the command.
+     * @param location the location/region to check.
      *
-     * @return A boolean value.
+     * @return true if it has, otherwise false.
      */
-    public boolean regionOrPlayerHasFlag(@NotNull Player player) {
+    public boolean hasRegionFlag(@NotNull Location location) {
+        ResidencePermissions permissions = findPermissionsByLocation(location);
+        return permissions != null && permissions.has(cropFlag, true);
+    }
+
+
+    /**
+     * Finds the {@link ResidencePermissions residence permissions} at the {@link Location provided location}.
+     *
+     * @param location the location to get the permissions from.
+     *
+     * @return the found permissions, otherwise null.
+     */
+    private @Nullable ResidencePermissions findPermissionsByLocation(@NotNull Location location) {
         ResidenceManager manager = Residence.getInstance().getResidenceManager();
         if (manager == null) {
-            return false;
+            return null;
         }
 
-        ClaimedResidence claimed = manager.getByLoc(player.getLocation());
+        ClaimedResidence claimed = manager.getByLoc(location);
         if (claimed == null) {
-            return false;
+            return null;
         }
 
         ResidencePermissions permissions = claimed.getPermissions();
         if (permissions == null) {
-            return false;
+            return null;
         }
 
         if (permissions.getFlags() == null) {
-            return false;
+            return null;
         }
 
         if (permissions.getFlags().isEmpty()) {
-            return false;
+            return null;
         }
 
-        boolean residenceHasFlag = permissions.has(flag, true);
-        boolean playerHasFlag = permissions.playerHas(player, flag, true);
-
-        return residenceHasFlag || playerHasFlag;
+        return permissions;
     }
 
 }

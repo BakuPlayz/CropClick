@@ -296,11 +296,7 @@ public abstract class LinkMenu extends BaseMenu {
         Location container = autofarmManager.getSelectedContainer(player);
         Location dispenser = autofarmManager.getSelectedDispenser(player);
 
-        assert crop != null; // Only here for the compiler.
-        assert container != null; // Only here for the compiler.
-        assert dispenser != null; // Only here for the compiler.
-
-        autofarmManager.deselectAll(player);
+        autofarmManager.deselectComponents(player);
         player.closeInventory();
 
         Autofarm autofarm = new Autofarm(

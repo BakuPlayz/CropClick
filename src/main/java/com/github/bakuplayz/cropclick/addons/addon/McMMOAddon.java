@@ -28,10 +28,10 @@ public final class McMMOAddon extends Addon {
 
 
     /**
-     * Add experience to a player for harvesting a crop.
+     * Adds the {@link McMMOAddon mcMMO} experience based on the {@link Crop provided crop} to the {@link Player provided player}.
      *
-     * @param player The player to add experience to.
-     * @param crop   The crop that was harvested.
+     * @param player the player to receive the experience.
+     * @param crop   the crop to base the experience on.
      */
     public void addExperience(@NotNull Player player, @NotNull Crop crop) {
         ExperienceAPI.addXP(player,
@@ -43,26 +43,26 @@ public final class McMMOAddon extends Addon {
 
 
     /**
-     * Get the experience for the crop with the passed name.
+     * Gets the {@link McMMOAddon mcMMO} experience for the {@link Crop provided crop}.
      *
-     * @param name The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The experience of the crop.
+     * @return the experience for the crop.
      */
-    private int getExperience(@NotNull String name) {
-        return addonSection.getMcMMOExperience(name);
+    private int getExperience(@NotNull String cropName) {
+        return addonSection.getMcMMOExperience(cropName);
     }
 
 
     /**
-     * Get the experience reason for the crop with the passed name.
+     * Gets the {@link McMMOAddon mcMMO} experience reason for the {@link Crop provided crop}.
      *
-     * @param name The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The experience reason for the crop.
+     * @return the experience for the crop.
      */
-    private @NotNull String getExperienceReason(@NotNull String name) {
-        return addonSection.getMcMMOExperienceReason(name);
+    private @NotNull String getExperienceReason(@NotNull String cropName) {
+        return addonSection.getMcMMOExperienceReason(cropName);
     }
 
 }

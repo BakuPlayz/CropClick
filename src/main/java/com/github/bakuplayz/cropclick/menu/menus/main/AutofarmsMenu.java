@@ -93,7 +93,7 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
 
     /**
-     * Finds the index of the {@link Autofarm farm} based on the {@link ItemStack clicked item}.
+     * Finds the index of the {@link Autofarm autofarm} based on the {@link ItemStack clicked item}.
      *
      * @param clicked the item that was clicked.
      *
@@ -136,7 +136,7 @@ public final class AutofarmsMenu extends PaginatedMenu {
     /**
      * Gets all the {@link #autofarms} as {@link #menuItems menu items}.
      *
-     * @return {@link #autofarms} as {@link #menuItems menu items}.
+     * @return autofarms as menu items.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
         return autofarms.stream()

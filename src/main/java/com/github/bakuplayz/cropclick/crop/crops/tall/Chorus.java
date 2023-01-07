@@ -32,11 +32,16 @@ public final class Chorus extends TallCrop {
     private List<Block> choruses;
 
 
-    public Chorus(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public Chorus(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "chorus";
@@ -44,21 +49,18 @@ public final class Chorus extends TallCrop {
 
 
     /**
-     * Get the height of a chorus plant by pushing the block onto a stack, then popping it off and pushing its neighbors
-     * onto the stack until the stack is empty.
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
      *
-     * @param clickedBlock The block that the player clicked, harvested.
+     * @param block the crop block.
      *
-     * @return The number of chorus blocks in the tree.
-     *
-     * @apiNote Written by <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
+     * @return the crop's current age.
      */
     @Override
-    public int getCurrentAge(@NotNull Block clickedBlock) {
+    public int getCurrentAge(@NotNull Block block) {
         choruses = new ArrayList<>();
 
         Stack<Block> stack = new Stack<>();
-        stack.push(clickedBlock);
+        stack.push(block);
 
         while (stack.size() > 0) {
             Block chorus = stack.pop();
@@ -83,6 +85,11 @@ public final class Chorus extends TallCrop {
     }
 
 
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
     @Override
     public void replant(@NotNull Block block) {
         CollectionUtils.reverseOrder(choruses)
@@ -92,6 +99,11 @@ public final class Chorus extends TallCrop {
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -104,7 +116,9 @@ public final class Chorus extends TallCrop {
 
 
     /**
-     * @return
+     * Checks whether the {@link Crop crop} should drop at least one drop.
+     *
+     * @return true if it should, otherwise false (default: false).
      */
     @Override
     public boolean dropAtLeastOne() {
@@ -115,7 +129,7 @@ public final class Chorus extends TallCrop {
     /**
      * Gets the clickable type of the {@link Crop crop}.
      *
-     * @return the clickable type of the crop.
+     * @return the crop's clickable type.
      */
     @Override
     public @NotNull Material getClickableType() {
@@ -126,7 +140,7 @@ public final class Chorus extends TallCrop {
     /**
      * Gets the menu type of the {@link Crop crop}.
      *
-     * @return the menu type of the crop.
+     * @return the crop's menu type.
      */
     @Override
     public @NotNull Material getMenuType() {

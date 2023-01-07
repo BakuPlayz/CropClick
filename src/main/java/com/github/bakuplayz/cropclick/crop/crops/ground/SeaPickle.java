@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,29 +26,51 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class SeaPickle extends GroundCrop {
 
-    public SeaPickle(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public SeaPickle(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "seaPickle";
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 2).
+     */
     @Override
     public int getHarvestAge() {
         return 2;
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         return ((org.bukkit.block.data.type.SeaPickle) block.getBlockData()).getPickles();
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -60,25 +82,45 @@ public final class SeaPickle extends GroundCrop {
     }
 
 
+    /**
+     * Gets the seed of the {@link Crop crop}.
+     *
+     * @return the crop's seed (default: null).
+     */
     @Override
     @Contract(pure = true)
-    public @Nullable BaseSeed getSeed() {
+    public @Nullable Seed getSeed() {
         return null;
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.SEA_PICKLE;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.SEA_PICKLE;
     }
 
 
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
     @Override
     public void replant(@NotNull Block block) {
         if (!shouldReplant()) {
@@ -92,16 +134,13 @@ public final class SeaPickle extends GroundCrop {
 
 
     /**
-     * "Harvesting all the sea pickles."
-     * <p>
-     * Checks whether the sea pickles can be harvested,
-     * returning true if it successfully harvested them.
+     * Harvests all the {@link SeaPickle sea pickles}.
      *
-     * @param player The player to add the drops to.
-     * @param block  The block that was harvested.
-     * @param crop   The crop that is being harvested.
+     * @param player the player to add the drops to.
+     * @param block  the crop block that was harvested.
+     * @param crop   the crop that was harvested.
      *
-     * @return The harvest state.
+     * @return true if it harvested all, otherwise false.
      */
     public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;
@@ -120,16 +159,13 @@ public final class SeaPickle extends GroundCrop {
 
 
     /**
-     * "Harvesting all the sea pickles."
-     * <p>
-     * Checks whether the sea pickles can be harvested,
-     * returning true if it successfully harvested them.
+     * Harvests all the {@link SeaPickle sea pickles}.
      *
-     * @param container The container to add the drops to.
-     * @param block     The block that was harvested.
-     * @param crop      The crop that is being harvested.
+     * @param container the container to add the drops to.
+     * @param block     the crop block that was harvested.
+     * @param crop      the crop that was harvested.
      *
-     * @return The harvest state.
+     * @return true if it harvested all, otherwise false.
      */
     public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;

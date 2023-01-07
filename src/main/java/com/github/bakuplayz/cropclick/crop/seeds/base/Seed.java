@@ -52,7 +52,7 @@ public interface Seed {
     /**
      * Gets the {@link Material menu type} of the implementing seed.
      *
-     * @return the menu type.
+     * @return the seed's menu type.
      */
     @NotNull Material getMenuType();
 

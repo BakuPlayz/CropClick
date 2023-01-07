@@ -139,7 +139,7 @@ public final class ParticlesMenu extends PaginatedMenu {
     /**
      * Gets all the {@link #particles particle names} as {@link #menuItems menu items}.
      *
-     * @return {@link #particles} as {@link #menuItems menu items}.
+     * @return particles as menu items.
      */
     @Override
     protected @NotNull List<ItemStack> getMenuItems() {

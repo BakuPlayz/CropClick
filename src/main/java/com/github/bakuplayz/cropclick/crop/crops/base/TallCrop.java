@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
@@ -116,7 +117,7 @@ public abstract class TallCrop extends BaseCrop {
 
 
     /**
-     * Checks whether the {@link TallCrop extending tall crop} is linkable.
+     * Checks whether the {@link TallCrop extending tall crop} is linkable to an {@link Autofarm}.
      *
      * @return true if it is, otherwise false (default: false).
      */

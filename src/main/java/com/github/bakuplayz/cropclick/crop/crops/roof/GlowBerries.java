@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.crops.roof;
 
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
@@ -36,18 +37,35 @@ public final class GlowBerries extends RoofCrop {
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "glowBerries";
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 1).
+     */
     @Override
     public int getHarvestAge() {
         return 1;
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         int minHeight = block.getLocation().getBlockY();
@@ -67,7 +85,7 @@ public final class GlowBerries extends RoofCrop {
                 break;
             }
 
-            if (!isGlowBerry(currentBlock)) {
+            if (!isGlowBerriesType(currentBlock)) {
                 break;
             }
 
@@ -82,6 +100,11 @@ public final class GlowBerries extends RoofCrop {
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -93,6 +116,11 @@ public final class GlowBerries extends RoofCrop {
     }
 
 
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
     @Override
     public void replant(@NotNull Block block) {
         for (int y : berryYPositions) {
@@ -111,18 +139,33 @@ public final class GlowBerries extends RoofCrop {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.CAVE_VINES_PLANT;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.GLOW_BERRIES;
     }
 
 
+    /**
+     * Checks whether the {@link Crop crop} is linkable to an {@link Autofarm}.
+     *
+     * @return true if it is, otherwise false.
+     */
     @Override
     public boolean isLinkable() {
         return cropSection.isLinkable(getName(), false);
@@ -130,13 +173,13 @@ public final class GlowBerries extends RoofCrop {
 
 
     /**
-     * Returns true if the given block is a glow berry.
+     * Checks whether the {@link Block provided block} is of type {@link GlowBerries glow berries}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    public boolean isGlowBerry(@NotNull Block block) {
+    public boolean isGlowBerriesType(@NotNull Block block) {
         return BlockUtils.isAnyType(block, Material.CAVE_VINES, Material.CAVE_VINES_PLANT);
     }
 

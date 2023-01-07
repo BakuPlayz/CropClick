@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 import com.github.bakuplayz.cropclick.collections.IndexedYamlMap;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.yaml.ParticleYaml;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -28,16 +29,15 @@ public final class ParticleConfigSection extends ConfigSection {
     private final Map<String, IndexedYamlMap<ParticleYaml>> particles;
 
 
-    public ParticleConfigSection(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig.getConfig());
-        this.cropsConfig = cropsConfig;
+    public ParticleConfigSection(@NotNull CropsConfig config) {
+        super(config.getConfig());
+        this.cropsConfig = config;
         this.particles = new LinkedHashMap<>();
     }
 
 
     /**
-     * It loads the particles for each crop, and saved them to the {@link #particles particles map}
-     * with the crop's name as key and particles in a {@link IndexedYamlMap<ParticleYaml> map} as values.
+     * Loads all the {@link ParticleYaml particles}.
      */
     public void loadParticles() {
         for (String cropName : cropsConfig.getCropsNames()) {
@@ -54,10 +54,10 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * If the particle is enabled, then add it to the crop's {@link IndexedYamlMap map}.
+     * Initializes the {@link ParticleYaml provided particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
      */
     public void initParticle(@NotNull String cropName, @NotNull String particleName) {
         ParticleYaml particle = new ParticleYaml(
@@ -78,11 +78,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * If the particle is disabled, remove it from the {@link #particles particles map}. Otherwise, add it to the {@link IndexedYamlMap map}.
+     * Updates the {@link ParticleYaml particle particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
-     * @param particle     The particle to update.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
+     * @param particle     the updated particle.
      */
     public void updateParticle(@NotNull String cropName, @NotNull String particleName, @NotNull ParticleYaml particle) {
         if (!particle.isEnabled()) {
@@ -98,11 +98,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * If the particle is null, initialize it, otherwise update it.
+     * Initializes or updates the {@link ParticleYaml provided particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
-     * @param particle     The particle to update.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
+     * @param particle     the updated particle.
      */
     public void initOrUpdateParticle(@NotNull String cropName, @NotNull String particleName, ParticleYaml particle) {
         if (particle == null) {
@@ -115,17 +115,17 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the delay, between the previous and this particle being spawned, for the given crop.
+     * Gets the delay of the {@link ParticleYaml provided particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
      *
-     * @return The delay of the particle.
+     * @return the delay of the particle.
      */
     public double getDelay(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!isEnabledAndPresent(particleName, indexedParticles)) {
+        if (!isPresentAndEnabled(particleName, indexedParticles)) {
             return config.getDouble(
                     "crops." + cropName + ".particles." + particleName + ".delay",
                     0
@@ -137,11 +137,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the delay, between the previous and this particle being spawn, of a particle for the given crop.
+     * Sets the delay of the {@link ParticleYaml provided particle} for the {@link Crop provided crop} to the provided delay.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
-     * @param delay        The delay between each particle spawn.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
+     * @param delay        the delay to set.
      */
     public void setDelay(@NotNull String cropName, @NotNull String particleName, double delay) {
         config.set("crops." + cropName + ".particles." + particleName + ".delay", delay);
@@ -158,17 +158,17 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the speed of a particle for the given crop.
+     * Gets the speed of the {@link ParticleYaml provided particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
      *
-     * @return The speed of the particle.
+     * @return the speed of the particle.
      */
     public double getSpeed(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!isEnabledAndPresent(particleName, indexedParticles)) {
+        if (!isPresentAndEnabled(particleName, indexedParticles)) {
             return config.getDouble(
                     "crops." + cropName + ".particles." + particleName + ".speed",
                     0
@@ -180,11 +180,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the speed of a particle for the given crop.
+     * Sets the speed of the {@link ParticleYaml provided particle} for the {@link Crop provided crop} to the provided speed.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
-     * @param speed        The speed of the particle.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
+     * @param speed        the speed to set.
      */
     public void setSpeed(@NotNull String cropName, @NotNull String particleName, double speed) {
         config.set("crops." + cropName + ".particles." + particleName + ".speed", speed);
@@ -201,17 +201,17 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the amount of particles to spawn, for a specific particle type, of the given crop.
+     * Gets the amount of the {@link ParticleYaml provided particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The cropName of the crop.
-     * @param particleName The name of the particle.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
      *
-     * @return The amount of particles for the given type.
+     * @return the amount of the particle.
      */
     public int getAmount(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
 
-        if (!isEnabledAndPresent(particleName, indexedParticles)) {
+        if (!isPresentAndEnabled(particleName, indexedParticles)) {
             return config.getInt(
                     "crops." + cropName + ".particles." + particleName + ".amount",
                     0
@@ -223,11 +223,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of particles, for a specific particle type, that will be spawned when a crop is harvested.
+     * Sets the amount of the {@link ParticleYaml provided particle} for the {@link Crop provided crop} to the provided amount.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
-     * @param amount       The amount of particles to spawn.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
+     * @param amount       the amount to set.
      */
     public void setAmount(@NotNull String cropName, @NotNull String particleName, int amount) {
         config.set("crops." + cropName + ".particles." + particleName + ".amount", amount);
@@ -244,12 +244,12 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It returns the order (index) of the particle in the {@link #particles map of particles} for the given crop.
+     * Gets the order of the {@link ParticleYaml provided particle} for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle you want to get the order of.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
      *
-     * @return The index of the particleName in the {@link #particles map of particles} for the cropName.
+     * @return the order of the particle.
      */
     public int getOrder(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> particlesOfCrop = particles.get(cropName);
@@ -258,11 +258,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It swaps the order of two particles in the given crop's {@link #particles particles map}.
+     * Swaps the order of {@link ParticleYaml two particles} with the provided orders for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop to swap the particles of.
-     * @param oldOrder The old (previous) order of the particle.
-     * @param newOrder The new order of the particle.
+     * @param cropName the name of the crop to swap the particle for.
+     * @param oldOrder the old (previous) order of the particle.
+     * @param newOrder the new order of the particle.
      */
     public void swapOrder(@NotNull String cropName, int oldOrder, int newOrder) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
@@ -283,12 +283,12 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It returns true if the particle is enabled, false otherwise.
+     * Checks whether the {@link ParticleYaml provided particle} is enabled for the {@link Crop provided crop}.
      *
-     * @param cropName     The name of the crop.
-     * @param particleName The name of the particle.
+     * @param cropName     the name of the crop.
+     * @param particleName the name of the particle.
      *
-     * @return The particle's enable status.
+     * @return true if enabled, otherwise false.
      */
     public boolean isEnabled(@NotNull String cropName, @NotNull String particleName) {
         IndexedYamlMap<ParticleYaml> particlesOfCrop = particles.get(cropName);
@@ -297,29 +297,29 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * If the {@link IndexedYamlMap<ParticleYaml> particles map} is null, return false. Otherwise, return whether the given map
-     * has the given particle name (as a key).
+     * Checks whether the {@link ParticleYaml provided particle} is present and enabled for the {@link Crop provided crop}.
      *
-     * @param particleName     The name of the particle you want to check.
-     * @param indexedParticles The {@link IndexedYamlMap} that contains all currently enabled particles.
+     * @param particleName     the name of the particle.
+     * @param presentParticles the particles that are present for the crop.
      *
-     * @return The enabled and present status of a particle, in the given map.
+     * @return true if enabled, otherwise false.
      */
-    private boolean isEnabledAndPresent(@NotNull String particleName, IndexedYamlMap<ParticleYaml> indexedParticles) {
-        if (indexedParticles == null) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean isPresentAndEnabled(@NotNull String particleName, IndexedYamlMap<ParticleYaml> presentParticles) {
+        if (presentParticles == null) {
             return false;
         }
 
-        return indexedParticles.hasKey(particleName);
+        return presentParticles.hasKey(particleName);
     }
 
 
     /**
-     * It returns the amount of particles a crop has.
+     * Gets the amount of {@link ParticleYaml particles} for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop you want to get the particles for.
+     * @param cropName the name of the crop.
      *
-     * @return The amount of particles for the given crop.
+     * @return the amount of particles for the crop.
      */
     public int getAmountOfParticles(@NotNull String cropName) {
         return getParticles(cropName).size();
@@ -327,11 +327,11 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the particles for the given crop.
+     * Gets all the {@link ParticleYaml particles} for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop to get the particles for.
+     * @param cropName the name of the crop.
      *
-     * @return Particles associated with the given crop, as a {@link List<String> string list}.
+     * @return the particles for the crop.
      */
     public @NotNull List<String> getParticles(@NotNull String cropName) {
         IndexedYamlMap<ParticleYaml> indexedParticles = particles.get(cropName);
@@ -340,16 +340,16 @@ public final class ParticleConfigSection extends ConfigSection {
             return Collections.emptyList();
         }
 
-        return indexedParticles.toList();
+        return indexedParticles.toStringList();
     }
 
 
     /**
-     * It gets the names of all the particles for a given crop.
+     * Gets all the {@link ParticleYaml particle} names for the {@link Crop provided crop}.
      *
-     * @param cropName The name of the crop to get the particle names for.
+     * @param cropName the name of the crop.
      *
-     * @return Particle names associated with the given crop, as a {@link Set<String> string set}.
+     * @return the particle names for the crop.
      */
     private @NotNull @Unmodifiable Set<String> getParticleNames(@NotNull String cropName) {
         ConfigurationSection particleSection = config.getConfigurationSection(
@@ -365,12 +365,12 @@ public final class ParticleConfigSection extends ConfigSection {
 
 
     /**
-     * It retrieves the enabled particles for the given crop.
+     * Gets all the {@link ParticleYaml existing particles} for the {@link Crop provided crop}.
      *
-     * @param cropName      The name of the crop.
-     * @param particleNames The names of the particles to search for.
+     * @param cropName      the name of the crop.
+     * @param particleNames the particle names to filter with.
      *
-     * @return {@link IndexedYamlMap<ParticleYaml> Maps} populated by the enabled {@link ParticleYaml particles}, that was searched for the given crop.
+     * @return the existing particles for the crop.
      */
     private @NotNull IndexedYamlMap<ParticleYaml> getExistingParticles(@NotNull String cropName,
                                                                        @NotNull Set<String> particleNames) {

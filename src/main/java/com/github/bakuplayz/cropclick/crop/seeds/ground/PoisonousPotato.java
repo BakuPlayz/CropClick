@@ -2,9 +2,8 @@ package com.github.bakuplayz.cropclick.crop.seeds.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +25,7 @@ public final class PoisonousPotato extends BaseSeed {
 
 
     /**
-     * Gets the name of the {@link BaseSeed seed}.
+     * Gets the name of the {@link Seed seed}.
      *
      * @return the name of the seed.
      */

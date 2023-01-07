@@ -27,7 +27,7 @@ public final class AddonsMenu extends BaseMenu {
     /**
      * A variable checking if the {@link McMMOAddon} is on the server.
      */
-    private final boolean mmoPresent;
+    private final boolean mmoInstalled;
 
     /**
      * A variable checking if the {@link McMMOAddon} is enabled in {@link CropClick}.
@@ -37,7 +37,7 @@ public final class AddonsMenu extends BaseMenu {
     /**
      * A variable checking if the {@link JobsRebornAddon} is on the server.
      */
-    private final boolean jobsPresent;
+    private final boolean jobsInstalled;
 
     /**
      * A variable checking if the {@link JobsRebornAddon} is enabled in {@link CropClick}.
@@ -47,7 +47,7 @@ public final class AddonsMenu extends BaseMenu {
     /**
      * A variable checking if the {@link TownyAddon} is on the server.
      */
-    private final boolean townyPresent;
+    private final boolean townyInstalled;
 
     /**
      * A variable checking if the {@link TownyAddon} is enabled in {@link CropClick}.
@@ -57,7 +57,7 @@ public final class AddonsMenu extends BaseMenu {
     /**
      * A variable checking if the {@link WorldGuardAddon} is on the server.
      */
-    private final boolean guardPresent;
+    private final boolean guardInstalled;
 
     /**
      * A variable checking if the {@link WorldGuardAddon} is enabled in {@link CropClick}.
@@ -67,7 +67,7 @@ public final class AddonsMenu extends BaseMenu {
     /**
      * A variable checking if the {@link OfflineGrowthAddon} is on the server.
      */
-    private final boolean growthPresent;
+    private final boolean growthInstalled;
 
     /**
      * A variable checking if the {@link OfflineGrowthAddon} is enabled in {@link CropClick}.
@@ -77,7 +77,7 @@ public final class AddonsMenu extends BaseMenu {
     /**
      * A variable checking if the {@link ResidenceAddon} is on the server.
      */
-    private final boolean residencePresent;
+    private final boolean residenceInstalled;
 
     /**
      * A variable checking if the {@link ResidenceAddon} is enabled in {@link CropClick}.
@@ -88,17 +88,17 @@ public final class AddonsMenu extends BaseMenu {
     public AddonsMenu(@NotNull CropClick plugin, @NotNull Player player) {
         super(plugin, player, LanguageAPI.Menu.ADDONS_TITLE);
         AddonManager addonManager = plugin.getAddonManager();
-        this.mmoPresent = addonManager.isPresent("mcMMO");
+        this.mmoInstalled = addonManager.isInstalled("mcMMO");
         this.mmoEnabled = addonManager.isEnabled("mcMMO");
-        this.townyPresent = addonManager.isPresent("Towny");
+        this.townyInstalled = addonManager.isInstalled("Towny");
         this.townyEnabled = addonManager.isEnabled("Towny");
-        this.jobsPresent = addonManager.isPresent("JobsReborn");
+        this.jobsInstalled = addonManager.isInstalled("JobsReborn");
         this.jobsEnabled = addonManager.isEnabled("JobsReborn");
-        this.guardPresent = addonManager.isPresent("WorldGuard");
+        this.guardInstalled = addonManager.isInstalled("WorldGuard");
         this.guardEnabled = addonManager.isEnabled("WorldGuard");
-        this.residencePresent = addonManager.isPresent("Residence");
+        this.residenceInstalled = addonManager.isInstalled("Residence");
         this.residenceEnabled = addonManager.isEnabled("Residence");
-        this.growthPresent = addonManager.isPresent("OfflineGrowth");
+        this.growthInstalled = addonManager.isInstalled("OfflineGrowth");
         this.growthEnabled = addonManager.isEnabled("OfflineGrowth");
     }
 
@@ -126,27 +126,27 @@ public final class AddonsMenu extends BaseMenu {
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getJobsItem())) {
-            if (jobsPresent) new JobsRebornMenu(plugin, player).openMenu();
+            if (jobsInstalled) new JobsRebornMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getMCMMOItem())) {
-            if (mmoPresent) new McMMOMenu(plugin, player).openMenu();
+            if (mmoInstalled) new McMMOMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getGrowthItem())) {
-            if (growthPresent) new OfflineGrowthMenu(plugin, player).openMenu();
+            if (growthInstalled) new OfflineGrowthMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getResidenceItem())) {
-            if (residencePresent) new ResidenceMenu(plugin, player).openMenu();
+            if (residenceInstalled) new ResidenceMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getTownyItem())) {
-            if (townyPresent) new TownyMenu(plugin, player).openMenu();
+            if (townyInstalled) new TownyMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getGuardItem())) {
-            if (guardPresent) new WorldGuardMenu(plugin, player).openMenu();
+            if (guardInstalled) new WorldGuardMenu(plugin, player).openMenu();
         }
     }
 
@@ -166,7 +166,7 @@ public final class AddonsMenu extends BaseMenu {
                         jobsEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
-                        jobsPresent ? null : Material.ORANGE_STAINED_GLASS_PANE
+                        jobsInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }
@@ -185,10 +185,10 @@ public final class AddonsMenu extends BaseMenu {
                 ))
 
                 .setMaterial(
-                        mmoPresent ? null : Material.GRAY_STAINED_GLASS_PANE
+                        mmoInstalled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
-                        mmoPresent ? null : Material.ORANGE_STAINED_GLASS_PANE
+                        mmoInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }
@@ -209,7 +209,7 @@ public final class AddonsMenu extends BaseMenu {
                         growthEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
-                        growthPresent ? null : Material.ORANGE_STAINED_GLASS_PANE
+                        growthInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }
@@ -230,7 +230,7 @@ public final class AddonsMenu extends BaseMenu {
                         residenceEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
-                        residencePresent ? null : Material.ORANGE_STAINED_GLASS_PANE
+                        residenceInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }
@@ -251,7 +251,7 @@ public final class AddonsMenu extends BaseMenu {
                         townyEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
-                        townyPresent ? null : Material.ORANGE_STAINED_GLASS_PANE
+                        townyInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }
@@ -272,7 +272,7 @@ public final class AddonsMenu extends BaseMenu {
                         guardEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
-                        guardPresent ? null : Material.ORANGE_STAINED_GLASS_PANE
+                        guardInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }

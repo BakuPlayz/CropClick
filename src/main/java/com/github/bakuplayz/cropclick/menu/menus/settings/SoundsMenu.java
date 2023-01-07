@@ -139,7 +139,7 @@ public final class SoundsMenu extends PaginatedMenu {
     /**
      * Gets all the {@link #sounds sound names} as {@link #menuItems menu items}.
      *
-     * @return {@link #sounds} as {@link #menuItems menu items}.
+     * @return sounds as menu items.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
         return sounds.stream()

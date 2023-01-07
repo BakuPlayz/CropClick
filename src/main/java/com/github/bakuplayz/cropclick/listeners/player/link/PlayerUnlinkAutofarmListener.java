@@ -72,7 +72,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             return;
         }
 

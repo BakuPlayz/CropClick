@@ -98,7 +98,7 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             return;
         }
 

@@ -108,7 +108,7 @@ public final class ToggleMenu extends PaginatedMenu {
         );
         String status = MessageUtils.getStatusMessage(
                 plugin,
-                playersConfig.isEnabled(playerID)
+                playersConfig.isEnabled(offlinePlayer)
         );
 
         assert offlinePlayer.getName() != null; // Cannot be null since the playerID grantee a valid ID.
@@ -123,7 +123,7 @@ public final class ToggleMenu extends PaginatedMenu {
     /**
      * Gets all the {@link #players players' IDs} as {@link #menuItems menu items}.
      *
-     * @return {@link #players} as {@link #menuItems menu items}.
+     * @return players as menu items.
      */
     @Override
     protected @NotNull List<ItemStack> getMenuItems() {
@@ -136,7 +136,7 @@ public final class ToggleMenu extends PaginatedMenu {
     /**
      * Gets all the {@link OfflinePlayer#getUniqueId() players' IDs} that ever joined the server.
      *
-     * @return the found {@link OfflinePlayer#getUniqueId() players' IDs}.
+     * @return the found player IDs.
      */
     private @NotNull List<String> getPlayers() {
         return Arrays.stream(Bukkit.getOfflinePlayers())

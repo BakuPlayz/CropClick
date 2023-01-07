@@ -67,7 +67,7 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             return;
         }
 
@@ -95,8 +95,8 @@ public final class PlayerPlantCropListener implements Listener {
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {
         if (event.isCancelled()) return;
 
-        if (addonManager.isPresentAndEnabled(growthAddon)) {
-            growthAddon.addCrop(event.getBlock().getLocation());
+        if (addonManager.isInstalledAndEnabled(growthAddon)) {
+            growthAddon.registerCrop(event.getBlock().getLocation());
         }
     }
 

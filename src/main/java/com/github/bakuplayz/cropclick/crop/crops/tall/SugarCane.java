@@ -29,7 +29,7 @@ public final class SugarCane extends TallCrop {
     /**
      * Gets the name of the {@link Crop crop}.
      *
-     * @return the name of the crop.
+     * @return the crop's name.
      */
     @Override
     @Contract(pure = true)
@@ -39,7 +39,7 @@ public final class SugarCane extends TallCrop {
 
 
     /**
-     * Gets the {@link Crop crop's} drop.
+     * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
      */
@@ -56,7 +56,7 @@ public final class SugarCane extends TallCrop {
     /**
      * Gets the clickable type of the {@link Crop crop}.
      *
-     * @return the clickable type of the crop.
+     * @return the crop's clickable type.
      */
     @Override
     public @NotNull Material getClickableType() {
@@ -67,7 +67,7 @@ public final class SugarCane extends TallCrop {
     /**
      * Gets the menu type of the {@link Crop crop}.
      *
-     * @return the menu type of the crop.
+     * @return the crop's menu type.
      */
     @Override
     public @NotNull Material getMenuType() {

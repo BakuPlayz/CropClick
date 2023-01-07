@@ -16,26 +16,26 @@ public interface Commandable {
     /**
      * Gets the implementing command's description of the command.
      *
-     * @return the description of the command.
+     * @return the command's description.
      */
     @NotNull String getDescription();
 
     /**
      * Gets the implementing command's usage of the command.
      *
-     * @return the usage of the command.
+     * @return the command's usage.
      */
     @NotNull String getUsage();
 
     /**
      * Gets the implementing command's permission of the command.
      *
-     * @return the permission of the command.
+     * @return the command's permission.
      */
     @NotNull String getPermission();
 
     /**
-     * Checks whether a player has permission to {@link #perform(Player, String[]) perform} the command.
+     * Checks whether the provided player has permission to perform the implementing command.
      *
      * @param player the player to check.
      *
@@ -44,7 +44,7 @@ public interface Commandable {
     boolean hasPermission(@NotNull Player player);
 
     /**
-     * Performs the command.
+     * Performs the implementing command.
      *
      * @param player the player executing the command.
      * @param args   the arguments passed along the command.

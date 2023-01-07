@@ -243,7 +243,7 @@ public final class WorldsMenu extends PaginatedMenu {
     /**
      * Gets all the {@link #worlds} as {@link #menuItems menu items}.
      *
-     * @return {@link #worlds} as {@link #menuItems menu items}.
+     * @return worlds as menu items.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
         return worlds.stream()

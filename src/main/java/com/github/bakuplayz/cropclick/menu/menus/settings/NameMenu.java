@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
@@ -123,7 +123,7 @@ public final class NameMenu extends BaseMenu {
      * @return the seed item.
      */
     private @NotNull ItemStack getSeedItem() {
-        BaseSeed seed = crop.getSeed();
+        Seed seed = crop.getSeed();
 
         assert seed != null; // Only here for the compiler.
 
@@ -195,7 +195,7 @@ public final class NameMenu extends BaseMenu {
 
 
     /**
-     * Gets the drop's name of either the {@link Crop} or {@link BaseSeed}.
+     * Gets the drop's name of either the {@link Crop} or {@link Seed}.
      *
      * @param isCrop true if a crop, otherwise false.
      *

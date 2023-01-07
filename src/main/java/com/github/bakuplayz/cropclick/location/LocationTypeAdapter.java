@@ -100,7 +100,7 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      *
      * @return the serialized doubly location.
      */
-    private static @NotNull JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
+    public static @NotNull JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
         JsonObject body = new JsonObject();
         JsonObject singly = serializeLocation(location.getSingly());
         JsonObject doubly = serializeLocation(location.getDoubly());
@@ -117,7 +117,7 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
      *
      * @return the serialized location.
      */
-    private static @NotNull JsonObject serializeLocation(@NotNull Location location) {
+    public static @NotNull JsonObject serializeLocation(@NotNull Location location) {
         JsonObject body = new JsonObject();
 
         assert location.getWorld() != null; // Only here for compiler, since a location cannot exist without a world.

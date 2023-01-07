@@ -11,8 +11,6 @@ import com.github.bakuplayz.cropclick.crop.crops.roof.GlowBerries;
 import com.github.bakuplayz.cropclick.crop.crops.tall.*;
 import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
-import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
 import org.bukkit.block.Block;
@@ -123,7 +121,7 @@ public final class CropManager {
         }
 
         crops.add(crop);
-        addSettings(crop);
+        cropsConfig.addSettings(crop);
     }
 
 
@@ -134,80 +132,7 @@ public final class CropManager {
      */
     public void unregisterCrop(@NotNull Crop crop) {
         crops.remove(crop);
-        removeSettings(crop);
-    }
-
-
-    /**
-     * TODO: Move to config
-     *
-     * @param crop
-     */
-    private void addSettings(@NotNull Crop crop) {
-        String cropName = crop.getName();
-
-        if (!cropSection.doesExist(cropName)) {
-            // Drop Settings
-            if (crop.hasDrop()) {
-                Drop drop = crop.getDrop();
-                cropSection.setDropName(cropName, drop.getName());
-                cropSection.setDropAmount(cropName, drop.getAmount());
-                cropSection.setDropChance(cropName, drop.getChance());
-                cropSection.setDropAtLeastOne(cropName, crop.dropAtLeastOne());
-            }
-
-            // Action Settings
-            cropSection.setReplant(cropName, crop.shouldReplant());
-            cropSection.setHarvestable(cropName, crop.isHarvestable());
-            cropSection.setLinkable(cropName, crop.isLinkable());
-
-            // mcMMO Settings
-            addonSection.setMcMMOExperience(cropName, 0);
-            addonSection.setMcMMOExperienceReason(
-                    cropName,
-                    "You harvested " + MessageUtils.beautify(cropName, false) + "."
-            );
-
-            // JobsReborn Settings
-            addonSection.setJobsMoney(cropName, 0);
-            addonSection.setJobsPoints(cropName, 0);
-            addonSection.setJobsExperience(cropName, 0);
-        }
-
-        if (!crop.hasSeed()) {
-            return;
-        }
-
-        BaseSeed seed = crop.getSeed();
-        String seedName = seed.getName();
-        if (!seedSection.doesExist(seedName)) {
-            // Drop Settings
-            if (crop.hasDrop()) {
-                Drop drop = seed.getDrop();
-                seedSection.setDropName(seedName, drop.getName());
-                seedSection.setDropAmount(seedName, drop.getAmount());
-                seedSection.setDropChance(seedName, drop.getChance());
-            }
-
-            seedSection.setEnabled(seedName, seed.isEnabled());
-        }
-    }
-
-
-    /**
-     * TODO: Move to config.
-     *
-     * @param crop
-     */
-    private void removeSettings(@NotNull Crop crop) {
-        if (crop.hasSeed()) {
-            BaseSeed seed = crop.getSeed();
-            String seedName = seed.getName();
-            cropsConfig.getConfig().set("seeds." + seedName, null);
-        }
-
-        cropsConfig.getConfig().set("crops." + crop.getName(), null);
-        cropsConfig.saveConfig();
+        cropsConfig.removeSettings(crop);
     }
 
 
@@ -249,7 +174,7 @@ public final class CropManager {
      */
     private boolean filterByType(@NotNull Crop crop, @NotNull Block block) {
         if (crop instanceof GlowBerries) {
-            return ((GlowBerries) crop).isGlowBerry(block);
+            return ((GlowBerries) crop).isGlowBerriesType(block);
         }
 
         if (crop instanceof Dripleaf) {

@@ -26,8 +26,8 @@ public final class AutofarmsCommand extends Subcommand {
     /**
      * Performs the '/crop autofarms' command, opening the {@link AutofarmsMenu}.
      *
-     * @param player The player who executed the command.
-     * @param args   The arguments passed to the command.
+     * @param player the player executing the command.
+     * @param args   the arguments passed along the command.
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {

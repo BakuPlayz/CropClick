@@ -35,7 +35,7 @@ public abstract class Config implements Configurable {
 
 
     /**
-     * If the file doesn't exist, create it and copy the default file from the jar. If it does exist, load it.
+     * Sets up the {@link Config extending config}.
      */
     public void setup() {
         this.file = new File(plugin.getDataFolder(), fileName);
@@ -55,7 +55,7 @@ public abstract class Config implements Configurable {
 
 
     /**
-     * Reloads the config file.
+     * Reloads the {@link Config extending config}.
      */
     public void reloadConfig() {
         if (file == null) return;
@@ -67,7 +67,7 @@ public abstract class Config implements Configurable {
 
 
     /**
-     * It saves the config file.
+     * Saves the {@link Config extending config}.
      */
     public void saveConfig() {
         if (file == null) return;

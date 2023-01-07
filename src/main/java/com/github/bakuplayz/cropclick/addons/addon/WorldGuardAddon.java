@@ -40,7 +40,7 @@ public final class WorldGuardAddon extends Addon {
 
 
     /**
-     * It registers the flag we created earlier.
+     * Registers the {@link #cropFlag CropClick flag}.
      */
     private void registerFlag() {
         FlagRegistry registry = worldGuard.getFlagRegistry();
@@ -49,12 +49,11 @@ public final class WorldGuardAddon extends Addon {
 
 
     /**
-     * If the player is in a region that has the flag set to allow, and the player is a member of that region, then return
-     * true.
+     * Checks whether a region allows the {@link Player provided player}.
      *
-     * @param player The player to check.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
      */
     public boolean regionAllowsPlayer(@NotNull Player player) {
         RegionContainer container = worldGuard.getPlatform().getRegionContainer();
@@ -77,21 +76,21 @@ public final class WorldGuardAddon extends Addon {
         for (ProtectedRegion region : foundRegions) {
             if (region == null) continue;
             if (region.getFlag(cropFlag) == null) return false;
-            if (regionHasMember(region, player)) return true;
+            if (isMemberOfRegion(region, player)) return true;
         }
         return false;
     }
 
 
     /**
-     * Returns true if the player is a member of the region, false otherwise.
+     * Checks whether the {@link Player provided player} is a member of the {@link ProtectedRegion provided region}.
      *
-     * @param region The region you want to check.
-     * @param player The player to check if they are a member of the region.
+     * @param region the region to check.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if member, otherwise false.
      */
-    private boolean regionHasMember(@NotNull ProtectedRegion region, @NotNull Player player) {
+    private boolean isMemberOfRegion(@NotNull ProtectedRegion region, @NotNull Player player) {
         DefaultDomain members = region.getMembers();
         DefaultDomain owners = region.getOwners();
         return members.contains(player.getUniqueId()) || owners.contains(player.getUniqueId());

@@ -25,8 +25,8 @@ public final class SettingsCommand extends Subcommand {
     /**
      * Performs the '/crop settings' command, showing the {@link SettingsMenu}.
      *
-     * @param player The player who executed the command.
-     * @param args   The arguments passed to the command.
+     * @param player the player executing the command.
+     * @param args   the arguments passed along the command.
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {

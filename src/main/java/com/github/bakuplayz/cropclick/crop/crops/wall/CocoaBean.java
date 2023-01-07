@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.crops.wall;
 
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
@@ -29,7 +30,7 @@ public final class CocoaBean extends WallCrop {
     /**
      * Gets the name of the {@link Crop crop}.
      *
-     * @return the name of the crop.
+     * @return the crop's name.
      */
     @Override
     @Contract(pure = true)
@@ -87,9 +88,9 @@ public final class CocoaBean extends WallCrop {
 
 
     /**
-     * Checks whether the {@link Crop crop} is linkable.
+     * Checks whether the {@link Crop crop} is linkable to an {@link Autofarm}.
      *
-     * @return true it is, otherwise false (default: false).
+     * @return true if it is, otherwise false (default: false).
      */
     @Override
     public boolean isLinkable() {

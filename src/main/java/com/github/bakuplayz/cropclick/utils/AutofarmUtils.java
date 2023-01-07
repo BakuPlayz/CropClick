@@ -35,7 +35,7 @@ public final class AutofarmUtils {
 
 
     /**
-     * Checks whether the {@link Player provided player} is the owner of the {@link Autofarm farm}.
+     * Checks whether the {@link Player provided player} is the owner of the {@link Autofarm provided autofarm}.
      *
      * @param player   the player to check.
      * @param autofarm the farm to check.
@@ -83,7 +83,7 @@ public final class AutofarmUtils {
      *
      * @param block the block to base the findings on.
      *
-     * @return the {@link Container}, otherwise null.
+     * @return the container, otherwise null.
      */
     public static @Nullable Container findContainer(@NotNull Block block) {
         BlockState blockState = block.getState();
@@ -130,7 +130,7 @@ public final class AutofarmUtils {
      *
      * @param block the block to base the findings on.
      *
-     * @return the {@link Dispenser}, otherwise null.
+     * @return the dispenser, otherwise null.
      */
     public static @NotNull Dispenser findDispenser(@NotNull Block block) {
         return (Dispenser) block.getState();
@@ -156,7 +156,7 @@ public final class AutofarmUtils {
      * @param manager the crop manager.
      * @param block   the block to base the findings on.
      *
-     * @return the {@link Crop}, otherwise null.
+     * @return the crop, otherwise null.
      */
     public static @Nullable Crop findCrop(@NotNull CropManager manager, @NotNull Block block) {
         return manager.findByBlock(block);
@@ -164,7 +164,7 @@ public final class AutofarmUtils {
 
 
     /**
-     * Adds the cached {@link Autofarm#getFarmerID() farmer id} to all of the {@link Autofarm farm's} components.
+     * Adds the cached {@link Autofarm#getFarmerID() autofarmer ID} to all the {@link Autofarm autofarm's} components.
      *
      * @param plugin   the CropClick instance.
      * @param autofarm the farm to add the ID to.
@@ -195,7 +195,7 @@ public final class AutofarmUtils {
 
 
     /**
-     * Removes the cached {@link Autofarm#getFarmerID() farmer id} from all of the {@link Autofarm farm's} components.
+     * Removes the cached {@link Autofarm#getFarmerID() autofarmer ID} from all the {@link Autofarm autofarm's} components.
      *
      * @param plugin   the CropClick instance.
      * @param autofarm the farm to remove the ID from.
@@ -222,7 +222,7 @@ public final class AutofarmUtils {
 
 
     /**
-     * Checks whether the {@link Autofarm farm's} components has a cached {@link Autofarm#getFarmerID() farmer id}.
+     * Checks whether the {@link Autofarm autofarm's} components has a cached {@link Autofarm#getFarmerID() autofarmer ID}.
      *
      * @param autofarm the farm to check.
      *
@@ -260,7 +260,7 @@ public final class AutofarmUtils {
 
 
     /**
-     * Checks whether the {@link Block provided block} has the cached {@link Autofarm#getFarmerID() farmer id}.
+     * Checks whether the {@link Block provided block} has the cached {@link Autofarm#getFarmerID() autofarmer ID}.
      *
      * @param block the block to check.
      *
@@ -273,13 +273,13 @@ public final class AutofarmUtils {
 
 
     /**
-     * Finds the cached {@link Autofarm#getFarmerID() farmer id} based on the {@link Block provided block}.
+     * Gets the cached {@link Autofarm#getFarmerID() autofarmer ID} based on the {@link Block provided block}.
      *
-     * @param block the block to check.
+     * @param block the block to get the cached ID from.
      *
-     * @return the found id, otherwise null.
+     * @return the found ID, otherwise null.
      */
-    public static @Nullable String findCachedID(@NotNull Block block) {
+    public static @Nullable String getCachedID(@NotNull Block block) {
         List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_KEY);
         return metas.isEmpty() ? null : metas.get(0).asString();
     }

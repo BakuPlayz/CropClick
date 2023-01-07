@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,23 +23,38 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class NetherWart extends GroundCrop {
 
-    public NetherWart(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public NetherWart(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "netherWart";
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 3).
+     */
     @Override
     public int getHarvestAge() {
         return 3;
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -51,19 +66,34 @@ public final class NetherWart extends GroundCrop {
     }
 
 
+    /**
+     * Gets the seed of the {@link Crop crop}.
+     *
+     * @return the crop's seed (default: null).
+     */
     @Override
     @Contract(pure = true)
-    public @Nullable BaseSeed getSeed() {
+    public @Nullable Seed getSeed() {
         return null;
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.NETHER_WART;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.NETHER_WART;

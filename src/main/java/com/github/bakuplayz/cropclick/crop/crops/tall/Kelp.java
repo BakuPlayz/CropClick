@@ -31,7 +31,7 @@ public final class Kelp extends TallCrop {
     /**
      * Gets the name of the {@link Crop crop}.
      *
-     * @return the name of the crop.
+     * @return the crop's name.
      */
     @Override
     public @NotNull String getName() {
@@ -44,7 +44,7 @@ public final class Kelp extends TallCrop {
      *
      * @param block the crop block.
      *
-     * @return the current age of the crop.
+     * @return the crop's current age.
      */
     @Override
     public int getCurrentAge(@NotNull Block block) {
@@ -73,7 +73,7 @@ public final class Kelp extends TallCrop {
 
 
     /**
-     * Gets the {@link Crop crop's} drop.
+     * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
      */
@@ -114,7 +114,7 @@ public final class Kelp extends TallCrop {
     /**
      * Gets the clickable type of the {@link Crop crop}.
      *
-     * @return the clickable type of the crop.
+     * @return the crop's clickable type.
      */
     @Override
     public @NotNull Material getClickableType() {
@@ -125,7 +125,7 @@ public final class Kelp extends TallCrop {
     /**
      * Gets the menu type of the {@link Crop crop}.
      *
-     * @return the menu type of the crop.
+     * @return the crop's menu type.
      */
     @Override
     public @NotNull Material getMenuType() {

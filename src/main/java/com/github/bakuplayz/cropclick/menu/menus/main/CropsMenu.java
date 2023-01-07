@@ -214,7 +214,7 @@ public final class CropsMenu extends PaginatedMenu {
     /**
      * Gets all the {@link #crops} as {@link #menuItems menu items}.
      *
-     * @return {@link #crops} as {@link #menuItems menu items}.
+     * @return crops as menu items.
      */
     protected @NotNull List<ItemStack> getMenuItems() {
         return crops.stream()

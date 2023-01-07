@@ -40,11 +40,11 @@ public final class AutofarmsConverter {
 
 
     /**
-     * It loads the old autofarms.yml file, converts it to the new format, and saves it to the new file.
+     * Makes the configuration conversion.
      *
-     * @param plugin The plugin instance.
+     * @param plugin the plugin instance.
      *
-     * @apiNote Written by BakuPlayz.
+     * @apiNote written by BakuPlayz.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
@@ -86,13 +86,13 @@ public final class AutofarmsConverter {
 
 
     /**
-     * It converts a legacy format to the new format.
+     * Converts the {@link ConfigurationSection provided "legacy" format} to a {@link ConfigurationSection new format}.
      *
-     * @param legacyFormat The configuration section that contains the legacy format.
+     * @param legacyFormat the legacy format.
      *
-     * @return A JsonObject
+     * @return the converted format.
      *
-     * @apiNote Written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     private static @NotNull JsonObject convertFormat(@NotNull ConfigurationSection legacyFormat) {
         JsonObject output = new JsonObject();
@@ -135,11 +135,13 @@ public final class AutofarmsConverter {
             JsonObject autofarmObj = new JsonObject();
 
             autofarmObj.addProperty("ownerID", "-1");
-            autofarmObj.add("dispenser", LocationTypeAdapter.serialize(dispenserLocation));
-            autofarmObj.add("crop", LocationTypeAdapter.serialize(cropLocation));
-            autofarmObj.add("container", LocationTypeAdapter.serialize(
-                    doublyLocation != null ? doublyLocation : containerLocation
-            ));
+            autofarmObj.add("dispenser", LocationTypeAdapter.serializeLocation(dispenserLocation));
+            autofarmObj.add("crop", LocationTypeAdapter.serializeLocation(cropLocation));
+            autofarmObj.add("container",
+                    doublyLocation != null
+                    ? LocationTypeAdapter.serializeDoublyLocation(doublyLocation)
+                    : LocationTypeAdapter.serializeLocation(containerLocation)
+            );
 
             output.add(UUID.randomUUID().toString(), autofarmObj);
         }
@@ -149,11 +151,13 @@ public final class AutofarmsConverter {
 
 
     /**
-     * Returns the Location represented by this ConfigurationSection
+     * Converts the {@link ConfigurationSection provided section} to a {@link Location location}.
      *
-     * @param section The ConfigurationSection to get the Location from.
+     * @param section the section to convert.
      *
-     * @return A Location object
+     * @return the converted location.
+     *
+     * @apiNote written by BakuPlayz.
      */
     private static @NotNull Location toLocation(@NotNull ConfigurationSection section) {
         int x = section.getInt("X");

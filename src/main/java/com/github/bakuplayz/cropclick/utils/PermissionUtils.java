@@ -132,7 +132,7 @@ public final class PermissionUtils {
     /**
      * "Checks whether the {@link Player provided player} is allowed to interact with others {@link Autofarm autofarms}."
      * <p>
-     * Additional check: If the {@link Autofarm farm} has an {@link Autofarm#UNKNOWN_OWNER unknown owner}, then check if the player can claim the farm.
+     * Additional check: If the {@link Autofarm autofarm} has an {@link Autofarm#UNKNOWN_OWNER unknown owner}, then check if the player can claim the farm.
      * </p>
      *
      * @param player   the player to check.
