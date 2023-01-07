@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.crop.crops.tall;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
@@ -22,17 +23,29 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class Kelp extends TallCrop {
 
-    public Kelp(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public Kelp(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the name of the crop.
+     */
     @Override
     public @NotNull String getName() {
         return "kelp";
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the current age of the crop.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         int minHeight = block.getLocation().getBlockY();
@@ -50,7 +63,7 @@ public final class Kelp extends TallCrop {
                 break;
             }
 
-            if (isKelp(currentBlock)) {
+            if (isKelpType(currentBlock)) {
                 ++height;
             }
         }
@@ -59,6 +72,11 @@ public final class Kelp extends TallCrop {
     }
 
 
+    /**
+     * Gets the {@link Crop crop's} drop.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -70,6 +88,11 @@ public final class Kelp extends TallCrop {
     }
 
 
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
     @Override
     public void replant(@NotNull Block block) {
         int height = getCurrentAge(block) - 1;
@@ -88,12 +111,22 @@ public final class Kelp extends TallCrop {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the clickable type of the crop.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.KELP_PLANT;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the menu type of the crop.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.KELP;
@@ -101,13 +134,13 @@ public final class Kelp extends TallCrop {
 
 
     /**
-     * Returns true if the block is any type of kelp.
+     * Checks whether the {@link Block provided block} is of type {@link Kelp kelp}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    public boolean isKelp(@NotNull Block block) {
+    public boolean isKelpType(@NotNull Block block) {
         return BlockUtils.isAnyType(block, Material.KELP, Material.KELP_PLANT);
     }
 

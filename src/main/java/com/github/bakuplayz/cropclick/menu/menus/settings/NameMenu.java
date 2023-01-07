@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
@@ -123,7 +123,7 @@ public final class NameMenu extends BaseMenu {
      * @return the seed item.
      */
     private @NotNull ItemStack getSeedItem() {
-        Seed seed = crop.getSeed();
+        BaseSeed seed = crop.getSeed();
 
         assert seed != null; // Only here for the compiler.
 
@@ -147,7 +147,6 @@ public final class NameMenu extends BaseMenu {
      *
      * @return the color codes item.
      */
-    @SuppressWarnings("deprecation")
     private @NotNull ItemStack getColorItem(int startIndex) {
         Material sign = VersionUtils.between(0.0, 13.9)
                         ? Material.LEGACY_SIGN
@@ -196,7 +195,7 @@ public final class NameMenu extends BaseMenu {
 
 
     /**
-     * Gets the drop's name of either the {@link Crop} or {@link Seed}.
+     * Gets the drop's name of either the {@link Crop} or {@link BaseSeed}.
      *
      * @param isCrop true if a crop, otherwise false.
      *

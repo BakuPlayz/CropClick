@@ -64,12 +64,12 @@ public final class PlayerHarvestCropListener implements Listener {
 
 
     /**
-     * If the player is allowed to harvest the crop, then call the PlayerHarvestCropEvent.
+     * Handles all the {@link Player player} interact at {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithCrop(@NotNull PlayerInteractEvent event) {
+    public void onPlayerInteractAtCrop(@NotNull PlayerInteractEvent event) {
         if (!EventUtils.isMainHand(event.getHand())) {
             return;
         }
@@ -103,7 +103,7 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         Crop crop = cropManager.findByBlock(block);
-        if (!cropManager.validate(crop, block)) {
+        if (crop == null) {
             return;
         }
 
@@ -136,9 +136,9 @@ public final class PlayerHarvestCropListener implements Listener {
 
 
     /**
-     * If the player can harvest the crop, then harvest it and replant it.
+     * Handles all the {@link Player player} harvest {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerHarvestCrop(@NotNull PlayerHarvestCropEvent event) {

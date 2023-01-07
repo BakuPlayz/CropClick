@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.crop.crops.tall;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Waterlogged;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
@@ -23,17 +24,29 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class Dripleaf extends TallCrop implements Waterlogged {
 
-    public Dripleaf(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public Dripleaf(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the name of the crop.
+     */
     @Override
     public @NotNull String getName() {
         return "dripleaf";
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop}.
+     *
+     * @param block the crop block.
+     *
+     * @return the age of the crop.
+     */
     @Override
     public int getCurrentAge(@NotNull Block block) {
         int minHeight = block.getLocation().getBlockY();
@@ -51,7 +64,7 @@ public final class Dripleaf extends TallCrop implements Waterlogged {
                 break;
             }
 
-            if (isDripleaf(currentBlock)) {
+            if (isDripleafType(currentBlock)) {
                 ++height;
             }
         }
@@ -60,6 +73,11 @@ public final class Dripleaf extends TallCrop implements Waterlogged {
     }
 
 
+    /**
+     * Gets the {@link Crop crop's} drop.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -71,6 +89,11 @@ public final class Dripleaf extends TallCrop implements Waterlogged {
     }
 
 
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
     @Override
     public void replant(@NotNull Block block) {
         boolean isWaterLogged = false;
@@ -104,12 +127,22 @@ public final class Dripleaf extends TallCrop implements Waterlogged {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.BIG_DRIPLEAF_STEM;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.BIG_DRIPLEAF;
@@ -117,24 +150,13 @@ public final class Dripleaf extends TallCrop implements Waterlogged {
 
 
     /**
-     * Returns true if the given block is dripleaf.
+     * Checks whether the {@link Block provided block} is {@link Waterlogged waterlogged}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    public boolean isDripleaf(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, Material.BIG_DRIPLEAF, Material.BIG_DRIPLEAF_STEM);
-    }
-
-
-    /**
-     * Returns true if the block is waterlogged.
-     *
-     * @param block The block to check
-     *
-     * @return A boolean value.
-     */
+    @Override
     public boolean isWaterLogged(@NotNull Block block) {
         if (!(block.getBlockData() instanceof org.bukkit.block.data.type.Dripleaf)) {
             return false;
@@ -144,16 +166,28 @@ public final class Dripleaf extends TallCrop implements Waterlogged {
 
 
     /**
-     * Set the waterlogged state of the block to the provided waterlogged state.
+     * Sets the {@link Waterlogged waterlogged state} of the {@link Block provided block} to the provided state.
      *
-     * @param block       The block you want to set the waterlogged state of.
-     * @param waterlogged Whether the dripleaf is waterlogged.
+     * @param block       the block to set the state of.
+     * @param waterlogged the state to set.
      */
     @Override
     public void setWaterLogged(@NotNull Block block, boolean waterlogged) {
         org.bukkit.block.data.Waterlogged dripleaf = (org.bukkit.block.data.Waterlogged) block.getBlockData();
         dripleaf.setWaterlogged(waterlogged);
         block.setBlockData(dripleaf);
+    }
+
+
+    /**
+     * Checks whether the {@link Block provided block} is of type {@link Dripleaf drip leaf}.
+     *
+     * @param block the block to check.
+     *
+     * @return true if it is, otherwise false.
+     */
+    public boolean isDripleafType(@NotNull Block block) {
+        return BlockUtils.isAnyType(block, Material.BIG_DRIPLEAF, Material.BIG_DRIPLEAF_STEM);
     }
 
 }

@@ -97,7 +97,7 @@ public final class ItemBuilder {
         this(stack, name, amount);
         this.lore = lore;
     }
-    
+
 
     /**
      * Sets the amount to the provided amount.

@@ -20,15 +20,15 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class RoofCrop extends BaseCrop {
 
-    public RoofCrop(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public RoofCrop(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
     /**
-     * Gets the harvest age of a roof crop.
+     * Gets the harvest age of the {@link RoofCrop extending roof crop}.
      *
-     * @return the harvest age (default: 2).
+     * @return the crop's harvest age (default: 2).
      */
     @Override
     public int getHarvestAge() {
@@ -37,11 +37,11 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     /**
-     * Gets the current age of a roof crop.
+     * Gets the current age of the {@link RoofCrop extending roof crop}.
      *
      * @param block the crop block.
      *
-     * @return the current age.
+     * @return the crop's current age.
      */
     @Override
     public int getCurrentAge(@NotNull Block block) {
@@ -70,9 +70,9 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     /**
-     * Gets the seed of the tall crop.
+     * Gets the {@link Seed seed} of the {@link TallCrop extending roof crop}.
      *
-     * @return the seed of the crop, or null (default: null).
+     * @return the crop's seed, otherwise null (default: null).
      */
     @Override
     public @Nullable Seed getSeed() {
@@ -81,7 +81,7 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     /**
-     * Checks whether the tall crop has a seed.
+     * Checks whether the {@link RoofCrop extending roof crop} has a {@link Seed seed}.
      *
      * @return true if it has, otherwise false (default: false).
      */
@@ -92,16 +92,13 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     /**
-     * "Harvest all the crops, stacked on each other, starting from the bottom."
-     * <p>
-     * Checks whether the roof crop can be harvested,
-     * returning true if it successfully harvested them.
+     * Harvests all the {@link RoofCrop extending roof crops}.
      *
-     * @param player The player to add the drops to.
-     * @param block  The block that was harvested
-     * @param crop   The crop that is being harvested.
+     * @param player the player to add the drops to.
+     * @param block  the crop block that was harvested.
+     * @param crop   the crop that was harvested.
      *
-     * @return The harvest state.
+     * @return true if it harvested all, otherwise false.
      */
     public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;
@@ -120,16 +117,13 @@ public abstract class RoofCrop extends BaseCrop {
 
 
     /**
-     * "Harvest all the crops, stacked on each other, starting from the bottom."
-     * <p>
-     * Checks whether the roof crop can be harvested,
-     * returning true if it successfully harvested them.
+     * Harvests all the {@link RoofCrop extending roof crops}.
      *
-     * @param container The container to add the drops to.
-     * @param block     The block that was harvested
-     * @param crop      The crop that is being harvested.
+     * @param container the container to add the drops to.
+     * @param block     the crop block that was harvested.
+     * @param crop      the crop that was harvested.
      *
-     * @return The harvest state.
+     * @return true if it harvested all, otherwise false.
      */
     public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;

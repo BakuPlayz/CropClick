@@ -276,7 +276,6 @@ public final class AutofarmManager implements Enableable {
      *
      * @return A boolean value.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isUsable(Autofarm autofarm) {
         if (autofarm == null) return false;
         if (!autofarm.isLinked()) return false;
@@ -305,6 +304,7 @@ public final class AutofarmManager implements Enableable {
      *
      * @return A boolean value.
      */
+    @Override
     public boolean isEnabled() {
         return plugin.getConfig().getBoolean("autofarms.isEnabled", true);
     }
@@ -316,7 +316,7 @@ public final class AutofarmManager implements Enableable {
      * @return The amount of farms in the farmStorage.
      */
     public int getAmountOfFarms() {
-        return farmStorage.getFarms().size();
+        return farmStorage.getAutofarms().size();
     }
 
 
@@ -326,7 +326,7 @@ public final class AutofarmManager implements Enableable {
      * @return A list of all the farms in the farmStorage.
      */
     public @NotNull List<Autofarm> getAutofarms() {
-        return new ArrayList<>(farmStorage.getFarms().values());
+        return new ArrayList<>(farmStorage.getAutofarms().values());
     }
 
 }

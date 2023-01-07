@@ -24,6 +24,9 @@ public final class PlayerInteractAtCropEvent extends Event implements Cancellabl
     private final @Getter Block block;
     private final @Getter Player player;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

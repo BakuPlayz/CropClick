@@ -21,6 +21,9 @@ public final class PlayerUnlinkAutofarmEvent extends Event implements Cancellabl
     private final @Getter Player player;
     private final @Getter Autofarm autofarm;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

@@ -13,6 +13,7 @@ import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,7 +45,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
 
 
     /**
-     * Handles all {@link Player players} placing a chest events.
+     * Handles all the {@link Player player} place a {@link Chest chest} events.
      *
      * @param event the event that was fired.
      */
@@ -70,7 +71,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
 
 
     /**
-     * Handles all {@link Player players} updating a {@link Autofarm autofarm} events.
+     * Handles all the {@link Player player} update {@link Autofarm autofarm} link events.
      *
      * @param event the event that was fired.
      */

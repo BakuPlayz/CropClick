@@ -46,7 +46,7 @@ public final class PlayerPlantCropListener implements Listener {
 
 
     /**
-     * Handles all {@link Player players} interacting at a plant events.
+     * Handles all the {@link Player player} place {@link Crop crop} events.
      *
      * @param event the event that was fired.
      */
@@ -72,7 +72,7 @@ public final class PlayerPlantCropListener implements Listener {
         }
 
         Crop crop = cropManager.findByBlock(block);
-        if (!cropManager.validate(crop, block)) {
+        if (crop == null) {
             return;
         }
 
@@ -87,7 +87,7 @@ public final class PlayerPlantCropListener implements Listener {
 
 
     /**
-     * Handles all {@link Player player} crop planting events.
+     * Handles all the {@link Player player} plant {@link Crop crop} events.
      *
      * @param event the event that was fired.
      */

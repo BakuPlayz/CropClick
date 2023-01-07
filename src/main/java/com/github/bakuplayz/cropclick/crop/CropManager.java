@@ -11,7 +11,7 @@ import com.github.bakuplayz.cropclick.crop.crops.roof.GlowBerries;
 import com.github.bakuplayz.cropclick.crop.crops.tall.*;
 import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -66,7 +65,7 @@ public final class CropManager {
 
 
     /**
-     * It adds all the vanilla crops to the list of crops.
+     * Registers all the {@link Crop vanilla crops}.
      */
     private void registerVanillaCrops() {
         if (VersionUtils.supportsBamboos()) {
@@ -110,17 +109,17 @@ public final class CropManager {
 
 
     /**
-     * If the crop type is already registered, throw an exception. Otherwise, register it.
+     * Registers the {@link Crop provided crop}.
      *
-     * @param crop The crop to register.
+     * @param crop the crop to register.
+     *
+     * @throws CropTypeDuplicateException the exception thrown when the crop is already registered.
      */
     public void registerCrop(@NotNull Crop crop)
             throws CropTypeDuplicateException {
 
-        List<Crop> duplicateCrops = getDuplicateCrops(crop);
-
-        if (duplicateCrops.size() > 1) {
-            throw new CropTypeDuplicateException(duplicateCrops);
+        if (isAlreadyRegistered(crop)) {
+            throw new CropTypeDuplicateException();
         }
 
         crops.add(crop);
@@ -129,9 +128,20 @@ public final class CropManager {
 
 
     /**
-     * It adds the crop and seed to the config if they don't already exist.
+     * Unregister the {@link Crop provided crop}.
      *
-     * @param crop The crop to add settings for.
+     * @param crop the crop to unregister.
+     */
+    public void unregisterCrop(@NotNull Crop crop) {
+        crops.remove(crop);
+        removeSettings(crop);
+    }
+
+
+    /**
+     * TODO: Move to config
+     *
+     * @param crop
      */
     private void addSettings(@NotNull Crop crop) {
         String cropName = crop.getName();
@@ -168,7 +178,7 @@ public final class CropManager {
             return;
         }
 
-        Seed seed = crop.getSeed();
+        BaseSeed seed = crop.getSeed();
         String seedName = seed.getName();
         if (!seedSection.doesExist(seedName)) {
             // Drop Settings
@@ -185,25 +195,13 @@ public final class CropManager {
 
 
     /**
-     * It removes a crop from the list of crops.
+     * TODO: Move to config.
      *
-     * @param crop The crop to register.
-     */
-    @SuppressWarnings("unused")
-    public void unregisterCrop(@NotNull Crop crop) {
-        crops.remove(crop);
-        removeSettings(crop);
-    }
-
-
-    /**
-     * It removes the settings for a crop and its seed from the crops.yml file
-     *
-     * @param crop The crop to remove
+     * @param crop
      */
     private void removeSettings(@NotNull Crop crop) {
         if (crop.hasSeed()) {
-            Seed seed = crop.getSeed();
+            BaseSeed seed = crop.getSeed();
             String seedName = seed.getName();
             cropsConfig.getConfig().set("seeds." + seedName, null);
         }
@@ -214,52 +212,11 @@ public final class CropManager {
 
 
     /**
-     * Return true if any of the crops in the list match the block type.
+     * Finds the {@link Crop crop} based on the {@link Block provided block}.
      *
-     * @param block The block to check.
+     * @param block the block to base the findings on.
      *
-     * @return A boolean value.
-     */
-    public boolean isCrop(@NotNull Block block) {
-        return crops.stream().anyMatch(crop -> filterByType(crop, block));
-    }
-
-
-    /**
-     * If the crop and block are not null, return true.
-     *
-     * @param crop  The crop that is being validated.
-     * @param block The block that was broken.
-     *
-     * @return A boolean value.
-     */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean validate(Crop crop, Block block) {
-        return crop != null && block != null;
-    }
-
-
-    /**
-     * If the crop is already clickable (like sweet berries), return true. Otherwise, false.
-     *
-     * @param crop The crop that is being checked.
-     *
-     * @return A boolean value.
-     */
-    public boolean isAlreadyClickable(@NotNull Crop crop) {
-        if (crop instanceof SweetBerries) {
-            return true;
-        }
-        return crop instanceof GlowBerries;
-    }
-
-
-    /**
-     * Find the first crop that matches the given block, or return null if none are found.
-     *
-     * @param block The block to find the crop for.
-     *
-     * @return A crop object.
+     * @return the found crop, otherwise false.
      */
     public @Nullable Crop findByBlock(@NotNull Block block) {
         return crops.stream()
@@ -269,13 +226,12 @@ public final class CropManager {
 
 
     /**
-     * Return the first crop whose name matches the given name, or null if no crop matches.
+     * Finds the {@link Crop crop} based on the provided name.
      *
-     * @param name The name of the crop to find.
+     * @param name the name to base the findings on.
      *
-     * @return A crop with the name specified in the parameter.
+     * @return the found crop, otherwise false.
      */
-    @SuppressWarnings("unused")
     public @Nullable Crop findByName(@NotNull String name) {
         return crops.stream()
                     .filter(crop -> crop.getName().equals(name))
@@ -284,12 +240,12 @@ public final class CropManager {
 
 
     /**
-     * This function returns true if the crop's clickable type is the same as the block's type.
+     * Filters searches based on the {@link Crop crop's} type matching with the {@link Block block's} type.
      *
-     * @param crop  The crop that is being checked.
-     * @param block The block that was clicked.
+     * @param crop  the crop to check.
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if they match, otherwise false.
      */
     private boolean filterByType(@NotNull Crop crop, @NotNull Block block) {
         if (crop instanceof GlowBerries) {
@@ -297,15 +253,15 @@ public final class CropManager {
         }
 
         if (crop instanceof Dripleaf) {
-            return ((Dripleaf) crop).isDripleaf(block);
+            return ((Dripleaf) crop).isDripleafType(block);
         }
 
         if (crop instanceof Kelp) {
-            return ((Kelp) crop).isKelp(block);
+            return ((Kelp) crop).isKelpType(block);
         }
 
         if (crop instanceof Chorus) {
-            return ((Chorus) crop).isChorus(block);
+            return ((Chorus) crop).isChorusType(block);
         }
 
         if (crop instanceof BrownMushroom) {
@@ -321,39 +277,64 @@ public final class CropManager {
 
 
     /**
-     * This function returns true if the two crops are of the same type.
+     * Filters searches based on the {@link Crop first crop's} type matching with the {@link Crop second crop's} type.
      *
-     * @param c1 The crop that is being compared to c2.
-     * @param c2 The crop that is being clicked on.
+     * @param first  the first crop to check.
+     * @param second the second crop to check.
      *
-     * @return A boolean value.
+     * @return true if they match, otherwise false.
      */
-    private boolean filterByType(@NotNull Crop c1, @NotNull Crop c2) {
-        return c1.getClickableType() == c2.getClickableType();
+    private boolean filterByType(@NotNull Crop first, @NotNull Crop second) {
+        return first.getClickableType() == second.getClickableType();
     }
 
 
     /**
-     * Returns the amount of crops.
+     * Checks whether the {@link Crop provided crop} is already clickable in game.
      *
-     * @return The amount of crops.
+     * @param crop the crop to check.
+     *
+     * @return true if it is, otherwise false.
+     */
+    public boolean isAlreadyClickable(@NotNull Crop crop) {
+        if (crop instanceof SweetBerries) {
+            return true;
+        }
+        return crop instanceof GlowBerries;
+    }
+
+
+    /**
+     * Checks whether the {@link Crop provided crop} is already registered.
+     *
+     * @param crop the crop to check.
+     *
+     * @return true if it is, otherwise false.
+     */
+    public boolean isAlreadyRegistered(@NotNull Crop crop) {
+        return crops.stream().anyMatch(c -> filterByType(c, crop));
+    }
+
+
+    /**
+     * Checks whether the {@link Block provided block} is a {@link Crop crop}.
+     *
+     * @param block the block to check.
+     *
+     * @return true if it is, otherwise false.
+     */
+    public boolean isCrop(@NotNull Block block) {
+        return crops.stream().anyMatch(crop -> filterByType(crop, block));
+    }
+
+
+    /**
+     * Gets the amount of {@link #crops registred crops}.
+     *
+     * @return the amount of crops.
      */
     public int getAmountOfCrops() {
         return getCrops().size();
-    }
-
-
-    /**
-     * Get all the crops that are the same type as the given crop.
-     *
-     * @param crop The crop to check for duplicates.
-     *
-     * @return A list of crops that are the same type as the crop passed in.
-     */
-    private @NotNull List<Crop> getDuplicateCrops(@NotNull Crop crop) {
-        return crops.stream()
-                    .filter(c -> filterByType(c, crop))
-                    .collect(Collectors.toList());
     }
 
 }

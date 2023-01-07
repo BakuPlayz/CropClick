@@ -19,6 +19,9 @@ public final class AutofarmUnlinkEvent extends Event implements Cancellable {
 
     private final @Getter Autofarm autofarm;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

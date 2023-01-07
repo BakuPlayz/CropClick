@@ -39,9 +39,9 @@ public final class Drop {
 
 
     /**
-     * If the chance is greater than or equal to a random number between 0 and 1, then drop the drops.
+     * Checks whether the {@link Drop drop} will drop.
      *
-     * @return A boolean value.
+     * @return true if it will, otherwise false.
      */
     public boolean willDrop() {
         return randomChance >= chance;
@@ -49,9 +49,11 @@ public final class Drop {
 
 
     /**
-     * It returns an ItemStack with the type, name, and amount of the Item.
+     * Gets the {@link Drop drop} as an {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @param nameChanged true if the name has been changed, otherwise false.
+     *
+     * @return the drop as an item.
      */
     public @NotNull ItemStack toItemStack(boolean nameChanged) {
         int randomAmount = (int) Math.round(amount * randomChance);

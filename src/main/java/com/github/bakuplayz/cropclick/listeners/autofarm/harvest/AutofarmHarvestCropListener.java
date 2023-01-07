@@ -16,6 +16,7 @@ import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -58,12 +59,12 @@ public final class AutofarmHarvestCropListener implements Listener {
 
 
     /**
-     * If the block is a crop, cancel the event and call a new event.
+     * Handles all the {@link Dispenser dispenser} interact at {@link Crop crop} events.
      *
-     * @param event The event that is being called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onAutofarmInteractWithCrop(@NotNull BlockDispenseEvent event) {
+    public void onDispenserInteractAtCrop(@NotNull BlockDispenseEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
@@ -95,7 +96,7 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         Block facing = findDispenserFacing(block);
         Crop crop = cropManager.findByBlock(facing);
-        if (!cropManager.validate(crop, facing)) {
+        if (crop == null) {
             return;
         }
 
@@ -120,9 +121,9 @@ public final class AutofarmHarvestCropListener implements Listener {
 
 
     /**
-     * If the crop has a drop, harvest it and replant it.
+     * Handles all the {@link Autofarm autofarm} harvest {@link Crop crop} events.
      *
-     * @param event The event that is being called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {

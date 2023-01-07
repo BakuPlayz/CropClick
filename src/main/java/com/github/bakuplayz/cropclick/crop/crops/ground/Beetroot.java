@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.crop.seeds.ground.BeetrootSeed;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Contract;
@@ -54,7 +54,7 @@ public final class Beetroot extends GroundCrop {
 
     @Override
     @Contract(value = " -> new", pure = true)
-    public @NotNull Seed getSeed() {
+    public @NotNull BaseSeed getSeed() {
         return new BeetrootSeed(cropsConfig);
     }
 

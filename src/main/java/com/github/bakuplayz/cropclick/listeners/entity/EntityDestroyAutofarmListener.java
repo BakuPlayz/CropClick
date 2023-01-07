@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
+import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -35,12 +36,12 @@ public final class EntityDestroyAutofarmListener implements Listener {
 
 
     /**
-     * If the autofarms are enabled, and within the explosion, then remove the autofarm from the farm data.
+     * Handles all the {@link Entity entity} explode {@link Autofarm autofarm} events.
      *
-     * @param event The event that is being called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onEntityExplodeBlock(@NotNull EntityExplodeEvent event) {
+    public void onEntityExplodeAutofarm(@NotNull EntityExplodeEvent event) {
         if (event.isCancelled()) return;
 
         if (!autofarmManager.isEnabled()) {
@@ -67,11 +68,11 @@ public final class EntityDestroyAutofarmListener implements Listener {
 
 
     /**
-     * Get all the exploded blocks that are autofarm components.
+     * Gets all the exploded {@link Component autofarm components}.
      *
-     * @param explodedBlocks The list of blocks that were exploded.
+     * @param explodedBlocks the list of exploded blocks.
      *
-     * @return A list of blocks that are autofarm components.
+     * @return the components that exploded.
      */
     private @NotNull List<Block> getExplodedComponents(@NotNull List<Block> explodedBlocks) {
         return explodedBlocks.stream()

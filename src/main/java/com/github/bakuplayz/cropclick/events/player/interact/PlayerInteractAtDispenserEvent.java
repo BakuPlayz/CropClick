@@ -24,6 +24,9 @@ public final class PlayerInteractAtDispenserEvent extends Event implements Cance
     private final @Getter Player player;
     private final @Getter Dispenser dispenser;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

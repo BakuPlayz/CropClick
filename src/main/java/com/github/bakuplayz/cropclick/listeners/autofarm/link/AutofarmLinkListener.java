@@ -38,9 +38,9 @@ public final class AutofarmLinkListener implements Listener {
 
 
     /**
-     * When triggered it links and caches the Autofarm components.
+     * Handles all the {@link Autofarm autofarm} link events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmLink(@NotNull AutofarmLinkEvent event) {
@@ -52,10 +52,13 @@ public final class AutofarmLinkListener implements Listener {
         }
 
         if (isDebugging) {
-            logger.info(String.format("%s (Autofarm): Called the link event!", event.getAutofarm().getShortenedID()));
+            logger.info(String.format(
+                    "%s (Autofarm): Called the link event!",
+                    event.getAutofarm().getShortenedID())
+            );
         }
 
-        farmData.addFarm(event.getAutofarm());
+        farmData.linkFarm(event.getAutofarm());
     }
 
 }

@@ -63,7 +63,7 @@ public final class Chorus extends TallCrop {
         while (stack.size() > 0) {
             Block chorus = stack.pop();
 
-            if (!isChorus(chorus)) {
+            if (!isChorusType(chorus)) {
                 continue;
             }
 
@@ -103,18 +103,31 @@ public final class Chorus extends TallCrop {
     }
 
 
+    /**
+     * @return
+     */
     @Override
     public boolean dropAtLeastOne() {
         return cropSection.shouldDropAtLeastOne(getName(), false);
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the clickable type of the crop.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.CHORUS_PLANT;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the menu type of the crop.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.CHORUS_FRUIT;
@@ -122,13 +135,13 @@ public final class Chorus extends TallCrop {
 
 
     /**
-     * Returns true if the given block is chorus.
+     * Checks whether the {@link Block provided block} is of type {@link Chorus chorus}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    public boolean isChorus(@NotNull Block block) {
+    public boolean isChorusType(@NotNull Block block) {
         return BlockUtils.isAnyType(block, Material.CHORUS_PLANT, Material.CHORUS_FLOWER);
     }
 

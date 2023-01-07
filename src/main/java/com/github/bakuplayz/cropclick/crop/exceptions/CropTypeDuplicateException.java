@@ -16,25 +16,8 @@ import java.util.stream.Collectors;
  */
 public final class CropTypeDuplicateException extends RuntimeException {
 
-    public CropTypeDuplicateException(@NotNull List<Crop> crops) {
-        super(CropTypeDuplicateException.getCropNames(crops) + " has the same click type.", new Throwable("Crops cannot have the same click type."));
-    }
-
-
-    /**
-     * Get the names of all the crops in a list, and join them together into a single string.
-     * <p>
-     * Using static as a workaround for the super constructor issue.
-     * </p>
-     *
-     * @param crops The list of crops to get the names of.
-     *
-     * @return A string of the names of the crops.
-     */
-    private static @NotNull String getCropNames(@NotNull List<Crop> crops) {
-        return crops.stream()
-                    .map(Crop::getName)
-                    .collect(Collectors.joining());
+    public CropTypeDuplicateException() {
+        super("The provided crop was already registered.", new Throwable("Crops cannot have the same click type."));
     }
 
 }

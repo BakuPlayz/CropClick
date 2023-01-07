@@ -32,7 +32,7 @@ public final class PlayerLinkAutofarmListener implements Listener {
 
 
     /**
-     * Handles all {@link Player players} linking an {@link Autofarm} events.
+     * Handles all the {@link Player player} link {@link Autofarm autofarm} events.
      *
      * @param event the event that was fired.
      */

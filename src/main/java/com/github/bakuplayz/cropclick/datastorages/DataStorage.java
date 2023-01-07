@@ -25,11 +25,11 @@ public abstract class DataStorage implements Storageable {
 
 
     protected Gson gson;
-    protected final JsonParser jsonParser;
+    protected JsonParser jsonParser;
 
 
-    protected File file;
-    protected final String fileName;
+    protected @Getter File file;
+    protected @Getter String fileName;
     protected @Getter JsonObject fileData;
 
 
@@ -44,7 +44,7 @@ public abstract class DataStorage implements Storageable {
 
 
     /**
-     * It creates a new file in the plugin's data folder.
+     * Sets up the extending object's {@link DataStorage DataStorage file}.
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setup() {
@@ -63,7 +63,7 @@ public abstract class DataStorage implements Storageable {
 
 
     /**
-     * It reads the file and parses it into the fileData (JsonObject).
+     * Fetches the data from the extending object's {@link DataStorage DataStorage file}.
      */
     public void fetchData() {
         try {
@@ -83,7 +83,7 @@ public abstract class DataStorage implements Storageable {
 
 
     /**
-     * It saves the data to the file.
+     * Saves the data to the extending object's {@link DataStorage DataStorage file}.
      */
     public void saveData() {
         try {

@@ -23,6 +23,9 @@ public final class PlayerPlantCropEvent extends Event implements Cancellable {
     private final @Getter Block block;
     private final @Getter Player player;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

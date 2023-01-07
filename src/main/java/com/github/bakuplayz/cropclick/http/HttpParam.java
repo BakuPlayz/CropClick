@@ -27,9 +27,9 @@ public final class HttpParam {
 
 
     /**
-     * This function returns a string representation of the key-value pair, with the param encoding.
+     * Gets the param as a string representation.
      *
-     * @return The key and value of the entry.
+     * @return the param as a string.
      */
     @Override
     @Contract(pure = true)

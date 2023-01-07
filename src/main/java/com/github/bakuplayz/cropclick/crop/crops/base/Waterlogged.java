@@ -14,19 +14,19 @@ import org.jetbrains.annotations.NotNull;
 public interface Waterlogged {
 
     /**
-     * Checks if the block is waterlogged.
+     * Checks whether the {@link Block provided block} is waterlogged.
      *
-     * @param block The block to check.
+     * @param block the block to check.
      *
-     * @return true if waterlogged, otherwise false.
+     * @return true if it is, otherwise false.
      */
     boolean isWaterLogged(@NotNull Block block);
 
     /**
-     * Set the waterlogged state of the block to the provided waterlogged state.
+     * Sets the waterlogged state of the {@link Block provided block} to the provided state.
      *
-     * @param block       The block you want to set the waterlogged state of.
-     * @param waterlogged The waterlogged state.
+     * @param block       the block to set the state of.
+     * @param waterlogged the state to set.
      */
     void setWaterLogged(@NotNull Block block, boolean waterlogged);
 

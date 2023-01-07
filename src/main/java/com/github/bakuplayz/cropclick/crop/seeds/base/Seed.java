@@ -1,93 +1,67 @@
 package com.github.bakuplayz.cropclick.crop.seeds.base;
 
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.utils.Enableable;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class that represents a seed.
+ * An interface acting as a base for a seed.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class Seed implements BaseSeed, Enableable {
+public interface Seed {
 
-    protected final CropsConfig cropsConfig;
-    protected final SeedConfigSection seedSection;
-
-
-    public Seed(@NotNull CropsConfig config) {
-        this.seedSection = config.getSeedSection();
-        this.cropsConfig = config;
-    }
+    /**
+     * Gets the name of the implementing seed.
+     *
+     * @return the name of the seed.
+     */
+    @NotNull String getName();
 
 
     /**
-     * Checks whether the seed has a drop.
+     * Gets the {@link Drop drop} of the implementing seed.
      *
-     * @return true if the seed has a drop, otherwise false.
+     * @return the drop of the seed.
      */
-    @Override
-    public boolean hasDrop() {
-        return getDrop() != null;
-    }
+    Drop getDrop();
 
 
     /**
-     * Checks whether the seed can be harvested, returning
-     * true if it successfully harvested it.
+     * Checks whether the implementing seed has a drop.
      *
-     * @param inventory The inventory to add the drops to.
-     *
-     * @return The harvest state.
+     * @return true if it has, otherwise false.
      */
-    @Override
-    public boolean harvest(@NotNull Inventory inventory) {
-        if (!hasDrop()) {
-            return false;
-        }
-
-        Drop drop = getDrop();
-        if (!drop.willDrop()) {
-            return false;
-        }
-
-        ItemStack dropItem = drop.toItemStack(
-                hasNameChanged()
-        );
-
-        if (dropItem.getAmount() != 0) {
-            inventory.addItem(dropItem);
-        }
-
-        return true;
-    }
+    boolean hasDrop();
 
 
     /**
-     * Checks whether the seed is enabled.
+     * Harvests the implementing seed.
      *
-     * @return true if the seed is enabled, otherwise false.
+     * @param inventory the inventory to add the drops to.
+     *
+     * @return true if the seed was harvested, otherwise false.
      */
-    @Override
-    public boolean isEnabled() {
-        return seedSection.isEnabled(getName());
-    }
+    boolean harvest(@NotNull Inventory inventory);
 
 
     /**
-     * Checks whether the name has been changed from its default.
+     * Gets the {@link Material menu type} of the implementing seed.
      *
-     * @return true if its changed, otherwise false.
+     * @return the menu type.
      */
-    private boolean hasNameChanged() {
-        return !getName().equals(getDrop().getName());
-    }
+    @NotNull Material getMenuType();
+
+
+    /**
+     * Checks whether the implementing seed is enabled.
+     *
+     * @return true if it is enabled, otherwise false.
+     */
+    boolean isEnabled();
 
 }

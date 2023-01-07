@@ -28,7 +28,7 @@ public final class PlayerJoinListener implements Listener {
 
 
     /**
-     * Handles all {@link Player operators} joining events.
+     * Handles all the {@link Player operator} join events.
      *
      * @param event the event that was fired.
      */

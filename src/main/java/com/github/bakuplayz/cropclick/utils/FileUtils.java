@@ -35,7 +35,7 @@ public final class FileUtils {
             LanguageAPI.Console.FILE_MOVE_FAILED.send(source.getName());
         }
     }
-    
+
 
     /**
      * Copies the contents of the {@link FileConfiguration YAML configuration} to the {@link ConfigurationSection provided section}.

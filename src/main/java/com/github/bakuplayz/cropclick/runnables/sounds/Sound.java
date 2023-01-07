@@ -40,7 +40,7 @@ public final class Sound {
     public static final int MIN_PITCH = 0;
     public static final int MAX_PITCH = 2;
 
-    
+
     private final @Getter String name;
 
     /**

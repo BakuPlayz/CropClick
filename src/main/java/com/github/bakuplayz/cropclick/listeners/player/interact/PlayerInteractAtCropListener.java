@@ -36,9 +36,9 @@ public final class PlayerInteractAtCropListener implements Listener {
 
 
     /**
-     * When a player interacts with a crop, open a menu that allows them to harvest the crop.
+     * Handles all the {@link Player player} interact at {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtCrop(@NotNull PlayerInteractAtCropEvent event) {

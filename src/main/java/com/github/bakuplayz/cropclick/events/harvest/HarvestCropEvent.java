@@ -23,6 +23,9 @@ public abstract class HarvestCropEvent extends Event implements Cancellable {
     private final @Getter Crop crop;
     private final @Getter Block block;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

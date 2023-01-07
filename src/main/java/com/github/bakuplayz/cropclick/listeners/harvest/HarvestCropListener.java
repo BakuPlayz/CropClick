@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.listeners.harvest;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.harvest.HarvestCropEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,9 +32,9 @@ public final class HarvestCropListener implements Listener {
 
 
     /**
-     * If the crop has no drop, cancel the event.
+     * Handles all the harvest {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onHarvestCrop(@NotNull HarvestCropEvent event) {

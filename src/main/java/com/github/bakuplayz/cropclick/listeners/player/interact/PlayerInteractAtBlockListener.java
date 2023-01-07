@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class PlayerInteractAtAutofarmListener implements Listener {
+public final class PlayerInteractAtBlockListener implements Listener {
 
     private final CropManager cropManager;
     private final WorldManager worldManager;
@@ -46,7 +46,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
     private final AutofarmManager autofarmManager;
 
 
-    public PlayerInteractAtAutofarmListener(@NotNull CropClick plugin) {
+    public PlayerInteractAtBlockListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
         this.playersConfig = plugin.getPlayersConfig();
         this.addonManager = plugin.getAddonManager();
@@ -56,10 +56,9 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
 
     /**
-     * If the player is left-clicking a block, and the block is a crop, container, or dispenser, then call the appropriate
-     * event.
+     * Handles all the {@link Player player} interact at {@link Block block} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtBlock(@NotNull PlayerInteractEvent event) {

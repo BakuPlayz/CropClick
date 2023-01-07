@@ -26,6 +26,11 @@ public final class CocoaBean extends WallCrop {
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the name of the crop.
+     */
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
@@ -33,12 +38,22 @@ public final class CocoaBean extends WallCrop {
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age.
+     */
     @Override
     public int getHarvestAge() {
         return 2;
     }
 
 
+    /**
+     * Gets the {@link Crop crop's} drop.
+     *
+     * @return the crop's drop.
+     */
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.COCOA_BEANS,
@@ -49,18 +64,33 @@ public final class CocoaBean extends WallCrop {
     }
 
 
+    /**
+     * Gets the {@link Crop crop's} clickable type.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.COCOA;
     }
 
 
+    /**
+     * Gets the {@link Crop crop's} menu type.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.COCOA_BEANS;
     }
 
 
+    /**
+     * Checks whether the {@link Crop crop} is linkable.
+     *
+     * @return true it is, otherwise false (default: false).
+     */
     @Override
     public boolean isLinkable() {
         return cropSection.isLinkable(getName(), false);

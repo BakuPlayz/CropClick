@@ -4,6 +4,8 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.runnables.particles.Particle;
+import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -21,21 +23,21 @@ import org.jetbrains.annotations.Nullable;
 public interface Crop {
 
     /**
-     * Gets the name of the crop.
+     * Gets the name of the implementing crop.
      *
      * @return the name of the crop.
      */
     @NotNull String getName();
 
     /**
-     * Gets the harvest age of the crop.
+     * Gets the harvest age of the implementing crop.
      *
      * @return the harvest age.
      */
     int getHarvestAge();
 
     /**
-     * Gets the current age of the crop.
+     * Gets the current age of the implementing crop.
      *
      * @param block the crop block.
      *
@@ -44,63 +46,60 @@ public interface Crop {
     int getCurrentAge(@NotNull Block block);
 
     /**
-     * Gets the drop of the crop.
+     * Gets the drop of the implementing crop.
      *
      * @return the drop of the crop.
      */
     Drop getDrop();
 
     /**
-     * Checks whether the crop has a drop.
+     * Checks whether the implementing crop has a drop.
      *
-     * @return true if it has a drop, otherwise false.
+     * @return true if it has, otherwise false.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean hasDrop();
 
     /**
-     * Checks whether the crop should drop at least one drop.
+     * Checks whether the implementing crop should drop at least one drop.
      *
      * @return true if it should, otherwise false.
      */
     boolean dropAtLeastOne();
 
     /**
-     * Gets the seed if it could be found.
+     * Gets the implementing seed.
      *
-     * @return the seed, or null.
+     * @return the found seed, otherwise null.
      */
     @Nullable Seed getSeed();
 
     /**
-     * Checks whether a crop has a seed.
+     * Checks whether the implementing crop has a seed.
      *
-     * @return true if it has a seed, otherwise false.
+     * @return true if it has, otherwise false.
      */
     boolean hasSeed();
 
     /**
-     * Checks whether the crop can be harvested, returning
-     * true if it successfully harvested it.
+     * Harvests the implementing crop.
      *
-     * @param player The player to add the drops to.
+     * @param player the player to add the drops to.
      *
-     * @return the harvest state.
+     * @return true if harvested, otherwise false.
      */
     boolean harvest(@NotNull Player player);
 
     /**
-     * Checks whether the crop can be harvested, returning
-     * true if it successfully harvested it.
+     * Harvests the implementing crop.
      *
-     * @param container The container to add the drops to.
+     * @param container the container to add the drops to.
      *
-     * @return the harvest state.
+     * @return true if harvested, otherwise false.
      */
     boolean harvest(@NotNull Container container);
 
     /**
-     * Checks whether the crop is its harvest age.
+     * Checks whether the implementing crop is at its harvest age.
      *
      * @param block the crop block.
      *
@@ -110,65 +109,65 @@ public interface Crop {
     boolean isHarvestAge(@NotNull Block block);
 
     /**
-     * Checks whether the crop can be harvested by the given player.
+     * Checks whether the {@link Player provided player} can harvest the implementing crop.
      *
      * @param player the player to be checked.
      *
-     * @return true if the player can harvest, otherwise false.
+     * @return true if it can, otherwise false.
      */
     boolean canHarvest(@NotNull Player player);
 
     /**
-     * Checks whether the crop is harvestable at all.
+     * Checks whether the implementing crop is harvestable at all.
      *
      * @return true if it is, otherwise false.
      */
     boolean isHarvestable();
 
     /**
-     * Replants the crop.
+     * Replants the implementing crop.
      *
-     * @param block the crop block.
+     * @param block the crop block to replant.
      */
     void replant(@NotNull Block block);
 
     /**
-     * Checks whether the crop should be replanted.
+     * Checks whether the implementing crop should be replanted.
      *
      * @return true if it should, otherwise false.
      */
     boolean shouldReplant();
 
     /**
-     * Plays the sounds assigned to the crop.
+     * Plays the {@link Sound sounds} assigned to the implementing crop.
      *
      * @param block the crop block.
      */
     void playSounds(@NotNull Block block);
 
     /**
-     * Plays the effects assigned to the crop.
+     * Plays the {@link Particle particles} assigned to the implementing crop.
      *
      * @param block the crop block.
      */
     void playParticles(@NotNull Block block);
 
     /**
-     * Gets the clickable type, meaning the type a {@link Player} or a {@link Autofarm} "clicks" on.
+     * Gets implementing crop's {@link Material clickable type}.
      *
-     * @return the clickable type.
+     * @return the crop's clickable type.
      */
     @NotNull Material getClickableType();
 
     /**
-     * Gets the menu type, meaning the type found in menus.
+     * Gets implementing crop's {@link Material menu type}.
      *
-     * @return the menu type.
+     * @return the crop's menu type.
      */
     @NotNull Material getMenuType();
 
     /**
-     * Checks whether the crop is linkable to an {@link Autofarm}.
+     * Checks whether the implementing crop is linkable to an {@link Autofarm}.
      *
      * @return true if it is, otherwise false.
      */

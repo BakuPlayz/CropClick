@@ -14,15 +14,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class GroundCrop extends BaseCrop {
 
-    public GroundCrop(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public GroundCrop(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
     /**
-     * Gets the harvest age for the crop.
+     * Gets the harvest age of the {@link GroundCrop extending ground crop}.
      *
-     * @return the harvest age (default: 7).
+     * @return the crop's harvest age (default: 7).
      */
     @Override
     public int getHarvestAge() {

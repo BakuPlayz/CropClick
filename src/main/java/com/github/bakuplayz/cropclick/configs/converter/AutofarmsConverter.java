@@ -77,7 +77,7 @@ public final class AutofarmsConverter {
                     oldFarm.getContainerLocation(),
                     oldFarm.getDispenserLocation()
             );
-            storage.addFarm(newFarm);
+            storage.linkFarm(newFarm);
         }
         storage.saveData();
 

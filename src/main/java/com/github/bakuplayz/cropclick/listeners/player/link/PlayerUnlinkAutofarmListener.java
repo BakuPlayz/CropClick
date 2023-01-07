@@ -49,12 +49,12 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
 
     /**
-     * Handles all {@link Player players} interacting at a {@link Autofarm} events.
+     * Handles all the {@link Player player} interact at {@link Autofarm autofarm} events.
      *
      * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithFarm(@NotNull BlockBreakEvent event) {
+    public void onPlayerInteractAtFarm(@NotNull BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
@@ -92,7 +92,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
 
     /**
-     * Handles all {@link Player players} unlinking an {@link Autofarm} events.
+     * Handles all the {@link Player player} unlink an {@link Autofarm autofarm} events.
      *
      * @param event the event that was fired.
      */

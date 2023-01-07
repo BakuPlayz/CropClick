@@ -26,28 +26,40 @@ import java.util.Stack;
  */
 public final class RedMushroom extends Mushroom {
 
-    public RedMushroom(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public RedMushroom(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the name of the crop.
+     */
     @Override
     public @NotNull String getName() {
         return "redMushroom";
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the current age of the crop.
+     */
     @Override
-    public int getCurrentAge(@NotNull Block clickedBlock) {
+    public int getCurrentAge(@NotNull Block block) {
         mushrooms = new Stack<>();
 
         Stack<Block> stack = new Stack<>();
-        stack.push(clickedBlock);
+        stack.push(block);
 
         while (stack.size() > 0) {
             Block mushroom = stack.pop();
 
-            if (!isMushroomBlock(mushroom)) {
+            if (!isMushroomType(mushroom)) {
                 continue;
             }
 
@@ -74,6 +86,11 @@ public final class RedMushroom extends Mushroom {
     }
 
 
+    /**
+     * Gets the {@link Crop crop's} drop.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -85,12 +102,22 @@ public final class RedMushroom extends Mushroom {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the clickable type of the crop.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.MUSHROOM_STEM;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the menu type of the crop.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.RED_MUSHROOM;
@@ -98,18 +125,17 @@ public final class RedMushroom extends Mushroom {
 
 
     /**
-     * Returns true if the function ultimately figures out if, the clicked block,
-     * is included in a red mushroom structure.
+     * Checks whether the {@link Block provided block} is a {@link RedMushroom red mushroom}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public boolean isRedMushroom(@NotNull Block block) {
         for (int y = 0; y < 30; ++y) {
             Block above = block.getRelative(0, y, 0);
 
-            if (isRedMushroomBlock(above)) {
+            if (isRedMushroomType(above)) {
                 return true;
             }
         }
@@ -119,13 +145,13 @@ public final class RedMushroom extends Mushroom {
 
 
     /**
-     * Returns true if the block is any type of Red Mushroom Block.
+     * Checks whether the {@link Block provided block} is of type {@link RedMushroom red mushroom}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    public boolean isRedMushroomBlock(@NotNull Block block) {
+    private boolean isRedMushroomType(@NotNull Block block) {
         return BlockUtils.isSameType(block, Material.RED_MUSHROOM_BLOCK);
     }
 

@@ -50,14 +50,12 @@ public final class PlayerDestroyCropListener implements Listener {
 
 
     /**
-     * If a player breaks a block, and the block is a plantable surface, and the player has permission to destroy crops,
-     * and the world is accessible, and the player can modify the world, and the block is a crop, then call the
-     * PlayerDestroyCropEvent.
+     * Handles all the {@link Player player} interact at {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithCrop(@NotNull BlockBreakEvent event) {
+    public void onPlayerInteractAtCrop(@NotNull BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
@@ -76,7 +74,7 @@ public final class PlayerDestroyCropListener implements Listener {
         }
 
         Crop crop = cropManager.findByBlock(block);
-        if (!cropManager.validate(crop, block)) {
+        if (crop == null) {
             return;
         }
 
@@ -96,9 +94,9 @@ public final class PlayerDestroyCropListener implements Listener {
 
 
     /**
-     * Removing the crop from offline growth and unlinks the crop's linked autofarm, if present.
+     * Handles all the {@link Player player} destroy {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler
     public void onPlayerDestroyCrop(@NotNull PlayerDestroyCropEvent event) {

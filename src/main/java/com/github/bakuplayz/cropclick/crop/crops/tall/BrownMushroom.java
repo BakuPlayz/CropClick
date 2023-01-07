@@ -49,7 +49,7 @@ public final class BrownMushroom extends Mushroom {
         while (stack.size() > 0) {
             Block mushroom = stack.pop();
 
-            if (!isMushroomBlock(mushroom)) {
+            if (!isMushroomType(mushroom)) {
                 continue;
             }
 

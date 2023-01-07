@@ -16,15 +16,15 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class WallCrop extends BaseCrop {
 
-    public WallCrop(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public WallCrop(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
     /**
-     * Gets the seed of the wall crop.
+     * Gets the {@link Seed seed} of the {@link WallCrop extending wall crop}.
      *
-     * @return the wall crop's seed or null (default: null).
+     * @return the seed, otherwise null (default: null).
      */
     @Override
     public @Nullable Seed getSeed() {
@@ -33,9 +33,9 @@ public abstract class WallCrop extends BaseCrop {
 
 
     /**
-     * Checks whether the crop has a seed.
+     * Checks whether the {@link WallCrop extending tall crop} has a {@link Seed seed}.
      *
-     * @return true if it has a seed, otherwise false (default: false).
+     * @return true if it has, otherwise false (default: false).
      */
     @Override
     public boolean hasSeed() {
