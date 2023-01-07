@@ -1,18 +1,41 @@
-##################################################################################
-#                                                                                #
-#  $$$$$$\                                 $$$$$$\  $$\ $$\           $$\        #
-# $$  __$$\                               $$  __$$\ $$ |\__|          $$ |       #
-# $$ /  \__| $$$$$$\   $$$$$$\   $$$$$$\  $$ /  \__|$$ |$$\  $$$$$$$\ $$ |  $$\  #
-# $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  | # 
-# $$ |      $$ |  \__|$$ /  $$ |$$ /  $$ |$$ |      $$ |$$ |$$ /      $$$$$$  /  #
-# $$ |  $$\ $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$\ $$ |$$ |$$ |      $$  _$$<   #
-# \$$$$$$  |$$ |      \$$$$$$  |$$$$$$$  |\$$$$$$  |$$ |$$ |\$$$$$$$\ $$ | \$$\  #
-#  \______/ \__|       \______/ $$  ____/  \______/ \__|\__| \_______|\__|  \__| #
-#                               $$ |                                             #
-#                               $$ |                                             #
-#                               \__|                                             # 
-#                                                                                #       
-##################################################################################
+####################################################################################
+#                                                                                  #
+#   $$$$$$\                                 $$$$$$\  $$\ $$\           $$\         #
+#  $$  __$$\                               $$  __$$\ $$ |\__|          $$ |        #
+#  $$ /  \__| $$$$$$\   $$$$$$\   $$$$$$\  $$ /  \__|$$ |$$\  $$$$$$$\ $$ |  $$\   #
+#  $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  |  #
+#  $$ |      $$ |  \__|$$ /  $$ |$$ /  $$ |$$ |      $$ |$$ |$$ /      $$$$$$  /   #
+#  $$ |  $$\ $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$\ $$ |$$ |$$ |      $$  _$$<    #
+#  \$$$$$$  |$$ |      \$$$$$$  |$$$$$$$  |\$$$$$$  |$$ |$$ |\$$$$$$$\ $$ | \$$\   #
+#   \______/ \__|       \______/ $$  ____/  \______/ \__|\__| \_______|\__|  \__|  #
+#                                $$ |                                              #
+#                                $$ |                                              #
+#                                \__|                                              #
+#                                                                                  #
+####################################################################################
+#                                                                                  #
+#   DEVELOPER CONTACT:                                                             #
+#                                                                                  #
+#   You can reach me via the links below. May it be an issue with CropClick        #
+#   or anything code related you can find me here:                                 #
+#                                                                                  #
+#   Discord: https://discord.gg/HqQqz2Z (Faster replies)                           #
+#   Spigot: https://www.spigotmc.org/resources/craftinggui.72420/                  #
+#                                                                                  #
+####################################################################################
+#                                                                                  #
+#   USAGE:                                                                         #
+#                                                                                  #
+#   This configuration is used to configure the language in menus as well as       #
+#   commands, allowing you to translate CropClick to your own tongue. It can       #
+#   currently only be found in English, however, in the future you may find        #
+#   more.                                                                          #
+#                                                                                  #
+#   OBS! keep note to follow the color code prefixed with '&' also make            #
+#        sure to keep every '%tag%', since they will automatically be              #
+#        filled in by CropClick.                                                   #
+#                                                                                  #
+####################################################################################
 
 command:
   general:
@@ -56,8 +79,9 @@ menu:
       disabled: "Disabled"
 
     updateStates:
-      upToDate: "&aUp to Date"
-      newUpdate: "&aNew Update"
+      upToDate: "&aUp to date"
+      newUpdate: "&aNew update"
+      noUpdateFound: "&eNo update found"
       notYetFetched: "&eNot yet fetched"
       failedToFetch: "&cFailed to fetch"
 
@@ -252,9 +276,14 @@ menu:
       linkFailure: "&cYour link failed to be established!"
 
     glass:
+      itemNameUnclaimed: "&f-"
       itemNameUnlinked: "&7*"
       itemNameSelected: "&b**"
       itemNameLinked: "&e***"
+
+    claim:
+      itemName: "&eClaim"
+      itemStatus: "&7Click to &eclaim &7the autofarm."
 
     toggle:
       itemName: "&eAutofarm"
@@ -274,6 +303,7 @@ menu:
   autofarms:
     itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
+    itemOwnerUnclaimed: "Unclaimed"
 
   addons:
     jobsReborn:

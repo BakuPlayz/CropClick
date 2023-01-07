@@ -1,3 +1,37 @@
+####################################################################################
+#                                                                                  #
+#   $$$$$$\                                 $$$$$$\  $$\ $$\           $$\         #
+#  $$  __$$\                               $$  __$$\ $$ |\__|          $$ |        #
+#  $$ /  \__| $$$$$$\   $$$$$$\   $$$$$$\  $$ /  \__|$$ |$$\  $$$$$$$\ $$ |  $$\   #
+#  $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  |  #
+#  $$ |      $$ |  \__|$$ /  $$ |$$ /  $$ |$$ |      $$ |$$ |$$ /      $$$$$$  /   #
+#  $$ |  $$\ $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$\ $$ |$$ |$$ |      $$  _$$<    #
+#  \$$$$$$  |$$ |      \$$$$$$  |$$$$$$$  |\$$$$$$  |$$ |$$ |\$$$$$$$\ $$ | \$$\   #
+#   \______/ \__|       \______/ $$  ____/  \______/ \__|\__| \_______|\__|  \__|  #
+#                                $$ |                                              #
+#                                $$ |                                              #
+#                                \__|                                              #
+#                                                                                  #
+####################################################################################
+#                                                                                  #
+#   DEVELOPER CONTACT:                                                             #
+#                                                                                  #
+#   You can reach me via the links below. May it be an issue with CropClick        #
+#   or anything code related you can find me here:                                 #
+#                                                                                  #
+#   Discord: https://discord.gg/HqQqz2Z (Faster replies)                           #
+#   Spigot: https://www.spigotmc.org/resources/craftinggui.72420/                  #
+#                                                                                  #
+####################################################################################
+#                                                                                  #
+#   USAGE:                                                                         #
+#                                                                                  #
+#   This configuration is used to change behaviours between CropClick and its      #
+#   addons. Currently, you can only toggle them on and off, but more settings      #
+#   may come later.                                                                #
+#                                                                                  #
+####################################################################################
+
 addons:
   JobsReborn:
     isEnabled: true
