@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Location locations}.
  *
  * @author BakuPlayz
  * @version 2.0.0

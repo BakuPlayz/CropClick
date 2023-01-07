@@ -7,10 +7,11 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class acting a communication tunnel (API) for {@link CropClick} and other plugins.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -47,10 +48,9 @@ public final class CropClickAPI {
      * Gets the AddonManager, which controls all the active and inactive addons.
      */
     private final @Getter AddonManager addonManager;
-    
 
-    public CropClickAPI() {
-        CropClick plugin = CropClick.getPlugin();
+
+    private CropClickAPI(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
         this.cropsConfig = plugin.getCropsConfig();
         this.worldManager = plugin.getWorldManager();

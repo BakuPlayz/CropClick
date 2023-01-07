@@ -10,7 +10,7 @@ import java.util.Random;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an {@link ItemStack item} drop.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -19,38 +19,32 @@ import java.util.Random;
 public final class Drop {
 
     private @Getter final int amount;
-    private @Getter final short damage;
+    private @Getter final int damage;
     private @Getter final String name;
     private @Getter final Material type;
 
-    private final double randomChance;
     private @Getter final double chance;
-
-
-    public Drop(@NotNull Material type,
-                @NotNull String name,
-                int amount,
-                double chance) {
-        this.type = type;
-        this.name = name;
-        this.amount = amount;
-        this.chance = chance;
-        this.damage = -1;
-        this.randomChance = new Random().nextDouble();
-    }
+    private @Getter final double randomChance;
 
 
     public Drop(@NotNull Material type,
                 @NotNull String name,
                 int amount,
                 double chance,
-                short damage) {
+                int damage) {
         this.type = type;
         this.name = name;
         this.amount = amount;
         this.chance = chance;
         this.damage = damage;
         this.randomChance = new Random().nextDouble();
+    }
+
+    public Drop(@NotNull Material type,
+                @NotNull String name,
+                int amount,
+                double chance) {
+        this(type, name, amount, chance, 0);
     }
 
 

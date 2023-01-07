@@ -3,11 +3,13 @@ package com.github.bakuplayz.cropclick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
-import com.github.bakuplayz.cropclick.configs.config.AddonsConfig;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configs.config.LanguageConfig;
-import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
+import com.github.bakuplayz.cropclick.configs.config.*;
+import com.github.bakuplayz.cropclick.configs.converter.AutofarmsConverter;
+import com.github.bakuplayz.cropclick.configs.converter.ConfigConverter;
+import com.github.bakuplayz.cropclick.configs.converter.CropConverter;
+import com.github.bakuplayz.cropclick.configs.converter.PlayerConverter;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
@@ -24,10 +26,12 @@ import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAt
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtContainerListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
+import com.github.bakuplayz.cropclick.listeners.player.join.PlayerJoinListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
+import com.github.bakuplayz.cropclick.metric.Metrics;
 import com.github.bakuplayz.cropclick.permissions.PermissionManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
@@ -41,13 +45,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the core of CropClick; my precious.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public class CropClick extends JavaPlugin {
+public final class CropClick extends JavaPlugin {
+
+    /**
+     * A singleton plugin instance of CropClick, used *ONLY* to communicate with the {@link CropClickAPI}.
+     */
+    private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
     private @Getter CropManager cropManager;
     private @Getter WorldManager worldManager;
@@ -57,6 +66,7 @@ public class CropClick extends JavaPlugin {
     private @Getter AutofarmManager autofarmManager;
     private @Getter PermissionManager permissionManager;
 
+    private @Getter UsageConfig usageConfig;
     private @Getter CropsConfig cropsConfig;
     private @Getter AddonsConfig addonsConfig;
     private @Getter PlayersConfig playersConfig;
@@ -65,11 +75,26 @@ public class CropClick extends JavaPlugin {
     private @Getter WorldDataStorage worldData;
     private @Getter AutofarmDataStorage farmData;
 
-    private static @Getter(AccessLevel.PACKAGE) CropClick plugin;
 
+    /**
+     * A variable used for resetting only the required items, when a reset is called.
+     */
     private boolean isReset;
 
+    /**
+     * A variable used for debugging purposes, when enabled it will, for instance log every event call.
+     */
+    private final @Getter boolean isDebugging = false;
 
+    /**
+     * A variable used for getting statistics using bStats.
+     */
+    private final @Getter(AccessLevel.PACKAGE) Metrics metrics = new Metrics(this, 5160);
+
+
+    /**
+     * It starts the execution of the CropClick, conceptually equivalent to an 'main(args)' run.
+     */
     @Override
     public void onEnable() {
         if (!VersionUtils.between(8.0, 12.9)) {
@@ -84,6 +109,9 @@ public class CropClick extends JavaPlugin {
 
         registerStorages();
         setupStorages();
+
+        handleLegacyConfigs();
+
         startStoragesSaveInterval();
 
         registerManagers();
@@ -94,6 +122,9 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It "ends" the execution of CropClick.
+     */
     @Override
     public void onDisable() {
         CropClick.plugin = null;
@@ -106,7 +137,7 @@ public class CropClick extends JavaPlugin {
 
 
     /**
-     * It resets the plugin (takes long to compute, 90ms+).
+     * It resets the plugin (a very expensive compute).
      */
     public void onReset() {
         this.isReset = true;
@@ -124,25 +155,54 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It converts the old (legacy) configs, their new equivalents.
+     */
+    private void handleLegacyConfigs() {
+        if (usageConfig.isNewFormatVersion()) {
+            return;
+        }
+
+        CropConverter.makeConversion(this);
+        PlayerConverter.makeConversion(this);
+        ConfigConverter.makeConversion(this);
+        AutofarmsConverter.makeConversion(this);
+
+        usageConfig.updateUsageInfo();
+    }
+
+
+    /**
+     * It initializes, loads and setups the referenced configurations, YAML files.
+     */
     public void setupConfigs() {
         LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
-        //getConfig().options().copyDefaults(true);
+        getConfig().options().copyDefaults(true);
         saveConfig();
 
         cropsConfig.setup();
         cropsConfig.setupSections();
+
+        usageConfig.setup();
         addonsConfig.setup();
         playersConfig.setup();
         languageConfig.setup();
     }
 
 
+    /**
+     * It initializes and loads the "overloaded" configuration sections.
+     */
     public void loadConfigSections() {
         cropsConfig.loadSections();
     }
 
 
+    /**
+     * It instantiates the referenced configurations, YAML files.
+     */
     private void registerConfigs() {
+        this.usageConfig = new UsageConfig(this);
         this.cropsConfig = new CropsConfig(this);
         this.addonsConfig = new AddonsConfig(this);
         this.playersConfig = new PlayersConfig(this);
@@ -150,12 +210,18 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It instantiates the referenced storages, JSON files.
+     */
     private void registerStorages() {
         this.worldData = new WorldDataStorage(this);
         this.farmData = new AutofarmDataStorage(this);
     }
 
 
+    /**
+     * It initializes, loads and setups the referenced storages, JSON files.
+     */
     public void setupStorages() {
         farmData.setup();
         if (!isReset) {
@@ -171,13 +237,19 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It initializes the {@link DataStorage#saveData() saveData} interval/task for all the referenced storages, JSON files.
+     */
     private void startStoragesSaveInterval() {
-        long TEN_MINUTES_PERIOD = 12000L;
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, farmData::saveData, 0, TEN_MINUTES_PERIOD);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, worldData::saveData, 0, TEN_MINUTES_PERIOD);
+        final int TEN_MINUTES_PERIOD = 10 * 60 * 20; // Written as ticks (20 per second).
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::saveData, 0, TEN_MINUTES_PERIOD);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::saveData, 0, TEN_MINUTES_PERIOD);
     }
 
 
+    /**
+     * It registers the 'cropclick' command, and its subcommands.
+     */
     private void registerCommands() {
         PluginCommand command = getCommand("cropclick");
         if (command == null) {
@@ -190,11 +262,14 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It instantiates the referenced managers.
+     */
     private void registerManagers() {
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
-        this.autofarmManager = new AutofarmManager(this);
         this.addonManager = new AddonManager(this);
+        this.autofarmManager = new AutofarmManager(this);
 
         if (!isReset) {
             this.updateManager = new UpdateManager(this);
@@ -204,17 +279,22 @@ public class CropClick extends JavaPlugin {
     }
 
 
+    /**
+     * It instantiates and registers the referenced listeners.
+     */
     private void registerListeners() {
         PluginManager manager = Bukkit.getPluginManager();
 
         manager.registerEvents(new MenuListener(), this);
+
+        manager.registerEvents(new PlayerJoinListener(this), this);
 
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);
 
-        manager.registerEvents(new HarvestCropListener(), this);
+        manager.registerEvents(new HarvestCropListener(this), this);
         manager.registerEvents(new PlayerHarvestCropListener(this), this);
         manager.registerEvents(new AutofarmHarvestCropListener(this), this);
 

@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Toggle menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -58,6 +58,8 @@ public final class ToggleMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new SettingsMenu(plugin, player, true));
         handlePagination(clicked);
 
@@ -70,12 +72,17 @@ public final class ToggleMenu extends PaginatedMenu {
                 players.get(index)
         );
 
-        updateMenu();
+        refresh();
     }
 
 
     /**
-     * Get the index of the player item that was clicked on.
+     * "Get the index of the player item that was clicked on."
+     * <p>
+     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
+     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
+     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
+     * </p>
      *
      * @param clicked The item that was clicked.
      *
@@ -91,11 +98,7 @@ public final class ToggleMenu extends PaginatedMenu {
 
 
     /**
-     * "It returns an ItemStack with the name of the player."
-     * <p>
-     * The first thing we do is get the player's name. We use the `MessageUtils` class to beautify the name. This means that
-     * we capitalize the first letter of the name and lowercase the rest.
-     * </p>
+     * It returns an ItemStack with the name of the player.
      *
      * @param playerID The UUID of the player to get the menu item for.
      *
@@ -110,10 +113,12 @@ public final class ToggleMenu extends PaginatedMenu {
                 playersConfig.isEnabled(playerID)
         );
 
+        assert offlinePlayer.getName() != null; // Cannot be null since the playerID grantee a valid ID.
+
         return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(LanguageAPI.Menu.TOGGLE_ITEM_NAME.get(plugin, offlinePlayer.getName()))
                 .setLore(LanguageAPI.Menu.TOGGLE_ITEM_STATUS.get(plugin, status))
-                .toItemStack();
+                .toSkullStack(offlinePlayer);
     }
 
 

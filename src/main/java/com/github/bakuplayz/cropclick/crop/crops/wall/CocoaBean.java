@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the cocoa bean crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class CocoaBean extends WallCrop {

@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Block blocks}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -31,19 +31,6 @@ public final class BlockUtils {
      */
     public static boolean isAir(Block block) {
         return block == null || block.getType() == Material.AIR;
-    }
-
-
-    /**
-     * Returns true if the given block is a plantable surface, false otherwise.
-     *
-     * @param block The block to check.
-     *
-     * @return A boolean value.
-     */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isPlantableSurface(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, Material.SAND, Material.SOIL, Material.ENDER_STONE);
     }
 
 

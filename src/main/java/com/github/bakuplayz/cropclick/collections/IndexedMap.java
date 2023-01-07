@@ -7,14 +7,17 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an indexed map.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public class IndexedMap<E> {
+public abstract class IndexedMap<E> {
 
+    /**
+     * A variable handling the internal mapping.
+     */
     protected final ListOrderedMap<String, E> map;
 
 
@@ -23,16 +26,33 @@ public class IndexedMap<E> {
     }
 
 
-    public void put(@NotNull String name, E item) {
-        map.put(name, item);
+    /**
+     * Puts an item into the map.
+     *
+     * @param key  the key to map.
+     * @param item the item to map to the key.
+     */
+    public void put(@NotNull String key, E item) {
+        map.put(key, item);
     }
 
 
-    public void remove(@NotNull String name) {
-        map.remove(name);
+    /**
+     * Removes an item inside the map.
+     *
+     * @param key the key of the item.
+     */
+    public void remove(@NotNull String key) {
+        map.remove(key);
     }
 
 
+    /**
+     * Swaps two items in the map.
+     *
+     * @param indexOfFirst  the index of the first item.
+     * @param indexOfSecond the index of the second item.
+     */
     public void swap(int indexOfFirst, int indexOfSecond) {
         String firstKey = map.get(indexOfFirst);
         String secondKey = map.get(indexOfSecond);
@@ -45,38 +65,65 @@ public class IndexedMap<E> {
     }
 
 
-    public E get(@NotNull String name) {
-        return map.get(name);
+    /**
+     * Gets an item in the map, using its key.
+     *
+     * @param key the mapped key.
+     *
+     * @return the found item.
+     */
+    public E get(@NotNull String key) {
+        return map.get(key);
     }
 
 
-    public E getOrDefault(@NotNull String name, E item) {
-        return map.getOrDefault(name, item);
-    }
-
-
+    /**
+     * Converts the map to a list.
+     *
+     * @return the map as a list.
+     */
     public List<String> toList() {
         return map.asList();
     }
 
 
+    /**
+     * Gets the underlying map.
+     *
+     * @return the map.
+     */
+    @SuppressWarnings("unused")
     public ListOrderedMap<String, E> toMap() {
         return map;
     }
 
 
-    public int indexOf(@NotNull String name) {
-        if (!hasKey(name)) {
+    /**
+     * Finds the index of a key in the map.
+     *
+     * @param key the mapped key.
+     *
+     * @return the index of the key.
+     */
+    public int indexOf(@NotNull String key) {
+        if (!hasKey(key)) {
             return -1;
         }
 
-        return map.indexOf(name);
+        return map.indexOf(key);
     }
 
 
+    /**
+     * Checks whether the map has the key
+     *
+     * @param key the key to check.
+     *
+     * @return true if it was found, otherwise false.
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean hasKey(@NotNull String name) {
-        return map.containsKey(name);
+    public boolean hasKey(@NotNull String key) {
+        return map.containsKey(key);
     }
 
 }

@@ -8,15 +8,13 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the seed configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class SeedConfigSection extends ConfigSection {
-
-    // TODO: Check through all the comments... I cannot be bothered right now.
 
     private final CropsConfig cropsConfig;
 
@@ -28,11 +26,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Returns true if the seed with the given name exists in the config.
+     * It returns true if the seed, with the given name, exists in the config.
      *
      * @param seedName The name of the seed.
      *
-     * @return A boolean value.
+     * @return The existing state of the seed in the config.
      */
     public boolean doesExist(@NotNull String seedName) {
         return config.get("seeds." + seedName) != null;
@@ -40,11 +38,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Returns the name of the seed drop for the given seed name.
+     * It returns the name of the seed's drop or seed name, if the drop name is not existent.
      *
      * @param seedName The name of the seed.
      *
-     * @return A string
+     * @return The drop name.
      */
     @Contract("_ -> new")
     public @NotNull String getDropName(@NotNull String seedName) {
@@ -53,7 +51,7 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the name of the item that is dropped when a seed is broken.
+     * It sets the name of the drop to the given name.
      *
      * @param seedName The name of the seed.
      * @param newName  The new name of the seed.
@@ -65,11 +63,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Get the amount of seeds that should be dropped when a plant is broken.
+     * It gets the amount of drop that should be dropped when a crop is harvested.
      *
      * @param seedName The name of the seed.
      *
-     * @return The amount of seeds that will drop from a plant.
+     * @return The amount of drop that will be dropped.
      */
     public int getDropAmount(@NotNull String seedName) {
         return getDropAmount(seedName, 0);
@@ -77,12 +75,12 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Get the amount of seeds that should drop from a plant.
+     * It gets the amount of drop that should be dropped when a crop is harvested.
      *
      * @param seedName The name of the seed.
      * @param def      The default value to return if the value is not found.
      *
-     * @return The amount of seeds that will drop from a plant.
+     * @return The amount of drop that will be dropped.
      */
     public int getDropAmount(@NotNull String seedName, int def) {
         return config.getInt("seeds." + seedName + ".drop.amount", def);
@@ -90,10 +88,10 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the amount of seeds that drop from a plant.
+     * It sets the amount of drop should be dropped when a crop is harvested.
      *
      * @param seedName The name of the seed.
-     * @param amount   The amount of seeds to drop.
+     * @param amount   The amount of the drop that should drop.
      */
     public void setDropAmount(@NotNull String seedName, int amount) {
         config.set("seeds." + seedName + ".drop.amount", amount);
@@ -102,11 +100,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Get the chance of a seed dropping from a mob.
+     * It gets the chance of a seed dropping drops (as decimal eg. 0.2).
      *
      * @param seedName The name of the seed.
      *
-     * @return The chance of a seed dropping.
+     * @return The chance of a seed dropping drops (as decimal).
      */
     public double getDropChance(@NotNull String seedName) {
         return getDropChance(seedName, 0.0);
@@ -114,12 +112,12 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Get the chance of a seed dropping from a plant, as a decimal.
+     * It gets the chance of a seed dropping drops (as decimal eg. 0.2).
      *
      * @param seedName The name of the seed.
      * @param def      The default value to return if the config doesn't have the value.
      *
-     * @return The chance of a seed dropping.
+     * @return The chance of a seed dropping drops (as decimal).
      */
     public double getDropChance(@NotNull String seedName, double def) {
         return config.getDouble("seeds." + seedName + ".drop.chance", def) / 100.0d;
@@ -127,10 +125,10 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the chance of a seed dropping.
+     * It sets the chance of a seed dropping drops (as decimal eg. 0.2).
      *
      * @param seedName The name of the seed.
-     * @param chance   The chance of the seed dropping.
+     * @param chance   The chance of a seed dropping drops (as decimal).
      */
     public void setDropChance(@NotNull String seedName, double chance) {
         config.set("seeds." + seedName + ".drop.chance", chance);
@@ -139,7 +137,7 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the seed's enabled state to the value of the boolean parameter
+     * It sets the seed's enabled state, with the given name, to the given value.
      *
      * @param seedName The name of the seed.
      * @param enabled  Whether the seed is enabled.
@@ -151,11 +149,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Returns whether the seed with the given name is enabled.
+     * It returns the seed's, with the given name, enabled state.
      *
      * @param seedName The name of the seed.
      *
-     * @return A boolean value.
+     * @return The enabled state of the seed.
      */
     public boolean isEnabled(@NotNull String seedName) {
         return config.getBoolean("seeds." + seedName + ".isEnabled", true);
@@ -163,7 +161,7 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * Toggle the seed with the given name.
+     * It toggles the seed's, with the given name, enabled state.
      *
      * @param seedName The name of the seed.
      */

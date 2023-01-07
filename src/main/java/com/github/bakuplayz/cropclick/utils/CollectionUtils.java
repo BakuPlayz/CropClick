@@ -3,17 +3,18 @@ package com.github.bakuplayz.cropclick.utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Collection collections}.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class CollectionUtil {
+public final class CollectionUtils {
 
     /**
      * Return a new list with the elements of the given list in reverse order.

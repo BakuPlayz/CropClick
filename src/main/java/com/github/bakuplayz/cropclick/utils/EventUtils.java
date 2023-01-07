@@ -1,12 +1,15 @@
 package com.github.bakuplayz.cropclick.utils;
 
+import com.github.bakuplayz.cropclick.events.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link Event events}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -48,6 +51,19 @@ public final class EventUtils {
      */
     public static boolean isLeftClick(@NotNull Action action) {
         return action == Action.LEFT_CLICK_BLOCK;
+    }
+
+
+    /**
+     * Returns true if the player is using their main hand, false otherwise.
+     *
+     * @param event The event that was called.
+     *
+     * @return The hand that the player is using.
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean isMainHand(@NotNull PlayerInteractEvent event) {
+        return event.getHand() == EquipmentSlot.HAND;
     }
 
 }

@@ -17,13 +17,13 @@ import java.util.Stack;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the brown mushroom crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @see TallCrop
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class BrownMushroom extends Mushroom {

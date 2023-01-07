@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ToggleMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
@@ -10,6 +10,7 @@ import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,7 +23,7 @@ import xyz.xenondevs.particle.ParticleEffect;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Settings menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -31,10 +32,12 @@ import xyz.xenondevs.particle.ParticleEffect;
 public final class SettingsMenu extends Menu {
 
     private final boolean isRedirected;
+    private final boolean supportsParticles;
 
 
     public SettingsMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
         super(plugin, player, LanguageAPI.Menu.SETTINGS_TITLE);
+        this.supportsParticles = !VersionUtils.between(0.0, 13.9);
         this.isRedirected = isRedirected;
     }
 
@@ -42,12 +45,16 @@ public final class SettingsMenu extends Menu {
     @Override
     public void setMenuItems() {
         inventory.setItem(10, getToggleItem());
-        inventory.setItem(13, getParticlesItem());
-        inventory.setItem(16, getSoundsItem());
 
-        inventory.setItem(28, getNameItem());
-        inventory.setItem(31, getAutofarmsItem());
-        inventory.setItem(34, getWorldsItem());
+        if (supportsParticles) {
+            inventory.setItem(13, getParticlesItem());
+        }
+
+        inventory.setItem(supportsParticles ? 16 : 13, getSoundsItem());
+
+        inventory.setItem(supportsParticles ? 28 : 16, getNameItem());
+        inventory.setItem(supportsParticles ? 31 : 28, getAutofarmsItem());
+        inventory.setItem(supportsParticles ? 34 : 31, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -57,15 +64,17 @@ public final class SettingsMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getAutofarmsItem())) {
             toggleAutofarms();
-            updateMenu();
+            refresh();
             return;
         }
 
-        if (clicked.equals(getParticlesItem())) {
+        if (supportsParticles && clicked.equals(getParticlesItem())) {
             new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
         }
 
@@ -87,6 +96,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing autofarms.
+     *
+     * @return An ItemStack representing autofarms.
+     */
     private @NotNull ItemStack getAutofarmsItem() {
         String status = MessageUtils.getEnabledStatus(
                 plugin,
@@ -101,6 +115,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing particles.
+     *
+     * @return An ItemStack representing particles.
+     */
     private @NotNull ItemStack getParticlesItem() {
         return new ItemBuilder(Material.FIREWORK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_PARTICLES_ITEM_NAME)
@@ -110,6 +129,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing sounds.
+     *
+     * @return An ItemStack representing sounds.
+     */
     private @NotNull ItemStack getSoundsItem() {
         return new ItemBuilder(Material.NOTE_BLOCK)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_SOUNDS_ITEM_NAME)
@@ -119,15 +143,25 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the toggle.
+     *
+     * @return An ItemStack representing the toggle.
+     */
     private @NotNull ItemStack getToggleItem() {
         return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
-                .toItemStack();
+                .toSkullStack(player);
     }
 
 
+    /**
+     * It creates an item representing the name.
+     *
+     * @return An ItemStack representing the name.
+     */
     private @NotNull ItemStack getNameItem() {
         return new ItemBuilder(Material.NAME_TAG)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_NAME_ITEM_NAME)
@@ -137,6 +171,11 @@ public final class SettingsMenu extends Menu {
     }
 
 
+    /**
+     * It creates an item representing the worlds.
+     *
+     * @return An ItemStack representing the worlds.
+     */
     private @NotNull ItemStack getWorldsItem() {
         return new ItemBuilder(Material.GRASS)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_WORLDS_ITEM_NAME)

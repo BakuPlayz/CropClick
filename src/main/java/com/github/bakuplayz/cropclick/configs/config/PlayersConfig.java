@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the YAML file: 'players.yml'.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -241,6 +241,7 @@ public final class PlayersConfig extends Config {
     }
 
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isEnabled(@NotNull Player player) {
         return isEnabled(player.getUniqueId().toString());
     }

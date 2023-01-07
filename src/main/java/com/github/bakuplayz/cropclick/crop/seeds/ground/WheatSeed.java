@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.seeds;
+package com.github.bakuplayz.cropclick.crop.seeds.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
@@ -10,16 +10,16 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents a wheat seed.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Seed
+ * @see BaseSeed
  * @since 2.0.0
  */
-public final class BeetrootSeed extends BaseSeed {
+public final class WheatSeed extends Seed {
 
-    public BeetrootSeed(@NotNull CropsConfig config) {
+    public WheatSeed(@NotNull CropsConfig config) {
         super(config);
     }
 
@@ -27,15 +27,15 @@ public final class BeetrootSeed extends BaseSeed {
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
-        return "beetrootSeed";
+        return "wheatSeed";
     }
 
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.BEETROOT_SEEDS,
+        return new Drop(Material.SEEDS,
                 seedSection.getDropName(getName()),
-                seedSection.getDropAmount(getName(), 2),
+                seedSection.getDropAmount(getName(), 3),
                 seedSection.getDropChance(getName(), 80)
         );
     }
@@ -43,7 +43,7 @@ public final class BeetrootSeed extends BaseSeed {
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.BEETROOT_SEEDS;
+        return Material.SEEDS;
     }
 
 }

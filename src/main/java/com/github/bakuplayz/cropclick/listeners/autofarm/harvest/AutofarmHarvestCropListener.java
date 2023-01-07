@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the harvest {@link BaseCrop crop} events caused by a {@link Autofarm}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -39,8 +39,11 @@ public final class AutofarmHarvestCropListener implements Listener {
     private final WorldManager worldManager;
     private final AutofarmManager autofarmManager;
 
-
-    private final HashMap<Crop, Long> harvestedCrops;
+    /**
+     * A map of the crops that have been harvested and the time they were harvested,
+     * in order to render a duplication issue, with crops, obsolete.
+     */
+    private final HashMap<BaseCrop, Long> harvestedCrops;
 
 
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
@@ -89,7 +92,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         }
 
         Block facing = findDispenserFacing(block);
-        Crop crop = cropManager.findByBlock(facing);
+        BaseCrop crop = cropManager.findByBlock(facing);
         if (!cropManager.validate(crop, facing)) {
             return;
         }
@@ -123,27 +126,38 @@ public final class AutofarmHarvestCropListener implements Listener {
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {
         if (event.isCancelled()) return;
 
-        Crop crop = event.getCrop();
+        BaseCrop crop = event.getCrop();
         Block block = event.getBlock();
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
+
+        harvestedCrops.remove(crop);
 
         if (container == null) {
             return;
         }
 
+        boolean wasHarvested;
+
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
-            tallCrop.harvestAll(container, block, crop);
+            wasHarvested = tallCrop.harvestAll(container, block, crop);
         } else {
-            crop.harvest(container);
+            wasHarvested = crop.harvest(container);
+        }
+
+        if (!wasHarvested) {
+            event.setCancelled(true);
+            return;
         }
 
         crop.replant(block);
 
-        System.out.println("Autofarm -- Harvest");
-
-        harvestedCrops.remove(crop);
+        if (plugin.isDebugging()) {
+            plugin
+                    .getLogger()
+                    .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
+        }
     }
 
 
@@ -154,7 +168,7 @@ public final class AutofarmHarvestCropListener implements Listener {
      *
      * @return The block that the dispenser is facing.
      */
-    private Block findDispenserFacing(@NotNull Block block) {
+    private @NotNull Block findDispenserFacing(@NotNull Block block) {
         return block.getRelative(
                 ((Directional) block.getState().getData()).getFacing()
         );

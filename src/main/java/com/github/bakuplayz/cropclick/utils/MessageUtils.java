@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class for {@link LanguageAPI displayed messages} and or {@link String strings}.
  *
  * @author BakuPlayz
  * @version 2.0.0

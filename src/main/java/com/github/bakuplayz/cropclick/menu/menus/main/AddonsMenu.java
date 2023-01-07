@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Addons menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -78,14 +78,16 @@ public final class AddonsMenu extends Menu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new MainMenu(plugin, player));
 
         if (clicked.equals(getJobsItem())) {
-            if (jobsPresent || true) new JobsRebornMenu(plugin, player).open();
+            if (jobsPresent) new JobsRebornMenu(plugin, player).open();
         }
 
         if (clicked.equals(getMCMMOItem())) {
-            if (mmoPresent || true) new McMMOMenu(plugin, player).open();
+            if (mmoPresent) new McMMOMenu(plugin, player).open();
         }
 
         if (clicked.equals(getGrowthItem())) {
@@ -118,11 +120,9 @@ public final class AddonsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.ADDONS_JOBS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_JOBS_ITEM_STATUS.get(plugin, jobsEnabled)
                 ))
-                .setMaterial(
-                        jobsPresent || jobsEnabled ? null : Material.STAINED_GLASS_PANE
-                )
-                .setDamage(jobsEnabled ? -1 : 7)
-                .setDamage(jobsPresent ? -1 : 1)
+                .setMaterial(jobsEnabled ^ jobsPresent, Material.STAINED_GLASS_PANE)
+                .setDamage(!jobsEnabled,7)
+                .setDamage(!jobsPresent, 1)
                 .toItemStack();
     }
 
@@ -139,11 +139,9 @@ public final class AddonsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.ADDONS_MCMMO_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)
                 ))
-                .setMaterial(
-                        mmoPresent || mmoEnabled ? null : Material.STAINED_GLASS_PANE
-                )
-                .setDamage(mmoEnabled ? -1 : 7)
-                .setDamage(mmoPresent ? -1 : 1)
+                .setMaterial(mmoEnabled ^ mmoPresent, Material.STAINED_GLASS_PANE)
+                .setDamage(!mmoEnabled, 7)
+                .setDamage(!mmoPresent, 1)
                 .toItemStack();
     }
 
@@ -160,11 +158,9 @@ public final class AddonsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.ADDONS_GROWTH_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_GROWTH_ITEM_STATUS.get(plugin, growthEnabled)
                 ))
-                .setMaterial(
-                        growthPresent || growthEnabled ? null : Material.STAINED_GLASS_PANE
-                )
-                .setDamage(growthEnabled ? -1 : 7)
-                .setDamage(growthPresent ? -1 : 1)
+                .setMaterial(growthEnabled ^ growthPresent, Material.STAINED_GLASS_PANE)
+                .setDamage(!growthEnabled, 7)
+                .setDamage(!growthPresent, 1)
                 .toItemStack();
     }
 
@@ -181,11 +177,9 @@ public final class AddonsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, residenceEnabled)
                 ))
-                .setMaterial(
-                        residencePresent || residenceEnabled ? null : Material.STAINED_GLASS_PANE
-                )
-                .setDamage(residenceEnabled ? -1 : 7)
-                .setDamage(residencePresent ? -1 : 1)
+                .setMaterial(residenceEnabled ^ residencePresent, Material.STAINED_GLASS_PANE)
+                .setDamage(!residenceEnabled, 7)
+                .setDamage(!residencePresent, 1)
                 .toItemStack();
     }
 
@@ -202,11 +196,9 @@ public final class AddonsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.ADDONS_TOWNY_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_TOWNY_ITEM_STATUS.get(plugin, townyEnabled)
                 ))
-                .setMaterial(
-                        townyPresent || townyEnabled ? null : Material.STAINED_GLASS_PANE
-                )
-                .setDamage(townyEnabled ? -1 : 7)
-                .setDamage(townyPresent ? -1 : 1)
+                .setMaterial(townyEnabled ^ townyPresent, Material.STAINED_GLASS_PANE)
+                .setDamage(!townyEnabled, 7)
+                .setDamage(!townyPresent, 1)
                 .toItemStack();
     }
 
@@ -223,11 +215,9 @@ public final class AddonsMenu extends Menu {
                 .setLore(LanguageAPI.Menu.ADDONS_GUARD_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_GUARD_ITEM_STATUS.get(plugin, guardEnabled)
                 ))
-                .setMaterial(
-                        guardPresent || guardEnabled ? null : Material.STAINED_GLASS_PANE
-                )
-                .setDamage(guardEnabled ? -1 : 7)
-                .setDamage(guardPresent ? -1 : 1)
+                .setMaterial(guardEnabled ^ guardPresent, Material.STAINED_GLASS_PANE)
+                .setDamage(!guardEnabled, 7)
+                .setDamage(!guardPresent, 1)
                 .toItemStack();
     }
 

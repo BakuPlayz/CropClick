@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.listeners.player.interact;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.menu.menus.links.ContainerLinkMenu;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A listener handling all the {@link Container} interactions caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -48,7 +49,7 @@ public final class PlayerInteractAtContainerListener implements Listener {
         Autofarm autofarm = autofarmManager.findAutofarm(block);
 
         if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm.getOwnerID())) {
+            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
                 event.setCancelled(true);
                 return;
             }

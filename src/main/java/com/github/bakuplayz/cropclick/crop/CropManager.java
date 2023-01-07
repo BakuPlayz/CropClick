@@ -5,12 +5,12 @@ import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.*;
 import com.github.bakuplayz.cropclick.crop.crops.tall.*;
 import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.exceptions.CropTypeDuplicateException;
-import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import lombok.Getter;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A manager controlling all the {@link BaseCrop crops}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -33,21 +33,23 @@ import java.util.stream.Collectors;
  */
 public final class CropManager {
 
-
     private final CropsConfig cropsConfig;
     private final CropConfigSection cropSection;
     private final SeedConfigSection seedSection;
     private final AddonConfigSection addonSection;
 
 
-    private final @Getter List<Crop> crops;
+    /**
+     * A variable containing all the registered crops.
+     */
+    private final @Getter List<BaseCrop> crops;
 
 
     /**
-     * A map of the crops that have been harvested and the time they were harvested,
+     * A {@link HashMap map} of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
-    private final @Getter HashMap<Crop, Long> harvestedCrops;
+    private final @Getter HashMap<BaseCrop, Long> harvestedCrops;
 
 
     public CropManager(@NotNull CropClick plugin) {
@@ -73,18 +75,19 @@ public final class CropManager {
         registerCrop(new BrownMushroom(cropsConfig));
         registerCrop(new Cactus(cropsConfig));
         registerCrop(new Carrot(cropsConfig));
+        registerCrop(new CocoaBean(cropsConfig));
 
         if (VersionUtils.supportsChorus()) {
             registerCrop(new Chorus(cropsConfig));
         }
 
-        registerCrop(new CocoaBean(cropsConfig));
         registerCrop(new Melon(cropsConfig));
         registerCrop(new NetherWart(cropsConfig));
         registerCrop(new Potato(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
-        registerCrop(new SugarCane(cropsConfig));
         registerCrop(new RedMushroom(cropsConfig));
+        registerCrop(new SugarCane(cropsConfig));
+
         registerCrop(new Wheat(cropsConfig));
     }
 
@@ -94,10 +97,10 @@ public final class CropManager {
      *
      * @param crop The crop to register.
      */
-    public void registerCrop(@NotNull Crop crop)
+    public void registerCrop(@NotNull BaseCrop crop)
             throws CropTypeDuplicateException {
 
-        List<Crop> duplicateCrops = getDuplicateCrops(crop);
+        List<BaseCrop> duplicateCrops = getDuplicateCrops(crop);
 
         if (duplicateCrops.size() > 1) {
             throw new CropTypeDuplicateException(duplicateCrops);
@@ -113,11 +116,10 @@ public final class CropManager {
      *
      * @param crop The crop to add settings for.
      */
-    private void addSettings(@NotNull Crop crop) {
+    private void addSettings(@NotNull BaseCrop crop) {
         String cropName = crop.getName();
 
         if (!cropSection.doesExist(cropName)) {
-
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = crop.getDrop();
@@ -149,10 +151,9 @@ public final class CropManager {
             return;
         }
 
-        Seed seed = crop.getSeed();
+        BaseSeed seed = crop.getSeed();
         String seedName = seed.getName();
         if (!seedSection.doesExist(seedName)) {
-
             // Drop Settings
             if (crop.hasDrop()) {
                 Drop drop = seed.getDrop();
@@ -171,8 +172,7 @@ public final class CropManager {
      *
      * @param crop The crop to register.
      */
-    @SuppressWarnings("unused")
-    public void unregisterCrop(@NotNull Crop crop) {
+    public void unregisterCrop(@NotNull BaseCrop crop) {
         crops.remove(crop);
         removeSettings(crop);
     }
@@ -183,9 +183,9 @@ public final class CropManager {
      *
      * @param crop The crop to remove
      */
-    private void removeSettings(@NotNull Crop crop) {
+    private void removeSettings(@NotNull BaseCrop crop) {
         if (crop.hasSeed()) {
-            Seed seed = crop.getSeed();
+            BaseSeed seed = crop.getSeed();
             String seedName = seed.getName();
             cropsConfig.getConfig().set("seeds." + seedName, null);
         }
@@ -215,8 +215,7 @@ public final class CropManager {
      *
      * @return A boolean value.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean validate(Crop crop, Block block) {
+    public boolean validate(BaseCrop crop, Block block) {
         return crop != null && block != null;
     }
 
@@ -228,7 +227,7 @@ public final class CropManager {
      *
      * @return A crop object.
      */
-    public @Nullable Crop findByBlock(@NotNull Block block) {
+    public @Nullable BaseCrop findByBlock(@NotNull Block block) {
         return crops.stream()
                     .filter(crop -> filterByType(crop, block))
                     .findFirst().orElse(null);
@@ -242,8 +241,7 @@ public final class CropManager {
      *
      * @return A crop with the name specified in the parameter.
      */
-    @SuppressWarnings("unused")
-    public @Nullable Crop findByName(@NotNull String name) {
+    public @Nullable BaseCrop findByName(@NotNull String name) {
         return crops.stream()
                     .filter(crop -> crop.getName().equals(name))
                     .findFirst().orElse(null);
@@ -258,7 +256,11 @@ public final class CropManager {
      *
      * @return A boolean value.
      */
-    private boolean filterByType(@NotNull Crop crop, @NotNull Block block) {
+    private boolean filterByType(@NotNull BaseCrop crop, @NotNull Block block) {
+        if (crop instanceof Chorus) {
+            return ((Chorus) crop).isChorus(block);
+        }
+
         if (crop instanceof BrownMushroom) {
             return ((BrownMushroom) crop).isBrownMushroom(block);
         }
@@ -279,7 +281,7 @@ public final class CropManager {
      *
      * @return A boolean value.
      */
-    private boolean filterByType(@NotNull Crop c1, @NotNull Crop c2) {
+    private boolean filterByType(@NotNull BaseCrop c1, @NotNull BaseCrop c2) {
         return c1.getClickableType() == c2.getClickableType();
     }
 
@@ -301,7 +303,7 @@ public final class CropManager {
      *
      * @return A list of crops that are the same type as the crop passed in.
      */
-    private @NotNull List<Crop> getDuplicateCrops(@NotNull Crop crop) {
+    private @NotNull List<BaseCrop> getDuplicateCrops(@NotNull BaseCrop crop) {
         return crops.stream()
                     .filter(c -> filterByType(c, crop))
                     .collect(Collectors.toList());

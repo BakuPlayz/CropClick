@@ -1,4 +1,4 @@
-package com.github.bakuplayz.cropclick.crop.seeds;
+package com.github.bakuplayz.cropclick.crop.seeds.ground;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
@@ -10,16 +10,16 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents a beetroot seed.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Seed
+ * @see BaseSeed
  * @since 2.0.0
  */
-public final class PoisonousPotato extends BaseSeed {
+public final class BeetrootSeed extends Seed {
 
-    public PoisonousPotato(@NotNull CropsConfig config) {
+    public BeetrootSeed(@NotNull CropsConfig config) {
         super(config);
     }
 
@@ -27,23 +27,23 @@ public final class PoisonousPotato extends BaseSeed {
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
-        return "poisonousPotato";
+        return "beetrootSeed";
     }
 
 
     @Override
     public @NotNull Drop getDrop() {
-        return new Drop(Material.POISONOUS_POTATO,
+        return new Drop(Material.BEETROOT_SEEDS,
                 seedSection.getDropName(getName()),
-                seedSection.getDropAmount(getName(), 1),
-                seedSection.getDropChance(getName(), 10)
+                seedSection.getDropAmount(getName(), 2),
+                seedSection.getDropChance(getName(), 80)
         );
     }
 
 
     @Override
     public @NotNull Material getMenuType() {
-        return Material.POISONOUS_POTATO;
+        return Material.BEETROOT_SEEDS;
     }
 
 }

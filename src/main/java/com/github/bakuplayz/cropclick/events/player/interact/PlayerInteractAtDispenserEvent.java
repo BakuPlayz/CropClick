@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * An event called when a {@link Player} interact at a {@link Dispenser}.
  *
  * @author BakuPlayz
  * @version 2.0.0

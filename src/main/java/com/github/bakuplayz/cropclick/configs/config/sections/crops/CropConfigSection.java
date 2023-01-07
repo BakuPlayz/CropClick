@@ -8,15 +8,13 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the crop configuration section.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public final class CropConfigSection extends ConfigSection {
-
-    // TODO: Check through all the comments... I cannot be bothered right now.
 
     private final CropsConfig cropsConfig;
 
@@ -28,11 +26,11 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * This function returns true if the crop exists in the config, and false if it doesn't.
+     * It returns true if the crop, with the given name, exists in the config.
      *
      * @param cropName The name of the crop.
      *
-     * @return A boolean value.
+     * @return The existing state of the crop in the config.
      */
     public boolean doesExist(@NotNull String cropName) {
         return config.get("crops." + cropName) != null;
@@ -40,7 +38,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Returns the name of the crop drop item.
+     * It returns the name of the crop's drop or crop name, if the drop name is not existent.
      *
      * @param cropName The name of the crop.
      *
@@ -58,7 +56,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the name of the drop of a crop.
+     * It sets the name of the drop to the given name.
      *
      * @param cropName The name of the crop.
      * @param newName  The new name of the crop.
@@ -70,11 +68,11 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Get the amount of items that a crop will drop when harvested.
+     * It gets the amount of drop that should be dropped when a crop is harvested.
      *
      * @param cropName The name of the crop.
      *
-     * @return The amount of items that will be dropped when the crop is harvested.
+     * @return The amount of drop that will be dropped.
      */
     public int getDropAmount(@NotNull String cropName) {
         return getDropAmount(cropName, 0);
@@ -82,12 +80,12 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Get the amount of items that a crop will drop when harvested.
+     * It gets the amount of drop that should be dropped when a crop is harvested.
      *
      * @param cropName The name of the crop.
      * @param def      The default value to return if the value is not found.
      *
-     * @return The amount of items that will be dropped when the crop is harvested.
+     * @return The amount of drop that will be dropped.
      */
     public int getDropAmount(@NotNull String cropName, int def) {
         return config.getInt("crops." + cropName + ".drop.amount", def);
@@ -95,10 +93,10 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of items that a crop will drop when harvested
+     * It sets the amount of drop should be dropped when a crop is harvested.
      *
      * @param cropName The name of the crop.
-     * @param amount   The amount of the item that will be dropped.
+     * @param amount   The amount of the drop that should drop.
      */
     public void setDropAmount(@NotNull String cropName, int amount) {
         config.set("crops." + cropName + ".drop.amount", amount);
@@ -107,11 +105,11 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Get the chance of a crop dropping an item.
+     * It gets the chance of a crop dropping drops (as decimal eg. 0.2).
      *
      * @param cropName The name of the crop.
      *
-     * @return The chance of a crop dropping an item.
+     * @return The chance of a crop dropping drops (as decimal).
      */
     public double getDropChance(@NotNull String cropName) {
         return getDropChance(cropName, 0.0);
@@ -119,12 +117,12 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Get the chance of a crop dropping its item.
+     * It gets the chance of a crop dropping drops (as decimal eg. 0.2).
      *
      * @param cropName The name of the crop.
      * @param def      The default value to return if the config doesn't have the value.
      *
-     * @return The chance of a crop dropping an item.
+     * @return The chance of a crop dropping a drops (as decimal).
      */
     public double getDropChance(@NotNull String cropName, double def) {
         return config.getDouble("crops." + cropName + ".drop.chance", def) / 100.0d;
@@ -132,10 +130,10 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the chance of a crop dropping an item.
+     * It sets the chance of a crop dropping a drop (as decimal eg. 0.2).
      *
      * @param cropName The name of the crop.
-     * @param chance   The chance that the crop will drop the item.
+     * @param chance   The chance of a crop dropping drops (as decimal).
      */
     public void setDropChance(@NotNull String cropName, double chance) {
         config.set("crops." + cropName + ".drop.chance", chance);
@@ -144,11 +142,11 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Returns whether the crop with the given name is harvestable.
+     * It returns whether the crop, with the given name, is harvestable.
      *
      * @param cropName The name of the crop.
      *
-     * @return A boolean value.
+     * @return The harvestable state of the crop.
      */
     public boolean isHarvestable(@NotNull String cropName) {
         return config.getBoolean("crops." + cropName + ".isHarvestable", true);
@@ -156,7 +154,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Set the crop harvestable state of the crop with the given name to the given value.
+     * It sets the crop harvestable state of the crop, with the given name, to the given value.
      *
      * @param cropName      The name of the crop.
      * @param isHarvestable Whether the crop can be harvested.
@@ -168,7 +166,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * It toggles the crop's harvestable state.
+     * It toggles the crop's, with the given name, harvestable state.
      *
      * @param cropName The name of the crop.
      */
@@ -178,11 +176,11 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Returns whether the crop with the given name is linkable.
+     * It returns whether the crop, with the given name, is linkable.
      *
      * @param cropName The name of the crop.
      *
-     * @return A boolean value.
+     * @return The linkable state of the crop.
      */
     public boolean isLinkable(@NotNull String cropName) {
         return isLinkable(cropName, true);
@@ -190,12 +188,12 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Returns whether the crop with the given name is linkable.
+     * It returns whether the crop, with the given name, is linkable.
      *
      * @param cropName The name of the crop.
      * @param def      The default value to return if the parameter is not found.
      *
-     * @return A boolean value.
+     * @return The linkable state of the crop.
      */
     public boolean isLinkable(@NotNull String cropName, boolean def) {
         return config.getBoolean("crops." + cropName + ".isLinkable", def);
@@ -203,7 +201,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the crop linkable value to the value of the linkable variable
+     * It sets the crop's, with the given name, linkable state to the given value.
      *
      * @param cropName The name of the crop.
      * @param linkable Whether the crop can be linked to a crop.
@@ -215,7 +213,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * It toggles the crop's linkable state.
+     * It toggles the crop's, with the given name, linkable state.
      *
      * @param cropName The name of the crop.
      */
@@ -225,11 +223,11 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Returns whether the crop should replant itself after being harvested.
+     * It returns whether the crop, with the given name, should replant itself after being harvested.
      *
      * @param cropName The name of the crop.
      *
-     * @return A boolean value.
+     * @return The shouldReplant state of the crop.
      */
     public boolean shouldReplant(@NotNull String cropName) {
         return config.getBoolean("crops." + cropName + ".shouldReplant", true);
@@ -237,10 +235,10 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the replant value of a crop to the given value.
+     * It sets the crop's, with the given name, replant state to the given value.
      *
      * @param cropName The name of the crop.
-     * @param replant  Whether the crop should replant itself
+     * @param replant  Whether the crop should replant itself.
      */
     public void setReplant(@NotNull String cropName, boolean replant) {
         config.set("crops." + cropName + ".shouldReplant", replant);
@@ -249,7 +247,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Toggle the value of the shouldReplant key for the crop with the given name.
+     * It toggles the crop's, with the given name, shouldReplant state.
      *
      * @param cropName The name of the crop.
      */
@@ -259,24 +257,24 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Returns whether the crop should drop at least one item.
+     * It returns whether the crop, with the given name, should drop at least one drop.
      *
      * @param cropName The name of the crop.
      *
-     * @return A boolean value.
+     * @return The drop's atLeastOne state of the crop.
      */
     public boolean shouldDropAtLeastOne(@NotNull String cropName) {
-        return config.getBoolean("crops." + cropName + ".drop.atLeastOne", true);
+        return shouldDropAtLeastOne(cropName, true);
     }
 
 
     /**
-     * Returns whether the crop should drop at least one item when harvested.
+     * It returns whether the crop, with the given name, should drop at least one drop.
      *
      * @param cropName The name of the crop.
      * @param def      The default value to return if the config doesn't have the value.
      *
-     * @return A boolean value.
+     * @return The drop's atLeastOne state of the crop.
      */
     public boolean shouldDropAtLeastOne(@NotNull String cropName, boolean def) {
         return config.getBoolean("crops." + cropName + ".drop.atLeastOne", def);
@@ -284,10 +282,10 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * Sets the crop's drop atLeastOne value.
+     * It sets the crop's, with the given name, drop's atLeastOne state.
      *
      * @param cropName   The name of the crop.
-     * @param atLeastOne If true, the crop will always drop at least one item.
+     * @param atLeastOne If true, the crop will always drop at least one drop.
      */
     public void setDropAtLeastOne(@NotNull String cropName, boolean atLeastOne) {
         config.set("crops." + cropName + ".drop.atLeastOne", atLeastOne);
@@ -296,7 +294,7 @@ public final class CropConfigSection extends ConfigSection {
 
 
     /**
-     * It toggles the dropAtLeastOne boolean for the crop with the given name.
+     * It toggles the crop's, with the given name, drop's atLeastOne state.
      *
      * @param cropName The name of the crop.
      */

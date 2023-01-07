@@ -3,6 +3,7 @@ package com.github.bakuplayz.cropclick.autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.Enableable;
 import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an Autofarm.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -26,10 +27,12 @@ import java.util.UUID;
  */
 @ToString
 @EqualsAndHashCode
-public final class Autofarm {
+public final class Autofarm implements Enableable {
+
+    public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     @SerializedName("owner")
-    private final @NotNull @Getter UUID ownerID;
+    private @NotNull @Setter @Getter UUID ownerID;
 
     @SerializedName("farmer")
     private final @NotNull @Getter UUID farmerID;
@@ -160,7 +163,6 @@ public final class Autofarm {
      *
      * @return A boolean value.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isComponentsPresent(@NotNull AutofarmManager manager) {
         if (!isLinked()) {
             return false;

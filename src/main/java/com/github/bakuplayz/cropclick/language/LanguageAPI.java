@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class handling all the shown messages, found in the {@link Console console}, {@link Menu menus} and {@link Command commands}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -23,31 +23,34 @@ import java.util.stream.Collectors;
  */
 public final class LanguageAPI {
 
+    /**
+     * An enumeration handling all the Console messages.
+     */
     public enum Console {
+
         FILE_RELOAD("Reloading &e%s&7."),
         FILE_SETUP_LOAD("Loading &e%s&7."),
         FILE_SAVE_FAILED("Could not save &e%s&7."),
-
         FILE_SETUP_FAILED("Could not setup &e%s&7."),
 
+        FILE_MOVE_FAILED("Could not move &e%s&7."),
+        FILE_COPY_FAILED("Could not copy &e%s&7."),
+
         DATA_STORAGE_LOADING_SETUP("Loading &e%s&7."),
-
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save &e%s&7, due to unknown reasons."),
-
         DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save &e%s&7, due to it being previously removed."),
-
         DATA_STORAGE_LOADED_DATA("Loaded &e%s's &7data."),
-
         DATA_STORAGE_FAILED_LOAD("Could not load &e%s&7."),
-
         DATA_STORAGE_FAILED_SETUP("Could not setup &e%s&7."),
+
         AUTOFARM_STORAGE_FAILED_REMOVE("Unlinked autofarms were unsuccessfully removed."),
 
         FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),
 
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
 
-        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.13 to the latest version. In order to run the plugin, please change to the correct jar for your server version.");
+        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.12. In order to run the plugin, please change to the correct jar for your server version.");
+
 
         private final String message;
 
@@ -100,7 +103,11 @@ public final class LanguageAPI {
 
     }
 
+    /**
+     * An enumeration handling all the Command messages.
+     */
     public enum Command {
+
         PLAYER_ONLY_COMMAND(Category.GENERAL, "playerOnlyCommand"),
         PLAYER_LACK_PERMISSION(Category.GENERAL, "playerLackPermission", "%permission%"),
 
@@ -118,7 +125,9 @@ public final class LanguageAPI {
         RELOAD_FAILED(Category.RELOAD, "failed"),
         RELOAD_SUCCESS(Category.RELOAD, "success");
 
+
         private enum Category {
+
             GENERAL,
             AUTOFARM,
             HELP,
@@ -220,7 +229,11 @@ public final class LanguageAPI {
 
     }
 
+    /**
+     * An enumeration handling all the Menu messages.
+     */
     public enum Menu {
+
         MAIN_TITLE(Category.TITLE, "main"),
         ADDONS_TITLE(Category.TITLE, "addons"),
         HELP_TITLE(Category.TITLE, "help"),
@@ -268,6 +281,7 @@ public final class LanguageAPI {
         GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
 
         GENERAL_STATES_NEW_UPDATE(Category.GENERAL, SubCategory.UPDATE_STATES, "newUpdate"),
+        GENERAL_STATES_NO_UPDATE_FOUND(Category.GENERAL, SubCategory.UPDATE_STATES, "noUpdateFound"),
         GENERAL_STATES_NOT_YET_FETCHED(Category.GENERAL, SubCategory.UPDATE_STATES, "notYetFetched"),
         GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
 
@@ -322,6 +336,7 @@ public final class LanguageAPI {
 
         AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, "itemName", "%name%", "%status%"),
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
+        AUTOFARMS_ITEM_OWNER_UNCLAIMED(Category.AUTOFARMS, "itemOwnerUnclaimed"),
 
         CROPS_ITEM_DROP_NAME(Category.CROPS, SubCategory.ITEM, "dropName", "%name%"),
         CROPS_ITEM_DROP_VALUE(Category.CROPS, SubCategory.ITEM, "dropValue", "%value%"),
@@ -407,10 +422,13 @@ public final class LanguageAPI {
         LINK_GLASS_ITEM_NAME_LINKED(Category.LINK, SubCategory.GLASS, "itemNameLinked"),
         LINK_GLASS_ITEM_NAME_SELECTED(Category.LINK, SubCategory.GLASS, "itemNameSelected"),
         LINK_GLASS_ITEM_NAME_UNLINKED(Category.LINK, SubCategory.GLASS, "itemNameUnlinked"),
+        LINK_GLASS_ITEM_NAME_UNCLAIMED(Category.LINK, SubCategory.GLASS, "itemNameUnclaimed"),
         LINK_STATES_SELECTED(Category.LINK, SubCategory.STATES, "selected"),
         LINK_STATES_UNLINKED(Category.LINK, SubCategory.STATES, "unlinked"),
         LINK_TOGGLE_NAME(Category.LINK, SubCategory.TOGGLE, "itemName"),
         LINK_TOGGLE_STATUS(Category.LINK, SubCategory.TOGGLE, "itemStatus", "%status%"),
+        LINK_CLAIM_NAME(Category.LINK, SubCategory.CLAIM, "itemName"),
+        LINK_CLAIM_STATUS(Category.LINK, SubCategory.CLAIM, "itemStatus"),
 
         MAIN_ADDONS_ITEM_NAME(Category.MAIN, SubCategory.ADDONS, "itemName"),
         MAIN_ADDONS_ITEM_STATUS(Category.MAIN, SubCategory.ADDONS, "itemStatus", "%status%"),
@@ -550,7 +568,9 @@ public final class LanguageAPI {
         WORLD_WORLD_ITEM_TIPS(Category.WORLD, SubCategory.WORLD, "itemTips"),
         WORLD_WORLD_ITEM_STATUS(Category.WORLD, SubCategory.WORLD, "itemStatus", "%status%");
 
+
         private enum Category {
+
             ADDON,
             ADDONS,
             AUTOFARMS,
@@ -601,6 +621,7 @@ public final class LanguageAPI {
         }
 
         private enum SubCategory {
+
             ACTIONS,
             ADD,
             ADDONS,
@@ -610,6 +631,7 @@ public final class LanguageAPI {
             COLOR_CODE("colorCode"),
             CONSOLE,
             CONTAINER,
+            CLAIM,
             CROP,
             CROPS,
             CROP_SETTINGS("cropSettings"),
@@ -655,6 +677,7 @@ public final class LanguageAPI {
             WORLD,
             WORLDS,
             WORLD_GUARD("worldGuard");
+
 
             private final String altName;
 

@@ -13,23 +13,24 @@ import java.io.IOException;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing an JSON file (with the help of the GSON API).
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class DataStorage {
+public abstract class DataStorage implements Storageable {
 
-    protected CropClick plugin;
+    protected final CropClick plugin;
 
-    protected File file;
-    protected String fileName;
-    protected @Getter JsonObject fileData;
-
-    protected JsonParser jsonParser;
 
     protected Gson gson;
+    protected final JsonParser jsonParser;
+
+
+    protected File file;
+    protected final String fileName;
+    protected @Getter JsonObject fileData;
 
 
     public DataStorage(@NotNull CropClick plugin, @NotNull String fileName) {

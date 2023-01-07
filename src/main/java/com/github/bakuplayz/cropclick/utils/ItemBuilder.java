@@ -4,8 +4,11 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import lombok.Getter;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -14,7 +17,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A utility class to manufacture {@link ItemStack items} easier.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -143,6 +146,21 @@ public final class ItemBuilder {
 
 
     /**
+     * Sets the damage to the provided damage, if it matches the condition.
+     *
+     * @param condition the condition to check
+     * @param damage the damage to set, if the condition is true.
+     * @return the ItemBuilder object.
+     */
+    public ItemBuilder setDamage(boolean condition, int damage) {
+        if (condition) {
+            setDamage(damage);
+        }
+        return this;
+    }
+
+
+    /**
      * Sets the material of the item, if the id is greater than -1.
      *
      * @param id The ID of the item.
@@ -165,6 +183,21 @@ public final class ItemBuilder {
      */
     public ItemBuilder setMaterial(Material material) {
         this.material = material == null ? this.material : material;
+        return this;
+    }
+
+
+    /**
+     * Sets the material to the provided material, if it matches the condition.
+     *
+     * @param condition the condition to check
+     * @param material the material to set, if the condition is true.
+     * @return the ItemBuilder object.
+     */
+    public ItemBuilder setMaterial(boolean condition, Material material) {
+        if (condition) {
+            setMaterial(material);
+        }
         return this;
     }
 
@@ -237,6 +270,50 @@ public final class ItemBuilder {
         }
 
         return stack;
+    }
+
+
+    /**
+     * Converts the ItemBuilder to a Skull ItemStack, with a given name of a player.
+     *
+     * @param player The player whose head you want to use.
+     *
+     * @return A new ItemStack with the given properties.
+     */
+    public @NotNull ItemStack toSkullStack(@NotNull OfflinePlayer player) {
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, amount);
+        SkullMeta meta = this.meta != null
+                         ? (SkullMeta) this.meta
+                         : (SkullMeta) stack.getItemMeta();
+
+        assert meta != null; // Only here for the compiler.
+
+        if (lore != null) {
+            meta.setLore(lore);
+        }
+
+        if (name != null) {
+            meta.setDisplayName(name);
+        }
+
+        if (name != null || lore != null) {
+            meta.setOwningPlayer(player);
+            stack.setItemMeta(meta);
+        }
+
+        return stack;
+    }
+
+
+    /**
+     * Returns true if the given item is a tool.
+     *
+     * @param item The item to check
+     *
+     * @return A boolean value.
+     */
+    private boolean isTool(@NotNull ItemStack item) {
+        return EnchantmentTarget.WEAPON.includes(item) || EnchantmentTarget.TOOL.includes(item);
     }
 
 }

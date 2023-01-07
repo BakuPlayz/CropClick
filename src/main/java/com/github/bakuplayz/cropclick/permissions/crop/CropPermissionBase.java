@@ -4,13 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * An enumeration that acts as a base for a specific crop permission for a crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
 public enum CropPermissionBase {
+
     GROUND("(e.g. wheat)."),
     TALL("(e.g. cactus)."),
     WALL("(e.g. cocoa bean).");

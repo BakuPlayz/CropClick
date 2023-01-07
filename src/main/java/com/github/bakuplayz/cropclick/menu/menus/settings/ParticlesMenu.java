@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
+import com.github.bakuplayz.cropclick.menu.base.Menu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the Particles menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
  */
 public final class ParticlesMenu extends PaginatedMenu {
 
-    private final Crop crop;
+    private final BaseCrop crop;
 
     private final List<String> particles;
     private final ParticleConfigSection particleSection;
 
 
-    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
+    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
         super(plugin, player, LanguageAPI.Menu.PARTICLES_TITLE);
         this.particleSection = plugin.getCropsConfig().getParticleSection();
         this.particles = getParticles();
@@ -60,6 +60,8 @@ public final class ParticlesMenu extends PaginatedMenu {
     public void handleMenu(@NotNull InventoryClickEvent event) {
         ItemStack clicked = event.getCurrentItem();
 
+        assert clicked != null; // Only here for the compiler.
+
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.PARTICLES));
         handlePagination(clicked);
 
@@ -78,18 +80,6 @@ public final class ParticlesMenu extends PaginatedMenu {
 
 
     /**
-     * It returns a list of all the particle names.
-     *
-     * @return A list of all the particle effects.
-     */
-    private @NotNull List<String> getParticles() {
-        return ParticleEffect.getAvailableEffects().stream()
-                             .map(ParticleEffect::name)
-                             .collect(Collectors.toList());
-    }
-
-
-    /**
      * "Get the index of the particle item that was clicked on."
      * <p>
      * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
@@ -99,7 +89,7 @@ public final class ParticlesMenu extends PaginatedMenu {
      *
      * @param clicked The item that was clicked.
      *
-     * @return The index of the particle in the menuItems list.
+     * @return The index of the particle in the {@link #menuItems menuItems list}.
      */
     private int getIndexOfParticle(@NotNull ItemStack clicked) {
         return menuItems
@@ -134,12 +124,12 @@ public final class ParticlesMenu extends PaginatedMenu {
                 ));
 
         if (isEnabled) {
-            item.setDamage(5)
-                .setMaterial(Material.STAINED_GLASS_PANE)
+            item.setMaterial(Material.STAINED_GLASS_PANE)
                 .setLore(LanguageAPI.Menu.PARTICLES_ITEM_ORDER.get(
                         plugin,
                         getOrderOfParticle(particle)
-                ));
+                ))
+                .setDamage(5);
         }
 
         return item.toItemStack();
@@ -156,6 +146,18 @@ public final class ParticlesMenu extends PaginatedMenu {
         return particles.stream()
                         .map(this::getMenuItem)
                         .collect(Collectors.toList());
+    }
+
+
+    /**
+     * It returns a list of all the particle names.
+     *
+     * @return A list of all the particle effects.
+     */
+    private @NotNull List<String> getParticles() {
+        return ParticleEffect.getAvailableEffects().stream()
+                             .map(ParticleEffect::name)
+                             .collect(Collectors.toList());
     }
 
 

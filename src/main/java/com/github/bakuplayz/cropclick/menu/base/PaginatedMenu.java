@@ -2,7 +2,6 @@ package com.github.bakuplayz.cropclick.menu.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.Menu;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,7 +12,7 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class representing the base of a Paginated menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -21,11 +20,14 @@ import java.util.List;
  */
 public abstract class PaginatedMenu extends Menu {
 
+    /**
+     * The maximum amount of items per a paginated page.
+     */
     protected final int MAX_ITEMS_PER_PAGE = 21;
 
 
-    protected int itemIndex;
     protected int page;
+    protected int itemIndex;
 
     protected List<ItemStack> menuItems;
 
@@ -92,12 +94,12 @@ public abstract class PaginatedMenu extends Menu {
     protected final void handlePagination(@NotNull ItemStack clicked) {
         if (clicked.equals(getPreviousPageItem())) {
             if (page > 0) page -= 1;
-            updateMenu();
+            refresh();
         }
 
         if (clicked.equals(getNextPageItem())) {
             if (!isIndexOutOfBounds()) page += 1;
-            updateMenu();
+            refresh();
         }
     }
 

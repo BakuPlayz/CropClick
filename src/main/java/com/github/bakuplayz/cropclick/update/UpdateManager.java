@@ -1,10 +1,10 @@
 package com.github.bakuplayz.cropclick.update;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.http.HttpParam;
+import com.github.bakuplayz.cropclick.http.HttpRequestBuilder;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import com.github.bakuplayz.cropclick.utils.Param;
-import com.github.bakuplayz.cropclick.utils.RequestUtil;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,11 +14,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * (DESCRIPTION)
+ * A manager controlling the plugin's updates.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -26,7 +28,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class UpdateManager {
 
+    private final static String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
+
     private final CropClick plugin;
+
 
     private @Getter @Setter(AccessLevel.PRIVATE) String updateURL;
     private @Getter @Setter(AccessLevel.PRIVATE) String updateMessage;
@@ -38,17 +43,35 @@ public final class UpdateManager {
         setUpdateMessage("");
         this.plugin = plugin;
 
-        //startInterval();
+        startInterval();
     }
 
 
     /**
      * It sends the update message to the sender.
      *
-     * @param sender The CommandSender to send the message to.
+     * @param sender The sender to send the message to.
      */
-    public void sendAlert(@NotNull CommandSender sender) {
-        sender.sendMessage(MessageUtils.colorize(updateMessage));
+    public void sendAlert(CommandSender sender) {
+        if (sender instanceof Player) {
+            if (!getPlayerMessageState()) {
+                return;
+            }
+        }
+
+        if (sender instanceof ConsoleCommandSender) {
+            if (!getConsoleMessageState()) {
+                return;
+            }
+        }
+
+        if (updateMessage.equals("")) {
+            //TODO: LanuageAPI later
+            sender.sendMessage(MessageUtils.colorize("[&aCropClick&r] Searched for updates and found none. You are up to date :)"));
+            return;
+        }
+
+        sender.sendMessage(MessageUtils.colorize("[&aCropClick&r] " + updateMessage));
     }
 
 
@@ -69,44 +92,57 @@ public final class UpdateManager {
      * It fetches the new update state and message from the server, defined in the URL variable above.
      */
     private void fetch() {
-        String UPDATE_URL = "https://api.github.com/repos/Bakuplayz/CropClick/releases";
         try {
-            JsonElement response = new RequestUtil(UPDATE_URL)
+            JsonElement response = new HttpRequestBuilder(UPDATE_URL)
                     .setDefaultHeaders()
                     .setParams(
-                            new Param("serverVersion", getServerVersion()),
-                            new Param("pluginVersion", getPluginVersion())
+                            new HttpParam("serverVersion", getServerVersion()),
+                            new HttpParam("pluginVersion", getPluginVersion())
                     )
                     .post(true)
                     .getResponse();
 
             if (response.isJsonNull()) {
+                setUpdateState(UpdateState.FAILED_TO_FETCH);
+                setUpdateMessage("");
+                setUpdateURL("");
+            }
+
+            if (response.getAsJsonObject().has("status")) {
                 setUpdateState(UpdateState.UP_TO_DATE);
                 setUpdateMessage("");
                 setUpdateURL("");
                 return;
             }
 
-            JsonArray updates = response.getAsJsonArray();
-            JsonObject update = updates.get(0).getAsJsonObject();
-            JsonElement updateMsg = update.get("message");
-            JsonElement updateUrl = update.get("url");
-            if (updateMsg.isJsonNull() || updateUrl.isJsonNull()) {
+            JsonArray versions = response.getAsJsonObject().get("versions").getAsJsonArray();
+            if (versions.size() == 0) {
+                setUpdateState(UpdateState.NO_UPDATE_FOUND);
+                setUpdateMessage("");
+                setUpdateURL("");
+                return;
+            }
+
+            JsonObject version = versions.get(0).getAsJsonObject();
+            JsonElement versionMsg = version.get("message");
+            JsonElement versionUrl = version.get("url");
+            if (versionMsg.isJsonNull() || versionUrl.isJsonNull()) {
                 setUpdateState(UpdateState.FAILED_TO_FETCH);
                 setUpdateMessage("");
                 setUpdateURL("");
                 return;
             }
 
-            setUpdateURL(updateUrl.getAsString());
-            setUpdateMessage(updateMsg.getAsString());
+            setUpdateURL(versionUrl.getAsString());
+            setUpdateMessage(versionMsg.getAsString());
             setUpdateState(UpdateState.NEW_UPDATE);
         } catch (Exception e) {
             e.printStackTrace();
             setUpdateState(UpdateState.FAILED_TO_FETCH);
             LanguageAPI.Console.UPDATE_FETCH_FAILED.send();
+        } finally {
+            sendAlert(Bukkit.getConsoleSender());
         }
-
     }
 
 
@@ -150,13 +186,15 @@ public final class UpdateManager {
             case NEW_UPDATE:
                 return LanguageAPI.Menu.GENERAL_STATES_NEW_UPDATE.get(plugin);
 
+            case NO_UPDATE_FOUND:
+                return LanguageAPI.Menu.GENERAL_STATES_NO_UPDATE_FOUND.get(plugin);
+
             case UP_TO_DATE:
                 return LanguageAPI.Menu.GENERAL_STATES_UP_TO_DATE.get(plugin);
 
             case NOT_FETCHED_YET:
                 return LanguageAPI.Menu.GENERAL_STATES_NOT_YET_FETCHED.get(plugin);
 
-            case FAILED_TO_FETCH:
             default:
                 return LanguageAPI.Menu.GENERAL_STATES_FAILED_TO_FETCH.get(plugin);
         }

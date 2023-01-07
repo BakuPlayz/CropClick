@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,14 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the base of a wall crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
-public abstract class WallCrop extends BaseCrop {
+public abstract class WallCrop extends Crop {
 
     public WallCrop(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
@@ -60,12 +61,21 @@ public abstract class WallCrop extends BaseCrop {
     }
 
 
+    /**
+     * Gets the seed of the wall crop.
+     *
+     * @return the wall crop's seed or null (default: null).
+     */
     @Override
-    public @Nullable Seed getSeed() {
+    public @Nullable BaseSeed getSeed() {
         return null;
     }
 
-
+    /**
+     * Checks whether the crop has a seed.
+     *
+     * @return true if it has a seed, otherwise false (default: false).
+     */
     @Override
     public boolean hasSeed() {
         return false;

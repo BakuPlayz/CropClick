@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.crop.CropManager;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.Enableable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,13 +19,13 @@ import java.util.List;
 
 
 /**
- * (DESCRIPTION)
+ * A class managing {@link Autofarm Autofarms}.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class AutofarmManager {
+public final class AutofarmManager implements Enableable {
 
     private final @NotNull CropClick plugin;
     private final @NotNull CropManager cropManager;
@@ -145,11 +146,9 @@ public final class AutofarmManager {
             return farmStorage.findFarmByCrop(block);
         }
 
-        if (BlockUtils.isPlantableSurface(block)) {
-            Block blockAbove = block.getRelative(BlockFace.UP);
-            if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
-                return farmStorage.findFarmByCrop(blockAbove);
-            }
+        Block blockAbove = block.getRelative(BlockFace.UP);
+        if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
+            return farmStorage.findFarmByCrop(blockAbove);
         }
 
         return null;

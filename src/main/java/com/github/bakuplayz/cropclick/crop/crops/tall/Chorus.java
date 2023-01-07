@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import com.github.bakuplayz.cropclick.utils.CollectionUtil;
+import com.github.bakuplayz.cropclick.utils.CollectionUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,12 +19,12 @@ import java.util.Stack;
 
 
 /**
- * (DESCRIPTION)
+ * A class that represents the chorus crop.
  *
- * @author BakuPlayz, Hannes Blåman
+ * @author BakuPlayz, <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
  * @version 2.0.0
- * @see BaseCrop
  * @see Crop
+ * @see BaseCrop
  * @since 2.0.0
  */
 public final class Chorus extends TallCrop {
@@ -81,8 +81,8 @@ public final class Chorus extends TallCrop {
 
     @Override
     public void replant(@NotNull Block block) {
-        CollectionUtil.reverseOrder(choruses)
-                      .forEach(b -> b.setType(Material.AIR));
+        CollectionUtils.reverseOrder(choruses)
+                       .forEach(b -> b.setType(Material.AIR));
 
         choruses = new ArrayList<>();
     }

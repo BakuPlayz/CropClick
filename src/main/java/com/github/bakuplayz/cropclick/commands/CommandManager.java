@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * (DESCRIPTION)
+ * A manager handling commands.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -30,6 +30,9 @@ public final class CommandManager implements TabExecutor {
 
     private final CropClick plugin;
 
+    /**
+     * A variable containing all the registered commands.
+     */
     private final @Getter List<Subcommand> commands;
 
 
@@ -45,7 +48,7 @@ public final class CommandManager implements TabExecutor {
      * Registers all the commands, by adding them to the commands list.
      */
     private void registerCommands() {
-        commands.add(new AutofarmCommand(plugin));
+        commands.add(new AutofarmsCommand(plugin));
         commands.add(new HelpCommand(plugin));
         commands.add(new ReloadCommand(plugin));
         commands.add(new ResetCommand(plugin));
