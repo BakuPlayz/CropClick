@@ -22,17 +22,54 @@ public final class FileUtils {
     /**
      * Moves the {@link File source file} to the {@link File target file}.
      *
-     * @param source the source file.
-     * @param target the target file.
+     * @param source      the source file.
+     * @param target      the target file.
+     * @param ignoreError true if errors should be ignored, otherwise false.
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void move(@NotNull File source, @NotNull File target) {
+    public static void move(@NotNull File source, @NotNull File target, boolean ignoreError) {
         try {
             target.getParentFile().mkdirs();
             Files.move(source.toPath(), target.toPath());
         } catch (IOException e) {
+            if (ignoreError) {
+                return;
+            }
             e.printStackTrace();
             LanguageAPI.Console.FILE_MOVE_FAILED.send(source.getName());
+        }
+    }
+
+
+    /**
+     * Moves the {@link File source file} to the {@link File target file}.
+     *
+     * @param source the source file.
+     * @param target the target file.
+     */
+    public static void move(@NotNull File source, @NotNull File target) {
+        move(source, target, false);
+    }
+
+
+    /**
+     * Copies the contents of the {@link FileConfiguration YAML configuration} to the {@link ConfigurationSection provided section}.
+     *
+     * @param config      the config to copy.
+     * @param section     the section to copy it to.
+     * @param ignoreError true if errors should be ignored, otherwise false.
+     */
+    public static void copyYamlTo(@NotNull FileConfiguration config,
+                                  @NotNull ConfigurationSection section,
+                                  boolean ignoreError) {
+        try {
+            config.save(section.toString());
+        } catch (IOException e) {
+            if (ignoreError) {
+                return;
+            }
+            e.printStackTrace();
+            LanguageAPI.Console.FILE_COPY_FAILED.send(config.getName());
         }
     }
 
@@ -44,12 +81,8 @@ public final class FileUtils {
      * @param section the section to copy it to.
      */
     public static void copyYamlTo(@NotNull FileConfiguration config, @NotNull ConfigurationSection section) {
-        try {
-            config.save(section.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            LanguageAPI.Console.FILE_COPY_FAILED.send(config.getName());
-        }
+        copyYamlTo(config, section, false);
     }
+
 
 }

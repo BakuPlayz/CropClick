@@ -81,7 +81,7 @@ public final class AutofarmsConverter {
         }
         storage.saveData();
 
-        FileUtils.move(inFile, outFile);
+        FileUtils.move(inFile, outFile, true);
     }
 
 

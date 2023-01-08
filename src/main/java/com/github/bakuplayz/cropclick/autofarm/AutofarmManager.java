@@ -164,9 +164,9 @@ public final class AutofarmManager implements Enableable {
      *
      * @param player the player to get the selected location for.
      *
-     * @return the selected crop's location.
+     * @return the selected crop's location, otherwise null.
      */
-    public Location getSelectedCrop(@NotNull Player player) {
+    public @Nullable Location getSelectedCrop(@NotNull Player player) {
         return playersConfig.getSelectedCrop(player);
     }
 
@@ -176,9 +176,9 @@ public final class AutofarmManager implements Enableable {
      *
      * @param player the player to get the selected location for.
      *
-     * @return the selected container's location.
+     * @return the selected container's location, otherwise null.
      */
-    public Location getSelectedContainer(@NotNull Player player) {
+    public @Nullable Location getSelectedContainer(@NotNull Player player) {
         return playersConfig.getSelectedContainer(player);
     }
 
@@ -188,9 +188,9 @@ public final class AutofarmManager implements Enableable {
      *
      * @param player the player to get the selected location for.
      *
-     * @return the selected dispenser's location.
+     * @return the selected dispenser's location, otherwise null.
      */
-    public Location getSelectedDispenser(@NotNull Player player) {
+    public @Nullable Location getSelectedDispenser(@NotNull Player player) {
         return playersConfig.getSelectedDispenser(player);
     }
 

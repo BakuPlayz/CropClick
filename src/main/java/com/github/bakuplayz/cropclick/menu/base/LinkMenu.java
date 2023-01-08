@@ -293,8 +293,19 @@ public abstract class LinkMenu extends BaseMenu {
         if (!isDispenserSelected) return;
 
         Location crop = autofarmManager.getSelectedCrop(player);
+        if (crop == null) {
+            return;
+        }
+
         Location container = autofarmManager.getSelectedContainer(player);
+        if (container == null) {
+            return;
+        }
+
         Location dispenser = autofarmManager.getSelectedDispenser(player);
+        if (dispenser == null) {
+            return;
+        }
 
         autofarmManager.deselectComponents(player);
         player.closeInventory();

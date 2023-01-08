@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -153,10 +154,10 @@ public final class PlayersConfig extends Config {
      *
      * @param player the player to get the selected location from.
      *
-     * @return the selected crop's location.
+     * @return the selected crop's location, otherwise null.
      */
-    public Location getSelectedCrop(@NotNull Player player) {
-        return (Location) config.get(player.getUniqueId() + ".crop");
+    public @Nullable Location getSelectedCrop(@NotNull Player player) {
+        return (Location) config.get(player.getUniqueId() + ".crop", null);
     }
 
 
@@ -165,10 +166,10 @@ public final class PlayersConfig extends Config {
      *
      * @param player the player to get the selected location from.
      *
-     * @return the selected container's location.
+     * @return the selected container's location, otherwise null.
      */
-    public Location getSelectedContainer(@NotNull Player player) {
-        return (Location) config.get(player.getUniqueId() + ".container");
+    public @Nullable Location getSelectedContainer(@NotNull Player player) {
+        return (Location) config.get(player.getUniqueId() + ".container", null);
     }
 
 
@@ -177,10 +178,10 @@ public final class PlayersConfig extends Config {
      *
      * @param player the player to get the selected location from
      *
-     * @return the selected dispenser's location.
+     * @return the selected dispenser's location, otherwise null.
      */
-    public Location getSelectedDispenser(@NotNull Player player) {
-        return (Location) config.get(player.getUniqueId() + ".dispenser");
+    public @Nullable Location getSelectedDispenser(@NotNull Player player) {
+        return (Location) config.get(player.getUniqueId() + ".dispenser", null);
     }
 
 
@@ -194,7 +195,8 @@ public final class PlayersConfig extends Config {
      */
     public boolean isCropSelected(@NotNull Player player, @NotNull Block block) {
         if (AutofarmUtils.isCrop(plugin.getCropManager(), block)) {
-            return getSelectedCrop(player).equals(block.getLocation());
+            Location crop = getSelectedCrop(player);
+            return crop != null && crop.equals(block.getLocation());
         }
         return false;
     }
@@ -210,7 +212,8 @@ public final class PlayersConfig extends Config {
      */
     public boolean isContainerSelected(@NotNull Player player, @NotNull Block block) {
         if (AutofarmUtils.isContainer(block)) {
-            return getSelectedContainer(player).equals(block.getLocation());
+            Location container = getSelectedContainer(player);
+            return container != null && container.equals(block.getLocation());
         }
         return false;
     }
@@ -226,7 +229,8 @@ public final class PlayersConfig extends Config {
      */
     public boolean isDispenserSelected(@NotNull Player player, @NotNull Block block) {
         if (AutofarmUtils.isDispenser(block)) {
-            return getSelectedDispenser(player).equals(block.getLocation());
+            Location dispenser = getSelectedDispenser(player);
+            return dispenser != null && dispenser.equals(block.getLocation());
         }
         return false;
     }
