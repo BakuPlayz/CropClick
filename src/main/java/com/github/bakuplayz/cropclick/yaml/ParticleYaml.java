@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 /**
- * A class representing an Particle object as YAML.
+ * A class representing a Particle object as YAML.
  *
  * @author BakuPlayz
  * @version 2.0.0
