@@ -20,6 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 
 /**
  * A listener handling all the {@link Crop crop} plant events caused by a {@link Player}.
@@ -30,6 +32,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerPlantCropListener implements Listener {
 
+    private final Logger logger;
+    private final boolean isDebugging;
+
     private final CropManager cropManager;
     private final AddonManager addonManager;
     private final WorldManager worldManager;
@@ -38,6 +43,8 @@ public final class PlayerPlantCropListener implements Listener {
 
 
     public PlayerPlantCropListener(@NotNull CropClick plugin) {
+        this.logger = plugin.getLogger();
+        this.isDebugging = plugin.isDebugging();
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
@@ -94,6 +101,10 @@ public final class PlayerPlantCropListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {
         if (event.isCancelled()) return;
+
+        if (isDebugging) {
+            logger.info(String.format("%s (Player): Called the plant crop event!", event.getPlayer().getName()));
+        }
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
             growthAddon.registerCrop(event.getBlock().getLocation());

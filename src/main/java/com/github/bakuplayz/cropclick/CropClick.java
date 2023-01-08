@@ -304,12 +304,12 @@ public final class CropClick extends JavaPlugin {
         manager.registerEvents(new PlayerHarvestCropListener(this), this);
         manager.registerEvents(new AutofarmHarvestCropListener(this), this);
 
+        manager.registerEvents(new PlayerPlantCropListener(this), this);
+        manager.registerEvents(new PlayerDestroyCropListener(this), this);
+
         manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
         manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
         manager.registerEvents(new PlayerLinkAutofarmListener(this), this);
-
-        manager.registerEvents(new PlayerPlantCropListener(this), this);
-        manager.registerEvents(new PlayerDestroyCropListener(this), this);
 
         manager.registerEvents(new AutofarmUpdateListener(this), this);
         manager.registerEvents(new AutofarmUnlinkListener(this), this);

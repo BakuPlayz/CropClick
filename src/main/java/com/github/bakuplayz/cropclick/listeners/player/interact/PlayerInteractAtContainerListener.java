@@ -9,7 +9,6 @@ import com.github.bakuplayz.cropclick.menu.menus.links.ContainerLinkMenu;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import org.bukkit.block.Block;
-import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -59,6 +58,12 @@ public final class PlayerInteractAtContainerListener implements Listener {
                 AutofarmUtils.addCachedID(plugin, autofarm);
             }
         }
+
+        if (plugin.isDebugging()) {
+            plugin.getLogger()
+                  .info(String.format("%s (Player): Called the interact at container event!", player.getName()));
+        }
+
 
         new ContainerLinkMenu(
                 plugin,

@@ -60,6 +60,12 @@ public final class PlayerInteractAtDispenserListener implements Listener {
             }
         }
 
+        if (plugin.isDebugging()) {
+            plugin.getLogger()
+                  .info(String.format("%s (Player): Called the interact at dispenser event!", player.getName()));
+        }
+
+
         new DispenserLinkMenu(
                 plugin,
                 player,
