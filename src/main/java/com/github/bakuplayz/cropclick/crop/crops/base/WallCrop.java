@@ -33,7 +33,7 @@ public abstract class WallCrop extends BaseCrop {
 
 
     /**
-     * Checks whether the {@link WallCrop extending tall crop} has a {@link Seed seed}.
+     * Checks whether the {@link WallCrop extending wall crop} has a {@link Seed seed}.
      *
      * @return true if it has, otherwise false (default: false).
      */
