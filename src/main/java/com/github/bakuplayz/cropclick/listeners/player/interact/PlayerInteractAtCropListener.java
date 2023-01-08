@@ -71,6 +71,11 @@ public final class PlayerInteractAtCropListener implements Listener {
             }
         }
 
+        if (plugin.isDebugging()) {
+            plugin.getLogger()
+                  .info(String.format("%s (Player): Called the interact at crop event!", player.getName()));
+        }
+
         new CropLinkMenu(
                 plugin,
                 player,

@@ -12,10 +12,7 @@ import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
-import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
-import com.github.bakuplayz.cropclick.utils.BlockUtils;
-import com.github.bakuplayz.cropclick.utils.EventUtils;
-import com.github.bakuplayz.cropclick.utils.PermissionUtils;
+import com.github.bakuplayz.cropclick.utils.*;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -29,6 +26,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 
 /**
  * A listener handling all the {@link Autofarm} interactions caused by a {@link Player}.
@@ -38,6 +37,9 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 public final class PlayerInteractAtAutofarmListener implements Listener {
+
+    private final Logger logger;
+    private final boolean isDebugging;
 
     private final CropManager cropManager;
     private final WorldManager worldManager;
@@ -52,6 +54,8 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         this.addonManager = plugin.getAddonManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
+        this.isDebugging = plugin.isDebugging();
+        this.logger = plugin.getLogger();
     }
 
 
@@ -62,7 +66,7 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtBlock(@NotNull PlayerInteractEvent event) {
-        if (!EventUtils.isMainHand(event.getHand())) {
+        if (VersionUtils.between(12, 12.9) && !EventUtils.isMainHand(event.getHand())) {
             return;
         }
 
@@ -104,6 +108,10 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
         if (autofarmManager.isComponent(block)) {
             event.setCancelled(true);
+        }
+
+        if (isDebugging) {
+            logger.info(String.format("%s (Player): Called the interact at autofarm event!", player.getName()));
         }
 
         if (AutofarmUtils.isContainer(block)) {

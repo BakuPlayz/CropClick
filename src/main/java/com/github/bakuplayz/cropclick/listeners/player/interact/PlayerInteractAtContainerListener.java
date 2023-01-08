@@ -59,6 +59,11 @@ public final class PlayerInteractAtContainerListener implements Listener {
             }
         }
 
+        if (plugin.isDebugging()) {
+            plugin.getLogger()
+                  .info(String.format("%s (Player): Called the interact at container event!", player.getName()));
+        }
+
         new ContainerLinkMenu(
                 plugin,
                 player,

@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 
 /**
  * A listener handling all the {@link Player} join events caused by a {@link Player}.
@@ -19,11 +21,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerJoinListener implements Listener {
 
+    private final Logger logger;
+    private final boolean isDebugging;
+
     private final UpdateManager updateManager;
 
 
     public PlayerJoinListener(@NotNull CropClick plugin) {
         this.updateManager = plugin.getUpdateManager();
+        this.isDebugging = plugin.isDebugging();
+        this.logger = plugin.getLogger();
     }
 
 
@@ -37,6 +44,10 @@ public final class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
 
         if (player.isOp()) {
+            if (isDebugging) {
+                logger.info(String.format("%s (Player): Called the join event!", player.getName()));
+            }
+
             updateManager.sendAlert(player);
         }
     }

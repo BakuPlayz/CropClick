@@ -1,6 +1,5 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.crop.crops.ground.Beetroot;
 import com.github.bakuplayz.cropclick.crop.crops.tall.Chorus;
 import org.bukkit.Bukkit;
@@ -59,15 +58,5 @@ public final class VersionUtils {
     public static boolean supportsChorus() {
         return !between(8, 8.9);
     }
-
-
-    /**
-     * Checks whether the {@link #getServerVersion() server version} supports {@link ContainerType#SHULKER shulkers}.
-     *
-     * @return true if it does, otherwise false.
-     */
-    public static boolean supportsShulkers() {
-        return !between(8, 10.9);
-    }
-
+    
 }

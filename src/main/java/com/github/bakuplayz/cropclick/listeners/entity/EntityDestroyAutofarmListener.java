@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -27,11 +28,16 @@ import java.util.stream.Collectors;
  */
 public final class EntityDestroyAutofarmListener implements Listener {
 
+    private final Logger logger;
+    private final boolean isDebugging;
+
     private final AutofarmManager autofarmManager;
 
 
     public EntityDestroyAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
+        this.isDebugging = plugin.isDebugging();
+        this.logger = plugin.getLogger();
     }
 
 
@@ -51,6 +57,10 @@ public final class EntityDestroyAutofarmListener implements Listener {
 
         List<Block> explodedBlocks = event.blockList();
         List<Block> explodedComponents = getExplodedComponents(explodedBlocks);
+
+        if (isDebugging) {
+            logger.info(String.format("%s (Entity): Called the destroy autofarm event!", event.getEntity().getName()));
+        }
 
         for (Block component : explodedComponents) {
 

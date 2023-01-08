@@ -29,7 +29,7 @@ public final class InventoryUtils {
     public static boolean canContain(@NotNull Inventory inventory, @NotNull ItemStack item) {
         Inventory temporary = cloneInventory(inventory);
 
-        if (inventory instanceof PlayerInventory) {
+        if (inventory instanceof PlayerInventory && inventory.getSize() < 36) {
             temporary.setItem(36, new ItemStack(Material.STONE, 64));
             temporary.setItem(37, new ItemStack(Material.STONE, 64));
             temporary.setItem(38, new ItemStack(Material.STONE, 64));
@@ -53,7 +53,7 @@ public final class InventoryUtils {
                               ? Bukkit.createInventory(null, 54)
                               : Bukkit.createInventory(null, inventory.getType());
 
-        for (int i = 0; i < inventory.getSize(); ++i) {
+        for (int i = 0; i < temporary.getSize(); ++i) {
             temporary.setItem(i, inventory.getItem(i));
         }
 

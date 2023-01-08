@@ -10,6 +10,7 @@ import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEve
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.EventUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
+import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -68,7 +69,7 @@ public final class PlayerHarvestCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtCrop(@NotNull PlayerInteractEvent event) {
-        if (!EventUtils.isMainHand(event.getHand())) {
+        if (VersionUtils.between(12, 12.9) && !EventUtils.isMainHand(event.getHand())) {
             return;
         }
 
@@ -166,7 +167,7 @@ public final class PlayerHarvestCropListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        
+
         crop.replant(block);
         crop.playSounds(block);
         crop.playParticles(block);
