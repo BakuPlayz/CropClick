@@ -9,6 +9,7 @@ import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConf
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
@@ -121,27 +122,26 @@ public final class CropsMenu extends PaginatedMenu {
         switch (menuState) {
             case CROP:
                 new CropMenu(plugin, player, crop).openMenu();
-                break;
+                return;
 
             case SOUNDS:
                 new SoundsMenu(plugin, player, crop).openMenu();
-                break;
+                return;
 
             case PARTICLES:
                 new ParticlesMenu(plugin, player, crop).openMenu();
-                break;
+                return;
 
             case NAME:
                 new NameMenu(plugin, player, crop).openMenu();
-                break;
+                return;
 
             case JOBS_REBORN:
                 new JobsCropMenu(plugin, player, crop).openMenu();
-                break;
+                return;
 
             case MCMMO:
                 new McMMOCropMenu(plugin, player, crop).openMenu();
-                break;
         }
     }
 
@@ -177,6 +177,7 @@ public final class CropsMenu extends PaginatedMenu {
         ItemBuilder menuItem = new ItemBuilder(crop.getMenuType())
                 .setName(LanguageAPI.Menu.CROPS_ITEM_NAME.get(plugin, name, status))
                 .setMaterial(!crop.isHarvestable(), Material.STAINED_GLASS_PANE)
+                .setDamage(crop instanceof CocoaBean, 3)
                 .setDamage(!crop.isHarvestable(), 7);
 
         switch (menuState) {

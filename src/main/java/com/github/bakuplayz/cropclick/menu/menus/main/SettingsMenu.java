@@ -13,7 +13,6 @@ import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -40,15 +39,9 @@ public final class SettingsMenu extends BaseMenu {
      */
     private final boolean isRedirected;
 
-    /**
-     * A variable checking if the {@link VersionUtils#getServerVersion() server version} supports {@link ParticleEffect particles}.
-     */
-    private final boolean supportsParticles;
-
 
     public SettingsMenu(@NotNull CropClick plugin, @NotNull Player player, boolean isRedirected) {
         super(plugin, player, LanguageAPI.Menu.SETTINGS_TITLE);
-        this.supportsParticles = !VersionUtils.between(0.0, 13.9);
         this.isRedirected = isRedirected;
     }
 
@@ -57,15 +50,13 @@ public final class SettingsMenu extends BaseMenu {
     public void setMenuItems() {
         inventory.setItem(10, getToggleItem());
 
-        if (supportsParticles) {
-            inventory.setItem(13, getParticlesItem());
-        }
+        inventory.setItem(13, getParticlesItem());
 
-        inventory.setItem(supportsParticles ? 16 : 13, getSoundsItem());
+        inventory.setItem(16, getSoundsItem());
 
-        inventory.setItem(supportsParticles ? 28 : 16, getNameItem());
-        inventory.setItem(supportsParticles ? 31 : 28, getAutofarmsItem());
-        inventory.setItem(supportsParticles ? 34 : 31, getWorldsItem());
+        inventory.setItem(28, getNameItem());
+        inventory.setItem(31, getAutofarmsItem());
+        inventory.setItem(34, getWorldsItem());
 
         if (isRedirected) setBackItem();
     }
@@ -85,7 +76,8 @@ public final class SettingsMenu extends BaseMenu {
             return;
         }
 
-        if (supportsParticles && clicked.equals(getParticlesItem())) {
+
+        if (clicked.equals(getParticlesItem())) {
             new CropsMenu(plugin, player, CropMenuState.PARTICLES).openMenu();
         }
 

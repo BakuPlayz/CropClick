@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.datastorages.datastorage;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.datastorages.DataStorage;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -87,7 +88,7 @@ public final class WorldDataStorage extends DataStorage {
      * Loads all the {@link #worlds}.
      */
     private void loadWorlds() {
-        HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, new TypeToken<HashMap<String, FarmWorld>>() {}.getType());
+        HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, type);
         this.worlds = loaded != null ? loaded : new HashMap<>();
     }
 
@@ -96,9 +97,14 @@ public final class WorldDataStorage extends DataStorage {
      * Saves all the {@link #worlds}.
      */
     private void saveWorlds() {
-        String data = gson.toJson(worlds, type);
-        JsonElement dataAsJson = jsonParser.parse(data);
-        fileData = dataAsJson.getAsJsonObject();
+        try {
+            String data = gson.toJson(worlds, type);
+            JsonElement dataAsJson = jsonParser.parse(data);
+            fileData = dataAsJson.getAsJsonObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
+        }
 
         super.saveData();
     }

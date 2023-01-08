@@ -9,17 +9,16 @@ import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.LocationUtils;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.DoubleChest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -35,13 +34,16 @@ public final class AutofarmDataStorage extends DataStorage {
 
     private @Getter HashMap<UUID, Autofarm> autofarms;
 
+    /**
+     * A variable used to save the {@link #autofarms hashmap of autofarms} appropriately, when using GSON.
+     */
+    private final Type type;
+
 
     public AutofarmDataStorage(@NotNull CropClick plugin) {
         super(plugin, "autofarms.json");
+        this.type = new TypeToken<HashMap<UUID, Autofarm>>() {}.getType();
         this.autofarms = new HashMap<>();
-        this.gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
     }
 
 
@@ -60,7 +62,7 @@ public final class AutofarmDataStorage extends DataStorage {
      */
     @Override
     public void saveData() {
-        unlinkDestoroyedFarms();
+        unlinkDestroyedFarms();
         saveFarms();
     }
 
@@ -91,7 +93,7 @@ public final class AutofarmDataStorage extends DataStorage {
      * Loads all the {@link #autofarms}.
      */
     private void loadFarms() {
-        HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
+        HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, type);
         this.autofarms = loaded != null ? loaded : new HashMap<>();
     }
 
@@ -100,9 +102,14 @@ public final class AutofarmDataStorage extends DataStorage {
      * Saves all the {@link #autofarms}.
      */
     private void saveFarms() {
-        String data = gson.toJson(autofarms, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
-        JsonElement dataAsJson = jsonParser.parse(data);
-        fileData = dataAsJson.getAsJsonObject();
+        try {
+            String data = gson.toJson(autofarms, type);
+            JsonElement dataAsJson = jsonParser.parse(data);
+            fileData = dataAsJson.getAsJsonObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
+        }
 
         super.saveData();
     }
@@ -111,7 +118,7 @@ public final class AutofarmDataStorage extends DataStorage {
     /**
      * Unlinks all the destroyed {@link Autofarm autofarms}.
      */
-    private void unlinkDestoroyedFarms() {
+    private void unlinkDestroyedFarms() {
         AutofarmManager manager = plugin.getAutofarmManager();
 
         if (manager == null) {
@@ -202,23 +209,14 @@ public final class AutofarmDataStorage extends DataStorage {
 
 
     /**
-     * Filters searches based on {@link DoublyLocation doubly location} matching with the {@link Location provided location}.
+     * Filters searches based on {@link DoublyLocation provided doubly location} matching with the {@link Location provided location}.
      *
-     * @param autofarm the farm to base the doubly location on.
+     * @param doubly   the doubly location.
      * @param location the location to match with the doubly location.
      *
      * @return true if it matches, otherwise false.
      */
-    private boolean filterByDoubly(@NotNull Autofarm autofarm, Location location) {
-        if (location == null) {
-            return false;
-        }
-
-        DoublyLocation doubly = (DoublyLocation) autofarm.getContainerLocation();
-        if (doubly == null) {
-            return false;
-        }
-
+    private boolean filterByDoubly(@NotNull DoublyLocation doubly, @NotNull Location location) {
         Location singlyLocation = doubly.getSingly();
         Location doublyLocation = doubly.getDoubly();
         return singlyLocation.equals(location) || doublyLocation.equals(location);
@@ -234,7 +232,12 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return true if it matches, otherwise false.
      */
     private boolean filterByDoubly(@NotNull Autofarm autofarm, @NotNull Block block) {
-        return filterByDoubly(autofarm, block.getLocation());
+        Location containerLocation = autofarm.getContainerLocation();
+        if (!(containerLocation instanceof DoublyLocation)) {
+            return false;
+        }
+
+        return filterByDoubly((DoublyLocation) autofarm.getContainerLocation(), block.getLocation());
     }
 
 
@@ -247,11 +250,17 @@ public final class AutofarmDataStorage extends DataStorage {
      * @return true if it matches, otherwise false.
      */
     private boolean filterByDoubleChest(@NotNull Autofarm autofarm, @NotNull Block block) {
-        if (!BlockUtils.isSameType(block, Material.CHEST)) {
+        if (!BlockUtils.isDoubleChest(block)) {
             return false;
         }
 
-        return filterByDoubly(autofarm, LocationUtils.findDoubly(block.getLocation()));
+        DoublyLocation doubleChest = LocationUtils.findDoubly(block);
+
+        if (doubleChest == null) {
+            return false;
+        }
+
+        return filterByDoubly(doubleChest, autofarm.getContainerLocation());
     }
 
 }

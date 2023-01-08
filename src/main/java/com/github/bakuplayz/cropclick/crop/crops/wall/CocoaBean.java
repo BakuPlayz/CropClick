@@ -84,7 +84,7 @@ public final class CocoaBean extends WallCrop {
      */
     @Override
     public @NotNull Material getMenuType() {
-        return Material.COCOA;
+        return Material.INK_SACK;
     }
 
 

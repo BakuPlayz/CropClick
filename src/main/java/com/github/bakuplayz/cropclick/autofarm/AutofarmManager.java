@@ -164,9 +164,9 @@ public final class AutofarmManager implements Enableable {
      *
      * @param player the player to get the selected location for.
      *
-     * @return the selected crop's location.
+     * @return the selected crop's location, otherwise null.
      */
-    public Location getSelectedCrop(@NotNull Player player) {
+    public @Nullable Location getSelectedCrop(@NotNull Player player) {
         return playersConfig.getSelectedCrop(player);
     }
 

@@ -65,11 +65,9 @@ public final class HelpMenu extends BaseMenu {
             return;
         }
 
-        if (isRedirected) {
-            handleBack(clicked, new MainMenu(plugin, player));
-        }
+        handleBack(clicked, new MainMenu(plugin, player));
 
-        if (event.getSlot() > 0) {
+        if (event.getSlot() > 0 && event.getSlot() != 49) {
             player.closeInventory();
             player.performCommand(
                     commands.get(event.getSlot() - 1).getUsage()

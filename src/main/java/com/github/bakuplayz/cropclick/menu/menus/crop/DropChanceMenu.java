@@ -4,6 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.wall.CocoaBean;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
@@ -143,6 +144,7 @@ public final class DropChanceMenu extends BaseMenu {
                         LanguageAPI.Menu.DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, chance)
                 ))
                 .setMaterial(!crop.isHarvestable(), Material.STAINED_GLASS_PANE)
+                .setDamage(crop instanceof CocoaBean, 3)
                 .setDamage(!crop.isHarvestable(), 14)
                 .toItemStack();
     }

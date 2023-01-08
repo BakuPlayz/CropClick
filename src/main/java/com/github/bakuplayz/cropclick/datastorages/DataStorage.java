@@ -2,8 +2,10 @@ package com.github.bakuplayz.cropclick.datastorages;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.location.LocationTypeAdapter;
 import com.google.gson.*;
 import lombok.Getter;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -37,6 +39,7 @@ public abstract class DataStorage implements Storageable {
         this.fileName = fileName;
         this.plugin = plugin;
         this.gson = new GsonBuilder()
+                .registerTypeAdapter(Location.class, new LocationTypeAdapter())
                 .setPrettyPrinting()
                 .create();
         this.jsonParser = new JsonParser();

@@ -111,7 +111,7 @@ public final class WorldsMenu extends PaginatedMenu {
         switch (menuState) {
             case SETTINGS:
                 new WorldMenu(plugin, player, world).openMenu();
-                break;
+                return;
 
             case JOBS_REBORN:
                 world.toggleAddon(addonManager, "JobsReborn");

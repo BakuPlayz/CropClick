@@ -161,6 +161,7 @@
             </exclusions>
         </dependency>
 
+        <!-- Produces four errors that can be ignored. -->
         <dependency>
             <groupId>com.github.Zrips</groupId>
             <artifactId>Jobs</artifactId>
@@ -266,7 +267,7 @@
         <dependency>
             <groupId>xyz.xenondevs</groupId>
             <artifactId>particle</artifactId>
-            <version>1.7.1</version>
+            <version>1.8.3</version>
             <scope>compile</scope>
         </dependency>
 
@@ -280,17 +281,9 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
+            <!--suppress MavenPackageUpdate -->
             <version>23.0.0</version>
             <scope>compile</scope>
         </dependency>
-
-        <!-- Not updated to keep in sync with spigot. -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Not updated to keep in sync with spigot. -->
     </dependencies>
 </project>

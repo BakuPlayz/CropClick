@@ -293,8 +293,19 @@ public abstract class LinkMenu extends BaseMenu {
         if (!isDispenserSelected) return;
 
         Location crop = autofarmManager.getSelectedCrop(player);
+        if (crop == null) {
+            return;
+        }
+
         Location container = autofarmManager.getSelectedContainer(player);
+        if (container == null) {
+            return;
+        }
+
         Location dispenser = autofarmManager.getSelectedDispenser(player);
+        if (dispenser == null) {
+            return;
+        }
 
         autofarmManager.deselectComponents(player);
         player.closeInventory();
@@ -416,8 +427,8 @@ public abstract class LinkMenu extends BaseMenu {
                 .setName(plugin, LanguageAPI.Menu.LINK_CROP_NAME)
                 .setLore(getLocationAsLore(cropLocation, Component.CROP))
                 .setMaterial(isUnlinked || isCropSelected, Material.STAINED_GLASS_PANE)
-                .setDamage(isCropSelected, 3)
                 .setDamage(isUnlinked, 15)
+                .setDamage(isCropSelected, 3)
                 .toItemStack();
     }
 
@@ -435,8 +446,8 @@ public abstract class LinkMenu extends BaseMenu {
                         containerLocation != null ? containerLocation.getBlock().getType() : null
                 )
                 .setMaterial(isUnlinked || isContainerSelected, Material.STAINED_GLASS_PANE)
-                .setDamage(isContainerSelected, 3)
                 .setDamage(isUnlinked, 15)
+                .setDamage(isContainerSelected, 3)
                 .toItemStack();
     }
 
@@ -451,8 +462,8 @@ public abstract class LinkMenu extends BaseMenu {
                 .setName(plugin, LanguageAPI.Menu.LINK_DISPENSER_NAME)
                 .setLore(getLocationAsLore(dispenserLocation, Component.DISPENSER))
                 .setMaterial(isUnlinked || isDispenserSelected, Material.STAINED_GLASS_PANE)
-                .setDamage(isDispenserSelected, 3)
                 .setDamage(isUnlinked, 15)
+                .setDamage(isDispenserSelected, 3)
                 .toItemStack();
     }
 
