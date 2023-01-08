@@ -58,9 +58,9 @@ public abstract class DataStorage implements Storageable {
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SETUP.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SETUP.send(plugin.getLogger(), fileName);
         } finally {
-            LanguageAPI.Console.DATA_STORAGE_LOADING_SETUP.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_LOADING_SETUP.send(plugin.getLogger(), fileName);
         }
     }
 
@@ -78,9 +78,9 @@ public abstract class DataStorage implements Storageable {
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_LOAD.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_LOAD.send(plugin.getLogger(), fileName);
         } finally {
-            LanguageAPI.Console.DATA_STORAGE_LOADED_DATA.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_LOADED_DATA.send(plugin.getLogger(), fileName);
         }
     }
 
@@ -96,10 +96,10 @@ public abstract class DataStorage implements Storageable {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_REMOVED.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_REMOVED.send(plugin.getLogger(), fileName);
         } catch (Exception e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(plugin.getLogger(), fileName);
         }
     }
 

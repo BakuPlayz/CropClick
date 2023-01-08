@@ -46,10 +46,10 @@ public abstract class Config implements Configurable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.FILE_SETUP_FAILED.send(fileName);
+            LanguageAPI.Console.FILE_SETUP_FAILED.send(plugin.getLogger(), fileName);
         } finally {
             this.config = YamlConfiguration.loadConfiguration(file);
-            LanguageAPI.Console.FILE_SETUP_LOAD.send(fileName);
+            LanguageAPI.Console.FILE_SETUP_LOAD.send(plugin.getLogger(), fileName);
         }
     }
 
@@ -62,7 +62,7 @@ public abstract class Config implements Configurable {
         if (config == null) return;
 
         this.config = YamlConfiguration.loadConfiguration(file);
-        LanguageAPI.Console.FILE_RELOAD.send(fileName);
+        LanguageAPI.Console.FILE_RELOAD.send(plugin.getLogger(), fileName);
     }
 
 
@@ -77,7 +77,7 @@ public abstract class Config implements Configurable {
             config.save(file);
         } catch (IOException e) {
             e.printStackTrace();
-            LanguageAPI.Console.FILE_SAVE_FAILED.send(fileName);
+            LanguageAPI.Console.FILE_SAVE_FAILED.send(plugin.getLogger(), fileName);
         }
     }
 

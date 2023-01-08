@@ -1,6 +1,5 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +36,6 @@ public final class FileUtils {
                 return;
             }
             e.printStackTrace();
-            LanguageAPI.Console.FILE_MOVE_FAILED.send(source.getName());
         }
     }
 

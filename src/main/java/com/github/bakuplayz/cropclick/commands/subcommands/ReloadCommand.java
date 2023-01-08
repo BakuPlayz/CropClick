@@ -10,6 +10,8 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.logging.Logger;
+
 
 /**
  * A class representing the '/crop reload' command.
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ReloadCommand extends Subcommand {
 
+    private final Logger logger;
     private final CropsConfig cropsConfig;
     private final AddonsConfig addonsConfig;
     private final PlayersConfig playersConfig;
@@ -28,6 +31,7 @@ public final class ReloadCommand extends Subcommand {
 
     public ReloadCommand(@NotNull CropClick plugin) {
         super(plugin, "reload", LanguageAPI.Command.RELOAD_DESCRIPTION);
+        this.logger = plugin.getLogger();
         this.cropsConfig = plugin.getCropsConfig();
         this.addonsConfig = plugin.getAddonsConfig();
         this.playersConfig = plugin.getPlayersConfig();
@@ -45,7 +49,7 @@ public final class ReloadCommand extends Subcommand {
     public void perform(@NotNull Player player, String[] args) {
         try {
             plugin.reloadConfig();
-            LanguageAPI.Console.FILE_RELOAD.send("config.yml");
+            LanguageAPI.Console.FILE_RELOAD.send(logger, "config.yml");
 
             cropsConfig.reloadConfig();
             addonsConfig.reloadConfig();

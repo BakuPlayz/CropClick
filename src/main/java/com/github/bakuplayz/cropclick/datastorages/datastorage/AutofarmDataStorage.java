@@ -108,7 +108,7 @@ public final class AutofarmDataStorage extends DataStorage {
             fileData = dataAsJson.getAsJsonObject();
         } catch (Exception e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(plugin.getLogger(), fileName);
         }
 
         super.saveData();
@@ -129,7 +129,7 @@ public final class AutofarmDataStorage extends DataStorage {
         try {
             autofarms.values().removeIf(farm -> !farm.isComponentsPresent(manager));
         } catch (Exception e) {
-            LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send();
+            LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send(plugin.getLogger());
         }
     }
 

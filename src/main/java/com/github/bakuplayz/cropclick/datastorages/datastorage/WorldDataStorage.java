@@ -103,7 +103,7 @@ public final class WorldDataStorage extends DataStorage {
             fileData = dataAsJson.getAsJsonObject();
         } catch (Exception e) {
             e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(fileName);
+            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(plugin.getLogger(), fileName);
         }
 
         super.saveData();
