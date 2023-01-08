@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 
-
 /**
  * A class that represents the sugar cane crop.
  *
@@ -27,6 +26,11 @@ public final class SugarCane extends TallCrop {
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
@@ -34,6 +38,11 @@ public final class SugarCane extends TallCrop {
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.SUGAR_CANE,
@@ -44,12 +53,22 @@ public final class SugarCane extends TallCrop {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
-        return Material.SUGAR_CANE_BLOCK;
+        return Material.SUGAR_CANE;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.SUGAR_CANE;

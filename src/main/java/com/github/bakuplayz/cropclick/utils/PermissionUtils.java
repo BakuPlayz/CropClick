@@ -1,6 +1,12 @@
 package com.github.bakuplayz.cropclick.utils;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.commands.CommandManager;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtAutofarmListener;
+import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
+import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
+import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
@@ -18,119 +24,134 @@ import java.util.UUID;
 public final class PermissionUtils {
 
     /**
-     * Returns true if the player is an operator or has the permission node `cropclick.command.general`.
+     * Checks whether the {@link Player provided player} can execute the '/crop' command.
      *
-     * @param player The player who is trying to execute the command.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if it can, otherwise false.
+     *
+     * @see CommandManager
      */
     public static boolean canPlayerExecuteGeneralCommand(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.command.general");
+        return player.hasPermission("cropclick.command.general");
     }
 
 
     /**
-     * Returns true if the player is an operator or has the permission node cropclick.autofarm.link.
+     * Checks whether the {@link Player provided player} is allowed to link a {@link Autofarm autofarm}.
      *
-     * @param player The player who is trying to link the farm.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerLinkAutofarmListener
      */
     public static boolean canLinkFarm(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.autofarm.link");
+        return player.hasPermission("cropclick.autofarm.link");
     }
 
 
     /**
-     * Returns true if the player is an operator or has the permission node cropclick.autofarm.unlink.
+     * Checks whether the {@link Player provided player} is allowed to unlink a {@link Autofarm autofarm}.
      *
-     * @param player The player who is trying to unlink the farm.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerUnlinkAutofarmListener
      */
     public static boolean canUnlinkFarm(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.autofarm.unlink");
+        return player.hasPermission("cropclick.autofarm.unlink");
     }
 
 
     /**
-     * If the player is the owner of the farm, they can unlink it if they have the permission to unlink their own farm. If
-     * the player is not the owner of the farm, they can unlink it if they have the permission to unlink other people's
-     * farms.
+     * Checks whether the {@link Player provided player} is allowed to unlink others {@link Autofarm autofarms}.
      *
-     * @param player   The player who is trying to unlink the farm.
-     * @param autofarm The autofarm that the player is trying to unlink.
+     * @param player   the player to check.
+     * @param autofarm the autofarm to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerUnlinkAutofarmListener
      */
     public static boolean canUnlinkOthersFarm(@NotNull Player player, @NotNull Autofarm autofarm) {
         if (!AutofarmUtils.isOwner(player, autofarm)) {
-            return player.isOp() || player.hasPermission("cropclick.autofarm.unlink.others");
+            return player.hasPermission("cropclick.autofarm.unlink.others");
         }
         return canUnlinkFarm(player);
     }
 
 
     /**
-     * If the player is an operator or has the permission `cropclick.autofarm.update`, return true.
+     * Checks whether the {@link Player provided player} is allowed to update a {@link Autofarm autofarm}.
      *
-     * @param player The player who is trying to update the farm.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerUpdateAutofarmListener
      */
     public static boolean canUpdateFarm(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.autofarm.update");
+        return player.hasPermission("cropclick.autofarm.update");
     }
 
 
     /**
-     * If the player is not the owner of the farm, then they must be an operator or have the permission
-     * `cropclick.autofarm.update.others` to update the farm.
+     * Checks whether the {@link Player provided player} is allowed to update others {@link Autofarm autofarms}.
      *
-     * @param player The player who is trying to update the farm.
-     * @param other  The UUID of the player whose farm you want to update.
+     * @param player the player to check.
+     * @param other  the owner of the autofarm.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerUpdateAutofarmListener
      */
     public static boolean canUpdateOthersFarm(@NotNull Player player, @NotNull UUID other) {
         if (!player.getUniqueId().equals(other)) {
-            return player.isOp() || player.hasPermission("cropclick.autofarm.update.others");
+            return player.hasPermission("cropclick.autofarm.update.others");
         }
         return canUpdateFarm(player);
     }
 
 
     /**
-     * If the player is an operator or has the permission `cropclick.autofarm.interact`, return true.
+     * Checks whether the {@link Player provided player} is allowed to interact at a {@link Autofarm autofarm}.
      *
-     * @param player The player who is trying to interact with the farm.
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerInteractAtAutofarmListener
      */
     public static boolean canInteractAtFarm(@NotNull Player player) {
-        return player.isOp() || player.hasPermission("cropclick.autofarm.interact");
+        return player.hasPermission("cropclick.autofarm.interact");
     }
 
 
     /**
-     * If the player is not the owner of the farm, then they must be an operator or have the permission
-     * "cropclick.autofarm.interact.others" to interact with the farm.
+     * "Checks whether the {@link Player provided player} is allowed to interact with others {@link Autofarm autofarms}."
+     * <p>
+     * Additional check: If the {@link Autofarm autofarm} has an {@link Autofarm#UNKNOWN_OWNER unknown owner}, then check if the player can claim the farm.
+     * </p>
      *
-     * @param player The player who is trying to interact with the farm.
-     * @param farm   The given autofarm.
+     * @param player   the player to check.
+     * @param autofarm the autofarm to interact with.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
+     *
+     * @see PlayerInteractAtAutofarmListener
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull Autofarm farm) {
+    public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull Autofarm autofarm) {
         UUID other = player.getUniqueId();
 
         if (other.equals(Autofarm.UNKNOWN_OWNER)) {
-            return player.isOp() || player.hasPermission("cropclick.autofarm.claim");
+            return player.hasPermission("cropclick.autofarm.claim");
         }
 
-        if (!other.equals(farm.getOwnerID())) {
-            return player.isOp() || player.hasPermission("cropclick.autofarm.interact.others");
+        if (!other.equals(autofarm.getOwnerID())) {
+            return player.hasPermission("cropclick.autofarm.interact.others");
         }
 
         return canInteractAtFarm(player);
@@ -138,41 +159,41 @@ public final class PermissionUtils {
 
 
     /**
-     * If the player is an operator or has the permission "cropclick.destroy.name", return true.
+     * Checks whether the {@link Player provided player} is allowed to destroy a {@link Crop crop}.
      *
-     * @param player The player who is trying to destroy the crop.
-     * @param name   The name of the crop.
+     * @param player the player to check.
+     * @param name   the name of the crop.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
      */
     public static boolean canDestroyCrop(@NotNull Player player, @NotNull String name) {
-        return player.isOp() || player.hasPermission("cropclick.destroy." + name);
+        return player.hasPermission("cropclick.destroy." + name);
     }
 
 
     /**
-     * If the player is an operator or has the permission node `cropclick.plant.name`, return true.
+     * Checks whether the {@link Player provided player} is allowed to plant a {@link Crop crop}.
      *
-     * @param player The player who is planting the crop.
-     * @param name   The name of the crop.
+     * @param player the player to check.
+     * @param name   the name of the crop.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
      */
     public static boolean canPlantCrop(@NotNull Player player, @NotNull String name) {
-        return player.isOp() || player.hasPermission("cropclick.plant." + name);
+        return player.hasPermission("cropclick.plant." + name);
     }
 
 
     /**
-     * If the player is an operator or has the permission "cropclick.harvest." + name, return true.
+     * Checks whether the {@link Player provided player} is allowed to harvest a {@link Crop crop}.
      *
-     * @param player The player who is trying to harvest the crop.
-     * @param name   The name of the crop.
+     * @param player the player to check.
+     * @param name   the name of the crop.
      *
-     * @return A boolean value.
+     * @return true if allowed, otherwise false.
      */
     public static boolean canHarvestCrop(@NotNull Player player, @NotNull String name) {
-        return player.isOp() || player.hasPermission("cropclick.harvest." + name);
+        return player.hasPermission("cropclick.harvest." + name);
     }
 
 }

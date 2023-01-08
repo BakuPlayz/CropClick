@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.converter.base.ExactValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.SourceValue;
 import com.github.bakuplayz.cropclick.configs.converter.base.YamlConverter;
-import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
+import com.github.bakuplayz.cropclick.runnables.particles.Particle;
 import com.github.bakuplayz.cropclick.utils.FileUtils;
 import com.github.bakuplayz.cropclick.utils.MathUtils;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,8 +37,8 @@ public final class CropConverter {
         particleObj.set("amount",
                 MathUtils.clamp(
                         section.getInt("Amount"),
-                        ParticleMenu.MIN_AMOUNT,
-                        ParticleMenu.MAX_AMOUNT
+                        Particle.MIN_AMOUNT,
+                        Particle.MAX_AMOUNT
                 )
         );
 
@@ -67,11 +67,11 @@ public final class CropConverter {
 
 
     /**
-     * It loads the old crops.yml file, converts it to the new format, and saves it to the new file.
+     * Makes the configuration conversion.
      *
-     * @param plugin The plugin instance.
+     * @param plugin the plugin instance.
      *
-     * @apiNote Written by BakuPlayz.
+     * @apiNote written by BakuPlayz.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
@@ -87,16 +87,18 @@ public final class CropConverter {
         ConfigurationSection newCrops = CropConverter.convertFormat(legacyCrops);
 
         FileUtils.copyYamlTo(plugin.getCropsConfig().getConfig(), newCrops);
-        FileUtils.moveFile(inFile, outFile);
+        FileUtils.move(inFile, outFile);
     }
 
 
     /**
-     * It converts a legacy format to the new format.
+     * Converts the {@link ConfigurationSection provided "legacy" format} to a {@link ConfigurationSection new format}.
      *
-     * @param legacyFormat The configuration section that contains the legacy format.
+     * @param legacyFormat the legacy format.
      *
-     * @return A JsonObject.
+     * @return the converted format.
+     *
+     * @apiNote written by BakuPlayz.
      */
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();

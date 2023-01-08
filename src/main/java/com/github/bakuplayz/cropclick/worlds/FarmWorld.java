@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.worlds;
 
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
+import com.github.bakuplayz.cropclick.utils.CollectionUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 /**
- * Represent a {@link World Bukkit World} as an {@link FarmWorld Farm World}.
+ * Represent a {@link World world} as a {@link FarmWorld farm world}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -32,7 +33,7 @@ public final class FarmWorld {
     private @Setter @Getter @Accessors(fluent = true) boolean allowsAutofarms;
 
     /**
-     * Contains all the banished addons in the world.
+     * A variable containing all the banished addons in the {@link FarmWorld farm world}.
      */
     private final @Getter List<Addon> banishedAddons;
 
@@ -59,10 +60,10 @@ public final class FarmWorld {
 
 
     /**
-     * If the addon is banished, remove it from the banished list, otherwise add it to the banished list.
+     * Toggles an {@link Addon addon} in the {@link FarmWorld world}.
      *
-     * @param manager The AddonManager instance that you're using.
-     * @param name    The name of the addon to toggle.
+     * @param manager the addon manager.
+     * @param name    the name of the addon.
      */
     public void toggleAddon(@NotNull AddonManager manager, @NotNull String name) {
         Addon addon = manager.findByName(name);
@@ -70,21 +71,17 @@ public final class FarmWorld {
             return;
         }
 
-        if (banishedAddons.contains(addon)) {
-            banishedAddons.remove(addon);
-        } else {
-            banishedAddons.add(addon);
-        }
+        CollectionUtils.toggleItem(banishedAddons, addon);
     }
 
 
     /**
-     * If the addon is not found or is in the banishedAddons, it is banished.
+     * Checks whether an {@link Addon addon} is banished in the {@link FarmWorld world}.
      *
-     * @param manager The AddonManager instance
-     * @param name    The name of the addon to check
+     * @param manager the addon manager.
+     * @param name    the name of the addon.
      *
-     * @return A boolean value.
+     * @return true if banished, otherwise false.
      */
     public boolean isBanishedAddon(@NotNull AddonManager manager, @NotNull String name) {
         Addon addon = manager.findByName(name);

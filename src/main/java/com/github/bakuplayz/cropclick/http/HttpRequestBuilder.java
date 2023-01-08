@@ -41,9 +41,9 @@ public final class HttpRequestBuilder {
 
 
     /**
-     * It sets the default headers for the request.
+     * Sets the default headers of a request.
      *
-     * @return The RequestUtil object.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     public HttpRequestBuilder setDefaultHeaders() {
         headers.put("User-Agent", "Mozilla/5.0");
@@ -52,9 +52,11 @@ public final class HttpRequestBuilder {
 
 
     /**
-     * It takes a list of Param objects and converts them to a string.
+     * Sets the provided parameters to the request.
      *
-     * @return A RequestUtil object.
+     * @param param the params to set.
+     *
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     public HttpRequestBuilder setParams(@NotNull HttpParam... param) {
         this.params = Arrays.stream(param)
@@ -65,12 +67,12 @@ public final class HttpRequestBuilder {
 
 
     /**
-     * It sets the headers for the request.
+     * Sets the provided headers to the request.
      *
-     * @param headers    The headers to be sent with the request.
-     * @param addDefault Adds the default request headers.
+     * @param headers    the headers to set.
+     * @param addDefault true if it should add the default headers.
      *
-     * @return The RequestUtil object.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     @SuppressWarnings("unused")
     public HttpRequestBuilder setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
@@ -87,7 +89,7 @@ public final class HttpRequestBuilder {
      *
      * @param doOutput makes the request provide a response.
      *
-     * @return a builder instance.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     public HttpRequestBuilder get(boolean doOutput)
             throws IOException {
@@ -100,7 +102,7 @@ public final class HttpRequestBuilder {
      *
      * @param doOutput makes the request provide a response.
      *
-     * @return a builder instance.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     public HttpRequestBuilder post(boolean doOutput)
             throws IOException {
@@ -113,7 +115,7 @@ public final class HttpRequestBuilder {
      *
      * @param doOutput makes the request provide a response.
      *
-     * @return a builder instance.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     public HttpRequestBuilder update(boolean doOutput)
             throws IOException {
@@ -126,7 +128,7 @@ public final class HttpRequestBuilder {
      *
      * @param doOutput makes the request provide a response.
      *
-     * @return a builder instance.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     @SuppressWarnings("unused")
     public HttpRequestBuilder delete(boolean doOutput)
@@ -138,10 +140,10 @@ public final class HttpRequestBuilder {
     /**
      * Makes an <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">HTTP request</a> with the given method.
      *
-     * @param method   the http method.
+     * @param method   the http method to request with.
      * @param doOutput makes the request provide a response.
      *
-     * @return a builder instance.
+     * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     private HttpRequestBuilder doRequest(String method, boolean doOutput)
             throws IOException {
@@ -194,9 +196,9 @@ public final class HttpRequestBuilder {
 
 
     /**
-     * Returns the response of the http request, unless it is unchanged then it returns an {@link JsonNull#INSTANCE JsonNull instance}.
+     * Gets the response of the request.
      *
-     * @return A JsonElement object.
+     * @return the request response, otherwise JsonNull.
      */
     public JsonElement getResponse()
             throws IOException {

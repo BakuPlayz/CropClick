@@ -17,7 +17,7 @@ public interface Yamlable {
     /**
      * It converts the implementing object to a YAML-styled map.
      *
-     * @return A {@link HashMap YAML-formatted HashMap}.
+     * @return a {@link HashMap YAML-formatted HashMap}.
      */
     Map<String, Object> toYaml();
 

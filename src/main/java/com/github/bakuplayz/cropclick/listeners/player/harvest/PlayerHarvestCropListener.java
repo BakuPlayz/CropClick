@@ -4,7 +4,7 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 
 /**
- * A listener handling all the {@link BaseCrop crop} harvest events caused by a {@link Player}.
+ * A listener handling all the {@link Crop crop} harvest events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -47,7 +47,7 @@ public final class PlayerHarvestCropListener implements Listener {
      * A map of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
-    private final HashMap<BaseCrop, Long> harvestedCrops;
+    private final HashMap<Crop, Long> harvestedCrops;
 
 
     public PlayerHarvestCropListener(@NotNull CropClick plugin) {
@@ -62,13 +62,13 @@ public final class PlayerHarvestCropListener implements Listener {
 
 
     /**
-     * If the player is allowed to harvest the crop, then call the PlayerHarvestCropEvent.
+     * Handles all the {@link Player player} interact at {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithCrop(@NotNull PlayerInteractEvent event) {
-        if (!EventUtils.isMainHand(event)) {
+    public void onPlayerInteractAtCrop(@NotNull PlayerInteractEvent event) {
+        if (!EventUtils.isMainHand(event.getHand())) {
             return;
         }
 
@@ -96,19 +96,19 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             return;
         }
 
-        BaseCrop crop = cropManager.findByBlock(block);
-        if (!cropManager.validate(crop, block)) {
+        Crop crop = cropManager.findByBlock(block);
+        if (crop == null) {
             return;
         }
 
         if (harvestedCrops.containsKey(crop)) {
             return;
         }
-
+        
         if (!PermissionUtils.canHarvestCrop(player, crop.getName())) {
             return;
         }
@@ -130,9 +130,9 @@ public final class PlayerHarvestCropListener implements Listener {
 
 
     /**
-     * If the player can harvest the crop, then harvest it and replant it.
+     * Handles all the {@link Player player} harvest {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerHarvestCrop(@NotNull PlayerHarvestCropEvent event) {
@@ -142,7 +142,7 @@ public final class PlayerHarvestCropListener implements Listener {
 
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        BaseCrop crop = event.getCrop();
+        Crop crop = event.getCrop();
 
         harvestedCrops.remove(crop);
 
@@ -156,10 +156,8 @@ public final class PlayerHarvestCropListener implements Listener {
         }
 
         boolean wasHarvested;
-
         if (crop instanceof TallCrop) {
-            TallCrop tallCrop = (TallCrop) crop;
-            wasHarvested = tallCrop.harvestAll(player, block, crop);
+            wasHarvested = ((TallCrop) crop).harvestAll(player, block, crop);
         } else {
             wasHarvested = crop.harvest(player);
         }

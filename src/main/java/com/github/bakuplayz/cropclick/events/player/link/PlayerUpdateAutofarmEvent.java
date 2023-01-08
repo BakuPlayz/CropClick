@@ -22,6 +22,9 @@ public final class PlayerUpdateAutofarmEvent extends Event implements Cancellabl
     private final @Getter Autofarm oldAutofarm;
     private final @Getter Autofarm newAutofarm;
 
+    /**
+     * Checks whether the event is cancelled or not.
+     */
     private @Setter @Getter boolean cancelled;
 
 

@@ -37,9 +37,9 @@ public final class PlayerInteractAtDispenserListener implements Listener {
 
 
     /**
-     * If a player interacts with a dispenser, open a menu that allows them to interact with the dispenser.
+     * Handles all the {@link Player player} interact at {@link Dispenser dispenser} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtDispenser(@NotNull PlayerInteractAtDispenserEvent event) {
@@ -55,8 +55,8 @@ public final class PlayerInteractAtDispenserListener implements Listener {
                 return;
             }
 
-            if (AutofarmUtils.componentHasMeta(block)) {
-                AutofarmUtils.addMeta(plugin, autofarm);
+            if (AutofarmUtils.hasCachedID(block)) {
+                AutofarmUtils.addCachedID(plugin, autofarm);
             }
         }
 
@@ -65,8 +65,8 @@ public final class PlayerInteractAtDispenserListener implements Listener {
                 player,
                 block,
                 autofarm,
-                AutofarmsMenuState.LINK
-        ).open();
+                AutofarmsMenuState.DISPENSER
+        ).openMenu();
     }
 
 }

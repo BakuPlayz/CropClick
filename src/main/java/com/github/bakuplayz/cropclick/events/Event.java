@@ -20,12 +20,22 @@ public abstract class Event extends org.bukkit.event.Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
 
+    /**
+     * Gets all the {@link #HANDLERS event handlers}.
+     *
+     * @return the event handlers.
+     */
     @SuppressWarnings("unused")
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
 
+    /**
+     * Gets all the {@link #HANDLERS event handlers}.
+     *
+     * @return the event handlers.
+     */
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;

@@ -18,14 +18,13 @@ import org.jetbrains.annotations.Nullable;
 public final class LocationUtils {
 
     /**
-     * If the given location is a container, return the location of the container.
+     * Finds a {@link DoublyLocation doubly location} based on the {@link Location location}.
      *
-     * @param location The location of the block you want to check.
+     * @param location the location to base the doubly on.
      *
-     * @return A DoublyLocation object.
+     * @return the found {@link DoublyLocation}, otherwise null.
      */
-    @Contract(pure = true)
-    public static @Nullable DoublyLocation getAsDoubly(@NotNull Location location) {
+    public static @Nullable DoublyLocation findDoubly(@NotNull Location location) {
         if (isDoubly(location)) {
             return (DoublyLocation) location;
         }
@@ -34,32 +33,56 @@ public final class LocationUtils {
             return null;
         }
 
-        return getDoubly(location);
+        return getAsDoubly(location);
     }
 
 
     /**
-     * Finds the DoublyLocation that is at the given Block's location.
+     * Finds a {@link DoublyLocation doubly location} based on the {@link Block block's location}.
      *
-     * @param block The block to find the location of.
+     * @param block the block to base the doubly on.
      *
-     * @return A DoublyLocation object.
+     * @return the found {@link DoublyLocation}, otherwise null.
      */
-    public static DoublyLocation getAsDoubly(@NotNull Block block) {
-        return LocationUtils.getAsDoubly(block.getLocation());
+    public static @Nullable DoublyLocation findDoubly(@NotNull Block block) {
+        return LocationUtils.findDoubly(block.getLocation());
     }
 
 
     /**
-     * If the block at the given location is a container, return a DoublyLocation object containing the given location and
-     * the location of the container next to it.
+     * Checks whether the provided {@link Location location} is a {@link DoublyLocation doubly location}.
      *
-     * @param location The location of the block that was broken.
+     * @param location the location to check.
      *
-     * @return A DoublyLocation object.
+     * @return true if doubly, otherwise false.
+     */
+    public static boolean isDoubly(@NotNull Location location) {
+        return location instanceof DoublyLocation;
+    }
+
+
+    /**
+     * Checks whether the provided {@link Block block's location} is a {@link DoublyLocation doubly location}.
+     *
+     * @param block the block to check.
+     *
+     * @return true if doubly, otherwise false.
+     */
+    @SuppressWarnings("unused")
+    public static boolean isDoubly(@NotNull Block block) {
+        return isDoubly(block.getLocation());
+    }
+
+
+    /**
+     * Gets the doubly based on the {@link Location location} and its {@link Block neighboring block}.
+     *
+     * @param location the location to base the doubly on.
+     *
+     * @return the found {@link DoublyLocation}, otherwise null.
      */
     @Contract("_ -> new")
-    private static @Nullable DoublyLocation getDoubly(@NotNull Location location) {
+    private static @Nullable DoublyLocation getAsDoubly(@NotNull Location location) {
         Location locOne = new Location(
                 location.getWorld(),
                 location.getX() + 1,
@@ -101,31 +124,6 @@ public final class LocationUtils {
             return new DoublyLocation(location, locFour);
         }
         return null;
-    }
-
-
-    /**
-     * Returns true if the given location is a doubly location.
-     *
-     * @param location The location to check.
-     *
-     * @return A boolean value.
-     */
-    public static boolean isDoubly(@NotNull Location location) {
-        return location instanceof DoublyLocation;
-    }
-
-
-    /**
-     * Returns true if the block's location is a doubly location.
-     *
-     * @param block The block to check
-     *
-     * @return A boolean value.
-     */
-    @SuppressWarnings("unused")
-    public static boolean isDoubly(@NotNull Block block) {
-        return isDoubly(block.getLocation());
     }
 
 }

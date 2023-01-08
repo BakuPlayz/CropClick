@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class WorldMenu extends Menu {
+public final class WorldMenu extends BaseMenu {
 
     private final FarmWorld world;
 
@@ -63,30 +63,28 @@ public final class WorldMenu extends Menu {
             world.allowsPlayers(!world.allowsPlayers());
         }
 
-        refresh();
+        refreshMenu();
     }
 
 
     /**
-     * This function returns an ItemStack with the material of the player's head, with the name of the "Players", and the lore of
-     * the item being the status of whether the world allows players.
+     * Gets the players {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the players item.
      */
     private @NotNull ItemStack getPlayersItem() {
         return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.WORLD_PLAYERS_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.WORLD_PLAYERS_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.WORLD_PLAYERS_ITEM_STATUS.get(plugin, world.allowsPlayers())
-                )).toSkullStack(player);
+                )).toPlayerHead(player);
     }
 
 
     /**
-     * This function returns an ItemStack with the material of dispenser, with the name of the "Autofarms", and the lore of
-     * the item being the status of whether the world allows autofarms.
+     * Gets the autofarms {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the autofarms item.
      */
     private @NotNull ItemStack getAutofarmsItem() {
         return new ItemBuilder(Material.DISPENSER)
@@ -98,9 +96,9 @@ public final class WorldMenu extends Menu {
 
 
     /**
-     * It creates an ItemStack that represents the world.
+     * Gets the world {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the world item.
      */
     private @NotNull ItemStack getWorldItem() {
         String name = MessageUtils.beautify(world.getName(), true);

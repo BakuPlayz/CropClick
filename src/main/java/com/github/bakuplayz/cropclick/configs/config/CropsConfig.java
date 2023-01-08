@@ -2,7 +2,12 @@ package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.Config;
+import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.*;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +38,9 @@ public final class CropsConfig extends Config {
     }
 
 
+    /**
+     * Sets up the crops specific {@link ConfigSection configuration sections}.
+     */
     public void setupSections() {
         this.cropSection = new CropConfigSection(this);
         this.seedSection = new SeedConfigSection(this);
@@ -43,7 +51,7 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Loads all the sections related to the config.
+     * Loads the crop specific {@link ConfigSection configuration sections}.
      */
     public void loadSections() {
         particleSection.loadParticles();
@@ -52,16 +60,89 @@ public final class CropsConfig extends Config {
 
 
     /**
-     * Get the names of all the crops in the config file.
+     * Adds the configuration settings based on the {@link Crop provided crop}.
      *
-     * @return A set of strings.
+     * @param crop the crop to add settings to.
+     */
+    public void addSettings(@NotNull Crop crop) {
+        String cropName = crop.getName();
+
+        if (!cropSection.exists(cropName)) {
+            // Drop Settings
+            if (crop.hasDrop()) {
+                Drop drop = crop.getDrop();
+                cropSection.setDropName(cropName, drop.getName());
+                cropSection.setDropAmount(cropName, drop.getAmount());
+                cropSection.setDropChance(cropName, drop.getChance());
+                cropSection.setDropAtLeastOne(cropName, crop.dropAtLeastOne());
+            }
+
+            // Action Settings
+            cropSection.setReplant(cropName, crop.shouldReplant());
+            cropSection.setHarvestable(cropName, crop.isHarvestable());
+            cropSection.setLinkable(cropName, crop.isLinkable());
+
+            // mcMMO Settings
+            addonSection.setMcMMOExperience(cropName, 0);
+            addonSection.setMcMMOExperienceReason(
+                    cropName,
+                    "You harvested " + MessageUtils.beautify(cropName, false) + "."
+            );
+
+            // JobsReborn Settings
+            addonSection.setJobsMoney(cropName, 0);
+            addonSection.setJobsPoints(cropName, 0);
+            addonSection.setJobsExperience(cropName, 0);
+        }
+
+        if (!crop.hasSeed()) {
+            return;
+        }
+
+        Seed seed = crop.getSeed();
+        //noinspection ConstantConditions
+        String seedName = seed.getName();
+        if (!seedSection.exists(seedName)) {
+            // Drop Settings
+            if (crop.hasDrop()) {
+                Drop drop = seed.getDrop();
+                seedSection.setDropName(seedName, drop.getName());
+                seedSection.setDropAmount(seedName, drop.getAmount());
+                seedSection.setDropChance(seedName, drop.getChance());
+            }
+
+            seedSection.setEnabled(seedName, seed.isEnabled());
+        }
+    }
+
+
+    /**
+     * Removes the configuration settings based on the {@link Crop provided crop}.
+     *
+     * @param crop the crop to remove settings from.
+     */
+    public void removeSettings(@NotNull Crop crop) {
+        if (crop.hasSeed()) {
+            Seed seed = crop.getSeed();
+            //noinspection ConstantConditions
+            String seedName = seed.getName();
+            config.set("seeds." + seedName, null);
+        }
+
+        config.set("crops." + crop.getName(), null);
+        saveConfig();
+    }
+
+
+    /**
+     * Gets all the found {@link Crop crops} names.
+     *
+     * @return all the found crops names.
      */
     @NotNull
     @Unmodifiable
     public Set<String> getCropsNames() {
-        ConfigurationSection cropSection = config.getConfigurationSection(
-                "crops"
-        );
+        ConfigurationSection cropSection = config.getConfigurationSection("crops");
 
         if (cropSection == null) {
             return Collections.emptySet();

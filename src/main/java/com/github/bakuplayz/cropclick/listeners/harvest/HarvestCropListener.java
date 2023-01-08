@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.listeners.harvest;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.harvest.HarvestCropEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 
 /**
- * A listener handling all the {@link BaseCrop crop} harvest events.
+ * A listener handling all the {@link Crop crop} harvest events.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -31,15 +31,15 @@ public final class HarvestCropListener implements Listener {
 
 
     /**
-     * If the crop has no drop, cancel the event.
+     * Handles all the harvest {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onHarvestCrop(@NotNull HarvestCropEvent event) {
         if (event.isCancelled()) return;
 
-        BaseCrop crop = event.getCrop();
+        Crop crop = event.getCrop();
 
         if (!crop.hasDrop()) {
             event.setCancelled(true);

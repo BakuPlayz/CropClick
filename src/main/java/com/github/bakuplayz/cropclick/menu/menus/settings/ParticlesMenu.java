@@ -2,9 +2,9 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.particles.ParticleMenu;
@@ -27,18 +27,24 @@ import java.util.stream.Collectors;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class ParticlesMenu extends PaginatedMenu {
 
-    private final BaseCrop crop;
+    /**
+     * A variable containing the {@link Crop selected crop}.
+     */
+    private final Crop crop;
 
+    /**
+     * A variable containing all the names of the {@link ParticleEffect particles}.
+     */
     private final List<String> particles;
     private final ParticleConfigSection particleSection;
 
 
-    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
+    public ParticlesMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.PARTICLES_TITLE);
         this.particleSection = plugin.getCropsConfig().getParticleSection();
         this.particles = getParticles();
@@ -65,7 +71,7 @@ public final class ParticlesMenu extends PaginatedMenu {
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.PARTICLES));
         handlePagination(clicked);
 
-        int index = getIndexOfParticle(clicked);
+        int index = indexOfParticle(clicked);
         if (index == -1) {
             return;
         }
@@ -75,23 +81,18 @@ public final class ParticlesMenu extends PaginatedMenu {
                 player,
                 crop,
                 particles.get(index)
-        ).open();
+        ).openMenu();
     }
 
 
     /**
-     * "Get the index of the particle item that was clicked on."
-     * <p>
-     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
-     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
-     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
-     * </p>
+     * Finds the index of the {@link ParticleEffect#name() particle's name} based on the {@link ItemStack clicked item}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      *
-     * @return The index of the particle in the {@link #menuItems menuItems list}.
+     * @return the index of the particle's name, otherwise -1.
      */
-    private int getIndexOfParticle(@NotNull ItemStack clicked) {
+    private int indexOfParticle(@NotNull ItemStack clicked) {
         return menuItems
                 .stream()
                 .filter(clicked::equals)
@@ -102,18 +103,18 @@ public final class ParticlesMenu extends PaginatedMenu {
 
 
     /**
-     * It creates an item with the name of the particle and a lore that says whether the particle is active or not.
+     * Creates a menu {@link ItemStack item} based on the {@link ParticleEffect#name() particle's name}.
      *
-     * @param particle The name of the particle.
+     * @param particle the name of the particle to base the item on.
      *
-     * @return An ItemStack.
+     * @return the created menu item.
      */
-    private @NotNull ItemStack getMenuItem(@NotNull String particle) {
+    private @NotNull ItemStack createMenuItem(@NotNull String particle) {
         boolean isEnabled = particleSection.isEnabled(
                 crop.getName(),
                 particle
         );
-        String status = MessageUtils.getEnabledStatus(plugin, isEnabled);
+        String status = MessageUtils.getStatusMessage(plugin, isEnabled);
         String name = MessageUtils.beautify(particle, true);
 
         ItemBuilder item = new ItemBuilder(Material.FIREWORK)
@@ -127,7 +128,7 @@ public final class ParticlesMenu extends PaginatedMenu {
             item.setMaterial(Material.STAINED_GLASS_PANE)
                 .setLore(LanguageAPI.Menu.PARTICLES_ITEM_ORDER.get(
                         plugin,
-                        getOrderOfParticle(particle)
+                        particleSection.getOrder(crop.getName(), particle)
                 ))
                 .setDamage(5);
         }
@@ -137,39 +138,27 @@ public final class ParticlesMenu extends PaginatedMenu {
 
 
     /**
-     * Get a list of menu items, where each menu item is a particle.
+     * Gets all the {@link #particles particle names} as {@link #menuItems menu items}.
      *
-     * @return A list of ItemStacks.
+     * @return particles as menu items.
      */
     @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return particles.stream()
-                        .map(this::getMenuItem)
+                        .map(this::createMenuItem)
                         .collect(Collectors.toList());
     }
 
 
     /**
-     * It returns a list of all the particle names.
+     * Gets all the {@link ParticleEffect#name() particle names}.
      *
-     * @return A list of all the particle effects.
+     * @return particle names.
      */
     private @NotNull List<String> getParticles() {
         return ParticleEffect.getAvailableEffects().stream()
                              .map(ParticleEffect::name)
                              .collect(Collectors.toList());
-    }
-
-
-    /**
-     * It returns the index of the particle in the list of particles for the crop.
-     *
-     * @param particle The name of the particle to play.
-     *
-     * @return The index of the particle in the list of particles for the crop.
-     */
-    private int getOrderOfParticle(@NotNull String particle) {
-        return particleSection.getOrder(crop.getName(), particle);
     }
 
 }

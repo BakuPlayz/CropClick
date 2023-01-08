@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.addons;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.AddonMenu;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.AddonsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
@@ -23,11 +23,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class JobsRebornMenu extends AddonMenu {
-
 
     public JobsRebornMenu(@NotNull CropClick plugin, @NotNull Player player) {
         super(plugin, player, LanguageAPI.Menu.JOBS_REBORN_TITLE, "JobsReborn");
@@ -55,18 +54,17 @@ public final class JobsRebornMenu extends AddonMenu {
         handleToggle(clicked, getToggleItem());
 
         if (clicked.equals(getCropsSettingsItem())) {
-            new CropsMenu(plugin, player, CropMenuState.JOBS_REBORN).open();
+            new CropsMenu(plugin, player, CropMenuState.JOBS_REBORN).openMenu();
         }
 
-        refresh();
+        this.refreshMenu();
     }
 
 
     /**
-     * It creates an ItemStack with the material of wheat, sets the name to the "Crop Settings" and a
-     * small description of the settings.
+     * Gets the crop settings {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the crop settings item.
      */
     private @NotNull ItemStack getCropsSettingsItem() {
         return new ItemBuilder(Material.WHEAT)
@@ -77,20 +75,19 @@ public final class JobsRebornMenu extends AddonMenu {
 
 
     /**
-     * Return a new ItemStack with the name and lore set to the Jobs Reborn item's name and lore, and the material set to either
-     * a stone hoe or stained-glass pane depending on whether Jobs Reborn is enabled.
+     * Gets the toggle {@link ItemStack item}.
      *
-     * @return An ItemStack with the name "Jobs Reborn" and the lore of ex: "Enabled: true".
+     * @return the toggle item.
      */
     @Override
     protected @NotNull ItemStack getToggleItem() {
         return new ItemBuilder(Material.STONE_HOE)
                 .setName(LanguageAPI.Menu.ADDON_JOBS_ITEM_NAME.get(plugin,
-                        MessageUtils.getEnabledStatus(plugin, isAddonEnabled)
+                        MessageUtils.getStatusMessage(plugin, isEnabled())
                 ))
                 .setLore(LanguageAPI.Menu.ADDON_JOBS_ITEM_TIPS.getAsList(plugin))
-                .setMaterial(!isAddonEnabled, Material.STAINED_GLASS_PANE)
-                .setDamage(!isAddonEnabled, 7)
+                .setMaterial(!isEnabled(), Material.STAINED_GLASS_PANE)
+                .setDamage(!isEnabled(), 7)
                 .toItemStack();
     }
 

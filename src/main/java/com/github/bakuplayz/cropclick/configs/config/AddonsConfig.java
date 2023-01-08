@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.Config;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -21,37 +22,36 @@ public final class AddonsConfig extends Config {
 
 
     /**
-     * Returns true if the plugin/addon is installed and enabled, false otherwise.
+     * Checks whether the {@link Addon addon} is installed based on the provided name.
      *
-     * @param name The name of the plugin to check.
+     * @param addonName the name of the addon.
      *
-     * @return A boolean value.
+     * @return true if installed, otherwise false.
      */
-    public boolean isInstalled(@NotNull String name) {
-        return Bukkit.getPluginManager().isPluginEnabled(name);
+    public boolean isInstalled(@NotNull String addonName) {
+        return Bukkit.getPluginManager().isPluginEnabled(addonName);
     }
 
 
     /**
-     * Returns whether the addon is enabled.
+     * Checks whether the {@link Addon addon} is enabled based on the provided name.
      *
-     * @param name The name of the addon.
+     * @param addonName the name of the addon.
      *
-     * @return A boolean value.
+     * @return true if enabled, otherwise false.
      */
-    public boolean isEnabled(@NotNull String name) {
-        return config.getBoolean("addons." + name + ".isEnabled", true);
+    public boolean isEnabled(@NotNull String addonName) {
+        return config.getBoolean("addons." + addonName + ".isEnabled", true);
     }
 
 
     /**
-     * It toggles the enabled state of an addon.
+     * Toggles the {@link Addon addon} based on the provided name.
      *
-     * @param name The name of the addon.
+     * @param addonName the name of the addon.
      */
-    public void toggle(@NotNull String name) {
-        boolean isEnabled = isEnabled(name);
-        config.set("addons." + name + ".isEnabled", !isEnabled);
+    public void toggleAddon(@NotNull String addonName) {
+        config.set("addons." + addonName + ".isEnabled", !isEnabled(addonName));
         saveConfig();
     }
 

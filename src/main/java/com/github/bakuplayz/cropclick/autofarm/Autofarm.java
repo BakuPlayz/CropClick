@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.Enableable;
 import com.google.gson.annotations.SerializedName;
@@ -108,9 +109,9 @@ public final class Autofarm implements Enableable {
 
 
     /**
-     * This function returns the first 7 characters of the farmerID, aka shortenedID.
+     * Gets the shortened {@link #farmerID autofarmer ID}.
      *
-     * @return The first 7 characters of the farmerID.
+     * @return the shortened autofarm ID.
      */
     public @NotNull String getShortenedID() {
         return farmerID.toString().substring(0, 7);
@@ -118,26 +119,28 @@ public final class Autofarm implements Enableable {
 
 
     /**
-     * If the container is not null, return it. If the container is null, check if the container is enabled, linked, and if
-     * the block is a chest, double chest, or shulker box. If it is, return the container. If it is not, return null.
+     * Gets the {@link Container container} of the {@link Autofarm autofarm}.
      *
-     * @return A container object.
+     * @return the autofarm's container.
      */
     public @Nullable Container getContainer() {
-        if (container != null) return container;
+        if (container != null) {
+            return container;
+        }
+
         if (!isEnabled()) return null;
         if (!isLinked()) return null;
 
-        return this.container = AutofarmUtils.getContainer(
+        return this.container = AutofarmUtils.findContainer(
                 containerLocation.getBlock()
         );
     }
 
 
     /**
-     * Returns true if the container is not null.
+     * Checks whether the {@link Autofarm autofarm} has a {@link Container container}.
      *
-     * @return A boolean value.
+     * @return true if it has a container, otherwise false.
      */
     public boolean hasContainer() {
         return getContainer() != null;
@@ -145,9 +148,9 @@ public final class Autofarm implements Enableable {
 
 
     /**
-     * If the crop, container, and dispenser locations are not null, then the farm is linked.
+     * Checks whether the {@link Autofarm autofarm} is linked.
      *
-     * @return A boolean value.
+     * @return true if linked, otherwise false.
      */
     public boolean isLinked() {
         return cropLocation != null
@@ -157,24 +160,23 @@ public final class Autofarm implements Enableable {
 
 
     /**
-     * If the farm is linked, check if the dispenser, container, and crop are present.
+     * Checks whether the {@link Component autofarm components} are present.
      *
-     * @param manager The AutofarmManager instance that is calling this method.
+     * @param manager the manager to check with.
      *
-     * @return A boolean value.
+     * @return true if all are present, otherwise false.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isComponentsPresent(@NotNull AutofarmManager manager) {
         if (!isLinked()) {
             return false;
         }
 
-        boolean isDispenserPresent = manager.isComponent(dispenserLocation.getBlock());
-        if (!isDispenserPresent) {
+        if (!manager.isComponent(dispenserLocation.getBlock())) {
             return false;
         }
 
-        boolean isContainerPresent = manager.isComponent(containerLocation.getBlock());
-        if (!isContainerPresent) {
+        if (!manager.isComponent(containerLocation.getBlock())) {
             return false;
         }
 

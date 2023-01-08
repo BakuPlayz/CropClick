@@ -1,6 +1,6 @@
 package com.github.bakuplayz.cropclick.yaml;
 
-import com.github.bakuplayz.cropclick.menu.menus.sounds.SoundMenu;
+import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
 import com.github.bakuplayz.cropclick.utils.Enableable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,17 +26,17 @@ import java.util.Map;
 public final class SoundYaml implements Yamlable, Enableable {
 
     /**
-     * The given delay before playing the sound ({@link SoundMenu#MIN_DELAY min delay} & {@link SoundMenu#MAX_DELAY max delay}).
+     * The given delay before playing the sound ({@link Sound#MIN_DELAY min delay} & {@link Sound#MAX_DELAY max delay}).
      */
     private @Setter @Getter @Accessors(chain = true) double delay;
 
     /**
-     * The given pitch the sound should be played at ({@link SoundMenu#MIN_PITCH min pitch} & {@link SoundMenu#MAX_PITCH max pitch}).
+     * The given pitch the sound should be played at ({@link Sound#MIN_PITCH min pitch} & {@link Sound#MAX_PITCH max pitch}).
      */
     private @Setter @Getter @Accessors(chain = true) double pitch;
 
     /**
-     * The given range-in-blocks or volume the sound should be played at ({@link SoundMenu#MIN_VOLUME min volume} & {@link SoundMenu#MAX_VOLUME max volume}).
+     * The given range-in-blocks or volume the sound should be played at ({@link Sound#MIN_VOLUME min volume} & {@link Sound#MAX_VOLUME max volume}).
      */
     private @Setter @Getter @Accessors(chain = true) double volume;
 
@@ -51,7 +51,7 @@ public final class SoundYaml implements Yamlable, Enableable {
     /**
      * It converts {@link SoundYaml this} object to a YAML-styled map.
      *
-     * @return A {@link HashMap YAML-formatted HashMap}.
+     * @return a {@link HashMap YAML-formatted HashMap}.
      */
     @Override
     @Contract(" -> new")
@@ -67,7 +67,7 @@ public final class SoundYaml implements Yamlable, Enableable {
     /**
      * It checks whether the Sound is enabled, by validating only ones with a {@link #volume} and {@link #pitch} more than zero.
      *
-     * @return An enabled state, whether the Sound is enabled or not.
+     * @return true if the sound is enabled, otherwise false.
      */
     @Override
     public boolean isEnabled() {

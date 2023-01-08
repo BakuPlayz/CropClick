@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.menu.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.*;
 import com.github.bakuplayz.cropclick.menu.states.AutofarmsMenuState;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class MainMenu extends Menu {
+public final class MainMenu extends BaseMenu {
 
     public MainMenu(@NotNull CropClick plugin, @NotNull Player player) {
         super(plugin, player, LanguageAPI.Menu.MAIN_TITLE);
@@ -49,35 +49,35 @@ public final class MainMenu extends Menu {
         assert clicked != null; // Only here for the compiler.
 
         if (clicked.equals(getCropsItem())) {
-            new CropsMenu(plugin, player, CropMenuState.CROP).open();
+            new CropsMenu(plugin, player, CropMenuState.CROP).openMenu();
         }
 
         if (clicked.equals(getAutofarmsItem())) {
-            new AutofarmsMenu(plugin, player, AutofarmsMenuState.MENU_REDIRECT).open();
+            new AutofarmsMenu(plugin, player, AutofarmsMenuState.MENU).openMenu();
         }
 
         if (clicked.equals(getUpdatesItem())) {
-            new UpdatesMenu(plugin, player).open();
+            new UpdatesMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getAddonsItem())) {
-            new AddonsMenu(plugin, player).open();
+            new AddonsMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getHelpItem())) {
-            new HelpMenu(plugin, player, true).open();
+            new HelpMenu(plugin, player, true).openMenu();
         }
 
         if (clicked.equals(getSettingsItem())) {
-            new SettingsMenu(plugin, player, true).open();
+            new SettingsMenu(plugin, player, true).openMenu();
         }
     }
 
 
     /**
-     * It creates an item with the material of an anvil, the name of "Updates" and the lore of explaining the update menu.
+     * Gets the updates {@link ItemStack item}.
      *
-     * @return An ItemStack
+     * @return the updates item.
      */
     private @NotNull ItemStack getUpdatesItem() {
         String updateState = plugin.getUpdateManager().getUpdateStateMessage();
@@ -90,9 +90,9 @@ public final class MainMenu extends Menu {
 
 
     /**
-     * It creates an item with the material of an ender chest, the name of "Addons" and the lore of explaining the addons menu.
+     * Gets the addons {@link ItemStack item}.
      *
-     * @return An ItemStack
+     * @return the addons item.
      */
     private @NotNull ItemStack getAddonsItem() {
         return new ItemBuilder(Material.ENDER_CHEST)
@@ -104,9 +104,9 @@ public final class MainMenu extends Menu {
 
 
     /**
-     * It creates an item with the material of a chest, the name of "Settings" and the lore explaining the settings menu.
+     * Gets the settings {@link ItemStack item}.
      *
-     * @return An ItemStack
+     * @return the settings item.
      */
     private @NotNull ItemStack getSettingsItem() {
         return new ItemBuilder(Material.CHEST)
@@ -118,9 +118,9 @@ public final class MainMenu extends Menu {
 
 
     /**
-     * It creates an item with the material of a wheat, the name of "Crops" and the lore of "Amount of Crops: X".
+     * Gets the crops {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the crops item.
      */
     private @NotNull ItemStack getCropsItem() {
         int amountOfCrops = plugin.getCropManager().getAmountOfCrops();
@@ -133,9 +133,9 @@ public final class MainMenu extends Menu {
 
 
     /**
-     * It creates an item with material of dispenser, the name of "Autofarms" and the lore "Amount of Autofarms: X".
+     * Gets the autofarms {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the autofarms item.
      */
     private @NotNull ItemStack getAutofarmsItem() {
         int amountOfFarms = plugin.getAutofarmManager().getAmountOfFarms();
@@ -148,9 +148,9 @@ public final class MainMenu extends Menu {
 
 
     /**
-     * It creates an item with material of book, the name of "Help" and the lore "Amount of Commands: X".
+     * Gets the help {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the help item.
      */
     private @NotNull ItemStack getHelpItem() {
         int amountOfCommands = plugin.getCommandManager().getAmountOfCommands();

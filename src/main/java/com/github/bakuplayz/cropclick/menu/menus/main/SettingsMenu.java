@@ -1,19 +1,23 @@
 package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.ToggleMenu;
 import com.github.bakuplayz.cropclick.menu.menus.settings.WorldsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.menu.states.WorldMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
+import com.github.bakuplayz.cropclick.utils.MathUtils;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,9 +33,16 @@ import xyz.xenondevs.particle.ParticleEffect;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class SettingsMenu extends Menu {
+public final class SettingsMenu extends BaseMenu {
 
+    /**
+     * A variable checking if the menu request to {@link SettingsMenu} was a redirect.
+     */
     private final boolean isRedirected;
+
+    /**
+     * A variable checking if the {@link VersionUtils#getServerVersion() server version} supports {@link ParticleEffect particles}.
+     */
     private final boolean supportsParticles;
 
 
@@ -70,41 +81,41 @@ public final class SettingsMenu extends Menu {
 
         if (clicked.equals(getAutofarmsItem())) {
             toggleAutofarms();
-            refresh();
+            refreshMenu();
             return;
         }
 
         if (supportsParticles && clicked.equals(getParticlesItem())) {
-            new CropsMenu(plugin, player, CropMenuState.PARTICLES).open();
+            new CropsMenu(plugin, player, CropMenuState.PARTICLES).openMenu();
         }
 
         if (clicked.equals(getSoundsItem())) {
-            new CropsMenu(plugin, player, CropMenuState.SOUNDS).open();
+            new CropsMenu(plugin, player, CropMenuState.SOUNDS).openMenu();
         }
 
         if (clicked.isSimilar(getToggleItem())) {
-            new ToggleMenu(plugin, player).open();
+            new ToggleMenu(plugin, player).openMenu();
         }
 
         if (clicked.equals(getNameItem())) {
-            new CropsMenu(plugin, player, CropMenuState.NAME).open();
+            new CropsMenu(plugin, player, CropMenuState.NAME).openMenu();
         }
 
         if (clicked.equals(getWorldsItem())) {
-            new WorldsMenu(plugin, player, WorldMenuState.SETTINGS).open();
+            new WorldsMenu(plugin, player, WorldMenuState.SETTINGS).openMenu();
         }
     }
 
 
     /**
-     * It creates an item representing autofarms.
+     * Gets the autofarms {@link ItemStack item}.
      *
-     * @return An ItemStack representing autofarms.
+     * @return the autofarms item.
      */
     private @NotNull ItemStack getAutofarmsItem() {
-        String status = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getStatusMessage(
                 plugin,
-                getAutofarmsState()
+                plugin.getAutofarmManager().isEnabled()
         );
 
         return new ItemBuilder(Material.DISPENSER)
@@ -116,9 +127,9 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * It creates an item representing particles.
+     * Gets the particles {@link ItemStack item}.
      *
-     * @return An ItemStack representing particles.
+     * @return the particles item.
      */
     private @NotNull ItemStack getParticlesItem() {
         return new ItemBuilder(Material.FIREWORK)
@@ -130,9 +141,9 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * It creates an item representing sounds.
+     * Gets the sounds {@link ItemStack item}.
      *
-     * @return An ItemStack representing sounds.
+     * @return the sounds item.
      */
     private @NotNull ItemStack getSoundsItem() {
         return new ItemBuilder(Material.NOTE_BLOCK)
@@ -144,23 +155,23 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * It creates an item representing the toggle.
+     * Gets the toggle {@link ItemStack item}.
      *
-     * @return An ItemStack representing the toggle.
+     * @return the toggle item.
      */
     private @NotNull ItemStack getToggleItem() {
         return new ItemBuilder(Material.SKULL_ITEM)
                 .setName(plugin, LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_NAME)
                 .setLore(LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())))
-                .toSkullStack(player);
+                .toPlayerHead(player);
     }
 
 
     /**
-     * It creates an item representing the name.
+     * Gets the name {@link ItemStack item}.
      *
-     * @return An ItemStack representing the name.
+     * @return the name item.
      */
     private @NotNull ItemStack getNameItem() {
         return new ItemBuilder(Material.NAME_TAG)
@@ -172,9 +183,9 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * It creates an item representing the worlds.
+     * Gets the worlds {@link ItemStack item}.
      *
-     * @return An ItemStack representing the worlds.
+     * @return the worlds item.
      */
     private @NotNull ItemStack getWorldsItem() {
         return new ItemBuilder(Material.GRASS)
@@ -186,29 +197,18 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * This function returns the value of the autofarms.isEnabled key in the config.yml file.
-     *
-     * @return The boolean value of the autofarms.isEnabled key in the config.yml file.
-     */
-    private boolean getAutofarmsState() {
-        return plugin.getAutofarmManager().isEnabled();
-    }
-
-
-    /**
-     * Toggle the state of autofarms.
+     * Toggles the enabled state of all {@link Autofarm autofarms}.
      */
     private void toggleAutofarms() {
-        boolean state = getAutofarmsState();
-        plugin.getConfig().set("autofarms.isEnabled", !state);
+        plugin.getConfig().set("autofarms.isEnabled", !plugin.getAutofarmManager().isEnabled());
         plugin.saveConfig();
     }
 
 
     /**
-     * It returns the amount of particles in the ParticleEffect enum.
+     * Gets the amount of {@link ParticleEffect#getAvailableEffects() particle effects}.
      *
-     * @return The amount of particles in the ParticleEffect enum.
+     * @return the amount particle effects.
      */
     private int getAmountOfParticles() {
         return ParticleEffect.getAvailableEffects().size();
@@ -216,9 +216,9 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * Return the amount of sounds in the Sound enum.
+     * Gets the amount of {@link Sound#values() sounds}.
      *
-     * @return The amount of sounds in the Sound enum.
+     * @return the amount of sounds.
      */
     private int getAmountOfSounds() {
         return Sound.values().length;
@@ -226,21 +226,21 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * Get the amount of players that have the plugin enabled.
+     * Gets the amount of {@link OfflinePlayer enabled players} allowed to use {@link CropClick}.
      *
-     * @return The amount of players that have the plugin enabled.
+     * @return the amount of enabled players.
      */
     private int getAmountOfEnabled() {
         int amountOfPlayers = Bukkit.getOfflinePlayers().length;
         int amountOfDisabled = plugin.getPlayersConfig().getDisabledPlayers().size();
-        return amountOfPlayers - amountOfDisabled;
+        return MathUtils.clamp(amountOfPlayers - amountOfDisabled, 0, 999999);
     }
 
 
     /**
-     * It returns the amount of crops that have a drop name of "null" (meaning unchanged name).
+     * Gets the amount of {@link Crop renamed crops}.
      *
-     * @return The amount of crops that have been renamed.
+     * @return the amount of renamed crops.
      */
     private int getAmountOfRenamed() {
         return (int) plugin.getCropManager().getCrops()
@@ -251,9 +251,9 @@ public final class SettingsMenu extends Menu {
 
 
     /**
-     * Get the amount of banished worlds.
+     * Gets the amount of {@link FarmWorld banished worlds}.
      *
-     * @return The number of banished worlds.
+     * @return the amount of banished worlds.
      */
     private int getAmountOfBanished() {
         return (int) plugin.getWorldManager().getWorlds().values().stream()

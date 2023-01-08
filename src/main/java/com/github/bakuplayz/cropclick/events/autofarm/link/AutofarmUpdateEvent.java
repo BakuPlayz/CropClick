@@ -17,10 +17,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AutofarmUpdateEvent extends Event implements Cancellable {
 
-    private @Setter @Getter boolean cancelled;
-
     private final @Getter Autofarm oldAutofarm;
     private final @Getter Autofarm newAutofarm;
+
+    /**
+     * Checks whether the event is cancelled or not.
+     */
+    private @Setter @Getter boolean cancelled;
 
 
     public AutofarmUpdateEvent(@NotNull Autofarm oldAutofarm, @NotNull Autofarm newAutofarm) {

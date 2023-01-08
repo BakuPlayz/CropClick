@@ -1,7 +1,7 @@
 package com.github.bakuplayz.cropclick.utils;
 
 /**
- * An interface for enableable/toggleable classes.
+ * An interface for toggleable classes.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -10,7 +10,7 @@ package com.github.bakuplayz.cropclick.utils;
 public interface Enableable {
 
     /**
-     * Checks if the implement object itself is enabled.
+     * Checks whether the implementing object is enabled.
      *
      * @return true if enabled, otherwise false.
      */

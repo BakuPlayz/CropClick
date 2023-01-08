@@ -1,10 +1,11 @@
 package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.addon.JobsRebornAddon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -23,10 +24,10 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @see CropsMenu
  * @see JobsRebornMenu
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
-public final class JobsCropMenu extends Menu {
+public final class JobsCropMenu extends BaseMenu {
 
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
@@ -39,7 +40,7 @@ public final class JobsCropMenu extends Menu {
     private final AddonConfigSection addonSection;
 
 
-    public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
+    public JobsCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.JOBS_CROP_TITLE);
         this.addonSection = plugin.getCropsConfig().getAddonSection();
         this.cropName = crop.getName();
@@ -48,23 +49,23 @@ public final class JobsCropMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        inventory.setItem(10, getMoneyRemoveItem(MAX_CHANGE));
-        inventory.setItem(11, getMoneyRemoveItem(MIN_CHANGE));
+        inventory.setItem(10, getMoneyDecreaseItem(MAX_CHANGE));
+        inventory.setItem(11, getMoneyDecreaseItem(MIN_CHANGE));
         inventory.setItem(13, getMoneyItem());
-        inventory.setItem(15, getMoneyAddItem(MIN_CHANGE));
-        inventory.setItem(16, getMoneyAddItem(MAX_CHANGE));
+        inventory.setItem(15, getMoneyIncreaseItem(MIN_CHANGE));
+        inventory.setItem(16, getMoneyIncreaseItem(MAX_CHANGE));
 
-        inventory.setItem(19, getPointsRemoveItem(MAX_CHANGE));
-        inventory.setItem(20, getPointsRemoveItem(MIN_CHANGE));
+        inventory.setItem(19, getPointsDecreaseItem(MAX_CHANGE));
+        inventory.setItem(20, getPointsDecreaseItem(MIN_CHANGE));
         inventory.setItem(22, getPointsItem());
-        inventory.setItem(24, getPointsAddItem(MIN_CHANGE));
-        inventory.setItem(25, getPointsAddItem(MAX_CHANGE));
+        inventory.setItem(24, getPointsIncreaseItem(MIN_CHANGE));
+        inventory.setItem(25, getPointsIncreaseItem(MAX_CHANGE));
 
-        inventory.setItem(28, getExperienceRemoveItem(MAX_CHANGE));
-        inventory.setItem(29, getExperienceRemoveItem(MIN_CHANGE));
+        inventory.setItem(28, getExperienceDecreaseItem(MAX_CHANGE));
+        inventory.setItem(29, getExperienceDecreaseItem(MIN_CHANGE));
         inventory.setItem(31, getExperienceItem());
-        inventory.setItem(33, getExperienceAddItem(MIN_CHANGE));
-        inventory.setItem(34, getExperienceAddItem(MAX_CHANGE));
+        inventory.setItem(33, getExperienceIncreaseItem(MIN_CHANGE));
+        inventory.setItem(34, getExperienceIncreaseItem(MAX_CHANGE));
 
         setBackItem();
     }
@@ -79,64 +80,64 @@ public final class JobsCropMenu extends Menu {
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.JOBS_REBORN));
 
         // Points
-        if (clicked.equals(getPointsAddItem(MIN_CHANGE))) {
-            addJobsPoints(MIN_CHANGE);
+        if (clicked.equals(getPointsIncreaseItem(MIN_CHANGE))) {
+            increasePoints(MIN_CHANGE);
         }
 
-        if (clicked.equals(getPointsAddItem(MAX_CHANGE))) {
-            addJobsPoints(MAX_CHANGE);
+        if (clicked.equals(getPointsIncreaseItem(MAX_CHANGE))) {
+            increasePoints(MAX_CHANGE);
         }
 
-        if (clicked.equals(getPointsRemoveItem(MIN_CHANGE))) {
-            removeJobsPoints(MIN_CHANGE);
+        if (clicked.equals(getPointsDecreaseItem(MIN_CHANGE))) {
+            decreasePoints(MIN_CHANGE);
         }
 
-        if (clicked.equals(getPointsRemoveItem(MAX_CHANGE))) {
-            removeJobsPoints(MAX_CHANGE);
+        if (clicked.equals(getPointsDecreaseItem(MAX_CHANGE))) {
+            decreasePoints(MAX_CHANGE);
         }
 
         // Money
-        if (clicked.equals(getMoneyAddItem(MIN_CHANGE))) {
-            addJobsMoney(MIN_CHANGE);
+        if (clicked.equals(getMoneyIncreaseItem(MIN_CHANGE))) {
+            increaseMoney(MIN_CHANGE);
         }
 
-        if (clicked.equals(getMoneyAddItem(MAX_CHANGE))) {
-            addJobsMoney(MAX_CHANGE);
+        if (clicked.equals(getMoneyIncreaseItem(MAX_CHANGE))) {
+            increaseMoney(MAX_CHANGE);
         }
 
-        if (clicked.equals(getMoneyRemoveItem(MIN_CHANGE))) {
-            removeJobsMoney(MIN_CHANGE);
+        if (clicked.equals(getMoneyDecreaseItem(MIN_CHANGE))) {
+            decreaseMoney(MIN_CHANGE);
         }
 
-        if (clicked.equals(getMoneyRemoveItem(MAX_CHANGE))) {
-            removeJobsMoney(MAX_CHANGE);
+        if (clicked.equals(getMoneyDecreaseItem(MAX_CHANGE))) {
+            decreaseMoney(MAX_CHANGE);
         }
 
         // Experience
-        if (clicked.equals(getExperienceAddItem(MIN_CHANGE))) {
-            addJobsExperience(MIN_CHANGE);
+        if (clicked.equals(getExperienceIncreaseItem(MIN_CHANGE))) {
+            increaseExperience(MIN_CHANGE);
         }
 
-        if (clicked.equals(getExperienceAddItem(MAX_CHANGE))) {
-            addJobsExperience(MAX_CHANGE);
+        if (clicked.equals(getExperienceIncreaseItem(MAX_CHANGE))) {
+            increaseExperience(MAX_CHANGE);
         }
 
-        if (clicked.equals(getExperienceRemoveItem(MIN_CHANGE))) {
-            removeJobsExperience(MIN_CHANGE);
+        if (clicked.equals(getExperienceDecreaseItem(MIN_CHANGE))) {
+            decreaseExperience(MIN_CHANGE);
         }
 
-        if (clicked.equals(getExperienceRemoveItem(MAX_CHANGE))) {
-            removeJobsExperience(MAX_CHANGE);
+        if (clicked.equals(getExperienceDecreaseItem(MAX_CHANGE))) {
+            decreaseExperience(MAX_CHANGE);
         }
 
-        refresh();
+        refreshMenu();
     }
 
 
     /**
-     * It returns an ItemStack that represents the points that the crop will give you on harvest.
+     * Gets the points {@link ItemStack item}.
      *
-     * @return An ItemStack that represents the points the crop will give you.
+     * @return the points item.
      */
     private @NotNull ItemStack getPointsItem() {
         double points = addonSection.getJobsPoints(cropName);
@@ -151,9 +152,9 @@ public final class JobsCropMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the money that the crop will give you on harvest.
+     * Gets the money {@link ItemStack item}.
      *
-     * @return An ItemStack that represents the money the crop will give you.
+     * @return the money item.
      */
     private @NotNull ItemStack getMoneyItem() {
         double money = addonSection.getJobsMoney(cropName);
@@ -168,9 +169,9 @@ public final class JobsCropMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the experience that the crop will give you on harvest.
+     * Gets the experience {@link ItemStack item}.
      *
-     * @return An ItemStack that represents the experience the crop will give you.
+     * @return the experience item.
      */
     private @NotNull ItemStack getExperienceItem() {
         double experience = addonSection.getJobsExperience(cropName);
@@ -185,180 +186,180 @@ public final class JobsCropMenu extends Menu {
 
 
     /**
-     * It creates an item that adds points to the crop.
+     * Gets the points increase {@link ItemStack item} based on the provided points.
      *
-     * @param amount The amount of points to add to the crop.
+     * @param points the points to be increased with when clicked.
      *
-     * @return An ItemStack that will be used to add points to the crop.
+     * @return the points increase item.
      */
-    private @NotNull ItemStack getPointsAddItem(int amount) {
+    private @NotNull ItemStack getPointsIncreaseItem(int points) {
         double beforeValue = addonSection.getJobsPoints(cropName);
-        double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
+        double afterValue = Math.min(beforeValue + points, VALUE_MAX);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Points"))
+                .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, points, "Points"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an item that removes points to the crop.
+     * Gets the points decrease {@link ItemStack item} based on the provided points.
      *
-     * @param amount The amount of points to remove to the crop.
+     * @param points the points to be decreased with when clicked.
      *
-     * @return An ItemStack that will be used to remove points to the crop.
+     * @return the points decrease item.
      */
-    private @NotNull ItemStack getPointsRemoveItem(int amount) {
+    private @NotNull ItemStack getPointsDecreaseItem(int points) {
         double beforeValue = addonSection.getJobsPoints(cropName);
-        double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
+        double afterValue = Math.max(beforeValue - points, VALUE_MIN);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Points"))
+                .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, points, "Points"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an item that adds money to the crop.
+     * Gets the money increase {@link ItemStack item} based on the provided money.
      *
-     * @param amount The amount of money to add to the crop.
+     * @param money the money to be increased with when clicked.
      *
-     * @return An ItemStack that will be used to add money to the crop.
+     * @return the money increase item.
      */
-    private @NotNull ItemStack getMoneyAddItem(int amount) {
+    private @NotNull ItemStack getMoneyIncreaseItem(int money) {
         double beforeValue = addonSection.getJobsMoney(cropName);
-        double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
+        double afterValue = Math.min(beforeValue + money, VALUE_MAX);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Money"))
+                .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, money, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an item that removes money to the crop.
+     * Gets the money decrease {@link ItemStack item} based on the provided money.
      *
-     * @param amount The amount of money to remove to the crop.
+     * @param money the money to be decreased with when clicked.
      *
-     * @return An ItemStack that will be used to remove money to the crop.
+     * @return the money decrease item.
      */
-    private @NotNull ItemStack getMoneyRemoveItem(int amount) {
+    private @NotNull ItemStack getMoneyDecreaseItem(int money) {
         double beforeValue = addonSection.getJobsMoney(cropName);
-        double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
+        double afterValue = Math.max(beforeValue - money, VALUE_MIN);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Money"))
+                .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, money, "Money"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an item that adds experience to the crop.
+     * Gets the experience increase {@link ItemStack item} based on the provided experience.
      *
-     * @param amount The amount of experience to add to the crop.
+     * @param experience the experience to be increased with when clicked.
      *
-     * @return An ItemStack that will be used to add experience to the crop.
+     * @return the experience increase item.
      */
-    private @NotNull ItemStack getExperienceAddItem(int amount) {
+    private @NotNull ItemStack getExperienceIncreaseItem(int experience) {
         double beforeValue = addonSection.getJobsExperience(cropName);
-        double afterValue = Math.min(beforeValue + amount, VALUE_MAX);
+        double afterValue = Math.min(beforeValue + experience, VALUE_MAX);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
+                .setName(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_NAME.get(plugin, experience, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an item that removes experience to the crop.
+     * Gets the experience decrease {@link ItemStack item} based on the provided experience.
      *
-     * @param amount The amount of experience to remove to the crop.
+     * @param experience the experience to be decreased with when clicked.
      *
-     * @return An ItemStack that will be used to remove experience to the crop.
+     * @return the experience decrease item.
      */
-    private @NotNull ItemStack getExperienceRemoveItem(int amount) {
+    private @NotNull ItemStack getExperienceDecreaseItem(int experience) {
         double beforeValue = addonSection.getJobsExperience(cropName);
-        double afterValue = Math.max(beforeValue - amount, VALUE_MIN);
+        double afterValue = Math.max(beforeValue - experience, VALUE_MIN);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
+                .setName(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, experience, "Experience"))
                 .setLore(LanguageAPI.Menu.JOBS_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * Adds the specified amount of points to the crop.
+     * Increases the {@link JobsRebornAddon JobsReborn} points with the provided points.
      *
-     * @param amount The amount of points to add.
+     * @param points the points to be increased with.
      */
-    public void addJobsPoints(int amount) {
-        double oldAmount = addonSection.getJobsPoints(cropName) + amount;
+    private void increasePoints(int points) {
+        double oldAmount = addonSection.getJobsPoints(cropName) + points;
         double newAmount = Math.min(oldAmount, VALUE_MAX);
         addonSection.setJobsPoints(cropName, newAmount);
     }
 
 
     /**
-     * Removes the specified amount of points from the specified player.
+     * Decreases the {@link JobsRebornAddon JobsReborn} points with the provided points.
      *
-     * @param amount The amount of points to remove.
+     * @param points the points to be decreased with.
      */
-    public void removeJobsPoints(int amount) {
-        double oldAmount = addonSection.getJobsPoints(cropName) - amount;
+    private void decreasePoints(int points) {
+        double oldAmount = addonSection.getJobsPoints(cropName) - points;
         double newAmount = Math.max(oldAmount, VALUE_MIN);
         addonSection.setJobsPoints(cropName, newAmount);
     }
 
 
     /**
-     * Adds the specified amount of money to the crop.
+     * Increases the {@link JobsRebornAddon JobsReborn} money with the provided money.
      *
-     * @param amount The amount of money to add to the specified crop.
+     * @param money the money to be increased with.
      */
-    public void addJobsMoney(int amount) {
-        double oldAmount = addonSection.getJobsMoney(cropName) + amount;
+    private void increaseMoney(int money) {
+        double oldAmount = addonSection.getJobsMoney(cropName) + money;
         double newAmount = Math.min(oldAmount, VALUE_MAX);
         addonSection.setJobsMoney(cropName, newAmount);
     }
 
 
     /**
-     * Remove money from a player's Jobs account.
+     * Decreases the {@link JobsRebornAddon JobsReborn} money with the provided money.
      *
-     * @param amount The amount of money to remove from the player's balance.
+     * @param money the money to be decreased with.
      */
-    public void removeJobsMoney(int amount) {
-        double oldAmount = addonSection.getJobsMoney(cropName) - amount;
+    private void decreaseMoney(int money) {
+        double oldAmount = addonSection.getJobsMoney(cropName) - money;
         double newAmount = Math.max(oldAmount, VALUE_MIN);
         addonSection.setJobsMoney(cropName, newAmount);
     }
 
 
     /**
-     * Adds the given amount of experience to the given job, but caps it at 10,000.
+     * Increases the {@link JobsRebornAddon JobsReborn} experience with the provided experience.
      *
-     * @param amount The amount of experience to add.
+     * @param experience the experience to be increased with.
      */
-    public void addJobsExperience(int amount) {
-        double oldAmount = addonSection.getJobsExperience(cropName) + amount;
+    private void increaseExperience(int experience) {
+        double oldAmount = addonSection.getJobsExperience(cropName) + experience;
         double newAmount = Math.min(oldAmount, VALUE_MAX);
         addonSection.setJobsExperience(cropName, newAmount);
     }
 
 
     /**
-     * Removes the specified amount of experience from the specified job.
+     * Decreases the {@link JobsRebornAddon JobsReborn} experience with the provided experience.
      *
-     * @param amount The amount of experience to remove.
+     * @param experience the experience to be decreased with.
      */
-    public void removeJobsExperience(int amount) {
-        double oldAmount = addonSection.getJobsExperience(cropName) - amount;
+    private void decreaseExperience(int experience) {
+        double oldAmount = addonSection.getJobsExperience(cropName) - experience;
         double newAmount = Math.max(oldAmount, VALUE_MIN);
         addonSection.setJobsExperience(cropName, newAmount);
     }

@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.permissions.crop;
 
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @version 2.0.0
  * @since 2.0.0
  */
-public enum CropPermissionType {
+public enum CropPermissionAction {
 
     PLANT,
     HARVEST,
@@ -21,10 +22,9 @@ public enum CropPermissionType {
 
 
     /**
-     * If this is a plant action, return the plant all crops permission, if this is a harvest action, return the harvest
-     * all crops permission, if this is a destroy action, return to destroy all crops permission, otherwise return null.
+     * Gets the {@link CropPermission permission} type for performing the given action to {@link Crop all crops}.
      *
-     * @return A permission object.
+     * @return the "all permission" for the action, otherwise null.
      */
     @Contract(pure = true)
     public @Nullable Permission getAllPermission() {
@@ -37,15 +37,17 @@ public enum CropPermissionType {
 
             case DESTROY:
                 return CropPermission.DESTROY_ALL_CROPS;
+
+            default:
+                return null;
         }
-        return null;
     }
 
 
     /**
-     * Returns the lowercase name of the enum constant.
+     * Gets the name of the permission type as all lowercase.
      *
-     * @return The name of the enum in lowercase.
+     * @return the name of the permission type.
      */
     public @NotNull String getName() {
         return name().toLowerCase();

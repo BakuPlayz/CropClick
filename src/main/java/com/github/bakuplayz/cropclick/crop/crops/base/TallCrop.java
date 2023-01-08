@@ -1,8 +1,9 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,20 +17,20 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see BaseCrop
+ * @see Crop
  * @since 2.0.0
  */
-public abstract class TallCrop extends Crop {
+public abstract class TallCrop extends BaseCrop {
 
-    public TallCrop(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public TallCrop(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
     /**
-     * Gets the harvest age of the tall crop.
+     * Gets the harvest age of the {@link TallCrop extending tall crop}.
      *
-     * @return the harvest age (default: 2).
+     * @return the crop's harvest age (default: 2).
      */
     @Override
     public int getHarvestAge() {
@@ -38,11 +39,11 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * Gets the current age of the tall crop.
+     * Gets the current age of the {@link TallCrop extending tall crop}.
      *
      * @param block the crop block.
      *
-     * @return the current age.
+     * @return the crop's current age.
      */
     @Override
     public int getCurrentAge(@NotNull Block block) {
@@ -71,18 +72,18 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * Gets the seed of the tall crop.
+     * Gets the {@link Seed seed} of the {@link TallCrop extending tall crop}.
      *
-     * @return the seed of the crop, or null (default: null).
+     * @return the seed, otherwise null (default: null).
      */
     @Override
-    public @Nullable BaseSeed getSeed() {
+    public @Nullable Seed getSeed() {
         return null;
     }
 
 
     /**
-     * Checks whether the tall crop has a seed.
+     * Checks whether the {@link TallCrop extending tall crop} has a {@link Seed seed}.
      *
      * @return true if it has, otherwise false (default: false).
      */
@@ -93,9 +94,9 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * Replants the tall crop.
+     * Replants the {@link TallCrop extending tall crop}.
      *
-     * @param block the crop block.
+     * @param block the crop block to replant.
      */
     @Override
     public void replant(@NotNull Block block) {
@@ -116,7 +117,7 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * Checks whether the tall crop is linkable.
+     * Checks whether the {@link TallCrop extending tall crop} is linkable to an {@link Autofarm}.
      *
      * @return true if it is, otherwise false (default: false).
      */
@@ -127,18 +128,15 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * "Harvest all the crops, stacked on each other, starting from the top."
-     * <p>
-     * Checks whether the tall crop can be harvested,
-     * returning true if it successfully harvested them.
+     * Harvests all the {@link TallCrop extending tall crops}.
      *
-     * @param player The player  to add the drops to.
-     * @param block  The block that was harvested.
-     * @param crop   The crop that is being harvested.
+     * @param player the player to add the drops to.
+     * @param block  the crop block that was harvested.
+     * @param crop   the crop that was harvested.
      *
-     * @return The harvest state.
+     * @return true if it harvested all, otherwise false.
      */
-    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull BaseCrop crop) {
+    public boolean harvestAll(@NotNull Player player, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -156,18 +154,15 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * "Harvest all the crops, stacked on each other, starting from the top."
-     * <p>
-     * Checks whether the tall crop can be harvested,
-     * returning true if it successfully harvested them.
+     * Harvests all the {@link TallCrop extending tall crops}.
      *
-     * @param container The container  to add the drops to.
-     * @param block     The block that was harvested.
-     * @param crop      The crop that is being harvested.
+     * @param container the container to add the drops to.
+     * @param block     the crop block that was harvested.
+     * @param crop      the crop that was harvested.
      *
-     * @return The harvest state.
+     * @return true if it harvested all, otherwise false.
      */
-    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull BaseCrop crop) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block, @NotNull Crop crop) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
@@ -185,15 +180,15 @@ public abstract class TallCrop extends Crop {
 
 
     /**
-     * Gets the actual height/age of a tall crop.
+     * Gets the actual height/age of the {@link TallCrop extending tall crop}.
      *
-     * @param crop   The crop to be planted
-     * @param height The height of the crop.
+     * @param crop the crop to get the height of.
+     * @param age  the age of the crop.
      *
-     * @return The height/age of the crop.
+     * @return the actual height/age of the crop.
      */
-    public int getActualHeight(@NotNull BaseCrop crop, int height) {
-        return crop.shouldReplant() ? height - 1 : height;
+    private int getActualHeight(@NotNull Crop crop, int age) {
+        return crop.shouldReplant() ? age - 1 : age;
     }
 
 }

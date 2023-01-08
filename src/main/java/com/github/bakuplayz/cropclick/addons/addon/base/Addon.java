@@ -43,9 +43,9 @@ public abstract class Addon implements Enableable {
 
 
     /**
-     * Returns true if the addon is enabled, false otherwise.
+     * Checks whether the {@link Addon extending addon} is enabled.
      *
-     * @return A boolean value.
+     * @return true if enabled, otherwise false.
      */
     public boolean isEnabled() {
         return addonsConfig.isEnabled(name);
@@ -53,9 +53,9 @@ public abstract class Addon implements Enableable {
 
 
     /**
-     * Get the amount of worlds that have this addon banished.
+     * Gets the amount of {@link FarmWorld farm worlds} where the {@link Addon extending addon} is banished.
      *
-     * @return The number of worlds that have banished this addon.
+     * @return the amount of worlds where the addon is banished.
      */
     public int getAmountOfBanished() {
         return (int) worlds.values().stream()

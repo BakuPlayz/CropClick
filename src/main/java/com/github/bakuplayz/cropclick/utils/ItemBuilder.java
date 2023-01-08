@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -118,12 +119,11 @@ public final class ItemBuilder {
 
 
     /**
-     * If the amount is less than or equal to -1, then set the amount to the current amount. Otherwise, set the amount to
-     * the amount
+     * Sets the {@link #amount} to the provided amount.
      *
-     * @param amount The amount of the item.
+     * @param amount the amount to set.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setAmount(int amount) {
         this.amount = amount <= -1 ? this.amount : amount;
@@ -132,12 +132,11 @@ public final class ItemBuilder {
 
 
     /**
-     * If the damage is less than or equal to -1, then set the damage to the current damage, otherwise set the damage to
-     * the damage
+     * Sets the {@link #damage} to the provided damage.
      *
-     * @param damage The damage value of the item.
+     * @param damage the damage to set, if the condition is true.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setDamage(int damage) {
         this.damage = damage <= -1 ? this.damage : (short) damage;
@@ -146,11 +145,12 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the damage to the provided damage, if it matches the condition.
+     * Sets the {@link #damage} to the provided damage, if it matches the condition.
      *
-     * @param condition the condition to check
-     * @param damage the damage to set, if the condition is true.
-     * @return the ItemBuilder object.
+     * @param condition the condition to match.
+     * @param damage    the damage to set, if the condition is true.
+     *
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setDamage(boolean condition, int damage) {
         if (condition) {
@@ -161,11 +161,11 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the material of the item, if the id is greater than -1.
+     * Sets the {@link #material} to the {@link Material provided material} id.
      *
-     * @param id The ID of the item.
+     * @param id the material id to set.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     @Deprecated
     public ItemBuilder setMaterial(int id) {
@@ -175,11 +175,11 @@ public final class ItemBuilder {
 
 
     /**
-     * If the material is null, then set the material to the current material, otherwise set the material to the material.
+     * Sets the {@link #material} to the {@link Material provided material}.
      *
-     * @param material The material of the item.
+     * @param material the material to set.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setMaterial(Material material) {
         this.material = material == null ? this.material : material;
@@ -188,11 +188,12 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the material to the provided material, if it matches the condition.
+     * Sets the {@link #material} to the {@link Material provided material}, if it matches the condition.
      *
-     * @param condition the condition to check
-     * @param material the material to set, if the condition is true.
-     * @return the ItemBuilder object.
+     * @param condition the condition to match.
+     * @param material  the material to set.
+     *
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setMaterial(boolean condition, Material material) {
         if (condition) {
@@ -203,11 +204,11 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the name of the item and returns the ItemUtil instance.
+     * Sets the {@link #name} to the provided name.
      *
-     * @param name The name of the item.
+     * @param name the name to set.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setName(String name) {
         this.name = name == null ? this.name : name;
@@ -216,12 +217,12 @@ public final class ItemBuilder {
 
 
     /**
-     * This function sets the name of the item.
+     * Sets the {@link #name} to the provided name.
      *
-     * @param plugin The plugin instance.
-     * @param name   The name of the item.
+     * @param plugin the plugin instance.
+     * @param name   the name to set.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setName(@NotNull CropClick plugin, @NotNull LanguageAPI.Menu name) {
         this.name = name.get(plugin);
@@ -230,11 +231,11 @@ public final class ItemBuilder {
 
 
     /**
-     * If the lore is null, then set the lore to the current lore, otherwise set the lore to the new lore.
+     * Sets the {@link #lore} of the item to the {@link List<String> provided lore}.
      *
-     * @param lore The lore of the item.
+     * @param lore the lore to set.
      *
-     * @return The ItemBuilder object.
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setLore(List<String> lore) {
         this.lore = lore == null ? this.lore : lore;
@@ -243,10 +244,11 @@ public final class ItemBuilder {
 
 
     /**
-     * This function sets the lore of the item to the given lore, or if the given lore is null, it sets the lore to the
-     * current lore.
+     * Sets the {@link #lore} of the item to the provided lore.
      *
-     * @return The ItemBuilder object.
+     * @param lore the lore to set.
+     *
+     * @return the {@link ItemBuilder ItemBuilder instance}.
      */
     public ItemBuilder setLore(String... lore) {
         this.lore = lore == null ? this.lore : Arrays.asList(lore);
@@ -255,16 +257,26 @@ public final class ItemBuilder {
 
 
     /**
-     * Converts the ItemBuilder to an ItemStack, with a given name, material, amount, damage and lore (if there is one).
+     * Converts the {@link ItemBuilder item builder} to a {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the item.
      */
     public @NotNull ItemStack toItemStack() {
         ItemStack stack = new ItemStack(material, amount, damage);
         ItemMeta meta = this.meta != null ? this.meta : stack.getItemMeta();
 
-        if (lore != null) meta.setLore(lore);
-        if (name != null) meta.setDisplayName(name);
+        if (lore != null) {
+            meta.setLore(lore);
+        }
+
+        if (name != null) {
+            meta.setDisplayName(name);
+        }
+
+        if (isToolOrWeapon(stack)) {
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        }
+
         if (name != null || lore != null) {
             stack.setItemMeta(meta);
         }
@@ -274,13 +286,13 @@ public final class ItemBuilder {
 
 
     /**
-     * Converts the ItemBuilder to a Skull ItemStack, with a given name of a player.
+     * Converts the {@link ItemBuilder item builder} to a {@link ItemStack item} of the {@link OfflinePlayer provided player's} head.
      *
-     * @param player The player whose head you want to use.
+     * @param player the player whose head you want to use.
      *
-     * @return A new ItemStack with the given properties.
+     * @return the head of the provided {@link OfflinePlayer}.
      */
-    public @NotNull ItemStack toSkullStack(@NotNull OfflinePlayer player) {
+    public @NotNull ItemStack toPlayerHead(@NotNull OfflinePlayer player) {
         ItemStack stack = new ItemStack(Material.SKULL_ITEM, amount);
         SkullMeta meta = this.meta != null
                          ? (SkullMeta) this.meta
@@ -306,13 +318,13 @@ public final class ItemBuilder {
 
 
     /**
-     * Returns true if the given item is a tool.
+     * Checks whether the passed {@link ItemStack item} is a tool or weapon.
      *
-     * @param item The item to check
+     * @param item the item to check.
      *
-     * @return A boolean value.
+     * @return true if is, otherwise false.
      */
-    private boolean isTool(@NotNull ItemStack item) {
+    private boolean isToolOrWeapon(@NotNull ItemStack item) {
         return EnchantmentTarget.WEAPON.includes(item) || EnchantmentTarget.TOOL.includes(item);
     }
 

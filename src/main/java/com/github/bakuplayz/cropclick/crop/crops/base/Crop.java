@@ -2,316 +2,175 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
-import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
 import com.github.bakuplayz.cropclick.crop.Drop;
-import com.github.bakuplayz.cropclick.crop.seeds.base.BaseSeed;
-import com.github.bakuplayz.cropclick.runnables.particles.ParticleRunnable;
-import com.github.bakuplayz.cropclick.runnables.sounds.SoundRunnable;
-import com.github.bakuplayz.cropclick.utils.InventoryUtils;
-import com.github.bakuplayz.cropclick.utils.PermissionUtils;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import com.github.bakuplayz.cropclick.runnables.particles.Particle;
+import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
- * A class that represents the base of a crop.
+ * An interface acting as a base for a crop.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class Crop implements BaseCrop {
-
-    protected final CropsConfig cropsConfig;
-
-    protected final CropConfigSection cropSection;
-    protected final SoundConfigSection soundSection;
-    protected final ParticleConfigSection particleSection;
-
-
-    public Crop(@NotNull CropsConfig cropsConfig) {
-        this.particleSection = cropsConfig.getParticleSection();
-        this.soundSection = cropsConfig.getSoundSection();
-        this.cropSection = cropsConfig.getCropSection();
-        this.cropsConfig = cropsConfig;
-    }
-
+public interface Crop {
 
     /**
-     * Gets the current age of the crop.
+     * Gets the name of the implementing crop.
+     *
+     * @return the name of the crop.
+     */
+    @NotNull String getName();
+
+    /**
+     * Gets the harvest age of the implementing crop.
+     *
+     * @return the harvest age.
+     */
+    int getHarvestAge();
+
+    /**
+     * Gets the current age of the implementing crop.
      *
      * @param block the crop block.
      *
      * @return the current age.
      */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        //TODO: Check if this works.
-        return block.getData();
-    }
-
+    int getCurrentAge(@NotNull Block block);
 
     /**
-     * Checks whether the crop has a drop.
+     * Gets the drop of the implementing crop.
      *
-     * @return true if it has a drop, otherwise false.
+     * @return the drop of the crop.
      */
-    @Override
-    public boolean hasDrop() {
-        return getDrop() != null;
-    }
-
+    Drop getDrop();
 
     /**
-     * Checks whether the crop should drop at least one drop.
+     * Checks whether the implementing crop has a drop.
+     *
+     * @return true if it has, otherwise false.
+     */
+    boolean hasDrop();
+
+    /**
+     * Checks whether the implementing crop should drop at least one drop.
      *
      * @return true if it should, otherwise false.
      */
-    @Override
-    public boolean dropAtLeastOne() {
-        return cropSection.shouldDropAtLeastOne(getName());
-    }
-
+    boolean dropAtLeastOne();
 
     /**
-     * Checks whether a crop has a seed.
+     * Gets the implementing seed.
      *
-     * @return true if it has a seed, otherwise false.
+     * @return the found seed, otherwise null.
      */
-    @Override
-    public boolean hasSeed() {
-        return getSeed() != null;
-    }
-
+    @Nullable Seed getSeed();
 
     /**
-     * Checks whether the crop can be harvested, returning
-     * true if it successfully harvested it.
+     * Checks whether the implementing crop has a seed.
      *
-     * @param player The player to add the drops to.
-     *
-     * @return The harvest state.
+     * @return true if it has, otherwise false.
      */
-    @Override
-    public boolean harvest(@NotNull Player player) {
-        return harvest(player.getInventory());
-    }
-
+    boolean hasSeed();
 
     /**
-     * Checks whether the crop can be harvested, returning
-     * true if it successfully harvested it.
+     * Harvests the implementing crop.
      *
-     * @param container The container to add the drops to.
+     * @param player the player to add the drops to.
      *
-     * @return The harvest state.
+     * @return true if harvested, otherwise false.
      */
-    @Override
-    public boolean harvest(@NotNull Container container) {
-        return harvest(container.getInventory());
-    }
-
+    boolean harvest(@NotNull Player player);
 
     /**
-     * Checks whether the crop can be harvested, returning
-     * true if it successfully harvested it.
+     * Harvests the implementing crop.
      *
-     * @param inventory The inventory to add the drops to.
+     * @param container the container to add the drops to.
      *
-     * @return The harvest state.
+     * @return true if harvested, otherwise false.
      */
-    private boolean harvest(@NotNull Inventory inventory) {
-        if (!isHarvestable()) {
-            return false;
-        }
-        if (!hasDrop()) {
-            return false;
-        }
-
-        Drop drop = getDrop();
-        ItemStack dropItem = drop.toItemStack(
-                hasNameChanged()
-        );
-
-        if (!InventoryUtils.canFit(inventory, dropItem)) {
-            return false;
-        }
-
-        if (drop.willDrop()) {
-            if (dropItem.getAmount() != 0) {
-                inventory.addItem(dropItem);
-            }
-        }
-
-        if (dropAtLeastOne()) {
-            if (dropItem.getAmount() == 0) {
-                dropItem.setAmount(1);
-                inventory.addItem(dropItem);
-            }
-        }
-
-        if (!hasSeed()) {
-            return true;
-        }
-
-        BaseSeed seed = getSeed();
-        if (seed == null) {
-            return false;
-        }
-        if (!seed.isEnabled()) {
-            return false;
-        }
-        if (!seed.hasDrop()) {
-            return false;
-        }
-
-        return seed.harvest(inventory);
-    }
-
+    boolean harvest(@NotNull Container container);
 
     /**
-     * Checks whether the crop is its harvest age.
+     * Checks whether the implementing crop is at its harvest age.
      *
      * @param block the crop block.
      *
      * @return true if it is, otherwise false.
      */
-    @Override
-    public boolean isHarvestAge(@NotNull Block block) {
-        if (!isHarvestable()) {
-            return false;
-        }
-        return getHarvestAge() <= getCurrentAge(block);
-    }
-
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    boolean isHarvestAge(@NotNull Block block);
 
     /**
-     * Checks whether the crop can be harvested by the given player.
+     * Checks whether the {@link Player provided player} can harvest the implementing crop.
      *
      * @param player the player to be checked.
      *
-     * @return true if the player can harvest, otherwise false.
+     * @return true if it can, otherwise false.
      */
-    @Override
-    public boolean canHarvest(@NotNull Player player) {
-        return PermissionUtils.canHarvestCrop(player, getName());
-    }
-
+    boolean canHarvest(@NotNull Player player);
 
     /**
-     * Replants the crop.
+     * Checks whether the implementing crop is harvestable at all.
      *
-     * @param block the crop block.
+     * @return true if it is, otherwise false.
      */
-    @Override
-    public void replant(@NotNull Block block) {
-        if (shouldReplant()) {
-            block.setType(getClickableType());
-        } else {
-            block.setType(Material.AIR);
-        }
-    }
-
+    boolean isHarvestable();
 
     /**
-     * Checks whether the crop should be replanted.
+     * Replants the implementing crop.
+     *
+     * @param block the crop block to replant.
+     */
+    void replant(@NotNull Block block);
+
+    /**
+     * Checks whether the implementing crop should be replanted.
      *
      * @return true if it should, otherwise false.
      */
-    @Override
-    public boolean shouldReplant() {
-        return cropSection.shouldReplant(getName());
-    }
-
+    boolean shouldReplant();
 
     /**
-     * Checks whether the crop is harvestable at all.
-     *
-     * @return true if it is, otherwise false.
-     */
-    @Override
-    public boolean isHarvestable() {
-        return cropSection.isHarvestable(getName());
-    }
-
-
-    /**
-     * Plays the sounds assigned to the crop.
+     * Plays the {@link Sound sounds} assigned to the implementing crop.
      *
      * @param block the crop block.
      */
-    @Override
-    public void playSounds(@NotNull Block block) {
-        SoundRunnable runnable = new SoundRunnable(block);
-
-        for (String sound : soundSection.getSounds(getName())) {
-            double delay = soundSection.getDelay(getName(), sound);
-            double pitch = soundSection.getPitch(getName(), sound);
-            double volume = soundSection.getVolume(getName(), sound);
-
-            runnable.queueSound(
-                    sound,
-                    volume,
-                    pitch,
-                    delay
-            );
-        }
-
-        runnable.run();
-    }
-
+    void playSounds(@NotNull Block block);
 
     /**
-     * Plays the effects assigned to the crop.
+     * Plays the {@link Particle particles} assigned to the implementing crop.
      *
      * @param block the crop block.
      */
-    @Override
-    public void playParticles(@NotNull Block block) {
-        ParticleRunnable runnable = new ParticleRunnable(block);
-
-        for (String particle : particleSection.getParticles(getName())) {
-            double delay = particleSection.getDelay(getName(), particle);
-            double speed = particleSection.getSpeed(getName(), particle);
-            int amount = particleSection.getAmount(getName(), particle);
-
-            runnable.queueParticle(
-                    particle,
-                    amount,
-                    speed,
-                    delay
-            );
-        }
-
-        runnable.run();
-    }
-
+    void playParticles(@NotNull Block block);
 
     /**
-     * Checks whether the crop is linkable to an {@link Autofarm}.
+     * Gets implementing crop's {@link Material clickable type}.
+     *
+     * @return the crop's clickable type.
+     */
+    @NotNull Material getClickableType();
+
+    /**
+     * Gets implementing crop's {@link Material menu type}.
+     *
+     * @return the crop's menu type.
+     */
+    @NotNull Material getMenuType();
+
+    /**
+     * Checks whether the implementing crop is linkable to an {@link Autofarm}.
      *
      * @return true if it is, otherwise false.
      */
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName());
-    }
-
-
-    /**
-     * Checks whether the name of the crop has changed.
-     *
-     * @return true if changed, otherwise false.
-     */
-    private boolean hasNameChanged() {
-        return !getName().equals(getDrop().getName());
-    }
+    boolean isLinkable();
 
 }

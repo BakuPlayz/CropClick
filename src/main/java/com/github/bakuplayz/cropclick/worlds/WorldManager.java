@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 
 /**
- * A manager holding and controlling all the {@link #worldData world data} and {@link #worlds}.
+ * A manager holding and controlling all the {@link #worldData world data} and {@link #worlds farm worlds}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -24,7 +24,7 @@ public final class WorldManager {
     private final @NotNull WorldDataStorage worldData;
 
     /**
-     * Contains all the registered bukkit worlds.
+     * A variable containing all the registered {@link World worlds} as {@link FarmWorld farm worlds}.
      */
     private final @Getter HashMap<String, FarmWorld> worlds;
 
@@ -37,7 +37,7 @@ public final class WorldManager {
 
 
     /**
-     * Register all the Bukkit Worlds as FarmWorlds, if they aren't already registered.
+     * Registers all the non-registered {@link World worlds} as {@link FarmWorld farm worlds}.
      */
     private void registerWorlds() {
         Bukkit.getWorlds().forEach(world -> worldData.registerWorld(new FarmWorld(world)));
@@ -45,11 +45,11 @@ public final class WorldManager {
 
 
     /**
-     * Find a FarmWorld by a Bukkit World.
+     * Finds a {@link FarmWorld farm world} based on the {@link World world}.
      *
-     * @param world The world to find the FarmWorld for.
+     * @param world the world to base the findings on.
      *
-     * @return A FarmWorld object
+     * @return the found {@link FarmWorld}, otherwise null.
      */
     public @Nullable FarmWorld findByWorld(@NotNull World world) {
         return worldData.findWorldByWorld(world);
@@ -57,11 +57,11 @@ public final class WorldManager {
 
 
     /**
-     * Find a world by name, and return it if it exists, otherwise return null.
+     * Finds a {@link FarmWorld farm world} based on its name.
      *
-     * @param name The name of the world to find.
+     * @param name the name of the world to find.
      *
-     * @return A FarmWorld object
+     * @return the found {@link FarmWorld}, otherwise null.
      */
     public @Nullable FarmWorld findByName(@NotNull String name) {
         return worldData.findWorldByName(name);
@@ -69,11 +69,11 @@ public final class WorldManager {
 
 
     /**
-     * Find the FarmWorld that the given player is in, or null if they are not in a FarmWorld.
+     * Finds a {@link FarmWorld farm world} based on the {@link Player player's position}.
      *
-     * @param player The player to find the world for.
+     * @param player the player to base the findings on.
      *
-     * @return A FarmWorld object
+     * @return the found {@link FarmWorld}, otherwise null.
      */
     public @Nullable FarmWorld findByPlayer(@NotNull Player player) {
         return worldData.findWorldByPlayer(player);
@@ -81,14 +81,14 @@ public final class WorldManager {
 
 
     /**
-     * If the world is not null and the world is not banished, return true.
+     * Checks whether the provided {@link FarmWorld farm world} is accessible by {@link CropClick}.
      *
-     * @param world The FarmWorld object that is being checked.
+     * @param farmWorld the world to be checked.
      *
-     * @return A boolean value.
+     * @return true if accessible, otherwise false.
      */
-    public boolean isAccessible(FarmWorld world) {
-        return world != null && !world.isBanished();
+    public boolean isAccessible(FarmWorld farmWorld) {
+        return farmWorld != null && !farmWorld.isBanished();
     }
 
 }

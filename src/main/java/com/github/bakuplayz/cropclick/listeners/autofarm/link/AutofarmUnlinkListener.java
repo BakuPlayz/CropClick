@@ -38,9 +38,9 @@ public final class AutofarmUnlinkListener implements Listener {
 
 
     /**
-     * When triggered it unlinks and 'un-caches' the Autofarm components.
+     * Handles all the {@link Autofarm autofarm} unlink events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmUnlink(@NotNull AutofarmUnlinkEvent event) {
@@ -58,7 +58,7 @@ public final class AutofarmUnlinkListener implements Listener {
             ));
         }
 
-        farmData.removeFarm(event.getAutofarm());
+        farmData.unlinkFarm(event.getAutofarm());
     }
 
 }

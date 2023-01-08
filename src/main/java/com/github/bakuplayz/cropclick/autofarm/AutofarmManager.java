@@ -1,15 +1,19 @@
 package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.Enableable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,10 +46,10 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Selects a crop for the player.
+     * Selects the {@link Block provided block}, if it is a {@link Crop crop} block.
      *
-     * @param player The player who is selecting the crop.
-     * @param block  The block that the player clicked on.
+     * @param player the player who selected the block.
+     * @param block  the block that was selected.
      */
     public void selectCrop(@NotNull Player player, @NotNull Block block) {
         playersConfig.selectCrop(player, block);
@@ -53,10 +57,10 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Selects a container for a player.
+     * Selects the {@link Block provided block}, if it is a {@link Container container} block.
      *
-     * @param player The player who is selecting the container.
-     * @param block  The block that the player is selecting.
+     * @param player the player who selected the block.
+     * @param block  the block that was selected.
      */
     public void selectContainer(@NotNull Player player, @NotNull Block block) {
         playersConfig.selectContainer(player, block);
@@ -64,10 +68,10 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Selects a dispenser for the player.
+     * Selects the {@link Block provided block}, if it is a {@link Dispenser dispenser} block.
      *
-     * @param player The player who is selecting the dispenser.
-     * @param block  The dispenser block that was selected.
+     * @param player the player who selected the block.
+     * @param block  the block that was selected.
      */
     public void selectDispenser(@NotNull Player player, @NotNull Block block) {
         playersConfig.selectDispenser(player, block);
@@ -75,10 +79,10 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * It deselects a crop for a player.
+     * Deselects the {@link Block provided block}, if it is a {@link Crop crop} block.
      *
-     * @param player The player who is deselecting the crop.
-     * @param block  The block that the player clicked on.
+     * @param player the player who deselected the block.
+     * @param block  the block that was deselected.
      */
     public void deselectCrop(@NotNull Player player, @NotNull Block block) {
         playersConfig.deselectCrop(player, block);
@@ -86,10 +90,10 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Deselects a container for a player.
+     * Deselects the {@link Block provided block}, if it is a {@link Container container} block.
      *
-     * @param player The player who is selecting the container.
-     * @param block  The block that the player is trying to select.
+     * @param player the player who deselected the block.
+     * @param block  the block that was deselected.
      */
     public void deselectContainer(@NotNull Player player, @NotNull Block block) {
         playersConfig.deselectContainer(player, block);
@@ -97,10 +101,10 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Deselects a dispenser for a player.
+     * Deselects the {@link Block provided block}, if it is a {@link Dispenser dispenser} block.
      *
-     * @param player The player who is selecting the dispenser.
-     * @param block  The block that the player is selecting.
+     * @param player the player who deselected the block.
+     * @param block  the block that was deselected.
      */
     public void deselectDispenser(@NotNull Player player, @NotNull Block block) {
         playersConfig.deselectDispenser(player, block);
@@ -108,29 +112,29 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Deselects all the selected items for a player.
+     * Deselects all the {@link Player provided player's} selected {@link Component autofarm components}.
      *
-     * @param player The player to deselect all the items for.
+     * @param player the player to deselect all the components for.
      */
-    public void deselectAll(@NotNull Player player) {
-        playersConfig.deselectAll(player);
+    public void deselectComponents(@NotNull Player player) {
+        playersConfig.deselectComponents(player);
     }
 
 
     /**
-     * Find the farm that the given block is a part of.
+     * Finds the {@link Autofarm autofarm} based on the {@link Block provided block}.
      *
-     * @param block The block to check.
+     * @param block the block to base the findings on.
      *
-     * @return The autofarm object that is associated with the block.
+     * @return the found autofarm, otherwise null.
      */
     public @Nullable Autofarm findAutofarm(@NotNull Block block) {
         if (BlockUtils.isAir(block)) {
             return null;
         }
 
-        if (hasCachedID(block)) {
-            String farmerID = getCachedID(block);
+        if (AutofarmUtils.hasCachedID(block)) {
+            String farmerID = AutofarmUtils.getCachedID(block);
             return farmStorage.findFarmById(farmerID);
         }
 
@@ -156,74 +160,48 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Returns the selected crop of the player, or null if the player has no selected crop.
+     * Gets the {@link Crop selected crop} for the {@link Player provided player}.
      *
-     * @param player The player to get the selected crop for.
+     * @param player the player to get the selected location for.
      *
-     * @return A Location object.
+     * @return the selected crop's location.
      */
-    public @Nullable Location getSelectedCrop(@NotNull Player player) {
+    public Location getSelectedCrop(@NotNull Player player) {
         return playersConfig.getSelectedCrop(player);
     }
 
 
     /**
-     * Returns the location of the container that the player has selected, or null if the player has not selected a
-     * container.
+     * Gets the {@link Container selected container} for the {@link Player provided player}.
      *
-     * @param player The player who's selected container you want to get.
+     * @param player the player to get the selected location for.
      *
-     * @return A Location object.
+     * @return the selected container's location.
      */
-    public @Nullable Location getSelectedContainer(@NotNull Player player) {
+    public Location getSelectedContainer(@NotNull Player player) {
         return playersConfig.getSelectedContainer(player);
     }
 
 
     /**
-     * `getSelectedDispenser` returns the location of the dispenser that the player has selected, or null if the player has
-     * not selected a dispenser.
+     * Gets the {@link Dispenser selected dispenser} for the {@link Player provided player}.
      *
-     * @param player The player to get the selected dispenser for.
+     * @param player the player to get the selected location for.
      *
-     * @return A Location object.
+     * @return the selected dispenser's location.
      */
-    public @Nullable Location getSelectedDispenser(@NotNull Player player) {
+    public Location getSelectedDispenser(@NotNull Player player) {
         return playersConfig.getSelectedDispenser(player);
     }
 
 
     /**
-     * Get the cached ID of a block, or null if it doesn't exist.
+     * Checks whether the {@link Block provided crop block} is selected by the {@link Player provided player}.
      *
-     * @param block The block to get the ID of.
+     * @param player the player to check.
+     * @param block  the block to check.
      *
-     * @return The ID of the block.
-     */
-    private @Nullable String getCachedID(@NotNull Block block) {
-        return AutofarmUtils.getMetaValue(block);
-    }
-
-
-    /**
-     * Returns true if the block has a cached ID.
-     *
-     * @param block The block that is being checked.
-     *
-     * @return A boolean value.
-     */
-    private boolean hasCachedID(@NotNull Block block) {
-        return AutofarmUtils.componentHasMeta(block);
-    }
-
-
-    /**
-     * Returns true if the given player has the given block selected as a crop.
-     *
-     * @param player The player who is selecting the crop.
-     * @param block  The block that the player is trying to harvest.
-     *
-     * @return A boolean value.
+     * @return true if selected, otherwise false.
      */
     public boolean isCropSelected(@NotNull Player player, @NotNull Block block) {
         return playersConfig.isCropSelected(player, block);
@@ -231,12 +209,12 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Returns true if the given player has the given block selected.
+     * Checks whether the {@link Block provided container block} is selected by the {@link Player provided player}.
      *
-     * @param player The player who is selecting the container.
-     * @param block  The block that the player is interacting with.
+     * @param player the player to check.
+     * @param block  the block to check.
      *
-     * @return A boolean value.
+     * @return true if selected, otherwise false.
      */
     public boolean isContainerSelected(@NotNull Player player, @NotNull Block block) {
         return playersConfig.isContainerSelected(player, block);
@@ -244,12 +222,12 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Returns true if the given dispenser is selected by the given player.
+     * Checks whether the {@link Block provided dispenser block} is selected by the {@link Player provided player}.
      *
-     * @param player The player who is selecting the dispenser.
-     * @param block  The block that the player is trying to select.
+     * @param player the player to check.
+     * @param block  the block to check.
      *
-     * @return A boolean value.
+     * @return true if selected, otherwise false.
      */
     public boolean isDispenserSelected(@NotNull Player player, @NotNull Block block) {
         return playersConfig.isDispenserSelected(player, block);
@@ -257,26 +235,24 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * Returns true if the given autofarm is linked to a farm.
+     * Checks whether the {@link Autofarm provided autofarm} is linked.
      *
-     * @param autofarm The autofarm object that you want to check if it's linked.
+     * @param autofarm the autofarm to check.
      *
-     * @return A boolean value.
+     * @return true if linked, otherwise false.
      */
     public boolean isLinked(Autofarm autofarm) {
-        if (autofarm == null) return false;
-        return autofarm.isLinked();
+        return autofarm != null && autofarm.isLinked();
     }
 
 
     /**
-     * If the autofarm is not null, linked, enabled, and has a container, then return true.
+     * Checks whether the {@link Autofarm provided autofarm} is usable.
      *
-     * @param autofarm The autofarm object that is being checked.
+     * @param autofarm the autofarm to check.
      *
-     * @return A boolean value.
+     * @return true if usable, otherwise false.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isUsable(Autofarm autofarm) {
         if (autofarm == null) return false;
         if (!autofarm.isLinked()) return false;
@@ -287,11 +263,11 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * If the block is a dispenser, container, or crop, return true.
+     * Checks whether the {@link Block provided block} is a {@link Component autofarm component}.
      *
-     * @param block The block that is being checked.
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public boolean isComponent(@NotNull Block block) {
         if (AutofarmUtils.isDispenser(block)) return true;
@@ -301,32 +277,33 @@ public final class AutofarmManager implements Enableable {
 
 
     /**
-     * This function returns a boolean value that is the value of the key 'autofarms.isEnabled' in the config.yml file.
+     * Checks whether the {@link Autofarm autofarms} are enabled.
      *
-     * @return A boolean value.
+     * @return true if they are, otherwise false.
      */
+    @Override
     public boolean isEnabled() {
         return plugin.getConfig().getBoolean("autofarms.isEnabled", true);
     }
 
 
     /**
-     * This function returns the amount of farms in the farmStorage.
+     * Gets the amount of {@link AutofarmDataStorage#getAutofarms() autofarms}.
      *
-     * @return The amount of farms in the farmStorage.
+     * @return the amount of autofarms.
      */
     public int getAmountOfFarms() {
-        return farmStorage.getFarms().size();
+        return farmStorage.getAutofarms().size();
     }
 
 
     /**
-     * This function returns a list of all the farms in the farm storage.
+     * Gets all the {@link AutofarmDataStorage#getAutofarms() autofarms}.
      *
-     * @return A list of all the farms in the farmStorage.
+     * @return the found autofarms.
      */
     public @NotNull List<Autofarm> getAutofarms() {
-        return new ArrayList<>(farmStorage.getFarms().values());
+        return new ArrayList<>(farmStorage.getAutofarms().values());
     }
 
 }

@@ -39,10 +39,9 @@ public final class AutofarmUpdateListener implements Listener {
 
 
     /**
-     * When triggered it unlinks and 'un-caches' the Autofarm components,
-     * and then links the new one and caches that.
+     * Handles all the {@link Autofarm autofarm} update link events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmUpdate(@NotNull AutofarmUpdateEvent event) {
@@ -62,9 +61,10 @@ public final class AutofarmUpdateListener implements Listener {
         );
 
         if (isDebugging) {
-            logger.info(String.format("%s (Autofarm): Called the update event!", event
-                    .getOldAutofarm()
-                    .getShortenedID()));
+            logger.info(String.format(
+                    "%s (Autofarm): Called the update event!",
+                    event.getOldAutofarm().getShortenedID())
+            );
         }
 
         Bukkit.getPluginManager().callEvent(unlinkEvent);

@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 public final class MessageUtils {
 
     /**
-     * This function takes a string and returns a string.
+     * Translates the given message to a colorized message, using {@link ChatColor}.
      *
-     * @param message The message to colorize.
+     * @param message the message to color.
      *
-     * @return A string.
+     * @return the message in color.
      */
     @Contract("_ -> new")
     public static @NotNull String colorize(@NotNull String message) {
@@ -37,12 +37,12 @@ public final class MessageUtils {
 
 
     /**
-     * It splits the message into words, capitalizes each word, and joins them back together.
+     * Beautifies the provided message by splitting the message into words, capitalizing each of them and joining them back into sentences.
      *
-     * @param message       The message to beautify.
-     * @param isUnderscored If the message is underscored, set this to true.
+     * @param message       the message to beautify.
+     * @param isUnderscored the matcher for underscored messages.
      *
-     * @return A string.
+     * @return the beautified message.
      */
     public static @NotNull String beautify(@NotNull String message, boolean isUnderscored) {
         String[] words = message.split(isUnderscored ? "_" : "(?=\\p{Lu})");
@@ -54,13 +54,12 @@ public final class MessageUtils {
 
 
     /**
-     * It takes a string and splits it into an array of words, then it takes those words and puts them into a list of
-     * strings, each string being a line of the message.
+     * "Readifies" the provided message according to the words per line.
      *
-     * @param message      The message you want to readify.
-     * @param wordsPerLine The amount of words per line.
+     * @param message      the message to readify.
+     * @param wordsPerLine the amount of words per line.
      *
-     * @return A list of strings
+     * @return the readified message as a {@link List<String> list of strings}.
      */
     public static @NotNull List<String> readify(@NotNull String message, int wordsPerLine) {
         String[] words = message.split(" ");
@@ -99,18 +98,16 @@ public final class MessageUtils {
 
 
     /**
-     * It returns a string that says "Enabled" or "Disabled" depending on the boolean value passed to it.
+     * Gets the enabled message or disabled message, depending on the value of isEnabled.
      *
-     * @param plugin    The plugin instance.
-     * @param isEnabled This is a boolean that determines whether the crop is enabled or not.
+     * @param plugin    the CropClick instance.
+     * @param isEnabled the enabled status.
      *
-     * @return A string.
+     * @return the status message.
      */
-    public static @NotNull String getEnabledStatus(@NotNull CropClick plugin, boolean isEnabled) {
-        if (isEnabled) {
-            return LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin);
-        }
-        return LanguageAPI.Menu.GENERAL_DISABLED_STATUS.get(plugin);
+    public static @NotNull String getStatusMessage(@NotNull CropClick plugin, boolean isEnabled) {
+        return isEnabled ? LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin)
+                         : LanguageAPI.Menu.GENERAL_DISABLED_STATUS.get(plugin);
     }
 
 }

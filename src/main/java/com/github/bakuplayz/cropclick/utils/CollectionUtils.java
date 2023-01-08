@@ -17,11 +17,12 @@ import java.util.List;
 public final class CollectionUtils {
 
     /**
-     * Return a new list with the elements of the given list in reverse order.
+     * Reverses the order of the items in the list.
      *
-     * @param list The list to be reversed.
+     * @param list the list to be reversed.
+     * @param <E>  the object provided.
      *
-     * @return A new list with the same elements as the original list, but in reverse order.
+     * @return the list with reversed items.
      */
     public static <E> @NotNull List<E> reverseOrder(@NotNull List<E> list) {
         List<E> reversed = new ArrayList<>();
@@ -32,6 +33,25 @@ public final class CollectionUtils {
         }
 
         return reversed;
+    }
+
+
+    /**
+     * Toggles the provided item by adding or removing it each call.
+     *
+     * @param list the list to add/remove to.
+     * @param item the item to toggle.
+     * @param <E>  the object provided.
+     *
+     * @return the list with the added or removed item.
+     */
+    public static <E> @NotNull List<E> toggleItem(@NotNull List<E> list, E item) {
+        if (list.contains(item)) {
+            list.remove(item);
+        } else {
+            list.add(item);
+        }
+        return list;
     }
 
 }

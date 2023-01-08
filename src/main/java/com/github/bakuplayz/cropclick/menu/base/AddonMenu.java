@@ -4,7 +4,9 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
+import com.github.bakuplayz.cropclick.utils.Enableable;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
+import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,15 +14,14 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the base of an Addon menu.
+ * A class representing the base of an addon menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public abstract class AddonMenu extends Menu {
+public abstract class AddonMenu extends BaseMenu implements Enableable {
 
-    protected boolean isAddonEnabled;
     protected final String addonName;
 
     protected final AddonManager addonManager;
@@ -37,75 +38,17 @@ public abstract class AddonMenu extends Menu {
 
 
     /**
-     * This function updates the menu by clearing the inventory and then setting the menu items.
-     */
-    @Override
-    public void refresh() {
-        inventory.clear();
-        setMenuItems();
-    }
-
-
-    /**
-     * If the item clicked is the toggle item, toggle the addon.
+     * Gets the toggle {@link ItemStack item}.
      *
-     * @param clicked    The item that was clicked.
-     * @param toggleItem The item that the player clicked on.
-     */
-    protected final void handleToggle(@NotNull ItemStack clicked, @NotNull ItemStack toggleItem) {
-        if (!clicked.equals(toggleItem)) {
-            return;
-        }
-
-        addonManager.toggle(addonName);
-    }
-
-
-    /**
-     * Set the toggle item in the inventory to the correct state, and then
-     * finally it updates the addons enabled status.
-     */
-    protected final void setToggleItem() {
-        isAddonEnabled = addonManager.isEnabled(addonName);
-        inventory.setItem(22, getToggleItem());
-    }
-
-
-    /**
-     * This function returns the item that will be used to toggle the item's state.
-     *
-     * @return The item that will be used to toggle the ability.
+     * @return the toggle item.
      */
     protected abstract @NotNull ItemStack getToggleItem();
 
 
     /**
-     * If the clicked item is the world item, open the menu.
+     * Gets the worlds {@link ItemStack item}.
      *
-     * @param clicked The item that was clicked.
-     * @param menu    The menu that the item is in.
-     */
-    protected final void handleWorlds(@NotNull ItemStack clicked, @NotNull Menu menu) {
-        if (!clicked.equals(getWorldsItem())) {
-            return;
-        }
-
-        menu.open();
-    }
-
-
-    /**
-     * Sets the world item in the inventory.
-     */
-    protected final void setWorldsItem() {
-        inventory.setItem(24, getWorldsItem());
-    }
-
-
-    /**
-     * Returns an ItemStack that represents the worlds addon.
-     *
-     * @return An ItemStack.
+     * @return the worlds item.
      */
     protected final @NotNull ItemStack getWorldsItem() {
         Addon addon = addonManager.findByName(addonName);
@@ -121,8 +64,72 @@ public abstract class AddonMenu extends Menu {
     }
 
 
+    /**
+     * Sets the {@link ItemStack toggle item} to its designated places in the {@link #inventory}.
+     */
+    protected final void setToggleItem() {
+        inventory.setItem(22, getToggleItem());
+    }
+
+
+    /**
+     * Sets the {@link ItemStack worlds item} to their designated places in the {@link #inventory}.
+     */
+    protected final void setWorldsItem() {
+        inventory.setItem(24, getWorldsItem());
+    }
+
+
+    /**
+     * Handles toggling of items inside the menu.
+     *
+     * @param clicked    the item that was clicked.
+     * @param toggleItem the item to toggle.
+     */
+    protected final void handleToggle(@NotNull ItemStack clicked, @NotNull ItemStack toggleItem) {
+        if (!clicked.equals(toggleItem)) {
+            return;
+        }
+
+        addonManager.toggleAddon(addonName);
+    }
+
+
+    /**
+     * Handles navigation to worlds inside the menu.
+     *
+     * @param clicked   the item that was clicked.
+     * @param worldMenu the menu to navigate to.
+     */
+    protected final void handleWorlds(@NotNull ItemStack clicked, @NotNull BaseMenu worldMenu) {
+        if (!clicked.equals(getWorldsItem())) {
+            return;
+        }
+
+        worldMenu.openMenu();
+    }
+
+
+    /**
+     * Gets the amount of {@link FarmWorld worlds} banishing the {@link Addon}.
+     *
+     * @param addon the addon to check.
+     *
+     * @return the amount of worlds banishing the addon.
+     */
     private int getAmountOfBanished(Addon addon) {
         return addon == null ? 0 : addon.getAmountOfBanished();
+    }
+
+
+    /**
+     * Checks whether the addon is enabled.
+     *
+     * @return true if enabled, otherwise false.
+     */
+    @Override
+    public boolean isEnabled() {
+        return addonManager.isEnabled(addonName);
     }
 
 }

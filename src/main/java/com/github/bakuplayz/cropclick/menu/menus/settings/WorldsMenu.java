@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.settings;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.*;
 import com.github.bakuplayz.cropclick.menu.menus.main.SettingsMenu;
@@ -16,7 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,22 +28,28 @@ import java.util.stream.Collectors;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class WorldsMenu extends PaginatedMenu {
 
     private final AddonManager addonManager;
 
+    /**
+     * A variable containing the state or menu to return to when clicking the {@link #getBackItem() back item}.
+     */
     private final WorldMenuState menuState;
 
+    /**
+     * A variable containing all the {@link FarmWorld farm worlds}.
+     */
     private final List<FarmWorld> worlds;
 
 
     public WorldsMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull WorldMenuState state) {
         super(plugin, player, LanguageAPI.Menu.WORLDS_TITLE);
+        this.worlds = new ArrayList<>(plugin.getWorldManager().getWorlds().values());
         this.addonManager = plugin.getAddonManager();
-        this.worlds = getWorlds();
         this.menuState = state;
     }
 
@@ -97,7 +102,7 @@ public final class WorldsMenu extends PaginatedMenu {
 
         handlePagination(clicked);
 
-        int index = getIndexOfWorld(clicked);
+        int index = indexOfWorld(clicked);
         if (index == -1) {
             return;
         }
@@ -105,7 +110,7 @@ public final class WorldsMenu extends PaginatedMenu {
         FarmWorld world = worlds.get(index);
         switch (menuState) {
             case SETTINGS:
-                new WorldMenu(plugin, player, world).open();
+                new WorldMenu(plugin, player, world).openMenu();
                 break;
 
             case JOBS_REBORN:
@@ -133,23 +138,18 @@ public final class WorldsMenu extends PaginatedMenu {
                 break;
         }
 
-        refresh();
+        refreshMenu();
     }
 
 
     /**
-     * "Get the index of the FarmWorld that was clicked on."
-     * <p>
-     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
-     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
-     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
-     * </p>
+     * Finds the index of the {@link FarmWorld world} based on the {@link ItemStack clicked item}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      *
-     * @return The index of the world in the menuItems list.
+     * @return the index of the world, otherwise -1.
      */
-    private int getIndexOfWorld(@NotNull ItemStack clicked) {
+    private int indexOfWorld(@NotNull ItemStack clicked) {
         return menuItems.stream()
                         .filter(clicked::equals)
                         .mapToInt(item -> menuItems.indexOf(item))
@@ -159,13 +159,13 @@ public final class WorldsMenu extends PaginatedMenu {
 
 
     /**
-     * It creates an item for the menu.
+     * Creates a menu {@link ItemStack item} based on the {@link FarmWorld provided world}.
      *
-     * @param world The world that the item is being created for.
+     * @param world the world to base the item on.
      *
-     * @return An ItemStack.
+     * @return the created menu item.
      */
-    private @NotNull ItemStack getMenuItem(@NotNull FarmWorld world) {
+    private @NotNull ItemStack createMenuItem(@NotNull FarmWorld world) {
         String name = MessageUtils.beautify(world.getName(), true);
         ItemBuilder menuItem = new ItemBuilder(Material.GRASS)
                 .setName(LanguageAPI.Menu.WORLDS_ITEM_NAME.get(plugin, name))
@@ -241,26 +241,14 @@ public final class WorldsMenu extends PaginatedMenu {
 
 
     /**
-     * Get a list of menu items, where each menu item is a world.
+     * Gets all the {@link #worlds} as {@link #menuItems menu items}.
      *
-     * @return A list of ItemStacks.
+     * @return worlds as menu items.
      */
-    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return worlds.stream()
-                     .map(this::getMenuItem)
+                     .map(this::createMenuItem)
                      .collect(Collectors.toList());
-    }
-
-
-    /**
-     * This function returns a list of all the worlds that the plugin is managing.
-     *
-     * @return A list of FarmWorlds.
-     */
-    @Contract(" -> new")
-    private @NotNull List<FarmWorld> getWorlds() {
-        return new ArrayList<>(plugin.getWorldManager().getWorlds().values());
     }
 
 }

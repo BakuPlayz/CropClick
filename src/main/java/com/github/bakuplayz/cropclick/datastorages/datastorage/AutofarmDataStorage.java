@@ -8,6 +8,7 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
+import com.github.bakuplayz.cropclick.utils.LocationUtils;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.DoubleChest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,12 +33,12 @@ import java.util.UUID;
  */
 public final class AutofarmDataStorage extends DataStorage {
 
-    private @Getter HashMap<UUID, Autofarm> farms;
+    private @Getter HashMap<UUID, Autofarm> autofarms;
 
 
     public AutofarmDataStorage(@NotNull CropClick plugin) {
         super(plugin, "autofarms.json");
-        this.farms = new HashMap<>();
+        this.autofarms = new HashMap<>();
         this.gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
@@ -44,7 +46,7 @@ public final class AutofarmDataStorage extends DataStorage {
 
 
     /**
-     * Handles the fetching and loading of the farms.
+     * Fetches the {@link #fileData file data}.
      */
     @Override
     public void fetchData() {
@@ -54,71 +56,51 @@ public final class AutofarmDataStorage extends DataStorage {
 
 
     /**
-     * Handles the saving of the farms.
+     * Saves the {@link #fileData file data}.
      */
     @Override
     public void saveData() {
-        removeUnlinkedFarms();
+        unlinkDestoroyedFarms();
         saveFarms();
     }
 
 
     /**
-     * Adds an autofarm to the list of autofarms.
+     * Links the {@link Autofarm provided autofarm}.
      *
-     * @param autofarm The autofarm object to add to the list of autofarms.
+     * @param autofarm the farm to link.
      */
-    public void addFarm(@NotNull Autofarm autofarm) {
-        farms.put(autofarm.getFarmerID(), autofarm);
-        addFarmerMeta(autofarm);
+    public void linkFarm(@NotNull Autofarm autofarm) {
+        autofarms.put(autofarm.getFarmerID(), autofarm);
+        AutofarmUtils.addCachedID(plugin, autofarm);
     }
 
 
     /**
-     * Adds the metadata to the blocks that are associated with the autofarm.
+     * Unlinks the {@link Autofarm provided autofarm}.
      *
-     * @param autofarm The autofarm object that we're adding metadata to.
+     * @param autofarm the farm to unlink.
      */
-    private void addFarmerMeta(@NotNull Autofarm autofarm) {
-        AutofarmUtils.addMeta(plugin, autofarm);
+    public void unlinkFarm(@NotNull Autofarm autofarm) {
+        autofarms.remove(autofarm.getFarmerID());
+        AutofarmUtils.removeCachedID(plugin, autofarm);
     }
 
 
     /**
-     * It removes an autofarm from the list of autofarms.
-     *
-     * @param autofarm The autofarm object that you want to remove.
-     */
-    public void removeFarm(@NotNull Autofarm autofarm) {
-        farms.remove(autofarm.getFarmerID());
-        removeFarmerMeta(autofarm);
-    }
-
-
-    /**
-     * Remove the metadata from the blocks that are associated with the autofarm.
-     *
-     * @param autofarm The autofarm object that is being removed.
-     */
-    private void removeFarmerMeta(@NotNull Autofarm autofarm) {
-        AutofarmUtils.removeMeta(plugin, autofarm);
-    }
-
-
-    /**
-     * It loads the farms from the file.
+     * Loads all the {@link #autofarms}.
      */
     private void loadFarms() {
         HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
-        this.farms = loaded != null ? loaded : new HashMap<>();
+        this.autofarms = loaded != null ? loaded : new HashMap<>();
     }
 
 
     /**
-     * It converts the HashMap of farms into a JSON object, then saves it to the file.
+     * Saves all the {@link #autofarms}.
      */
     private void saveFarms() {
-        String data = gson.toJson(farms, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
+        String data = gson.toJson(autofarms, new TypeToken<HashMap<UUID, Autofarm>>() {}.getType());
         JsonElement dataAsJson = jsonParser.parse(data);
         fileData = dataAsJson.getAsJsonObject();
 
@@ -127,18 +109,18 @@ public final class AutofarmDataStorage extends DataStorage {
 
 
     /**
-     * Remove all farms from the map that are not linked to any other farm.
+     * Unlinks all the destroyed {@link Autofarm autofarms}.
      */
-    private void removeUnlinkedFarms() {
-        AutofarmManager autofarmManager = plugin.getAutofarmManager();
+    private void unlinkDestoroyedFarms() {
+        AutofarmManager manager = plugin.getAutofarmManager();
 
-        if (autofarmManager == null) {
-            farms.values().removeIf(farm -> !farm.isLinked());
+        if (manager == null) {
+            autofarms.values().removeIf(farm -> !farm.isLinked());
             return;
         }
 
         try {
-            farms.values().removeIf(farm -> !farm.isComponentsPresent(autofarmManager));
+            autofarms.values().removeIf(farm -> !farm.isComponentsPresent(manager));
         } catch (Exception e) {
             LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send();
         }
@@ -146,126 +128,130 @@ public final class AutofarmDataStorage extends DataStorage {
 
 
     /**
-     * If the farmerID is null, return null, otherwise return the farm with the given farmerID.
+     * Finds the {@link Autofarm autofarm} based on the provided farmerID.
      *
-     * @param farmerID The ID of the farmer.
+     * @param farmerID the id to base the findings on.
      *
-     * @return The first found farm with and ID, that equal the cached ID.
+     * @return the found autofarm, otherwise null.
      */
     public @Nullable Autofarm findFarmById(String farmerID) {
         if (farmerID == null) {
             return null;
         }
-        return farms.getOrDefault(UUID.fromString(farmerID), null);
+        return autofarms.getOrDefault(UUID.fromString(farmerID), null);
     }
 
 
     /**
-     * Find the first farm that is linked, enabled, and has the given block as its crop location.
+     * Finds the {@link Autofarm autofarm} based on the provided {@link Block crop block}.
      *
-     * @param block The block that was interacted with
+     * @param block the crop block to base the findings on.
      *
-     * @return The first farm that is linked, enabled, and has the same crop location as the block.
+     * @return the found autofarm, otherwise null.
      */
     public @Nullable Autofarm findFarmByCrop(@NotNull Block block) {
-        return farms.values().stream()
-                    .filter(Autofarm::isLinked)
-                    .filter(Autofarm::isEnabled)
-                    .filter(farm -> farm.getCropLocation().equals(block.getLocation()))
-                    .findFirst().orElse(null);
+        return autofarms.values().stream()
+                        .filter(Autofarm::isLinked)
+                        .filter(Autofarm::isEnabled)
+                        .filter(farm -> farm.getCropLocation().equals(block.getLocation()))
+                        .findFirst().orElse(null);
     }
 
 
     /**
-     * Find the first farm that is linked, enabled, and has a container at the given location.
+     * Finds the {@link Autofarm autofarm} based on the provided {@link Block container block}.
      *
-     * @param block The block that was interacted with.
+     * @param block the container block to base the findings on.
      *
-     * @return The first farm that is linked, enabled, and has the same location as the block.
+     * @return the found autofarm, otherwise null.
      */
     public @Nullable Autofarm findFarmByContainer(@NotNull Block block) {
-        return farms.values().stream()
-                    .filter(Autofarm::isLinked)
-                    .filter(Autofarm::isEnabled)
-                    .filter(farm -> {
-                        boolean filterByDoubly = filterByDoubly(farm, block);
-                        boolean filterByDoubleChest = filterByDoubleChest(farm, block);
+        return autofarms.values().stream()
+                        .filter(Autofarm::isLinked)
+                        .filter(Autofarm::isEnabled)
+                        .filter(farm -> {
+                            boolean filterByDoubly = filterByDoubly(farm, block);
+                            boolean filterByDoubleChest = filterByDoubleChest(farm, block);
 
-                        if (filterByDoubly || filterByDoubleChest) {
-                            return true;
-                        }
+                            if (filterByDoubly || filterByDoubleChest) {
+                                return true;
+                            }
 
-                        Location blockLocation = block.getLocation();
-                        Location containerLocation = farm.getContainerLocation();
-                        return containerLocation.equals(blockLocation);
-                    })
-                    .findFirst().orElse(null);
+                            Location blockLocation = block.getLocation();
+                            Location containerLocation = farm.getContainerLocation();
+                            return containerLocation.equals(blockLocation);
+                        })
+                        .findFirst().orElse(null);
     }
 
 
     /**
-     * Find the farm that is linked to the given dispenser block, if any.
+     * Finds the {@link Autofarm autofarm} based on the provided {@link Block dispenser block}.
      *
-     * @param block The block that was interacted with.
+     * @param block the dispenser block to base the findings on.
      *
-     * @return The first farm that is linked, enabled, and has a dispenser at the given location.
+     * @return the found autofarm, otherwise null.
      */
     public @Nullable Autofarm findFarmByDispenser(@NotNull Block block) {
-        return farms.values().stream()
-                    .filter(Autofarm::isLinked)
-                    .filter(Autofarm::isEnabled)
-                    .filter(farm -> farm.getDispenserLocation().equals(block.getLocation()))
-                    .findFirst().orElse(null);
+        return autofarms.values().stream()
+                        .filter(Autofarm::isLinked)
+                        .filter(Autofarm::isEnabled)
+                        .filter(farm -> farm.getDispenserLocation().equals(block.getLocation()))
+                        .findFirst().orElse(null);
     }
 
 
     /**
-     * If the container location is a doubly location, then return true if the block location is equal to the singly
-     * location or the doubly location.
+     * Filters searches based on {@link DoublyLocation doubly location} matching with the {@link Location provided location}.
      *
-     * @param farm  The farm that is being checked.
-     * @param block The block that is being checked.
+     * @param autofarm the farm to base the doubly location on.
+     * @param location the location to match with the doubly location.
      *
-     * @return A boolean value.
+     * @return true if it matches, otherwise false.
      */
-    private boolean filterByDoubly(@NotNull Autofarm farm, @NotNull Block block) {
-        Location blockLocation = block.getLocation();
-        Location containerLocation = farm.getContainerLocation();
-
-        if (containerLocation instanceof DoublyLocation) {
-            DoublyLocation location = (DoublyLocation) containerLocation;
-            Location singlyLocation = location.getSingly();
-            Location doublyLocation = location.getDoubly();
-            return singlyLocation.equals(blockLocation) || doublyLocation.equals(blockLocation);
+    private boolean filterByDoubly(@NotNull Autofarm autofarm, Location location) {
+        if (location == null) {
+            return false;
         }
 
-        return false;
+        DoublyLocation doubly = (DoublyLocation) autofarm.getContainerLocation();
+        if (doubly == null) {
+            return false;
+        }
+
+        Location singlyLocation = doubly.getSingly();
+        Location doublyLocation = doubly.getDoubly();
+        return singlyLocation.equals(location) || doublyLocation.equals(location);
     }
 
 
     /**
-     * If the block is a double chest, and the double chest is the same as the container location, return true.
+     * Filters searches based on {@link DoublyLocation doubly location} matching with the {@link Block provided block's} location.
      *
-     * @param farm  The farm that is being checked
-     * @param block The block that is being checked.
+     * @param autofarm the farm to base the doubly location on.
+     * @param block    the block to match with the doubly location.
      *
-     * @return A boolean value.
+     * @return true if it matches, otherwise false.
      */
-    private boolean filterByDoubleChest(@NotNull Autofarm farm, @NotNull Block block) {
+    private boolean filterByDoubly(@NotNull Autofarm autofarm, @NotNull Block block) {
+        return filterByDoubly(autofarm, block.getLocation());
+    }
+
+
+    /**
+     * Filters searches based on {@link DoubleChest double chests} matching with the {@link Block provided block's} location.
+     *
+     * @param autofarm the farm to base the doubly location on.
+     * @param block    the block to match with the doubly location.
+     *
+     * @return true if it matches, otherwise false.
+     */
+    private boolean filterByDoubleChest(@NotNull Autofarm autofarm, @NotNull Block block) {
         if (!BlockUtils.isSameType(block, Material.CHEST)) {
             return false;
         }
 
-        DoublyLocation doubleChest = BlockUtils.getAsDoubleChest(block);
-
-        if (doubleChest == null) {
-            return false;
-        }
-
-        Location singlyLocation = doubleChest.getSingly();
-        Location doublyLocation = doubleChest.getDoubly();
-        Location containerLocation = farm.getContainerLocation();
-        return singlyLocation.equals(containerLocation) || doublyLocation.equals(containerLocation);
+        return filterByDoubly(autofarm, LocationUtils.findDoubly(block.getLocation()));
     }
 
 }

@@ -12,33 +12,35 @@ import java.text.DecimalFormat;
  */
 public final class MathUtils {
 
+    /**
+     * The format for formatting numbers to two decimal points.
+     */
+    private final static DecimalFormat NUMBER_FORMAT = new DecimalFormat("###.##");
+
 
     /**
-     * It takes a double, formats it to two decimal places, and returns the formatted double.
+     * Rounds the passed number to two decimals places.
      *
-     * @param number The number to be rounded.
+     * @param number the number to round.
      *
-     * @return A double
+     * @return the rounded number.
      */
     public static double round(double number) {
-        DecimalFormat decimalFormat = new DecimalFormat("###.##");
-        return Double.parseDouble(
-                decimalFormat.format(number)
-        );
+        return Double.parseDouble(NUMBER_FORMAT.format(number));
     }
 
 
     /**
-     * If x is less than min, return min. If x is greater than max, return max. Otherwise, return x.
+     * Clamps the provided number to the min or max value.
      *
-     * @param x   The value to clamp
-     * @param min The minimum value that the returned value can be.
-     * @param max The maximum value that the returned value can be.
+     * @param number the number to clamp.
+     * @param min    the minimum value to clamp to.
+     * @param max    the maximum value to clamp to.
      *
-     * @return The minimum of the max and the maximum of the min and x.
+     * @return the clamped number.
      */
-    public static int clamp(int x, int min, int max) {
-        return Math.min(max, Math.max(min, x));
+    public static int clamp(int number, int min, int max) {
+        return Math.min(max, Math.max(min, number));
     }
 
 }

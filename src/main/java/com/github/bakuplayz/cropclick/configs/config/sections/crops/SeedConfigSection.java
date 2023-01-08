@@ -2,6 +2,8 @@ package com.github.bakuplayz.cropclick.configs.config.sections.crops;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configs.config.sections.ConfigSection;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,30 +21,30 @@ public final class SeedConfigSection extends ConfigSection {
     private final CropsConfig cropsConfig;
 
 
-    public SeedConfigSection(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig.getConfig());
-        this.cropsConfig = cropsConfig;
+    public SeedConfigSection(@NotNull CropsConfig config) {
+        super(config.getConfig());
+        this.cropsConfig = config;
     }
 
 
     /**
-     * It returns true if the seed, with the given name, exists in the config.
+     * Checks whether the {@link Seed provided seed} exists in the {@link CropsConfig crops config}.
      *
-     * @param seedName The name of the seed.
+     * @param seedName the name of the seed.
      *
-     * @return The existing state of the seed in the config.
+     * @return true if it exists, otherwise false.
      */
-    public boolean doesExist(@NotNull String seedName) {
+    public boolean exists(@NotNull String seedName) {
         return config.get("seeds." + seedName) != null;
     }
 
 
     /**
-     * It returns the name of the seed's drop or seed name, if the drop name is not existent.
+     * Gets the {@link Drop drop} name for the {@link Seed provided seed}.
      *
-     * @param seedName The name of the seed.
+     * @param seedName the name of the seed.
      *
-     * @return The drop name.
+     * @return the seed's drop name.
      */
     @Contract("_ -> new")
     public @NotNull String getDropName(@NotNull String seedName) {
@@ -51,23 +53,23 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the name of the drop to the given name.
+     * Sets the {@link Drop drop} name for the {@link Seed provided seed} to the provided name.
      *
-     * @param seedName The name of the seed.
-     * @param newName  The new name of the seed.
+     * @param seedName the name of the seed.
+     * @param name     the new name to set.
      */
-    public void setDropName(@NotNull String seedName, @NotNull String newName) {
-        config.set("seeds." + seedName + ".drop.name", newName);
+    public void setDropName(@NotNull String seedName, @NotNull String name) {
+        config.set("seeds." + seedName + ".drop.name", name);
         cropsConfig.saveConfig();
     }
 
 
     /**
-     * It gets the amount of drop that should be dropped when a crop is harvested.
+     * Gets the {@link Drop drop} amount for the {@link Seed provided seed}.
      *
-     * @param seedName The name of the seed.
+     * @param seedName the name of the seed.
      *
-     * @return The amount of drop that will be dropped.
+     * @return the seed's drop amount.
      */
     public int getDropAmount(@NotNull String seedName) {
         return getDropAmount(seedName, 0);
@@ -75,12 +77,12 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the amount of drop that should be dropped when a crop is harvested.
+     * Gets the {@link Drop drop} amount for the {@link Seed provided seed}.
      *
-     * @param seedName The name of the seed.
-     * @param def      The default value to return if the value is not found.
+     * @param seedName the name of the seed.
+     * @param def      the default amount, if non was found.
      *
-     * @return The amount of drop that will be dropped.
+     * @return the seed's drop amount, otherwise the default.
      */
     public int getDropAmount(@NotNull String seedName, int def) {
         return config.getInt("seeds." + seedName + ".drop.amount", def);
@@ -88,10 +90,10 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the amount of drop should be dropped when a crop is harvested.
+     * Sets the {@link Drop drop} amount for the {@link Seed provided seed} to the provided amount.
      *
-     * @param seedName The name of the seed.
-     * @param amount   The amount of the drop that should drop.
+     * @param seedName the name of the seed.
+     * @param amount   the amount to set.
      */
     public void setDropAmount(@NotNull String seedName, int amount) {
         config.set("seeds." + seedName + ".drop.amount", amount);
@@ -100,11 +102,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the chance of a seed dropping drops (as decimal eg. 0.2).
+     * Gets the {@link Drop drop} chance for the {@link Seed provided seed}.
      *
-     * @param seedName The name of the seed.
+     * @param seedName the name of the seed.
      *
-     * @return The chance of a seed dropping drops (as decimal).
+     * @return the seed's drop chance.
      */
     public double getDropChance(@NotNull String seedName) {
         return getDropChance(seedName, 0.0);
@@ -112,12 +114,12 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It gets the chance of a seed dropping drops (as decimal eg. 0.2).
+     * Gets the {@link Drop drop} chance for the {@link Seed provided seed}.
      *
-     * @param seedName The name of the seed.
-     * @param def      The default value to return if the config doesn't have the value.
+     * @param seedName the name of the seed.
+     * @param def      the default chance, if non was found.
      *
-     * @return The chance of a seed dropping drops (as decimal).
+     * @return the seed's drop chance, otherwise the default.
      */
     public double getDropChance(@NotNull String seedName, double def) {
         return config.getDouble("seeds." + seedName + ".drop.chance", def) / 100.0d;
@@ -125,10 +127,10 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the chance of a seed dropping drops (as decimal eg. 0.2).
+     * Sets the {@link Drop drop} chance for the {@link Seed provided seed} to the provided chance.
      *
-     * @param seedName The name of the seed.
-     * @param chance   The chance of a seed dropping drops (as decimal).
+     * @param seedName the name of the seed.
+     * @param chance   the chance to set.
      */
     public void setDropChance(@NotNull String seedName, double chance) {
         config.set("seeds." + seedName + ".drop.chance", chance);
@@ -137,23 +139,23 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It sets the seed's enabled state, with the given name, to the given value.
+     * Sets the enabled state of the {@link Seed provided seed} to the provided state.
      *
-     * @param seedName The name of the seed.
-     * @param enabled  Whether the seed is enabled.
+     * @param seedName  the name of the seed.
+     * @param isEnabled the enabled state to set.
      */
-    public void setEnabled(@NotNull String seedName, boolean enabled) {
-        config.set("seeds." + seedName + ".isEnabled", enabled);
+    public void setEnabled(@NotNull String seedName, boolean isEnabled) {
+        config.set("seeds." + seedName + ".isEnabled", isEnabled);
         cropsConfig.saveConfig();
     }
 
 
     /**
-     * It returns the seed's, with the given name, enabled state.
+     * Checks whether the {@link Seed provided seed} is enabled.
      *
-     * @param seedName The name of the seed.
+     * @param seedName the name of the seed.
      *
-     * @return The enabled state of the seed.
+     * @return true if enabled, otherwise false.
      */
     public boolean isEnabled(@NotNull String seedName) {
         return config.getBoolean("seeds." + seedName + ".isEnabled", true);
@@ -161,11 +163,11 @@ public final class SeedConfigSection extends ConfigSection {
 
 
     /**
-     * It toggles the seed's, with the given name, enabled state.
+     * Toggles enabled state of the {@link Seed provided seed}.
      *
-     * @param seedName The name of the seed.
+     * @param seedName the name of the seed.
      */
-    public void toggle(@NotNull String seedName) {
+    public void toggleSeed(@NotNull String seedName) {
         setEnabled(seedName, !isEnabled(seedName));
     }
 

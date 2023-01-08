@@ -28,9 +28,9 @@ public final class PlayerJoinListener implements Listener {
 
 
     /**
-     * Sends the update message to OP players upon joining the server.
+     * Handles all the {@link Player operator} join events.
      *
-     * @param event the event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onOperatorJoin(@NotNull PlayerJoinEvent event) {

@@ -17,13 +17,18 @@ import org.jetbrains.annotations.NotNull;
  * @see BaseSeed
  * @since 2.0.0
  */
-public final class BeetrootSeed extends Seed {
+public final class BeetrootSeed extends BaseSeed {
 
     public BeetrootSeed(@NotNull CropsConfig config) {
         super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Seed seed}.
+     *
+     * @return the name of the seed.
+     */
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
@@ -31,6 +36,11 @@ public final class BeetrootSeed extends Seed {
     }
 
 
+    /**
+     * Gets the {@link Seed seed's} drop.
+     *
+     * @return the seed's drop.
+     */
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.BEETROOT_SEEDS,
@@ -41,6 +51,11 @@ public final class BeetrootSeed extends Seed {
     }
 
 
+    /**
+     * Gets the {@link BaseSeed seed's} menu type.
+     *
+     * @return the seed's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.BEETROOT_SEEDS;

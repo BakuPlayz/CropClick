@@ -5,7 +5,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
@@ -14,6 +14,7 @@ import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 
 
 /**
- * A listener handling all the harvest {@link BaseCrop crop} events caused by a {@link Autofarm}.
+ * A listener handling all the harvest {@link Crop crop} events caused by a {@link Autofarm}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -43,7 +44,7 @@ public final class AutofarmHarvestCropListener implements Listener {
      * A map of the crops that have been harvested and the time they were harvested,
      * in order to render a duplication issue, with crops, obsolete.
      */
-    private final HashMap<BaseCrop, Long> harvestedCrops;
+    private final HashMap<Crop, Long> harvestedCrops;
 
 
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
@@ -56,12 +57,12 @@ public final class AutofarmHarvestCropListener implements Listener {
 
 
     /**
-     * If the block is a crop, cancel the event and call a new event.
+     * Handles all the {@link Dispenser dispenser} interact at {@link Crop crop} events.
      *
-     * @param event The event that is being called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onAutofarmInteractWithCrop(@NotNull BlockDispenseEvent event) {
+    public void onDispenserInteractAtCrop(@NotNull BlockDispenseEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
@@ -87,13 +88,13 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        if (AutofarmUtils.componentHasMeta(block)) {
-            AutofarmUtils.addMeta(plugin, autofarm);
+        if (AutofarmUtils.hasCachedID(block)) {
+            AutofarmUtils.addCachedID(plugin, autofarm);
         }
 
         Block facing = findDispenserFacing(block);
-        BaseCrop crop = cropManager.findByBlock(facing);
-        if (!cropManager.validate(crop, facing)) {
+        Crop crop = cropManager.findByBlock(facing);
+        if (crop == null) {
             return;
         }
 
@@ -118,15 +119,15 @@ public final class AutofarmHarvestCropListener implements Listener {
 
 
     /**
-     * If the crop has a drop, harvest it and replant it.
+     * Handles all the {@link Autofarm autofarm} harvest {@link Crop crop} events.
      *
-     * @param event The event that is being called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {
         if (event.isCancelled()) return;
 
-        BaseCrop crop = event.getCrop();
+        Crop crop = event.getCrop();
         Block block = event.getBlock();
         Autofarm autofarm = event.getAutofarm();
         Container container = autofarm.getContainer();
@@ -138,10 +139,8 @@ public final class AutofarmHarvestCropListener implements Listener {
         }
 
         boolean wasHarvested;
-
         if (crop instanceof TallCrop) {
-            TallCrop tallCrop = (TallCrop) crop;
-            wasHarvested = tallCrop.harvestAll(container, block, crop);
+            wasHarvested = ((TallCrop) crop).harvestAll(container, block, crop);
         } else {
             wasHarvested = crop.harvest(container);
         }
@@ -154,9 +153,8 @@ public final class AutofarmHarvestCropListener implements Listener {
         crop.replant(block);
 
         if (plugin.isDebugging()) {
-            plugin
-                    .getLogger()
-                    .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
+            plugin.getLogger()
+                  .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedID()));
         }
     }
 

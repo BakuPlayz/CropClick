@@ -28,6 +28,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class UpdateManager {
 
+    /**
+     * The URL to the {@link CropClick CropClick's} update server.
+     */
     private final static String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
 
     private final CropClick plugin;
@@ -43,61 +46,63 @@ public final class UpdateManager {
         setUpdateMessage("");
         this.plugin = plugin;
 
-        startInterval();
+        fetchUpdates();
     }
 
 
     /**
-     * It sends the update message to the sender.
+     * Sends the {@link #updateMessage update message} to the {@link CommandSender provided sender}.
      *
-     * @param sender The sender to send the message to.
+     * @param sender the sender to send the message to.
      */
-    public void sendAlert(CommandSender sender) {
+    public void sendAlert(@NotNull CommandSender sender) {
         if (sender instanceof Player) {
-            if (!getPlayerMessageState()) {
+            if (!canPlayerReceiveUpdates()) {
                 return;
             }
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            if (!getConsoleMessageState()) {
+            if (!canConsoleReceiveUpdates()) {
                 return;
             }
         }
 
         if (updateMessage.equals("")) {
-            //TODO: LanuageAPI later
-            sender.sendMessage(MessageUtils.colorize("[&aCropClick&r] Searched for updates and found none. You are up to date :)"));
+            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(sender);
             return;
         }
 
-        sender.sendMessage(MessageUtils.colorize("[&aCropClick&r] " + updateMessage));
+        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(sender);
+        for (String message : MessageUtils.readify(updateMessage, 10)) {
+            sender.sendMessage(message);
+        }
     }
 
 
     /**
-     * Run the fetch function in an interval, with the given period in-between each fetch.
+     * Starts fetching updates from the {@link #UPDATE_URL update server}.
      */
-    private void startInterval() {
+    private void fetchUpdates() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(
                 plugin,
-                this::fetch,
-                0,
-                60 * 30 * 20  // (30 minutes in ticks)
+                this::fetchUpdate,
+                0, // ticks before running the first time.
+                60 * 30 * 20  // ticks before running again (30 minutes as ticks).
         );
     }
 
 
     /**
-     * It fetches the new update state and message from the server, defined in the URL variable above.
+     * Fetches the updates from the {@link #UPDATE_URL update server}.
      */
-    private void fetch() {
+    private void fetchUpdate() {
         try {
             JsonElement response = new HttpRequestBuilder(UPDATE_URL)
                     .setDefaultHeaders()
                     .setParams(
-                            new HttpParam("serverVersion", getServerVersion()),
-                            new HttpParam("pluginVersion", getPluginVersion())
+                            new HttpParam("serverVersion", VersionUtils.getServerVersion()),
+                            new HttpParam("pluginVersion", plugin.getDescription().getVersion())
                     )
                     .post(true)
                     .getResponse();
@@ -139,7 +144,7 @@ public final class UpdateManager {
         } catch (Exception e) {
             e.printStackTrace();
             setUpdateState(UpdateState.FAILED_TO_FETCH);
-            LanguageAPI.Console.UPDATE_FETCH_FAILED.send();
+            LanguageAPI.Update.UPDATE_FETCH_FAILED.send(Bukkit.getConsoleSender());
         } finally {
             sendAlert(Bukkit.getConsoleSender());
         }
@@ -147,9 +152,9 @@ public final class UpdateManager {
 
 
     /**
-     * If the update state is up-to-date, then return true.
+     * Checks whether {@link CropClick} is up-to-date or not.
      *
-     * @return The updateState equal to UP_TO_DATE.
+     * @return true if it is, otherwise false.
      */
     public boolean isUpdated() {
         return updateState == UpdateState.UP_TO_DATE;
@@ -157,29 +162,9 @@ public final class UpdateManager {
 
 
     /**
-     * Gets the plugin version from the plugin description.
+     * Gets the {@link UpdateState update state's} message.
      *
-     * @return The version of the plugin.
-     */
-    private @NotNull String getPluginVersion() {
-        return plugin.getDescription().getVersion();
-    }
-
-
-    /**
-     * Gets the server version from bukkit.
-     *
-     * @return The server version.
-     */
-    private @NotNull String getServerVersion() {
-        return VersionUtils.getServerVersion();
-    }
-
-
-    /**
-     * It returns a message that tells the user the update state.
-     *
-     * @return The message that is being returned is the message that is being displayed in the menu.
+     * @return the update state's message.
      */
     public @NotNull String getUpdateStateMessage() {
         switch (updateState) {
@@ -202,41 +187,39 @@ public final class UpdateManager {
 
 
     /**
-     * It returns a boolean value from the config.yml file.
+     * Checks whether {@link Player OP players} can receive {@link #updateMessage update messages}.
      *
-     * @return The boolean value of the "updateMessage.player" key in the config.yml file.
+     * @return true if they can, otherwise false (default: true).
      */
-    public boolean getPlayerMessageState() {
+    public boolean canPlayerReceiveUpdates() {
         return plugin.getConfig().getBoolean("updateMessage.player", true);
     }
 
 
     /**
-     * It toggles the state of the player message.
+     * Toggles the {@link #updateMessage update message} for {@link Player OP players}.
      */
-    public void togglePlayerMessage() {
-        boolean state = getPlayerMessageState();
-        plugin.getConfig().set("updateMessage.player", !state);
+    public void toggleUpdatesPlayer() {
+        plugin.getConfig().set("updateMessage.player", !canPlayerReceiveUpdates());
         plugin.saveConfig();
     }
 
 
     /**
-     * It returns a boolean value from the config.yml file.
+     * Checks whether {@link ConsoleCommandSender the console} can receive {@link #updateMessage update messages}.
      *
-     * @return The boolean value of the "updateMessage.console" key in the config.yml file.
+     * @return true if it can, otherwise false (default: true).
      */
-    public boolean getConsoleMessageState() {
+    public boolean canConsoleReceiveUpdates() {
         return plugin.getConfig().getBoolean("updateMessage.console", true);
     }
 
 
     /**
-     * It toggles the state of the console message.
+     * Toggles the {@link #updateMessage update message} for {@link ConsoleCommandSender the console}.
      */
     public void toggleConsoleMessage() {
-        boolean state = getConsoleMessageState();
-        plugin.getConfig().set("updateMessage.console", !state);
+        plugin.getConfig().set("updateMessage.console", !canConsoleReceiveUpdates());
         plugin.saveConfig();
     }
 

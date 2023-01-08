@@ -25,15 +25,22 @@ public enum CropPermissionBase {
     }
 
 
-    public @NotNull String getDescription(@NotNull CropPermissionType type) {
-        return "Permission to " + type.getName() + " all the " + getName() + " crops " + example;
+    /**
+     * Gets the description of the {@link CropPermissionAction crop action permission}.
+     *
+     * @param action the action type.
+     *
+     * @return the description of the {@link CropPermission}.
+     */
+    public @NotNull String getDescription(@NotNull CropPermissionAction action) {
+        return "Permission to " + action.getName() + " all the " + getName() + " crops " + example;
     }
 
 
     /**
-     * Returns the lowercase name of the enum constant.
+     * Gets the name of the permission type as all lowercase.
      *
-     * @return The name of the enum in lowercase.
+     * @return the name of the permission type.
      */
     public @NotNull String getName() {
         return name().toLowerCase();

@@ -28,6 +28,11 @@ public final class Wheat extends GroundCrop {
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
@@ -35,6 +40,11 @@ public final class Wheat extends GroundCrop {
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     public @NotNull Drop getDrop() {
         return new Drop(Material.WHEAT,
@@ -45,6 +55,11 @@ public final class Wheat extends GroundCrop {
     }
 
 
+    /**
+     * Gets the seed of the {@link Crop crop}.
+     *
+     * @return the crop's seed.
+     */
     @Override
     @Contract(value = " -> new", pure = true)
     public @NotNull Seed getSeed() {
@@ -52,12 +67,22 @@ public final class Wheat extends GroundCrop {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
-        return Material.CROPS;
+        return Material.WHEAT;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.WHEAT;

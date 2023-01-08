@@ -21,21 +21,21 @@ public final class LanguageConfig extends Config {
 
 
     /**
-     * It gets a message from the config file.
+     * Gets the message from the {@link LanguageConfig language config}.
      *
-     * @param category    The category of the message.
-     * @param subCategory The subcategory of the message.
-     * @param key         The key of the message you want to get.
-     * @param colorize    Whether to colorize the message.
+     * @param category    the category used to find the message.
+     * @param subcategory the subcategory used to find the message.
+     * @param key         the key used to find the message.
+     * @param colorize    whether to colorize the message.
      *
-     * @return A string.
+     * @return the found message.
      */
     public @NotNull String getMessage(@NotNull String category,
-                                      @NotNull String subCategory,
+                                      @NotNull String subcategory,
                                       @NotNull String key,
                                       boolean colorize) {
-        String errorMessage = subCategory.equals("title") ? "&cError" : "&cError: Message is null!";
-        String message = config.getString(category + "." + subCategory + "." + key, errorMessage);
+        String errorMessage = subcategory.equals("title") ? "&cError" : "&cError: Message is null!";
+        String message = config.getString(category + "." + subcategory + "." + key, errorMessage);
         return colorize ? MessageUtils.colorize(message) : message;
     }
 

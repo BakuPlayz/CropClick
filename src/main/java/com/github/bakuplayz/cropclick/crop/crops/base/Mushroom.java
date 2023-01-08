@@ -1,6 +1,7 @@
 package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
+import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,15 +27,15 @@ public abstract class Mushroom extends TallCrop {
     protected Stack<Block> mushrooms;
 
 
-    public Mushroom(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public Mushroom(@NotNull CropsConfig config) {
+        super(config);
 
         mushrooms = new Stack<>();
     }
 
 
     /**
-     * Checks whether at least one mushroom should drop.
+     * Checks whether the {@link Mushroom extending mushroom} should drop at least one {@link Drop drop}.
      *
      * @return true if it should, otherwise false (default: false).
      */
@@ -45,9 +46,9 @@ public abstract class Mushroom extends TallCrop {
 
 
     /**
-     * Replants the mushroom.
+     * Replants the {@link Mushroom extending mushroom}.
      *
-     * @param block the mushroom crop block.
+     * @param block the crop block to replant.
      */
     @Override
     public void replant(@NotNull Block block) {
@@ -58,14 +59,14 @@ public abstract class Mushroom extends TallCrop {
 
 
     /**
-     * Returns true if the block is any type of Mushroom Block or Mushroom Stem.
+     * Checks whether the {@link Block provided block} is a {@link Mushroom mushroom} block.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean isMushroomBlock(@NotNull Block block) {
+    protected boolean isMushroomType(@NotNull Block block) {
         return BlockUtils.isAnyType(block, Material.HUGE_MUSHROOM_1, Material.HUGE_MUSHROOM_2);
     }
 

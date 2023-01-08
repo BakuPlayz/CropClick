@@ -1,13 +1,16 @@
 package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.addon.JobsRebornAddon;
+import com.github.bakuplayz.cropclick.addons.addon.McMMOAddon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.ParticleConfigSection;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.SoundConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.Drop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
@@ -22,11 +25,13 @@ import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
 import com.github.bakuplayz.cropclick.utils.ItemBuilder;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,13 +42,19 @@ import java.util.stream.Collectors;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class CropsMenu extends PaginatedMenu {
 
-    private final List<BaseCrop> crops;
+    /**
+     * A variable containing all the registered {@link Crop crops}.
+     */
+    private final List<Crop> crops;
 
+    /**
+     * A variable containing the state or menu to return to when clicking the {@link #getBackItem() back item}.
+     */
     private final CropMenuState menuState;
 
     private final CropConfigSection cropSection;
@@ -101,53 +112,48 @@ public final class CropsMenu extends PaginatedMenu {
 
         handlePagination(clicked);
 
-        int index = getIndexOfCrop(clicked);
+        int index = indexOfCrop(clicked);
         if (index == -1) {
             return;
         }
 
-        BaseCrop crop = crops.get(index);
+        Crop crop = crops.get(index);
         switch (menuState) {
             case CROP:
-                new CropMenu(plugin, player, crop).open();
+                new CropMenu(plugin, player, crop).openMenu();
                 break;
 
             case SOUNDS:
-                new SoundsMenu(plugin, player, crop).open();
+                new SoundsMenu(plugin, player, crop).openMenu();
                 break;
 
             case PARTICLES:
-                new ParticlesMenu(plugin, player, crop).open();
+                new ParticlesMenu(plugin, player, crop).openMenu();
                 break;
 
             case NAME:
-                new NameMenu(plugin, player, crop).open();
+                new NameMenu(plugin, player, crop).openMenu();
                 break;
 
             case JOBS_REBORN:
-                new JobsCropMenu(plugin, player, crop).open();
+                new JobsCropMenu(plugin, player, crop).openMenu();
                 break;
 
             case MCMMO:
-                new McMMOCropMenu(plugin, player, crop).open();
+                new McMMOCropMenu(plugin, player, crop).openMenu();
                 break;
         }
     }
 
 
     /**
-     * "Get the index of the crop item that was clicked on."
-     * <p>
-     * The first thing we do is create a stream of all the items in the menu. Then we filter the stream to only contain the
-     * item that was clicked on. Then we map the stream to only contain the index of the item that was clicked on. Finally,
-     * we find the first item in the stream and return it. If there is no item in the stream, we return -1.
-     * </p>
+     * Finds the index of the {@link Crop crop} based on the {@link ItemStack clicked item}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      *
-     * @return The index of the crop in the {@link #menuItems menuItems list}.
+     * @return the index of the crop, otherwise -1.
      */
-    private int getIndexOfCrop(@NotNull ItemStack clicked) {
+    private int indexOfCrop(@NotNull ItemStack clicked) {
         return menuItems.stream()
                         .filter(clicked::equals)
                         .mapToInt(item -> menuItems.indexOf(item))
@@ -157,13 +163,13 @@ public final class CropsMenu extends PaginatedMenu {
 
 
     /**
-     * It creates a crop item for the menu.
+     * Creates a menu {@link ItemStack item} based on the {@link Crop provided crop}.
      *
-     * @param crop The crop that the item is being created for.
+     * @param crop the crop to base the item on.
      *
-     * @return The given crop as a menu item.
+     * @return the created menu item.
      */
-    private @NotNull ItemStack getMenuItem(@NotNull BaseCrop crop) {
+    private @NotNull ItemStack createMenuItem(@NotNull Crop crop) {
         String name = MessageUtils.beautify(crop.getName(), false);
         String status = crop.isHarvestable()
                         ? LanguageAPI.Menu.CROPS_STATUS_ENABLED.get(plugin)
@@ -175,7 +181,7 @@ public final class CropsMenu extends PaginatedMenu {
 
         switch (menuState) {
             case CROP:
-                menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_DROP_VALUE.get(plugin, getDropValue(crop)));
+                menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_DROP_VALUE.get(plugin, getAmountOfDrops(crop)));
                 break;
 
             case PARTICLES:
@@ -207,111 +213,110 @@ public final class CropsMenu extends PaginatedMenu {
 
 
     /**
-     * It gets a list of menu items by mapping each crop to a menu item.
+     * Gets all the {@link #crops} as {@link #menuItems menu items}.
      *
-     * @return A list of crops as menuItems.
+     * @return crops as menu items.
      */
-    @Override
     protected @NotNull List<ItemStack> getMenuItems() {
         return crops.stream()
-                    .map(this::getMenuItem)
+                    .map(this::createMenuItem)
                     .collect(Collectors.toList());
     }
 
 
     /**
-     * It gets the <a href="https://www.spigotmc.org/resources/official-mcmmo-original-author-returns.64348/">mcMMO</a> experience for the given crop.
+     * Gets the {@link McMMOAddon mcMMO} experience gained when harvesting the {@link Crop provided crop}.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop to base the experience on.
      *
-     * @return The <a href="https://www.spigotmc.org/resources/official-mcmmo-original-author-returns.64348/">mcMMO</a> experience given when harvesting a crop.
+     * @return the experience gained when harvesting the crop.
      */
-    private double getMcMMOExperience(@NotNull BaseCrop crop) {
+    private double getMcMMOExperience(@NotNull Crop crop) {
         return addonSection.getMcMMOExperience(crop.getName());
     }
 
 
     /**
-     * It gets the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> money for the given crop.
+     * Gets the {@link JobsRebornAddon JobsReborn} money gained when harvesting the {@link Crop provided crop}.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop to base the money on.
      *
-     * @return The <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> money given when harvesting a crop.
+     * @return the money gained when harvesting the crop.
      */
-    private double getJobsMoney(@NotNull BaseCrop crop) {
+    private double getJobsMoney(@NotNull Crop crop) {
         return addonSection.getJobsMoney(crop.getName());
     }
 
 
     /**
-     * It gets the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> points for the given crop.
+     * Gets the {@link JobsRebornAddon JobsReborn} points gained when harvesting the {@link Crop provided crop}.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop to base the points on.
      *
-     * @return The <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> points given when harvesting a crop.
+     * @return the points gained when harvesting the crop.
      */
-    private double getJobsPoints(@NotNull BaseCrop crop) {
+    private double getJobsPoints(@NotNull Crop crop) {
         return addonSection.getJobsPoints(crop.getName());
     }
 
 
     /**
-     * It gets the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> experience for the given crop.
+     * Gets the {@link JobsRebornAddon JobsReborn} experience gained when harvesting the {@link Crop provided crop}.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop to base the experience on.
      *
-     * @return The <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> experience given when harvesting a crop.
+     * @return the experience gained when harvesting the crop.
      */
-    private double getJobsExperience(@NotNull BaseCrop crop) {
+    private double getJobsExperience(@NotNull Crop crop) {
         return addonSection.getJobsExperience(crop.getName());
     }
 
 
     /**
-     * It returns the amount of sounds the given crop has.
+     * Gets the amount of {@link Sound#values() sounds} associated with the {@link Crop crop}.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop associated with the sounds.
      *
-     * @return The amount of sounds the crop has.
+     * @return the amount of sounds associated with the crop.
      */
-    private int getAmountOfSounds(@NotNull BaseCrop crop) {
+    private int getAmountOfSounds(@NotNull Crop crop) {
         return soundSection.getAmountOfSounds(crop.getName());
     }
 
 
     /**
-     * It returns the amount of particles the given crop has.
+     * Gets the amount of {@link ParticleEffect#values() sounds} associated with the {@link Crop crop}.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop associated with the particles.
      *
-     * @return The amount of particles the crop has.
+     * @return the amount of particles associated with the crop.
      */
-    private int getAmountOfParticles(@NotNull BaseCrop crop) {
+    private int getAmountOfParticles(@NotNull Crop crop) {
         return particleSection.getAmountOfParticles(crop.getName());
     }
 
 
     /**
-     * It returns the amount of drops the given crop will drop.
+     * Gets the amount of {@link Drop drops} given when the {@link Crop provided crop} is harvested.
      *
-     * @param crop The crop that is being harvested.
+     * @param crop the crop to base the amount of drops on.
      *
-     * @return The amount of drop.
+     * @return the amount of drops given when harvesting the crop.
      */
-    private int getDropValue(@NotNull BaseCrop crop) {
+    private int getAmountOfDrops(@NotNull Crop crop) {
         return crop.getDrop().getAmount();
     }
 
 
     /**
-     * It gets the drop's name or the crop's name, if no drop name is set.
+     * Gets the name of the {@link Drop drop} of the {@link Crop provided crop}.
      *
-     * @param crop The crop to get the drop name of.
+     * @param crop the crop to base the name of the drop on.
      *
-     * @return The name of the crop or the name of the drop.
+     * @return the name of the crop's drop.
      */
     @Contract("_ -> new")
-    private @NotNull String getDropName(@NotNull BaseCrop crop) {
+    private @NotNull String getDropName(@NotNull Crop crop) {
         return cropSection.getDropName(crop.getName());
     }
 

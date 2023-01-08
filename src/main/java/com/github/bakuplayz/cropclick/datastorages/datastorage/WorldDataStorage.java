@@ -6,6 +6,7 @@ import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * Handles the fetching and loading of the worlds.
+     * Fetches the {@link #fileData file data}.
      */
     @Override
     public void fetchData() {
@@ -50,7 +51,7 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * Handles the saving of the worlds.
+     * Saves the {@link #worlds}.
      */
     @Override
     public void saveData() {
@@ -59,9 +60,9 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * If the world is already registered, return. Otherwise, register the world.
+     * Register the provided {@link FarmWorld world}.
      *
-     * @param world The world to register.
+     * @param world the world to register.
      */
     public void registerWorld(@NotNull FarmWorld world) {
         if (worlds.containsKey(world.getName())) {
@@ -72,9 +73,9 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * Remove the world from the list of worlds.
+     * Unregister the provided {@link FarmWorld world}.
      *
-     * @param world The world to unregister.
+     * @param world the world to unregister.
      */
     @SuppressWarnings("unused")
     public void unregisterWorld(@NotNull FarmWorld world) {
@@ -83,7 +84,7 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * It loads the worlds from the file.
+     * Loads all the {@link #worlds}.
      */
     private void loadWorlds() {
         HashMap<String, FarmWorld> loaded = gson.fromJson(fileData, new TypeToken<HashMap<String, FarmWorld>>() {}.getType());
@@ -92,7 +93,7 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * It converts the HashMap of worlds into a JSON object, then saves it to the file.
+     * Saves all the {@link #worlds}.
      */
     private void saveWorlds() {
         String data = gson.toJson(worlds, type);
@@ -104,11 +105,11 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * Returns the FarmWorld object with the given name, or null if no such world exists.
+     * Finds the {@link FarmWorld farm world} based on the provided name.
      *
-     * @param name The name of the world you want to find.
+     * @param name the name to base the findings on.
      *
-     * @return A FarmWorld object or null.
+     * @return the found farm world, otherwise null.
      */
     public @Nullable FarmWorld findWorldByName(@NotNull String name) {
         return worlds.getOrDefault(name, null);
@@ -116,11 +117,11 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * Returns the FarmWorld object associated with the given World object, or null if no such FarmWorld exists.
+     * Finds the {@link FarmWorld farm world} based on the {@link World world}.
      *
-     * @param world The world to find the FarmWorld for.
+     * @param world the world to base the findings on.
      *
-     * @return A FarmWorld object or null.
+     * @return the found farm world, otherwise null.
      */
     public @Nullable FarmWorld findWorldByWorld(@NotNull World world) {
         return worlds.getOrDefault(world.getName(), null);
@@ -128,11 +129,11 @@ public final class WorldDataStorage extends DataStorage {
 
 
     /**
-     * Returns the FarmWorld object associated with the given player, or null if the player is not in a FarmWorld.
+     * Finds the {@link FarmWorld farm world} based on the {@link Location player's location}.
      *
-     * @param player The player to find the world for.
+     * @param player the player to base the findings on.
      *
-     * @return A FarmWorld object or null.
+     * @return the found farm world, otherwise null.
      */
     public @Nullable FarmWorld findWorldByPlayer(@NotNull Player player) {
         return worlds.getOrDefault(player.getWorld().getName(), null);

@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.menu.menus.main;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
 import com.github.bakuplayz.cropclick.menu.menus.links.DispenserLinkMenu;
@@ -28,13 +28,19 @@ import java.util.stream.Collectors;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class AutofarmsMenu extends PaginatedMenu {
 
+    /**
+     * A variable containing all the registered {@link Autofarm autofarms}.
+     */
     private final List<Autofarm> autofarms;
 
+    /**
+     * A variable containing the state or menu to return to when clicking the {@link #getBackItem() back item}.
+     */
     private final AutofarmsMenuState menuState;
 
 
@@ -51,7 +57,7 @@ public final class AutofarmsMenu extends PaginatedMenu {
         setPaginatedItems();
         setPageItems();
 
-        if (menuState == AutofarmsMenuState.MENU_REDIRECT) {
+        if (menuState == AutofarmsMenuState.MENU) {
             setBackItems();
         }
     }
@@ -65,11 +71,11 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
         handlePagination(clicked);
 
-        if (menuState == AutofarmsMenuState.MENU_REDIRECT) {
+        if (menuState == AutofarmsMenuState.MENU) {
             handleBack(clicked, new MainMenu(plugin, player));
         }
 
-        int index = getIndexOfFarm(clicked);
+        int index = indexOfFarm(clicked);
         if (index == -1) {
             return;
         }
@@ -82,11 +88,18 @@ public final class AutofarmsMenu extends PaginatedMenu {
                 dispenser.getBlock(),
                 autofarm,
                 menuState
-        ).open();
+        ).openMenu();
     }
 
 
-    private int getIndexOfFarm(@NotNull ItemStack clicked) {
+    /**
+     * Finds the index of the {@link Autofarm autofarm} based on the {@link ItemStack clicked item}.
+     *
+     * @param clicked the item that was clicked.
+     *
+     * @return the index of the autofarm, otherwise -1.
+     */
+    private int indexOfFarm(@NotNull ItemStack clicked) {
         return menuItems.stream()
                         .filter(clicked::equals)
                         .mapToInt(item -> menuItems.indexOf(item))
@@ -95,15 +108,21 @@ public final class AutofarmsMenu extends PaginatedMenu {
     }
 
 
-    @SuppressWarnings("ConstantConditions")
-    private @NotNull ItemStack getMenuItem(@NotNull Autofarm farm) {
-        String status = farm.isEnabled()
+    /**
+     * Creates a menu {@link ItemStack item} based on the {@link Autofarm provided autofarm}.
+     *
+     * @param autofarm the autofarm to base the item on.
+     *
+     * @return the created menu item.
+     */
+    private @NotNull ItemStack createMenuItem(@NotNull Autofarm autofarm) {
+        String status = autofarm.isEnabled()
                         ? LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin)
                         : LanguageAPI.Menu.GENERAL_DISABLED_STATUS.get(plugin);
-        OfflinePlayer player = Bukkit.getOfflinePlayer(farm.getOwnerID());
+        OfflinePlayer player = Bukkit.getOfflinePlayer(autofarm.getOwnerID());
 
         return new ItemBuilder(Material.DISPENSER)
-                .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, farm.getShortenedID(), status))
+                .setName(LanguageAPI.Menu.AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedID(), status))
                 .setLore(LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER.get(plugin,
                         player.getUniqueId().equals(Autofarm.UNKNOWN_OWNER)
                         ? LanguageAPI.Menu.AUTOFARMS_ITEM_OWNER_UNCLAIMED.get(plugin)
@@ -113,14 +132,23 @@ public final class AutofarmsMenu extends PaginatedMenu {
     }
 
 
+    /**
+     * Gets all the {@link #autofarms} as {@link #menuItems menu items}.
+     *
+     * @return autofarms as menu items.
+     */
     protected @NotNull List<ItemStack> getMenuItems() {
         return autofarms.stream()
-                        .map(this::getMenuItem)
+                        .map(this::createMenuItem)
                         .collect(Collectors.toList());
     }
 
 
-    @NotNull
+    /**
+     * Gets all the registered {@link Autofarm autofarms}.
+     *
+     * @return registered autofarms.
+     */
     private List<Autofarm> getAutofarms(@NotNull CropClick plugin, @NotNull Player player) {
         return plugin.getAutofarmManager().getAutofarms().stream()
                      .filter(autofarm -> PermissionUtils.canUnlinkOthersFarm(player, autofarm))

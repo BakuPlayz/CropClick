@@ -1,10 +1,11 @@
 package com.github.bakuplayz.cropclick.menu.menus.addons.additional;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.addon.McMMOAddon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.McMMOMenu;
 import com.github.bakuplayz.cropclick.menu.menus.main.CropsMenu;
 import com.github.bakuplayz.cropclick.menu.states.CropMenuState;
@@ -25,10 +26,10 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @see CropsMenu
  * @see McMMOMenu
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
-public final class McMMOCropMenu extends Menu {
+public final class McMMOCropMenu extends BaseMenu {
 
     private final int MIN_CHANGE = 1;
     private final int MAX_CHANGE = 5;
@@ -41,7 +42,7 @@ public final class McMMOCropMenu extends Menu {
     private final AddonConfigSection addonSection;
 
 
-    public McMMOCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull BaseCrop crop) {
+    public McMMOCropMenu(@NotNull CropClick plugin, @NotNull Player player, @NotNull Crop crop) {
         super(plugin, player, LanguageAPI.Menu.MCMMO_CROP_TITLE);
         this.addonSection = plugin.getCropsConfig().getAddonSection();
         this.cropName = crop.getName();
@@ -52,11 +53,11 @@ public final class McMMOCropMenu extends Menu {
     public void setMenuItems() {
         inventory.setItem(13, getReasonItem());
 
-        inventory.setItem(28, getExperienceRemoveItem(MAX_CHANGE));
-        inventory.setItem(29, getExperienceRemoveItem(MIN_CHANGE));
+        inventory.setItem(28, getExperienceDecreaseItem(MAX_CHANGE));
+        inventory.setItem(29, getExperienceDecreaseItem(MIN_CHANGE));
         inventory.setItem(31, getExperienceItem());
-        inventory.setItem(33, getExperienceAddItem(MIN_CHANGE));
-        inventory.setItem(34, getExperienceAddItem(MAX_CHANGE));
+        inventory.setItem(33, getExperienceIncreaseItem(MIN_CHANGE));
+        inventory.setItem(34, getExperienceIncreaseItem(MAX_CHANGE));
 
         setBackItem();
     }
@@ -70,34 +71,34 @@ public final class McMMOCropMenu extends Menu {
 
         handleBack(clicked, new CropsMenu(plugin, player, CropMenuState.MCMMO));
 
-        if (clicked.equals(getExperienceAddItem(MIN_CHANGE))) {
-            addMcMMOExperience(MIN_CHANGE);
+        if (clicked.equals(getExperienceIncreaseItem(MIN_CHANGE))) {
+            increaseExperience(MIN_CHANGE);
         }
 
-        if (clicked.equals(getExperienceAddItem(MAX_CHANGE))) {
-            addMcMMOExperience(MAX_CHANGE);
+        if (clicked.equals(getExperienceIncreaseItem(MAX_CHANGE))) {
+            increaseExperience(MAX_CHANGE);
         }
 
-        if (clicked.equals(getExperienceRemoveItem(MIN_CHANGE))) {
-            removeMcMMOExperience(MIN_CHANGE);
+        if (clicked.equals(getExperienceDecreaseItem(MIN_CHANGE))) {
+            decreaseExperience(MIN_CHANGE);
         }
 
-        if (clicked.equals(getExperienceRemoveItem(MAX_CHANGE))) {
-            removeMcMMOExperience(MAX_CHANGE);
+        if (clicked.equals(getExperienceDecreaseItem(MAX_CHANGE))) {
+            decreaseExperience(MAX_CHANGE);
         }
 
         if (clicked.equals(getReasonItem())) {
             getReasonMenu().open(player);
         }
 
-        refresh();
+        refreshMenu();
     }
 
 
     /**
-     * It creates an item that displays the reason why the crop gives experience.
+     * Gets the reason {@link ItemStack item}.
      *
-     * @return The item that will be used to display the reason for the experience.
+     * @return the reason item.
      */
     private @NotNull ItemStack getReasonItem() {
         String reason = addonSection.getMcMMOExperienceReason(cropName);
@@ -111,9 +112,9 @@ public final class McMMOCropMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the experience that the crop will give you on harvest.
+     * Gets the experience {@link ItemStack item}.
      *
-     * @return An ItemStack that represents the experience the crop will give you.
+     * @return the experience item.
      */
     private @NotNull ItemStack getExperienceItem() {
         double experience = addonSection.getMcMMOExperience(cropName);
@@ -128,43 +129,43 @@ public final class McMMOCropMenu extends Menu {
 
 
     /**
-     * It creates an item that adds experience to the crop.
+     * Gets the experience increase {@link ItemStack item} based on the provided experience.
      *
-     * @param amount The amount of experience to add to the crop.
+     * @param experience the experience to be increased with when clicked.
      *
-     * @return An ItemStack that will be used to add experience to the crop.
+     * @return the experience increase item.
      */
-    private @NotNull ItemStack getExperienceAddItem(int amount) {
+    private @NotNull ItemStack getExperienceIncreaseItem(int experience) {
         double beforeValue = addonSection.getMcMMOExperience(cropName);
-        double afterValue = Math.min(beforeValue + amount, EXPERIENCE_MAX);
+        double afterValue = Math.min(beforeValue + experience, EXPERIENCE_MAX);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5)
-                .setName(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_NAME.get(plugin, amount, "Experience"))
+                .setName(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_NAME.get(plugin, experience, "Experience"))
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_ADD_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates an item that removes experience to the crop.
+     * Gets the experience decrease {@link ItemStack item} based on the provided experience.
      *
-     * @param amount The amount of experience to remove to the crop.
+     * @param experience the experience to be decreased with when clicked.
      *
-     * @return An ItemStack that will be used to remove experience to the crop.
+     * @return the experience decrease item.
      */
-    private @NotNull ItemStack getExperienceRemoveItem(int amount) {
+    private @NotNull ItemStack getExperienceDecreaseItem(int experience) {
         double beforeValue = addonSection.getMcMMOExperience(cropName);
-        double afterValue = Math.max(beforeValue - amount, EXPERIENCE_MIN);
+        double afterValue = Math.max(beforeValue - experience, EXPERIENCE_MIN);
 
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14)
-                .setName(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_NAME.get(plugin, amount, "Experience"))
+                .setName(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_NAME.get(plugin, experience, "Experience"))
                 .setLore(LanguageAPI.Menu.MCMMO_CROP_REMOVE_ITEM_AFTER.get(plugin, afterValue))
                 .toItemStack();
     }
 
 
     /**
-     * It creates a menu that allows the player to change the reason for the McMMO experience.
+     * Creates the reason change {@link AnvilGUI anvil menu}.
      *
      * @return the reason menu.
      */
@@ -190,24 +191,24 @@ public final class McMMOCropMenu extends Menu {
 
 
     /**
-     * Adds the given amount of experience to the given skill, but caps it at 10,000.
+     * Increases the {@link McMMOAddon mcMMO} experience with the provided experience.
      *
-     * @param amount The amount of experience to add.
+     * @param experience the experience to be increased with.
      */
-    public void addMcMMOExperience(int amount) {
-        double oldAmount = addonSection.getMcMMOExperience(cropName) + amount;
+    private void increaseExperience(int experience) {
+        double oldAmount = addonSection.getMcMMOExperience(cropName) + experience;
         double newAmount = Math.min(oldAmount, EXPERIENCE_MAX);
         addonSection.setMcMMOExperience(cropName, newAmount);
     }
 
 
     /**
-     * Removes the specified amount of experience from the specified skill.
+     * Decreases the {@link McMMOAddon mcMMO} experience with the provided experience.
      *
-     * @param amount The amount of experience to remove.
+     * @param experience the experience to be decreased with.
      */
-    public void removeMcMMOExperience(int amount) {
-        double oldAmount = addonSection.getMcMMOExperience(cropName) - amount;
+    private void decreaseExperience(int experience) {
+        double oldAmount = addonSection.getMcMMOExperience(cropName) - experience;
         double newAmount = Math.max(oldAmount, EXPERIENCE_MIN);
         addonSection.setMcMMOExperience(cropName, newAmount);
     }

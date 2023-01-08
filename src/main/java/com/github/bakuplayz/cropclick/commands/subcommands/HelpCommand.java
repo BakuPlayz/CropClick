@@ -25,12 +25,12 @@ public final class HelpCommand extends Subcommand {
     /**
      * Performs the '/crop help' command, opening the {@link HelpMenu}.
      *
-     * @param player The player who executed the command.
-     * @param args   The arguments passed to the command.
+     * @param player the player executing the command.
+     * @param args   the arguments passed along the command.
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {
-        new HelpMenu(plugin, player, false).open();
+        new HelpMenu(plugin, player, false).openMenu();
     }
 
 }

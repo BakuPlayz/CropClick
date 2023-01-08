@@ -1,13 +1,18 @@
 package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.configs.Config;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.menu.menus.links.Component;
 import com.github.bakuplayz.cropclick.utils.AutofarmUtils;
+import com.github.bakuplayz.cropclick.utils.CollectionUtils;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -27,10 +32,10 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the block is a crop, set the player's crop location to the block's location.
+     * Selects the {@link Block provided block}, if it is a {@link Crop crop} block.
      *
-     * @param player The player who is selecting the crop.
-     * @param block  The block that the player clicked on.
+     * @param player the player who selected the block.
+     * @param block  the block that was selected.
      */
     public void selectCrop(@NotNull Player player, @NotNull Block block) {
         if (!AutofarmUtils.isCrop(plugin.getCropManager(), block)) return;
@@ -40,10 +45,10 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the block is a container, set the player's container location to the block's location.
+     * Selects the {@link Block provided block}, if it is a {@link Container container} block.
      *
-     * @param player The player who is selecting the container.
-     * @param block  The block that the player clicked on.
+     * @param player the player who selected the block.
+     * @param block  the block that was selected.
      */
     public void selectContainer(@NotNull Player player, @NotNull Block block) {
         if (!AutofarmUtils.isContainer(block)) return;
@@ -53,10 +58,10 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the block is a dispenser, save the location of the dispenser in the config.
+     * Selects the {@link Block provided block}, if it is a {@link Dispenser dispenser} block.
      *
-     * @param player The player who is selecting the dispenser.
-     * @param block  The block that the player clicked on.
+     * @param player the player who selected the block.
+     * @param block  the block that was selected.
      */
     public void selectDispenser(@NotNull Player player, @NotNull Block block) {
         if (!AutofarmUtils.isDispenser(block)) return;
@@ -66,10 +71,10 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the block is a crop, set the player's crop to null.
+     * Deselects the {@link Block provided block}, if it is a {@link Crop crop} block.
      *
-     * @param player The player who is deselecting the crop.
-     * @param block  The block that the player is trying to select.
+     * @param player the player who deselected the block.
+     * @param block  the block that was deselected.
      */
     public void deselectCrop(@NotNull Player player, @NotNull Block block) {
         if (!AutofarmUtils.isCrop(plugin.getCropManager(), block)) return;
@@ -79,10 +84,10 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the block is a container, set the player's container to null.
+     * Deselects the {@link Block provided block}, if it is a {@link Container container} block.
      *
-     * @param player The player who is selecting the container.
-     * @param block  The block that the player is trying to select.
+     * @param player the player who deselected the block.
+     * @param block  the block that was deselected.
      */
     public void deselectContainer(@NotNull Player player, @NotNull Block block) {
         if (!AutofarmUtils.isContainer(block)) return;
@@ -92,10 +97,10 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the block is a dispenser, remove the dispenser from the player's config.
+     * Deselects the {@link Block provided block}, if it is a {@link Dispenser dispenser} block.
      *
-     * @param player The player who is selecting the dispenser.
-     * @param block  The block that the player is trying to select.
+     * @param player the player who deselected the block.
+     * @param block  the block that was deselected.
      */
     public void deselectDispenser(@NotNull Player player, @NotNull Block block) {
         if (!AutofarmUtils.isDispenser(block)) return;
@@ -105,27 +110,38 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * It removes all the links between the player's selected blocks and the other players' selected blocks, if they clash.
+     * Deselects all the {@link Player provided player's} selected {@link Component autofarm components}.
      *
-     * @param player The player whose selections are being cleared.
+     * @param player the player to deselect all the components for.
      */
-    public void deselectAll(@NotNull Player player) {
+    public void deselectComponents(@NotNull Player player) {
         Location crop = getSelectedCrop(player);
         Location container = getSelectedContainer(player);
         Location dispenser = getSelectedDispenser(player);
 
         config.set(player.getUniqueId().toString(), null);
 
-        assert crop != null;
-        assert container != null;
-        assert dispenser != null;
-
         for (String path : config.getKeys(true)) {
             String[] sections = path.split("\\.");
             String playerID = sections[0];
-            if (path.equals("crop")) nullifyLinked(crop, "crop", playerID);
-            if (path.equals("container")) nullifyLinked(container, "container", playerID);
-            if (path.equals("dispenser")) nullifyLinked(dispenser, "dispenser", playerID);
+
+            if (!path.equals("crops")
+                    && !path.equals("container")
+                    && !path.equals("dispenser")) {
+                continue;
+            }
+
+            if (crop == config.get(playerID + ".crop")) {
+                config.set(playerID + ".crop", null);
+            }
+
+            if (container == config.get(playerID + ".container")) {
+                config.set(playerID + ".container", null);
+            }
+
+            if (dispenser == config.get(playerID + ".dispenser")) {
+                config.set(playerID + ".dispenser", null);
+            }
         }
 
         saveConfig();
@@ -133,136 +149,105 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * If the location is the same as the location in the config, set the location in the config to null.
+     * Gets the {@link Crop selected crop} for the {@link Player provided player}.
      *
-     * @param location The location to check if it's linked to the player.
-     * @param key      The key of the location you want to nullify.
-     * @param playerID The player's UUID.
+     * @param player the player to get the selected location from.
+     *
+     * @return the selected crop's location.
      */
-    private void nullifyLinked(@NotNull Location location,
-                               @NotNull String key,
-                               @NotNull String playerID) {
-        Location loc = (Location) config.get(playerID + "." + key);
-        if (location.equals(loc)) {
-            config.set(playerID + "." + key, null);
-        }
-    }
-
-
-    /**
-     * This function returns the location of the crop that the player has selected, or null if the player has not selected
-     * a crop.
-     *
-     * @param player The player whose crop you want to get.
-     *
-     * @return A location.
-     */
-    public @Nullable Location getSelectedCrop(@NotNull Player player) {
+    public Location getSelectedCrop(@NotNull Player player) {
         return (Location) config.get(player.getUniqueId() + ".crop");
     }
 
 
     /**
-     * This function returns the location of the container that the player has selected, or null if the player has not
-     * selected a container.
+     * Gets the {@link Container selected container} for the {@link Player provided player}.
      *
-     * @param player The player whose container you want to get.
+     * @param player the player to get the selected location from.
      *
-     * @return A Location.
+     * @return the selected container's location.
      */
-    public @Nullable Location getSelectedContainer(@NotNull Player player) {
+    public Location getSelectedContainer(@NotNull Player player) {
         return (Location) config.get(player.getUniqueId() + ".container");
     }
 
 
     /**
-     * This function returns the location of the dispenser that the player has selected, or null if the player has not
-     * selected a dispenser.
+     * Gets the {@link Dispenser selected dispenser} for the {@link Player provided player}.
      *
-     * @param player The player whose dispenser you want to get.
+     * @param player the player to get the selected location from
      *
-     * @return A Location.
+     * @return the selected dispenser's location.
      */
-    public @Nullable Location getSelectedDispenser(@NotNull Player player) {
+    public Location getSelectedDispenser(@NotNull Player player) {
         return (Location) config.get(player.getUniqueId() + ".dispenser");
     }
 
 
     /**
-     * If the block is a crop, and the player has a crop selected, and the block is the same as the player's selected crop,
-     * then return true. Otherwise, if not found return false.
+     * Checks whether the {@link Block provided crop block} is selected by the {@link Player provided player}.
      *
-     * @param player The player who is selecting the crop.
-     * @param block  The block that the player is looking at.
+     * @param player the player to check.
+     * @param block  the crop block to check.
      *
-     * @return A boolean value.
+     * @return true if selected, otherwise false.
      */
     public boolean isCropSelected(@NotNull Player player, @NotNull Block block) {
         if (AutofarmUtils.isCrop(plugin.getCropManager(), block)) {
-            Location crop = (Location) config.get(player.getUniqueId() + ".crop");
-            return crop != null && crop.equals(block.getLocation());
+            return getSelectedCrop(player).equals(block.getLocation());
         }
         return false;
     }
 
 
     /**
-     * If the block is a container, and the player has a container selected, and the container selected is the same as the
-     * block, then return true. Otherwise, if not found return false.
+     * Checks whether the {@link Block provided container block} is selected by the {@link Player provided player}.
      *
-     * @param player The player who is using the plugin.
-     * @param block  The block that is being checked.
+     * @param player the player to check.
+     * @param block  the container block to check.
      *
-     * @return A boolean value.
+     * @return true if selected, otherwise false.
      */
     public boolean isContainerSelected(@NotNull Player player, @NotNull Block block) {
         if (AutofarmUtils.isContainer(block)) {
-            Location container = (Location) config.get(player.getUniqueId() + ".container");
-            return container != null && container.equals(block.getLocation());
+            return getSelectedContainer(player).equals(block.getLocation());
         }
         return false;
     }
 
 
     /**
-     * If the block is a dispenser, return true if the player has selected it, otherwise return false.
+     * Checks whether the {@link Block provided dispenser block} is selected by the {@link Player provided player}.
      *
-     * @param player The player who is selecting the dispenser
-     * @param block  The block that the player is looking at.
+     * @param player the player to check.
+     * @param block  the dispenser block to check.
      *
-     * @return A boolean value.
+     * @return true if selected, otherwise false.
      */
     public boolean isDispenserSelected(@NotNull Player player, @NotNull Block block) {
         if (AutofarmUtils.isDispenser(block)) {
-            Location dispenser = (Location) config.get(player.getUniqueId() + ".dispenser");
-            return dispenser != null && dispenser.equals(block.getLocation());
+            return getSelectedDispenser(player).equals(block.getLocation());
         }
         return false;
     }
 
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isEnabled(@NotNull Player player) {
-        return isEnabled(player.getUniqueId().toString());
-    }
-
-
     /**
-     * Returns true if the player is not in the list of disabled players.
+     * Checks whether the {@link OfflinePlayer provided player} is able to use {@link CropClick}.
      *
-     * @param playerID The player's UUID
+     * @param player the player to check.
      *
-     * @return A boolean value.
+     * @return true if able, otherwise false.
      */
-    public boolean isEnabled(@NotNull String playerID) {
-        return !getDisabledPlayers().contains(playerID);
+    public boolean isEnabled(@NotNull OfflinePlayer player) {
+        return !getDisabledPlayers().contains(player.getUniqueId().toString());
     }
 
 
     /**
-     * It returns a list of all the players who have the plugin disabled.
+     * Gets all the {@link OfflinePlayer disabled players' IDs}, meaning all the {@link OfflinePlayer players} who are unable to use {@link CropClick}.
      *
-     * @return A list of strings.
+     * @return the disabled players.
      */
     public @NotNull List<String> getDisabledPlayers() {
         return config.getStringList("disabled");
@@ -270,18 +255,15 @@ public final class PlayersConfig extends Config {
 
 
     /**
-     * Toggle the player's ability on/off to use the plugin.
+     * Toggles the {@link OfflinePlayer provided player} based on its ID.
      *
-     * @param playerID The player's UUID.
+     * @param playerID the player to toggle.
      */
     public void togglePlayer(@NotNull String playerID) {
-        List<String> toggles = getDisabledPlayers();
-        if (toggles.contains(playerID)) {
-            toggles.remove(playerID);
-        } else {
-            toggles.add(playerID);
-        }
-        config.set("disabled", toggles);
+        config.set("disabled", CollectionUtils.toggleItem(
+                getDisabledPlayers(),
+                playerID
+        ));
         saveConfig();
     }
 

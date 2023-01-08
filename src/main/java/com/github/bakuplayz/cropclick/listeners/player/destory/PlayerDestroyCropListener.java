@@ -6,7 +6,7 @@ import com.github.bakuplayz.cropclick.addons.addon.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A listener handling all the {@link BaseCrop crop} destroy events caused by a {@link Player}.
+ * A listener handling all the {@link Crop crop} destroy events caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -50,14 +50,12 @@ public final class PlayerDestroyCropListener implements Listener {
 
 
     /**
-     * If a player breaks a block, and the block is a plantable surface, and the player has permission to destroy crops,
-     * and the world is accessible, and the player can modify the world, and the block is a crop, then call the
-     * PlayerDestroyCropEvent.
+     * Handles all the {@link Player player} interact at {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithCrop(@NotNull BlockBreakEvent event) {
+    public void onPlayerInteractAtCrop(@NotNull BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
@@ -75,8 +73,8 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        BaseCrop crop = cropManager.findByBlock(block);
-        if (!cropManager.validate(crop, block)) {
+        Crop crop = cropManager.findByBlock(block);
+        if (crop == null) {
             return;
         }
 
@@ -84,7 +82,7 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             event.setCancelled(true);
             return;
         }
@@ -96,9 +94,9 @@ public final class PlayerDestroyCropListener implements Listener {
 
 
     /**
-     * Removing the crop from offline growth and unlinks the crop's linked autofarm, if present.
+     * Handles all the {@link Player player} destroy {@link Crop crop} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler
     public void onPlayerDestroyCrop(@NotNull PlayerDestroyCropEvent event) {
@@ -107,18 +105,18 @@ public final class PlayerDestroyCropListener implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        if (addonManager.isPresentAndEnabled(growthAddon)) {
-            growthAddon.removeCrop(block.getLocation());
+        if (addonManager.isInstalledAndEnabled(growthAddon)) {
+            growthAddon.unregisterCrop(block.getLocation());
         }
 
-        Autofarm farm = autofarmManager.findAutofarm(block);
-        if (!autofarmManager.isUsable(farm)) {
+        Autofarm autofarm = autofarmManager.findAutofarm(block);
+        if (!autofarmManager.isUsable(autofarm)) {
             event.setCancelled(true);
             return;
         }
 
         Bukkit.getPluginManager().callEvent(
-                new PlayerUnlinkAutofarmEvent(player, farm)
+                new PlayerUnlinkAutofarmEvent(player, autofarm)
         );
     }
 

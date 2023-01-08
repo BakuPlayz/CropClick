@@ -3,6 +3,8 @@ package com.github.bakuplayz.cropclick.menu.base;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
@@ -31,24 +33,48 @@ import java.util.List;
 
 
 /**
- * A class representing the base of a Link menu.
+ * A class representing the base of a link menu.
  *
  * @author BakuPlayz
  * @version 2.0.0
+ * @apiNote Will get a rework later.
+ * @see Menu
  * @since 2.0.0
  */
-public abstract class LinkMenu extends Menu {
+public abstract class LinkMenu extends BaseMenu {
 
     private final Block block;
     protected final Autofarm autofarm;
     private final AutofarmManager autofarmManager;
 
+    /**
+     * A variable containing the selection state for the {@link Crop crop}.
+     */
     private boolean isCropSelected;
+
+    /**
+     * A variable containing the selection state for the {@link Container container}.
+     */
     private boolean isContainerSelected;
+
+    /**
+     * A variable containing the selection state for the {@link Dispenser dispenser}.
+     */
     private boolean isDispenserSelected;
 
+    /**
+     * A variable containing the unlinked state for the {@link Autofarm autofarm}.
+     */
     protected boolean isUnlinked;
+
+    /**
+     * A variable containing the unclaimed state for the {@link Autofarm autofarm}.
+     */
     protected boolean isUnclaimed;
+
+    /**
+     * A variable containing the selected state for the {@link Component clicked component}.
+     */
     private boolean isClickedSelected;
 
     private Location cropLocation;
@@ -62,6 +88,9 @@ public abstract class LinkMenu extends Menu {
     private ItemStack claimItem;
     private ItemStack toggleItem;
 
+    /**
+     * A variable containing the {@link Component clicked component}.
+     */
     private final Component clickedComponent;
 
 
@@ -77,10 +106,13 @@ public abstract class LinkMenu extends Menu {
         this.autofarm = autofarm;
         this.block = block;
 
-        assignCachedMeta();
+        assignCachedID();
     }
 
 
+    /**
+     * Sets the {@link LinkMenu LinkMenu's} menu items.
+     */
     @Override
     public void setMenuItems() {
         assignLinked();
@@ -115,22 +147,21 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the autofarm is present and has no cached id, assign it one.
+     * Assigns the {@link Autofarm#getFarmerID() farmer ID} if not found.
      */
-    private void assignCachedMeta() {
+    private void assignCachedID() {
         if (autofarm == null) {
             return;
         }
 
-        if (!AutofarmUtils.hasMeta(autofarm)) {
-            AutofarmUtils.addMeta(plugin, autofarm);
+        if (!AutofarmUtils.hasCachedID(autofarm)) {
+            AutofarmUtils.addCachedID(plugin, autofarm);
         }
     }
 
 
     /**
-     * Assigns the isUnclaimed whether autofarm is unclaimed, and its
-     * item variable, claimItem.
+     * Assigns whether the {@link #autofarm} is unclaimed or claimed to the variable {@link #isUnclaimed}.
      */
     private void assignClaimed() {
         if (autofarm == null) {
@@ -144,7 +175,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the isUnlinked whether autofarm is unlinked.
+     * Assigns whether the {@link #autofarm} is unlinked or linked to the variable {@link #isUnlinked}.
      */
     private void assignLinked() {
         this.isUnlinked = !autofarmManager.isLinked(autofarm);
@@ -152,7 +183,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assign whether the clickedComponent is selected or not.
+     * Assigns whether the {@link #clickedComponent clicked component} is unselected or selected to the variable {@link #isClickedSelected}.
      */
     private void assignClicked() {
         this.isClickedSelected = isClickedSelected(clickedComponent);
@@ -160,7 +191,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the toggle item to the toggle item variable.
+     * Assigns the {@link #toggleItem toggle item}.
      */
     private void assignToggle() {
         if (autofarm == null) {
@@ -172,7 +203,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the crop location, whether it's selected or linked, and the crop item.
+     * Assigns the {@link #cropLocation crop location}, {@link #isCropSelected crop selected} and {@link #cropItem crop item}.
      */
     private void assignCrop() {
         this.cropLocation = getSelectedOrLinked(Component.CROP);
@@ -182,7 +213,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the container location, whether it's selected or linked, and the container item.
+     * Assigns the {@link #containerLocation container location}, {@link #isContainerSelected container selected} and {@link #containerItem container item}.
      */
     private void assignContainer() {
         this.containerLocation = getSelectedOrLinked(Component.CONTAINER);
@@ -192,7 +223,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Assigns the dispenser location, whether it's selected or linked, and the dispenser item.
+     * Assigns the {@link #dispenserLocation dispenser location}, {@link #isDispenserSelected dispenser selected} and {@link #dispenserItem dispenser item}.
      */
     private void assignDispenser() {
         this.dispenserLocation = getSelectedOrLinked(Component.DISPENSER);
@@ -202,7 +233,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * Open a preview menu of the dispenser's inventory.
+     * Opens the {@link PreviewMenu preview menu} of the {@link PreviewDispenserMenu#inventory dispenser's inventory}.
      */
     protected void openDispenser() {
         Dispenser dispenser = (Dispenser) dispenserLocation.getBlock().getState();
@@ -212,12 +243,12 @@ public abstract class LinkMenu extends Menu {
                 autofarm.getShortenedID(),
                 dispenser.getInventory()
         );
-        previewMenu.open();
+        previewMenu.openMenu();
     }
 
 
     /**
-     * Open a preview menu of the container's inventory.
+     * Opens the {@link PreviewMenu preview menu} of the {@link PreviewContainerMenu#inventory container's inventory}.
      */
     protected void openContainer() {
         BlockState containerState = containerLocation.getBlock().getState();
@@ -228,32 +259,33 @@ public abstract class LinkMenu extends Menu {
                     player,
                     autofarm.getShortenedID(),
                     ((Chest) containerState).getInventory()
-            ).open();
+            ).openMenu();
         } else if (containerState instanceof ShulkerBox) {
             new PreviewContainerMenu(
                     plugin,
                     player,
                     autofarm.getShortenedID(),
                     ((ShulkerBox) containerState).getInventory()
-            ).open();
+            ).openMenu();
         }
     }
 
 
     /**
-     * If the player clicks on the claim item, it set the owner of the autofarm to the player.
+     * Handles unclaimed {@link Autofarm autofarms} if {@link #isUnclaimed}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      */
     protected void handleUnclaimed(@NotNull ItemStack clicked) {
-        if (clicked.equals(claimItem)) {
-            autofarm.setOwnerID(player.getUniqueId());
+        if (!clicked.equals(claimItem)) {
+            return;
         }
+        autofarm.setOwnerID(player.getUniqueId());
     }
 
 
     /**
-     * If the player has selected a crop, container, and dispenser, then link them together and deselect all of them.
+     * Handles linking {@link Autofarm autofarms} if {@link #isUnlinked}.
      */
     protected void handleLink() {
         if (!isCropSelected) return;
@@ -264,11 +296,7 @@ public abstract class LinkMenu extends Menu {
         Location container = autofarmManager.getSelectedContainer(player);
         Location dispenser = autofarmManager.getSelectedDispenser(player);
 
-        assert crop != null; // Only here for the compiler.
-        assert container != null; // Only here for the compiler.
-        assert dispenser != null; // Only here for the compiler.
-
-        autofarmManager.deselectAll(player);
+        autofarmManager.deselectComponents(player);
         player.closeInventory();
 
         Autofarm autofarm = new Autofarm(
@@ -290,7 +318,7 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the clicked block is selected, deselect it, otherwise select it - if it is already selected.
+     * Handles selecting a {@link Component component}.
      */
     protected void handleSelect() {
         switch (clickedComponent) {
@@ -322,10 +350,9 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the player clicks on the dispenser item, open the dispenser. If the player clicks on the container item, open the
-     * container.
+     * Handles {@link PreviewMenu preview menus}.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      */
     protected void handlePreviews(@NotNull ItemStack clicked) {
         if (clicked.equals(dispenserItem)) {
@@ -337,9 +364,9 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the player clicks on the toggle item, toggle the autofarm and update the menu.
+     * Handles toggling of {@link Autofarm the autofarm} inside the menu.
      *
-     * @param clicked The item that was clicked.
+     * @param clicked the item that was clicked.
      */
     protected void handleToggle(@NotNull ItemStack clicked) {
         if (clicked.equals(toggleItem)) {
@@ -348,6 +375,11 @@ public abstract class LinkMenu extends Menu {
     }
 
 
+    /**
+     * Gets the claim {@link ItemStack item}.
+     *
+     * @return the claim item.
+     */
     private @NotNull ItemStack getClaimItem() {
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 3)
                 .setName(plugin, LanguageAPI.Menu.LINK_CLAIM_NAME)
@@ -357,12 +389,12 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the Autofarm state.
+     * Gets the toggle {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the toggle item.
      */
     private @NotNull ItemStack getToggleItem() {
-        String status = MessageUtils.getEnabledStatus(
+        String status = MessageUtils.getStatusMessage(
                 plugin,
                 autofarm.isEnabled()
         );
@@ -375,9 +407,9 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the crop.
+     * Gets the crop {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the crop item.
      */
     private @NotNull ItemStack getCropItem() {
         return new ItemBuilder(Material.WHEAT)
@@ -391,9 +423,9 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the container.
+     * Gets the container {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the container item.
      */
     private @NotNull ItemStack getContainerItem() {
         return new ItemBuilder(Material.CHEST)
@@ -410,9 +442,9 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the dispenser.
+     * Gets the dispenser {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the dispenser item.
      */
     private @NotNull ItemStack getDispenserItem() {
         return new ItemBuilder(Material.DISPENSER)
@@ -426,9 +458,9 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns an ItemStack that represents the glass, with the connection state.
+     * Gets the glass {@link ItemStack item}.
      *
-     * @return An ItemStack.
+     * @return the glass item.
      */
     private @NotNull ItemStack getGlassItem() {
         return new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 7)
@@ -453,12 +485,11 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the player has an autofarm selected, return the location of the component they clicked on. If they don't have an
-     * autofarm selected, return the location of the component they linked.
+     * Gets the location of either the selected or linked {@link Component component}.
      *
-     * @param component The component that is being linked.
+     * @param component the component to check.
      *
-     * @return The location of the selected component.
+     * @return the selected location or linked location.
      */
     private @Nullable Location getSelectedOrLinked(@NotNull Component component) {
         if (component == Component.CROP) {
@@ -487,11 +518,12 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It takes a location and returns a list of strings that represent the location.
+     * Gets the {@link Location provided location} as a lore.
      *
-     * @param location The location to format.
+     * @param location  the location to make into a lore.
+     * @param component the component to get the lore from.
      *
-     * @return A list of strings.
+     * @return the provided location as lore.
      */
     private @NotNull List<String> getLocationAsLore(Location location, @NotNull Component component) {
         if (location == null) {
@@ -499,7 +531,7 @@ public abstract class LinkMenu extends Menu {
         }
 
         if (location instanceof DoublyLocation) {
-            DoublyLocation doublyLocation = LocationUtils.getAsDoubly(location);
+            DoublyLocation doublyLocation = LocationUtils.findDoubly(location);
 
             assert doublyLocation != null;  // Only here for the compiler.
 
@@ -535,11 +567,11 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns a list of strings that contain the X, Y, and Z coordinates of a location.
+     * Gets the base lore for the {@link Location provided location}.
      *
-     * @param location The location of the base.
+     * @param location the location to make into a lore.
      *
-     * @return A list of strings.
+     * @return the base lore for the provided location.
      */
     private @NotNull List<String> getBaseLocationLore(@NotNull Location location) {
         return Arrays.asList(
@@ -551,13 +583,12 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * This function returns a list of strings that contains a single string that says the location is unlinked.
+     * Gets the unlinked lore for {@link Location any location}.
      *
-     * @return A list of strings.
+     * @return the unlinked lore for any location.
      */
     @Contract(" -> new")
-    private @NotNull
-    @Unmodifiable List<String> getUnlinkedLocationLore() {
+    private @NotNull @Unmodifiable List<String> getUnlinkedLocationLore() {
         return Collections.singletonList(
                 LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
                         LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)
@@ -567,14 +598,13 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns a list of strings that are the base location lore, with the selected state added to the end.
+     * Gets the selected lore for the {@link Location provided location}.
      *
-     * @param location The location to get the lore for.
+     * @param location the location to make into a lore.
      *
-     * @return A list of strings that are the lore of the location.
+     * @return the selected lore for the provided location.
      */
-    private @NotNull
-    @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
+    private @NotNull @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
         ArrayList<String> baseState = new ArrayList<>(
                 getBaseLocationLore(location)
         );
@@ -592,12 +622,12 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * It returns a list of strings that are used to display the location of a linked block.
+     * Gets the linked lore for the {@link Location provided location}.
      *
-     * @param location  The location of the block that is being linked.
-     * @param component The component that the location is linked to.
+     * @param location  the location to make into a lore.
+     * @param component the component to get the lore from.
      *
-     * @return A list of strings.
+     * @return the linked lore for the provided location.
      */
     private @NotNull List<String> getLinkedLocationLore(@NotNull Location location, @NotNull Component component) {
         switch (component) {
@@ -615,13 +645,11 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the autofarm is not null, return false. If the autofarm is linked, return false. If the component is a crop,
-     * return true if the crop location is not null. If the component is a container, return true if the container location
-     * is not null. If the component is a dispenser, return true if the dispenser location is not null-
+     * Checks whether a {@link Component component} is selected and not linked.
      *
-     * @param component The component that is being checked.
+     * @param component the component to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     private boolean isSelectedAndNotLinked(@NotNull Component component) {
         if (autofarm != null) {
@@ -648,11 +676,11 @@ public abstract class LinkMenu extends Menu {
 
 
     /**
-     * If the player clicked the currently selected the block, return true.
+     * Checks whether the {@link Component component} is selected.
      *
-     * @param component The component that was clicked.
+     * @param component the component to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     private boolean isClickedSelected(@NotNull Component component) {
         switch (component) {

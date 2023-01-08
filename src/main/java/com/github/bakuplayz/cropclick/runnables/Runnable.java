@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.runnables;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Timer;
 import java.util.TimerTask;
 
 
@@ -20,7 +21,9 @@ public interface Runnable {
     void run();
 
     /**
-     * Clears the implementing object's runnable when called.
+     * Clears the implementing object's runnable {@link Timer timer} when called.
+     *
+     * @return a cleaning task.
      */
     @NotNull TimerTask clean();
 

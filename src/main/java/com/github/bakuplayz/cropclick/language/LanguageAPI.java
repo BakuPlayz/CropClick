@@ -1,11 +1,13 @@
 package com.github.bakuplayz.cropclick.language;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.configs.config.LanguageConfig;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
-import org.apache.commons.lang.StringUtils;
+import com.github.bakuplayz.cropclick.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
 public final class LanguageAPI {
 
     /**
-     * An enumeration handling all the Console messages.
+     * An enumeration for handling all the Console messages.
      */
     public enum Console {
 
@@ -47,9 +49,7 @@ public final class LanguageAPI {
 
         FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),
 
-        UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
-
-        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.12. In order to run the plugin, please change to the correct jar for your server version.");
+        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.12.2. In order to run the plugin, please change to the correct jar for your server version.");
 
 
         private final String message;
@@ -61,27 +61,9 @@ public final class LanguageAPI {
 
 
         /**
-         * It sends the message to the console.
-         */
-        public void send() {
-            Bukkit.getConsoleSender().sendMessage(get());
-        }
-
-
-        /**
-         * It sends a message to the console.
+         * Gets the message as a {@link String string}.
          *
-         * @param value The value to replace the placeholder with.
-         */
-        public void send(@NotNull String value) {
-            Bukkit.getConsoleSender().sendMessage(fastReplace(get(), value));
-        }
-
-
-        /**
-         * It returns a string with the prefix and the message.
-         *
-         * @return The message is being returned.
+         * @return the message as a string.
          */
         @Contract(" -> new")
         private @NotNull String get() {
@@ -90,21 +72,65 @@ public final class LanguageAPI {
 
 
         /**
-         * Replaces the first occurrence of %s in the given message with the given value.
-         *
-         * @param message The message to be formatted.
-         * @param value   The value to be replaced.
-         *
-         * @return A String.
+         * Sends the message to the {@link ConsoleCommandSender console}.
          */
-        private @NotNull String fastReplace(@NotNull String message, @NotNull String value) {
-            return StringUtils.replace(message, "%s", value, 1);
+        public void send() {
+            Bukkit.getConsoleSender().sendMessage(get());
+        }
+
+
+        /**
+         * Sends the message to the {@link ConsoleCommandSender console} replacing the "%s%" with the provided value.
+         *
+         * @param value the value to replace with.
+         */
+        public void send(@NotNull String value) {
+            Bukkit.getConsoleSender().sendMessage(StringUtils.replace(get(), "%s", value));
         }
 
     }
 
     /**
-     * An enumeration handling all the Command messages.
+     * An enumeration for handling some Update messages.
+     */
+    public enum Update {
+
+        UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
+        UPDATE_FOUND_NO_UPDATES("Searched for updates and found none. You are up to date :)"),
+        UPDATE_FOUND_NEW_UPDATE("Searched for updates and found one.");
+
+        private final String message;
+
+
+        Update(@NotNull String message) {
+            this.message = message;
+        }
+
+
+        /**
+         * Gets the message as a {@link String string}.
+         *
+         * @return the message as a string.
+         */
+        @Contract(" -> new")
+        public @NotNull String get() {
+            return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
+        }
+
+
+        /**
+         * Sends the message to the provided {@link CommandSender sender}.
+         *
+         * @param sender the sender to send the message to.
+         */
+        public void send(@NotNull CommandSender sender) {
+            sender.sendMessage(get());
+        }
+
+    }
+
+    /**
+     * An enumeration for handling all the Command messages.
      */
     public enum Command {
 
@@ -126,6 +152,9 @@ public final class LanguageAPI {
         RELOAD_SUCCESS(Category.RELOAD, "success");
 
 
+        /**
+         * An enumeration for handling {@link LanguageConfig config} categories.
+         */
         private enum Category {
 
             GENERAL,
@@ -138,9 +167,9 @@ public final class LanguageAPI {
 
 
             /**
-             * This function returns the name of the enum in lowercase.
+             * Gets the category name.
              *
-             * @return The name of the enum in lowercase.
+             * @return the name of the category.
              */
             public @NotNull String getName() {
                 return name().toLowerCase();
@@ -168,11 +197,11 @@ public final class LanguageAPI {
 
 
         /**
-         * It gets the message from the language config.
+         * Gets the message from the {@link LanguageConfig language config}.
          *
-         * @param plugin The plugin instance.
+         * @param plugin the plugin instance.
          *
-         * @return The message from the language config.
+         * @return the message found in the config.
          */
         public @NotNull String get(@NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("command", category, key, true);
@@ -180,23 +209,23 @@ public final class LanguageAPI {
 
 
         /**
-         * It takes a string, and replaces all instances of `%value%` with the value passed to the function.
+         * Gets the message from the {@link LanguageConfig language config}, replacing the {@link #placeholder} with the provided value.
          *
-         * @param plugin The plugin instance.
-         * @param value  The value to replace the placeholder with.
+         * @param plugin the plugin instance.
+         * @param value  the replacement value.
          *
-         * @return The value of the key in the config.yml file.
+         * @return the message found in the config, replaced with the provided value.
          */
         public @NotNull String get(@NotNull CropClick plugin, @NotNull String value) {
-            return fastReplace(get(plugin), value);
+            return StringUtils.replace(get(plugin), placeholder, value);
         }
 
 
         /**
-         * This function sends the message to the sender.
+         * Sends the message to the {@link CommandSender sender}.
          *
-         * @param plugin The plugin instance.
-         * @param sender The CommandSender to send the message to.
+         * @param plugin the plugin instance.
+         * @param sender the sender to send the message to.
          */
         public void send(@NotNull CropClick plugin, @NotNull CommandSender sender) {
             sender.sendMessage(get(plugin));
@@ -204,33 +233,20 @@ public final class LanguageAPI {
 
 
         /**
-         * Send a message to a CommandSender.
+         * Sends the message to the {@link CommandSender sender}, replacing the {@link #placeholder} with the provided value.
          *
-         * @param plugin The plugin instance.
-         * @param sender The CommandSender that will receive the message.
-         * @param value  The value to be translated.
+         * @param plugin the plugin instance.
+         * @param sender the sender to send the message to.
+         * @param value  the value to replace the placeholder with.
          */
         public void send(@NotNull CropClick plugin, @NotNull CommandSender sender, @NotNull String value) {
             sender.sendMessage(get(plugin, value));
         }
 
-
-        /**
-         * Replace the first occurrence of a placeholder with a value.
-         *
-         * @param message The message to replace the placeholder in.
-         * @param value   The value to be replaced.
-         *
-         * @return A string with the placeholder replaced with the value.
-         */
-        private @NotNull String fastReplace(@NotNull String message, @NotNull String value) {
-            return StringUtils.replaceOnce(message, placeholder, value);
-        }
-
     }
 
     /**
-     * An enumeration handling all the Menu messages.
+     * An enumeration for handling all the Menu messages.
      */
     public enum Menu {
 
@@ -569,6 +585,9 @@ public final class LanguageAPI {
         WORLD_WORLD_ITEM_STATUS(Category.WORLD, SubCategory.WORLD, "itemStatus", "%status%");
 
 
+        /**
+         * An enumeration for handling {@link LanguageConfig config} categories.
+         */
         private enum Category {
 
             ADDON,
@@ -610,9 +629,9 @@ public final class LanguageAPI {
 
 
             /**
-             * If the altName is not null, return the altName, otherwise return the lowercase version of the name.
+             * Gets the {@link #altName alternative name} or category name, if not found.
              *
-             * @return The name of the enum.
+             * @return the alternative name, otherwise the category name.
              */
             public @NotNull String getName() {
                 return altName != null ? altName : name().toLowerCase();
@@ -620,6 +639,10 @@ public final class LanguageAPI {
 
         }
 
+
+        /**
+         * An enumeration for handling {@link LanguageConfig config} subcategories.
+         */
         private enum SubCategory {
 
             ACTIONS,
@@ -693,15 +716,16 @@ public final class LanguageAPI {
 
 
             /**
-             * If the altName is not null, return the altName, otherwise return the lowercase version of the name.
+             * Gets the {@link #altName alternative name} or category name, if not found.
              *
-             * @return The name of the enum.
+             * @return the alternative name, otherwise the category name.
              */
             public @NotNull String getName() {
                 return altName != null ? altName : name().toLowerCase();
             }
 
         }
+
 
         private final String[] placeholders;
         private final String category;
@@ -740,11 +764,11 @@ public final class LanguageAPI {
 
 
         /**
-         * It gets the message from the language config.
+         * Gets the message from the {@link LanguageConfig language config}.
          *
-         * @param plugin The plugin instance.
+         * @param plugin the plugin instance.
          *
-         * @return The message from the language config.
+         * @return the message found in the config.
          */
         public @NotNull String get(@NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("menu", category, key, true);
@@ -752,28 +776,29 @@ public final class LanguageAPI {
 
 
         /**
-         * It takes a list of objects, converts them to strings, and then replaces the placeholders in the message with the
-         * strings.
+         * Gets the message from the {@link LanguageConfig language config}, replacing all the {@link #placeholders} with all the provided values.
          *
-         * @param plugin The plugin instance.
+         * @param plugin the plugin instance.
+         * @param values the values to replace the placeholders with.
+         * @param <T>    the object provided.
          *
-         * @return A string.
+         * @return the message found in the config, replaced with the provided values.
          */
         @SafeVarargs
         public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
                                              .map(Object::toString)
                                              .toArray(String[]::new);
-            return fastReplace(get(plugin), valuesAsStrings);
+            return format(get(plugin), valuesAsStrings);
         }
 
 
         /**
-         * It gets the message from the language config, reads it into a list, colors it, and returns it.
+         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line.
          *
-         * @param plugin The plugin instance
+         * @param plugin the plugin instance.
          *
-         * @return A list of strings
+         * @return the message found in the config as a list.
          */
         public @NotNull List<String> getAsList(@NotNull CropClick plugin) {
             String message = plugin.getLanguageConfig().getMessage("menu", category, key, false);
@@ -784,12 +809,12 @@ public final class LanguageAPI {
 
 
         /**
-         * It returns a list of strings that are the messages in the config file, with the given strings appended to the
-         * end.
+         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line, with the messages that was provided as appendable.
          *
-         * @param plugin The plugin instance.
+         * @param plugin     the plugin instance.
+         * @param appendable the appendable messages to append to the found message.
          *
-         * @return A list of strings.
+         * @return the message found in the config as a list.
          */
         public @NotNull List<String> getAsList(@NotNull CropClick plugin, String @NotNull ... appendable) {
             List<String> messages = getAsList(plugin);
@@ -800,13 +825,12 @@ public final class LanguageAPI {
 
 
         /**
-         * It returns a list of strings that are the messages in the message file, with a blank line and the appendable
-         * list appended to the end.
+         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line, with the messages that was provided as appendable.
          *
-         * @param plugin     The plugin instance.
-         * @param appendable The list of strings to append to the end of the list of messages.
+         * @param plugin     the plugin instance.
+         * @param appendable the appendable messages to append to the found message.
          *
-         * @return A list of strings.
+         * @return the message found in the config as a list.
          */
         public @NotNull List<String> getAsList(@NotNull CropClick plugin, List<String> appendable) {
             List<String> messages = getAsList(plugin);
@@ -817,10 +841,10 @@ public final class LanguageAPI {
 
 
         /**
-         * Send the message to the sender.
+         * Sends the message to the {@link CommandSender sender}.
          *
-         * @param plugin The plugin instance.
-         * @param sender The CommandSender to send the message to.
+         * @param plugin the plugin instance.
+         * @param sender the sender to send the message to.
          */
         public void send(@NotNull CropClick plugin, @NotNull CommandSender sender) {
             sender.sendMessage(get(plugin));
@@ -828,11 +852,11 @@ public final class LanguageAPI {
 
 
         /**
-         * This function returns a string that is the title of the GUI.
+         * Gets the menu's title from the {@link LanguageConfig language config}.
          *
-         * @param plugin The plugin instance.
+         * @param plugin the plugin instance.
          *
-         * @return The title of the GUI.
+         * @return the title found in the config.
          */
         public @NotNull String getTitle(@NotNull CropClick plugin) {
             String title = "CropClick: " + get(plugin);
@@ -842,12 +866,12 @@ public final class LanguageAPI {
 
 
         /**
-         * This function returns the title of the crafting GUI.
+         * Gets the menu's title from the {@link LanguageConfig language config} with the provided type.
          *
-         * @param plugin The plugin instance.
-         * @param type   The type of the item.
+         * @param plugin the plugin instance.
+         * @param type   the menu type.
          *
-         * @return The title of the GUI.
+         * @return the title found in the config.
          */
         public @NotNull String getTitle(@NotNull CropClick plugin, @NotNull String type) {
             if (type.equals("")) {
@@ -861,12 +885,11 @@ public final class LanguageAPI {
 
 
         /**
-         * Returns an unknown issue as a trigger for the language config,
-         * to serve us with an error message response.
+         * Gets the error message from the {@link LanguageConfig language config}.
          *
-         * @param plugin The plugin instance.
+         * @param plugin the plugin instance.
          *
-         * @return The error message from the language config.
+         * @return the error message found in the config.
          */
         private @NotNull String getErrorMessage(@NotNull CropClick plugin) {
             return plugin.getLanguageConfig().getMessage("title", "error", "message", true);
@@ -874,21 +897,21 @@ public final class LanguageAPI {
 
 
         /**
-         * It replaces the placeholders in a message with the values.
+         * Formats the provided message, replacing the {@link #placeholders} with the provided values.
          *
-         * @param message The message to replace the placeholders in.
+         * @param message the message to format.
+         * @param values  the values to replace the placeholder with.
          *
-         * @return A string with the placeholders replaced with the values.
+         * @return the formatted message.
          */
-        private @NotNull String fastReplace(@NotNull String message, @NotNull String @NotNull ... values) {
+        private @NotNull String format(@NotNull String message, @NotNull String @NotNull ... values) {
             if (placeholders.length != values.length) {
                 return message;
             }
 
             String returned = message;
-            int amountOfValues = values.length;
-            for (int i = 0; i < amountOfValues; ++i) {
-                returned = StringUtils.replaceOnce(returned, placeholders[i], values[i]);
+            for (int i = 0; i < values.length; ++i) {
+                returned = StringUtils.replace(returned, placeholders[i], values[i]);
             }
             return returned;
         }

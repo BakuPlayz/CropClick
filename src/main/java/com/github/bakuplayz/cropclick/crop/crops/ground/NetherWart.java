@@ -23,27 +23,42 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class NetherWart extends GroundCrop {
 
-    public NetherWart(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public NetherWart(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "netherWart";
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 3).
+     */
     @Override
     public int getHarvestAge() {
         return 3;
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.NETHER_STALK,
+        return new Drop(Material.NETHER_WARTS,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 3),
                 cropSection.getDropChance(getName(), 80)
@@ -51,6 +66,11 @@ public final class NetherWart extends GroundCrop {
     }
 
 
+    /**
+     * Gets the seed of the {@link Crop crop}.
+     *
+     * @return the crop's seed (default: null).
+     */
     @Override
     @Contract(pure = true)
     public @Nullable Seed getSeed() {
@@ -58,12 +78,22 @@ public final class NetherWart extends GroundCrop {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.NETHER_WARTS;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.NETHER_STALK;

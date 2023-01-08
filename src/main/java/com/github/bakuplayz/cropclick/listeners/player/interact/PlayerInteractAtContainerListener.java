@@ -36,9 +36,9 @@ public final class PlayerInteractAtContainerListener implements Listener {
 
 
     /**
-     * If a player interacts with a container, open a menu for them.
+     * Handles all the {@link Player player} interact at {@link Container container} events.
      *
-     * @param event The event that was called.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtContainer(@NotNull PlayerInteractAtContainerEvent event) {
@@ -54,8 +54,8 @@ public final class PlayerInteractAtContainerListener implements Listener {
                 return;
             }
 
-            if (AutofarmUtils.componentHasMeta(block)) {
-                AutofarmUtils.addMeta(plugin, autofarm);
+            if (AutofarmUtils.hasCachedID(block)) {
+                AutofarmUtils.addCachedID(plugin, autofarm);
             }
         }
 
@@ -64,7 +64,7 @@ public final class PlayerInteractAtContainerListener implements Listener {
                 player,
                 block,
                 autofarm
-        ).open();
+        ).openMenu();
     }
 
 }

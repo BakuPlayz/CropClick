@@ -1,6 +1,8 @@
 package com.github.bakuplayz.cropclick.menu.states;
 
+import com.github.bakuplayz.cropclick.commands.subcommands.AutofarmsCommand;
 import com.github.bakuplayz.cropclick.menu.menus.main.AutofarmsMenu;
+import org.bukkit.block.Dispenser;
 
 
 /**
@@ -12,8 +14,19 @@ import com.github.bakuplayz.cropclick.menu.menus.main.AutofarmsMenu;
  */
 public enum AutofarmsMenuState {
 
-    COMMAND_REDIRECT,
-    MENU_REDIRECT,
-    LINK
+    /**
+     * The access state when calling {@link AutofarmsCommand}.
+     */
+    COMMAND,
+
+    /**
+     * The access state when opening the {@link AutofarmsMenu} via another menu.
+     */
+    MENU,
+
+    /**
+     * The access state when clicking an {@link Dispenser}.
+     */
+    DISPENSER
 
 }

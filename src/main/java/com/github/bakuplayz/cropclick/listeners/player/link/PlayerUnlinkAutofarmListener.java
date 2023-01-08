@@ -49,14 +49,12 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
 
     /**
-     * If the player is breaking a block, and the block is an autofarm, and the player has permission to unlink autofarms,
-     * and the player is in a world where autofarms are allowed, and the player is allowed to modify autofarms, then unlink
-     * the autofarm.
+     * Handles all the {@link Player player} interact at {@link Autofarm autofarm} events.
      *
-     * @param event The event that is being listened to.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerInteractWithFarm(@NotNull BlockBreakEvent event) {
+    public void onPlayerInteractAtFarm(@NotNull BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
@@ -74,7 +72,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModify(player)) {
+        if (!addonManager.canModifyRegion(player)) {
             return;
         }
 
@@ -94,9 +92,9 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
 
     /**
-     * When a player unlinks an autofarm, call the AutofarmUnlinkEvent.
+     * Handles all the {@link Player player} unlink an {@link Autofarm autofarm} events.
      *
-     * @param event The event that is being listened for.
+     * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {

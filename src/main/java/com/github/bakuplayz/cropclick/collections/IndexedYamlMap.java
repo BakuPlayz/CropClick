@@ -17,9 +17,9 @@ import java.util.Map;
 public final class IndexedYamlMap<E> extends IndexedMap<E> {
 
     /**
-     * Converts the map to a YAML-styled {@link Map}.
+     * Converts the {@link IndexedMap map} to a YAML-styled {@link Map}.
      *
-     * @return the map as an YAML-styled {@link Map}.
+     * @return the map as an YAML-styled map.
      */
     public @NotNull Map<String, Object> toYaml() {
         Map<String, Object> yamlMapped = new ListOrderedMap<>();

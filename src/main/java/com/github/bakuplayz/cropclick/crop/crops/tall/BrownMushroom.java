@@ -21,36 +21,51 @@ import java.util.Stack;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see TallCrop
  * @see Crop
  * @see BaseCrop
+ * @see TallCrop
  * @since 2.0.0
  */
 public final class BrownMushroom extends Mushroom {
 
-
-    public BrownMushroom(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
+    public BrownMushroom(@NotNull CropsConfig config) {
+        super(config);
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "brownMushroom";
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
     @Override
-    public int getCurrentAge(@NotNull Block clickedBlock) {
+    public int getCurrentAge(@NotNull Block block) {
         mushrooms = new Stack<>();
 
         Stack<Block> stack = new Stack<>();
-        stack.push(clickedBlock);
+        stack.push(block);
 
         while (stack.size() > 0) {
             Block mushroom = stack.pop();
 
-            if (!isMushroomBlock(mushroom) || mushrooms.contains(mushroom)) {
+            if (!isMushroomType(mushroom)) {
+                continue;
+            }
+
+            if (mushrooms.contains(mushroom)) {
                 continue;
             }
 
@@ -66,6 +81,11 @@ public final class BrownMushroom extends Mushroom {
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -76,13 +96,23 @@ public final class BrownMushroom extends Mushroom {
         );
     }
 
-    
+
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.HUGE_MUSHROOM_1;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.BROWN_MUSHROOM;
@@ -90,18 +120,17 @@ public final class BrownMushroom extends Mushroom {
 
 
     /**
-     * Returns true if the function ultimately figures out if, the clicked block,
-     * is included in a brown mushroom structure.
+     * Checks whether the {@link Block provided block} is a {@link BrownMushroom brown mushroom}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public boolean isBrownMushroom(@NotNull Block block) {
         for (int y = 0; y < 30; ++y) {
             Block above = block.getRelative(0, y, 0);
 
-            if (isBrownMushroomBlock(above)) {
+            if (isBrownMushroomType(above)) {
                 return true;
             }
         }
@@ -111,13 +140,13 @@ public final class BrownMushroom extends Mushroom {
 
 
     /**
-     * Returns true if the block is any type of Brown Mushroom Block.
+     * Checks whether the {@link Block provided block} is of type {@link BrownMushroom brown mushroom}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
-    private boolean isBrownMushroomBlock(@NotNull Block block) {
+    private boolean isBrownMushroomType(@NotNull Block block) {
         return BlockUtils.isSameType(block, Material.HUGE_MUSHROOM_1);
     }
 

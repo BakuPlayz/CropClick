@@ -28,6 +28,11 @@ public final class Beetroot extends GroundCrop {
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     @Contract(pure = true)
     public @NotNull String getName() {
@@ -35,12 +40,22 @@ public final class Beetroot extends GroundCrop {
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 3).
+     */
     @Override
     public int getHarvestAge() {
         return 3;
     }
 
 
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -52,6 +67,11 @@ public final class Beetroot extends GroundCrop {
     }
 
 
+    /**
+     * Gets the seed of the {@link Crop crop}.
+     *
+     * @return the crop's seed.
+     */
     @Override
     @Contract(value = " -> new", pure = true)
     public @NotNull Seed getSeed() {
@@ -59,12 +79,22 @@ public final class Beetroot extends GroundCrop {
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.BEETROOT_BLOCK;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.BEETROOT;

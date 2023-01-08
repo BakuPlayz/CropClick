@@ -27,7 +27,7 @@ public abstract class IndexedMap<E> {
 
 
     /**
-     * Puts an item into the map.
+     * Puts the provided item into the {@link #map} with the provided key.
      *
      * @param key  the key to map.
      * @param item the item to map to the key.
@@ -38,7 +38,7 @@ public abstract class IndexedMap<E> {
 
 
     /**
-     * Removes an item inside the map.
+     * Removes the provided item inside the {@link #map} based on the key.
      *
      * @param key the key of the item.
      */
@@ -48,7 +48,7 @@ public abstract class IndexedMap<E> {
 
 
     /**
-     * Swaps two items in the map.
+     * Swaps two items in the {@link #map}.
      *
      * @param indexOfFirst  the index of the first item.
      * @param indexOfSecond the index of the second item.
@@ -66,7 +66,7 @@ public abstract class IndexedMap<E> {
 
 
     /**
-     * Gets an item in the map, using its key.
+     * Gets the item in the {@link #map} based on its key.
      *
      * @param key the mapped key.
      *
@@ -78,28 +78,28 @@ public abstract class IndexedMap<E> {
 
 
     /**
-     * Converts the map to a list.
+     * Converts the {@link #map} to a string list.
      *
      * @return the map as a list.
      */
-    public List<String> toList() {
+    public List<String> toStringList() {
         return map.asList();
     }
 
 
     /**
-     * Gets the underlying map.
+     * Gets the {@link #map underlying map}.
      *
-     * @return the map.
+     * @return the underlying map.
      */
     @SuppressWarnings("unused")
-    public ListOrderedMap<String, E> toMap() {
+    public ListOrderedMap<String, E> toStringMap() {
         return map;
     }
 
 
     /**
-     * Finds the index of a key in the map.
+     * Finds the index of a key in the {@link #map}.
      *
      * @param key the mapped key.
      *
@@ -115,11 +115,11 @@ public abstract class IndexedMap<E> {
 
 
     /**
-     * Checks whether the map has the key
+     * Checks whether the {@link #map} has the provided key.
      *
      * @param key the key to check.
      *
-     * @return true if it was found, otherwise false.
+     * @return true if found, otherwise false.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean hasKey(@NotNull String key) {

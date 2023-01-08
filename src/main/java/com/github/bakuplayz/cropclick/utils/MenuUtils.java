@@ -1,12 +1,12 @@
 package com.github.bakuplayz.cropclick.utils;
 
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 
 /**
- * A utility class for {@link Menu menus}.
+ * A utility class for {@link BaseMenu menus}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -15,14 +15,14 @@ import org.bukkit.inventory.ItemStack;
 public final class MenuUtils {
 
     /**
-     * If the item is null or the item is air, return true.
+     * Checks whether the {@link ItemStack passed item} is {@link Material#AIR air}.
      *
-     * @param clicked The item that was clicked.
+     * @param item the item to check.
      *
-     * @return The method is returning a boolean value.
+     * @return true if air, otherwise false.
      */
-    public static boolean isAir(ItemStack clicked) {
-        return clicked == null || clicked.getType() == Material.AIR;
+    public static boolean isAir(ItemStack item) {
+        return item == null || item.getType() == Material.AIR;
     }
 
 }

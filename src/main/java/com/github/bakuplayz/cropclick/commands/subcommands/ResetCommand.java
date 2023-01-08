@@ -2,6 +2,8 @@ package com.github.bakuplayz.cropclick.commands.subcommands;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
+import com.github.bakuplayz.cropclick.configs.Config;
+import com.github.bakuplayz.cropclick.datastorages.DataStorage;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +34,8 @@ public final class ResetCommand extends Subcommand {
     /**
      * Performs the '/crop reset' command, resetting all settings to default.
      *
-     * @param player The player who executed the command.
-     * @param args   The arguments passed to the command.
+     * @param player the player executing the command.
+     * @param args   the arguments passed along the command.
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {
@@ -52,7 +54,9 @@ public final class ResetCommand extends Subcommand {
 
 
     /**
-     * It deletes the config files, if they are present.
+     * Deletes all the {@link Config config files}.
+     *
+     * @throws IOException thrown if any deletion failed.
      */
     private void deleteConfigs()
             throws IOException {
@@ -65,7 +69,9 @@ public final class ResetCommand extends Subcommand {
 
 
     /**
-     * It deletes the data storages, if they are present.
+     * Deletes all the {@link DataStorage data storage files}.
+     *
+     * @throws IOException thrown if any deletion failed.
      */
     private void deleteDataStorages()
             throws IOException {

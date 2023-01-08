@@ -1,8 +1,9 @@
 package com.github.bakuplayz.cropclick.menu.menus.previews;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.menu.base.Menu;
+import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PreviewMenu;
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -17,11 +18,14 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @see Menu
+ * @see BaseMenu
  * @since 2.0.0
  */
 public final class PreviewContainerMenu extends PreviewMenu {
 
+    /**
+     * A variable containing the {@link Container previewed container's} inventory.
+     */
     private @Setter(AccessLevel.PRIVATE) Inventory containerInventory;
 
 

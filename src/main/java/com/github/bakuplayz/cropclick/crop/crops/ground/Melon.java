@@ -1,5 +1,6 @@
 package com.github.bakuplayz.cropclick.crop.crops.ground;
 
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.Drop;
 import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
@@ -29,18 +30,44 @@ public final class Melon extends GroundCrop {
     }
 
 
+    /**
+     * Gets the name of the {@link Crop crop}.
+     *
+     * @return the crop's name.
+     */
     @Override
     public @NotNull String getName() {
         return "melon";
     }
 
 
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 1).
+     */
     @Override
     public int getHarvestAge() {
-        return 0;
+        return 1;
     }
 
 
+    /**
+     * Gets the current age of the {@link Crop crop}.
+     *
+     * @return the crop's current age (default: 1).
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return 1;
+    }
+
+
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
@@ -52,6 +79,11 @@ public final class Melon extends GroundCrop {
     }
 
 
+    /**
+     * Gets the seed of the {@link Crop crop}.
+     *
+     * @return the crop's seed (default: null).
+     */
     @Override
     @Contract(pure = true)
     public @Nullable Seed getSeed() {
@@ -59,24 +91,44 @@ public final class Melon extends GroundCrop {
     }
 
 
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
     @Override
-    public void replant(@NotNull Block clickedBlock) {
-        clickedBlock.setType(Material.AIR);
+    public void replant(@NotNull Block block) {
+        block.setType(Material.AIR);
     }
 
 
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
     @Override
     public @NotNull Material getClickableType() {
         return Material.MELON_BLOCK;
     }
 
 
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
     @Override
     public @NotNull Material getMenuType() {
         return Material.MELON;
     }
 
 
+    /**
+     * Checks whether the {@link Crop crop} is linkable to an {@link Autofarm}.
+     *
+     * @return true if it is, otherwise false (default: false).
+     */
     @Override
     public boolean isLinkable() {
         return cropSection.isLinkable(getName(), false);

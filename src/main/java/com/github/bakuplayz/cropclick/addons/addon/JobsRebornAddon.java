@@ -7,13 +7,13 @@ import com.gamingmesh.jobs.container.JobsPlayer;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A class representing the JobsReborn addon.
+ * A class representing the <a href="https://www.spigotmc.org/resources/jobs-reborn.4216/">JobsReborn</a> addon.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -34,11 +34,12 @@ public final class JobsRebornAddon extends Addon {
 
 
     /**
-     * It adds points, experience, and money to the player's JobsReborn account.
+     * Updates the {@link JobsRebornAddon JobsReborn} farmer stats for the {@link Player provided player} based on the {@link Crop provided crop}.
      *
-     * @param player The player who is being updated.
+     * @param player the player to update stats for.
+     * @param crop   the crop to base the update on.
      */
-    public void updateStats(@NotNull Player player, @NotNull BaseCrop crop) {
+    public void updateStats(@NotNull Player player, @NotNull Crop crop) {
         JobsPlayer jobsPlayer = new JobsPlayer(player.getName());
         if (!jobsPlayer.isInJob(farmerJob)) {
             return;
@@ -56,38 +57,38 @@ public final class JobsRebornAddon extends Addon {
 
 
     /**
-     * Get the points of the crop with the passed name.
+     * Gets the {@link JobsRebornAddon JobsRebon} points for the {@link Crop provided crop}.
      *
-     * @param name The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The points of the crop.
+     * @return the points for the crop.
      */
-    private double getPoints(@NotNull String name) {
-        return addonSection.getJobsPoints(name);
+    private double getPoints(@NotNull String cropName) {
+        return addonSection.getJobsPoints(cropName);
     }
 
 
     /**
-     * Get the experience of a crop with the passed name.
+     * Gets the {@link JobsRebornAddon JobsRebon} experience for the {@link Crop provided crop}.
      *
-     * @param name The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The experience of the crop.
+     * @return the experience for the crop.
      */
-    private double getExperience(@NotNull String name) {
-        return addonSection.getJobsExperience(name);
+    private double getExperience(@NotNull String cropName) {
+        return addonSection.getJobsExperience(cropName);
     }
 
 
     /**
-     * Get the money of a crop with the passed name.
+     * Gets the {@link JobsRebornAddon JobsRebon} money for the {@link Crop provided crop}.
      *
-     * @param name The name of the crop.
+     * @param cropName the name of the crop.
      *
-     * @return The money of the crop.
+     * @return the money for the crop.
      */
-    private double getMoney(@NotNull String name) {
-        return addonSection.getJobsMoney(name);
+    private double getMoney(@NotNull String cropName) {
+        return addonSection.getJobsMoney(cropName);
     }
 
 }

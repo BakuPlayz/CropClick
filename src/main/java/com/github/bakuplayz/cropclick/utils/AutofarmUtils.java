@@ -7,7 +7,7 @@ import com.github.bakuplayz.cropclick.autofarm.container.Container;
 import com.github.bakuplayz.cropclick.autofarm.container.ContainerType;
 import com.github.bakuplayz.cropclick.autofarm.metadata.AutofarmMetadata;
 import com.github.bakuplayz.cropclick.crop.CropManager;
-import com.github.bakuplayz.cropclick.crop.crops.base.BaseCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.location.DoublyLocation;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -28,16 +28,19 @@ import java.util.List;
  */
 public final class AutofarmUtils {
 
-    public static final String FARMER_ID_META = "farmerID";
+    /**
+     * The {@link MetadataValue meta key} for the cached {@link Autofarm#getFarmerID() farmer id}.
+     */
+    public static final String FARMER_ID_KEY = "farmerID";
 
 
     /**
-     * Returns true if the player is the owner of the autofarm.
+     * Checks whether the {@link Player provided player} is the owner of the {@link Autofarm provided autofarm}.
      *
-     * @param player   The player who is trying to access the autofarm.
-     * @param autofarm The autofarm object.
+     * @param player   the player to check.
+     * @param autofarm the farm to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public static boolean isOwner(@NotNull Player player, @NotNull Autofarm autofarm) {
         return autofarm.getOwnerID().equals(player.getUniqueId());
@@ -45,11 +48,11 @@ public final class AutofarmUtils {
 
 
     /**
-     * If the block is a chest or shulker box, return true.
+     * Checks whether the {@link Block provided block} is a container.
      *
-     * @param block The block to check.
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public static boolean isContainer(@NotNull Block block) {
         if (BlockUtils.isSameType(block, Material.CHEST)) {
@@ -60,12 +63,12 @@ public final class AutofarmUtils {
 
 
     /**
-     * Returns true if the block is a container, false otherwise.
+     * Checks whether the {@link Block provided block} is a {@link Container container}.
      *
-     * @param block           The block to check.
-     * @param onlyDoubleChest If true, only double chests will be considered containers.
+     * @param block           the block to check.
+     * @param onlyDoubleChest match for only double chests.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public static boolean isContainer(@NotNull Block block, boolean onlyDoubleChest) {
         if (onlyDoubleChest) {
@@ -76,14 +79,13 @@ public final class AutofarmUtils {
 
 
     /**
-     * If the block is a chest, double chest, or shulker box, return a new Container object with the block's inventory and
-     * the appropriate container type.
+     * Finds a {@link Container container} based on the {@link Block provided block}.
      *
-     * @param block The block to get the container from.
+     * @param block the block to base the findings on.
      *
-     * @return A Container object
+     * @return the container, otherwise null.
      */
-    public static @Nullable Container getContainer(@NotNull Block block) {
+    public static @Nullable Container findContainer(@NotNull Block block) {
         BlockState blockState = block.getState();
 
         if (BlockUtils.isDoubleChest(block)) {
@@ -112,11 +114,11 @@ public final class AutofarmUtils {
 
 
     /**
-     * Returns true if the given block is a dispenser.
+     * Checks whether the {@link Block provided block} is a {@link Dispenser dispenser}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public static boolean isDispenser(@NotNull Block block) {
         return BlockUtils.isSameType(block, Material.DISPENSER);
@@ -124,24 +126,24 @@ public final class AutofarmUtils {
 
 
     /**
-     * Returns the Dispenser object associated with the given Block.
+     * Finds a {@link Dispenser dispenser} based on the {@link Block provided block}.
      *
-     * @param block The block to get the dispenser from.
+     * @param block the block to base the findings on.
      *
-     * @return A Dispenser object.
+     * @return the dispenser, otherwise null.
      */
-    public static @NotNull Dispenser getDispenser(@NotNull Block block) {
+    public static @NotNull Dispenser findDispenser(@NotNull Block block) {
         return (Dispenser) block.getState();
     }
 
 
     /**
-     * Returns true if the block is a crop.
+     * Checks whether the {@link Block provided block} is a {@link Crop crop}.
      *
-     * @param manager The CropManager instance.
-     * @param block   The block to check
+     * @param manager the crop manager.
+     * @param block   the block to check.
      *
-     * @return A boolean value.
+     * @return true if it is, otherwise false.
      */
     public static boolean isCrop(@NotNull CropManager manager, @NotNull Block block) {
         return manager.isCrop(block);
@@ -149,136 +151,136 @@ public final class AutofarmUtils {
 
 
     /**
-     * Returns the crop that the given block is a part of, or null if the block is not a part of a crop.
+     * Finds a {@link Crop crop} based on the {@link Block provided block}.
      *
-     * @param manager The CropManager instance.
-     * @param block   The block that you want to get the crop from.
+     * @param manager the crop manager.
+     * @param block   the block to base the findings on.
      *
-     * @return A Crop object
+     * @return the crop, otherwise null.
      */
-    public static @Nullable BaseCrop getCrop(@NotNull CropManager manager, @NotNull Block block) {
+    public static @Nullable Crop findCrop(@NotNull CropManager manager, @NotNull Block block) {
         return manager.findByBlock(block);
     }
 
 
     /**
-     * Adds the Autofarm meta (aka farmerID) to all the Autofarm components (the dispenser, container, and crop).
+     * Adds the cached {@link Autofarm#getFarmerID() autofarmer ID} to all the {@link Autofarm autofarm's} components.
      *
-     * @param plugin   The plugin instance
-     * @param autofarm The autofarm object that you want to set the metadata for.
+     * @param plugin   the CropClick instance.
+     * @param autofarm the farm to add the ID to.
      */
-    public static void addMeta(@NotNull CropClick plugin, @NotNull Autofarm autofarm) {
+    public static void addCachedID(@NotNull CropClick plugin, @NotNull Autofarm autofarm) {
         Block dispenser = autofarm.getDispenserLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block crop = autofarm.getCropLocation().getBlock();
 
         AutofarmMetadata farmerMeta = new AutofarmMetadata(plugin, autofarm::getFarmerID);
 
-        DoublyLocation doublyLocation = LocationUtils.getAsDoubly(container);
+        DoublyLocation doublyLocation = LocationUtils.findDoubly(container);
         if (doublyLocation != null) {
             Block singly = doublyLocation.getSingly().getBlock();
             Block doubly = doublyLocation.getDoubly().getBlock();
 
-            singly.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
-            doubly.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
+            singly.setMetadata(AutofarmUtils.FARMER_ID_KEY, farmerMeta);
+            doubly.setMetadata(AutofarmUtils.FARMER_ID_KEY, farmerMeta);
 
             autofarm.setContainerLocation(doublyLocation);
         } else {
-            container.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
+            container.setMetadata(AutofarmUtils.FARMER_ID_KEY, farmerMeta);
         }
 
-        dispenser.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
-        crop.setMetadata(AutofarmUtils.FARMER_ID_META, farmerMeta);
+        dispenser.setMetadata(AutofarmUtils.FARMER_ID_KEY, farmerMeta);
+        crop.setMetadata(AutofarmUtils.FARMER_ID_KEY, farmerMeta);
     }
 
 
     /**
-     * Remove the Autofarm meta (aka farmerID) from the dispenser, container, and crop.
+     * Removes the cached {@link Autofarm#getFarmerID() autofarmer ID} from all the {@link Autofarm autofarm's} components.
      *
-     * @param plugin   The main class of the plugin.
-     * @param autofarm The autofarm object that you want to remove the metadata from.
+     * @param plugin   the CropClick instance.
+     * @param autofarm the farm to remove the ID from.
      */
-    public static void removeMeta(@NotNull CropClick plugin, @NotNull Autofarm autofarm) {
+    public static void removeCachedID(@NotNull CropClick plugin, @NotNull Autofarm autofarm) {
         Block dispenser = autofarm.getDispenserLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block crop = autofarm.getCropLocation().getBlock();
 
-        DoublyLocation doublyContainer = LocationUtils.getAsDoubly(container);
+        DoublyLocation doublyContainer = LocationUtils.findDoubly(container);
         if (doublyContainer != null) {
             Block singly = doublyContainer.getSingly().getBlock();
             Block doubly = doublyContainer.getDoubly().getBlock();
 
-            singly.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
-            doubly.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
+            singly.removeMetadata(AutofarmUtils.FARMER_ID_KEY, plugin);
+            doubly.removeMetadata(AutofarmUtils.FARMER_ID_KEY, plugin);
         } else {
-            container.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
+            container.removeMetadata(AutofarmUtils.FARMER_ID_KEY, plugin);
         }
 
-        dispenser.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
-        crop.removeMetadata(AutofarmUtils.FARMER_ID_META, plugin);
+        dispenser.removeMetadata(AutofarmUtils.FARMER_ID_KEY, plugin);
+        crop.removeMetadata(AutofarmUtils.FARMER_ID_KEY, plugin);
     }
 
 
     /**
-     * If the dispenser, container, and crop all have the Autofarm meta (aka farmerID) present, return true.
+     * Checks whether the {@link Autofarm autofarm's} components has a cached {@link Autofarm#getFarmerID() autofarmer ID}.
      *
-     * @param autofarm The autofarm object that you want to check.
+     * @param autofarm the farm to check.
      *
-     * @return A boolean value.
+     * @return true if they have it, otherwise false.
      */
-    public static boolean hasMeta(@NotNull Autofarm autofarm) {
+    public static boolean hasCachedID(@NotNull Autofarm autofarm) {
         Block dispenser = autofarm.getDispenserLocation().getBlock();
         Block container = autofarm.getContainerLocation().getBlock();
         Block crop = autofarm.getCropLocation().getBlock();
 
-        if (!AutofarmUtils.componentHasMeta(dispenser)) {
+        if (!AutofarmUtils.hasCachedID(dispenser)) {
             return false;
         }
 
-        if (!AutofarmUtils.componentHasMeta(crop)) {
+        if (!AutofarmUtils.hasCachedID(crop)) {
             return false;
         }
 
-        DoublyLocation doublyContainer = LocationUtils.getAsDoubly(container);
+        DoublyLocation doublyContainer = LocationUtils.findDoubly(container);
         if (doublyContainer != null) {
             Block singly = doublyContainer.getSingly().getBlock();
             Block doubly = doublyContainer.getSingly().getBlock();
 
-            if (!AutofarmUtils.componentHasMeta(singly)) {
+            if (!AutofarmUtils.hasCachedID(singly)) {
                 return false;
             }
 
-            if (!AutofarmUtils.componentHasMeta(doubly)) {
+            if (!AutofarmUtils.hasCachedID(doubly)) {
                 return false;
             }
         }
 
-        return AutofarmUtils.componentHasMeta(container);
+        return AutofarmUtils.hasCachedID(container);
     }
 
 
     /**
-     * Checks if the given component (i.e. chest) has the Autofarm meta (aka farmerID).
+     * Checks whether the {@link Block provided block} has the cached {@link Autofarm#getFarmerID() autofarmer ID}.
      *
-     * @param block The block to check
+     * @param block the block to check.
      *
-     * @return A boolean value.
+     * @return true if it has, otherwise false.
      */
-    public static boolean componentHasMeta(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_META);
-        return block.hasMetadata(AutofarmUtils.FARMER_ID_META) && !metas.isEmpty();
+    public static boolean hasCachedID(@NotNull Block block) {
+        List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_KEY);
+        return block.hasMetadata(AutofarmUtils.FARMER_ID_KEY) && !metas.isEmpty();
     }
 
 
     /**
-     * Get the Autofarm Meta Value (aka. farmerID) of the given block, or null if it doesn't have one.
+     * Gets the cached {@link Autofarm#getFarmerID() autofarmer ID} based on the {@link Block provided block}.
      *
-     * @param block The block to get the farmer ID from.
+     * @param block the block to get the cached ID from.
      *
-     * @return The farmerID of the block.
+     * @return the found ID, otherwise null.
      */
-    public static @Nullable String getMetaValue(@NotNull Block block) {
-        List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_META);
+    public static @Nullable String getCachedID(@NotNull Block block) {
+        List<MetadataValue> metas = block.getMetadata(AutofarmUtils.FARMER_ID_KEY);
         return metas.isEmpty() ? null : metas.get(0).asString();
     }
 

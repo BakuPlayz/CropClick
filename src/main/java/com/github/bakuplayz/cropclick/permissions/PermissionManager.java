@@ -2,11 +2,14 @@ package com.github.bakuplayz.cropclick.permissions;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
-import com.github.bakuplayz.cropclick.crop.crops.base.*;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
+import com.github.bakuplayz.cropclick.crop.crops.base.GroundCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.TallCrop;
+import com.github.bakuplayz.cropclick.crop.crops.base.WallCrop;
 import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
 import com.github.bakuplayz.cropclick.permissions.crop.CropPermission;
+import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionAction;
 import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionBase;
-import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionType;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
@@ -16,7 +19,7 @@ import java.util.List;
 
 
 /**
- * A manager controlling the plugin's permissions.
+ * A manager controlling the plugin's {@link Permission permissions}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -26,8 +29,8 @@ public final class PermissionManager {
 
     private final PluginManager pluginManager;
 
+    private final List<Crop> crops;
     private final List<Subcommand> subcommands;
-    private final List<BaseCrop> crops;
 
 
     public PermissionManager(@NotNull CropClick plugin) {
@@ -37,25 +40,24 @@ public final class PermissionManager {
 
         registerCommands();
 
-        // Runs later, in order to make sure all the crop permissions are registered,
-        // both CropClick's and other plugins.
+        /* Runs once the server is done loading in order to register all crops,
+         * both CropClick's and other plugins. */
         Bukkit.getScheduler().runTaskLater(plugin, this::registerCrops, 0);
     }
 
 
     /**
-     * It creates a permission for each subcommand, and then adds that permission as a child of the "cropclick.command.*"
-     * permission.
+     * Registers all the {@link Permission permissions} for each of the {@link Subcommand registred subcommands}.
      */
     private void registerCommands() {
         Permission allPermission = CommandPermission.ALL_COMMANDS;
         pluginManager.addPermission(allPermission);
 
-        for (Subcommand subcommand : subcommands) {
-            Permission child = new CommandPermission(subcommand);
+        subcommands.forEach(command -> {
+            Permission child = new CommandPermission(command);
             child.addParent(allPermission, true);
             pluginManager.addPermission(child);
-        }
+        });
 
         Permission generalPermission = CommandPermission.GENERAL_COMMAND;
         generalPermission.addParent(allPermission, true);
@@ -64,19 +66,21 @@ public final class PermissionManager {
 
 
     /**
-     * Register all the permissions, for crops that has been registered.
+     * Registers all the {@link Permission permissions} for each of the {@link Crop registred crops}.
      */
     private void registerCrops() {
-        registerCropType(CropPermissionType.PLANT);
-        registerCropType(CropPermissionType.HARVEST);
-        registerCropType(CropPermissionType.DESTROY);
+        registerCropType(CropPermissionAction.PLANT);
+        registerCropType(CropPermissionAction.HARVEST);
+        registerCropType(CropPermissionAction.DESTROY);
     }
 
 
     /**
-     * It creates a permission for each permission type, and then creates a child permission for each permission type and crop.
+     * Registers all the {@link Permission permissions} for each of the {@link Crop registred crops} provided {@link CropPermissionAction action types}.
+     *
+     * @param type the action type.
      */
-    private void registerCropType(@NotNull CropPermissionType type) {
+    private void registerCropType(@NotNull CropPermissionAction type) {
         Permission allPermission = type.getAllPermission();
 
         assert allPermission != null; // Only here for the compiler, since type cannot be a null instance when passed.
@@ -87,7 +91,7 @@ public final class PermissionManager {
         Permission tallPermission = new CropPermission(CropPermissionBase.TALL, type);
         Permission wallPermission = new CropPermission(CropPermissionBase.WALL, type);
 
-        for (BaseCrop crop : crops) {
+        crops.forEach(crop -> {
             Permission child = new CropPermission(crop.getName(), type);
 
             if (crop instanceof GroundCrop) {
@@ -101,7 +105,7 @@ public final class PermissionManager {
             }
 
             pluginManager.addPermission(child);
-        }
+        });
 
         groundPermission.addParent(allPermission, true);
         tallPermission.addParent(allPermission, true);
