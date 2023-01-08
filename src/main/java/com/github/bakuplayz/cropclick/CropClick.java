@@ -87,7 +87,7 @@ public final class CropClick extends JavaPlugin {
     /**
      * A variable used for debugging purposes, when enabled it will, for instance log every event call.
      */
-    private final @Getter boolean isDebugging = true;
+    private final @Getter boolean isDebugging = false;
 
     /**
      * A variable used for getting statistics using bStats.
@@ -149,10 +149,8 @@ public final class CropClick extends JavaPlugin {
      */
     public void onReset() {
         this.isReset = true;
-
-
+        
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
-            long start = System.nanoTime();
             registerConfigs();
             setupConfigs();
 
@@ -163,7 +161,6 @@ public final class CropClick extends JavaPlugin {
             registerManagers();
 
             loadConfigSections();
-            System.out.println(System.nanoTime() - start);
         }, 0);
     }
 
