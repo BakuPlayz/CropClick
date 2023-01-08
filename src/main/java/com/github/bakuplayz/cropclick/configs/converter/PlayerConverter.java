@@ -41,7 +41,7 @@ public final class PlayerConverter {
         YamlConfiguration legacyPlayer = YamlConfiguration.loadConfiguration(inFile);
         ConfigurationSection newPlayer = PlayerConverter.convertFormat(legacyPlayer);
 
-        FileUtils.copyYamlTo(plugin.getPlayersConfig().getConfig(), newPlayer, true);
+        FileUtils.copyYamlTo(plugin.getPlayersConfig().getConfig(), newPlayer);
         FileUtils.move(inFile, outFile, true);
     }
 

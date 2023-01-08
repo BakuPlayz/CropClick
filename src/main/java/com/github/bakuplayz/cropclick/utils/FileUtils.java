@@ -42,46 +42,16 @@ public final class FileUtils {
 
 
     /**
-     * Moves the {@link File source file} to the {@link File target file}.
-     *
-     * @param source the source file.
-     * @param target the target file.
-     */
-    public static void move(@NotNull File source, @NotNull File target) {
-        move(source, target, false);
-    }
-
-
-    /**
-     * Copies the contents of the {@link FileConfiguration YAML configuration} to the {@link ConfigurationSection provided section}.
-     *
-     * @param config      the config to copy.
-     * @param section     the section to copy it to.
-     * @param ignoreError true if errors should be ignored, otherwise false.
-     */
-    public static void copyYamlTo(@NotNull FileConfiguration config,
-                                  @NotNull ConfigurationSection section,
-                                  boolean ignoreError) {
-        try {
-            config.save(section.toString());
-        } catch (IOException e) {
-            if (ignoreError) {
-                return;
-            }
-            e.printStackTrace();
-            LanguageAPI.Console.FILE_COPY_FAILED.send(config.getName());
-        }
-    }
-
-
-    /**
      * Copies the contents of the {@link FileConfiguration YAML configuration} to the {@link ConfigurationSection provided section}.
      *
      * @param config  the config to copy.
      * @param section the section to copy it to.
      */
-    public static void copyYamlTo(@NotNull FileConfiguration config, @NotNull ConfigurationSection section) {
-        copyYamlTo(config, section, false);
+    public static void copyYamlTo(@NotNull FileConfiguration config,
+                                  @NotNull ConfigurationSection section) {
+        for (String key : section.getKeys(true)) {
+            config.set(key, section.get(key));
+        }
     }
 
 
