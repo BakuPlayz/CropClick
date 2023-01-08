@@ -43,13 +43,15 @@ public final class PlayerJoinListener implements Listener {
     public void onOperatorJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (player.isOp()) {
-            if (isDebugging) {
-                logger.info(String.format("%s (Player): Called the join event!", player.getName()));
-            }
-
-            updateManager.sendAlert(player);
+        if (!player.isOp()) {
+            return;
         }
+
+        if (isDebugging) {
+            logger.info(String.format("%s (Operator): Called the join event!", player.getName()));
+        }
+        
+        updateManager.sendAlert(player);
     }
 
 }

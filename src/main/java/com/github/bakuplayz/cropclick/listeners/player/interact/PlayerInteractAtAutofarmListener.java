@@ -26,8 +26,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
-
 
 /**
  * A listener handling all the {@link Autofarm} interactions caused by a {@link Player}.
@@ -37,9 +35,6 @@ import java.util.logging.Logger;
  * @since 2.0.0
  */
 public final class PlayerInteractAtAutofarmListener implements Listener {
-
-    private final Logger logger;
-    private final boolean isDebugging;
 
     private final CropManager cropManager;
     private final WorldManager worldManager;
@@ -54,8 +49,6 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         this.addonManager = plugin.getAddonManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
-        this.isDebugging = plugin.isDebugging();
-        this.logger = plugin.getLogger();
     }
 
 
@@ -108,10 +101,6 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
         if (autofarmManager.isComponent(block)) {
             event.setCancelled(true);
-        }
-
-        if (isDebugging) {
-            logger.info(String.format("%s (Player): Called the interact at autofarm event!", player.getName()));
         }
 
         if (AutofarmUtils.isContainer(block)) {
