@@ -102,6 +102,7 @@ public final class CropClick extends JavaPlugin {
     public void onEnable() {
         if (VersionUtils.between(8.0, 12.9)) {
             LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
