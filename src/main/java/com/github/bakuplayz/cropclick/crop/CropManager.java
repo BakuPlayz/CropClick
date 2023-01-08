@@ -2,9 +2,6 @@ package com.github.bakuplayz.cropclick.crop;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configs.config.sections.crops.SeedConfigSection;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.crop.crops.ground.*;
 import com.github.bakuplayz.cropclick.crop.crops.roof.GlowBerries;
@@ -32,9 +29,6 @@ import java.util.List;
 public final class CropManager {
 
     private final CropsConfig cropsConfig;
-    private final CropConfigSection cropSection;
-    private final SeedConfigSection seedSection;
-    private final AddonConfigSection addonSection;
 
 
     /**
@@ -52,9 +46,6 @@ public final class CropManager {
 
     public CropManager(@NotNull CropClick plugin) {
         this.cropsConfig = plugin.getCropsConfig();
-        this.addonSection = cropsConfig.getAddonSection();
-        this.seedSection = cropsConfig.getSeedSection();
-        this.cropSection = cropsConfig.getCropSection();
         this.harvestedCrops = new HashMap<>();
         this.crops = new ArrayList<>();
 
@@ -202,7 +193,7 @@ public final class CropManager {
 
 
     /**
-     * Filters searches based on the {@link Crop first crop's} type matching with the {@link Crop second crop's} type.
+     * Filters searches based on the {@link Crop first crop's} clickable type matching with the {@link Crop second crop's} clickable type.
      *
      * @param first  the first crop to check.
      * @param second the second crop to check.
@@ -210,6 +201,12 @@ public final class CropManager {
      * @return true if they match, otherwise false.
      */
     private boolean filterByType(@NotNull Crop first, @NotNull Crop second) {
+        
+        // Specific check for mushrooms as they have the same click type.
+        if (first instanceof BrownMushroom && second instanceof RedMushroom) {
+            return false;
+        }
+
         return first.getClickableType() == second.getClickableType();
     }
 

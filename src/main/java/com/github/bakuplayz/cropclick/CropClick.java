@@ -3,6 +3,8 @@ package com.github.bakuplayz.cropclick;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
+import com.github.bakuplayz.cropclick.commands.Subcommand;
+import com.github.bakuplayz.cropclick.configs.Config;
 import com.github.bakuplayz.cropclick.configs.config.*;
 import com.github.bakuplayz.cropclick.configs.converter.AutofarmsConverter;
 import com.github.bakuplayz.cropclick.configs.converter.ConfigConverter;
@@ -40,6 +42,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -93,7 +96,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It starts the execution of the CropClick, conceptually equivalent to an 'main(args)' run.
+     * Starts the execution of {@link CropClick}.
      */
     @Override
     public void onEnable() {
@@ -123,7 +126,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It "ends" the execution of CropClick.
+     * Stops the execution of {@link CropClick}.
      */
     @Override
     public void onDisable() {
@@ -137,26 +140,28 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It resets the plugin (a very expensive compute).
+     * Resets {@link CropClick} (a very expensive compute).
      */
     public void onReset() {
         this.isReset = true;
 
-        registerConfigs();
-        setupConfigs();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
+            registerConfigs();
+            setupConfigs();
 
-        registerStorages();
-        setupStorages();
-        startStoragesSaveInterval();
+            registerStorages();
+            setupStorages();
+            startStoragesSaveInterval();
 
-        registerManagers();
+            registerManagers();
 
-        loadConfigSections();
+            loadConfigSections();
+        }, 0);
     }
 
 
     /**
-     * It converts the old (legacy) configs, their new equivalents.
+     * Handles the {@link Config legacy configurations}.
      */
     private void handleLegacyConfigs() {
         if (usageConfig.isNewFormatVersion()) {
@@ -173,7 +178,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It initializes, loads and setups the referenced configurations, YAML files.
+     * Sets up {@link CropClick CropClick's} configurations.
      */
     public void setupConfigs() {
         LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
@@ -191,7 +196,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It initializes and loads the "overloaded" configuration sections.
+     * Loads all the {@link CropClick} sections.
      */
     public void loadConfigSections() {
         cropsConfig.loadSections();
@@ -199,7 +204,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It instantiates the referenced configurations, YAML files.
+     * Registers all the {@link CropClick} configurations.
      */
     private void registerConfigs() {
         this.usageConfig = new UsageConfig(this);
@@ -211,7 +216,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It instantiates the referenced storages, JSON files.
+     * Registers all the {@link CropClick} data storages.
      */
     private void registerStorages() {
         this.worldData = new WorldDataStorage(this);
@@ -220,7 +225,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It initializes, loads and setups the referenced storages, JSON files.
+     * Sets up {@link CropClick CropClick's} data storages.
      */
     public void setupStorages() {
         farmData.setup();
@@ -238,17 +243,17 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It initializes the {@link DataStorage#saveData() saveData} interval/task for all the referenced storages, JSON files.
+     * Starts the saving interval for {@link DataStorage data storages}.
      */
     private void startStoragesSaveInterval() {
-        final int TEN_MINUTES_PERIOD = 10 * 60 * 20; // Written as ticks (20 per second).
+        final int TEN_MINUTES_PERIOD = 10 * 60 * 20; // Written as Minecraft ticks.
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::saveData, 0, TEN_MINUTES_PERIOD);
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::saveData, 0, TEN_MINUTES_PERIOD);
     }
 
 
     /**
-     * It registers the 'cropclick' command, and its subcommands.
+     * Registers all the {@link Subcommand commands}.
      */
     private void registerCommands() {
         PluginCommand command = getCommand("cropclick");
@@ -263,7 +268,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It instantiates the referenced managers.
+     * Registers all the managers.
      */
     private void registerManagers() {
         this.cropManager = new CropManager(this);
@@ -280,7 +285,7 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * It instantiates and registers the referenced listeners.
+     * Registers all the {@link Listener listeners}.
      */
     private void registerListeners() {
         PluginManager manager = Bukkit.getPluginManager();

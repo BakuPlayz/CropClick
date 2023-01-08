@@ -1,10 +1,14 @@
 package com.github.bakuplayz.cropclick;
 
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.CropManager;
+import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
+import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -20,32 +24,32 @@ import org.jetbrains.annotations.NotNull;
 public final class CropClickAPI {
 
     /**
-     * Gets the CropManager, which controls all the crops.
+     * Gets the {@link CropManager} which controls all the {@link Crop crops}.
      */
     private final @Getter CropManager cropManager;
 
     /**
-     * Gets the CropsConfig, which is required to example register crops.
+     * Gets the {@link CropsConfig} which is used register {@link Crop crops}.
      */
     private final @Getter CropsConfig cropsConfig;
 
     /**
-     * Gets the AutofarmManager, which controls all the active and inactive autofarms.
+     * Gets the {@link AutofarmManager} which controls all the {@link Autofarm autofarms}.
      */
     private final @Getter AutofarmManager autofarmManager;
 
     /**
-     * Gets the UpdateManager, which handles the plugin updates.
+     * Gets the {@link UpdateManager} which handles {@link CropClick} updates.
      */
     private final @Getter UpdateManager updateManager;
 
     /**
-     * Gets the WorldManager, which controls all the active and inactive worlds.
+     * Gets the {@link WorldManager} which controls all the {@link FarmWorld farm worlds}.
      */
     private final @Getter WorldManager worldManager;
 
     /**
-     * Gets the AddonManager, which controls all the active and inactive addons.
+     * Gets the {@link AddonManager} which controls all the {@link Addon addons}.
      */
     private final @Getter AddonManager addonManager;
 
