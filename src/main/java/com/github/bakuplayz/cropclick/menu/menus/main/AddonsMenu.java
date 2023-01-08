@@ -183,9 +183,8 @@ public final class AddonsMenu extends BaseMenu {
                 .setLore(LanguageAPI.Menu.ADDONS_MCMMO_ITEM_TIPS.getAsList(plugin,
                         LanguageAPI.Menu.ADDONS_MCMMO_ITEM_STATUS.get(plugin, mmoEnabled)
                 ))
-
                 .setMaterial(
-                        mmoInstalled ? null : Material.GRAY_STAINED_GLASS_PANE
+                        mmoEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
                 )
                 .setMaterial(
                         mmoInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
