@@ -39,6 +39,7 @@
 
 command:
   general:
+    commandNotFound: "&cCommand &7%command% &cwas not found. Please type &7/crop help &cto see the available commands."
     playerOnlyCommand: "&cOnly players can use this command."
     playerLackPermission: "&cYou lack permission to run this command."
 

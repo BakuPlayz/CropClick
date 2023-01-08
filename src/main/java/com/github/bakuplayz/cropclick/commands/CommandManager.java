@@ -91,6 +91,12 @@ public final class CommandManager implements TabExecutor {
         }
 
         for (Subcommand command : commands) {
+            if (commands.indexOf(command) == commands.size() - 1) {
+                LanguageAPI.Command.COMMAND_NOT_FOUND.send(
+                        plugin, player, args[0]
+                );
+            }
+
             if (!args[0].equalsIgnoreCase(command.getName())) {
                 continue;
             }
@@ -134,7 +140,7 @@ public final class CommandManager implements TabExecutor {
                        .filter(command -> command.startsWith(args[0]))
                        .sorted().collect(Collectors.toList());
     }
-    
+
 
     /**
      * Gets the amount of {@link #commands}.

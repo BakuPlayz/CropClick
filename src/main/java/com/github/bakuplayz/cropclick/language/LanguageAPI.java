@@ -134,6 +134,7 @@ public final class LanguageAPI {
      */
     public enum Command {
 
+        COMMAND_NOT_FOUND(Category.GENERAL, "commandNotFound", "%command%"),
         PLAYER_ONLY_COMMAND(Category.GENERAL, "playerOnlyCommand"),
         PLAYER_LACK_PERMISSION(Category.GENERAL, "playerLackPermission", "%permission%"),
 
