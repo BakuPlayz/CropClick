@@ -2,6 +2,12 @@ package com.github.bakuplayz.cropclick.crop.crops.base;
 
 import com.github.bakuplayz.cropclick.configs.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crop.seeds.base.Seed;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,13 +39,38 @@ public abstract class WallCrop extends BaseCrop {
 
 
     /**
-     * Checks whether the {@link WallCrop extending tall crop} has a {@link Seed seed}.
+     * Checks whether the {@link WallCrop extending wall crop} has a {@link Seed seed}.
      *
      * @return true if it has, otherwise false (default: false).
      */
     @Override
     public boolean hasSeed() {
         return false;
+    }
+
+
+    /**
+     * Replants the {@link WallCrop extending wall crop}.
+     *
+     * @param block the crop block to replant.
+     */
+    @Override
+    public void replant(@NotNull Block block) {
+        if (shouldReplant()) {
+            Directional initialDirect = (Directional) block.getState().getData();
+            BlockFace initialFace = initialDirect.getFacing();
+
+            block.setType(getClickableType());
+
+            Directional changedDirect = (Directional) block.getState().getData();
+            changedDirect.setFacingDirection(initialFace);
+
+            BlockState state = block.getState();
+            state.setData((MaterialData) changedDirect);
+            state.update();
+        } else {
+            block.setType(Material.AIR);
+        }
     }
 
 }

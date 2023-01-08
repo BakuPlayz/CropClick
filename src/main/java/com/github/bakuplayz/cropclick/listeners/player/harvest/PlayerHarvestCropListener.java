@@ -108,7 +108,7 @@ public final class PlayerHarvestCropListener implements Listener {
         if (harvestedCrops.containsKey(crop)) {
             return;
         }
-        
+
         if (!PermissionUtils.canHarvestCrop(player, crop.getName())) {
             return;
         }
@@ -166,7 +166,7 @@ public final class PlayerHarvestCropListener implements Listener {
             event.setCancelled(true);
             return;
         }
-
+        
         crop.replant(block);
         crop.playSounds(block);
         crop.playParticles(block);

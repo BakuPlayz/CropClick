@@ -55,7 +55,7 @@ public abstract class BaseCrop implements Crop {
      */
     @Override
     public int getCurrentAge(@NotNull Block block) {
-        //TODO: Check if this works.
+        //noinspection deprecation
         return block.getData();
     }
 
