@@ -92,7 +92,14 @@ public final class CommandManager implements TabExecutor {
 
         for (Subcommand command : commands) {
             if (!args[0].equalsIgnoreCase(command.getName())) {
-                continue;
+                if (commands.indexOf(command) != commands.size() - 1) {
+                    continue;
+                }
+
+                LanguageAPI.Command.COMMAND_NOT_FOUND.send(
+                        plugin, player, args[0]
+                );
+                return true;
             }
 
             if (!command.hasPermission(player)) {
