@@ -73,7 +73,6 @@ public final class AutofarmsMenu extends PaginatedMenu {
 
         if (menuState == AutofarmsMenuState.MENU) {
             handleBack(clicked, new MainMenu(plugin, player));
-            return;
         }
 
         int index = indexOfFarm(clicked);
