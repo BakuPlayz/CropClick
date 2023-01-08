@@ -58,7 +58,7 @@ public final class NetherWart extends GroundCrop {
     @Override
     @Contract(" -> new")
     public @NotNull Drop getDrop() {
-        return new Drop(Material.NETHER_WARTS,
+        return new Drop(Material.NETHER_STALK,
                 cropSection.getDropName(getName()),
                 cropSection.getDropAmount(getName(), 3),
                 cropSection.getDropChance(getName(), 80)
