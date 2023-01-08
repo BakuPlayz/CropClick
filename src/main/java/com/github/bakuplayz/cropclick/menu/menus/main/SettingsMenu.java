@@ -85,7 +85,7 @@ public final class SettingsMenu extends BaseMenu {
             new CropsMenu(plugin, player, CropMenuState.SOUNDS).openMenu();
         }
 
-        if (clicked.isSimilar(getToggleItem())) {
+        if (clicked.getType() == Material.SKULL_ITEM) {
             new ToggleMenu(plugin, player).openMenu();
         }
 

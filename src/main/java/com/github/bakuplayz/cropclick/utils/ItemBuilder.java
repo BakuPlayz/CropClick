@@ -293,7 +293,7 @@ public final class ItemBuilder {
      * @return the head of the provided {@link OfflinePlayer}.
      */
     public @NotNull ItemStack toPlayerHead(@NotNull OfflinePlayer player) {
-        ItemStack stack = new ItemStack(Material.SKULL_ITEM, amount);
+        ItemStack stack = new ItemStack(Material.SKULL_ITEM, amount, (short) 3);
         SkullMeta meta = this.meta != null
                          ? (SkullMeta) this.meta
                          : (SkullMeta) stack.getItemMeta();
@@ -309,7 +309,8 @@ public final class ItemBuilder {
         }
 
         if (name != null || lore != null) {
-            meta.setOwningPlayer(player);
+            //noinspection deprecation
+            meta.setOwner(player.getName());
             stack.setItemMeta(meta);
         }
 

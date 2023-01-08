@@ -59,7 +59,7 @@ public final class WorldMenu extends BaseMenu {
             world.allowsAutofarms(!world.allowsAutofarms());
         }
 
-        if (clicked.equals(getPlayersItem())) {
+        if (clicked.getType() == Material.SKULL_ITEM) {
             world.allowsPlayers(!world.allowsPlayers());
         }
 

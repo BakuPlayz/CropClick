@@ -88,7 +88,25 @@ public final class ToggleMenu extends PaginatedMenu {
      */
     private int indexOfPlayer(@NotNull ItemStack clicked) {
         return menuItems.stream()
-                        .filter(clicked::equals)
+                        .filter(item -> {
+                            if (item.getType() != clicked.getType()) {
+                                return false;
+                            }
+
+                            if (item.getDurability() != clicked.getDurability()) {
+                                return false;
+                            }
+
+                            if (!item.hasItemMeta()) {
+                                return false;
+                            }
+
+                            if (!item.getItemMeta().hasDisplayName()) {
+                                return false;
+                            }
+
+                            return item.getItemMeta().getDisplayName().equals(clicked.getItemMeta().getDisplayName());
+                        })
                         .mapToInt(item -> menuItems.indexOf(item))
                         .findFirst()
                         .orElse(-1);
