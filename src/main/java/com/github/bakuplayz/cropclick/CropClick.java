@@ -149,7 +149,7 @@ public final class CropClick extends JavaPlugin {
      */
     public void onReset() {
         this.isReset = true;
-        
+
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
             registerConfigs();
             setupConfigs();
