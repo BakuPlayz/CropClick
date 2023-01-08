@@ -24,7 +24,7 @@ import com.github.bakuplayz.cropclick.listeners.entity.EntityDestroyAutofarmList
 import com.github.bakuplayz.cropclick.listeners.harvest.HarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.destory.PlayerDestroyCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.harvest.PlayerHarvestCropListener;
-import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtBlockListener;
+import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtContainerListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
@@ -295,7 +295,7 @@ public final class CropClick extends JavaPlugin {
 
         manager.registerEvents(new PlayerJoinListener(this), this);
 
-        manager.registerEvents(new PlayerInteractAtBlockListener(this), this);
+        manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);

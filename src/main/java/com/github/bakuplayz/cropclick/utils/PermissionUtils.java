@@ -3,7 +3,7 @@ package com.github.bakuplayz.cropclick.utils;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
 import com.github.bakuplayz.cropclick.crop.crops.base.Crop;
-import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtBlockListener;
+import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
@@ -122,7 +122,7 @@ public final class PermissionUtils {
      *
      * @return true if allowed, otherwise false.
      *
-     * @see PlayerInteractAtBlockListener
+     * @see PlayerInteractAtAutofarmListener
      */
     public static boolean canInteractAtFarm(@NotNull Player player) {
         return player.hasPermission("cropclick.autofarm.interact");
@@ -140,7 +140,7 @@ public final class PermissionUtils {
      *
      * @return true if allowed, otherwise false.
      *
-     * @see PlayerInteractAtBlockListener
+     * @see PlayerInteractAtAutofarmListener
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean canInteractAtOthersFarm(@NotNull Player player, @NotNull Autofarm autofarm) {
