@@ -101,7 +101,7 @@ public final class CropClick extends JavaPlugin {
     @Override
     public void onEnable() {
         if (VersionUtils.between(8.0, 12.9)) {
-            LanguageAPI.Console.NOT_SUPPORTED_VERSION.send();
+            LanguageAPI.Console.NOT_SUPPORTED_VERSION.send(getLogger());
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -182,7 +182,7 @@ public final class CropClick extends JavaPlugin {
      * Sets up {@link CropClick CropClick's} configurations.
      */
     public void setupConfigs() {
-        LanguageAPI.Console.FILE_SETUP_LOAD.send("config.yml");
+        LanguageAPI.Console.FILE_SETUP_LOAD.send(getLogger(), "config.yml");
         getConfig().options().copyDefaults(true);
         saveConfig();
 
@@ -259,7 +259,7 @@ public final class CropClick extends JavaPlugin {
     private void registerCommands() {
         PluginCommand command = getCommand("cropclick");
         if (command == null) {
-            LanguageAPI.Console.FAILED_TO_REGISTER_COMMANDS.send();
+            LanguageAPI.Console.FAILED_TO_REGISTER_COMMANDS.send(getLogger());
             return;
         }
 

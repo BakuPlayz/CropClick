@@ -4,7 +4,6 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configs.config.LanguageConfig;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -13,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -30,19 +30,17 @@ public final class LanguageAPI {
      */
     public enum Console {
 
-        FILE_RELOAD("Reloading &e%s&7."),
-        FILE_SETUP_LOAD("Loading &e%s&7."),
-        FILE_SAVE_FAILED("Could not save &e%s&7."),
-        FILE_SETUP_FAILED("Could not setup &e%s&7."),
+        FILE_RELOAD("Reloading %s."),
+        FILE_SETUP_LOAD("Loading %s."),
+        FILE_SAVE_FAILED("Could not save %s."),
+        FILE_SETUP_FAILED("Could not setup %s."),
 
-        FILE_MOVE_FAILED("Could not move &e%s&7."),
-
-        DATA_STORAGE_LOADING_SETUP("Loading &e%s&7."),
-        DATA_STORAGE_FAILED_SAVE_OTHER("Could not save &e%s&7, due to unknown reasons."),
-        DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save &e%s&7, due to it being previously removed."),
-        DATA_STORAGE_LOADED_DATA("Loaded &e%s's &7data."),
-        DATA_STORAGE_FAILED_LOAD("Could not load &e%s&7."),
-        DATA_STORAGE_FAILED_SETUP("Could not setup &e%s&7."),
+        DATA_STORAGE_LOADING_SETUP("Loading %s."),
+        DATA_STORAGE_FAILED_SAVE_OTHER("Could not save %s, due to unknown reasons."),
+        DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save %s, due to it being previously removed."),
+        DATA_STORAGE_LOADED_DATA("Loaded %s's data."),
+        DATA_STORAGE_FAILED_LOAD("Could not load %s."),
+        DATA_STORAGE_FAILED_SETUP("Could not setup %s."),
 
         AUTOFARM_STORAGE_FAILED_REMOVE("Unlinked autofarms were unsuccessfully removed."),
 
@@ -60,31 +58,23 @@ public final class LanguageAPI {
 
 
         /**
-         * Gets the message as a {@link String string}.
-         *
-         * @return the message as a string.
-         */
-        @Contract(" -> new")
-        private @NotNull String get() {
-            return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
-        }
-
-
-        /**
          * Sends the message to the {@link ConsoleCommandSender console}.
+         *
+         * @param logger the plugin's logger instance.
          */
-        public void send() {
-            Bukkit.getConsoleSender().sendMessage(get());
+        public void send(@NotNull Logger logger) {
+            logger.info(message);
         }
 
 
         /**
          * Sends the message to the {@link ConsoleCommandSender console} replacing the "%s%" with the provided value.
          *
-         * @param value the value to replace with.
+         * @param logger the plugin's logger instance.
+         * @param value  the value to replace with.
          */
-        public void send(@NotNull String value) {
-            Bukkit.getConsoleSender().sendMessage(StringUtils.replace(get(), "%s", value));
+        public void send(@NotNull Logger logger, @NotNull String value) {
+            logger.info(StringUtils.replace(message, "%s", value));
         }
 
     }

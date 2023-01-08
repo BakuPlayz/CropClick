@@ -45,7 +45,7 @@ public final class ReloadCommand extends Subcommand {
     public void perform(@NotNull Player player, String[] args) {
         try {
             plugin.reloadConfig();
-            LanguageAPI.Console.FILE_RELOAD.send("config.yml");
+            LanguageAPI.Console.FILE_RELOAD.send(plugin.getLogger(), "config.yml");
 
             cropsConfig.reloadConfig();
             addonsConfig.reloadConfig();
