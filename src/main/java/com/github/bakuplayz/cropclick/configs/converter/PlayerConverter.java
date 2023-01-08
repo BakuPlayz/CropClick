@@ -42,7 +42,7 @@ public final class PlayerConverter {
         ConfigurationSection newPlayer = PlayerConverter.convertFormat(legacyPlayer);
 
         FileUtils.copyYamlTo(plugin.getPlayersConfig().getConfig(), newPlayer);
-        FileUtils.move(inFile, outFile);
+        FileUtils.move(inFile, outFile, true);
     }
 
 

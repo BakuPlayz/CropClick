@@ -87,7 +87,7 @@ public final class CropConverter {
         ConfigurationSection newCrops = CropConverter.convertFormat(legacyCrops);
 
         FileUtils.copyYamlTo(plugin.getCropsConfig().getConfig(), newCrops);
-        FileUtils.move(inFile, outFile);
+        FileUtils.move(inFile, outFile, true);
     }
 
 

@@ -36,7 +36,6 @@ public final class LanguageAPI {
         FILE_SETUP_FAILED("Could not setup &e%s&7."),
 
         FILE_MOVE_FAILED("Could not move &e%s&7."),
-        FILE_COPY_FAILED("Could not copy &e%s&7."),
 
         DATA_STORAGE_LOADING_SETUP("Loading &e%s&7."),
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save &e%s&7, due to unknown reasons."),
