@@ -57,16 +57,18 @@ public final class EntityDestroyAutofarmListener implements Listener {
 
         List<Block> explodedBlocks = event.blockList();
         List<Block> explodedComponents = getExplodedComponents(explodedBlocks);
-
-        if (isDebugging) {
-            logger.info(String.format("%s (Entity): Called the destroy autofarm event!", event.getEntity().getName()));
-        }
-
         for (Block component : explodedComponents) {
             Autofarm autofarm = autofarmManager.findAutofarm(component);
 
             if (autofarm == null) {
                 continue;
+            }
+            
+            if (isDebugging) {
+                logger.info(String.format(
+                        "%s (Entity): Called the destroy autofarm event!",
+                        event.getEntity().getName())
+                );
             }
 
             Bukkit.getPluginManager().callEvent(
