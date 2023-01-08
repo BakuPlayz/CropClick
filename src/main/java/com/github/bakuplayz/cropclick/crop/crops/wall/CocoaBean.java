@@ -46,7 +46,7 @@ public final class CocoaBean extends WallCrop {
      */
     @Override
     public int getHarvestAge() {
-        return 9;
+        return 8;
     }
 
 
