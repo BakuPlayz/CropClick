@@ -100,7 +100,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the amount to the provided amount.
+     * Sets the {@link #amount} to the provided amount.
      *
      * @param amount the amount to set.
      *
@@ -113,7 +113,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the material to the provided material.
+     * Sets the {@link #material} to the {@link Material provided material}.
      *
      * @param material the material to set.
      *
@@ -126,9 +126,10 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the material to the provided material, if it matches the condition.
+     * Sets the {@link #material} to the {@link Material provided material}, if it matches the condition.
      *
-     * @param material the material to set.
+     * @param condition the condition to match.
+     * @param material  the material to set.
      *
      * @return the {@link ItemBuilder ItemBuilder instance}.
      */
@@ -141,7 +142,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the name of the item to the provided name.
+     * Sets the {@link #name} to the provided name.
      *
      * @param name the name to set.
      *
@@ -154,9 +155,9 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the name of the item to the provided name.
+     * Sets the {@link #name} to the provided name.
      *
-     * @param plugin the CropClick instance.
+     * @param plugin the plugin instance.
      * @param name   the name to set.
      *
      * @return the {@link ItemBuilder ItemBuilder instance}.
@@ -168,7 +169,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the lore of the item to the provided lore.
+     * Sets the {@link #lore} of the item to the {@link List<String> provided lore}.
      *
      * @param lore the lore to set.
      *
@@ -181,7 +182,7 @@ public final class ItemBuilder {
 
 
     /**
-     * Sets the lore of the item to the provided lore.
+     * Sets the {@link #lore} of the item to the provided lore.
      *
      * @param lore the lore to set.
      *
