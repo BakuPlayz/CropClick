@@ -7,13 +7,10 @@
 ![lines_of_code](https://img.shields.io/tokei/lines/github/BakuPlayz/CropClick?color=teal&style=for-the-badge)
 
 # Features
-- **Multi Crafting Menu**: A menu which allows you to craft a full inventory, within about 2 to 15 milliseconds.
-- **Crafting Table Menu**: A menu which allows you to have a default crafting experience with some custom selectable glass.
-- **Settings Menu**: A menu-system which allows you to enable/disable the Multi Crafting/Crafting Table menu and more.
-- **Manage Menu**: A menu which allows you to enable/disable spesific recipes.
+Write features.
 
 # Images
-Add images
+Add images.
 
 # What version should I get?
 - **Legacy**:jar are for server versions 1.8 to 1.12.2.
