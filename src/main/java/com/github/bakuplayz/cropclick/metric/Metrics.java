@@ -1,3 +1,22 @@
+/**
+ * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
+ * <p>
+ * Copyright (C) 2023 BakuPlayz
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.bakuplayz.cropclick.metric;
 
 import org.bukkit.Bukkit;
@@ -858,7 +877,7 @@ public final class Metrics {
 
 
         /**
-         * Escapes the given string like stated in https://www.ietf.org/rfc/rfc4627.txt.
+         * Escapes the given string like stated in <a href="https://www.ietf.org/rfc/rfc4627.txt">...</a>.
          *
          * <p>This method escapes only the necessary characters '"', '\'. and '\u0000' - '\u001F'.
          * Compact escapes are not used (e.g., '\n' is escaped as "\u000a" and not as "\n").

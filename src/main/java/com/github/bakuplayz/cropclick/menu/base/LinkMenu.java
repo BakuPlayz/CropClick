@@ -1,3 +1,22 @@
+/**
+ * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
+ * <p>
+ * Copyright (C) 2023 BakuPlayz
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.bakuplayz.cropclick.menu.base;
 
 import com.github.bakuplayz.cropclick.CropClick;
@@ -599,7 +618,8 @@ public abstract class LinkMenu extends BaseMenu {
      * @return the unlinked lore for any location.
      */
     @Contract(" -> new")
-    private @NotNull @Unmodifiable List<String> getUnlinkedLocationLore() {
+    private @NotNull
+    @Unmodifiable List<String> getUnlinkedLocationLore() {
         return Collections.singletonList(
                 LanguageAPI.Menu.LINK_FORMAT_STATE.get(plugin,
                         LanguageAPI.Menu.LINK_STATES_UNLINKED.get(plugin)
@@ -615,7 +635,8 @@ public abstract class LinkMenu extends BaseMenu {
      *
      * @return the selected lore for the provided location.
      */
-    private @NotNull @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
+    private @NotNull
+    @Unmodifiable List<String> getSelectedLocationLore(@NotNull Location location) {
         ArrayList<String> baseState = new ArrayList<>(
                 getBaseLocationLore(location)
         );
