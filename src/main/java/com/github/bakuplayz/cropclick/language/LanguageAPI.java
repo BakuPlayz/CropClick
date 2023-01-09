@@ -85,7 +85,7 @@ public final class LanguageAPI {
      */
     public enum Update {
 
-        UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
+        UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online to keep CropClick up to date."),
         UPDATE_FOUND_NO_UPDATES("Searched for updates and found none. You are up to date :)"),
         UPDATE_FOUND_NEW_UPDATE("Searched for updates and found one!"),
 

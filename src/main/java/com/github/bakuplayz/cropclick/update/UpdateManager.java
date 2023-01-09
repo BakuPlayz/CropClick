@@ -6,7 +6,6 @@ import com.github.bakuplayz.cropclick.http.HttpRequestBuilder;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
@@ -62,7 +61,7 @@ public final class UpdateManager {
             return;
         }
 
-        if (updateMessage.equals("")) {
+        if (updateState != UpdateState.NEW_UPDATE) {
             LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(player);
             return;
         }
@@ -70,7 +69,7 @@ public final class UpdateManager {
         LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(player);
         LanguageAPI.Update.UPDATE_TITLE_FORMAT_PLAYER.send(player, updateTitle);
         LanguageAPI.Update.UPDATE_LINK_FORMAT_PLAYER.send(player, updateURL);
-        for (String message : MessageUtils.readify(MessageUtils.colorize("&7Message: &7") + updateMessage, 10)) {
+        for (String message : MessageUtils.readify(MessageUtils.colorize("&7Message: &f") + updateMessage, 10)) {
             LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_PLAYER.send(player, message);
         }
     }
@@ -86,7 +85,7 @@ public final class UpdateManager {
             return;
         }
 
-        if (updateMessage.equals("")) {
+        if (updateState != UpdateState.NEW_UPDATE) {
             LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(logger);
             return;
         }
@@ -128,53 +127,68 @@ public final class UpdateManager {
                     .getResponse();
 
             if (response == null) {
-                setUpdateState(UpdateState.FAILED_TO_FETCH);
-                setUpdateMessage("");
-                setUpdateTitle("");
-                setUpdateURL("");
+                setUpdateProperties(UpdateState.FAILED_TO_FETCH);
                 return;
             }
 
             if (response.getAsJsonObject().has("status")) {
-                setUpdateState(UpdateState.UP_TO_DATE);
-                setUpdateMessage("");
-                setUpdateTitle("");
-                setUpdateURL("");
+                setUpdateProperties(UpdateState.UP_TO_DATE);
                 return;
             }
 
-            JsonArray versions = response.getAsJsonObject().get("versions").getAsJsonArray();
-            if (versions.size() == 0) {
-                setUpdateState(UpdateState.NO_UPDATE_FOUND);
-                setUpdateMessage("");
-                setUpdateTitle("");
-                setUpdateURL("");
+            if (!response.getAsJsonObject().has("version")) {
+                setUpdateProperties(UpdateState.NO_UPDATE_FOUND);
                 return;
             }
 
-            JsonObject version = versions.get(0).getAsJsonObject();
+            JsonObject version = response.getAsJsonObject();
             JsonElement versionUrl = version.get("shortUrl");
             JsonElement versionTitle = version.get("title");
-            JsonElement versionMsg = version.get("message");
-            if (versionMsg == null || versionUrl == null || versionTitle == null) {
-                setUpdateState(UpdateState.FAILED_TO_FETCH);
-                setUpdateMessage("");
-                setUpdateTitle("");
-                setUpdateURL("");
+            JsonElement versionMessage = version.get("message");
+            if (versionMessage == null || versionUrl == null || versionTitle == null) {
+                setUpdateProperties(UpdateState.FAILED_TO_FETCH);
                 return;
             }
 
-            setUpdateURL(versionUrl.getAsString());
-            setUpdateTitle(versionTitle.getAsString());
-            setUpdateMessage(versionMsg.getAsString());
-            setUpdateState(UpdateState.NEW_UPDATE);
+            setUpdateProperties(
+                    versionUrl.getAsString(),
+                    versionTitle.getAsString(),
+                    versionMessage.getAsString(),
+                    UpdateState.NEW_UPDATE
+            );
         } catch (Exception e) {
             e.printStackTrace();
-            setUpdateState(UpdateState.FAILED_TO_FETCH);
+            setUpdateProperties(UpdateState.FAILED_TO_FETCH);
             LanguageAPI.Update.UPDATE_FETCH_FAILED.send(plugin.getLogger());
-        } finally {
-            sendAlert(plugin.getLogger());
+            return;
         }
+        sendAlert(plugin.getLogger());
+    }
+
+
+    /**
+     * Sets {@link #updateURL}, {@link #updateTitle}, {@link #updateMessage} and {@link #updateState} to the provided.
+     *
+     * @param url     the url to set.
+     * @param title   the title to set.
+     * @param message the message to set.
+     * @param state   the update state to set.
+     */
+    private void setUpdateProperties(String url, String title, String message, UpdateState state) {
+        setUpdateURL(url);
+        setUpdateTitle(title);
+        setUpdateMessage(message);
+        setUpdateState(state);
+    }
+
+
+    /**
+     * Sets {@link #updateURL}, {@link #updateTitle}, {@link #updateMessage} to an empty string and {@link #updateState} to the provided.
+     *
+     * @param state the update state to set.
+     */
+    private void setUpdateProperties(UpdateState state) {
+        setUpdateProperties("", "", "", state);
     }
 
 
