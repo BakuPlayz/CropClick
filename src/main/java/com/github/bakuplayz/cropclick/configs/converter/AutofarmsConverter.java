@@ -176,7 +176,7 @@ public final class AutofarmsConverter {
      *
      * @return the converted location.
      *
-     * @apiNote written by BakuPlayz.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     private static @NotNull Location toLocation(@NotNull ConfigurationSection section) {
         int x = section.getInt("X");
