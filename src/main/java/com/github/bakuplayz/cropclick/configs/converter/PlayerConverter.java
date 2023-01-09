@@ -45,7 +45,7 @@ public final class PlayerConverter {
      *
      * @param plugin the plugin instance.
      *
-     * @apiNote written by BakuPlayz.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
@@ -72,7 +72,7 @@ public final class PlayerConverter {
      *
      * @return the converted format.
      *
-     * @apiNote written by BakuPlayz.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();

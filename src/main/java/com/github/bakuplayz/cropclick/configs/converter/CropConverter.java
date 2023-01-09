@@ -46,6 +46,9 @@ import java.util.function.Function;
  */
 public final class CropConverter {
 
+    /**
+     * @apiNote written by <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
+     */
     private static final Function<Object, Object> PARTICLE_CONVERTER = value -> {
         ConfigurationSection section = (ConfigurationSection) value;
         ConfigurationSection output = new MemoryConfiguration();
@@ -68,6 +71,9 @@ public final class CropConverter {
         return output;
     };
 
+    /**
+     * @apiNote written by <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
+     */
     private static final Function<Object, Object> SOUND_CONVERTER = value -> {
         ConfigurationSection section = (ConfigurationSection) value;
         ConfigurationSection output = new MemoryConfiguration();
@@ -90,7 +96,7 @@ public final class CropConverter {
      *
      * @param plugin the plugin instance.
      *
-     * @apiNote written by BakuPlayz.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
@@ -117,7 +123,7 @@ public final class CropConverter {
      *
      * @return the converted format.
      *
-     * @apiNote written by BakuPlayz.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     private static @NotNull ConfigurationSection convertFormat(@NotNull ConfigurationSection legacyFormat) {
         YamlConverter converter = new YamlConverter();
