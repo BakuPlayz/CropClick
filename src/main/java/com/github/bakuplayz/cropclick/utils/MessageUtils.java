@@ -66,8 +66,7 @@ public final class MessageUtils {
         StringBuilder partOfWord = new StringBuilder();
         List<String> readableWords = new ArrayList<>();
 
-        String color = message.indexOf('&') > -1 ? message.substring(0, 2) : "";
-
+        String color = getLastColor(message);
         for (int i = 0; i < words.length; ++i) {
             boolean isNotStart = i != 0;
             boolean isNewLine = i % wordsPerLine == 0;
@@ -108,6 +107,22 @@ public final class MessageUtils {
     public static @NotNull String getStatusMessage(@NotNull CropClick plugin, boolean isEnabled) {
         return isEnabled ? LanguageAPI.Menu.GENERAL_ENABLED_STATUS.get(plugin)
                          : LanguageAPI.Menu.GENERAL_DISABLED_STATUS.get(plugin);
+    }
+
+
+    /**
+     * Gets the color used in the last sentence.
+     *
+     * @param message the message to find the color in.
+     *
+     * @return the color found.
+     */
+    private static @NotNull String getLastColor(@NotNull String message) {
+        int indexOfColor = message.lastIndexOf('&');
+        if (indexOfColor == -1) {
+            return "";
+        }
+        return message.substring(indexOfColor, indexOfColor + 2);
     }
 
 }
