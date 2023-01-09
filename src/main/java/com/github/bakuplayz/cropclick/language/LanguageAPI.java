@@ -7,6 +7,7 @@ import com.github.bakuplayz.cropclick.utils.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -86,7 +87,15 @@ public final class LanguageAPI {
 
         UPDATE_FETCH_FAILED("Update fetch failed! Make sure your online, to keep the plugin up to date."),
         UPDATE_FOUND_NO_UPDATES("Searched for updates and found none. You are up to date :)"),
-        UPDATE_FOUND_NEW_UPDATE("Searched for updates and found one.");
+        UPDATE_FOUND_NEW_UPDATE("Searched for updates and found one!"),
+
+        UPDATE_MESSAGE_FORMAT_PLAYER("&f%s"),
+        UPDATE_TITLE_FORMAT_PLAYER("Title: &f%s"),
+        UPDATE_LINK_FORMAT_PLAYER("Link: &f%s"),
+
+        UPDATE_MESSAGE_FORMAT_LOGGER("%s"),
+        UPDATE_TITLE_FORMAT_LOGGER("Title: %s"),
+        UPDATE_LINK_FORMAT_LOGGER("Link: %s");
 
         private final String message;
 
@@ -97,23 +106,55 @@ public final class LanguageAPI {
 
 
         /**
-         * Gets the message as a {@link String string}.
+         * Gets the message as a {@link String string} for {@link Player players}.
          *
          * @return the message as a string.
          */
         @Contract(" -> new")
-        public @NotNull String get() {
+        public @NotNull String getForPlayer() {
             return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
         }
 
 
         /**
-         * Sends the message to the provided {@link CommandSender sender}.
+         * Sends the message to the provided {@link Player player}.
          *
-         * @param sender the sender to send the message to.
+         * @param player the player to send the message to.
          */
-        public void send(@NotNull CommandSender sender) {
-            sender.sendMessage(get());
+        public void send(@NotNull Player player) {
+            player.sendMessage(getForPlayer());
+        }
+
+
+        /**
+         * Sends the message to the provided {@link Logger logger}.
+         *
+         * @param logger the logger to send the message to.
+         */
+        public void send(@NotNull Logger logger) {
+            logger.info(message);
+        }
+
+
+        /**
+         * Sends the message to the {@link Player player}, replacing the '/s' with the provided value.
+         *
+         * @param player the sender to send the message to.
+         * @param value  the value to replace the placeholder with.
+         */
+        public void send(@NotNull Player player, @NotNull String value) {
+            player.sendMessage(String.format(getForPlayer(), value));
+        }
+
+
+        /**
+         * Sends the message to the {@link Logger logger}, replacing the '/s' with the provided value.
+         *
+         * @param logger the logger to send the message to.
+         * @param value  the value to replace the placeholder with.
+         */
+        public void send(@NotNull Logger logger, @NotNull String value) {
+            logger.info(String.format(message, value));
         }
 
     }

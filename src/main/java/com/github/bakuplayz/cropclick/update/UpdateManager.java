@@ -13,10 +13,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.logging.Logger;
 
 
 /**
@@ -35,8 +36,8 @@ public final class UpdateManager {
 
     private final CropClick plugin;
 
-
     private @Getter @Setter(AccessLevel.PRIVATE) String updateURL;
+    private @Getter @Setter(AccessLevel.PRIVATE) String updateTitle;
     private @Getter @Setter(AccessLevel.PRIVATE) String updateMessage;
     private @Getter @Setter(AccessLevel.PRIVATE) UpdateState updateState;
 
@@ -44,6 +45,7 @@ public final class UpdateManager {
     public UpdateManager(@NotNull CropClick plugin) {
         setUpdateState(UpdateState.NOT_FETCHED_YET);
         setUpdateMessage("");
+        setUpdateTitle("");
         this.plugin = plugin;
 
         fetchUpdates();
@@ -51,31 +53,49 @@ public final class UpdateManager {
 
 
     /**
-     * Sends the {@link #updateMessage update message} to the {@link CommandSender provided sender}.
+     * Sends the {@link #updateMessage update message} to the {@link Player provided player}.
      *
-     * @param sender the sender to send the message to.
+     * @param player the player to send the message to.
      */
-    public void sendAlert(@NotNull CommandSender sender) {
-        if (sender instanceof Player) {
-            if (!canPlayerReceiveUpdates()) {
-                return;
-            }
-        }
-
-        if (sender instanceof ConsoleCommandSender) {
-            if (!canConsoleReceiveUpdates()) {
-                return;
-            }
-        }
-
-        if (updateMessage.equals("")) {
-            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(sender);
+    public void sendAlert(@NotNull Player player) {
+        if (!canPlayerReceiveUpdates()) {
             return;
         }
 
-        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(sender);
-        for (String message : MessageUtils.readify(updateMessage, 10)) {
-            sender.sendMessage(message);
+        if (updateMessage.equals("")) {
+            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(player);
+            return;
+        }
+
+        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(player);
+        LanguageAPI.Update.UPDATE_TITLE_FORMAT_PLAYER.send(player, updateTitle);
+        LanguageAPI.Update.UPDATE_LINK_FORMAT_PLAYER.send(player, updateURL);
+        for (String message : MessageUtils.readify(MessageUtils.colorize("&7Message: &7") + updateMessage, 10)) {
+            LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_PLAYER.send(player, message);
+        }
+    }
+
+
+    /**
+     * Sends the {@link #updateMessage update message} to the {@link Logger provided logger}.
+     *
+     * @param logger the logger to send the message to.
+     */
+    public void sendAlert(@NotNull Logger logger) {
+        if (!canConsoleReceiveUpdates()) {
+            return;
+        }
+
+        if (updateMessage.equals("")) {
+            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(logger);
+            return;
+        }
+
+        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(logger);
+        LanguageAPI.Update.UPDATE_TITLE_FORMAT_LOGGER.send(logger, updateTitle);
+        LanguageAPI.Update.UPDATE_LINK_FORMAT_LOGGER.send(logger, updateURL);
+        for (String message : MessageUtils.readify("Message: " + updateMessage, 15)) {
+            LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_LOGGER.send(logger, message);
         }
     }
 
@@ -107,15 +127,18 @@ public final class UpdateManager {
                     .post(true)
                     .getResponse();
 
-            if (response.isJsonNull()) {
+            if (response == null) {
                 setUpdateState(UpdateState.FAILED_TO_FETCH);
                 setUpdateMessage("");
+                setUpdateTitle("");
                 setUpdateURL("");
+                return;
             }
 
             if (response.getAsJsonObject().has("status")) {
                 setUpdateState(UpdateState.UP_TO_DATE);
                 setUpdateMessage("");
+                setUpdateTitle("");
                 setUpdateURL("");
                 return;
             }
@@ -124,29 +147,33 @@ public final class UpdateManager {
             if (versions.size() == 0) {
                 setUpdateState(UpdateState.NO_UPDATE_FOUND);
                 setUpdateMessage("");
+                setUpdateTitle("");
                 setUpdateURL("");
                 return;
             }
 
             JsonObject version = versions.get(0).getAsJsonObject();
+            JsonElement versionUrl = version.get("shortUrl");
+            JsonElement versionTitle = version.get("title");
             JsonElement versionMsg = version.get("message");
-            JsonElement versionUrl = version.get("url");
-            if (versionMsg.isJsonNull() || versionUrl.isJsonNull()) {
+            if (versionMsg == null || versionUrl == null || versionTitle == null) {
                 setUpdateState(UpdateState.FAILED_TO_FETCH);
                 setUpdateMessage("");
+                setUpdateTitle("");
                 setUpdateURL("");
                 return;
             }
 
             setUpdateURL(versionUrl.getAsString());
+            setUpdateTitle(versionTitle.getAsString());
             setUpdateMessage(versionMsg.getAsString());
             setUpdateState(UpdateState.NEW_UPDATE);
         } catch (Exception e) {
             e.printStackTrace();
             setUpdateState(UpdateState.FAILED_TO_FETCH);
-            LanguageAPI.Update.UPDATE_FETCH_FAILED.send(Bukkit.getConsoleSender());
+            LanguageAPI.Update.UPDATE_FETCH_FAILED.send(plugin.getLogger());
         } finally {
-            sendAlert(Bukkit.getConsoleSender());
+            sendAlert(plugin.getLogger());
         }
     }
 
