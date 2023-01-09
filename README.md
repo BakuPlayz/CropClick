@@ -17,7 +17,7 @@ Add images.
 - **Latest**:jar are for server versions 1.13+.
 
 # Java Issues?
-- **Legacy versions** (1.8+) require Java 8 or newer to run.
+- All versions require **Java 8 or heigher**.
 
 # Issues
 
