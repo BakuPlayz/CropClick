@@ -1,3 +1,22 @@
+/**
+ * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
+ * <p>
+ * Copyright (C) 2023 BakuPlayz
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.bakuplayz.cropclick.menu.base;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -27,7 +46,7 @@ public interface Menu {
     void handleMenu(@NotNull InventoryClickEvent event);
 
     /**
-     * Handles navigations back to the previous menu.
+     * Handles navigation back to the previous menu.
      *
      * @param clicked the item that was clicked.
      * @param menu    the menu to navigate back to.
