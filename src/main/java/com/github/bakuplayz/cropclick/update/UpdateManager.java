@@ -6,17 +6,17 @@ import com.github.bakuplayz.cropclick.http.HttpRequestBuilder;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.MessageUtils;
 import com.github.bakuplayz.cropclick.utils.VersionUtils;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.logging.Logger;
 
 
 /**
@@ -35,8 +35,8 @@ public final class UpdateManager {
 
     private final CropClick plugin;
 
-
     private @Getter @Setter(AccessLevel.PRIVATE) String updateURL;
+    private @Getter @Setter(AccessLevel.PRIVATE) String updateTitle;
     private @Getter @Setter(AccessLevel.PRIVATE) String updateMessage;
     private @Getter @Setter(AccessLevel.PRIVATE) UpdateState updateState;
 
@@ -44,6 +44,7 @@ public final class UpdateManager {
     public UpdateManager(@NotNull CropClick plugin) {
         setUpdateState(UpdateState.NOT_FETCHED_YET);
         setUpdateMessage("");
+        setUpdateTitle("");
         this.plugin = plugin;
 
         fetchUpdates();
@@ -51,31 +52,49 @@ public final class UpdateManager {
 
 
     /**
-     * Sends the {@link #updateMessage update message} to the {@link CommandSender provided sender}.
+     * Sends the {@link #updateMessage update message} to the {@link Player provided player}.
      *
-     * @param sender the sender to send the message to.
+     * @param player the player to send the message to.
      */
-    public void sendAlert(@NotNull CommandSender sender) {
-        if (sender instanceof Player) {
-            if (!canPlayerReceiveUpdates()) {
-                return;
-            }
-        }
-
-        if (sender instanceof ConsoleCommandSender) {
-            if (!canConsoleReceiveUpdates()) {
-                return;
-            }
-        }
-
-        if (updateMessage.equals("")) {
-            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(sender);
+    public void sendAlert(@NotNull Player player) {
+        if (!canPlayerReceiveUpdates()) {
             return;
         }
 
-        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(sender);
-        for (String message : MessageUtils.readify(updateMessage, 10)) {
-            sender.sendMessage(message);
+        if (updateState != UpdateState.NEW_UPDATE) {
+            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(player);
+            return;
+        }
+
+        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(player);
+        LanguageAPI.Update.UPDATE_TITLE_FORMAT_PLAYER.send(player, updateTitle);
+        LanguageAPI.Update.UPDATE_LINK_FORMAT_PLAYER.send(player, updateURL);
+        for (String message : MessageUtils.readify(MessageUtils.colorize("&7Message: &f") + updateMessage, 10)) {
+            LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_PLAYER.send(player, message);
+        }
+    }
+
+
+    /**
+     * Sends the {@link #updateMessage update message} to the {@link Logger provided logger}.
+     *
+     * @param logger the logger to send the message to.
+     */
+    public void sendAlert(@NotNull Logger logger) {
+        if (!canConsoleReceiveUpdates()) {
+            return;
+        }
+
+        if (updateState != UpdateState.NEW_UPDATE) {
+            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(logger);
+            return;
+        }
+
+        LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(logger);
+        LanguageAPI.Update.UPDATE_TITLE_FORMAT_LOGGER.send(logger, updateTitle);
+        LanguageAPI.Update.UPDATE_LINK_FORMAT_LOGGER.send(logger, updateURL);
+        for (String message : MessageUtils.readify("Message: " + updateMessage, 15)) {
+            LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_LOGGER.send(logger, message);
         }
     }
 
@@ -107,47 +126,69 @@ public final class UpdateManager {
                     .post(true)
                     .getResponse();
 
-            if (response.isJsonNull()) {
-                setUpdateState(UpdateState.FAILED_TO_FETCH);
-                setUpdateMessage("");
-                setUpdateURL("");
+            if (response == null) {
+                setUpdateProperties(UpdateState.FAILED_TO_FETCH);
+                return;
             }
 
             if (response.getAsJsonObject().has("status")) {
-                setUpdateState(UpdateState.UP_TO_DATE);
-                setUpdateMessage("");
-                setUpdateURL("");
+                setUpdateProperties(UpdateState.UP_TO_DATE);
                 return;
             }
 
-            JsonArray versions = response.getAsJsonObject().get("versions").getAsJsonArray();
-            if (versions.size() == 0) {
-                setUpdateState(UpdateState.NO_UPDATE_FOUND);
-                setUpdateMessage("");
-                setUpdateURL("");
+            if (!response.getAsJsonObject().has("version")) {
+                setUpdateProperties(UpdateState.NO_UPDATE_FOUND);
                 return;
             }
 
-            JsonObject version = versions.get(0).getAsJsonObject();
-            JsonElement versionMsg = version.get("message");
-            JsonElement versionUrl = version.get("url");
-            if (versionMsg.isJsonNull() || versionUrl.isJsonNull()) {
-                setUpdateState(UpdateState.FAILED_TO_FETCH);
-                setUpdateMessage("");
-                setUpdateURL("");
+            JsonObject version = response.getAsJsonObject();
+            JsonElement versionUrl = version.get("shortUrl");
+            JsonElement versionTitle = version.get("title");
+            JsonElement versionMessage = version.get("message");
+            if (versionMessage == null || versionUrl == null || versionTitle == null) {
+                setUpdateProperties(UpdateState.FAILED_TO_FETCH);
                 return;
             }
 
-            setUpdateURL(versionUrl.getAsString());
-            setUpdateMessage(versionMsg.getAsString());
-            setUpdateState(UpdateState.NEW_UPDATE);
+            setUpdateProperties(
+                    versionUrl.getAsString(),
+                    versionTitle.getAsString(),
+                    versionMessage.getAsString(),
+                    UpdateState.NEW_UPDATE
+            );
         } catch (Exception e) {
             e.printStackTrace();
-            setUpdateState(UpdateState.FAILED_TO_FETCH);
-            LanguageAPI.Update.UPDATE_FETCH_FAILED.send(Bukkit.getConsoleSender());
-        } finally {
-            sendAlert(Bukkit.getConsoleSender());
+            setUpdateProperties(UpdateState.FAILED_TO_FETCH);
+            LanguageAPI.Update.UPDATE_FETCH_FAILED.send(plugin.getLogger());
+            return;
         }
+        sendAlert(plugin.getLogger());
+    }
+
+
+    /**
+     * Sets {@link #updateURL}, {@link #updateTitle}, {@link #updateMessage} and {@link #updateState} to the provided.
+     *
+     * @param url     the url to set.
+     * @param title   the title to set.
+     * @param message the message to set.
+     * @param state   the update state to set.
+     */
+    private void setUpdateProperties(String url, String title, String message, UpdateState state) {
+        setUpdateURL(url);
+        setUpdateTitle(title);
+        setUpdateMessage(message);
+        setUpdateState(state);
+    }
+
+
+    /**
+     * Sets {@link #updateURL}, {@link #updateTitle}, {@link #updateMessage} to an empty string and {@link #updateState} to the provided.
+     *
+     * @param state the update state to set.
+     */
+    private void setUpdateProperties(UpdateState state) {
+        setUpdateProperties("", "", "", state);
     }
 
 

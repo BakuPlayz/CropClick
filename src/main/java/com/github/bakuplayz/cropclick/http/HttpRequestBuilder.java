@@ -6,7 +6,6 @@ import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -25,18 +24,18 @@ import java.util.stream.Collectors;
  */
 public final class HttpRequestBuilder {
 
-    private final @Getter HttpURLConnection connection;
+    private final @Getter String url;
 
     private @Getter String params;
     private @Getter HttpStatus status;
+    private @Getter HttpURLConnection connection;
     private @Getter HashMap<String, String> headers;
 
 
-    public HttpRequestBuilder(@NotNull String url)
-            throws IOException {
-        this.connection = (HttpURLConnection) new URL(url).openConnection();
+    public HttpRequestBuilder(@NotNull String url) {
         this.headers = new HashMap<>();
         this.params = "";
+        this.url = url;
     }
 
 
@@ -147,28 +146,17 @@ public final class HttpRequestBuilder {
      */
     private HttpRequestBuilder doRequest(String method, boolean doOutput)
             throws IOException {
+        connection = (HttpURLConnection) new URL(
+                !params.equals("")
+                ? url + "?" + params
+                : url
+        ).openConnection();
         connection.setRequestMethod(method);
         connection.setDoOutput(doOutput);
 
-        writeParams();
         updateStatus();
 
         return this;
-    }
-
-
-    /**
-     * Writes the provided {@link HttpParam HTTP params}, if provided.
-     */
-    private void writeParams()
-            throws IOException {
-        if (params.equals("")) {
-            return;
-        }
-
-        DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
-        dos.writeBytes(params);
-        dos.flush();
     }
 
 
@@ -178,7 +166,6 @@ public final class HttpRequestBuilder {
     private void updateStatus()
             throws IOException {
         switch (connection.getResponseCode()) {
-
             case 200:
                 status = HttpStatus.OK;
                 break;
