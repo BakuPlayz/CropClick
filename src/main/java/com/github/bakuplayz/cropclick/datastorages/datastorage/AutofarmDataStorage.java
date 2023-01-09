@@ -60,7 +60,7 @@ public final class AutofarmDataStorage extends DataStorage {
      */
     @Override
     public void saveData() {
-        unlinkDestoroyedFarms();
+        unlinkDestroyedFarms();
         saveFarms();
     }
 
@@ -111,7 +111,7 @@ public final class AutofarmDataStorage extends DataStorage {
     /**
      * Unlinks all the destroyed {@link Autofarm autofarms}.
      */
-    private void unlinkDestoroyedFarms() {
+    private void unlinkDestroyedFarms() {
         AutofarmManager manager = plugin.getAutofarmManager();
 
         if (manager == null) {
@@ -122,7 +122,7 @@ public final class AutofarmDataStorage extends DataStorage {
         try {
             autofarms.values().removeIf(farm -> !farm.isComponentsPresent(manager));
         } catch (Exception e) {
-            LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send();
+            LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send(plugin.getLogger());
         }
     }
 
