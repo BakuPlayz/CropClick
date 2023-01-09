@@ -63,7 +63,7 @@ public final class AutofarmsConverter {
      *
      * @param plugin the plugin instance.
      *
-     * @apiNote written by BakuPlayz.
+     * @apiNote written by BakuPlayz and <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>.
      */
     public static void makeConversion(@NotNull CropClick plugin) {
         File inFile = new File(
