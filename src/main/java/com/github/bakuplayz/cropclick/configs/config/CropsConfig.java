@@ -1,3 +1,22 @@
+/**
+ * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
+ * <p>
+ * Copyright (C) 2023 BakuPlayz
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.bakuplayz.cropclick.configs.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
@@ -100,6 +119,7 @@ public final class CropsConfig extends Config {
         }
 
         Seed seed = crop.getSeed();
+        assert seed != null;
         String seedName = seed.getName();
         if (!seedSection.exists(seedName)) {
             // Drop Settings
@@ -123,6 +143,7 @@ public final class CropsConfig extends Config {
     public void removeSettings(@NotNull Crop crop) {
         if (crop.hasSeed()) {
             Seed seed = crop.getSeed();
+            assert seed != null;
             String seedName = seed.getName();
             config.set("seeds." + seedName, null);
         }

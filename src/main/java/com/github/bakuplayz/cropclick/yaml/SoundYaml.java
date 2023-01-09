@@ -1,6 +1,25 @@
+/**
+ * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
+ * <p>
+ * Copyright (C) 2023 BakuPlayz
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.github.bakuplayz.cropclick.yaml;
 
-import com.github.bakuplayz.cropclick.menu.menus.sounds.SoundMenu;
+import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
 import com.github.bakuplayz.cropclick.utils.Enableable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,17 +45,17 @@ import java.util.Map;
 public final class SoundYaml implements Yamlable, Enableable {
 
     /**
-     * The given delay before playing the sound ({@link SoundMenu#MIN_DELAY min delay} & {@link SoundMenu#MAX_DELAY max delay}).
+     * The given delay before playing the sound ({@link Sound#MIN_DELAY min delay} & {@link Sound#MAX_DELAY max delay}).
      */
     private @Setter @Getter @Accessors(chain = true) double delay;
 
     /**
-     * The given pitch the sound should be played at ({@link SoundMenu#MIN_PITCH min pitch} & {@link SoundMenu#MAX_PITCH max pitch}).
+     * The given pitch the sound should be played at ({@link Sound#MIN_PITCH min pitch} & {@link Sound#MAX_PITCH max pitch}).
      */
     private @Setter @Getter @Accessors(chain = true) double pitch;
 
     /**
-     * The given range-in-blocks or volume the sound should be played at ({@link SoundMenu#MIN_VOLUME min volume} & {@link SoundMenu#MAX_VOLUME max volume}).
+     * The given range-in-blocks or volume the sound should be played at ({@link Sound#MIN_VOLUME min volume} & {@link Sound#MAX_VOLUME max volume}).
      */
     private @Setter @Getter @Accessors(chain = true) double volume;
 
