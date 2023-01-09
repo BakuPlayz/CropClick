@@ -62,7 +62,9 @@ public final class UpdateManager {
         }
 
         if (updateState != UpdateState.NEW_UPDATE) {
-            LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.send(player);
+            MessageUtils.readify(LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.get(), 10)
+                        .stream().map(MessageUtils::colorize)
+                        .forEach(player::sendMessage);
             return;
         }
 

@@ -106,13 +106,13 @@ public final class LanguageAPI {
 
 
         /**
-         * Gets the message as a {@link String string} for {@link Player players}.
+         * Gets the message with the {@link CropClick CropClick prefix}.
          *
-         * @return the message as a string.
+         * @return the message.
          */
-        @Contract(" -> new")
-        public @NotNull String getForPlayer() {
-            return ChatColor.translateAlternateColorCodes('&', "[&aCropClick&f] &7" + message);
+        @Contract(pure = true)
+        public @NotNull String get() {
+            return "[&aCropClick&f] &7" + message;
         }
 
 
@@ -122,7 +122,7 @@ public final class LanguageAPI {
          * @param player the player to send the message to.
          */
         public void send(@NotNull Player player) {
-            player.sendMessage(getForPlayer());
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', get()));
         }
 
 
@@ -143,7 +143,7 @@ public final class LanguageAPI {
          * @param value  the value to replace the placeholder with.
          */
         public void send(@NotNull Player player, @NotNull String value) {
-            player.sendMessage(String.format(getForPlayer(), value));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(get(), value)));
         }
 
 
