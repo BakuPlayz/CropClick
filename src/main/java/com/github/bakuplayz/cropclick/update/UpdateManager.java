@@ -138,7 +138,7 @@ public final class UpdateManager {
      */
     private void fetchUpdate() {
         try {
-            JsonElement response = new HttpRequestBuilder(UPDATE_URL)
+            JsonElement response = new HttpRequestBuilder(UpdateManager.UPDATE_URL)
                     .setDefaultHeaders()
                     .setParams(
                             new HttpParam("serverVersion", VersionUtils.getServerVersion()),
@@ -163,9 +163,9 @@ public final class UpdateManager {
             }
 
             JsonObject version = response.getAsJsonObject();
-            JsonElement versionUrl = version.get("shortUrl");
             JsonElement versionTitle = version.get("title");
             JsonElement versionMessage = version.get("message");
+            JsonElement versionUrl = version.get("urls").getAsJsonObject().get("short");
             if (versionMessage == null || versionUrl == null || versionTitle == null) {
                 setUpdateProperties(UpdateState.FAILED_TO_FETCH);
                 return;
