@@ -39,8 +39,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
-
 
 /**
  * A listener handling all the unlinking {@link Autofarm} events caused by a {@link Player}.
