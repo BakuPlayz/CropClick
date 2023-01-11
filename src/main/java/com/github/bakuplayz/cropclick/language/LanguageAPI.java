@@ -108,11 +108,11 @@ public final class LanguageAPI {
         UPDATE_FOUND_NO_UPDATES("Searched for updates and found none. You are up to date :)"),
         UPDATE_FOUND_NEW_UPDATE("Searched for updates and found one!"),
 
-        UPDATE_MESSAGE_FORMAT_PLAYER("&f%s"),
+        UPDATE_MESSAGE_FORMAT_PLAYER("Message: &f%s"),
         UPDATE_TITLE_FORMAT_PLAYER("Title: &f%s"),
         UPDATE_LINK_FORMAT_PLAYER("Link: &f%s"),
 
-        UPDATE_MESSAGE_FORMAT_LOGGER("%s"),
+        UPDATE_MESSAGE_FORMAT_LOGGER("Message: %s"),
         UPDATE_TITLE_FORMAT_LOGGER("Title: %s"),
         UPDATE_LINK_FORMAT_LOGGER("Link: %s");
 
