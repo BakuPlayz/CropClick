@@ -44,5 +44,4 @@ creating a new issue.
 
 # Contributions
 
-Contributions is done freely by whomever wants to fix spelling errors, code bugs and also code efficiency. The
-contributor will also get the "Contributor"-rank on discord if they are apart of the discord server. 
+Contributions is done freely by whomever want to contribute. It may be something as small as a spelling mistake, or as big as a douplication glitch. Every contribute and contributor is welcome. Additionally, if you contribute to the project you will also be abled to redeem the "Contributor"-rank on my plugins dedicated [discord server](https://discord.gg/HqQqz2Z). 
