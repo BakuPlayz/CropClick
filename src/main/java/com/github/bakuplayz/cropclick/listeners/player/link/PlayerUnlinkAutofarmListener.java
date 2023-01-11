@@ -25,6 +25,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
+import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.utils.BlockUtils;
 import com.github.bakuplayz.cropclick.utils.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
@@ -50,8 +51,7 @@ import java.util.logging.Logger;
  */
 public final class PlayerUnlinkAutofarmListener implements Listener {
 
-    private final Logger logger;
-    private final boolean isDebugging;
+    private final CropClick plugin;
 
     private final WorldManager worldManager;
     private final AddonManager addonManager;
@@ -62,8 +62,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
-        this.isDebugging = plugin.isDebugging();
-        this.logger = plugin.getLogger();
+        this.plugin = plugin;
     }
 
 
@@ -125,8 +124,10 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        if (isDebugging) {
-            logger.info(String.format("%s (Player): Called the unlinked event!", player.getName()));
+        LanguageAPI.Menu.UNLINK_ACTION_SUCCESS.send(plugin, player);
+
+        if (plugin.isDebugging()) {
+            plugin.getLogger().info(String.format("%s (Player): Called the unlinked event!", player.getName()));
         }
 
         Bukkit.getPluginManager().callEvent(

@@ -474,6 +474,7 @@ public final class LanguageAPI {
 
         LINK_ACTION_FAILURE(Category.LINK, SubCategory.ACTIONS, "linkFailure"),
         LINK_ACTION_SUCCESS(Category.LINK, SubCategory.ACTIONS, "linkSuccess"),
+        UNLINK_ACTION_SUCCESS(Category.LINK, SubCategory.ACTIONS, "unlinkSuccess"),
         LINK_CROP_NAME(Category.LINK, SubCategory.CROP, "itemName"),
         LINK_CONTAINER_NAME(Category.LINK, SubCategory.CONTAINER, "itemName"),
         LINK_CONTAINER_TIPS(Category.LINK, SubCategory.CONTAINER, "itemTips"),
