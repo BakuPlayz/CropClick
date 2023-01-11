@@ -273,6 +273,7 @@ menu:
       selected: "&bSelected"
 
     actions:
+      unlinkSuccess: "&7You've successfully unlined a farm :)"
       linkSuccess: "&7You've successfully linked a farm :)"
       linkFailure: "&cYour link failed to be established!"
 
