@@ -163,14 +163,14 @@ public final class UpdateManager {
             }
 
             JsonObject version = response.getAsJsonObject();
-            JsonElement versionUrl = version.get("shortUrl");
             JsonElement versionTitle = version.get("title");
             JsonElement versionMessage = version.get("message");
+            JsonElement versionUrl = version.get("urls").getAsJsonObject().get("short");
             if (versionMessage == null || versionUrl == null || versionTitle == null) {
                 setUpdateProperties(UpdateState.FAILED_TO_FETCH);
                 return;
             }
-
+            
             setUpdateProperties(
                     versionUrl.getAsString(),
                     versionTitle.getAsString(),
