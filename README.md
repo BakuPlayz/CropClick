@@ -18,7 +18,7 @@ Just right click a crop, get the drops and get back on the tops of your Mincraft
 > ![harvesting_chorus](https://github.com/BakuPlayz/CropClick/blob/main/chorus_harvest.gif)
 
 ### Autofarming has never been closer! ###
-Just connect a crop, dispenser and a container to link them together. Fill the the dispenser with some bonemeal, build a redstone clock and then connect it to the dispenser. And boom! You now got your own functioning autofarm!
+Just connect a crop, dispenser and a container to link them together (By shift left-clicking on them). Fill the the dispenser with some bonemeal, build a redstone clock and then connect it to the dispenser. And boom! You now got your own functioning autofarm!
 > ![autofarm_link](https://github.com/BakuPlayz/CropClick/blob/main/autofarm_link.gif)
 
 # What version should I get?
