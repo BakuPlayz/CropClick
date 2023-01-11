@@ -90,9 +90,7 @@ public final class UpdateManager {
         LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(player);
         LanguageAPI.Update.UPDATE_TITLE_FORMAT_PLAYER.send(player, updateTitle);
         LanguageAPI.Update.UPDATE_LINK_FORMAT_PLAYER.send(player, updateURL);
-        for (String message : MessageUtils.readify(MessageUtils.colorize("&7Message: &f") + updateMessage, 10)) {
-            LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_PLAYER.send(player, message);
-        }
+        LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_PLAYER.send(player, updateMessage);
     }
 
 
@@ -114,9 +112,7 @@ public final class UpdateManager {
         LanguageAPI.Update.UPDATE_FOUND_NEW_UPDATE.send(logger);
         LanguageAPI.Update.UPDATE_TITLE_FORMAT_LOGGER.send(logger, updateTitle);
         LanguageAPI.Update.UPDATE_LINK_FORMAT_LOGGER.send(logger, updateURL);
-        for (String message : MessageUtils.readify("Message: " + updateMessage, 15)) {
-            LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_LOGGER.send(logger, message);
-        }
+        LanguageAPI.Update.UPDATE_MESSAGE_FORMAT_LOGGER.send(logger, updateMessage);
     }
 
 
