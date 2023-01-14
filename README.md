@@ -21,6 +21,93 @@ Just right click a crop, get the drops and get back on the tops of your Mincraft
 Just connect a crop, dispenser and a container to link them together (By shift left-clicking on them). Fill the the dispenser with some bonemeal, build a redstone clock and then connect it to the dispenser. And boom! You now got your own functioning autofarm!
 > ![autofarm_link](https://github.com/BakuPlayz/CropClick/blob/main/autofarm_link.gif)
 
+# Commands
+<details>
+  <summary><i>Click to view or hide</i></summary>
+  <br>
+  
+```yaml
+/crop: the base command for CropClick.
+/crop autofarms: shows all of the autofarms.
+/crop help: shows all the commands and their permissions.
+/crop reload: reloads the plugin (i.e. good for configuration changes).
+/crop reset: resets the plugin to its default settings.
+/crop settings: shows the most important settings for customizing CropClick.
+```
+</details>
+
+# Permissions
+<details>
+  <summary><i>Click to view or hide</i></summary>
+ 
+#### All
+```yaml
+cropclick.*: permission to access and use everything in CropClick.
+cropclick.command.*: permission to use every command.
+cropclick.autofarm.*: permission to use all the autofarm features.
+cropclick.plant.*: permission to plant every crop.
+cropclick.harvest.*: permission to harvest every crop.
+cropclick.destory.*: permission to destroy every crop.
+```
+
+#### Commands
+```yaml
+cropclick.command.general: permission to use the general command # /crop
+cropclick.command.autofarms: permission to use the autofarms command. # /crop autofarms
+cropclick.command.help: permission to use the help command. # /crop help
+cropclick.command.reload: permission to use the reload command. # /crop reload
+cropclick.command.reset: permission to use the reset command. # /crop reset
+cropclick.command.settings: permission to use the settings command. # /crop settings
+```
+
+#### Autofarms
+```yaml
+cropclick.autofarm.claim: permission to claim autofarms with unknown an owner.
+cropclick.autofarm.link: permission to link your own autofarms.
+cropclick.autofarm.unlink: permission to unlink your own autofarms.
+cropclick.autofarm.unlink.others: permission to unlink others autofarms.
+cropclick.autofarm.update: permission to update your own farms.
+cropclick.autofarm.update.others: permission to update others autofarms.
+cropclick.autofarm.toggle: permission to toggle your own autofarms.
+cropclick.autofarm.toggle.others: permission to toggle others autofarms.
+cropclick.autofarm.interact: permission to interact with your own autofarms.
+cropclick.autofarm.interact.other: permission to interact with your others autofarms.
+```
+
+#### Crops
+```yaml
+# OBS! Replace the "cropName" in the following with the name of the crop, e.g. netherWart.
+
+cropclick.plant.(cropName): permission to plant the given crop.
+cropclick.harvest.(cropName): permission to harvest the given crop.
+cropclick.destroy.(cropName): permission to destory the given crop.
+
+cropNames: # A list of all the vanilla crop names (custom crops will also have their own permissions).
+- bamboo
+- beetroot
+- brownMushroom
+- cactus
+- carrot
+- chorus
+- cocoaBean
+- dripleaf
+- glowBerries
+- kelp
+- melon
+- netherWart
+- potato
+- pumpkin
+- redMushroom
+- seaPickle
+- sugarCane
+- sweetBerries
+- twistingVines
+- wheat
+```
+
+</details>
+
+
 # What version should I get?
 
 - **Legacy.jar** are for server versions 1.8 to 1.12.2.
