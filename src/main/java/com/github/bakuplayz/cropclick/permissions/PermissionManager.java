@@ -59,6 +59,18 @@ public final class PermissionManager {
 
         registerCommands();
 
+
+    }
+
+
+    /**
+     * Registers all the {@link Permission permissions} for {@link CropClick}.
+     *
+     * @param plugin the plugin instance.
+     */
+    public void registerPermissions(CropClick plugin) {
+        registerCommands();
+
         /* Runs once the server is done loading in order to register all crops,
          * both CropClick's and other plugins. */
         Bukkit.getScheduler().runTaskLater(plugin, this::registerCrops, 0);
