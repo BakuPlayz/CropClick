@@ -27,7 +27,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
@@ -62,8 +61,7 @@ public final class WorldGuardAddon extends Addon {
      * Registers the {@link #cropFlag CropClick flag}.
      */
     private void registerFlag() {
-        FlagRegistry registry = worldGuard.getFlagRegistry();
-        registry.register(cropFlag);
+        worldGuard.getFlagRegistry().register(cropFlag);
     }
 
 

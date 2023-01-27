@@ -30,7 +30,6 @@ import com.google.gson.JsonObject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -65,8 +64,6 @@ public final class UpdateManager {
         setUpdateMessage("");
         setUpdateTitle("");
         this.plugin = plugin;
-
-        fetchUpdates();
     }
 
 
@@ -117,22 +114,9 @@ public final class UpdateManager {
 
 
     /**
-     * Starts fetching updates from the {@link #UPDATE_URL update server}.
-     */
-    private void fetchUpdates() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(
-                plugin,
-                this::fetchUpdate,
-                0, // ticks before running the first time.
-                60 * 30 * 20  // ticks before running again (30 minutes as ticks).
-        );
-    }
-
-
-    /**
      * Fetches the updates from the {@link #UPDATE_URL update server}.
      */
-    private void fetchUpdate() {
+    public void fetchUpdate() {
         try {
             JsonElement response = new HttpRequestBuilder(UPDATE_URL)
                     .setDefaultHeaders()
