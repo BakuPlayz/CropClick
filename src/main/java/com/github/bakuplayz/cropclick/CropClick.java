@@ -62,6 +62,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -115,6 +116,23 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
+     * Runs before the {@link #onEnable() execution of CropClick}.
+     */
+    @Override
+    public void onLoad() {
+        registerConfigs();
+        setupConfigs();
+
+        registerStorages();
+        setupStorages();
+
+        handleLegacyConfigs();
+
+        registerManagers();
+    }
+
+
+    /**
      * Starts the execution of {@link CropClick}.
      */
     @Override
@@ -127,19 +145,12 @@ public final class CropClick extends JavaPlugin {
 
         CropClick.plugin = this;
 
-        registerConfigs();
-        setupConfigs();
-
-        registerStorages();
-        setupStorages();
-
-        handleLegacyConfigs();
-
-        startStoragesSaveInterval();
-
-        registerManagers();
         registerCommands();
         registerListeners();
+        registerPermissions();
+
+        startStoragesSaveInterval();
+        startUpdateFetchInterval();
 
         loadConfigSections();
     }
@@ -266,9 +277,18 @@ public final class CropClick extends JavaPlugin {
      * Starts the saving interval for {@link DataStorage data storages}.
      */
     private void startStoragesSaveInterval() {
-        final int TEN_MINUTES_PERIOD = 10 * 60 * 20; // Written as Minecraft ticks.
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::saveData, 0, TEN_MINUTES_PERIOD);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::saveData, 0, TEN_MINUTES_PERIOD);
+        final int TEN_MINUTES = 10 * 60 * 20; // Written as Minecraft ticks.
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::saveData, 0, TEN_MINUTES);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::saveData, 0, TEN_MINUTES);
+    }
+
+
+    /**
+     * Starts fetching updates from the {@link CropClick CropClick's} update server.
+     */
+    private void startUpdateFetchInterval() {
+        final int THIRTHY_MINUTES = 30 * 60 * 20; // Written as Minecraft ticks.
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, updateManager::fetchUpdate, 0, THIRTHY_MINUTES);
     }
 
 
@@ -335,6 +355,14 @@ public final class CropClick extends JavaPlugin {
         manager.registerEvents(new AutofarmLinkListener(this), this);
 
         manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
+    }
+
+
+    /**
+     * Registers all the {@link Permission permissions}.
+     */
+    private void registerPermissions() {
+        permissionManager.registerPermissions(this);
     }
 
 }

@@ -56,7 +56,15 @@ public final class PermissionManager {
         this.subcommands = plugin.getCommandManager().getCommands();
         this.crops = plugin.getCropManager().getCrops();
         this.pluginManager = Bukkit.getPluginManager();
+    }
 
+
+    /**
+     * Registers all the {@link Permission permissions} for {@link CropClick}.
+     *
+     * @param plugin the plugin instance.
+     */
+    public void registerPermissions(CropClick plugin) {
         registerCommands();
 
         /* Runs once the server is done loading in order to register all crops,
