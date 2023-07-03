@@ -48,6 +48,7 @@ public final class AddonManager {
 
     private @Getter McMMOAddon mcMMOAddon;
     private @Getter TownyAddon townyAddon;
+    private @Getter AureliumAddon aureliumAddon;
     private @Getter ResidenceAddon residenceAddon;
     private @Getter JobsRebornAddon jobsRebornAddon;
     private @Getter WorldGuardAddon worldGuardAddon;
@@ -80,6 +81,11 @@ public final class AddonManager {
         if (addonsConfig.isInstalled("Towny")) {
             this.townyAddon = new TownyAddon(plugin);
             registeredAddons.add(townyAddon);
+        }
+
+        if (addonsConfig.isInstalled("Aurelium")) {
+            this.aureliumAddon = new AureliumAddon(plugin);
+            registeredAddons.add(aureliumAddon);
         }
 
         if (addonsConfig.isInstalled("Residence")) {
@@ -203,6 +209,10 @@ public final class AddonManager {
 
         if (isInstalledAndEnabled(mcMMOAddon)) {
             mcMMOAddon.addExperience(player, crop);
+        }
+
+        if (isInstalledAndEnabled(aureliumAddon)) {
+            aureliumAddon.addExperience(player, crop);
         }
     }
 

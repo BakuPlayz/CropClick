@@ -330,6 +330,8 @@ public final class LanguageAPI {
 
         MCMMO_CROP_TITLE(Category.TITLE, "mcMMOCrop"),
         MCMMO_TITLE(Category.TITLE, "mcMMO"),
+        AURELIUM_CROP_TITLE(Category.TITLE, "aureliumCrop"),
+        AURELIUM_TITLE(Category.TITLE, "aurelium"),
         JOBS_CROP_TITLE(Category.TITLE, "jobsRebornCrop"),
         JOBS_REBORN_TITLE(Category.TITLE, "jobsReborn"),
         WORLD_GUARD_TITLE(Category.TITLE, "worldGuard"),
@@ -366,6 +368,10 @@ public final class LanguageAPI {
         ADDONS_MCMMO_ITEM_STATUS(Category.ADDONS, SubCategory.MCMMO, "itemStatus", "%status%"),
         ADDONS_MCMMO_ITEM_TIPS(Category.ADDONS, SubCategory.MCMMO, "itemTips"),
 
+        ADDONS_AURELIUM_ITEM_NAME(Category.ADDONS, SubCategory.AURELIUM, "itemName"),
+        ADDONS_AURELIUM_ITEM_STATUS(Category.ADDONS, SubCategory.AURELIUM, "itemStatus", "%status%"),
+        ADDONS_AURELIUM_ITEM_TIPS(Category.ADDONS, SubCategory.AURELIUM, "itemTips"),
+
         ADDONS_RESIDENCE_ITEM_NAME(Category.ADDONS, SubCategory.RESIDENCE, "itemName"),
         ADDONS_RESIDENCE_ITEM_STATUS(Category.ADDONS, SubCategory.RESIDENCE, "itemStatus", "%status%"),
         ADDONS_RESIDENCE_ITEM_TIPS(Category.ADDONS, SubCategory.RESIDENCE, "itemTips"),
@@ -389,6 +395,9 @@ public final class LanguageAPI {
         ADDON_MCMMO_ITEM_NAME(Category.ADDON, SubCategory.MCMMO, "itemName", "%status%"),
         ADDON_MCMMO_ITEM_TIPS(Category.ADDON, SubCategory.MCMMO, "itemTips"),
 
+        ADDON_AURELIUM_ITEM_NAME(Category.ADDON, SubCategory.AURELIUM, "itemName", "%status%"),
+        ADDON_AURELIUM_ITEM_TIPS(Category.ADDON, SubCategory.AURELIUM, "itemTips"),
+
         ADDON_RESIDENCE_ITEM_NAME(Category.ADDON, SubCategory.RESIDENCE, "itemName", "%status%"),
         ADDON_RESIDENCE_ITEM_TIPS(Category.ADDON, SubCategory.RESIDENCE, "itemTips"),
 
@@ -409,6 +418,7 @@ public final class LanguageAPI {
         CROPS_ITEM_JOBS_MONEY(Category.CROPS, SubCategory.ITEM, "jobsMoney", "%status%"),
         CROPS_ITEM_JOBS_POINTS(Category.CROPS, SubCategory.ITEM, "jobsPoints", "%status%"),
         CROPS_ITEM_MMO_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "mcMMOExperience", "%status%"),
+        CROPS_ITEM_AURELIUM_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "aureliumExperience", "%status%"),
         CROPS_ITEM_NAME(Category.CROPS, SubCategory.ITEM, "name", "%name%", "%status%"),
         CROPS_ITEM_PARTICLES(Category.CROPS, SubCategory.ITEM, "particles", "%status%"),
         CROPS_ITEM_SOUNDS(Category.CROPS, SubCategory.ITEM, "sounds", "%status%"),
@@ -528,6 +538,14 @@ public final class LanguageAPI {
         MCMMO_CROP_REMOVE_ITEM_AFTER(Category.MCMMO_CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
         MCMMO_CROP_REMOVE_ITEM_NAME(Category.MCMMO_CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
 
+        AURELIUM_CROP_EXPERIENCE_ITEM_NAME(Category.AURELIUM_CROP, SubCategory.EXPERIENCE, "itemName"),
+        AURELIUM_CROP_EXPERIENCE_ITEM_TIPS(Category.AURELIUM_CROP, SubCategory.EXPERIENCE, "itemTips"),
+        AURELIUM_CROP_EXPERIENCE_ITEM_VALUE(Category.AURELIUM_CROP, SubCategory.EXPERIENCE, "itemValue", "%value%"),
+        AURELIUM_CROP_ADD_ITEM_AFTER(Category.AURELIUM_CROP, SubCategory.ADD, "itemAfter", "%value%"),
+        AURELIUM_CROP_ADD_ITEM_NAME(Category.AURELIUM_CROP, SubCategory.ADD, "itemName", "%amount%", "%type%"),
+        AURELIUM_CROP_REMOVE_ITEM_AFTER(Category.AURELIUM_CROP, SubCategory.REMOVE, "itemAfter", "%value%"),
+        AURELIUM_CROP_REMOVE_ITEM_NAME(Category.AURELIUM_CROP, SubCategory.REMOVE, "itemName", "%amount%", "%type%"),
+
         NAME_COLOR_ITEM_CODE(Category.NAME, SubCategory.COLOR_CODE, "itemColor", "%code%", "%color%", "%name%"),
         NAME_COLOR_ITEM_NAME(Category.NAME, SubCategory.COLOR_CODE, "itemName"),
 
@@ -620,6 +638,7 @@ public final class LanguageAPI {
         WORLDS_ITEM_JOBS_TIPS(Category.WORLDS, "itemJobsTips"),
         WORLDS_ITEM_MCMMO_TIPS(Category.WORLDS, "itemMcMMOTips"),
         WORLDS_ITEM_GROWTH_TIPS(Category.WORLDS, "itemOfflineGrowthTips"),
+        WORLDS_ITEM_AURELIUM_TIPS(Category.WORLDS, "itemAureliumTips"),
         WORLDS_ITEM_RESIDENCE_TIPS(Category.WORLDS, "itemResidenceTips"),
         WORLDS_ITEM_TOWNY_TIPS(Category.WORLDS, "itemTownyTips"),
         WORLDS_ITEM_GUARD_TIPS(Category.WORLDS, "itemWorldGuardTips"),
@@ -652,6 +671,7 @@ public final class LanguageAPI {
             LINK,
             MAIN,
             MCMMO_CROP("mcMMOCrop"),
+            AURELIUM_CROP("aureliumCrop"),
             NAME,
             PARTICLE,
             PARTICLES,
@@ -701,6 +721,7 @@ public final class LanguageAPI {
             AMOUNT,
             AT_LEAST("atLeastOne"),
             AUTOFARMS,
+            AURELIUM,
             COLOR_CODE("colorCode"),
             CONSOLE,
             CONTAINER,

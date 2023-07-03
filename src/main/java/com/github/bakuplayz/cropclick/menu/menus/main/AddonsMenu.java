@@ -103,6 +103,16 @@ public final class AddonsMenu extends BaseMenu {
      */
     private final boolean residenceEnabled;
 
+    /**
+     * A variable checking if the {@link AureliumAddon} is on the server.
+     */
+    private final boolean aureliumInstalled;
+
+    /**
+     * A variable checking if the {@link AureliumAddon} is enabled in {@link CropClick}.
+     */
+    private final boolean aureliumEnabled;
+
 
     public AddonsMenu(@NotNull CropClick plugin, @NotNull Player player) {
         super(plugin, player, LanguageAPI.Menu.ADDONS_TITLE);
@@ -119,18 +129,21 @@ public final class AddonsMenu extends BaseMenu {
         this.residenceEnabled = addonManager.isEnabled("Residence");
         this.growthInstalled = addonManager.isInstalled("OfflineGrowth");
         this.growthEnabled = addonManager.isEnabled("OfflineGrowth");
+        this.aureliumInstalled = addonManager.isEnabled("AureliumSkills");
+        this.aureliumEnabled = addonManager.isEnabled("AureliumSkills");
     }
 
 
     @Override
     public void setMenuItems() {
         inventory.setItem(10, getJobsItem());
-        inventory.setItem(13, getMCMMOItem());
-        inventory.setItem(16, getGrowthItem());
+        inventory.setItem(12, getMCMMOItem());
+        inventory.setItem(14, getGrowthItem());
 
-        inventory.setItem(28, getResidenceItem());
-        inventory.setItem(31, getTownyItem());
-        inventory.setItem(34, getGuardItem());
+        inventory.setItem(16, getResidenceItem());
+        inventory.setItem(28, getTownyItem());
+        inventory.setItem(30, getGuardItem());
+        inventory.setItem(32, getAureliumItem());
 
         setBackItem();
     }
@@ -166,6 +179,10 @@ public final class AddonsMenu extends BaseMenu {
 
         if (clicked.equals(getGuardItem())) {
             if (guardInstalled) new WorldGuardMenu(plugin, player).openMenu();
+        }
+
+        if (clicked.equals(getAureliumItem())) {
+            if (aureliumInstalled) new AureliumMenu(plugin, player).openMenu();
         }
     }
 
@@ -291,6 +308,27 @@ public final class AddonsMenu extends BaseMenu {
                 )
                 .setMaterial(
                         guardInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
+                )
+                .toItemStack();
+    }
+
+
+    /**
+     * Gets the Aurelium {@link ItemStack item}.
+     *
+     * @return the Aurelium item.
+     */
+    public @NotNull ItemStack getAureliumItem() {
+        return new ItemBuilder(Material.DIAMOND_AXE)
+                .setName(plugin, LanguageAPI.Menu.ADDONS_AURELIUM_ITEM_NAME)
+                .setLore(LanguageAPI.Menu.ADDONS_AURELIUM_ITEM_TIPS.getAsList(plugin,
+                        LanguageAPI.Menu.ADDONS_AURELIUM_ITEM_STATUS.get(plugin, aureliumEnabled)
+                ))
+                .setMaterial(
+                        aureliumEnabled ? null : Material.GRAY_STAINED_GLASS_PANE
+                )
+                .setMaterial(
+                        aureliumInstalled ? null : Material.ORANGE_STAINED_GLASS_PANE
                 )
                 .toItemStack();
     }

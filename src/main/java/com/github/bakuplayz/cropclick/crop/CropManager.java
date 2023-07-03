@@ -98,6 +98,11 @@ public final class CropManager {
         registerCrop(new Kelp(cropsConfig));
         registerCrop(new Melon(cropsConfig));
         registerCrop(new NetherWart(cropsConfig));
+
+        if (VersionUtils.supportsPitcherPlants()) {
+            registerCrop(new PitcherPlant(cropsConfig));
+        }
+
         registerCrop(new Potato(cropsConfig));
         registerCrop(new Pumpkin(cropsConfig));
         registerCrop(new RedMushroom(cropsConfig));
@@ -106,6 +111,10 @@ public final class CropManager {
 
         if (VersionUtils.supportsSweetBerries()) {
             registerCrop(new SweetBerries(cropsConfig));
+        }
+
+        if (VersionUtils.supportsTorchFlowers()) {
+            registerCrop(new Torchflower(cropsConfig));
         }
 
         if (VersionUtils.supportsTwistingVines()) {

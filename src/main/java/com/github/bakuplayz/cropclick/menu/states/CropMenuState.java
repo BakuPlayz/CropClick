@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.menu.states;
 
+import com.github.bakuplayz.cropclick.menu.menus.addons.AureliumMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.McMMOMenu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
@@ -60,6 +61,11 @@ public enum CropMenuState {
      * The return state to the {@link SoundsMenu}.
      */
     SOUNDS,
+
+    /**
+     * The return state to the {@link AureliumMenu}.
+     */
+    AURELIUM,
 
     /**
      * The return state to the {@link ParticlesMenu}.

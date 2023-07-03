@@ -185,15 +185,12 @@ public final class PlayerHarvestCropListener implements Listener {
         if (crop instanceof TallCrop) {
             TallCrop tallCrop = (TallCrop) crop;
             wasHarvested = tallCrop.harvestAll(player, block, crop);
-
         } else if (crop instanceof RoofCrop) {
             RoofCrop roofCrop = (RoofCrop) crop;
             wasHarvested = roofCrop.harvestAll(player, block, crop);
-
         } else if (crop instanceof SeaPickle) {
             SeaPickle seaPickle = (SeaPickle) crop;
             wasHarvested = seaPickle.harvestAll(player, block, crop);
-
         } else {
             wasHarvested = crop.harvest(player);
         }

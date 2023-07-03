@@ -64,6 +64,11 @@ public enum WorldMenuState {
     TOWNY,
 
     /**
+     * The return state to the {@link AureliumMenu}.
+     */
+    AURELIUM,
+
+    /**
      * The return state to the {@link WorldGuardMenu}.
      */
     WORLD_GUARD
