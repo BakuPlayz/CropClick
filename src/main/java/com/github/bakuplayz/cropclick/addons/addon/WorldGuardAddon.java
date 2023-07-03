@@ -61,7 +61,9 @@ public final class WorldGuardAddon extends Addon {
      * Registers the {@link #cropFlag CropClick flag}.
      */
     private void registerFlag() {
-        worldGuard.getFlagRegistry().register(cropFlag);
+        if (worldGuard.getFlagRegistry().get("cropclick") == null) {
+            worldGuard.getFlagRegistry().register(cropFlag);
+        }
     }
 
 

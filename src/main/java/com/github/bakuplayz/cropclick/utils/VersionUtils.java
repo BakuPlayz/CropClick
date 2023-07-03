@@ -19,7 +19,9 @@
 
 package com.github.bakuplayz.cropclick.utils;
 
+import com.github.bakuplayz.cropclick.crop.crops.ground.PitcherPlant;
 import com.github.bakuplayz.cropclick.crop.crops.ground.SweetBerries;
+import com.github.bakuplayz.cropclick.crop.crops.ground.Torchflower;
 import com.github.bakuplayz.cropclick.crop.crops.roof.GlowBerries;
 import com.github.bakuplayz.cropclick.crop.crops.tall.Bamboo;
 import com.github.bakuplayz.cropclick.crop.crops.tall.Dripleaf;
@@ -108,6 +110,26 @@ public final class VersionUtils {
      */
     public static boolean supportsDripleaves() {
         return !between(0.0, 16.9);
+    }
+
+
+    /**
+     * Checks whether the {@link #getServerVersion() server version} supports {@link PitcherPlant pitcher plants}.
+     *
+     * @return true if it does, otherwise false.
+     */
+    public static boolean supportsPitcherPlants() {
+        return !between(0.0, 20);
+    }
+
+
+    /**
+     * Checks whether the {@link #getServerVersion() server version} supports {@link Torchflower torchflowers}.
+     *
+     * @return true if it does, otherwise false.
+     */
+    public static boolean supportsTorchFlowers() {
+        return !between(0.0, 20);
     }
 
 }

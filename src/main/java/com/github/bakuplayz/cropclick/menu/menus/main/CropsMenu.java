@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.menu.menus.main;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.addon.AureliumAddon;
 import com.github.bakuplayz.cropclick.addons.addon.JobsRebornAddon;
 import com.github.bakuplayz.cropclick.addons.addon.McMMOAddon;
 import com.github.bakuplayz.cropclick.configs.config.sections.crops.AddonConfigSection;
@@ -32,8 +33,10 @@ import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.menu.base.BaseMenu;
 import com.github.bakuplayz.cropclick.menu.base.PaginatedMenu;
 import com.github.bakuplayz.cropclick.menu.menus.MainMenu;
+import com.github.bakuplayz.cropclick.menu.menus.addons.AureliumMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.JobsRebornMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.McMMOMenu;
+import com.github.bakuplayz.cropclick.menu.menus.addons.additional.AureliumCropMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.additional.JobsCropMenu;
 import com.github.bakuplayz.cropclick.menu.menus.addons.additional.McMMOCropMenu;
 import com.github.bakuplayz.cropclick.menu.menus.crops.CropMenu;
@@ -127,6 +130,10 @@ public final class CropsMenu extends PaginatedMenu {
             case JOBS_REBORN:
                 handleBack(clicked, new JobsRebornMenu(plugin, player));
                 break;
+
+            case AURELIUM:
+                handleBack(clicked, new AureliumMenu(plugin, player));
+                break;
         }
 
         handlePagination(clicked);
@@ -160,6 +167,10 @@ public final class CropsMenu extends PaginatedMenu {
 
             case MCMMO:
                 new McMMOCropMenu(plugin, player, crop).openMenu();
+                break;
+
+            case AURELIUM:
+                new AureliumCropMenu(plugin, player, crop).openMenu();
                 break;
         }
     }
@@ -224,6 +235,11 @@ public final class CropsMenu extends PaginatedMenu {
                         LanguageAPI.Menu.CROPS_ITEM_JOBS_POINTS.get(plugin, getJobsPoints(crop)),
                         LanguageAPI.Menu.CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, getJobsExperience(crop))
                 );
+                break;
+
+            case AURELIUM:
+                menuItem.setLore(LanguageAPI.Menu.CROPS_ITEM_AURELIUM_EXPERIENCE.get(plugin, getAureliumExperience(crop)));
+                break;
         }
 
         return menuItem.toItemStack();
@@ -251,6 +267,18 @@ public final class CropsMenu extends PaginatedMenu {
      */
     private double getMcMMOExperience(@NotNull Crop crop) {
         return addonSection.getMcMMOExperience(crop.getName());
+    }
+
+
+    /**
+     * Gets the {@link AureliumAddon Aurelium} experience gained when harvesting the {@link Crop provided crop}.
+     *
+     * @param crop the crop to base the experience on.
+     *
+     * @return the experience gained when harvesting the crop.
+     */
+    private double getAureliumExperience(@NotNull Crop crop) {
+        return  addonSection.getAureliumExperience(crop.getName());
     }
 
 

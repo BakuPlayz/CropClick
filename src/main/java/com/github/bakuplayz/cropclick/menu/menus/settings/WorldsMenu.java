@@ -117,6 +117,10 @@ public final class WorldsMenu extends PaginatedMenu {
             case WORLD_GUARD:
                 handleBack(clicked, new WorldGuardMenu(plugin, player));
                 break;
+
+            case AURELIUM:
+                handleBack(clicked, new AureliumMenu(plugin, player));
+                break;
         }
 
         handlePagination(clicked);
@@ -154,6 +158,10 @@ public final class WorldsMenu extends PaginatedMenu {
 
             case WORLD_GUARD:
                 world.toggleAddon(addonManager, "WorldGuard");
+                break;
+
+            case AURELIUM:
+                world.toggleAddon(addonManager, "AureliumSkills");
                 break;
         }
 
@@ -244,6 +252,15 @@ public final class WorldsMenu extends PaginatedMenu {
 
                 menuItem.setLore(
                         LanguageAPI.Menu.WORLDS_ITEM_GROWTH_TIPS.getAsList(plugin,
+                                LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
+                        ));
+                break;
+
+            case AURELIUM:
+                status = world.isBanishedAddon(addonManager, "AureliumSkills");
+
+                menuItem.setLore(
+                        LanguageAPI.Menu.WORLDS_ITEM_AURELIUM_TIPS.getAsList(plugin,
                                 LanguageAPI.Menu.WORLDS_ITEM_STATUS.get(plugin, status)
                         ));
                 break;
