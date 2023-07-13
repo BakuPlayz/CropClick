@@ -145,6 +145,8 @@ public final class CropClick extends JavaPlugin {
 
         CropClick.plugin = this;
 
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> addonManager.registerAddons(),0);
+
         registerCommands();
         registerListeners();
         registerPermissions();

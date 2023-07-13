@@ -192,20 +192,19 @@ public final class NameMenu extends BaseMenu {
         return new AnvilGUI.Builder()
                 .text(ChatColor.stripColor(currentName))
                 .itemLeft(isCrop ? getCropItem() : getSeedItem())
-                .onComplete((player, text) -> {
-
+                .onClick((player, stateSnapshot) -> {
                     if (isCrop) {
-                        cropSection.setDropName(crop.getName(), text);
+                        cropSection.setDropName(crop.getName(), stateSnapshot.getText());
                     } else {
                         assert crop.getSeed() != null; // Only here for the compiler.
-                        seedSection.setDropName(crop.hasSeed() ? crop.getSeed().getName() : "", text);
+                        seedSection.setDropName(crop.hasSeed() ? crop.getSeed().getName() : "", stateSnapshot.getText());
                     }
 
                     return AnvilGUI.Response.close();
-                }).onClose((player) -> {
+                }).onClose((stateSnapshot) -> {
                     String newName = getDropName(isCrop);
 
-                    player.sendMessage(
+                    stateSnapshot.getPlayer().sendMessage(
                             currentName.equals(newName)
                             ? LanguageAPI.Menu.NAME_RESPONSE_UNCHANGED.get(plugin)
                             : LanguageAPI.Menu.NAME_RESPONSE_CHANGED.get(plugin, newName)

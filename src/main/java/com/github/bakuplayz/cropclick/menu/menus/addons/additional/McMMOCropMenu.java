@@ -193,13 +193,13 @@ public final class McMMOCropMenu extends BaseMenu {
         return new AnvilGUI.Builder()
                 .text(ChatColor.stripColor(currentReason))
                 .itemLeft(getReasonItem())
-                .onComplete((player, text) -> {
-                    addonSection.setMcMMOExperienceReason(cropName, text);
+                .onClick((player, stateSnapshot) -> {
+                    addonSection.setMcMMOExperienceReason(cropName, stateSnapshot.getText());
                     return AnvilGUI.Response.close();
                 })
-                .onClose((player) -> {
+                .onClose((stateSnapshot) -> {
                     String newReason = addonSection.getMcMMOExperienceReason(cropName);
-                    player.sendMessage(
+                    stateSnapshot.getPlayer().sendMessage(
                             currentReason.equals(newReason)
                             ? LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_UNCHANGED.get(plugin)
                             : LanguageAPI.Menu.MCMMO_CROP_REASON_RESPONSE_CHANGED.get(plugin, newReason)
