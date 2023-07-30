@@ -64,15 +64,13 @@ public final class AddonManager {
         this.registeredAddons = new ArrayList<>();
         this.addonsConfig = plugin.getAddonsConfig();
         this.plugin = plugin;
-
-        registerAddons();
     }
 
 
     /**
      * Registers the all the {@link Addon installed addons}.
      */
-    private void registerAddons() {
+    public void registerAddons() {
         if (addonsConfig.isInstalled("mcMMO")) {
             this.mcMMOAddon = new McMMOAddon(plugin);
             registeredAddons.add(mcMMOAddon);
@@ -93,7 +91,7 @@ public final class AddonManager {
             registeredAddons.add(residenceAddon);
         }
 
-        if (addonsConfig.isInstalled("JobsReborn")) {
+        if (addonsConfig.isInstalled("Jobs")) {
             this.jobsRebornAddon = new JobsRebornAddon(plugin);
             registeredAddons.add(jobsRebornAddon);
         }

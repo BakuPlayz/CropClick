@@ -129,7 +129,7 @@ public final class AddonsMenu extends BaseMenu {
         this.residenceEnabled = addonManager.isEnabled("Residence");
         this.growthInstalled = addonManager.isInstalled("OfflineGrowth");
         this.growthEnabled = addonManager.isEnabled("OfflineGrowth");
-        this.aureliumInstalled = addonManager.isEnabled("AureliumSkills");
+        this.aureliumInstalled = addonManager.isInstalled("AureliumSkills");
         this.aureliumEnabled = addonManager.isEnabled("AureliumSkills");
     }
 
