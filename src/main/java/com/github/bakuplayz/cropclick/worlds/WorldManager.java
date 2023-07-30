@@ -51,14 +51,13 @@ public final class WorldManager {
     public WorldManager(@NotNull CropClick plugin) {
         this.worldData = plugin.getWorldData();
         this.worlds = worldData.getWorlds();
-        registerWorlds();
     }
 
 
     /**
      * Registers all the non-registered {@link World worlds} as {@link FarmWorld farm worlds}.
      */
-    private void registerWorlds() {
+    public void registerWorlds() {
         Bukkit.getWorlds().forEach(world -> worldData.registerWorld(new FarmWorld(world)));
     }
 
