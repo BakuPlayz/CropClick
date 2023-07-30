@@ -60,6 +60,7 @@ import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
@@ -148,6 +149,7 @@ public final class CropClick extends JavaPlugin {
         startUpdateFetchInterval();
         startStoragesSaveInterval();
 
+        registerWorlds();
         registerCommands();
         registerListeners();
         registerPermissions();
@@ -367,6 +369,14 @@ public final class CropClick extends JavaPlugin {
      */
     private void registerPermissions() {
         permissionManager.registerPermissions(this);
+    }
+
+
+    /**
+     * Registers all the {@link World worlds}.
+     */
+    private void registerWorlds() {
+        worldManager.registerWorlds();
     }
 
 }
