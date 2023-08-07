@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick;
 
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
@@ -152,6 +153,8 @@ public final class CropClick extends JavaPlugin {
         registerCommands();
         registerListeners();
         registerPermissions();
+        registerWorlds();
+        registerAddons();
 
         startStoragesSaveInterval();
         startUpdateFetchInterval();
@@ -377,4 +380,10 @@ public final class CropClick extends JavaPlugin {
         worldManager.registerWorlds();
     }
 
+    /**
+     * Registers all the {@link Addon addons}.
+     */
+    private void registerAddons(){
+        addonManager.registerAddons();
+    }
 }
