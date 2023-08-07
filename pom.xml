@@ -235,7 +235,7 @@
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.8</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -289,7 +289,7 @@
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.5.3-SNAPSHOT</version>
+            <version>1.7.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 

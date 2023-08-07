@@ -51,7 +51,6 @@ public final class WorldManager {
     public WorldManager(@NotNull CropClick plugin) {
         this.worldData = plugin.getWorldData();
         this.worlds = worldData.getWorlds();
-        registerWorlds();
     }
 
 

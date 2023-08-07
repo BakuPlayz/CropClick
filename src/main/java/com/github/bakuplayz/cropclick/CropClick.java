@@ -147,6 +147,9 @@ public final class CropClick extends JavaPlugin {
 
         CropClick.plugin = this;
 
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> addonManager.registerAddons(),0);
+
+        registerWorlds();
         registerCommands();
         registerListeners();
         registerPermissions();
@@ -377,12 +380,10 @@ public final class CropClick extends JavaPlugin {
         worldManager.registerWorlds();
     }
 
-
     /**
      * Registers all the {@link Addon addons}.
      */
     private void registerAddons(){
         addonManager.registerAddons();
     }
-
 }
