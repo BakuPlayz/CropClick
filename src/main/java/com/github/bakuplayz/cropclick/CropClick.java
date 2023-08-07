@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick;
 
 import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.addons.addon.base.Addon;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
@@ -107,7 +108,7 @@ public final class CropClick extends JavaPlugin {
     /**
      * A variable used for debugging purposes, when enabled it will, for instance log every event call.
      */
-    private final @Getter boolean isDebugging = false;
+    private final @Getter boolean isDebugging = true;
 
     /**
      * A variable used for getting statistics using bStats.
@@ -148,6 +149,7 @@ public final class CropClick extends JavaPlugin {
         registerCommands();
         registerListeners();
         registerPermissions();
+        registerAddons();
 
         startStoragesSaveInterval();
         startUpdateFetchInterval();
@@ -363,6 +365,14 @@ public final class CropClick extends JavaPlugin {
      */
     private void registerPermissions() {
         permissionManager.registerPermissions(this);
+    }
+
+
+    /**
+     * Registers all the {@link Addon addons}.
+     */
+    private void registerAddons(){
+        addonManager.registerAddons();
     }
 
 }
