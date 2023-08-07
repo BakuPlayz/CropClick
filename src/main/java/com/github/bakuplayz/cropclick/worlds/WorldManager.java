@@ -58,7 +58,7 @@ public final class WorldManager {
     /**
      * Registers all the non-registered {@link World worlds} as {@link FarmWorld farm worlds}.
      */
-    private void registerWorlds() {
+    public void registerWorlds() {
         Bukkit.getWorlds().forEach(world -> worldData.registerWorld(new FarmWorld(world)));
     }
 
