@@ -70,7 +70,6 @@ public final class EntityDestroyAutofarmListener implements Listener {
         if (event.isCancelled()) return;
 
         if (!autofarmManager.isEnabled()) {
-            event.setCancelled(true);
             return;
         }
 
