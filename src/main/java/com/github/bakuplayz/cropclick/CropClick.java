@@ -380,6 +380,7 @@ public final class CropClick extends JavaPlugin {
         worldManager.registerWorlds();
     }
 
+
     /**
      * Registers all the {@link Addon addons}.
      */
