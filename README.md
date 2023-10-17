@@ -5,6 +5,9 @@
 ![spigot_stars](https://img.shields.io/spiget/stars/69480?color=teal&style=for-the-badge)
 ![plugin_issues](https://img.shields.io/github/issues/BakuPlayz/CropClick?color=teal&style=for-the-badge)
 
+>  [!Note]
+> This page will get an update soon.
+
 # Features
 - **Autofarms**: An automatic farming method making you potatoes, carrots or whatever you need! While you mine, build or AFK away :)
 - **Vanilla Crops**: Supports all the vanilla crops, so that you can click-away at all of them.
@@ -14,15 +17,17 @@
 
 ### Harvesting crops has never been easier! ###
 Just right click a crop, get the drops and get back on the tops of your Mincraft journey!
-<div>
-  <img src="/docs/media/ground_harvest.gif" alt="A video on (fast) harvesting some ground crops."/>
-  <img src="/docs/media/chorus_harvest.gif" alt="A video on (fast) harvesting the chorus crop."/>
+
+<div float="left">
+  <img alt="A video on (fast) harvesting some ground crops." src="/docs/media/ground_harvest.gif" width="400">
+  <img alt="A video on (fast) harvesting the chorus crop." src="/docs/media/chorus_harvest.gif" width="400"> 
 </div>
 
 ### Autofarming has never been closer! ###
 Just connect a crop, dispenser and a container to link them together (By shift left-clicking on them). Fill the the dispenser with some bonemeal, build a redstone clock and then connect it to the dispenser. And boom! You now got your own functioning autofarm!
-<div>
-   <img src="/docs/media/autofarm_link.gif" alt="A video of how to create a autofarm."/>
+
+<div float="left">
+  <img alt="A video of how to create a autofarm." src="/docs/media/autofarm_link.gif" width="400"/>
 </div>
 
 # Commands
