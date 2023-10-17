@@ -14,12 +14,12 @@
 
 ### Harvesting crops has never been easier! ###
 Just right click a crop, get the drops and get back on the tops of your Mincraft journey!
-> ![harvesting_ground_crops](docs/media/ground_harvest.gif)
-> ![harvesting_chorus](docs/media/chorus_harvest.gif)
+![harvesting_ground_crops](/docs/media/ground_harvest.gif)
+![harvesting_chorus](docs/media/chorus_harvest.gif)
 
 ### Autofarming has never been closer! ###
 Just connect a crop, dispenser and a container to link them together (By shift left-clicking on them). Fill the the dispenser with some bonemeal, build a redstone clock and then connect it to the dispenser. And boom! You now got your own functioning autofarm!
-> ![autofarm_link](docs/media/autofarm_link.gif)
+![autofarm_link](docs/media/autofarm_link.gif)
 
 # Commands
 <details>
