@@ -14,9 +14,9 @@
 
 ### Harvesting crops has never been easier! ###
 Just right click a crop, get the drops and get back on the tops of your Mincraft journey!
-<div style="display: flex;">
-  <img style="width:100%; flex-basis: auto;" src="/docs/media/ground_harvest.gif" alt="A video on (fast) harvesting some ground crops."/>
-  <img style="width:100%; flex-basis: auto;" src="/docs/media/chorus_harvest.gif" alt="A video on (fast) harvesting the chorus crop."/>
+<div>
+  <img src="/docs/media/ground_harvest.gif" alt="A video on (fast) harvesting some ground crops."/>
+  <img src="/docs/media/chorus_harvest.gif" alt="A video on (fast) harvesting the chorus crop."/>
 </div>
 
 ### Autofarming has never been closer! ###
