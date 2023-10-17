@@ -14,7 +14,7 @@
 
 ### Harvesting crops has never been easier! ###
 Just right click a crop, get the drops and get back on the tops of your Mincraft journey!
-<div>
+<div style="display: grid; grid-template-columns: 1fr 1fr">
   <img src="/docs/media/ground_harvest.gif" alt="A video on (fast) harvesting some ground crops."/>
   <img src="/docs/media/chorus_harvest.gif" alt="A video on (fast) harvesting the chorus crop."/>
 </div>
