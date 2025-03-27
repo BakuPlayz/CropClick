@@ -19,8 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.abstracts;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SeedConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
@@ -60,20 +59,17 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
     protected final CropClick plugin;
 
-    protected final CropConfigSection cropSection;
-
-    protected final SeedConfigSection seedSection;
+    protected final CropsConfig cropsConfig;
 
 
     public AbstractCropMenu(@NotNull String title, @NotNull CropClick plugin, @NotNull Crop crop) {
         super(title);
         this.crop = crop;
         this.plugin = plugin;
+        this.cropsConfig = plugin.getCropsConfig();
         this.seed = crop.getSeed();
         this.hasSeed = crop.hasSeed();
         this.cropName = crop.getName();
-        this.cropSection = plugin.getCropsConfig().getCropSection();
-        this.seedSection = plugin.getCropsConfig().getSeedSection();
     }
 
 
@@ -112,16 +108,14 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
     @AllArgsConstructor
     protected abstract class AbstractDecreaseItem extends ClickableStateItem<S> {
 
-        protected final int initialValue;
-
         protected final int change;
 
 
         @Override
         public void create() {
             setName(getName());
-            setLore(getLore(getAfterValue(initialValue)));
             setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+            setLore(getLore(getAfterValue(getStateValue(getState()))));
         }
 
 
@@ -152,7 +146,6 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
     @AllArgsConstructor
     protected abstract class AbstractIncreaseItem extends ClickableStateItem<S> {
 
-        protected final int initialValue;
 
         protected final int change;
 
@@ -160,8 +153,8 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
         @Override
         public void create() {
             setName(getName());
-            setLore(getLore(getAfterValue(initialValue)));
             setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+            setLore(getLore(getAfterValue(getStateValue(getState()))));
         }
 
 
@@ -186,12 +179,13 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
         private int getAfterValue(int beforeValue) {
             return Math.min(beforeValue + change, getHigherBound());
         }
+
     }
 
     protected abstract class AbstractCropDecreaseItem extends AbstractDecreaseItem {
 
-        public AbstractCropDecreaseItem(int initialValue, int change) {
-            super(initialValue, change);
+        public AbstractCropDecreaseItem(int change) {
+            super(change);
         }
 
 
@@ -205,20 +199,17 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
     @AllArgsConstructor
     protected abstract class AbstractCropItem extends ClickableStateItem<S> {
 
-        private final int initialValue;
-
-
         @Override
         public void create() {
-            setLore(getLore(initialValue));
             setMaterial(crop.getMenuType());
             setName(getName(crop.isHarvestable()));
+            setLore(getLore(getState().getCropValue()));
             setMaterial(!crop.isHarvestable(), XMaterial.GRAY_STAINED_GLASS_PANE);
         }
 
 
         @Override
-        public final void update(@NotNull AbstractCropMenu.AbstractCropMenuState state, int flag) {
+        public final void update(@NotNull AbstractCropMenuState state, int flag) {
             setLore(getLore(state.getCropValue()));
             setName(getName(state.isCropHarvestable()));
             setMaterial(state.isCropHarvestable() ? crop.getMenuType() : XMaterial.GRAY_STAINED_GLASS_PANE);
@@ -236,8 +227,8 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
     protected abstract class AbstractCropIncreaseItem extends AbstractIncreaseItem {
 
-        public AbstractCropIncreaseItem(int initialValue, int change) {
-            super(initialValue, change);
+        public AbstractCropIncreaseItem(int change) {
+            super(change);
         }
 
 
@@ -250,8 +241,8 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
     protected abstract class AbstractSeedDecreaseItem extends AbstractDecreaseItem {
 
-        public AbstractSeedDecreaseItem(int initialValue, int change) {
-            super(initialValue, change);
+        public AbstractSeedDecreaseItem(int change) {
+            super(change);
         }
 
 
@@ -265,20 +256,17 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
     @AllArgsConstructor
     protected abstract class AbstractSeedItem extends ClickableStateItem<S> {
 
-        private final int initialValue;
-
-
         @Override
         public void create() {
-            setLore(getLore(initialValue));
             setMaterial(seed.getMenuType());
             setName(getName(seed.isEnabled()));
+            setLore(getLore(getState().getSeedValue()));
             setMaterial(!seed.isEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
         }
 
 
         @Override
-        public final void update(@NotNull AbstractCropMenu.AbstractCropMenuState state, int flag) {
+        public final void update(@NotNull AbstractCropMenuState state, int flag) {
             setName(getName(state.isSeedEnabled()));
             setLore(getLore(state.getSeedValue()));
             setMaterial(state.isSeedEnabled() ? seed.getMenuType() : XMaterial.GRAY_STAINED_GLASS_PANE);
@@ -296,8 +284,8 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
     protected abstract class AbstractSeedIncreaseItem extends AbstractIncreaseItem {
 
-        public AbstractSeedIncreaseItem(int initialValue, int change) {
-            super(initialValue, change);
+        public AbstractSeedIncreaseItem(int change) {
+            super(change);
         }
 
 

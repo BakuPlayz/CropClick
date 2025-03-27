@@ -21,7 +21,7 @@ package com.github.bakuplayz.cropclick.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.FarmWorldAPI;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
+import com.github.bakuplayz.cropclick.datacontainers.datastorage.WorldDataStorage;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;

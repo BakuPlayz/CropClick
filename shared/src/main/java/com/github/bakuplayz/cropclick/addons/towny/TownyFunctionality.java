@@ -23,6 +23,7 @@ import com.github.bakuplayz.cropclick.crops.Crop;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,8 +36,8 @@ public final class TownyFunctionality implements AddonFunctionality {
      *
      * @return true if allowed, otherwise false.
      */
-    public boolean canDestroyCrop(@NotNull Player player) {
-        PlayerCache cache = Towny.getPlugin().getCache(player);
+    public boolean canDestroyCrop(@NotNull OfflinePlayer player) {
+        PlayerCache cache = Towny.getPlugin().getCache(player.getPlayer());
         return cache.getDestroyPermission(Material.STONE);
     }
 

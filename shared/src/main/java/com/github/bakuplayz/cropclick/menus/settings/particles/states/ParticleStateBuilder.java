@@ -19,7 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.settings.particles.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.ParticleConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.particles.ParticleMenu;
 import com.github.bakuplayz.cropclick.runnables.particles.Particle;
@@ -50,12 +51,12 @@ public final class ParticleStateBuilder {
 
         private final String particleName;
 
-        private final ParticleConfigSection particleConfigSection;
+        private final CropsConfig cropsConfig;
 
 
         private ParticleMenuStateHandler(@NotNull ParticleMenu observer, @NotNull CropClick plugin, @NotNull Crop crop, @NotNull String particleName) {
             super(observer, new ParticleMenuState(plugin, crop, particleName));
-            this.particleConfigSection = plugin.getCropsConfig().getParticleSection();
+            this.cropsConfig = plugin.getCropsConfig();
             this.particleName = particleName;
             this.crop = crop;
         }
@@ -118,17 +119,17 @@ public final class ParticleStateBuilder {
         protected <P> ParticleMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == ParticleMenuStateFlag.DELAY) {
                 state.setDelay(infer(partial));
-                particleConfigSection.setDelay(crop.getName(), particleName, infer(partial));
+                cropsConfig.set(ConfigurationKey.PARTICLE_DELAY, infer(partial), crop.getName(), particleName);
             }
 
             if (flag == ParticleMenuStateFlag.SPEED) {
                 state.setSpeed(infer(partial));
-                particleConfigSection.setSpeed(crop.getName(), particleName, infer(partial));
+                cropsConfig.set(ConfigurationKey.PARTICLE_SPEED, infer(partial), crop.getName(), particleName);
             }
 
             if (flag == ParticleMenuStateFlag.AMOUNT) {
                 state.setAmount(infer(partial));
-                particleConfigSection.setAmount(crop.getName(), particleName, infer(partial));
+                cropsConfig.set(ConfigurationKey.PARTICLE_AMOUNT, infer(partial), crop.getName(), particleName);
             }
 
             if (flag == ParticleMenuStateFlag.ORDER) {

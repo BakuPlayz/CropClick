@@ -22,7 +22,7 @@ package com.github.bakuplayz.cropclick.listeners.autofarm.link;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.datacontainers.datastorage.AutofarmDataStorage;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

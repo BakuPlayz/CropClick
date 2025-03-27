@@ -67,9 +67,9 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
     @Override
     public List<String> getPaginationItems() {
         return Arrays.stream(Bukkit.getOfflinePlayers())
-                .map(OfflinePlayer::getUniqueId)
-                .map(Object::toString)
-                .collect(Collectors.toList());
+                       .map(OfflinePlayer::getUniqueId)
+                       .map(Object::toString)
+                       .collect(Collectors.toList());
     }
 
 
@@ -90,7 +90,7 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
     @NotNull
     @Override
     public ToggleMenuStateHandler createStateHandler() {
-        return ToggleStateBuilder.createStateHandler(this, plugin);
+        return ToggleStateBuilder.createStateHandler(this);
     }
 
 

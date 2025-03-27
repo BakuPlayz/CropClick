@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2023 BakuPlayz
+ * Copyright (C) 2024 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,26 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.github.bakuplayz.cropclick.sql.query;
 
-package com.github.bakuplayz.cropclick.datastorages;
+import com.github.bakuplayz.cropclick.sql.Column;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 /**
- * An interface for handling JSON data fetching and data saving.
+ * A class representing a typed SQL insert query, where the type
+ * T is the type of the result of performing the query.
  *
- * @author BakuPlayz
- * @version 2.0.0
- * @since 2.0.0
+ * @param <T> the resulting type, after querying.
  */
-public interface Storageable {
+public class InsertQuery<T> extends BaseQuery<T> {
 
-    /**
-     * Fetches the data according to the implementing object.
-     */
-    void fetchData();
+    @SafeVarargs
+    public InsertQuery(@NotNull String table, Column<T, ?>... columns) {
+        query.append("INSERT INTO ").append(table);
+        appendColumnsAndValues("", columns);
+    }
 
-    /**
-     * Saves the data according to the implementing object.
-     */
-    void saveData();
+
+    public InsertQuery<T> values(Object... values) {
+        parameters.addAll(Arrays.asList(values));
+        return this;
+    }
 
 }

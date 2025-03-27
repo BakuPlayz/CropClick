@@ -19,7 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.addons.jobsreborn;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropsMenu;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
@@ -46,22 +47,22 @@ public final class CropsMenu extends AbstractCropsMenu {
 
 
     @NotNull
-    @Override
-    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
-        return (item, player) -> new CropMenu(plugin, crop).open(player);
+    @Unmodifiable
+    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
+        CropsConfig cropsConfig = plugin.getCropsConfig();
+
+        return Arrays.asList(
+                CROPS_ITEM_JOBS_MONEY.get(plugin, cropsConfig.get(ConfigurationKey.JOBS_MONEY, crop.getName())),
+                CROPS_ITEM_JOBS_POINTS.get(plugin, cropsConfig.get(ConfigurationKey.JOBS_POINTS, crop.getName())),
+                CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, cropsConfig.get(ConfigurationKey.JOBS_EXPERIENCE, crop.getName()))
+        );
     }
 
 
     @NotNull
-    @Unmodifiable
-    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        AddonConfigSection section = plugin.getCropsConfig().getAddonSection();
-
-        return Arrays.asList(
-                CROPS_ITEM_JOBS_MONEY.get(plugin, section.getJobsMoney(crop.getName())),
-                CROPS_ITEM_JOBS_POINTS.get(plugin, section.getJobsPoints(crop.getName())),
-                CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, section.getJobsExperience(crop.getName()))
-        );
+    @Override
+    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
+        return (item, player) -> new CropMenu(plugin, crop).open(player);
     }
 
 }

@@ -26,6 +26,7 @@ import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.github.bakuplayz.cropclick.addons.AddonFunctionality;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,9 +52,9 @@ public final class ResidenceFunctionality implements AddonFunctionality {
      *
      * @return true if member, otherwise false.
      */
-    public boolean isMemberOfRegion(@NotNull Player player) {
-        ResidencePermissions permissions = findPermissionsByLocation(player.getLocation());
-        return permissions != null && permissions.playerHas(player, cropFlag, true);
+    public boolean isMemberOfRegion(@NotNull OfflinePlayer player) {
+        ResidencePermissions permissions = findPermissionsByLocation(player.getPlayer().getLocation());
+        return permissions != null && permissions.playerHas(player.getPlayer(), cropFlag, true);
     }
 
 

@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.crops.seeds.ground;
 
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.seeds.AbstractSeed;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
@@ -63,9 +64,9 @@ public final class PoisonousPotato extends AbstractSeed {
     @Override
     public Drop getDrop() {
         return new Drop(XMaterial.POISONOUS_POTATO,
-                seedSection.getDropName(getName()),
-                seedSection.getDropAmount(getName(), 1),
-                seedSection.getDropChance(getName(), 10)
+                cropsConfig.get(ConfigurationKey.SEED_DROP_NAME, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_AMOUNT, 1, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_CHANCE, 10, getName())
         );
     }
 

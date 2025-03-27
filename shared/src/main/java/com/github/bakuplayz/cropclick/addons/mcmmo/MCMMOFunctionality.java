@@ -24,6 +24,7 @@ import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.Configur
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.gmail.nossr50.api.ExperienceAPI;
 import lombok.AllArgsConstructor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,8 +40,8 @@ public final class MCMMOFunctionality implements AddonFunctionality {
      * @param player the player to receive the experience.
      * @param crop   the crop to base the experience on.
      */
-    public void addExperience(@NotNull Player player, @NotNull Crop crop) {
-        ExperienceAPI.addRawXP(player, "Herbalism",
+    public void addExperience(@NotNull OfflinePlayer player, @NotNull Crop crop) {
+        ExperienceAPI.addRawXP(player.getPlayer(), "Herbalism",
                 config.get(ConfigurationKey.MCMMO_EXPERIENCE, crop.getName()),
                 config.get(ConfigurationKey.MCMMO_REASON, crop.getName())
         );

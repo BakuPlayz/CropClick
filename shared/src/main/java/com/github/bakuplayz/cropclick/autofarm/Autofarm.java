@@ -21,7 +21,6 @@ package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.Enableable;
 import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.common.location.LocationTypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
@@ -47,7 +46,7 @@ import java.util.UUID;
  */
 @ToString
 @EqualsAndHashCode
-public final class Autofarm implements Enableable {
+public final class Autofarm {
 
     public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
@@ -134,8 +133,6 @@ public final class Autofarm implements Enableable {
     /**
      * Gets the {@link #container} iff present, otherwise uses
      * the Autofarm Manager to find it via its block location.
-     *
-     * @return the found container, otherwise null.
      */
     @Nullable
     public ContainerComponent getContainer() {
@@ -153,9 +150,7 @@ public final class Autofarm implements Enableable {
      * @return true if linked, otherwise false.
      */
     public boolean isLinked() {
-        return cropLocation != null
-                && containerLocation != null
-                && dispenserLocation != null;
+        return containerLocation != null && dispenserLocation != null && cropLocation != null;
     }
 
 

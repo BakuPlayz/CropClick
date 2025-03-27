@@ -75,6 +75,14 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
     }
 
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getOrDefault(@NotNull IConfigurationKey key, T def, @NotNull String... args) {
+        String path = StringUtils.replace(key.getPath(), "%s", args);
+        return (T) getConfiguration().get(path, def);
+    }
+
+
     @NotNull
     @Override
     public Set<String> getKeys(@NotNull IConfigurationKey key, @NotNull String... args) {
@@ -105,7 +113,7 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
     public void create() {
         setFile(getNewFileInstance());
         setConfiguration(YamlConfiguration.loadConfiguration(file));
-        
+
         try {
             if (file.createNewFile()) {
                 plugin.saveResource(fileName, true);

@@ -24,13 +24,12 @@ import com.github.bakuplayz.cropclick.addons.AddonFunctionality;
 import com.github.bakuplayz.cropclick.configurations.config.AddonsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,8 +39,6 @@ import java.util.HashMap;
  * @version 2.0.0
  * @since 2.2.0
  */
-@ToString
-@EqualsAndHashCode
 public abstract class AbstractAddon {
 
     @Getter
@@ -53,18 +50,13 @@ public abstract class AbstractAddon {
 
     protected transient final AddonsConfig addonsConfig;
 
-    // TODO: Remove?
-
-    /**
-     * A variable containing all the registered worlds.
-     */
-    private transient final HashMap<String, FarmWorld> worlds;
+    private transient final List<String> banishedWorlds;
 
 
     public AbstractAddon(@NotNull CropClick plugin, @NotNull String name) {
-        this.worlds = plugin.getWorldManager().getWorlds();
         this.addonsConfig = plugin.getAddonsConfig();
         this.cropsConfig = plugin.getCropsConfig();
+        this.banishedWorlds = new ArrayList<>();
         this.plugin = plugin;
         this.name = name;
     }
@@ -73,9 +65,15 @@ public abstract class AbstractAddon {
     public abstract void setup();
 
 
+    @NotNull
     public abstract AddonFunctionality getFunctionality();
 
 
+    /**
+     * Checks whether the {@link AbstractAddon extending addon} is installed.
+     *
+     * @return true if installed, otherwise false.
+     */
     public boolean isInstalled() {
         return Bukkit.getPluginManager().isPluginEnabled(name);
     }
@@ -97,9 +95,7 @@ public abstract class AbstractAddon {
      * @return the amount of worlds where the addon is banished.
      */
     public int getAmountOfBanished() {
-        return (int) worlds.values().stream()
-                             .filter(world -> world.getBanishedAddons().contains(this))
-                             .count();
+        return banishedWorlds.size() + 1;
     }
 
 }

@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.*;
+import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.menus.addons.*;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractPlainMenu;
@@ -84,96 +84,55 @@ public final class AddonsMenu extends AbstractPlainMenu {
         return SizeType.DOUBLE_CHEST;
     }
 
+
     @Getter
     private final static class AddonsState {
 
-        /**
-         * A variable checking if the {@link McMMOAddon} is on the server.
-         */
         private final boolean mmoInstalled;
 
-        /**
-         * A variable checking if the {@link McMMOAddon} is enabled in {@link CropClick}.
-         */
         private final boolean mmoEnabled;
 
-        /**
-         * A variable checking if the {@link JobsRebornAddon} is on the server.
-         */
         private final boolean jobsInstalled;
 
-        /**
-         * A variable checking if the {@link JobsRebornAddon} is enabled in {@link CropClick}.
-         */
         private final boolean jobsEnabled;
 
-        /**
-         * A variable checking if the {@link TownyAddon} is on the server.
-         */
         private final boolean townyInstalled;
 
-        /**
-         * A variable checking if the {@link TownyAddon} is enabled in {@link CropClick}.
-         */
         private final boolean townyEnabled;
 
-        /**
-         * A variable checking if the {@link WorldGuardAddon} is on the server.
-         */
         private final boolean guardInstalled;
 
-        /**
-         * A variable checking if the {@link WorldGuardAddon} is enabled in {@link CropClick}.
-         */
         private final boolean guardEnabled;
 
-        /**
-         * A variable checking if the {@link OfflineGrowthAddon} is on the server.
-         */
         private final boolean growthInstalled;
 
-        /**
-         * A variable checking if the {@link OfflineGrowthAddon} is enabled in {@link CropClick}.
-         */
         private final boolean growthEnabled;
 
-        /**
-         * A variable checking if the {@link ResidenceAddon} is on the server.
-         */
         private final boolean residenceInstalled;
 
-        /**
-         * A variable checking if the {@link ResidenceAddon} is enabled in {@link CropClick}.
-         */
         private final boolean residenceEnabled;
 
-        /**
-         * A variable checking if the {@link AuraSkillsAddon} is on the server.
-         */
         private final boolean auraSkillsInstalled;
 
-        /**
-         * A variable checking if the {@link AuraSkillsAddon} is enabled in {@link CropClick}.
-         */
         private final boolean auraSkillsEnabled;
 
 
         public AddonsState(@NotNull CropClick plugin) {
             AddonManager addonManager = plugin.getAddonManager();
-            this.mmoInstalled = addonManager.isInstalled(McMMOAddon.NAME);
-            this.mmoEnabled = addonManager.isEnabled(McMMOAddon.NAME);
-            this.townyInstalled = addonManager.isInstalled(TownyAddon.NAME);
-            this.townyEnabled = addonManager.isEnabled(TownyAddon.NAME);
-            this.jobsInstalled = addonManager.isInstalled(JobsRebornAddon.NAME);
-            this.jobsEnabled = addonManager.isEnabled(JobsRebornAddon.NAME);
-            this.guardInstalled = addonManager.isInstalled(WorldGuardAddon.NAME);
-            this.guardEnabled = addonManager.isEnabled(WorldGuardAddon.NAME);
-            this.residenceInstalled = addonManager.isInstalled(ResidenceAddon.NAME);
-            this.residenceEnabled = addonManager.isEnabled(ResidenceAddon.NAME);
-            this.growthInstalled = addonManager.isInstalled(OfflineGrowthAddon.NAME);
-            this.growthEnabled = addonManager.isEnabled(OfflineGrowthAddon.NAME);
-            this.auraSkillsInstalled = addonManager.isInstalled(AuraSkillsAddon.NAME);
-            this.auraSkillsEnabled = addonManager.isEnabled(AuraSkillsAddon.NAME);
+            this.mmoInstalled = addonManager.getMcMMOAddon().isInstalled();
+            this.mmoEnabled = addonManager.getMcMMOAddon().isEnabled();
+            this.townyInstalled = addonManager.getTownyAddon().isInstalled();
+            this.townyEnabled = addonManager.getTownyAddon().isEnabled();
+            this.jobsInstalled = addonManager.getJobsRebornAddon().isInstalled();
+            this.jobsEnabled = addonManager.getJobsRebornAddon().isEnabled();
+            this.guardInstalled = addonManager.getWorldGuardAddon().isInstalled();
+            this.guardEnabled = addonManager.getWorldGuardAddon().isEnabled();
+            this.residenceInstalled = addonManager.getResidenceAddon().isInstalled();
+            this.residenceEnabled = addonManager.getResidenceAddon().isEnabled();
+            this.growthInstalled = addonManager.getOfflineGrowthAddon().isInstalled();
+            this.growthEnabled = addonManager.getOfflineGrowthAddon().isEnabled();
+            this.auraSkillsInstalled = addonManager.getAuraSkillsAddon().isInstalled();
+            this.auraSkillsEnabled = addonManager.getAuraSkillsAddon().isEnabled();
         }
 
     }

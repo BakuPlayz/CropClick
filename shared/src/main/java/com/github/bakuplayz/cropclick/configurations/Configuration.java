@@ -35,6 +35,9 @@ public interface Configuration {
     <T> T get(@NotNull IConfigurationKey key, String... args);
 
 
+    <T> T getOrDefault(@NotNull IConfigurationKey key, T def, String... args);
+
+
     @NotNull
     Set<String> getKeys(@NotNull IConfigurationKey key, String... args);
 

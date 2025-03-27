@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.menus.addons.jobsreborn;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.addons.jobsreborn.states.CropMenuStateBuilder;
@@ -46,12 +45,8 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
 public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStateHandler> {
 
 
-    private final AddonConfigSection addonSection;
-
-
     public CropMenu(@NotNull CropClick plugin, @NotNull Crop crop) {
         super(JOBS_CROP_TITLE.getTitle(plugin), plugin, crop);
-        this.addonSection = plugin.getCropsConfig().getAddonSection();
     }
 
 
@@ -89,7 +84,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class MoneyDecreaseItem extends AbstractDecreaseItem {
 
         public MoneyDecreaseItem(int change) {
-            super(addonSection.getJobsMoney(cropName), change);
+            super(change);
         }
 
 
@@ -126,8 +121,8 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         public void create() {
             setMaterial(XMaterial.GOLD_INGOT);
-            setName(JOBS_CROP_MONEY_ITEM_NAME.get(plugin));
             setLore(getLore(getState().getMoney()));
+            setName(JOBS_CROP_MONEY_ITEM_NAME.get(plugin));
         }
 
 
@@ -148,7 +143,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class MoneyIncreaseItem extends AbstractIncreaseItem {
 
         public MoneyIncreaseItem(int change) {
-            super(addonSection.getJobsMoney(cropName), change);
+            super(change);
         }
 
 
@@ -183,7 +178,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class PointsDecreaseItem extends AbstractDecreaseItem {
 
         public PointsDecreaseItem(int change) {
-            super(addonSection.getJobsPoints(cropName), change);
+            super(change);
         }
 
 
@@ -242,7 +237,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class PointsIncreaseItem extends AbstractIncreaseItem {
 
         public PointsIncreaseItem(int change) {
-            super(addonSection.getJobsPoints(cropName), change);
+            super(change);
         }
 
 
@@ -277,7 +272,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class ExperienceDecreaseItem extends AbstractDecreaseItem {
 
         public ExperienceDecreaseItem(int change) {
-            super(addonSection.getJobsExperience(cropName), change);
+            super(change);
         }
 
 
@@ -336,7 +331,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class ExperienceIncreaseItem extends AbstractIncreaseItem {
 
         public ExperienceIncreaseItem(int change) {
-            super(addonSection.getJobsExperience(cropName), change);
+            super(change);
         }
 
 

@@ -25,7 +25,7 @@ import com.github.bakuplayz.cropclick.common.AutofarmUtils;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.configurations.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crops.CropManager;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.datacontainers.datastorage.AutofarmDataStorage;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;

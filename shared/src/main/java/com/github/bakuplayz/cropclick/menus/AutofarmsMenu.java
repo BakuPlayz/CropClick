@@ -55,23 +55,15 @@ public final class AutofarmsMenu extends AbstractPaginatedMenu<BasicPaginatedMen
     }
 
 
-    // TODO: Look at how you can unlink...
     @Override
     public List<Autofarm> getPaginationItems() {
         return plugin.getAutofarmManager().getAutofarms().stream()
-                .filter(autofarm -> {
-                    boolean canClaim = PermissionUtils.canClaimAutofarm(viewers.get(0));
-                    boolean canUnlinkOthers = PermissionUtils.canUnlinkOthersFarm(viewers.get(0), autofarm);
-                    return canUnlinkOthers || canClaim;
-                })
-                .collect(Collectors.toList());
-    }
-
-
-    @NotNull
-    @Override
-    public BasicPaginatedStateHandler createStateHandler() {
-        return new BasicPaginatedStateHandler(this);
+                       .filter(autofarm -> {
+                           boolean canClaim = PermissionUtils.canClaimAutofarm(viewers.get(0));
+                           boolean canUnlinkOthers = PermissionUtils.canUnlinkOthersFarm(viewers.get(0), autofarm);
+                           return canUnlinkOthers || canClaim;
+                       })
+                       .collect(Collectors.toList());
     }
 
 
@@ -79,6 +71,13 @@ public final class AutofarmsMenu extends AbstractPaginatedMenu<BasicPaginatedMen
     @Override
     public Item loadPaginatedItem(@NotNull Autofarm autofarm, int position) {
         return new AutofarmItem(autofarm);
+    }
+
+
+    @NotNull
+    @Override
+    public BasicPaginatedStateHandler createStateHandler() {
+        return new BasicPaginatedStateHandler(this);
     }
 
 

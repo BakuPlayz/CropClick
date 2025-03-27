@@ -19,7 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.addons.jobsreborn.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu.AbstractCropMenuState;
 import com.github.bakuplayz.cropclick.menus.addons.jobsreborn.CropMenu;
@@ -52,12 +53,12 @@ public final class CropMenuStateBuilder {
 
         private final Crop crop;
 
-        private final AddonConfigSection addonSection;
+        private final CropsConfig cropsConfig;
 
 
         private CropMenuStateHandler(@NotNull CropMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
             super(observer, new CropMenuState(plugin, crop));
-            this.addonSection = plugin.getCropsConfig().getAddonSection();
+            this.cropsConfig = plugin.getCropsConfig();
             this.crop = crop;
         }
 
@@ -96,17 +97,17 @@ public final class CropMenuStateBuilder {
         protected <P> CropMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == CropMenuStateFlag.MONEY_VALUE) {
                 state.setMoney(infer(partial));
-                addonSection.setJobsMoney(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.JOBS_MONEY, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.POINTS_VALUE) {
                 state.setPoints(infer(partial));
-                addonSection.setJobsPoints(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.JOBS_POINTS, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.EXPERIENCE_VALUE) {
                 state.setExperience(infer(partial));
-                addonSection.setJobsExperience(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.JOBS_EXPERIENCE, infer(partial), crop.getName());
             }
 
             return state;
@@ -126,11 +127,9 @@ public final class CropMenuStateBuilder {
 
 
         private CropMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
-            AddonConfigSection addonSection = plugin.getCropsConfig().getAddonSection();
-
-            this.money = addonSection.getJobsMoney(crop.getName());
-            this.points = addonSection.getJobsPoints(crop.getName());
-            this.experience = addonSection.getJobsExperience(crop.getName());
+            this.money = plugin.getCropsConfig().get(ConfigurationKey.JOBS_MONEY, crop.getName());
+            this.points = plugin.getCropsConfig().get(ConfigurationKey.JOBS_POINTS, crop.getName());
+            this.experience = plugin.getCropsConfig().get(ConfigurationKey.JOBS_EXPERIENCE, crop.getName());
         }
 
     }

@@ -27,6 +27,7 @@ import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import lombok.AllArgsConstructor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +46,7 @@ public final class JobsRebornFunctionality implements AddonFunctionality {
      * @param player the player to update stats for.
      * @param crop   the crop to base the update on.
      */
-    public void updateStats(@NotNull Player player, @NotNull Crop crop) {
+    public void updateStats(@NotNull OfflinePlayer player, @NotNull Crop crop) {
         JobsPlayer jobsPlayer = new JobsPlayer(player.getName());
         if (!jobsPlayer.isInJob(FARMER_JOB)) {
             return;

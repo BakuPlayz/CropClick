@@ -20,16 +20,17 @@
 package com.github.bakuplayz.cropclick.listeners.player.destory;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
-import com.github.bakuplayz.cropclick.addons.OfflineGrowthAddon;
+import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -117,7 +118,8 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModifyRegion(player)) {
+        CropPlayer cropPlayer = new CropPlayer(player);
+        if (!cropPlayer.canModifyRegion()) {
             event.setCancelled(true);
             return;
         }
@@ -141,7 +143,7 @@ public final class PlayerDestroyCropListener implements Listener {
         Player player = event.getPlayer();
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
-            growthAddon.unregisterCrop(block.getLocation());
+            growthAddon.getFunctionality().unregisterCrop(block.getLocation());
         }
 
         Autofarm autofarm = autofarmManager.findAutofarm(block);

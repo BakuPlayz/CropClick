@@ -19,8 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.crops.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SeedConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu.AbstractCropMenuState;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu.AbstractMenuStateFlag;
@@ -54,15 +54,12 @@ public final class ChanceStateBuilder {
 
         private final Crop crop;
 
-        private final CropConfigSection cropSection;
-
-        private final SeedConfigSection seedSection;
+        private final CropsConfig cropsConfig;
 
 
         private ChanceMenuStateHandler(@NotNull ChanceMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
             super(observer, new ChanceMenuState(plugin, crop));
-            this.cropSection = plugin.getCropsConfig().getCropSection();
-            this.seedSection = plugin.getCropsConfig().getSeedSection();
+            this.cropsConfig = plugin.getCropsConfig();
             this.crop = crop;
         }
 
@@ -101,22 +98,22 @@ public final class ChanceStateBuilder {
         protected <P> ChanceMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == AbstractMenuStateFlag.CROP_STATE) {
                 state.setCropHarvestable(infer(partial));
-                cropSection.setHarvestable(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.CROP_HARVESTABLE, infer(partial), crop.getName());
             }
 
             if (flag == AbstractMenuStateFlag.SEED_STATE) {
                 state.setSeedEnabled(infer(partial));
-                seedSection.setEnabled(crop.getSeed().getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.SEED_ENABLED, infer(partial), crop.getSeed().getName());
             }
 
             if (flag == AbstractMenuStateFlag.CROP_VALUE) {
                 state.setCropValue(infer(partial));
-                cropSection.setDropChance(crop.getName(), (int) partial / 100.0d);
+                cropsConfig.set(ConfigurationKey.CROP_DROP_CHANCE, (int) partial / 100.0d, crop.getName());
             }
 
             if (flag == AbstractMenuStateFlag.SEED_VALUE) {
                 state.setSeedValue(infer(partial));
-                seedSection.setDropChance(crop.getSeed().getName(), (int) partial / 100.0d);
+                cropsConfig.set(ConfigurationKey.SEED_DROP_CHANCE, (int) partial / 100.0d, crop.getSeed().getName());
             }
 
             return state;
@@ -131,10 +128,9 @@ public final class ChanceStateBuilder {
         private ChanceMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
             this.isCropHarvestable = crop.isHarvestable();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.cropValue = plugin.getCropsConfig().getCropSection().getDropChanceDecimal(crop.getName());
-            this.seedValue = plugin.getCropsConfig().getSeedSection().getDropChanceDecimal(crop.hasSeed() ? crop.getSeed().getName() : "");
+            this.cropValue = (int) plugin.getCropsConfig().get(ConfigurationKey.CROP_DROP_CHANCE, crop.getName()) * 100;
+            this.seedValue = (int) plugin.getCropsConfig().get(ConfigurationKey.SEED_DROP_CHANCE, crop.hasSeed() ? crop.getSeed().getName() : "") * 100;
         }
-
     }
 
 

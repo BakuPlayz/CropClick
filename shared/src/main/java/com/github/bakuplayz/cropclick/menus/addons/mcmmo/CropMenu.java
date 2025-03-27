@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.addons.mcmmo;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.states.CropMenuStateBuilder;
@@ -48,12 +48,9 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
  */
 public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStateHandler> {
 
-    private final AddonConfigSection addonSection;
-
 
     public CropMenu(@NotNull CropClick plugin, @NotNull Crop crop) {
         super(AURA_SKILLS_TITLE.getTitle(plugin), plugin, crop);
-        this.addonSection = plugin.getCropsConfig().getAddonSection();
     }
 
 
@@ -80,8 +77,8 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private ClickableAction<ExperienceReasonItem> getReasonAction() {
         return (item, player) -> AnvilMenuFactory.createMenu(
                 plugin, item,
-                addonSection.getMcMMOExperienceReason(crop.getName()),
-                (text) -> addonSection.setMcMMOExperienceReason(crop.getName(), text)
+                cropsConfig.get(ConfigurationKey.MCMMO_REASON, crop.getName()),
+                (text) -> cropsConfig.set(ConfigurationKey.MCMMO_REASON, text, crop.getName())
         ).open(player);
     }
 
@@ -89,7 +86,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class ExperienceDecreaseItem extends AbstractDecreaseItem {
 
         public ExperienceDecreaseItem(int change) {
-            super(addonSection.getMcMMOExperience(cropName), change);
+            super(change);
         }
 
 
@@ -127,8 +124,8 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         public void create() {
             setMaterial(XMaterial.EXPERIENCE_BOTTLE);
-            setName(MCMMO_CROP_EXPERIENCE_ITEM_NAME.get(plugin));
             setLore(getLore(getState().getExperience()));
+            setName(MCMMO_CROP_EXPERIENCE_ITEM_NAME.get(plugin));
         }
 
 
@@ -149,7 +146,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class ExperienceIncreaseItem extends AbstractIncreaseItem {
 
         public ExperienceIncreaseItem(int change) {
-            super(addonSection.getMcMMOExperience(cropName), change);
+            super(change);
         }
 
 

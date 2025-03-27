@@ -21,27 +21,27 @@ package com.github.bakuplayz.cropclick.crops.abstracts;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.common.InventoryUtils;
+import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.ParticleConfigSection;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SoundConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import com.github.bakuplayz.cropclick.mappers.ComponentMapper;
 import com.github.bakuplayz.cropclick.runnables.particles.Particle;
-import com.github.bakuplayz.cropclick.runnables.particles.ParticleRunnable;
+import com.github.bakuplayz.cropclick.runnables.particles.ParticlePlayQueue;
 import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
-import com.github.bakuplayz.cropclick.runnables.sounds.SoundRunnable;
-import com.github.bakuplayz.cropclick.common.InventoryUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.runnables.sounds.SoundPlayQueue;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 
 /**
@@ -55,14 +55,11 @@ public abstract class AbstractCrop implements Crop {
 
     protected final CropsConfig cropsConfig;
 
-    protected final CropConfigSection cropSection;
-
     private final CropAgeComponent ageComponent;
 
 
     public AbstractCrop(@NotNull CropsConfig config) {
         this.ageComponent = ComponentMapper.getAge();
-        this.cropSection = config.getCropSection();
         this.cropsConfig = config;
     }
 
@@ -81,24 +78,13 @@ public abstract class AbstractCrop implements Crop {
 
 
     /**
-     * Checks whether the {@link Crop extending crop} has a drop.
-     *
-     * @return true if it has, otherwise false.
-     */
-    @Override
-    public boolean hasDrop() {
-        return getDrop() != null;
-    }
-
-
-    /**
      * Checks whether the {@link Crop extending crop} should drop at least one drop.
      *
      * @return true if it should, otherwise false.
      */
     @Override
     public boolean dropAtLeastOne() {
-        return cropSection.shouldDropAtLeastOne(getName());
+        return cropsConfig.get(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, getName());
     }
 
 
@@ -123,9 +109,6 @@ public abstract class AbstractCrop implements Crop {
     @Override
     public boolean harvest(@NotNull ContainerComponent container) {
         if (!isHarvestable()) {
-            return false;
-        }
-        if (!hasDrop()) {
             return false;
         }
 
@@ -198,6 +181,28 @@ public abstract class AbstractCrop implements Crop {
 
 
     /**
+     * Checks whether the {@link Crop extending crop} is harvestable at all.
+     *
+     * @return true if it is, otherwise false.
+     */
+    @Override
+    public boolean isHarvestable() {
+        return cropsConfig.get(ConfigurationKey.CROP_HARVESTABLE, getName());
+    }
+
+
+    /**
+     * Checks whether the {@link Crop extending crop} is linkable to an {@link Autofarm}.
+     *
+     * @return true if it is, otherwise false.
+     */
+    @Override
+    public boolean isLinkable() {
+        return cropsConfig.get(ConfigurationKey.CROP_LINKABLE, getName());
+    }
+
+
+    /**
      * Replants the {@link Crop extending crop}.
      *
      * @param block the crop block to replant.
@@ -220,18 +225,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public boolean shouldReplant() {
-        return cropSection.shouldReplant(getName());
-    }
-
-
-    /**
-     * Checks whether the {@link Crop extending crop} is harvestable at all.
-     *
-     * @return true if it is, otherwise false.
-     */
-    @Override
-    public boolean isHarvestable() {
-        return cropSection.isHarvestable(getName());
+        return cropsConfig.get(ConfigurationKey.CROP_SHOULD_REPLANT, getName());
     }
 
 
@@ -242,15 +236,15 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public void playSounds(@NotNull Block block) {
-        SoundConfigSection soundSection = cropsConfig.getSoundSection();
-        SoundRunnable runnable = new SoundRunnable(block);
+        Set<String> sounds = cropsConfig.getKeys(ConfigurationKey.SOUNDS, getName());
+        SoundPlayQueue queue = new SoundPlayQueue(block);
 
-        for (String sound : soundSection.getSounds(getName())) {
-            long delay = soundSection.getDelay(getName(), sound);
-            double pitch = soundSection.getPitch(getName(), sound);
-            double volume = soundSection.getVolume(getName(), sound);
+        for (String sound : sounds) {
+            long delay = cropsConfig.get(ConfigurationKey.SOUND_DELAY, getName(), sound);
+            double pitch = cropsConfig.get(ConfigurationKey.SOUND_PITCH, getName(), sound);
+            double volume = cropsConfig.get(ConfigurationKey.SOUND_VOLUME, getName(), sound);
 
-            runnable.queueSound(
+            queue.queueSound(
                     sound,
                     volume,
                     pitch,
@@ -258,7 +252,7 @@ public abstract class AbstractCrop implements Crop {
             );
         }
 
-        runnable.run();
+        queue.run();
     }
 
 
@@ -269,15 +263,15 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public void playParticles(@NotNull Block block) {
-        ParticleConfigSection particleSection = cropsConfig.getParticleSection();
-        ParticleRunnable runnable = new ParticleRunnable(block);
+        Set<String> particles = cropsConfig.getKeys(ConfigurationKey.PARTICLES, getName());
+        ParticlePlayQueue queue = new ParticlePlayQueue(block);
 
-        for (String particle : particleSection.getParticles(getName())) {
-            long delay = particleSection.getDelay(getName(), particle);
-            double speed = particleSection.getSpeed(getName(), particle);
-            int amount = particleSection.getAmount(getName(), particle);
+        for (String particle : particles) {
+            long delay = cropsConfig.get(ConfigurationKey.PARTICLE_DELAY, getName(), particle);
+            int amount = cropsConfig.get(ConfigurationKey.PARTICLE_AMOUNT, getName(), particle);
+            double speed = cropsConfig.get(ConfigurationKey.PARTICLE_SPEED, getName(), particle);
 
-            runnable.queueParticle(
+            queue.queueParticle(
                     particle,
                     amount,
                     speed,
@@ -285,18 +279,7 @@ public abstract class AbstractCrop implements Crop {
             );
         }
 
-        runnable.run();
-    }
-
-
-    /**
-     * Checks whether the {@link Crop extending crop} is linkable to an {@link Autofarm}.
-     *
-     * @return true if it is, otherwise false.
-     */
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName());
+        queue.run();
     }
 
 

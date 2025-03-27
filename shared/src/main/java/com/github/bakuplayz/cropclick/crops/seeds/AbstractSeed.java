@@ -20,7 +20,7 @@
 package com.github.bakuplayz.cropclick.crops.seeds;
 
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SeedConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -38,11 +38,8 @@ public abstract class AbstractSeed implements Seed {
 
     protected final CropsConfig cropsConfig;
 
-    protected final SeedConfigSection seedSection;
-
 
     public AbstractSeed(@NotNull CropsConfig config) {
-        this.seedSection = config.getSeedSection();
         this.cropsConfig = config;
     }
 
@@ -95,7 +92,7 @@ public abstract class AbstractSeed implements Seed {
      */
     @Override
     public boolean isEnabled() {
-        return seedSection.isEnabled(getName());
+        return cropsConfig.get(ConfigurationKey.SEED_ENABLED, getName());
     }
 
 

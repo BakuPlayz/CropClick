@@ -18,9 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.menus.states;
 
-import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.menus.settings.ToggleMenu;
-import com.github.bakuplayz.cropclick.players.CropPlayer;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuStateHandler;
 import lombok.Getter;
@@ -37,15 +36,15 @@ import org.jetbrains.annotations.NotNull;
 public final class ToggleStateBuilder {
 
     @NotNull
-    public static ToggleMenuStateHandler createStateHandler(@NotNull ToggleMenu menu, @NotNull CropClick plugin) {
-        return new ToggleMenuStateHandler(menu, plugin);
+    public static ToggleMenuStateHandler createStateHandler(@NotNull ToggleMenu menu) {
+        return new ToggleMenuStateHandler(menu);
     }
 
 
     public static class ToggleMenuStateHandler extends PaginatedMenuStateHandler<ToggleMenuState> {
 
 
-        public ToggleMenuStateHandler(@NotNull ToggleMenu observer, @NotNull CropClick plugin) {
+        public ToggleMenuStateHandler(@NotNull ToggleMenu observer) {
             super(observer, new ToggleMenuState());
         }
 

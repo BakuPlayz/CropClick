@@ -19,14 +19,14 @@
 package com.github.bakuplayz.cropclick.menus.settings.names;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SeedConfigSection;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import com.github.bakuplayz.cropclick.menus.common.AnvilMenuFactory;
 import com.github.bakuplayz.cropclick.menus.common.AnvilMenuFactory.ValueSetter;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractPlainMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
@@ -56,15 +56,12 @@ public final class NameMenu extends AbstractPlainMenu {
 
     private final Crop crop;
 
-    private final CropConfigSection cropSection;
-
-    private final SeedConfigSection seedSection;
+    private final CropsConfig cropsConfig;
 
 
     public NameMenu(@NotNull CropClick plugin, @NotNull Crop crop) {
         super(NAME_TITLE.getTitle(plugin));
-        this.cropSection = plugin.getCropsConfig().getCropSection();
-        this.seedSection = plugin.getCropsConfig().getSeedSection();
+        this.cropsConfig = plugin.getCropsConfig();
         this.plugin = plugin;
         this.crop = crop;
     }
@@ -74,17 +71,17 @@ public final class NameMenu extends AbstractPlainMenu {
     public void setItems() {
         if (crop.hasSeed()) {
             setItem(13, new CropItem(), (item, player) -> {
-                ValueSetter setter = (text) -> cropSection.setDropName(crop.getName(), text);
-                AnvilMenuFactory.createMenu(plugin, item, cropSection.getDropName(crop.getName()), setter).open(player);
+                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.CROP_DROP_NAME, text, crop.getName());
+                AnvilMenuFactory.createMenu(plugin, item, cropsConfig.get(ConfigurationKey.CROP_DROP_NAME, crop.getName()), setter).open(player);
             });
             setItem(31, new SeedItem(), (item, player) -> {
-                ValueSetter setter = (text) -> seedSection.setDropName(crop.getSeed().getName(), text);
-                AnvilMenuFactory.createMenu(plugin, item, seedSection.getDropName(crop.getSeed().getName()), setter).open(player);
+                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.SEED_DROP_NAME, text, crop.getSeed().getName());
+                AnvilMenuFactory.createMenu(plugin, item, cropsConfig.get(ConfigurationKey.SEED_DROP_NAME, crop.getSeed().getName()), setter).open(player);
             });
         } else {
             setItem(22, new CropItem(), (item, player) -> {
-                ValueSetter setter = (text) -> cropSection.setDropName(crop.getName(), text);
-                AnvilMenuFactory.createMenu(plugin, item, cropSection.getDropName(crop.getName()), setter).open(player);
+                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.CROP_DROP_NAME, text, crop.getName());
+                AnvilMenuFactory.createMenu(plugin, item, cropsConfig.get(ConfigurationKey.CROP_DROP_NAME, crop.getName()), setter).open(player);
             });
         }
 
@@ -118,10 +115,10 @@ public final class NameMenu extends AbstractPlainMenu {
         @NotNull
         private static Map<Character, String> getColorCodes() {
             return Arrays.stream(ChatColor.values())
-                    .collect(Collectors.toMap(
-                            ChatColor::getChar,
-                            color -> MessageUtils.beautify(color.name(), true)
-                    ));
+                           .collect(Collectors.toMap(
+                                   ChatColor::getChar,
+                                   color -> MessageUtils.beautify(color.name(), true)
+                           ));
         }
 
 
@@ -142,16 +139,16 @@ public final class NameMenu extends AbstractPlainMenu {
          */
         private List<String> getCodesAsLore(int startIndex) {
             return colorCodes.entrySet().stream()
-                    .map(colorMap -> MessageUtils.colorize(
-                            NAME_COLOR_ITEM_CODE.get(
-                                    plugin,
-                                    colorMap.getKey(),
-                                    colorMap.getKey(),
-                                    colorMap.getValue())
-                    ).replace("#", "&")) // Some wizardry formatting
-                    .skip(startIndex)
-                    .limit(11)
-                    .collect(Collectors.toList());
+                           .map(colorMap -> MessageUtils.colorize(
+                                   NAME_COLOR_ITEM_CODE.get(
+                                           plugin,
+                                           colorMap.getKey(),
+                                           colorMap.getKey(),
+                                           colorMap.getValue())
+                           ).replace("#", "&")) // Some wizardry formatting
+                           .skip(startIndex)
+                           .limit(11)
+                           .collect(Collectors.toList());
         }
 
     }
@@ -162,14 +159,14 @@ public final class NameMenu extends AbstractPlainMenu {
         public void create() {
             String name = MessageUtils.beautify(crop.getName(), false);
             String status = crop.isHarvestable()
-                    ? CROP_STATUS_ENABLED.get(plugin)
-                    : CROP_STATUS_DISABLED.get(plugin);
+                                    ? CROP_STATUS_ENABLED.get(plugin)
+                                    : CROP_STATUS_DISABLED.get(plugin);
 
             setMaterial(crop.getMenuType());
             setMaterial(!crop.isHarvestable(), XMaterial.RED_STAINED_GLASS_PANE);
             setName(NAME_CROP_ITEM_NAME.get(plugin, name, status));
             setLore(NAME_CROP_ITEM_TIPS.getAsAppendList(plugin,
-                    NAME_CROP_ITEM_DROP_NAME.get(plugin, cropSection.getDropName(crop.getName())))
+                    NAME_CROP_ITEM_DROP_NAME.get(plugin, cropsConfig.get(ConfigurationKey.CROP_DROP_NAME, crop.getName())))
             );
         }
 
@@ -187,7 +184,7 @@ public final class NameMenu extends AbstractPlainMenu {
             setMaterial(!seed.isEnabled(), XMaterial.RED_STAINED_GLASS_PANE);
             setName(NAME_SEED_ITEM_NAME.get(plugin, name, status));
             setLore(NAME_SEED_ITEM_TIPS.getAsAppendList(plugin,
-                    NAME_SEED_ITEM_DROP_NAME.get(plugin, seedSection.getDropName(seed.getName())))
+                    NAME_SEED_ITEM_DROP_NAME.get(plugin, cropsConfig.get(ConfigurationKey.SEED_DROP_NAME, crop.getSeed().getName())))
             );
         }
 

@@ -102,6 +102,7 @@ public final class CropsConfig extends AbstractConfiguration {
         CROP("crops.%s", null),
         CROP_DROP_NAME("crops.%s.drop.name", ""),
         CROP_DROP_AMOUNT("crops.%s.drop.amount", 0),
+        CROP_DROP_CHANCE("crops.%s.drop.chance", 0),
         CROP_DROP_AT_LEAST_ONE("crops.%s.drop.atLeastOne", true),
         CROP_HARVESTABLE("crops.%s.isHarvestable", true),
         CROP_LINKABLE("crops.%s.isLinkable", true),

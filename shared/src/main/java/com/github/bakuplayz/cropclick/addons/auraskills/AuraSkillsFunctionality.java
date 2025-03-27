@@ -26,7 +26,7 @@ import dev.aurelium.auraskills.api.AuraSkillsApi;
 import dev.aurelium.auraskills.api.skill.Skills;
 import dev.aurelium.auraskills.api.user.SkillsUser;
 import lombok.AllArgsConstructor;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
@@ -35,7 +35,7 @@ public final class AuraSkillsFunctionality implements AddonFunctionality {
     private final CropsConfig config;
 
 
-    public void addExperience(@NotNull Player player, @NotNull Crop crop) {
+    public void addExperience(@NotNull OfflinePlayer player, @NotNull Crop crop) {
         SkillsUser user = AuraSkillsApi.get().getUser(player.getUniqueId());
         user.addSkillXp(Skills.FARMING, config.get(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName()));
     }

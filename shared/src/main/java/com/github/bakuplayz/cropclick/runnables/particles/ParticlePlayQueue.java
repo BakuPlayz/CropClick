@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.github.bakuplayz.cropclick.runnables.sounds;
+package com.github.bakuplayz.cropclick.runnables.particles;
 
 import com.github.bakuplayz.cropclick.runnables.Runnable;
+import com.github.bakuplayz.cropclick.runnables.RunnableTask;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Contract;
@@ -32,51 +33,51 @@ import java.util.TimerTask;
 
 
 /**
- * A class representing a Sound as a {@link Runnable}.
+ * A class representing a Particle as a {@link RunnableTask}.
  *
  * @author BakuPlayz
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class SoundRunnable implements Runnable {
+public final class ParticlePlayQueue implements Runnable {
 
     private final Timer timer;
 
     private final Location location;
 
-    private final List<Sound> queuedSounds;
+    private final List<Particle> queuedParticles;
 
 
-    public SoundRunnable(@NotNull Block block) {
+    public ParticlePlayQueue(@NotNull Block block) {
+        this.queuedParticles = new ArrayList<>();
         this.timer = new Timer(true);
-        this.queuedSounds = new ArrayList<>();
         this.location = block.getLocation();
     }
 
 
     /**
-     * Adds a sound to the {@link #queuedSounds queue of sounds}.
+     * Adds a particle to the {@link #queuedParticles queue of particles}.
      *
-     * @param name   the name of the sound.
-     * @param pitch  the pitch of the sound.
-     * @param volume the volume of the sound.
-     * @param delay  the delay in milliseconds before playing the sound.
+     * @param name   the name of the particle.
+     * @param amount the amount of the particle to spawn.
+     * @param speed  the speed at which the particle should be played.
+     * @param delay  the delay in milliseconds before playing the particle.
      */
-    public void queueSound(@NotNull String name, double pitch, double volume, long delay) {
-        queuedSounds.add(new Sound(name, pitch, volume, delay));
+    public void queueParticle(@NotNull String name, int amount, double speed, long delay) {
+        queuedParticles.add(new Particle(name, amount, speed, delay));
     }
 
 
     /**
-     * Runs each {@link Sound} one by one till done.
+     * Runs each {@link Particle} one by one till done.
      */
     @Override
     public void run() {
         long delay = 0;
-        for (Sound sound : queuedSounds) {
-            delay += sound.getDelay();
+        for (Particle particle : queuedParticles) {
+            delay += particle.getDelay();
             timer.schedule(
-                    new SoundTask(sound, location),
+                    new ParticleTask(particle, location),
                     delay
             );
         }
@@ -85,7 +86,7 @@ public final class SoundRunnable implements Runnable {
 
 
     /**
-     * Clears the {@link Timer timer} and removes the {@link SoundTask} when called.
+     * Clears the {@link Timer timer} and removes the {@link ParticleTask} when called.
      *
      * @return a cleaning task.
      */

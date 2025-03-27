@@ -32,9 +32,8 @@ import com.github.bakuplayz.cropclick.configurations.converter.ConfigConverter;
 import com.github.bakuplayz.cropclick.configurations.converter.CropConverter;
 import com.github.bakuplayz.cropclick.configurations.converter.PlayerConverter;
 import com.github.bakuplayz.cropclick.crops.CropManager;
-import com.github.bakuplayz.cropclick.datastorages.DataStorage;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.AutofarmDataStorage;
-import com.github.bakuplayz.cropclick.datastorages.datastorage.WorldDataStorage;
+import com.github.bakuplayz.cropclick.datacontainers.AutofarmDataContainer;
+import com.github.bakuplayz.cropclick.datacontainers.WorldDataContainer;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.listeners.autofarm.harvest.AutofarmHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmLinkListener;
@@ -54,7 +53,7 @@ import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarm
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
 import com.github.bakuplayz.cropclick.permissions.PermissionManager;
-import com.github.bakuplayz.cropclick.players.PlayerManager;
+import com.github.bakuplayz.cropclick.sql.ConnectionPool;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import com.github.bakuplayz.spigotspin.SpigotSpin;
@@ -120,9 +119,6 @@ public final class CropClick extends JavaPlugin {
     private PermissionManager permissionManager;
 
     @Getter
-    private PlayerManager playerManager;
-
-    @Getter
     private UsageConfig usageConfig;
 
     @Getter
@@ -138,10 +134,13 @@ public final class CropClick extends JavaPlugin {
     private LanguageConfig languageConfig;
 
     @Getter
-    private WorldDataStorage worldData;
+    private WorldDataContainer worldData;
 
     @Getter
-    private AutofarmDataStorage farmData;
+    private AutofarmDataContainer farmData;
+
+    @Getter
+    private ConnectionPool database;
 
     /**
      * A variable used for resetting only the required items, when a reset is called.
@@ -156,8 +155,8 @@ public final class CropClick extends JavaPlugin {
     public void onDisable() {
         CropClick.instance = null;
 
-        worldData.saveData();
-        farmData.saveData();
+        worldData.save();
+        farmData.save();
 
         Bukkit.getScheduler().cancelTasks(this);
     }
@@ -192,8 +191,6 @@ public final class CropClick extends JavaPlugin {
 
         startStoragesSaveInterval();
         startUpdateFetchInterval();
-
-        loadConfigSections();
     }
 
 
@@ -207,13 +204,12 @@ public final class CropClick extends JavaPlugin {
             registerConfigs();
             setupConfigs();
 
+            registerDatabase();
             registerStorages();
             setupStorages();
             startStoragesSaveInterval();
 
             registerManagers();
-
-            loadConfigSections();
         }, 0);
     }
 
@@ -243,21 +239,20 @@ public final class CropClick extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
-        cropsConfig.setup();
-        cropsConfig.setupSections();
-
-        usageConfig.setup();
-        addonsConfig.setup();
-        playersConfig.setup();
-        languageConfig.setup();
+        cropsConfig.create();
+        usageConfig.create();
+        addonsConfig.create();
+        playersConfig.create();
+        languageConfig.create();
     }
 
 
     /**
-     * Loads all the {@link CropClick} sections.
+     * Registers the database (or the SQL connection pool).
      */
-    public void loadConfigSections() {
-        cropsConfig.loadSections();
+    private void registerDatabase() {
+        // TODO: Make this work with the database configuration better.
+        this.database = new ConnectionPool(this.databaseConfig);
     }
 
 
@@ -277,8 +272,8 @@ public final class CropClick extends JavaPlugin {
      * Registers all the {@link CropClick} data storages.
      */
     private void registerStorages() {
-        this.worldData = new WorldDataStorage(this);
-        this.farmData = new AutofarmDataStorage(this);
+        this.worldData = new WorldDataContainer();
+        this.farmData = new AutofarmDataContainer();
     }
 
 
@@ -286,27 +281,18 @@ public final class CropClick extends JavaPlugin {
      * Sets up {@link CropClick CropClick's} data storages.
      */
     public void setupStorages() {
-        farmData.setup();
-        if (!isReset) {
-            farmData.fetchData();
-            farmData.saveData();
-        }
-
-        worldData.setup();
-        if (!isReset) {
-            worldData.fetchData();
-            worldData.saveData();
-        }
+        farmData.create();
+        worldData.create();
     }
 
 
     /**
-     * Starts the saving interval for {@link DataStorage data storages}.
+     * Starts the saving interval for {@link com.github.bakuplayz.spigotspin.container.DataContainer data containers}.
      */
     private void startStoragesSaveInterval() {
         final int TEN_MINUTES = 10 * 60 * 20; // Written as Minecraft ticks.
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::saveData, 0, TEN_MINUTES);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::saveData, 0, TEN_MINUTES);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, farmData::save, 0, TEN_MINUTES);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, worldData::save, 0, TEN_MINUTES);
     }
 
 
@@ -341,7 +327,6 @@ public final class CropClick extends JavaPlugin {
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
         this.addonManager = new AddonManager(this);
-        this.playerManager = new PlayerManager(this);
         this.autofarmManager = new AutofarmManager(this);
 
         if (!isReset) {
@@ -406,5 +391,5 @@ public final class CropClick extends JavaPlugin {
     private void registerAddons() {
         addonManager.registerAddons();
     }
-    
+
 }

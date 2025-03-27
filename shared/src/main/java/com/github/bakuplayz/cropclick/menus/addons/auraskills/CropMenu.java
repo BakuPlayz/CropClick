@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.menus.addons.auraskills;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.addons.auraskills.states.CropMenuStateBuilder;
@@ -45,12 +44,8 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
  */
 public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStateHandler> {
 
-    private final AddonConfigSection addonSection;
-
-
     public CropMenu(@NotNull CropClick plugin, @NotNull Crop crop) {
         super(AURA_SKILLS_TITLE.getTitle(plugin), plugin, crop);
-        this.addonSection = plugin.getCropsConfig().getAddonSection();
     }
 
 
@@ -75,7 +70,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class ExperienceDecreaseItem extends AbstractDecreaseItem {
 
         public ExperienceDecreaseItem(int change) {
-            super(addonSection.getSkillsExperience(cropName), change);
+            super(change);
         }
 
 
@@ -95,7 +90,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
 
         @Override
-        protected int getStateValue(@NotNull CropMenuStateBuilder.CropMenuState state) {
+        protected int getStateValue(@NotNull CropMenuState state) {
             return state.getExperience();
         }
 
@@ -113,13 +108,13 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         public void create() {
             setMaterial(XMaterial.EXPERIENCE_BOTTLE);
-            setName(AURA_SKILLS_CROP_EXPERIENCE_ITEM_NAME.get(plugin));
             setLore(getLore(getState().getExperience()));
+            setName(AURA_SKILLS_CROP_EXPERIENCE_ITEM_NAME.get(plugin));
         }
 
 
         @Override
-        public void update(@NotNull CropMenuStateBuilder.CropMenuState state, int flag) {
+        public void update(@NotNull CropMenuState state, int flag) {
             setLore(getLore(state.getExperience()));
         }
 
@@ -135,7 +130,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class ExperienceIncreaseItem extends AbstractIncreaseItem {
 
         public ExperienceIncreaseItem(int change) {
-            super(addonSection.getSkillsExperience(cropName), change);
+            super(change);
         }
 
 
@@ -155,7 +150,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
 
         @Override
-        protected int getStateValue(@NotNull CropMenuStateBuilder.CropMenuState state) {
+        protected int getStateValue(@NotNull CropMenuState state) {
             return state.getExperience();
         }
 

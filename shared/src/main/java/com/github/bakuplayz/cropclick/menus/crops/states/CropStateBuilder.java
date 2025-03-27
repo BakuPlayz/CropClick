@@ -19,8 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.crops.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.CropConfigSection;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SeedConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.crops.CropMenu;
@@ -53,15 +53,12 @@ public final class CropStateBuilder {
 
         private final Crop crop;
 
-        private final CropConfigSection cropSection;
-
-        private final SeedConfigSection seedSection;
+        private final CropsConfig cropsConfig;
 
 
         private CropMenuStateHandler(@NotNull CropMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
             super(observer, new CropMenuState(plugin, crop));
-            this.cropSection = plugin.getCropsConfig().getCropSection();
-            this.seedSection = plugin.getCropsConfig().getSeedSection();
+            this.cropsConfig = plugin.getCropsConfig();
             this.crop = crop;
         }
 
@@ -115,37 +112,37 @@ public final class CropStateBuilder {
         protected <P> CropMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == CropMenuStateFlag.CROP_VALUE) {
                 state.setCropValue(infer(partial));
-                cropSection.setDropAmount(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.CROP_DROP_AMOUNT, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.CROP_STATE) {
                 state.setCropHarvestable(infer(partial));
-                cropSection.setHarvestable(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.CROP_HARVESTABLE, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.SEED_VALUE) {
                 state.setSeedValue(infer(partial));
-                seedSection.setDropAmount(crop.getSeed().getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.SEED_DROP_AMOUNT, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.SEED_STATE) {
                 state.setSeedEnabled(infer(partial));
-                seedSection.setEnabled(crop.getSeed().getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.SEED_ENABLED, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.LINKABLE_STATE) {
                 state.setLinkable(infer(partial));
-                cropSection.setLinkable(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.CROP_LINKABLE, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.REPLANT_STATE) {
                 state.setReplantable(infer(partial));
-                cropSection.setReplant(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.CROP_SHOULD_REPLANT, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.AT_LEAST_ONE_STATE) {
                 state.setDroppingAtLeastOne(infer(partial));
-                cropSection.setDropAtLeastOne(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, infer(partial), crop.getName());
             }
 
             return state;
@@ -174,8 +171,8 @@ public final class CropStateBuilder {
             this.isCropHarvestable = crop.isHarvestable();
             this.isDroppingAtLeastOne = crop.dropAtLeastOne();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.cropValue = plugin.getCropsConfig().getCropSection().getDropAmount(crop.getName());
-            this.seedValue = plugin.getCropsConfig().getSeedSection().getDropAmount(crop.hasSeed() ? crop.getSeed().getName() : "");
+            this.cropValue = plugin.getCropsConfig().get(ConfigurationKey.CROP_DROP_AMOUNT, crop.getName());
+            this.seedValue = plugin.getCropsConfig().get(ConfigurationKey.SEED_DROP_AMOUNT, crop.hasSeed() ? crop.getSeed().getName() : "");
         }
 
     }

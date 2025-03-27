@@ -79,7 +79,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     private final class CropDecreaseItem extends AbstractCropDecreaseItem {
 
         public CropDecreaseItem(int change) {
-            super(cropSection.getDropChanceDecimal(cropName), change);
+            super(change);
         }
 
 
@@ -106,19 +106,14 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     }
 
     private final class CropItem extends AbstractCropItem {
-
-        public CropItem() {
-            super(cropSection.getDropChanceDecimal(cropName));
-        }
-
-
+        
         @NotNull
         @Override
         protected String getName(boolean isHarvestable) {
             String name = MessageUtils.beautify(cropName, false);
             String status = isHarvestable
-                    ? CROP_STATUS_ENABLED.get(plugin)
-                    : CROP_STATUS_DISABLED.get(plugin);
+                                    ? CROP_STATUS_ENABLED.get(plugin)
+                                    : CROP_STATUS_DISABLED.get(plugin);
 
             return DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status);
         }
@@ -137,7 +132,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     private final class CropIncreaseItem extends AbstractCropIncreaseItem {
 
         public CropIncreaseItem(int change) {
-            super(cropSection.getDropChanceDecimal(cropName), change);
+            super(change);
         }
 
 
@@ -166,7 +161,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     private final class SeedDecreaseItem extends AbstractSeedDecreaseItem {
 
         public SeedDecreaseItem(int change) {
-            super(seedSection.getDropChanceDecimal(seed.getName()), change);
+            super(change);
         }
 
 
@@ -194,10 +189,6 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
 
     private final class SeedItem extends AbstractSeedItem {
 
-        public SeedItem() {
-            super(seedSection.getDropChanceDecimal(seed.getName()));
-        }
-
 
         @NotNull
         @Override
@@ -220,7 +211,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     private final class SeedIncreaseItem extends AbstractSeedIncreaseItem {
 
         public SeedIncreaseItem(int change) {
-            super(seedSection.getDropChanceDecimal(seed.getName()), change);
+            super(change);
         }
 
 

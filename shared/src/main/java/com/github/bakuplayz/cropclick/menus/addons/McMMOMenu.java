@@ -19,13 +19,13 @@
 package com.github.bakuplayz.cropclick.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.McMMOAddon;
+import com.github.bakuplayz.cropclick.addons.mcmmo.MCMMOAddon;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractAddonMenu;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.CropsMenu;
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.WorldsMenu;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
 public class McMMOMenu extends AbstractAddonMenu {
 
     public McMMOMenu(@NotNull CropClick plugin) {
-        super(MCMMO_TITLE.getTitle(plugin), plugin, McMMOAddon.NAME);
+        super(MCMMO_TITLE.getTitle(plugin), plugin, MCMMOAddon.NAME);
     }
 
 

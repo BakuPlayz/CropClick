@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2023 BakuPlayz
+ * Copyright (C) 2024 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,74 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package com.github.bakuplayz.cropclick.datastorages.datastorage;
+package com.github.bakuplayz.cropclick.datacontainers;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.common.LocationUtils;
 import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.datastorages.DataStorage;
-import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
-import lombok.Getter;
+import com.github.bakuplayz.spigotspin.container.DataContainer;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.DoubleChest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE;
+import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER;
 
-/**
- * A class representing {@link Autofarm Autofarms} as a JSON file.
- *
- * @author BakuPlayz
- * @version 2.0.0
- * @since 2.0.0
- */
-public final class AutofarmDataStorage extends DataStorage {
+public final class AutofarmDataContainer extends DataContainer<HashMap<UUID, Autofarm>> implements LoggerContext {
 
-    /**
-     * A variable used to save the {@link #autofarms hashmap of autofarms} appropriately, when using GSON.
-     */
-    private final Type type;
-
-    private @Getter HashMap<UUID, Autofarm> autofarms;
-
-
-    public AutofarmDataStorage(@NotNull CropClick plugin) {
-        super(plugin, "autofarms.json");
-        this.type = new TypeToken<HashMap<UUID, Autofarm>>() {
-        }.getType();
-        this.autofarms = new HashMap<>();
-    }
-
-
-    /**
-     * Fetches the {@link #fileData file data}.
-     */
-    @Override
-    public void fetchData() {
-        super.fetchData();
-        loadFarms();
-    }
-
-
-    /**
-     * Saves the {@link #fileData file data}.
-     */
-    @Override
-    public void saveData() {
-        unlinkDestroyedFarms();
-        saveFarms();
+    public AutofarmDataContainer() {
+        super("autofarms.json");
+        setHandler(new Handler());
     }
 
 
@@ -93,8 +53,8 @@ public final class AutofarmDataStorage extends DataStorage {
      * @param autofarm the farm to link.
      */
     public void linkFarm(@NotNull Autofarm autofarm) {
-        autofarms.put(autofarm.getFarmerId(), autofarm);
-        AutofarmUtils.addCachedID(plugin, autofarm);
+        getData().put(autofarm.getFarmerId(), autofarm);
+        AutofarmUtils.addCachedID(CropClick.getInstance(), autofarm);
     }
 
 
@@ -104,34 +64,8 @@ public final class AutofarmDataStorage extends DataStorage {
      * @param autofarm the farm to unlink.
      */
     public void unlinkFarm(@NotNull Autofarm autofarm) {
-        autofarms.remove(autofarm.getFarmerId());
-        AutofarmUtils.removeCachedID(plugin, autofarm);
-    }
-
-
-    /**
-     * Loads all the {@link #autofarms}.
-     */
-    private void loadFarms() {
-        HashMap<UUID, Autofarm> loaded = gson.fromJson(fileData, type);
-        this.autofarms = loaded != null ? loaded : new HashMap<>();
-    }
-
-
-    /**
-     * Saves all the {@link #autofarms}.
-     */
-    private void saveFarms() {
-        try {
-            String data = gson.toJson(autofarms, type);
-            JsonElement dataAsJson = jsonParser.parse(data);
-            fileData = dataAsJson.getAsJsonObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            LanguageAPI.Console.DATA_STORAGE_FAILED_SAVE_OTHER.send(plugin.getLogger(), fileName);
-        }
-
-        super.saveData();
+        getData().remove(autofarm.getFarmerId());
+        AutofarmUtils.removeCachedID(CropClick.getInstance(), autofarm);
     }
 
 
@@ -139,17 +73,17 @@ public final class AutofarmDataStorage extends DataStorage {
      * Unlinks all the destroyed {@link Autofarm autofarms}.
      */
     private void unlinkDestroyedFarms() {
-        AutofarmManager manager = plugin.getAutofarmManager();
+        AutofarmManager manager = CropClick.getInstance().getAutofarmManager();
 
         if (manager == null) {
-            autofarms.values().removeIf(farm -> !farm.isLinked());
+            getData().values().removeIf(farm -> !farm.isLinked());
             return;
         }
 
         try {
-            autofarms.values().removeIf(farm -> !farm.isComponentsPresent(manager));
+            getData().values().removeIf(farm -> !farm.isComponentsPresent(manager));
         } catch (Exception e) {
-            LanguageAPI.Console.AUTOFARM_STORAGE_FAILED_REMOVE.send(plugin.getLogger());
+            AUTOFARM_STORAGE_FAILED_REMOVE.send(getLogger());
         }
     }
 
@@ -161,11 +95,12 @@ public final class AutofarmDataStorage extends DataStorage {
      *
      * @return the found autofarm, otherwise null.
      */
-    public @Nullable Autofarm findFarmById(String farmerID) {
+    @Nullable
+    public Autofarm findFarmById(String farmerID) {
         if (farmerID == null) {
             return null;
         }
-        return autofarms.getOrDefault(UUID.fromString(farmerID), null);
+        return getData().getOrDefault(UUID.fromString(farmerID), null);
     }
 
 
@@ -176,12 +111,13 @@ public final class AutofarmDataStorage extends DataStorage {
      *
      * @return the found autofarm, otherwise null.
      */
-    public @Nullable Autofarm findFarmByCrop(@NotNull Block block) {
-        return autofarms.values().stream()
-                .filter(Autofarm::isLinked)
-                .filter(Autofarm::isEnabled)
-                .filter(farm -> farm.getCropLocation().equals(block.getLocation()))
-                .findFirst().orElse(null);
+    @Nullable
+    public Autofarm findFarmByCrop(@NotNull Block block) {
+        return getData().values().stream()
+                       .filter(Autofarm::isLinked)
+                       .filter(Autofarm::isEnabled)
+                       .filter(farm -> farm.getCropLocation().equals(block.getLocation()))
+                       .findFirst().orElse(null);
     }
 
 
@@ -192,23 +128,24 @@ public final class AutofarmDataStorage extends DataStorage {
      *
      * @return the found autofarm, otherwise null.
      */
-    public @Nullable Autofarm findFarmByContainer(@NotNull Block block) {
-        return autofarms.values().stream()
-                .filter(Autofarm::isLinked)
-                .filter(Autofarm::isEnabled)
-                .filter(farm -> {
-                    boolean filterByDoubly = filterByDoubly(farm, block);
-                    boolean filterByDoubleChest = filterByDoubleChest(farm, block);
+    @Nullable
+    public Autofarm findFarmByContainer(@NotNull Block block) {
+        return getData().values().stream()
+                       .filter(Autofarm::isLinked)
+                       .filter(Autofarm::isEnabled)
+                       .filter(farm -> {
+                           boolean filterByDoubly = filterByDoubly(farm, block);
+                           boolean filterByDoubleChest = filterByDoubleChest(farm, block);
 
-                    if (filterByDoubly || filterByDoubleChest) {
-                        return true;
-                    }
+                           if (filterByDoubly || filterByDoubleChest) {
+                               return true;
+                           }
 
-                    Location blockLocation = block.getLocation();
-                    Location containerLocation = farm.getContainerLocation();
-                    return containerLocation.equals(blockLocation);
-                })
-                .findFirst().orElse(null);
+                           Location blockLocation = block.getLocation();
+                           Location containerLocation = farm.getContainerLocation();
+                           return containerLocation.equals(blockLocation);
+                       })
+                       .findFirst().orElse(null);
     }
 
 
@@ -219,12 +156,13 @@ public final class AutofarmDataStorage extends DataStorage {
      *
      * @return the found autofarm, otherwise null.
      */
-    public @Nullable Autofarm findFarmByDispenser(@NotNull Block block) {
-        return autofarms.values().stream()
-                .filter(Autofarm::isLinked)
-                .filter(Autofarm::isEnabled)
-                .filter(farm -> farm.getDispenserLocation().equals(block.getLocation()))
-                .findFirst().orElse(null);
+    @Nullable
+    public Autofarm findFarmByDispenser(@NotNull Block block) {
+        return getData().values().stream()
+                       .filter(Autofarm::isLinked)
+                       .filter(Autofarm::isEnabled)
+                       .filter(farm -> farm.getDispenserLocation().equals(block.getLocation()))
+                       .findFirst().orElse(null);
     }
 
 
@@ -283,4 +221,55 @@ public final class AutofarmDataStorage extends DataStorage {
         return filterByDoubly(doubleChest, autofarm.getContainerLocation());
     }
 
+
+    private final class Handler implements EventHandler {
+
+        @Override
+        public void onCreateSuccess() {
+
+        }
+
+
+        @Override
+        public void onCreateFailure() {
+
+        }
+
+
+        @Override
+        public void onReloadSuccess() {
+
+        }
+
+
+        @Override
+        public void onReloadFailure() {
+
+        }
+
+
+        @Override
+        public void onSaveSuccess() {
+            unlinkDestroyedFarms();
+        }
+
+
+        @Override
+        public void onSaveFailure() {
+            DATA_STORAGE_FAILED_SAVE_OTHER.send(getLogger(), fileName);
+        }
+
+
+        @Override
+        public void onResetSuccess() {
+
+        }
+
+
+        @Override
+        public void onResetFailure() {
+
+        }
+
+    }
 }

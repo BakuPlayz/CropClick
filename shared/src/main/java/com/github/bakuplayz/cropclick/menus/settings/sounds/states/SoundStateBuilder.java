@@ -19,11 +19,12 @@
 package com.github.bakuplayz.cropclick.menus.settings.sounds.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SoundConfigSection;
+import com.github.bakuplayz.cropclick.common.MathUtils;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.SoundMenu;
 import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
-import com.github.bakuplayz.cropclick.common.MathUtils;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
@@ -52,12 +53,12 @@ public final class SoundStateBuilder {
 
         private final String soundName;
 
-        private final SoundConfigSection soundSection;
+        private final CropsConfig cropsConfig;
 
 
         private SoundMenuStateHandler(@NotNull SoundMenu observer, @NotNull CropClick plugin, @NotNull Crop crop, @NotNull String soundName) {
             super(observer, new SoundMenuState(plugin, crop, soundName));
-            this.soundSection = plugin.getCropsConfig().getSoundSection();
+            this.cropsConfig = plugin.getCropsConfig();
             this.soundName = soundName;
             this.crop = crop;
         }
@@ -120,17 +121,17 @@ public final class SoundStateBuilder {
         protected <P> SoundMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == SoundMenuStateFlag.DELAY) {
                 state.setDelay(infer(partial));
-                soundSection.setDelay(crop.getName(), soundName, infer(partial));
+                cropsConfig.set(ConfigurationKey.SOUND_DELAY, infer(partial), crop.getName(), soundName);
             }
 
             if (flag == SoundMenuStateFlag.VOLUME) {
                 state.setVolume(infer(partial));
-                soundSection.setVolume(crop.getName(), soundName, infer(partial));
+                cropsConfig.set(ConfigurationKey.SOUND_VOLUME, infer(partial), crop.getName(), soundName);
             }
 
             if (flag == SoundMenuStateFlag.PITCH) {
                 state.setPitch(MathUtils.round(infer(partial)));
-                soundSection.setPitch(crop.getName(), soundName, MathUtils.round(infer(partial)));
+                cropsConfig.set(ConfigurationKey.SOUND_PITCH, MathUtils.round(infer(partial)), crop.getName(), soundName);
             }
 
             if (flag == SoundMenuStateFlag.ORDER) {

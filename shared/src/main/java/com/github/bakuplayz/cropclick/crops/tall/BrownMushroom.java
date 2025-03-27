@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
+import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
@@ -27,7 +28,6 @@ import com.github.bakuplayz.cropclick.crops.abstracts.AbstractMushroom;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal;
 import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal.Input;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +45,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BrownMushroom extends AbstractMushroom {
 
+    private final static StackTraversal traversal = new StackTraversal();
+
+
     public BrownMushroom(@NotNull CropsConfig config) {
         super(config);
     }
@@ -59,23 +62,6 @@ public final class BrownMushroom extends AbstractMushroom {
     @Override
     public String getName() {
         return "brownMushroom";
-    }
-
-
-    /**
-     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
-     *
-     * @param block the crop block.
-     *
-     * @return the crop's current age.
-     */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        mushrooms.clear();
-
-        return new StackTraversal().traverse(
-                new Input(block, (mushroom) -> !isNotMushroomType(mushroom) || mushrooms.contains(mushroom), mushrooms)
-        );
     }
 
 
@@ -116,6 +102,23 @@ public final class BrownMushroom extends AbstractMushroom {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.BROWN_MUSHROOM;
+    }
+
+
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        mushrooms.clear();
+
+        return traversal.traverse(
+                new Input(block, (mushroom) -> !isNotMushroomType(mushroom) || mushrooms.contains(mushroom), mushrooms)
+        );
     }
 
 

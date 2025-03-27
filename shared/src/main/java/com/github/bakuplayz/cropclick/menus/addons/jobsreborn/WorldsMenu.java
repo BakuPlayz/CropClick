@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.addons.jobsreborn;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.JobsRebornAddon;
+import com.github.bakuplayz.cropclick.addons.jobsreborn.JobsRebornAddon;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractWorldsMenu;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;

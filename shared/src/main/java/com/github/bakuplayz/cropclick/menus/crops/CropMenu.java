@@ -19,12 +19,13 @@
 package com.github.bakuplayz.cropclick.menus.crops;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.crops.chance.ChanceMenu;
 import com.github.bakuplayz.cropclick.menus.crops.states.CropStateBuilder;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
@@ -86,7 +87,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class CropDecreaseItem extends AbstractCropDecreaseItem {
 
         public CropDecreaseItem(int change) {
-            super(cropSection.getDropAmount(cropName), change);
+            super(change);
         }
 
 
@@ -114,17 +115,12 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class CropItem extends AbstractCropItem {
 
-        public CropItem() {
-            super(crop.getDrop().getAmount());
-        }
-
-
         @NotNull
         protected String getName(boolean isHarvestable) {
             String name = MessageUtils.beautify(cropName, false);
             String status = isHarvestable
-                    ? CROP_STATUS_ENABLED.get(plugin)
-                    : CROP_STATUS_DISABLED.get(plugin);
+                                    ? CROP_STATUS_ENABLED.get(plugin)
+                                    : CROP_STATUS_DISABLED.get(plugin);
 
             return CROP_CROP_ITEM_NAME.get(plugin, name, status);
         }
@@ -142,7 +138,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class CropIncreaseItem extends AbstractCropIncreaseItem {
 
         public CropIncreaseItem(int change) {
-            super(cropSection.getDropAmount(cropName), change);
+            super(change);
         }
 
 
@@ -171,7 +167,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class SeedDecreaseItem extends AbstractSeedDecreaseItem {
 
         public SeedDecreaseItem(int change) {
-            super(seedSection.getDropAmount(seed.getName()), change);
+            super(change);
         }
 
 
@@ -198,12 +194,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     }
 
     private final class SeedItem extends AbstractSeedItem {
-
-        public SeedItem() {
-            super(seed.getDrop().getAmount());
-        }
-
-
+        
         @NotNull
         protected String getName(boolean isEnabled) {
             String name = MessageUtils.beautify(seed.getName(), false);
@@ -224,7 +215,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class SeedIncreaseItem extends AbstractSeedIncreaseItem {
 
         public SeedIncreaseItem(int change) {
-            super(seedSection.getDropAmount(seed.getName()), change);
+            super(change);
         }
 
 
@@ -267,13 +258,15 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         }
 
 
+        // TODO: Convert to decimal
         private int getCropDropChance() {
-            return cropSection.getDropChanceDecimal(cropName);
+            return cropsConfig.get(ConfigurationKey.CROP_DROP_CHANCE, cropName);
         }
 
 
+        // TODO: Convert to decimal
         private int getSeedDropChance() {
-            return seedSection.getDropChanceDecimal(seed.getName());
+            return cropsConfig.get(ConfigurationKey.SEED_DROP_CHANCE, seed.getName());
         }
 
     }

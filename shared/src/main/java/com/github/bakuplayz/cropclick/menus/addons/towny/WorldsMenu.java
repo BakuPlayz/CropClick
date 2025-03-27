@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.addons.towny;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.TownyAddon;
+import com.github.bakuplayz.cropclick.addons.towny.TownyAddon;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractWorldsMenu;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;

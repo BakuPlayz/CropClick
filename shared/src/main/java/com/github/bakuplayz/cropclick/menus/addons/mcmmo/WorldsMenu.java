@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.addons.mcmmo;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.McMMOAddon;
+import com.github.bakuplayz.cropclick.addons.mcmmo.MCMMOAddon;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractWorldsMenu;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
@@ -48,7 +48,7 @@ public final class WorldsMenu extends AbstractWorldsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull FarmWorld world) {
-        boolean isBanished = world.isBanishedAddon(plugin.getAddonManager(), McMMOAddon.NAME);
+        boolean isBanished = world.isBanishedAddon(plugin.getAddonManager(), MCMMOAddon.NAME);
         return WORLDS_ITEM_MCMMO_TIPS.getAsAppendList(plugin, WORLDS_ITEM_STATUS.get(plugin, isBanished));
     }
 
@@ -56,7 +56,7 @@ public final class WorldsMenu extends AbstractWorldsMenu {
     @NotNull
     @Override
     public ItemAction getPaginatedItemAction(@NotNull FarmWorld world, int position) {
-        return (item, player) -> stateHandler.toggleWorld(world, McMMOAddon.NAME, position);
+        return (item, player) -> stateHandler.toggleWorld(world, MCMMOAddon.NAME, position);
     }
 
 }

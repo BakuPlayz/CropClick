@@ -20,11 +20,15 @@ package com.github.bakuplayz.cropclick.mappers;
 
 import com.github.bakuplayz.cropclick.Component;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
 import com.github.bakuplayz.cropclick.common.VersionUtils;
+import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: Add comment.
+/**
+ * A class representing a reflection ComponentMapper, which
+ * maps the right to the correct component based on the given
+ * Minecraft versions (0-12.9: legacy, above: latest).
+ */
 public final class ComponentMapper {
 
     private final static String VERSION = VersionUtils.between(0.0, 12.9) ? "legacy" : "latest";
@@ -32,23 +36,23 @@ public final class ComponentMapper {
 
     @NotNull
     public static CropAgeComponent getAge() {
-        return (CropAgeComponent) getMappedComponent("crops.CropAge");
+        return (CropAgeComponent) getMappedComponent("crops", "CropAge");
     }
 
 
     @NotNull
     public static ContainerComponent getContainer() {
-        return (ContainerComponent) getMappedComponent("autofarms.Container");
+        return (ContainerComponent) getMappedComponent("autofarms", "Container");
     }
 
 
     @NotNull
     @SuppressWarnings("unchecked")
-    private static <T extends Component> Component getMappedComponent(@NotNull String classPath) {
+    private static <T extends Component> Component getMappedComponent(@NotNull String packagePath, @NotNull String className) {
         try {
-            return (T) Class.forName(String.format("com.github.bakuplayz.cropclick.%s.%s", VERSION, classPath))
-                    .getDeclaredConstructor()
-                    .newInstance();
+            return (T) Class.forName(String.format("com.github.bakuplayz.cropclick.%s.%s.%s", VERSION, packagePath, className))
+                               .getDeclaredConstructor()
+                               .newInstance();
         } catch (ClassNotFoundException exception) {
             throw new IllegalStateException("CropClick does not support this server version", exception);
         } catch (ReflectiveOperationException exception) {

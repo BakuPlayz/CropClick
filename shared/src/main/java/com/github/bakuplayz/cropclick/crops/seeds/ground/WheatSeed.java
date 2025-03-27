@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.crops.seeds.ground;
 
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.seeds.AbstractSeed;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
@@ -63,9 +64,9 @@ public final class WheatSeed extends AbstractSeed {
     @Override
     public Drop getDrop() {
         return new Drop(XMaterial.WHEAT_SEEDS,
-                seedSection.getDropName(getName()),
-                seedSection.getDropAmount(getName(), 3),
-                seedSection.getDropChance(getName(), 80)
+                cropsConfig.get(ConfigurationKey.SEED_DROP_NAME, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_AMOUNT, 3, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_CHANCE, 80, getName())
         );
     }
 

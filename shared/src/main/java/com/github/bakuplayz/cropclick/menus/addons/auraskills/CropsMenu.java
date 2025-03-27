@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.addons.auraskills;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropsMenu;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
@@ -46,17 +46,18 @@ public final class CropsMenu extends AbstractCropsMenu {
 
 
     @NotNull
-    @Override
-    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
-        return (item, player) -> new CropMenu(plugin, crop).open(player);
+    @Unmodifiable
+    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
+        return CROPS_ITEM_AURA_SKILLS_EXPERIENCE.getAsList(plugin,
+                plugin.getCropsConfig().get(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName())
+        );
     }
 
 
     @NotNull
-    @Unmodifiable
-    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        AddonConfigSection section = plugin.getCropsConfig().getAddonSection();
-        return CROPS_ITEM_AURA_SKILLS_EXPERIENCE.getAsList(plugin, section.getSkillsExperience(crop.getName()));
+    @Override
+    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
+        return (item, player) -> new CropMenu(plugin, crop).open(player);
     }
 
 }

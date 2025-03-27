@@ -16,34 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.players;
+package com.github.bakuplayz.cropclick.sql;
 
-import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.PlayersConfig;
-import lombok.Getter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A class managing the {@link Player player}.
- *
- * @author BakuPlayz
- * @version 2.2.0
- * @since 2.2.0
- */
-public final class PlayerManager {
+import java.util.HashMap;
+import java.util.Map;
 
-    @NotNull
-    private final PlayersConfig config;
+public class RowMapperRegistry {
 
-    @Getter
-    private final PlayerInteractionManager interactionManager;
+    private static final Map<Class<?>, RowMapper<?>> registry = new HashMap<>();
 
 
-    public PlayerManager(@NotNull CropClick plugin) {
-        this.config = plugin.getPlayersConfig();
-        this.interactionManager = new PlayerInteractionManager(plugin);
+    public static <T> void register(Class<T> clazz, RowMapper<T> mapper) {
+        registry.put(clazz, mapper);
     }
 
 
+    @SuppressWarnings("unchecked")
+    public static <T> @NotNull RowMapper<T> get(Class<T> clazz) {
+        RowMapper<T> mapper = (RowMapper<T>) registry.get(clazz);
+        if (mapper == null) {
+            throw new IllegalStateException("No RowMapper registered for class: " + clazz.getName());
+        }
+        return mapper;
+    }
 }

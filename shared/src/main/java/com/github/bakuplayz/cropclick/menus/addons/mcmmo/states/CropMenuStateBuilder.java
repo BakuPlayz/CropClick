@@ -19,7 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.addons.mcmmo.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.AddonConfigSection;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu.AbstractCropMenuState;
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.CropMenu;
@@ -52,12 +53,12 @@ public final class CropMenuStateBuilder {
 
         private final Crop crop;
 
-        private final AddonConfigSection addonSection;
+        private final CropsConfig cropsConfig;
 
 
         private CropMenuStateHandler(@NotNull CropMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
             super(observer, new CropMenuState(plugin, crop));
-            this.addonSection = plugin.getCropsConfig().getAddonSection();
+            this.cropsConfig = plugin.getCropsConfig();
             this.crop = crop;
         }
 
@@ -76,7 +77,7 @@ public final class CropMenuStateBuilder {
         protected <P> CropMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == CropMenuStateFlag.EXPERIENCE_VALUE) {
                 state.setExperience(infer(partial));
-                addonSection.setMcMMOExperience(crop.getName(), infer(partial));
+                cropsConfig.set(ConfigurationKey.MCMMO_EXPERIENCE, infer(partial), crop.getName());
             }
 
             return state;
@@ -96,8 +97,8 @@ public final class CropMenuStateBuilder {
         private CropMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
             this.isCropHarvestable = crop.isHarvestable();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.experience = plugin.getCropsConfig().getAddonSection().getSkillsExperience(crop.getName());
-            this.reason = plugin.getCropsConfig().getAddonSection().getMcMMOExperienceReason(crop.getName());
+            this.experience = plugin.getCropsConfig().get(ConfigurationKey.MCMMO_EXPERIENCE, crop.getName());
+            this.reason = plugin.getCropsConfig().get(ConfigurationKey.MCMMO_REASON, crop.getName());
         }
 
     }

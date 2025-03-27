@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.menus.shared;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.spigotspin.SpigotSpin;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginationContext;
 import com.github.bakuplayz.spigotspin.menu.items.paginated.PreviousPageItem;
@@ -46,6 +45,6 @@ public final class CustomPreviousPageItem<S extends PaginatedMenuState> extends 
     @Override
     public void create() {
         super.create();
-        setName(GENERAL_PREVIOUS_PAGE_ITEM_NAME.get((CropClick) SpigotSpin.Plugin.REF.getPlugin()));
+        setName(GENERAL_PREVIOUS_PAGE_ITEM_NAME.get(CropClick.getInstance()));
     }
 }

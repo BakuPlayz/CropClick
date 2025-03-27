@@ -290,7 +290,7 @@
         <dependency>
             <groupId>com.github.bakuplayz</groupId>
             <artifactId>SpigotSpin</artifactId>
-            <version>0.1.1.68-BETA</version>
+            <version>0.1.1.71-BETA</version>
             <scope>compile</scope>
         </dependency>
 
@@ -304,7 +304,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>24.1.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

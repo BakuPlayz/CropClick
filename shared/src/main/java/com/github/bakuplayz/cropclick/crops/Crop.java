@@ -78,14 +78,6 @@ public interface Crop {
 
 
     /**
-     * Checks whether the implementing crop has a drop.
-     *
-     * @return true if it has, otherwise false.
-     */
-    boolean hasDrop();
-
-
-    /**
      * Checks whether the implementing crop should drop at least one drop.
      *
      * @return true if it should, otherwise false.
@@ -120,7 +112,6 @@ public interface Crop {
     boolean harvest(@NotNull ContainerComponent container);
 
 
-
     /**
      * Checks whether the implementing crop is at its harvest age.
      *
@@ -148,6 +139,14 @@ public interface Crop {
      * @return true if it is, otherwise false.
      */
     boolean isHarvestable();
+
+
+    /**
+     * Checks whether the implementing crop is linkable to an {@link Autofarm}.
+     *
+     * @return true if it is, otherwise false.
+     */
+    boolean isLinkable();
 
 
     /**
@@ -199,12 +198,5 @@ public interface Crop {
     @NotNull
     XMaterial getMenuType();
 
-
-    /**
-     * Checks whether the implementing crop is linkable to an {@link Autofarm}.
-     *
-     * @return true if it is, otherwise false.
-     */
-    boolean isLinkable();
 
 }

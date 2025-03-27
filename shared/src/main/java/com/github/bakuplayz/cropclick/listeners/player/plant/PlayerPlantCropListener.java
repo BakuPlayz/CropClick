@@ -20,15 +20,16 @@
 package com.github.bakuplayz.cropclick.listeners.player.plant;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
-import com.github.bakuplayz.cropclick.addons.OfflineGrowthAddon;
-import com.github.bakuplayz.cropclick.crops.Crop;
-import com.github.bakuplayz.cropclick.crops.CropManager;
-import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
+import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.common.EventUtils;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.common.VersionUtils;
+import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropManager;
+import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -97,7 +98,8 @@ public final class PlayerPlantCropListener implements Listener {
             return;
         }
 
-        if (!addonManager.canModifyRegion(player)) {
+        CropPlayer cropPlayer = new CropPlayer(player);
+        if (!cropPlayer.canModifyRegion()) {
             return;
         }
 
@@ -130,7 +132,7 @@ public final class PlayerPlantCropListener implements Listener {
         }
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
-            growthAddon.registerCrop(event.getBlock().getLocation());
+            growthAddon.getFunctionality().registerCrop(event.getBlock().getLocation());
         }
     }
 

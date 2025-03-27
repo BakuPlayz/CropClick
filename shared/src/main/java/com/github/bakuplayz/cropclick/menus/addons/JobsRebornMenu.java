@@ -19,13 +19,13 @@
 package com.github.bakuplayz.cropclick.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.JobsRebornAddon;
+import com.github.bakuplayz.cropclick.addons.jobsreborn.JobsRebornAddon;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractAddonMenu;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.addons.jobsreborn.CropsMenu;
 import com.github.bakuplayz.cropclick.menus.addons.jobsreborn.WorldsMenu;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 

@@ -31,6 +31,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,9 +72,9 @@ public final class WorldGuardFunctionality implements AddonFunctionality, Logger
      *
      * @return true if allowed, otherwise false.
      */
-    public boolean regionAllowsPlayer(@NotNull Player player) {
+    public boolean regionAllowsPlayer(@NotNull OfflinePlayer player) {
         RegionContainer container = worldGuard.getPlatform().getRegionContainer();
-        RegionManager manager = container.get((World) player.getWorld());
+        RegionManager manager = container.get((World) player.getPlayer().getWorld());
         if (manager == null) {
             return false;
         }
@@ -106,7 +107,7 @@ public final class WorldGuardFunctionality implements AddonFunctionality, Logger
      *
      * @return true if member, otherwise false.
      */
-    private boolean isMemberOfRegion(@NotNull ProtectedRegion region, @NotNull Player player) {
+    private boolean isMemberOfRegion(@NotNull ProtectedRegion region, @NotNull OfflinePlayer player) {
         DefaultDomain owners = region.getOwners();
         DefaultDomain members = region.getMembers();
         return members.contains(player.getUniqueId()) || owners.contains(player.getUniqueId());

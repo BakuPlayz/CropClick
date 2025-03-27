@@ -19,12 +19,12 @@
 package com.github.bakuplayz.cropclick.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.TownyAddon;
+import com.github.bakuplayz.cropclick.addons.towny.TownyAddon;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractAddonMenu;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.addons.towny.WorldsMenu;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
