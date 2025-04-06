@@ -24,11 +24,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,30 +56,6 @@ public final class DataContainer<D> implements DataService<D> {
         service.save();
     }
 
-
-    // Meant for local files, aka not for db.
-    static class LocalAutofarmService implements DataService<Autofarm> {
-
-        private HashMap<UUID, Autofarm> data;
-
-
-        @Override
-        public List<Autofarm> getMany() {
-            return (List<Autofarm>) data.values();
-        }
-
-
-        @Override
-        public Autofarm getOne(@NotNull UUID id) {
-            return data.values().stream().filter(a -> a.getFarmerId() == id).findAny().orElse(null);
-        }
-
-
-        @Override
-        public void save() {
-
-        }
-    }
 
     static class AutofarmSerializer implements SQLSerializer<Autofarm> {
 
@@ -133,53 +107,8 @@ public final class DataContainer<D> implements DataService<D> {
                     rs.getDouble("z")
             );
         }
+
     }
 
-    static class RemoteAutofarmService implements DataService<Autofarm> {
-
-        private final Connection connection;
-
-        private final AutofarmSerializer autofarmSerializer;
-
-
-        public RemoteAutofarmService(Connection connection) {
-            this.connection = connection;
-            this.autofarmSerializer = new AutofarmSerializer();
-        }
-
-
-        @Override
-        public List<Autofarm> getMany() {
-            return null;
-        }
-
-
-        @Override
-        public Autofarm getOne(@NotNull UUID id) {
-            String query = "SELECT * FROM autofarms WHERE farmer_id = ?";
-
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, id.toString());
-                ResultSet rs = stmt.executeQuery();
-
-                if (rs.next()) {
-                    return autofarmSerializer.deserialize(rs);
-                }
-            } catch (SQLException e) {
-                return null;
-            }
-            return null;
-        }
-
-
-        @Override
-        public void save() {
-
-        }
-    }
-
-    // DataService<D> service = new LocalAutofarmService();
-    // DataContainer<AutoFarm> autofarms = new DataContainer(service);
-    //
 
 }

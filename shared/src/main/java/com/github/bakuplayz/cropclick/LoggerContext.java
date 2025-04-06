@@ -18,12 +18,25 @@
  */
 package com.github.bakuplayz.cropclick;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public interface LoggerContext {
 
+    boolean DEBUG = false;
+
+
     default Logger getLogger() {
         return Logger.getLogger("CropClick");
+    }
+
+
+    default void logDebug(@NotNull String message, @NotNull Throwable throwable) {
+        if (DEBUG) {
+            getLogger().log(Level.INFO, message, throwable);
+        }
     }
 
 }

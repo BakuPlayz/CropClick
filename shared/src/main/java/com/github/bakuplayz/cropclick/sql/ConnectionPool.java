@@ -28,8 +28,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.Queue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import static com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig.DatabaseProtocol;
@@ -43,50 +44,79 @@ public final class ConnectionPool implements LoggerContext {
 
     private final static int MAX_CONNECTION_TRIES = 3;
 
+
+    private final Lock connectionsLock;
+
     private final Queue<Connection> connections;
-
-
-    // SQLConnectionPool pool = new SQLConnectionPool("<host>")
-    // async () -> pool.acquire().ifPresentOrElse(con -> {
-    //          con.fetch();
-    //          pool.release(con);
-    // }, () -> System.out.println("");)
 
 
     public ConnectionPool(@NotNull DatabaseConfig config) {
         this.connections = initializePool(config);
+        this.connectionsLock = new ReentrantLock();
     }
 
 
-    public synchronized Optional<Connection> acquire() {
-        if (connections.isEmpty()) {
-            return Optional.empty();
+    /**
+     * Acquires a new connection once it has become available,
+     * will sleep the thread while waiting for one or just return
+     * one immediately.
+     *
+     * @return the acquired connection.
+     * @throws InterruptedException since there is a lock wait.
+     */
+    public Connection acquire() throws InterruptedException {
+        synchronized (connectionsLock) {
+            while (connections.isEmpty()) {
+                connectionsLock.wait();
+            }
+            return connections.poll();
         }
-        return Optional.of(connections.poll());
     }
 
 
-    public synchronized void release(@NotNull Connection connection) {
+    /**
+     * Releases the provided connection back to the pool again.
+     *
+     * @param connection the connection that is to be released.
+     */
+    public void release(@NotNull Connection connection) {
         try {
-            if (connection.isClosed()) {
-                return;
-            }
+            if (connection.isClosed()) return;
         } catch (SQLException e) {
-            getLogger().log(Level.WARNING, "Could not release an established SQL connection.", e);
+            logDebug("Could not release an established SQL connection, already closed.", e);
         }
-        connections.add(connection);
+
+        synchronized (connectionsLock) {
+            connections.add(connection);
+            connectionsLock.notify();
+        }
     }
 
 
-    public synchronized void close() {
-        for (Iterator<Connection> it = connections.iterator(); it.hasNext(); ) {
-            try {
-                it.next().close();
-                it.remove();
-            } catch (SQLException e) {
-                getLogger().log(Level.WARNING, "Could not close an established SQL connection.", e);
+    /**
+     * Closes all the connections within the pool.
+     */
+    public void close() {
+        synchronized (connectionsLock) {
+            for (Iterator<Connection> it = connections.iterator(); it.hasNext(); ) {
+                try {
+                    it.next().close();
+                    it.remove();
+                } catch (SQLException e) {
+                    logDebug("Could not close an established SQL connection.", e);
+                }
             }
         }
+    }
+
+
+    /**
+     * Checks if there are any established connections.
+     *
+     * @return true iff any, false otherwise.
+     */
+    public boolean isEstablished() {
+        return !connections.isEmpty();
     }
 
 
@@ -128,5 +158,6 @@ public final class ConnectionPool implements LoggerContext {
             return tryConnect(path, username, password, tries - 1);
         }
     }
+
 
 }

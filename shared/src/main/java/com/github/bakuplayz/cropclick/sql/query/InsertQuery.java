@@ -21,25 +21,56 @@ package com.github.bakuplayz.cropclick.sql.query;
 import com.github.bakuplayz.cropclick.sql.Column;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.StringJoiner;
 
 /**
- * A class representing a typed SQL insert query, where the type
- * T is the type of the result of performing the query.
- *
- * @param <T> the resulting type, after querying.
+ * A class representing a typed SQL insert query.
  */
-public class InsertQuery<T> extends BaseQuery<T> {
+public final class InsertQuery<T> extends BaseQuery {
 
-    @SafeVarargs
-    public InsertQuery(@NotNull String table, Column<T, ?>... columns) {
+    private final Column<T>[] columns;
+
+
+    public InsertQuery(@NotNull String table, Collection<? extends Column<?>> columns) {
         query.append("INSERT INTO ").append(table);
-        appendColumnsAndValues("", columns);
+        appendColumnsAndValues(columns.toArray(Column[]::new));
     }
 
 
-    public InsertQuery<T> values(Object... values) {
-        parameters.addAll(Arrays.asList(values));
+    public InsertQuery(@NotNull String table, Column<?>... columns) {
+        query.append("INSERT INTO ").append(table);
+        appendColumnsAndValues(columns);
+    }
+
+
+    private void appendColumnsAndValues(Column<?> @NotNull [] columns) {
+        query.append(" (");
+        StringJoiner colNames = new StringJoiner(", ");
+        StringJoiner placeholders = new StringJoiner(", ");
+
+        for (Column<?> col : columns) {
+            colNames.add(col.getName());
+            placeholders.add("?");
+        }
+
+        query.append(colNames);
+        query.append(") VALUES (").append(placeholders).append(")");
+    }
+
+
+    public InsertQuery<T> values(@NotNull T instance) {
+        // TODO: ColumnMapper.get(Autofarm.class).forEach(value -> parameters.add(value));
+        for (Column<T> column : columns) {
+            parameters.add(column.getGetter().apply(instance));
+        }
+        return this;
+    }
+
+
+    @Override
+    public InsertQuery where(@NotNull Column<?, ?> column, @NotNull String operator, Object value) {
+        super.where(column, operator, column.getType().cast(value));
         return this;
     }
 

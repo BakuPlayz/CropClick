@@ -18,20 +18,21 @@
  */
 package com.github.bakuplayz.cropclick.sql.query;
 
+import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.sql.Column;
+import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * A class representing the base for a typed SQL query, where the type
- * T is the type of the result of performing the query.
- *
- * @param <T> the resulting type, after querying.
+ * A class representing the base for a typed SQL query.
  */
-public abstract class BaseQuery<T> {
+public abstract class BaseQuery implements LoggerContext {
 
     protected final StringBuilder query = new StringBuilder();
 
@@ -43,26 +44,32 @@ public abstract class BaseQuery<T> {
     }
 
 
-    @SuppressWarnings("unchecked")
-    public <V> BaseQuery<T> where(@NotNull Column<T, V> column, @NotNull String operator, V value) {
+    public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        scheduler.queue((connection) -> {
+            try (PreparedStatement statement = connection.prepareStatement(build())) {
+                for (int i = 0; i < parameters.size(); ++i) {
+                    statement.setObject(i + 1, parameters.get(i));
+                }
+
+                statement.executeUpdate();
+                future.complete(true);
+            } catch (SQLException e) {
+                logDebug("Could not perform SQL update query, something went wrong.", e);
+                future.complete(false);
+            }
+        });
+
+        return future;
+    }
+
+
+    public BaseQuery where(@NotNull Column<?> column, @NotNull String operator, Object value) {
         query.append(" WHERE ").append(column.getName()).append(" ").append(operator).append(" ?");
         parameters.add(value);
         return this;
     }
 
-
-    protected void appendColumnsAndValues(String keyword, Column<T, ?> @NotNull [] columns) {
-        query.append(keyword).append(" (");
-        StringJoiner colNames = new StringJoiner(", ");
-        StringJoiner placeholders = new StringJoiner(", ");
-
-        for (Column<T, ?> col : columns) {
-            colNames.add(col.getName());
-            placeholders.add("?");
-        }
-
-        query.append(colNames);
-        query.append(") VALUES (").append(placeholders).append(")");
-    }
 
 }

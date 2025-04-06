@@ -252,7 +252,7 @@ public final class CropClick extends JavaPlugin {
      */
     private void registerDatabase() {
         // TODO: Make this work with the database configuration better.
-        this.database = new ConnectionPool(this.databaseConfig);
+        this.database = new ConnectionPool(null);
     }
 
 

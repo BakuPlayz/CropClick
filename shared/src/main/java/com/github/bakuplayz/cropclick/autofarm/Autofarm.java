@@ -48,6 +48,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 public final class Autofarm {
 
+
     public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     @Getter
@@ -159,7 +160,6 @@ public final class Autofarm {
      * * Checks whether the autofarm components are present.
      *
      * @param manager the manager to check with.
-     *
      * @return true if all are present, otherwise false.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

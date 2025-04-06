@@ -18,11 +18,13 @@
  */
 package com.github.bakuplayz.cropclick.sql;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface RowMapper<T> {
 
-    T map(ResultSet rs) throws SQLException;
-    
+    T map(@NotNull ResultSet rs) throws SQLException;
+
 }

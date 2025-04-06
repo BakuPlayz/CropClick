@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.sql.query;
 
 import com.github.bakuplayz.cropclick.sql.Column;
-import com.github.bakuplayz.cropclick.sql.ConnectionPool;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the resulting type, after querying.
  */
-public final class DeleteQuery<T> extends BaseQuery<T> {
+public final class DeleteQuery extends BaseQuery {
 
     public DeleteQuery(@NotNull String table) {
         query.append("DELETE FROM ").append(table);
@@ -36,14 +35,9 @@ public final class DeleteQuery<T> extends BaseQuery<T> {
 
 
     @Override
-    public <V> DeleteQuery<T> where(@NotNull Column<T, V> column, @NotNull String operator, V value) {
+    public DeleteQuery where(@NotNull Column<?> column, @NotNull String operator, Object value) {
         super.where(column, operator, column.getType().cast(value));
         return this;
-    }
-
-
-    public void execute(@NotNull ConnectionPool pool) {
-
     }
 
 }

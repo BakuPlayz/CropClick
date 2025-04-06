@@ -20,11 +20,13 @@ package com.github.bakuplayz.cropclick.sql;
 
 import lombok.Data;
 
+import java.util.function.Function;
+
 @Data
-public final class Column<T, V> {
+public final class Column<R> {
 
     private final String name;
 
-    private final Class<V> type;
+    private final Function<R, String> getter;
 
 }

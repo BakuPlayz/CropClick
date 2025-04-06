@@ -19,17 +19,18 @@
 package com.github.bakuplayz.cropclick.sql.query;
 
 import com.github.bakuplayz.cropclick.sql.Column;
-import com.github.bakuplayz.cropclick.sql.ConnectionPool;
+import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import com.github.bakuplayz.cropclick.sql.RowMapper;
 import com.github.bakuplayz.cropclick.sql.RowMapperRegistry;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A class representing a typed SQL select query, where the type
@@ -37,13 +38,30 @@ import java.util.*;
  *
  * @param <T> the resulting type, after querying.
  */
-public final class SelectQuery<T> extends BaseQuery<T> {
+public final class SelectQuery<T> extends BaseQuery {
 
-    @SafeVarargs
-    public SelectQuery(Column<T, ?> @NotNull ... columns) {
+    /**
+     * Constructor for selecting all, i.e. using the '*' operator, from
+     * the provided table.
+     *
+     * @param table the table to select from.
+     */
+    public SelectQuery(@NotNull String table) {
+        query.append("SELECT *");
+    }
+
+
+    /**
+     * Constructor for selecting the specified columns, from the
+     * provided table.
+     *
+     * @param columns the columns to select.
+     * @param table   the table to select from.
+     */
+    public SelectQuery(@NotNull String table, Column<?> @NotNull ... columns) {
         query.append("SELECT ");
         StringJoiner joiner = new StringJoiner(", ");
-        for (Column<T, ?> column : columns) {
+        for (Column<?> column : columns) {
             joiner.add(column.getName());
         }
         query.append(joiner);
@@ -63,59 +81,66 @@ public final class SelectQuery<T> extends BaseQuery<T> {
     }
 
 
-    @Nullable
-    public T fetchOne(@NotNull ConnectionPool pool, Class<T> clazz) {
-        RowMapper<T> mapper = RowMapperRegistry.get(clazz);
-        Optional<Connection> optionalConn = pool.acquire();
-
-        if (!optionalConn.isPresent()) {
-            return null;
-        }
-
-        Connection conn = optionalConn.get();
-        try (PreparedStatement stmt = conn.prepareStatement(build())) {
-            for (int i = 0; i < parameters.size(); ++i) {
-                stmt.setObject(i + 1, parameters.get(i));
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next() ? mapper.map(rs) : null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to execute query.", e);
-        } finally {
-            pool.release(conn);
-        }
+    @Override
+    public SelectQuery<T> where(@NotNull Column<?> column, @NotNull String operator, Object value) {
+        super.where(column, operator, value);
+        return this;
     }
 
 
     @NotNull
-    public List<T> fetchAll(@NotNull ConnectionPool pool, Class<T> clazz) {
+    public CompletableFuture<T> fetchOne(@NotNull QueryScheduler scheduler, Class<T> clazz) {
+        CompletableFuture<T> completable = new CompletableFuture<>();
         RowMapper<T> mapper = RowMapperRegistry.get(clazz);
-        Optional<Connection> optionalConn = pool.acquire();
 
-        if (!optionalConn.isPresent()) {
-            return Collections.emptyList();
-        }
-
-        Connection conn = optionalConn.get();
-        try (PreparedStatement stmt = conn.prepareStatement(build())) {
-            for (int i = 0; i < parameters.size(); ++i) {
-                stmt.setObject(i + 1, parameters.get(i));
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                List<T> results = new ArrayList<>();
-                while (rs.next()) {
-                    results.add(mapper.map(rs));
+        scheduler.queue((connection -> {
+            try (PreparedStatement statement = connection.prepareStatement(build())) {
+                for (int i = 0; i < parameters.size(); ++i) {
+                    statement.setObject(i + 1, parameters.get(i));
                 }
-                return results;
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    completable.complete(rs.next() ? mapper.map(rs) : null);
+                }
+            } catch (SQLException e) {
+                // TODO: debug log this.
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to execute query.", e);
-        } finally {
-            pool.release(conn);
-        }
+        }));
+
+        return completable;
+    }
+
+
+    @NotNull
+    public CompletableFuture<List<T>> fetchAll(@NotNull QueryScheduler scheduler, Class<T> clazz) {
+        CompletableFuture<List<T>> completable = new CompletableFuture<>();
+        RowMapper<T> mapper = RowMapperRegistry.get(clazz);
+
+        scheduler.queue((connection -> {
+            try (PreparedStatement statement = connection.prepareStatement(build())) {
+                for (int i = 0; i < parameters.size(); ++i) {
+                    statement.setObject(i + 1, parameters.get(i));
+                }
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    List<T> results = new ArrayList<>();
+                    while (rs.next()) {
+                        results.add(mapper.map(rs));
+                    }
+                    completable.complete(results);
+                }
+            } catch (SQLException e) {
+                //TODO: debug log this.
+            }
+        }));
+
+        return completable;
+    }
+
+
+    @Override
+    public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
     }
 
 }

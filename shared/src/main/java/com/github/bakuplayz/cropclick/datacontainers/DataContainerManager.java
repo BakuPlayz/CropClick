@@ -18,12 +18,13 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers;
 
-import com.github.bakuplayz.cropclick.sql.Column;
-import com.github.bakuplayz.cropclick.sql.ConnectionPool;
-import com.github.bakuplayz.cropclick.sql.query.DeleteQuery;
-import com.github.bakuplayz.cropclick.sql.query.SelectQuery;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.datacontainers.DataContainer.LocalAutofarmService;
+import static com.github.bakuplayz.cropclick.datacontainers.DataContainer.RemoteAutofarmService;
 
 // TODO: Document
 @Getter
@@ -31,23 +32,24 @@ public final class DataContainerManager {
 
     //   private final DataContainer<FarmWorld> worldContainer;
 
-    // private final DataContainer<Autofarm> autofarmContainer;
+    private final DataContainer<Autofarm> autofarmContainer;
 
 
-    public DataContainerManager(@NotNull ConnectionPool pool) {
-        Object result = new SelectQuery<>(
+    public DataContainerManager(@NotNull QueryScheduler scheduler) {
+     /*   CompletableFuture<Object> result = new SelectQuery<>(
                 new Column<>("name", String.class),
                 new Column<>("id", String.class)
-        ).fetchOne(pool, Object.class);
+        ).fetchOne(scheduler, Object.class);
 
         new DeleteQuery<>("hello")
                 .where(new Column<>("name", String.class), "=", "hej")
-                .execute(pool);
+                .execute(scheduler);*/
 
-        ;
-
-        //ContainerMode mode = load(config);
-
+        this.autofarmContainer = new DataContainer<>(
+                scheduler.canQuery()
+                        ? new RemoteAutofarmService(scheduler)
+                        : new LocalAutofarmService()
+        );
         /*this.autofarmContainer = new DataContainer<>(
                 mode == ContainerMode.REMOTE
                         ? new DataContainer.RemoteAutofarmService(connect(config))
@@ -55,65 +57,5 @@ public final class DataContainerManager {
         );*/
         //  this.worldContainer = new DataContainer<>();
     }
-
-
-    /*private ContainerMode load(@NotNull DatabaseConfig config) {
-        Connection conn = connect(config);
-
-        if (conn == null) {
-            return ContainerMode.LOCAL;
-        }
-
-        tryClose(conn, 3);
-        return ContainerMode.REMOTE;
-    }
-
-
-    @Nullable
-    private Connection connect(@NotNull DatabaseConfig config) {
-        String host = config.get(ConfigurationKey.HOST);
-        String port = config.get(ConfigurationKey.PORT);
-        String password = config.get(ConfigurationKey.PASSWORD);
-        String username = config.get(ConfigurationKey.USERNAME);
-        String database = config.get(ConfigurationKey.DATABASE);
-        DatabaseProtocol protocol = config.get(ConfigurationKey.PROTOCOL);
-
-        return tryConnect(String.format("jdbc:%s://%s:%s/%s", protocol.getName(), host, port, database), username, password, 3);
-    }
-
-
-    @Nullable
-    private Connection tryConnect(@NotNull String path, @NotNull String username, @NotNull String password, int tries) {
-        if (tries <= 0) {
-            return null;
-        }
-
-        try {
-            return DriverManager.getConnection(path, username, password);
-        } catch (SQLException e) {
-            // TODO: Add error message or handler inside of this (event?)
-            return tryConnect(path, username, password, tries - 1);
-        }
-    }
-
-
-    private void tryClose(@NotNull Connection connection, int tries) {
-        if (tries <= 0) {
-            // TODO write an error.
-            return;
-        }
-
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            tryClose(connection, tries - 1);
-        }
-    }
-
-
-    enum ContainerMode {
-        LOCAL,
-        REMOTE;
-    }*/
 
 }
