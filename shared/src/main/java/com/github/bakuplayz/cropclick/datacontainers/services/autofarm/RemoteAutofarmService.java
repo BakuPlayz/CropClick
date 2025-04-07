@@ -2,7 +2,6 @@ package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.sql.QueryScheduler;
-import com.github.bakuplayz.cropclick.sql.dao.AutofarmDAO;
 import com.github.bakuplayz.cropclick.sql.query.DeleteQuery;
 import com.github.bakuplayz.cropclick.sql.query.InsertQuery;
 import com.github.bakuplayz.cropclick.sql.query.SelectQuery;
@@ -21,40 +20,40 @@ public final class RemoteAutofarmService {
 
 
     @NotNull
-    public CompletableFuture<List<Autofarm>> getMany() {
+    public CompletableFuture<List<Autofarm>> getMany(int start) {
         return new SelectQuery<Autofarm>("autofarms")
-                .limit(1000)
-                .fetchAll(scheduler, Autofarm.class);
+                       .limit(start, 1000)
+                       .fetchAll(scheduler, Autofarm.class);
     }
 
 
     @NotNull
     public CompletableFuture<Autofarm> getOne(@NotNull String id) {
         return new SelectQuery<Autofarm>("autofarms")
-                .where(AutofarmDAO.getColumn("farmer_id"), "=", id)
-                .fetchOne(scheduler, Autofarm.class);
+                       .where("farmer_id", "=", id)
+                       .fetchOne(scheduler, Autofarm.class);
     }
 
 
     public CompletableFuture<Boolean> insertOne(@NotNull Autofarm autofarm) {
-        return new InsertQuery<Autofarm>("autofarms")
-                .values(autofarm)
-                .execute(scheduler);
+        return new InsertQuery<>("autofarms", Autofarm.class)
+                       .values(autofarm)
+                       .execute(scheduler);
     }
 
 
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
         return new DeleteQuery("autofarms")
-                .where(AutofarmDAO.getColumn("farmer_id"), "=", id)
-                .execute(scheduler);
+                       .where("farmer_id", "=", id)
+                       .execute(scheduler);
     }
 
 
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull Autofarm autofarm) {
-        return new UpdateQuery<Autofarm>("autofarms")
-                .where(AutofarmDAO.getColumn("farmer_id"), "=", id)
-                .values(autofarm)
-                .execute(scheduler);
+        return new UpdateQuery<>("autofarms", Autofarm.class)
+                       .where("farmer_id", "=", id)
+                       .setAll(autofarm)
+                       .execute(scheduler);
     }
 
 }

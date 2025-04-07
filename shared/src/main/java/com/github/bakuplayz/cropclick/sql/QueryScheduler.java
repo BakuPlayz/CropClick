@@ -49,6 +49,8 @@ public final class QueryScheduler implements LoggerContext {
 
     private void start() {
         for (int i = 0; i < NUM_WORKERS; ++i) {
+            // TODO: Handle the removing and clearing of these threads when
+            //       required to do so.
             new Thread(() -> {
                 while (true) {
                     try {

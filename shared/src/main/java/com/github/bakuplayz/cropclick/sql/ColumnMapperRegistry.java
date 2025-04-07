@@ -18,15 +18,31 @@
  */
 package com.github.bakuplayz.cropclick.sql;
 
-import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+import java.util.HashMap;
+import java.util.Map;
 
-@Data
-public final class Column<R> {
+public final class ColumnMapperRegistry {
 
-    private final String name;
+    private static final Map<Class<?>, ColumnMapper<?>> registry = new HashMap<>();
 
-    private final Function<R, String> getter;
+
+    public static <T> void register(@NotNull Class<T> clazz, @NotNull ColumnMapper<T> mapper) {
+        registry.put(clazz, mapper);
+    }
+
+
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public static <T> ColumnMapper<T> get(@NotNull Class<T> clazz) {
+        ColumnMapper<T> mapper = (ColumnMapper<T>) registry.get(clazz);
+
+        if (mapper == null) {
+            throw new IllegalStateException("No ColumnMapper registered for class: " + clazz.getName());
+        }
+
+        return mapper;
+    }
 
 }

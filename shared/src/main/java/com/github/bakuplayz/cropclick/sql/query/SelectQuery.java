@@ -18,7 +18,6 @@
  */
 package com.github.bakuplayz.cropclick.sql.query;
 
-import com.github.bakuplayz.cropclick.sql.Column;
 import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import com.github.bakuplayz.cropclick.sql.RowMapper;
 import com.github.bakuplayz.cropclick.sql.RowMapperRegistry;
@@ -29,7 +28,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -47,24 +45,48 @@ public final class SelectQuery<T> extends BaseQuery {
      * @param table the table to select from.
      */
     public SelectQuery(@NotNull String table) {
-        query.append("SELECT *");
+        query.append("SELECT * FROM ").append(table);
     }
 
 
-    /**
-     * Constructor for selecting the specified columns, from the
-     * provided table.
-     *
-     * @param columns the columns to select.
-     * @param table   the table to select from.
-     */
-    public SelectQuery(@NotNull String table, Column<?> @NotNull ... columns) {
-        query.append("SELECT ");
-        StringJoiner joiner = new StringJoiner(", ");
-        for (Column<?> column : columns) {
-            joiner.add(column.getName());
-        }
-        query.append(joiner);
+    @Override
+    public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Override
+    public SelectQuery<T> where(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+        super.where(column, operator, value);
+        return this;
+    }
+
+
+    @Override
+    public SelectQuery<T> beginGroup() {
+        super.beginGroup();
+        return this;
+    }
+
+
+    @Override
+    public SelectQuery<T> endGroup() {
+        super.endGroup();
+        return this;
+    }
+
+
+    @Override
+    public SelectQuery<T> and(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+        super.and(column, operator, value);
+        return this;
+    }
+
+
+    @Override
+    public SelectQuery<T> or(String column, String operator, Object value) {
+        super.or(column, operator, value);
+        return this;
     }
 
 
@@ -74,16 +96,17 @@ public final class SelectQuery<T> extends BaseQuery {
     }
 
 
-    public SelectQuery<T> limit(int count) {
-        query.append(" LIMIT ?");
-        parameters.add(count);
+    public SelectQuery<T> limit(int start, int count) {
+        query.append(" LIMIT ?, ?");
+        parameters.add(start);
+        parameters.add(start + count);
         return this;
     }
 
 
-    @Override
-    public SelectQuery<T> where(@NotNull Column<?> column, @NotNull String operator, Object value) {
-        super.where(column, operator, value);
+    public SelectQuery<T> limit(int count) {
+        query.append(" LIMIT ?");
+        parameters.add(count);
         return this;
     }
 
@@ -103,7 +126,7 @@ public final class SelectQuery<T> extends BaseQuery {
                     completable.complete(rs.next() ? mapper.map(rs) : null);
                 }
             } catch (SQLException e) {
-                // TODO: debug log this.
+                logDebug("Could not perform SQL fetchOne query, something went wrong.", e);
             }
         }));
 
@@ -112,7 +135,7 @@ public final class SelectQuery<T> extends BaseQuery {
 
 
     @NotNull
-    public CompletableFuture<List<T>> fetchAll(@NotNull QueryScheduler scheduler, Class<T> clazz) {
+    public CompletableFuture<List<T>> fetchAll(@NotNull QueryScheduler scheduler, @NotNull Class<T> clazz) {
         CompletableFuture<List<T>> completable = new CompletableFuture<>();
         RowMapper<T> mapper = RowMapperRegistry.get(clazz);
 
@@ -130,17 +153,11 @@ public final class SelectQuery<T> extends BaseQuery {
                     completable.complete(results);
                 }
             } catch (SQLException e) {
-                //TODO: debug log this.
+                logDebug("Could not perform SQL fetchAll query, something went wrong.", e);
             }
         }));
 
         return completable;
-    }
-
-
-    @Override
-    public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
     }
 
 }

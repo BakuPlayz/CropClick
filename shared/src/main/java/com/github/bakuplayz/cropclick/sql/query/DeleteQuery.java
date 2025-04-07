@@ -18,7 +18,6 @@
  */
 package com.github.bakuplayz.cropclick.sql.query;
 
-import com.github.bakuplayz.cropclick.sql.Column;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,8 +34,36 @@ public final class DeleteQuery extends BaseQuery {
 
 
     @Override
-    public DeleteQuery where(@NotNull Column<?> column, @NotNull String operator, Object value) {
-        super.where(column, operator, column.getType().cast(value));
+    public DeleteQuery where(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+        super.where(column, operator, column);
+        return this;
+    }
+
+
+    @Override
+    public DeleteQuery beginGroup() {
+        super.beginGroup();
+        return this;
+    }
+
+
+    @Override
+    public DeleteQuery endGroup() {
+        super.endGroup();
+        return this;
+    }
+
+
+    @Override
+    public DeleteQuery and(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+        super.and(column, operator, value);
+        return this;
+    }
+
+
+    @Override
+    public DeleteQuery or(String column, String operator, Object value) {
+        super.or(column, operator, value);
         return this;
     }
 

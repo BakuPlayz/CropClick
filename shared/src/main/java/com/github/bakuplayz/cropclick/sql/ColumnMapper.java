@@ -20,29 +20,13 @@ package com.github.bakuplayz.cropclick.sql;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public final class RowMapperRegistry {
+public interface ColumnMapper<T> {
 
-    private static final Map<Class<?>, RowMapper<?>> registry = new HashMap<>();
-
-
-    public static <T> void register(@NotNull Class<T> clazz, @NotNull RowMapper<T> mapper) {
-        registry.put(clazz, mapper);
-    }
+    List<Object> getValues(@NotNull T instance);
 
 
-    @NotNull
-    @SuppressWarnings("unchecked")
-    public static <T> RowMapper<T> get(@NotNull Class<T> clazz) {
-        RowMapper<T> mapper = (RowMapper<T>) registry.get(clazz);
-
-        if (mapper == null) {
-            throw new IllegalStateException("No RowMapper registered for class: " + clazz.getName());
-        }
-        
-        return mapper;
-    }
+    List<String> getColumns();
 
 }

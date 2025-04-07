@@ -18,10 +18,11 @@
  */
 package com.github.bakuplayz.cropclick.sql.query;
 
-import com.github.bakuplayz.cropclick.sql.Column;
+import com.github.bakuplayz.cropclick.sql.ColumnMapper;
+import com.github.bakuplayz.cropclick.sql.ColumnMapperRegistry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.StringJoiner;
 
 /**
@@ -29,48 +30,65 @@ import java.util.StringJoiner;
  */
 public final class InsertQuery<T> extends BaseQuery {
 
-    private final Column<T>[] columns;
+    private final Class<T> clazz;
 
 
-    public InsertQuery(@NotNull String table, Collection<? extends Column<?>> columns) {
-        query.append("INSERT INTO ").append(table);
-        appendColumnsAndValues(columns.toArray(Column[]::new));
+    public InsertQuery(@NotNull String table, @NotNull Class<T> clazz) {
+        this.clazz = clazz;
+        query.append("INSERT INTO ").append(table).append(" ");
     }
 
 
-    public InsertQuery(@NotNull String table, Column<?>... columns) {
-        query.append("INSERT INTO ").append(table);
-        appendColumnsAndValues(columns);
-    }
-
-
-    private void appendColumnsAndValues(Column<?> @NotNull [] columns) {
-        query.append(" (");
-        StringJoiner colNames = new StringJoiner(", ");
-        StringJoiner placeholders = new StringJoiner(", ");
-
-        for (Column<?> col : columns) {
-            colNames.add(col.getName());
-            placeholders.add("?");
-        }
-
-        query.append(colNames);
-        query.append(") VALUES (").append(placeholders).append(")");
-    }
-
-
-    public InsertQuery<T> values(@NotNull T instance) {
-        // TODO: ColumnMapper.get(Autofarm.class).forEach(value -> parameters.add(value));
-        for (Column<T> column : columns) {
-            parameters.add(column.getGetter().apply(instance));
-        }
+    @Override
+    public InsertQuery<T> where(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+        super.where(column, operator, value);
         return this;
     }
 
 
     @Override
-    public InsertQuery where(@NotNull Column<?, ?> column, @NotNull String operator, Object value) {
-        super.where(column, operator, column.getType().cast(value));
+    public InsertQuery<T> beginGroup() {
+        super.beginGroup();
+        return this;
+    }
+
+
+    @Override
+    public InsertQuery<T> endGroup() {
+        super.endGroup();
+        return this;
+    }
+
+
+    @Override
+    public InsertQuery<T> and(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+        super.and(column, operator, value);
+        return this;
+    }
+
+
+    @Override
+    public InsertQuery<T> or(String column, String operator, Object value) {
+        super.or(column, operator, value);
+        return this;
+    }
+
+
+    public InsertQuery<T> values(@NotNull T instance) {
+        StringJoiner columnNames = new StringJoiner(", ");
+        StringJoiner placeholders = new StringJoiner(", ");
+
+        ColumnMapper<T> mapper = ColumnMapperRegistry.get(clazz);
+        List<String> columns = mapper.getColumns();
+        List<Object> values = mapper.getValues(instance);
+
+        for (int i = 0; i < columns.size(); i++) {
+            columnNames.add(columns.get(i));
+            parameters.add(values.get(i));
+            placeholders.add("?");
+        }
+
+        query.append("(").append(columnNames).append(") VALUES (").append(placeholders).append(")");
         return this;
     }
 
