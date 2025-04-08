@@ -16,21 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.datacontainers;
+package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
+import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
+import com.github.bakuplayz.cropclick.sql.QueryScheduler;
+import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.UUID;
-
-public interface DataService<D> {
-
-    List<D> getMany();
-
-
-    D getOne(@NotNull UUID id);
+/**
+ * Remote implementation of {@link FarmWorldDataService} that communicates with an external database
+ * configured within the database configuration files.
+ */
+public class RemoteFarmWorldService extends AbstractRemoteDataService<FarmWorld> implements FarmWorldDataService {
 
 
-    void save();
+    public RemoteFarmWorldService(@NotNull QueryScheduler scheduler) {
+        super(scheduler, FarmWorld.class);
+    }
+
+
+    @Override
+    protected String getTable() {
+        return "worlds";
+    }
+
+
+    @Override
+    protected String getIdentifier() {
+        return "name";
+    }
+
 
 }

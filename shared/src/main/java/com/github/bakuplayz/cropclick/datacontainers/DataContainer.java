@@ -27,34 +27,9 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.UUID;
 
-public final class DataContainer<D> implements DataService<D> {
-
-    private final DataService<D> service;
-
-
-    public DataContainer(@NotNull DataService<D> service) {
-        this.service = service;
-    }
-
-
-    @Override
-    public List<D> getMany() {
-        return service.getMany();
-    }
-
-
-    public D getOne(@NotNull UUID id) {
-        return service.getOne(id);
-    }
-
-
-    @Override
-    public void save() {
-        service.save();
-    }
+public final class DataContainer {
 
 
     static class AutofarmSerializer implements SQLSerializer<Autofarm> {

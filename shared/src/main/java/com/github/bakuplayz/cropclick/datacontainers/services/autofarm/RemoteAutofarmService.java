@@ -1,62 +1,32 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
 import com.github.bakuplayz.cropclick.sql.QueryScheduler;
-import com.github.bakuplayz.cropclick.sql.query.DeleteQuery;
-import com.github.bakuplayz.cropclick.sql.query.InsertQuery;
-import com.github.bakuplayz.cropclick.sql.query.SelectQuery;
-import com.github.bakuplayz.cropclick.sql.query.UpdateQuery;
-import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+/**
+ * Remote implementation of {@link AutofarmDataService} that communicates with an external database
+ * configured within the database configuration files.
+ */
+public final class RemoteAutofarmService extends AbstractRemoteDataService<Autofarm> implements AutofarmDataService {
 
-@AllArgsConstructor
-public final class RemoteAutofarmService implements AutofarmService {
-
-    @NotNull
-    private final QueryScheduler scheduler;
-
-
-    @NotNull
-    public CompletableFuture<List<Autofarm>> getMany(int start) {
-        return new SelectQuery<>("autofarms", Autofarm.class)
-                .limit(start, 1000)
-                .fetchAll(scheduler);
+    public RemoteAutofarmService(@NotNull QueryScheduler scheduler) {
+        super(scheduler, Autofarm.class);
     }
 
 
     @NotNull
-    public CompletableFuture<Autofarm> getOne(@NotNull String id) {
-        return new SelectQuery<Autofarm>("autofarms", Autofarm.class)
-                .where("farmer_id", "=", id)
-                .fetchOne(scheduler);
+    @Override
+    protected String getTable() {
+        return "autofarms";
     }
 
 
     @NotNull
-    public CompletableFuture<Boolean> insertOne(@NotNull Autofarm autofarm) {
-        return new InsertQuery<>("autofarms", Autofarm.class)
-                .values(autofarm)
-                .execute(scheduler);
-    }
-
-
-    @NotNull
-    public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
-        return new DeleteQuery("autofarms")
-                .where("farmer_id", "=", id)
-                .execute(scheduler);
-    }
-
-
-    @NotNull
-    public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull Autofarm autofarm) {
-        return new UpdateQuery<>("autofarms", Autofarm.class)
-                .where("farmer_id", "=", id)
-                .setAll(autofarm)
-                .execute(scheduler);
+    @Override
+    protected String getIdentifier() {
+        return "farmer_id";
     }
 
 }
