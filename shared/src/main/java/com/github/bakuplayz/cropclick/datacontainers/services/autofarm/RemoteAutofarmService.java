@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @AllArgsConstructor
-public final class RemoteAutofarmService {
+public final class RemoteAutofarmService implements AutofarmService {
 
     @NotNull
     private final QueryScheduler scheduler;
@@ -21,39 +21,42 @@ public final class RemoteAutofarmService {
 
     @NotNull
     public CompletableFuture<List<Autofarm>> getMany(int start) {
-        return new SelectQuery<Autofarm>("autofarms")
-                       .limit(start, 1000)
-                       .fetchAll(scheduler, Autofarm.class);
+        return new SelectQuery<>("autofarms", Autofarm.class)
+                .limit(start, 1000)
+                .fetchAll(scheduler);
     }
 
 
     @NotNull
     public CompletableFuture<Autofarm> getOne(@NotNull String id) {
-        return new SelectQuery<Autofarm>("autofarms")
-                       .where("farmer_id", "=", id)
-                       .fetchOne(scheduler, Autofarm.class);
+        return new SelectQuery<Autofarm>("autofarms", Autofarm.class)
+                .where("farmer_id", "=", id)
+                .fetchOne(scheduler);
     }
 
 
+    @NotNull
     public CompletableFuture<Boolean> insertOne(@NotNull Autofarm autofarm) {
         return new InsertQuery<>("autofarms", Autofarm.class)
-                       .values(autofarm)
-                       .execute(scheduler);
+                .values(autofarm)
+                .execute(scheduler);
     }
 
 
+    @NotNull
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
         return new DeleteQuery("autofarms")
-                       .where("farmer_id", "=", id)
-                       .execute(scheduler);
+                .where("farmer_id", "=", id)
+                .execute(scheduler);
     }
 
 
+    @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull Autofarm autofarm) {
         return new UpdateQuery<>("autofarms", Autofarm.class)
-                       .where("farmer_id", "=", id)
-                       .setAll(autofarm)
-                       .execute(scheduler);
+                .where("farmer_id", "=", id)
+                .setAll(autofarm)
+                .execute(scheduler);
     }
 
 }

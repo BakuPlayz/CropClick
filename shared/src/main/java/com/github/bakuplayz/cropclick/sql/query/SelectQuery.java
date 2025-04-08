@@ -38,13 +38,17 @@ import java.util.concurrent.CompletableFuture;
  */
 public final class SelectQuery<T> extends BaseQuery {
 
+    private final Class<T> clazz;
+
+
     /**
      * Constructor for selecting all, i.e. using the '*' operator, from
      * the provided table.
      *
      * @param table the table to select from.
      */
-    public SelectQuery(@NotNull String table) {
+    public SelectQuery(@NotNull String table, @NotNull Class<T> clazz) {
+        this.clazz = clazz;
         query.append("SELECT * FROM ").append(table);
     }
 
@@ -112,7 +116,7 @@ public final class SelectQuery<T> extends BaseQuery {
 
 
     @NotNull
-    public CompletableFuture<T> fetchOne(@NotNull QueryScheduler scheduler, Class<T> clazz) {
+    public CompletableFuture<T> fetchOne(@NotNull QueryScheduler scheduler) {
         CompletableFuture<T> completable = new CompletableFuture<>();
         RowMapper<T> mapper = RowMapperRegistry.get(clazz);
 
@@ -135,7 +139,7 @@ public final class SelectQuery<T> extends BaseQuery {
 
 
     @NotNull
-    public CompletableFuture<List<T>> fetchAll(@NotNull QueryScheduler scheduler, @NotNull Class<T> clazz) {
+    public CompletableFuture<List<T>> fetchAll(@NotNull QueryScheduler scheduler) {
         CompletableFuture<List<T>> completable = new CompletableFuture<>();
         RowMapper<T> mapper = RowMapperRegistry.get(clazz);
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public final class LocalAutofarmService {
+public final class LocalAutofarmService implements AutofarmService {
 
     private HashMap<UUID, Autofarm> data;
 
@@ -20,12 +20,40 @@ public final class LocalAutofarmService {
 
 
     @NotNull
+    @Override
+    public CompletableFuture<List<Autofarm>> getMany(int start) {
+        return null;
+    }
+
+
+    @NotNull
     public CompletableFuture<Autofarm> getOne(@NotNull String id) {
         return CompletableFuture.completedFuture(
                 data.values().stream()
                         .filter(a -> a.getFarmerId().toString().equals(id))
                         .findAny().orElse(null)
         );
+    }
+
+
+    @NotNull
+    @Override
+    public CompletableFuture<Boolean> insertOne(@NotNull Autofarm autofarm) {
+        return null;
+    }
+
+
+    @NotNull
+    @Override
+    public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
+        return null;
+    }
+
+
+    @NotNull
+    @Override
+    public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull Autofarm autofarm) {
+        return null;
     }
 
 }
