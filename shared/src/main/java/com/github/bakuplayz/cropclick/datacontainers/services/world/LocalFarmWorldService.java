@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 public final class LocalFarmWorldService extends AbstractLocalDataService<FarmWorld> implements FarmWorldDataService {
 
     public LocalFarmWorldService() {
-        super("worlds.json", FarmWorld.class);
+        super("worlds.json");
     }
 
 

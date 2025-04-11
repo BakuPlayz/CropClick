@@ -68,7 +68,7 @@ public final class CropManager implements CropAPI {
 
 
     public CropManager(@NotNull CropClick plugin) {
-        this.cropsConfig = plugin.getCropsConfig();
+        this.cropsConfig = plugin.getConfigManager().getCropsConfig();
         this.harvestedCrops = new HashMap<>();
         this.registeredCrops = new ArrayList<>();
 

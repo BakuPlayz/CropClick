@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2024 BakuPlayz
+ * Copyright (C) 2025 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,41 @@ package com.github.bakuplayz.cropclick.configurations;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.config.*;
+import com.github.bakuplayz.cropclick.configurations.converter.AutofarmsConverter;
+import com.github.bakuplayz.cropclick.configurations.converter.ConfigConverter;
+import com.github.bakuplayz.cropclick.configurations.converter.CropConverter;
+import com.github.bakuplayz.cropclick.configurations.converter.PlayerConverter;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
+/**
+ * A manager controlling all the {@link Configuration configurations}.
+ *
+ * @author BakuPlayz
+ * @version 3.0.0
+ * @since 3.0.0
+ */
 public final class ConfigurationManager {
 
+    private final CropClick plugin;
+
+    @Getter
     private final UsageConfig usageConfig;
 
+    @Getter
     private final CropsConfig cropsConfig;
 
+    @Getter
     private final AddonsConfig addonsConfig;
 
+    @Getter
     private final PlayersConfig playersConfig;
 
+    @Getter
     private final LanguageConfig languageConfig;
+
+    @Getter
+    private final DatabaseConfig databaseConfig;
 
 
     public ConfigurationManager(@NotNull CropClick plugin) {
@@ -43,11 +63,27 @@ public final class ConfigurationManager {
         this.addonsConfig = new AddonsConfig(plugin);
         this.playersConfig = new PlayersConfig(plugin);
         this.languageConfig = new LanguageConfig(plugin);
+        this.databaseConfig = new DatabaseConfig(plugin);
+        this.plugin = plugin;
+
+        handleLegacyConfigs();
     }
 
 
-    public void handleLegacy() {
-        // TODO: Write...
+    /**
+     * Handles the {@link AbstractConfiguration legacy configurations}.
+     */
+    private void handleLegacyConfigs() {
+        if (usageConfig.isNewFormatVersion()) {
+            return;
+        }
+
+        CropConverter.makeConversion(plugin);
+        PlayerConverter.makeConversion(plugin);
+        ConfigConverter.makeConversion(plugin);
+        AutofarmsConverter.makeConversion(plugin);
+
+        usageConfig.updateUsageInfo();
     }
 
 }

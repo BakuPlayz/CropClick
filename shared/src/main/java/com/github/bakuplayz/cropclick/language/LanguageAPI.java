@@ -61,6 +61,7 @@ public final class LanguageAPI {
         DATA_CONTAINER_FAILED_CREATE("Could not create file %s, due to unknown reasons."),
         DATA_CONTAINER_FAILED_CREATE_SECURITY("Could not create file %s, due to security policy."),
         DATA_CONTAINER_FAILED_SAVE("Could not save file %s, due to unknown reasons."),
+        DATA_CONTAINER_SUCCESS_SAVE("Successfully saved file %s."),
 
         DATA_STORAGE_LOADING_SETUP("Loading %s."),
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save %s, due to unknown reasons."),

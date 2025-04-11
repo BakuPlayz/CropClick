@@ -41,8 +41,8 @@ public abstract class AbstractLocalDataService<D> {
     private final AbstractDataContainer<D> dataContainer;
 
 
-    public AbstractLocalDataService(@NotNull String fileName, @NotNull Class<D> clazz) {
-        this.dataContainer = new AbstractDataContainer<>(fileName, clazz);
+    public AbstractLocalDataService(@NotNull String fileName) {
+        this.dataContainer = new AbstractDataContainer<>(fileName);
     }
 
 

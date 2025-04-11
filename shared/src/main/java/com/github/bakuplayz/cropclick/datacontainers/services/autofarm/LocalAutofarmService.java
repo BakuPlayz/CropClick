@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
  * is no database configured.
  */
 public final class LocalAutofarmService extends AbstractLocalDataService<Autofarm> implements AutofarmDataService {
-    
+
     public LocalAutofarmService() {
-        super("autofarms.json", Autofarm.class);
+        super("autofarms.json");
     }
 
 
