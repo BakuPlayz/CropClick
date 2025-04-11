@@ -58,6 +58,10 @@ public final class LanguageAPI {
         FILE_SETUP_FAILED("Could not setup %s."),
         FILE_RESET_FAILED("Could not reset %s."),
 
+        DATA_CONTAINER_FAILED_CREATE("Could not create file %s, due to unknown reasons."),
+        DATA_CONTAINER_FAILED_CREATE_SECURITY("Could not create file %s, due to security policy."),
+        DATA_CONTAINER_FAILED_SAVE("Could not save file %s, due to unknown reasons."),
+
         DATA_STORAGE_LOADING_SETUP("Loading %s."),
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save %s, due to unknown reasons."),
         DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save %s, due to it being previously removed."),
@@ -728,8 +732,8 @@ public final class LanguageAPI {
         @SafeVarargs
         public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
-                    .map(Object::toString)
-                    .toArray(String[]::new);
+                                               .map(Object::toString)
+                                               .toArray(String[]::new);
             return format(get(plugin), valuesAsStrings);
         }
 
@@ -744,8 +748,8 @@ public final class LanguageAPI {
         public @NotNull List<String> getAsList(@NotNull CropClick plugin) {
             String message = plugin.getLanguageConfig().getMessage("menu", category, key, false);
             return MessageUtils.readify(message, 4).stream()
-                    .map(MessageUtils::colorize)
-                    .collect(Collectors.toList());
+                           .map(MessageUtils::colorize)
+                           .collect(Collectors.toList());
         }
 
 

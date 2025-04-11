@@ -39,4 +39,16 @@ public interface LoggerContext {
         }
     }
 
+
+    default void logDebug(@NotNull String message, @NotNull Object... params) {
+        if (DEBUG) {
+            getLogger().log(Level.INFO, message, params);
+        }
+    }
+
+
+    default void logInfo(@NotNull String message, @NotNull Object... params) {
+        getLogger().log(Level.INFO, message, params);
+    }
+
 }

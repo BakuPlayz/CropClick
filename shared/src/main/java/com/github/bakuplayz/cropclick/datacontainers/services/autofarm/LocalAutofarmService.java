@@ -9,12 +9,10 @@ import org.jetbrains.annotations.NotNull;
  * is no database configured.
  */
 public final class LocalAutofarmService extends AbstractLocalDataService<Autofarm> implements AutofarmDataService {
-
-    // DataContainer<Autofarm> container = new DataContainer("autofarms.json");
-    // container.add(getIdentifier(autofarm), autofarm);
-    // container.remove(getIdentifier(autofarm));
-    // container.removeIf(farm->...);
-    // container.getOrDefault(...);
+    
+    public LocalAutofarmService() {
+        super("autofarms.json", Autofarm.class);
+    }
 
 
     @Override

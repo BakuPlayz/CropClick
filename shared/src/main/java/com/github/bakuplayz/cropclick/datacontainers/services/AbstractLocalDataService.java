@@ -18,11 +18,10 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
+import com.github.bakuplayz.cropclick.datacontainers.AbstractDataContainer;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.rmi.UnexpectedException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -39,11 +38,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public abstract class AbstractLocalDataService<D> {
 
-    private final HashMap<String, D> data;
+    private final AbstractDataContainer<D> dataContainer;
 
 
-    public AbstractLocalDataService() {
-        this.data = new HashMap<>();
+    public AbstractLocalDataService(@NotNull String fileName, @NotNull Class<D> clazz) {
+        this.dataContainer = new AbstractDataContainer<>(fileName, clazz);
     }
 
 
@@ -68,7 +67,7 @@ public abstract class AbstractLocalDataService<D> {
     @NotNull
     public CompletableFuture<List<D>> getMany(int start, int max) {
         return CompletableFuture.completedFuture(
-                data.values().stream()
+                dataContainer.getMany().stream()
                         .skip(start)
                         .limit(max)
                         .collect(Collectors.toList())
@@ -85,7 +84,7 @@ public abstract class AbstractLocalDataService<D> {
      */
     @NotNull
     public CompletableFuture<D> getOne(@NotNull String id) {
-        return CompletableFuture.completedFuture(data.get(id));
+        return CompletableFuture.completedFuture(dataContainer.getOne(id));
     }
 
 
@@ -98,8 +97,9 @@ public abstract class AbstractLocalDataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
-        data.putIfAbsent(getIdentifier(entity), entity);
-        return CompletableFuture.completedFuture(true);
+        return CompletableFuture.completedFuture(
+                dataContainer.addIfAbsent(getIdentifier(entity), entity)
+        );
     }
 
 
@@ -113,7 +113,7 @@ public abstract class AbstractLocalDataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
-        return CompletableFuture.completedFuture(data.remove(id) != null);
+        return CompletableFuture.completedFuture(dataContainer.remove(id));
     }
 
 
@@ -127,22 +127,9 @@ public abstract class AbstractLocalDataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity) {
-        data.put(id, entity);
+        dataContainer.add(id, entity);
         return CompletableFuture.completedFuture(true);
     }
 
-
-    /**
-     * TODO: Implement this!!!!
-     * <p>
-     * Persists the current in-memory data to a storage medium.
-     *
-     * @return a {@link CompletableFuture} indicating whether the save operation was successful.
-     *
-     * @throws UnexpectedException if not implemented.
-     */
-    public CompletableFuture<Boolean> save() throws UnexpectedException {
-        throw new UnexpectedException("Not implemented yet");
-    }
 }
 

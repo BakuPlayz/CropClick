@@ -20,23 +20,42 @@ package com.github.bakuplayz.cropclick.datacontainers;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface DataContainer<D> {
+public final class ModelRegistry {
 
-    void add(@NotNull String key, @NotNull D entity);
-
-
-    boolean addIfAbsent(@NotNull String key, @NotNull D entity);
+    private static final Map<Class<?>, ModelMapper<?>> registry = new HashMap<>();
 
 
-    boolean remove(@NotNull String key);
-
-
-    D getOne(@NotNull String key);
+    public static <T> void register(@NotNull Class<T> clazz, @NotNull ModelMapper<T> mapper) {
+        registry.put(clazz, mapper);
+    }
 
 
     @NotNull
-    Collection<D> getMany();
-    
+    @SuppressWarnings("unchecked")
+    public static <T> ModelMapper<T> get(@NotNull Class<T> clazz) {
+        ModelMapper<T> mapper = (ModelMapper<T>) registry.get(clazz);
+
+        if (mapper == null) {
+            throw new IllegalStateException("No ModelMapper registered for class: " + clazz.getName());
+        }
+
+        return mapper;
+    }
+
+
+    public interface ModelMapper<D> {
+
+        @NotNull
+        String toJSONString();
+
+
+        D toModel();
+
+
+    }
+
+
 }
