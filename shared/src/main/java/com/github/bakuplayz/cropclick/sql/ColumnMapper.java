@@ -21,6 +21,7 @@ package com.github.bakuplayz.cropclick.sql;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ColumnMapper<T> {
 
@@ -28,5 +29,8 @@ public interface ColumnMapper<T> {
 
 
     List<String> getColumns();
+
+
+    Map<String, String> getColumnsAndTypes();
 
 }

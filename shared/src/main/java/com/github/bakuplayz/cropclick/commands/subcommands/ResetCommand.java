@@ -99,7 +99,7 @@ public final class ResetCommand implements Subcommand, LoggerContext {
      * @throws IOException thrown if any deletion failed.
      */
     private void deleteDataStorages() throws IOException {
-        plugin.getDataManager().getAll().forEach(DataService::dropAll);
+        plugin.getDataManager().getAll().forEach(DataService::reset);
     }
 
 

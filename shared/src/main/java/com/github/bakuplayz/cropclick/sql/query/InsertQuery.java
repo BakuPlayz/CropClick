@@ -26,7 +26,10 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * A class representing a typed SQL insert query.
+ * A class representing a typed SQL insert query, where the type
+ * T is the type to insert.
+ *
+ * @param <T> the type to update according to.
  */
 public final class InsertQuery<T> extends BaseQuery {
 
@@ -35,7 +38,7 @@ public final class InsertQuery<T> extends BaseQuery {
 
     public InsertQuery(@NotNull String table, @NotNull Class<T> clazz) {
         this.clazz = clazz;
-        query.append("INSERT INTO ").append(table).append(" ");
+        query.append("INSERT INTO ").append(table);
     }
 
 

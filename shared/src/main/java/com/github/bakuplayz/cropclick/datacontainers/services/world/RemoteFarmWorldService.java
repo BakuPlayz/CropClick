@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  * Remote implementation of {@link FarmWorldDataService} that communicates with an external database
  * configured within the database configuration files.
  */
-public class RemoteFarmWorldService extends AbstractRemoteDataService<FarmWorld> implements FarmWorldDataService {
+public final class RemoteFarmWorldService extends AbstractRemoteDataService<FarmWorld> implements FarmWorldDataService {
 
 
     public RemoteFarmWorldService(@NotNull QueryScheduler scheduler) {
@@ -35,12 +35,14 @@ public class RemoteFarmWorldService extends AbstractRemoteDataService<FarmWorld>
     }
 
 
+    @NotNull
     @Override
     protected String getTable() {
         return "worlds";
     }
 
 
+    @NotNull
     @Override
     protected String getIdentifier() {
         return "name";

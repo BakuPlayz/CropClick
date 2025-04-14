@@ -18,9 +18,9 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
+import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import com.github.bakuplayz.cropclick.sql.query.*;
-import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -34,14 +34,29 @@ import java.util.concurrent.CompletableFuture;
  *
  * @param <D> the type of data entity managed by this service.
  */
-@AllArgsConstructor
-public abstract class AbstractRemoteDataService<D> {
+public abstract class AbstractRemoteDataService<D> implements LoggerContext {
 
     @NotNull
     private final QueryScheduler scheduler;
 
     @NotNull
     private final Class<D> clazz;
+
+
+    public AbstractRemoteDataService(@NotNull QueryScheduler scheduler, @NotNull Class<D> clazz) {
+        this.scheduler = scheduler;
+        this.clazz = clazz;
+        createTable();
+    }
+
+
+    /**
+     * Creates table if not already exists.
+     */
+    private CompletableFuture<Boolean> createTable() {
+        return new CreateQuery<>(getTable(), clazz, true)
+                       .execute(scheduler);
+    }
 
 
     /**
@@ -143,8 +158,10 @@ public abstract class AbstractRemoteDataService<D> {
      *
      * @return a {@link CompletableFuture} that completes with {@code true} if the drop was successful.
      */
-    public CompletableFuture<Boolean> dropAll() {
-        return new DropQuery(getTable()).execute(scheduler);
+    public CompletableFuture<Boolean> reset() {
+        return new DropQuery(getTable())
+                       .execute(scheduler)
+                       .thenCompose(res -> res ? createTable() : CompletableFuture.completedFuture(false));
     }
 
 

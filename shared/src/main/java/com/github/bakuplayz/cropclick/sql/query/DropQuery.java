@@ -20,6 +20,9 @@ package com.github.bakuplayz.cropclick.sql.query;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A class representing a typed SQL drop query.
+ */
 public final class DropQuery extends BaseQuery {
 
     public DropQuery(@NotNull String table) {
@@ -27,32 +30,57 @@ public final class DropQuery extends BaseQuery {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws UnsupportedOperationException always, as WHERE clauses are not supported for DROP queries.
+     */
     @Override
-    public DropQuery where(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+    public DropQuery where(@NotNull String column, @NotNull String operator, @NotNull Object value) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported operation for DROP.");
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws UnsupportedOperationException always, as grouping conditions are not supported for DROP queries.
+     */
     @Override
-    public DropQuery beginGroup() {
+    public DropQuery beginGroup() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported operation for DROP.");
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws UnsupportedOperationException always, as grouping conditions are not supported for DROP queries.
+     */
     @Override
-    public DropQuery endGroup() {
+    public DropQuery endGroup() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported operation for DROP.");
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws UnsupportedOperationException always, as logical AND conditions are not supported for DROP queries.
+     */
     @Override
-    public DropQuery and(@NotNull String column, @NotNull String operator, @NotNull Object value) {
+    public DropQuery and(@NotNull String column, @NotNull String operator, @NotNull Object value) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported operation for DROP.");
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws UnsupportedOperationException always, as logical OR conditions are not supported for DROP queries.
+     */
     @Override
-    public DropQuery or(String column, String operator, Object value) {
+    public DropQuery or(String column, String operator, Object value) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Not supported operation for DROP.");
     }
 

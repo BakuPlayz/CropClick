@@ -136,7 +136,7 @@ public abstract class AbstractLocalDataService<D> {
      *
      * @return a {@link CompletableFuture} that completes with {@code true}.
      */
-    public CompletableFuture<Boolean> dropAll() {
+    public CompletableFuture<Boolean> reset() {
         dataContainer.reset();
         return CompletableFuture.completedFuture(true);
     }

@@ -21,10 +21,7 @@ package com.github.bakuplayz.cropclick.sql.query;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A class representing a typed SQL delete query, where the type
- * T is the type of the result of performing the query.
- *
- * @param <T> the resulting type, after querying.
+ * A class representing a typed SQL delete query.
  */
 public final class DeleteQuery extends BaseQuery {
 

@@ -7,6 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.StringJoiner;
 
+/**
+ * A class representing a typed SQL update query, where the type
+ * T is the type to update.
+ *
+ * @param <T> the type to update according to.
+ */
 public final class UpdateQuery<T> extends BaseQuery {
 
     private final Class<T> clazz;

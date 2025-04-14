@@ -53,6 +53,13 @@ public final class SelectQuery<T> extends BaseQuery {
     }
 
 
+    /**
+     * Should not be called, as we expect item(s) to be returned, and it therefore
+     * doesn't make sense to call an execution method to not retrieve anything upon
+     * trying to select.
+     *
+     * @throws UnsupportedOperationException always, as executing select queries doesn't make sense since we want actual items.
+     */
     @Override
     public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
