@@ -28,8 +28,12 @@ import com.github.bakuplayz.cropclick.datacontainers.services.world.LocalFarmWor
 import com.github.bakuplayz.cropclick.datacontainers.services.world.RemoteFarmWorldService;
 import com.github.bakuplayz.cropclick.sql.ConnectionPool;
 import com.github.bakuplayz.cropclick.sql.QueryScheduler;
+import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -42,7 +46,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public final class DataServiceManager {
 
-    private final QueryScheduler scheduler;
+    private final TaskScheduler taskScheduler;
+
+    private final QueryScheduler queryScheduler;
 
     private final AutofarmDataService autofarmService;
 
@@ -50,27 +56,35 @@ public final class DataServiceManager {
 
 
     public DataServiceManager(@NotNull CropClick plugin) {
+        this.taskScheduler = plugin.getTaskScheduler();
         this.autofarmService = createAutofarmService();
         this.farmWorldDataService = createFarmWorldService();
-        this.scheduler = new QueryScheduler(
-                new ConnectionPool(plugin.getConfigManager().getDatabaseConfig())
+        this.queryScheduler = new QueryScheduler(
+                new ConnectionPool(plugin.getConfigManager().getDatabaseConfig()),
+                taskScheduler
         );
     }
 
 
     @NotNull
-    public AutofarmDataService createAutofarmService() {
-        return scheduler.canQuery()
-                       ? new RemoteAutofarmService(scheduler)
-                       : new LocalAutofarmService();
+    public Collection<DataService<?>> getAll() {
+        return Arrays.asList(autofarmService, farmWorldDataService);
     }
 
 
     @NotNull
-    public FarmWorldDataService createFarmWorldService() {
-        return scheduler.canQuery()
-                       ? new RemoteFarmWorldService(scheduler)
-                       : new LocalFarmWorldService();
+    private AutofarmDataService createAutofarmService() {
+        return queryScheduler.canQuery()
+                       ? new RemoteAutofarmService(queryScheduler)
+                       : new LocalAutofarmService(taskScheduler);
+    }
+
+
+    @NotNull
+    private FarmWorldDataService createFarmWorldService() {
+        return queryScheduler.canQuery()
+                       ? new RemoteFarmWorldService(queryScheduler)
+                       : new LocalFarmWorldService(taskScheduler);
     }
 
 }

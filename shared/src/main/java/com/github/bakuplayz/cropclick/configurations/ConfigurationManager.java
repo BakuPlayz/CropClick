@@ -19,6 +19,7 @@
 package com.github.bakuplayz.cropclick.configurations;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.configurations.config.*;
 import com.github.bakuplayz.cropclick.configurations.converter.AutofarmsConverter;
 import com.github.bakuplayz.cropclick.configurations.converter.ConfigConverter;
@@ -27,6 +28,11 @@ import com.github.bakuplayz.cropclick.configurations.converter.PlayerConverter;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FILE_SETUP_LOAD;
+
 /**
  * A manager controlling all the {@link Configuration configurations}.
  *
@@ -34,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 3.0.0
  * @since 3.0.0
  */
-public final class ConfigurationManager {
+public final class ConfigurationManager implements LoggerContext {
 
     private final CropClick plugin;
 
@@ -66,7 +72,30 @@ public final class ConfigurationManager {
         this.databaseConfig = new DatabaseConfig(plugin);
         this.plugin = plugin;
 
+        setupConfigs();
         handleLegacyConfigs();
+    }
+
+
+    @NotNull
+    public Collection<Configuration> getAll() {
+        return Arrays.asList(usageConfig, cropsConfig, addonsConfig, playersConfig, languageConfig, databaseConfig);
+    }
+
+
+    /**
+     * Sets up and create configurations iff missing.
+     */
+    private void setupConfigs() {
+        FILE_SETUP_LOAD.send(getLogger(), "config.yml");
+        plugin.getConfig().options().copyDefaults(true);
+        plugin.saveConfig();
+
+        cropsConfig.create();
+        usageConfig.create();
+        addonsConfig.create();
+        playersConfig.create();
+        languageConfig.create();
     }
 
 
@@ -85,5 +114,6 @@ public final class ConfigurationManager {
 
         usageConfig.updateUsageInfo();
     }
+
 
 }

@@ -21,7 +21,8 @@ package com.github.bakuplayz.cropclick.datacontainers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.LoggerContext;
-import org.bukkit.Bukkit;
+import com.github.bakuplayz.cropclick.tasks.CleanupTask;
+import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -39,16 +40,19 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
 
     private final static long SAVE_INTERVAL = 30 * 1000 * 20L;
 
+    private final TaskScheduler taskScheduler;
+
+    private final File file;
+
     private final String fileName;
 
     private final ObjectMapper mapper;
 
     private final Map<String, D> data;
 
-    private final File file;
 
-
-    public AbstractDataContainer(@NotNull String fileName) {
+    public AbstractDataContainer(@NotNull String fileName, @NotNull TaskScheduler taskScheduler) {
+        this.taskScheduler = taskScheduler;
         this.file = getNewFileInstance();
         this.mapper = new ObjectMapper();
         this.data = new HashMap<>();
@@ -123,6 +127,11 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
     }
 
 
+    public void reset() {
+        // TODO: Implement
+    }
+
+
     /**
      * Creates the JSON (backing) file if it doesn't already exist.
      */
@@ -141,13 +150,9 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
 
     /**
      * Initializes a repeating asynchronous save task that runs at a fixed interval.
-     * <p>
-     * This task is automatically canceled when {@code CropClick}'s {@code @OnDisable} method is triggered,
-     * so no manual cleanup or cancellation is required within this class.
-     * </p>
      */
     private void setupSave() {
-        Bukkit.getScheduler().runTaskTimer(CropClick.getInstance(), () -> {
+        taskScheduler.scheduleRepeatingTask((CleanupTask) () -> {
             if (!trySave(3)) {
                 DATA_CONTAINER_FAILED_SAVE.send(getLogger(), file.getAbsolutePath());
                 return;

@@ -28,7 +28,6 @@ import com.github.bakuplayz.cropclick.common.metric.Metrics;
 import com.github.bakuplayz.cropclick.configurations.ConfigurationManager;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.datacontainers.DataServiceManager;
-import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.listeners.autofarm.harvest.AutofarmHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmLinkListener;
 import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmUnlinkListener;
@@ -47,6 +46,7 @@ import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarm
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
 import com.github.bakuplayz.cropclick.permissions.PermissionManager;
+import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import com.github.bakuplayz.spigotspin.SpigotSpin;
@@ -91,6 +91,9 @@ public final class CropClick extends JavaPlugin {
     private final Metrics metrics = new Metrics(this, 5160);
 
     @Getter
+    private TaskScheduler taskScheduler;
+
+    @Getter
     private CropManager cropManager;
 
     @Getter
@@ -106,16 +109,16 @@ public final class CropClick extends JavaPlugin {
     private CommandManager commandManager;
 
     @Getter
-    private AutofarmManager autofarmManager;
-
-    @Getter
-    private PermissionManager permissionManager;
-
-    @Getter
     private DataServiceManager dataManager;
 
     @Getter
+    private AutofarmManager autofarmManager;
+
+    @Getter
     private ConfigurationManager configManager;
+
+    @Getter
+    private PermissionManager permissionManager;
 
 
     /**
@@ -129,9 +132,8 @@ public final class CropClick extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        // TODO: Handle the saving of data service when sudden crash or onDisable called...
+        taskScheduler.cleanupTasks();
         CropClick.instance = null;
-        Bukkit.getScheduler().cancelTasks(this);
     }
 
 
@@ -140,14 +142,13 @@ public final class CropClick extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        setupConfigs();
         registerManagers();
 
         new SpigotSpin(this);
 
         CropClick.instance = this;
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(instance, () -> addonManager.registerAddons(), 0);
+        Bukkit.getScheduler().runTaskLaterAsynchronously(instance, addonManager::registerAddons, 0);
 
         registerWorlds();
         registerCommands();
@@ -155,49 +156,6 @@ public final class CropClick extends JavaPlugin {
         registerPermissions();
         registerWorlds();
         registerAddons();
-
-        startUpdateFetchInterval();
-    }
-
-
-    /**
-     * Resets {@link CropClick} (a very expensive compute).
-     */
-    public void onReset() {
-        this.isReset = true;
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> {
-            setupConfigs();
-
-            registerManagers();
-        }, 0);
-    }
-
-    // TODO: Move this logic into ConfigurationManager
-
-
-    /**
-     * Sets up {@link CropClick CropClick's} configurations.
-     */
-    public void setupConfigs() {
-        LanguageAPI.Console.FILE_SETUP_LOAD.send(getLogger(), "config.yml");
-        getConfig().options().copyDefaults(true);
-        saveConfig();
-
-        cropsConfig.create();
-        usageConfig.create();
-        addonsConfig.create();
-        playersConfig.create();
-        languageConfig.create();
-    }
-
-
-    /**
-     * Starts fetching updates from the {@link CropClick CropClick's} update server.
-     */
-    private void startUpdateFetchInterval() {
-        final int THIRTY_MINUTES = 30 * 60 * 20; // Written as Minecraft ticks.
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, updateManager::fetchUpdate, 0, THIRTY_MINUTES);
     }
 
 
@@ -220,6 +178,7 @@ public final class CropClick extends JavaPlugin {
      * Registers all the managers.
      */
     private void registerManagers() {
+        this.taskScheduler = new TaskScheduler(this);
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
         this.addonManager = new AddonManager(this);

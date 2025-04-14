@@ -16,27 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.datacontainers.services.world;
+package com.github.bakuplayz.cropclick.tasks;
 
-import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import org.jetbrains.annotations.NotNull;
+public interface Task extends Runnable {
 
-/**
- * Local in-memory implementation of {@link FarmWorldDataService}, used when there
- * is no database configured.
- */
-public final class LocalFarmWorldService extends AbstractLocalDataService<FarmWorld> implements FarmWorldDataService {
-
-    public LocalFarmWorldService(@NotNull TaskScheduler pool) {
-        super("worlds.json", pool);
-    }
-
-
-    @Override
-    protected String getIdentifier(@NotNull FarmWorld world) {
-        return world.getName();
+    default boolean shouldRunOnCleanup() {
+        return false;
     }
 
 }

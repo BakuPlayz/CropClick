@@ -19,10 +19,7 @@
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
 import com.github.bakuplayz.cropclick.sql.QueryScheduler;
-import com.github.bakuplayz.cropclick.sql.query.DeleteQuery;
-import com.github.bakuplayz.cropclick.sql.query.InsertQuery;
-import com.github.bakuplayz.cropclick.sql.query.SelectQuery;
-import com.github.bakuplayz.cropclick.sql.query.UpdateQuery;
+import com.github.bakuplayz.cropclick.sql.query.*;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -138,6 +135,16 @@ public abstract class AbstractRemoteDataService<D> {
                        .where(getIdentifier(), "=", id)
                        .setAll(entity)
                        .execute(scheduler);
+    }
+
+
+    /**
+     * Drops the table, removing all entries inside of it.
+     *
+     * @return a {@link CompletableFuture} that completes with {@code true} if the drop was successful.
+     */
+    public CompletableFuture<Boolean> dropAll() {
+        return new DropQuery(getTable()).execute(scheduler);
     }
 
 

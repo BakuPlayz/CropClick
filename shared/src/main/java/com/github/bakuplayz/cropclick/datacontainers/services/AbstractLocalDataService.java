@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
 import com.github.bakuplayz.cropclick.datacontainers.AbstractDataContainer;
-import lombok.AllArgsConstructor;
+import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -35,14 +35,13 @@ import java.util.stream.Collectors;
  *
  * @param <D> the type of data entity managed by this service.
  */
-@AllArgsConstructor
 public abstract class AbstractLocalDataService<D> {
 
     private final AbstractDataContainer<D> dataContainer;
 
 
-    public AbstractLocalDataService(@NotNull String fileName) {
-        this.dataContainer = new AbstractDataContainer<>(fileName);
+    public AbstractLocalDataService(@NotNull String fileName, @NotNull TaskScheduler scheduler) {
+        this.dataContainer = new AbstractDataContainer<>(fileName, scheduler);
     }
 
 
@@ -128,6 +127,17 @@ public abstract class AbstractLocalDataService<D> {
     @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity) {
         dataContainer.add(id, entity);
+        return CompletableFuture.completedFuture(true);
+    }
+
+
+    /**
+     * Removes all data from the data store.
+     *
+     * @return a {@link CompletableFuture} that completes with {@code true}.
+     */
+    public CompletableFuture<Boolean> dropAll() {
+        dataContainer.reset();
         return CompletableFuture.completedFuture(true);
     }
 

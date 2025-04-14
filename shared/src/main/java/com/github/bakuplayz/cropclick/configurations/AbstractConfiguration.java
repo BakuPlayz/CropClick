@@ -64,6 +64,8 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
     public AbstractConfiguration(@NotNull CropClick plugin, @NotNull String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
+
+        create();
     }
 
 

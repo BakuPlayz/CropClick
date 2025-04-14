@@ -21,11 +21,11 @@ package com.github.bakuplayz.cropclick.update;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.UpdateAPI;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.VersionUtils;
 import com.github.bakuplayz.cropclick.common.http.HttpParam;
 import com.github.bakuplayz.cropclick.common.http.HttpRequestBuilder;
 import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
@@ -57,17 +57,21 @@ public final class UpdateManager implements UpdateAPI {
 
     private final CropClick plugin;
 
-    private @Getter
-    @Setter(AccessLevel.PRIVATE) String updateURL;
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    private String updateURL;
 
-    private @Getter
-    @Setter(AccessLevel.PRIVATE) String updateTitle;
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    private String updateTitle;
 
-    private @Getter
-    @Setter(AccessLevel.PRIVATE) String updateMessage;
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    private String updateMessage;
 
-    private @Getter
-    @Setter(AccessLevel.PRIVATE) UpdateState updateState;
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    private UpdateState updateState;
 
 
     public UpdateManager(@NotNull CropClick plugin) {
@@ -75,6 +79,11 @@ public final class UpdateManager implements UpdateAPI {
         setUpdateMessage("");
         setUpdateTitle("");
         this.plugin = plugin;
+    }
+
+
+    private void start() {
+        plugin.getTaskScheduler().scheduleRepeatingTask(this::fetchUpdate, 0, 30 * 60 * 20);
     }
 
 
@@ -130,13 +139,13 @@ public final class UpdateManager implements UpdateAPI {
     public void fetchUpdate() {
         try {
             JsonElement response = new HttpRequestBuilder(UpdateManager.UPDATE_URL)
-                    .setDefaultHeaders()
-                    .setParams(
-                            new HttpParam("serverVersion", VersionUtils.getServerVersion()),
-                            new HttpParam("pluginVersion", plugin.getDescription().getVersion())
-                    )
-                    .post(true)
-                    .getResponse();
+                                           .setDefaultHeaders()
+                                           .setParams(
+                                                   new HttpParam("serverVersion", VersionUtils.getServerVersion()),
+                                                   new HttpParam("pluginVersion", plugin.getDescription().getVersion())
+                                           )
+                                           .post(true)
+                                           .getResponse();
 
             if (response == null) {
                 setUpdateProperties(UpdateState.FAILED_TO_FETCH);
@@ -226,7 +235,8 @@ public final class UpdateManager implements UpdateAPI {
      *
      * @return the update state's message.
      */
-    public @NotNull String getUpdateStateMessage() {
+    @NotNull
+    public String getUpdateStateMessage() {
         switch (updateState) {
             case NEW_UPDATE:
                 return GENERAL_STATES_NEW_UPDATE.get(plugin);

@@ -23,14 +23,13 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.datacontainers.DataStorage;
+import com.github.bakuplayz.cropclick.configurations.Configuration;
+import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.*;
 
@@ -71,43 +70,37 @@ public final class ResetCommand implements Subcommand, LoggerContext {
     @Override
     public void perform(@NotNull Player player, String[] args) {
         try {
-            deleteConfigs();
+            resetConfigs();
             deleteDataStorages();
             RESET_DELETE.send(plugin, player);
         } catch (IOException e) {
             getLogger().severe(e.getMessage());
             RESET_FAILED.send(plugin, player);
         } finally {
-            plugin.onReset();
             RESET_SUCCESS.send(plugin, player);
         }
     }
 
 
     /**
-     * Deletes all the {@link AbstractConfiguration config files}.
+     * Resets all the {@link AbstractConfiguration config files}.
      *
      * @throws IOException thrown if any deletion failed.
      */
-    private void deleteConfigs() throws IOException {
-        File pluginFolder = plugin.getDataFolder();
-        Files.deleteIfExists(new File(pluginFolder, "crops.yml").toPath());
-        Files.deleteIfExists(new File(pluginFolder, "config.yml").toPath());
-        Files.deleteIfExists(new File(pluginFolder, "addons.yml").toPath());
-        Files.deleteIfExists(new File(pluginFolder, "players.yml").toPath());
-        Files.deleteIfExists(new File(pluginFolder, "language.yml").toPath());
+    private void resetConfigs() throws IOException {
+        plugin.getConfigManager().getAll().forEach(Configuration::reset);
+        // TODO: fix... Files.deleteIfExists(new File(pluginFolder, "config.yml").toPath());
     }
 
 
     /**
-     * Deletes all the {@link DataStorage data storage files}.
+     * Deletes all the {@link DataService data service files}.
      *
      * @throws IOException thrown if any deletion failed.
      */
     private void deleteDataStorages() throws IOException {
-        File pluginFolder = plugin.getDataFolder();
-        Files.deleteIfExists(new File(pluginFolder, "worlds.json").toPath());
-        Files.deleteIfExists(new File(pluginFolder, "autofarms.json").toPath());
+        plugin.getDataManager().getAll().forEach(DataService::dropAll);
     }
+
 
 }

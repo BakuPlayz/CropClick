@@ -45,14 +45,14 @@ public final class ConnectionPool implements LoggerContext {
     private final static int MAX_CONNECTION_TRIES = 3;
 
 
-    private final Lock connectionsLock;
+    private final Lock connectionsSema;
 
     private final Queue<Connection> connections;
 
 
     public ConnectionPool(@NotNull DatabaseConfig config) {
         this.connections = initializePool(config);
-        this.connectionsLock = new ReentrantLock();
+        this.connectionsSema = new ReentrantLock();
     }
 
 
@@ -62,12 +62,13 @@ public final class ConnectionPool implements LoggerContext {
      * one immediately.
      *
      * @return the acquired connection.
+     *
      * @throws InterruptedException since there is a lock wait.
      */
     public Connection acquire() throws InterruptedException {
-        synchronized (connectionsLock) {
+        synchronized (connectionsSema) {
             while (connections.isEmpty()) {
-                connectionsLock.wait();
+                connectionsSema.wait();
             }
             return connections.poll();
         }
@@ -86,9 +87,9 @@ public final class ConnectionPool implements LoggerContext {
             logDebug("Could not release an established SQL connection, already closed.", e);
         }
 
-        synchronized (connectionsLock) {
+        synchronized (connectionsSema) {
             connections.add(connection);
-            connectionsLock.notify();
+            connectionsSema.notify();
         }
     }
 
@@ -97,7 +98,7 @@ public final class ConnectionPool implements LoggerContext {
      * Closes all the connections within the pool.
      */
     public void close() {
-        synchronized (connectionsLock) {
+        synchronized (connectionsSema) {
             for (Iterator<Connection> it = connections.iterator(); it.hasNext(); ) {
                 try {
                     it.next().close();
