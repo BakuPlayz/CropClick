@@ -23,9 +23,9 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.AutofarmAPI;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.configurations.config.PlayersConfig;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
 import com.github.bakuplayz.cropclick.crops.CropManager;
-import com.github.bakuplayz.cropclick.datacontainers.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
 
 
 /**
@@ -44,24 +46,25 @@ import java.util.List;
  */
 public final class AutofarmManager implements AutofarmAPI {
 
-    @NotNull
-    private final CropClick plugin;
 
     @NotNull
     private final CropManager cropManager;
 
     @NotNull
-    private final PlayersConfig playersConfig;
+    private final DefaultConfig defaultConfig;
 
     @NotNull
-    private final AutofarmDataStorage farmStorage;
+    private final AutofarmDataService dataService;
+
+    @NotNull
+    private final AutofarmFinder autofarmFinder;
 
 
     public AutofarmManager(@NotNull CropClick plugin) {
-        this.playersConfig = plugin.getPlayersConfig();
+        this.defaultConfig = plugin.getConfigManager().getDefaultConfig();
+        this.dataService = plugin.getDataManager().getAutofarmService();
         this.cropManager = plugin.getCropManager();
-        this.farmStorage = plugin.getFarmData();
-        this.plugin = plugin;
+        this.autofarmFinder = new AutofarmFinder(dataService);
     }
 
 
@@ -80,24 +83,24 @@ public final class AutofarmManager implements AutofarmAPI {
 
         if (AutofarmUtils.hasCachedID(block)) {
             String farmerID = AutofarmUtils.getCachedID(block);
-            return farmStorage.findFarmById(farmerID);
+            return autofarmFinder.findById(farmerID);
         }
 
         if (AutofarmUtils.isDispenser(block)) {
-            return farmStorage.findFarmByDispenser(block);
+            return dataService.findFarmByDispenser(block);
         }
 
         if (AutofarmUtils.isContainer(block)) {
-            return farmStorage.findFarmByContainer(block);
+            return dataService.findFarmByContainer(block);
         }
 
         if (AutofarmUtils.isCrop(cropManager, block)) {
-            return farmStorage.findFarmByCrop(block);
+            return dataService.findFarmByCrop(block);
         }
 
         Block blockAbove = block.getRelative(BlockFace.UP);
         if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
-            return farmStorage.findFarmByCrop(blockAbove);
+            return dataService.findFarmByCrop(blockAbove);
         }
 
         return null;
@@ -105,13 +108,13 @@ public final class AutofarmManager implements AutofarmAPI {
 
 
     /**
-     * Gets all the {@link AutofarmDataStorage#getAutofarms() autofarms}.
+     * Gets all the {@link Autofarm autofarms}.
      *
      * @return the found autofarms.
      */
     @NotNull
     public List<Autofarm> getAutofarms() {
-        return new ArrayList<>(farmStorage.getAutofarms().values());
+        return new ArrayList<>(dataService.getMany(0, 10000).join());
     }
 
 
@@ -121,13 +124,12 @@ public final class AutofarmManager implements AutofarmAPI {
      * @return true if they are, otherwise false.
      */
     public boolean isEnabled() {
-        return plugin.getConfig().getBoolean("autofarms.isEnabled", true);
+        return defaultConfig.get(ConfigurationKey.AUTOFARMS_ENABLED);
     }
 
 
     public void setEnabled(boolean isEnabled) {
-        plugin.getConfig().set("autofarms.isEnabled", isEnabled);
-        plugin.saveConfig();
+        defaultConfig.set(ConfigurationKey.AUTOFARMS_ENABLED, isEnabled);
     }
 
 
@@ -154,12 +156,12 @@ public final class AutofarmManager implements AutofarmAPI {
 
 
     /**
-     * Gets the amount of {@link AutofarmDataStorage#getAutofarms() autofarms}.
+     * Gets the amount of {@link Autofarm autofarms}.
      *
      * @return the amount of autofarms.
      */
     public int getAmountOfFarms() {
-        return farmStorage.getAutofarms().size();
+        return dataService.getMany(0, 10000).join().size();
     }
 
 }

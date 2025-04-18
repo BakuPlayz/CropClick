@@ -61,30 +61,6 @@ public final class SeaPickle extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 2).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 2;
-    }
-
-
-    /**
-     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
-     *
-     * @param block the crop block.
-     *
-     * @return the crop's current age.
-     */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return ((org.bukkit.block.data.type.SeaPickle) block.getBlockData()).getPickles();
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -92,11 +68,7 @@ public final class SeaPickle extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.SEA_PICKLE,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
+        return createDrop(1, 100);
     }
 
 
@@ -133,6 +105,30 @@ public final class SeaPickle extends AbstractGroundCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.SEA_PICKLE;
+    }
+
+
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 2).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 2;
+    }
+
+
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return ((org.bukkit.block.data.type.SeaPickle) block.getBlockData()).getPickles();
     }
 
 

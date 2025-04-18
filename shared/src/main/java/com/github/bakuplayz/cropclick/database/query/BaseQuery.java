@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql.query;
+package com.github.bakuplayz.cropclick.database.query;
 
-import com.github.bakuplayz.cropclick.LoggerContext;
-import com.github.bakuplayz.cropclick.sql.QueryScheduler;
+import com.github.bakuplayz.cropclick.Log;
+import com.github.bakuplayz.cropclick.database.QueryScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * A class representing the base for a typed SQL query.
  */
-public abstract class BaseQuery implements LoggerContext {
+public abstract class BaseQuery {
 
     protected final StringBuilder query = new StringBuilder();
 
@@ -56,7 +56,7 @@ public abstract class BaseQuery implements LoggerContext {
      *
      * @return the future response, true iff successful otherwise false.
      */
-    public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) {
+    public CompletableFuture<Boolean> queue(@NotNull QueryScheduler scheduler) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         scheduler.queue((connection) -> {
@@ -71,7 +71,7 @@ public abstract class BaseQuery implements LoggerContext {
                 statement.executeUpdate();
                 future.complete(true);
             } catch (SQLException e) {
-                logDebug("Could not perform SQL update query, something went wrong.", e);
+                Log.debug("Could not perform SQL update query, something went wrong.", e);
                 future.complete(false);
             }
         });

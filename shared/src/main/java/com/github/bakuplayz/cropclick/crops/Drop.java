@@ -68,16 +68,17 @@ public final class Drop {
      *
      * @return the drop as an item.
      */
-    public @NotNull ItemStack toItemStack(boolean nameChanged) {
+    @NotNull
+    public ItemStack toItemStack(boolean nameChanged) {
         int randomAmount = (int) Math.round(amount * getChance());
         return new ItemBuilder(type.parseItem())
-                .setName(nameChanged ? name : null)
-                .setAmount(randomAmount)
-                .toItemStack();
+                       .setName(nameChanged ? name : null)
+                       .setAmount(randomAmount)
+                       .toItemStack();
     }
 
 
-    public double getChance() {
+    private double getChance() {
         return RANDOM.nextDouble();
     }
 

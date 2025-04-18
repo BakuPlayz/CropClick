@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.listeners.entity;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
@@ -33,7 +34,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -46,17 +46,11 @@ import java.util.stream.Collectors;
  */
 public final class EntityDestroyAutofarmListener implements Listener {
 
-    private final Logger logger;
-
-    private final boolean isDebugging;
-
     private final AutofarmManager autofarmManager;
 
 
     public EntityDestroyAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
-        this.isDebugging = plugin.isDebugging();
-        this.logger = plugin.getLogger();
     }
 
 
@@ -82,12 +76,10 @@ public final class EntityDestroyAutofarmListener implements Listener {
                 continue;
             }
 
-            if (isDebugging) {
-                logger.info(String.format(
-                        "%s (Entity): Called the destroy autofarm event!",
-                        event.getEntity().getName())
-                );
-            }
+            Log.debug(String.format(
+                    "%s (Entity): Called the destroy autofarm event!",
+                    event.getEntity().getName())
+            );
 
             Bukkit.getPluginManager().callEvent(
                     new AutofarmUnlinkEvent(autofarm)
@@ -105,8 +97,8 @@ public final class EntityDestroyAutofarmListener implements Listener {
      */
     private @NotNull List<Block> getExplodedComponents(@NotNull List<Block> explodedBlocks) {
         return explodedBlocks.stream()
-                .filter(autofarmManager::isComponent)
-                .collect(Collectors.toList());
+                       .filter(autofarmManager::isComponent)
+                       .collect(Collectors.toList());
     }
 
 }

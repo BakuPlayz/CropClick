@@ -18,8 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
+import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.datacontainers.AbstractDataContainer;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -35,13 +35,13 @@ import java.util.stream.Collectors;
  *
  * @param <D> the type of data entity managed by this service.
  */
-public abstract class AbstractLocalDataService<D> {
+public abstract class AbstractLocalDataService<D> implements DataService<D> {
 
     private final AbstractDataContainer<D> dataContainer;
 
 
-    public AbstractLocalDataService(@NotNull String fileName, @NotNull TaskScheduler scheduler) {
-        this.dataContainer = new AbstractDataContainer<>(fileName, scheduler);
+    public AbstractLocalDataService(@NotNull String fileName, @NotNull CropClick plugin) {
+        this.dataContainer = new AbstractDataContainer<>(fileName, plugin);
     }
 
 

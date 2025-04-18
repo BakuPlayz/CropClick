@@ -16,27 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.datacontainers.services.world;
+package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
+import com.github.bakuplayz.cropclick.configurations.IConfigurationKey;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Local in-memory implementation of {@link FarmWorldDataService}, used when there
- * is no database configured.
+ * A class representing the YAML file: 'config.yml'.
+ *
+ * @author BakuPlayz
+ * @version 3.0.0
+ * @since 3.0.0
  */
-public final class LocalFarmWorldService extends AbstractLocalDataService<FarmWorld> implements FarmWorldDataService {
+public final class DefaultConfig extends AbstractConfiguration {
 
-    public LocalFarmWorldService(@NotNull CropClick plugin) {
-        super("worlds.json", plugin);
+    public DefaultConfig(@NotNull CropClick plugin) {
+        super(plugin, "config.yml");
     }
 
 
-    @Override
-    protected String getIdentifier(@NotNull FarmWorld world) {
-        return world.getName();
+    @Getter
+    @AllArgsConstructor
+    public enum ConfigurationKey implements IConfigurationKey {
+
+        UPDATE_MESSAGE_PLAYER("updateMessage.player", true),
+        UPDATE_MESSAGE_CONSOLE("updateMessage.console", true),
+        AUTOFARMS_ENABLED("autofarms.isEnabled", true);
+
+        @NotNull
+        private final String path;
+
+        private final Object defaultValue;
+
     }
 
 }

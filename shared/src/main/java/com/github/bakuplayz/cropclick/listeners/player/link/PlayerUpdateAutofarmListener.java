@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
@@ -115,9 +116,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
                 newFarm
         );
 
-        if (plugin.isDebugging()) {
-            plugin.getLogger().info(String.format("%s (Player): Called the update event!", player.getName()));
-        }
+        Log.debug(String.format("%s (Player): Called the update event!", player.getName()));
 
         Bukkit.getPluginManager().callEvent(updateEvent);
     }

@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.tasks;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class TaskScheduler implements LoggerContext {
+public final class TaskScheduler {
 
     private final CropClick plugin;
 
@@ -46,7 +46,7 @@ public final class TaskScheduler implements LoggerContext {
             try {
                 task.run();
             } catch (Exception e) {
-                logDebug("Failed to run task.", e);
+                Log.debug("Failed to run task.", e);
             } finally {
                 tasks.remove(task);
             }
@@ -60,7 +60,7 @@ public final class TaskScheduler implements LoggerContext {
             try {
                 task.run();
             } catch (Exception e) {
-                logDebug("Failed to run task.", e);
+                Log.debug("Failed to run task.", e);
             } finally {
                 tasks.remove(task);
             }
@@ -74,7 +74,7 @@ public final class TaskScheduler implements LoggerContext {
                 try {
                     task.run();
                 } catch (Exception e) {
-                    logDebug("Failed to cleanup task.", e);
+                    Log.debug("Failed to run task.", e);
                 }
             });
 

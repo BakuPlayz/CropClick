@@ -18,7 +18,7 @@
  */
 package com.github.bakuplayz.cropclick.addons.worldguard;
 
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonFunctionality;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.World;
@@ -35,9 +35,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Level;
-
-public final class WorldGuardFunctionality implements AddonFunctionality, LoggerContext {
+public final class WorldGuardFunctionality implements AddonFunctionality {
 
     public final static String FLAG_NAME = "cropclick";
 
@@ -60,7 +58,7 @@ public final class WorldGuardFunctionality implements AddonFunctionality, Logger
                 worldGuard.getFlagRegistry().register(CROP_FLAG);
             }
         } catch (FlagConflictException e) {
-            getLogger().log(Level.WARNING, "WorldGuard failed to register the CropClick flag, expect potential issues.", e);
+            Log.info("WorldGuard failed to register the CropClick flag, expect potential issues.", e);
         }
     }
 

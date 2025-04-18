@@ -1,6 +1,6 @@
-package com.github.bakuplayz.cropclick.sql;
+package com.github.bakuplayz.cropclick.database;
 
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class QueryScheduler implements LoggerContext {
+public final class QueryScheduler {
 
 
     private static final long RESTART_WORKERS_INTERVAL = 1000 * 60 * 60 * 20;
@@ -80,18 +80,26 @@ public final class QueryScheduler implements LoggerContext {
      */
     private void startWorker() {
         while (true) {
+            Connection connection = null;
             try {
                 DatabaseJob job = queuedJobs.take();
-                Connection connection = connectionPool.acquire();
+                connection = connectionPool.acquire();
                 job.execute(connection);
-                connectionPool.release(connection);
             } catch (InterruptedException e) {
-                logDebug("(Debug) Database worker is interrupted, stopping.", e);
+                Log.debug("Database worker is interrupted, stopping.", e);
                 Thread.currentThread().interrupt();
-                workers.decrementAndGet();
                 break;
+            } finally {
+                if (connection != null) {
+                    connectionPool.release(connection);
+                }
             }
         }
+
+        // Make sure we decrement our workers if they crash
+        // so that we can handle creation of new workers if
+        // all crashed.
+        workers.decrementAndGet();
     }
 
 

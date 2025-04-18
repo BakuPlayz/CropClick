@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.listeners.autofarm.harvest;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
@@ -190,10 +191,7 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         crop.replant(block);
 
-        if (plugin.isDebugging()) {
-            plugin.getLogger()
-                    .info(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedId()));
-        }
+        Log.debug(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedId()));
     }
 
 
@@ -204,7 +202,8 @@ public final class AutofarmHarvestCropListener implements Listener {
      *
      * @return The block that the dispenser is facing.
      */
-    private @NotNull Block findDispenserFacing(@NotNull Block block) {
+    @NotNull
+    private Block findDispenserFacing(@NotNull Block block) {
         return block.getRelative(
                 ((Directional) block.getState().getData()).getFacing()
         );

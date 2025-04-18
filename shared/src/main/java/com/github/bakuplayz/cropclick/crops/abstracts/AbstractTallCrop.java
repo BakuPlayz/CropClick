@@ -30,6 +30,8 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
+
 
 /**
  * A class that represents the base of a tall crop.
@@ -40,6 +42,9 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.0.0
  */
 public abstract class AbstractTallCrop extends AbstractCrop {
+
+    private final static BottomToTopTraversal ALGORITHM = new BottomToTopTraversal();
+
 
     public AbstractTallCrop(@NotNull CropsConfig config) {
         super(config);
@@ -58,19 +63,6 @@ public abstract class AbstractTallCrop extends AbstractCrop {
 
 
     /**
-     * Gets the current age of the {@link AbstractTallCrop extending tall crop}.
-     *
-     * @param block the crop block.
-     *
-     * @return the crop's current age.
-     */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return new BottomToTopTraversal().traverse(block);
-    }
-
-
-    /**
      * Gets the {@link Seed seed} of the {@link AbstractTallCrop extending tall crop}.
      *
      * @return the seed, otherwise null (default: null).
@@ -83,6 +75,19 @@ public abstract class AbstractTallCrop extends AbstractCrop {
 
 
     /**
+     * Gets the current age of the {@link AbstractTallCrop extending tall crop}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return ALGORITHM.traverse(block);
+    }
+
+
+    /**
      * Checks whether the {@link AbstractTallCrop extending tall crop} has a {@link Seed seed}.
      *
      * @return true if it has, otherwise false (default: false).
@@ -90,6 +95,17 @@ public abstract class AbstractTallCrop extends AbstractCrop {
     @Override
     public boolean hasSeed() {
         return false;
+    }
+
+
+    /**
+     * Checks whether the {@link AbstractTallCrop extending tall crop} is linkable to an {@link Autofarm}.
+     *
+     * @return true if it is, otherwise false (default: false).
+     */
+    @Override
+    public boolean isLinkable() {
+        return cropsConfig.get(ConfigurationKey.CROP_LINKABLE, getName());
     }
 
 
@@ -113,17 +129,6 @@ public abstract class AbstractTallCrop extends AbstractCrop {
         if (!shouldReplant()) {
             block.setType(Material.AIR);
         }
-    }
-
-
-    /**
-     * Checks whether the {@link AbstractTallCrop extending tall crop} is linkable to an {@link Autofarm}.
-     *
-     * @return true if it is, otherwise false (default: false).
-     */
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
     }
 
 

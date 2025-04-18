@@ -19,13 +19,13 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
+import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.Waterlogged;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,6 +60,42 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
 
 
     /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
+    @NotNull
+    @Override
+    public Drop getDrop() {
+        return createDrop(1, 100);
+    }
+
+
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
+    @NotNull
+    @Override
+    public XMaterial getClickableType() {
+        return XMaterial.BIG_DRIPLEAF_STEM;
+    }
+
+
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
+    @NotNull
+    @Override
+    public XMaterial getMenuType() {
+        return XMaterial.BIG_DRIPLEAF;
+    }
+
+
+    /**
      * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
      *
      * @param block the crop block.
@@ -89,22 +125,6 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
         }
 
         return height;
-    }
-
-
-    /**
-     * Gets the drop of the {@link Crop crop}.
-     *
-     * @return the crop's drop.
-     */
-    @NotNull
-    @Override
-    public Drop getDrop() {
-        return new Drop(XMaterial.BIG_DRIPLEAF,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
     }
 
 
@@ -143,30 +163,6 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
 
         block.setType(Material.BIG_DRIPLEAF);
         setWaterLogged(block, isWaterLogged);
-    }
-
-
-    /**
-     * Gets the clickable type of the {@link Crop crop}.
-     *
-     * @return the crop's clickable type.
-     */
-    @NotNull
-    @Override
-    public XMaterial getClickableType() {
-        return XMaterial.BIG_DRIPLEAF_STEM;
-    }
-
-
-    /**
-     * Gets the menu type of the {@link Crop crop}.
-     *
-     * @return the crop's menu type.
-     */
-    @NotNull
-    @Override
-    public XMaterial getMenuType() {
-        return XMaterial.BIG_DRIPLEAF;
     }
 
 

@@ -20,14 +20,14 @@
 package com.github.bakuplayz.cropclick.commands.subcommands;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
+import com.github.bakuplayz.cropclick.configurations.Configuration;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.*;
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FILE_RELOAD;
 
 
 /**
@@ -38,7 +38,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FILE_R
  * @since 2.0.0
  */
 @AllArgsConstructor
-public final class ReloadCommand implements Subcommand, LoggerContext {
+public final class ReloadCommand implements Subcommand {
 
     private final CropClick plugin;
 
@@ -66,15 +66,9 @@ public final class ReloadCommand implements Subcommand, LoggerContext {
     @Override
     public void perform(@NotNull Player player, String[] args) {
         try {
-            plugin.reloadConfig();
-            FILE_RELOAD.send(plugin.getLogger(), "config.yml");
-
-            plugin.getCropsConfig().reload();
-            plugin.getAddonsConfig().reload();
-            plugin.getPlayersConfig().reload();
-            plugin.getLanguageConfig().reload();
+            plugin.getConfigManager().getAll().forEach(Configuration::reload);
         } catch (Exception e) {
-            getLogger().severe(e.getMessage());
+            Log.severe(e.getMessage());
             RELOAD_FAILED.send(plugin, player);
         } finally {
             RELOAD_SUCCESS.send(plugin, player);

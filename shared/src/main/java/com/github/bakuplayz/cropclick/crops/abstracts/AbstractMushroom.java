@@ -19,16 +19,18 @@
 
 package com.github.bakuplayz.cropclick.crops.abstracts;
 
+import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Stack;
+
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 
 
 /**
@@ -59,7 +61,7 @@ public abstract class AbstractMushroom extends AbstractTallCrop {
      */
     @Override
     public boolean dropAtLeastOne() {
-        return cropSection.shouldDropAtLeastOne(getName(), false);
+        return cropsConfig.get(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, getName());
     }
 
 

@@ -28,6 +28,7 @@ import com.github.bakuplayz.cropclick.crops.abstracts.AbstractWallCrop;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 
 /**
  * A class that represents the cocoa bean crop.
@@ -76,11 +77,7 @@ public final class CocoaBean extends AbstractWallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.COCOA_BEANS,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 3),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(3, 80);
     }
 
 
@@ -115,7 +112,7 @@ public final class CocoaBean extends AbstractWallCrop {
      */
     @Override
     public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
+        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
     }
 
 }

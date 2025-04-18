@@ -23,32 +23,39 @@ import org.jetbrains.annotations.NotNull;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public interface LoggerContext {
+public final class Log {
 
-    boolean DEBUG = false;
+    private final static boolean DEBUG = false;
 
-
-    default Logger getLogger() {
-        return Logger.getLogger("CropClick");
-    }
+    private final static Logger logger = Logger.getLogger("CropClick");
 
 
-    default void logDebug(@NotNull String message, @NotNull Throwable throwable) {
+    public static void debug(@NotNull String message, @NotNull Throwable throwable) {
         if (DEBUG) {
-            getLogger().log(Level.INFO, message, throwable);
+            logger.log(Level.INFO, message, throwable);
         }
     }
 
 
-    default void logDebug(@NotNull String message, @NotNull Object... params) {
+    public static void debug(@NotNull String message, @NotNull Object... params) {
         if (DEBUG) {
-            getLogger().log(Level.INFO, message, params);
+            logger.log(Level.INFO, message, params);
         }
     }
 
 
-    default void logInfo(@NotNull String message, @NotNull Object... params) {
-        getLogger().log(Level.INFO, message, params);
+    public static void severe(@NotNull String message) {
+        logger.severe(message);
+    }
+
+
+    public static void info(@NotNull String message, @NotNull Throwable throwable) {
+        logger.log(Level.INFO, message, throwable);
+    }
+
+
+    public static void info(@NotNull String message, @NotNull Object... params) {
+        logger.log(Level.INFO, message, params);
     }
 
 }

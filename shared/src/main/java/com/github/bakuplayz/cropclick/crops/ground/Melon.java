@@ -32,6 +32,8 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
+
 
 /**
  * A class that represents the melon crop.
@@ -62,28 +64,6 @@ public final class Melon extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 1).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 1;
-    }
-
-
-    /**
-     * Gets the current age of the {@link Crop crop}.
-     *
-     * @return the crop's current age (default: 1).
-     */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return 1;
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -91,11 +71,7 @@ public final class Melon extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.MELON_SLICE,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 7),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(7, 80);
     }
 
 
@@ -108,17 +84,6 @@ public final class Melon extends AbstractGroundCrop {
     @Override
     public Seed getSeed() {
         return null;
-    }
-
-
-    /**
-     * Replants the {@link Crop crop}.
-     *
-     * @param block the crop block to replant.
-     */
-    @Override
-    public void replant(@NotNull Block block) {
-        block.setType(Material.AIR);
     }
 
 
@@ -147,13 +112,46 @@ public final class Melon extends AbstractGroundCrop {
 
 
     /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 1).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 1;
+    }
+
+
+    /**
+     * Gets the current age of the {@link Crop crop}.
+     *
+     * @return the crop's current age (default: 1).
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return 1;
+    }
+
+
+    /**
      * Checks whether the {@link Crop crop} is linkable to an {@link Autofarm}.
      *
      * @return true if it is, otherwise false (default: false).
      */
     @Override
     public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
+        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
+    }
+
+
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
+    @Override
+    public void replant(@NotNull Block block) {
+        block.setType(Material.AIR);
     }
 
 }

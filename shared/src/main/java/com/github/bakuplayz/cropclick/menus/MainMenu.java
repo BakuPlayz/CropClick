@@ -20,7 +20,6 @@
 package com.github.bakuplayz.cropclick.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractPlainMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
@@ -64,7 +63,7 @@ public final class MainMenu extends AbstractPlainMenu {
     }
 
 
-    private final class CropsItem extends ClickableItem implements LoggerContext {
+    private final class CropsItem extends ClickableItem {
 
         @Override
         public void create() {

@@ -19,6 +19,8 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
+import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.CollectionUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
@@ -26,8 +28,6 @@ import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal;
 import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal.Input;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.common.CollectionUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 
 
 /**
@@ -47,6 +49,8 @@ import java.util.List;
  * @since 2.0.0
  */
 public final class Chorus extends AbstractTallCrop {
+
+    private final static StackTraversal ALGORITHM = new StackTraversal();
 
     private final List<Block> choruses;
 
@@ -71,37 +75,6 @@ public final class Chorus extends AbstractTallCrop {
 
 
     /**
-     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
-     *
-     * @param block the crop block.
-     *
-     * @return the crop's current age.
-     */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        choruses.clear();
-
-        return new StackTraversal().traverse(
-                new Input(block, (chorus) -> !isChorusType(chorus) || choruses.contains(chorus), choruses)
-        );
-    }
-
-
-    /**
-     * Replants the {@link Crop crop}.
-     *
-     * @param block the crop block to replant.
-     */
-    @Override
-    public void replant(@NotNull Block block) {
-        CollectionUtils.reverseOrder(choruses)
-                .forEach(b -> b.setType(Material.AIR));
-
-        choruses.clear();
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -109,22 +82,7 @@ public final class Chorus extends AbstractTallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.CHORUS_FRUIT,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 80)
-        );
-    }
-
-
-    /**
-     * Checks whether the {@link Crop crop} should drop at least one drop.
-     *
-     * @return true if it should, otherwise false (default: false).
-     */
-    @Override
-    public boolean dropAtLeastOne() {
-        return cropSection.shouldDropAtLeastOne(getName(), false);
+        return createDrop(1, 80);
     }
 
 
@@ -149,6 +107,48 @@ public final class Chorus extends AbstractTallCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.CHORUS_FRUIT;
+    }
+
+
+    /**
+     * Gets the current age of the {@link Crop crop} provided the {@link Block crop block}.
+     *
+     * @param block the crop block.
+     *
+     * @return the crop's current age.
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        choruses.clear();
+
+        return ALGORITHM.traverse(
+                new Input(block, (chorus) -> !isChorusType(chorus) || choruses.contains(chorus), choruses)
+        );
+    }
+
+
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
+    @Override
+    public void replant(@NotNull Block block) {
+        CollectionUtils.reverseOrder(choruses)
+                .forEach(b -> b.setType(Material.AIR));
+
+        choruses.clear();
+    }
+
+
+    /**
+     * Checks whether the {@link Crop crop} should drop at least one drop.
+     *
+     * @return true if it should, otherwise false (default: false).
+     */
+    @Override
+    public boolean dropAtLeastOne() {
+        return cropsConfig.getOrDefault(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, false, getName());
     }
 
 

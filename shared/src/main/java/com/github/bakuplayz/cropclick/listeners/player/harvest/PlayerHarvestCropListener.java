@@ -20,8 +20,13 @@
 package com.github.bakuplayz.cropclick.listeners.player.harvest;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.EventUtils;
+import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.common.VersionUtils;
 import com.github.bakuplayz.cropclick.configurations.config.PlayersConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
@@ -30,10 +35,6 @@ import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.ground.SeaPickle;
 import com.github.bakuplayz.cropclick.events.player.harvest.PlayerHarvestCropEvent;
 import com.github.bakuplayz.cropclick.mappers.ComponentMapper;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.common.EventUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -47,7 +48,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 
 /**
@@ -58,10 +58,6 @@ import java.util.logging.Logger;
  * @since 2.0.0
  */
 public final class PlayerHarvestCropListener implements Listener {
-
-    private final Logger logger;
-
-    private final boolean isDebugging;
 
     private final CropManager cropManager;
 
@@ -79,8 +75,6 @@ public final class PlayerHarvestCropListener implements Listener {
 
 
     public PlayerHarvestCropListener(@NotNull CropClick plugin) {
-        this.logger = plugin.getLogger();
-        this.isDebugging = plugin.isDebugging();
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
@@ -183,9 +177,7 @@ public final class PlayerHarvestCropListener implements Listener {
             return;
         }
 
-        if (isDebugging) {
-            logger.info(String.format("%s (Player): Called the harvest event!", player.getName()));
-        }
+        Log.debug(String.format("%s (Player): Called the harvest event!", player.getName()));
 
         ContainerComponent container = ComponentMapper.getContainer().of(player);
 

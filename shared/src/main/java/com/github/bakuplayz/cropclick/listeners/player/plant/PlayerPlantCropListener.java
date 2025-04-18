@@ -21,6 +21,7 @@ package com.github.bakuplayz.cropclick.listeners.player.plant;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
@@ -41,8 +42,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
-
 
 /**
  * A listener handling all the {@link Crop crop} plant events caused by a {@link Player}.
@@ -52,10 +51,6 @@ import java.util.logging.Logger;
  * @since 2.0.0
  */
 public final class PlayerPlantCropListener implements Listener {
-
-    private final Logger logger;
-
-    private final boolean isDebugging;
 
     private final CropManager cropManager;
 
@@ -67,8 +62,6 @@ public final class PlayerPlantCropListener implements Listener {
 
 
     public PlayerPlantCropListener(@NotNull CropClick plugin) {
-        this.logger = plugin.getLogger();
-        this.isDebugging = plugin.isDebugging();
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
@@ -127,9 +120,7 @@ public final class PlayerPlantCropListener implements Listener {
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {
         if (event.isCancelled()) return;
 
-        if (isDebugging) {
-            logger.info(String.format("%s (Player): Called the plant crop event!", event.getPlayer().getName()));
-        }
+        Log.debug(String.format("%s (Player): Called the plant crop event!", event.getPlayer().getName()));
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
             growthAddon.getFunctionality().registerCrop(event.getBlock().getLocation());

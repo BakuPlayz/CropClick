@@ -62,17 +62,6 @@ public final class PitcherPlant extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 4).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 4;
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -80,11 +69,7 @@ public final class PitcherPlant extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.PITCHER_PLANT,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
+        return createDrop(1, 100);
     }
 
 
@@ -97,18 +82,6 @@ public final class PitcherPlant extends AbstractGroundCrop {
     @Override
     public Seed getSeed() {
         return null;
-    }
-
-
-    /**
-     * Replants the {@link Crop crop}.
-     *
-     * @param block the crop block to replant.
-     */
-    @Override
-    public void replant(@NotNull Block block) {
-        super.replant(block);
-        block.getRelative(BlockFace.UP).setType(Material.AIR);
     }
 
 
@@ -133,6 +106,29 @@ public final class PitcherPlant extends AbstractGroundCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.PITCHER_PLANT;
+    }
+
+
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 4).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 4;
+    }
+
+
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
+    @Override
+    public void replant(@NotNull Block block) {
+        super.replant(block);
+        block.getRelative(BlockFace.UP).setType(Material.AIR);
     }
 
 }

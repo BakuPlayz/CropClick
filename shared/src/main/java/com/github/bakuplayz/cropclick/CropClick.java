@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2023 BakuPlayz
+ * Copyright (C) 2025 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.common.metric.Metrics;
 import com.github.bakuplayz.cropclick.configurations.ConfigurationManager;
 import com.github.bakuplayz.cropclick.crops.CropManager;
+import com.github.bakuplayz.cropclick.database.DatabaseManager;
 import com.github.bakuplayz.cropclick.datacontainers.DataServiceManager;
 import com.github.bakuplayz.cropclick.listeners.autofarm.harvest.AutofarmHarvestCropListener;
 import com.github.bakuplayz.cropclick.listeners.autofarm.link.AutofarmLinkListener;
@@ -67,7 +68,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FAILED
  * The class representing the core of CropClick -- my precious.
  *
  * @author BakuPlayz
- * @version 2.0.0
+ * @version 3.0.0
  * @since 2.0.0
  */
 public final class CropClick extends JavaPlugin {
@@ -75,20 +76,15 @@ public final class CropClick extends JavaPlugin {
     /**
      * A singleton plugin instance of CropClick, used *ONLY* to communicate with the {@link CropClickAPI}.
      */
-    @Getter(AccessLevel.PUBLIC)
+    @Getter(AccessLevel.PACKAGE)
     private static CropClick instance;
-
-    /**
-     * A variable used for debugging purposes, when enabled it will, for instance log every event call.
-     */
-    @Getter
-    private final boolean isDebugging = false;
 
     /**
      * A variable used for getting statistics using bStats.
      */
     @Getter(AccessLevel.PACKAGE)
     private final Metrics metrics = new Metrics(this, 5160);
+
 
     @Getter
     private TaskScheduler taskScheduler;
@@ -112,6 +108,9 @@ public final class CropClick extends JavaPlugin {
     private DataServiceManager dataManager;
 
     @Getter
+    private DatabaseManager databaseManager;
+
+    @Getter
     private AutofarmManager autofarmManager;
 
     @Getter
@@ -122,16 +121,11 @@ public final class CropClick extends JavaPlugin {
 
 
     /**
-     * A variable used for resetting only the required items, when a reset is called.
-     */
-    private boolean isReset;
-
-
-    /**
      * Stops the execution of {@link CropClick}.
      */
     @Override
     public void onDisable() {
+        // TODO: Close all connections, and create new ones...
         taskScheduler.cleanupTasks();
         CropClick.instance = null;
     }
@@ -142,20 +136,42 @@ public final class CropClick extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        registerManagers();
+        CropClick.instance = this;
 
         new SpigotSpin(this);
 
-        CropClick.instance = this;
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(instance, addonManager::registerAddons, 0);
-
+        registerSchedulers();
+        registerManagers();
+        registerAddons();
         registerWorlds();
         registerCommands();
         registerListeners();
         registerPermissions();
-        registerWorlds();
-        registerAddons();
+    }
+
+
+    /**
+     * Registers all the managers.
+     */
+    private void registerManagers() {
+        this.configManager = new ConfigurationManager(this);
+        this.databaseManager = new DatabaseManager(this);
+        this.dataManager = new DataServiceManager(this);
+        this.cropManager = new CropManager(this);
+        this.worldManager = new WorldManager(this);
+        this.addonManager = new AddonManager(this);
+        this.updateManager = new UpdateManager(this);
+        this.commandManager = new CommandManager(this);
+        this.autofarmManager = new AutofarmManager(this);
+        this.permissionManager = new PermissionManager(this);
+    }
+
+
+    /**
+     * Registers all the schedulers.
+     */
+    private void registerSchedulers() {
+        this.taskScheduler = new TaskScheduler(this);
     }
 
 
@@ -165,32 +181,12 @@ public final class CropClick extends JavaPlugin {
     private void registerCommands() {
         PluginCommand command = getCommand("cropclick");
         if (command == null) {
-            FAILED_TO_REGISTER_COMMANDS.send(getLogger());
+            FAILED_TO_REGISTER_COMMANDS.send();
             return;
         }
 
         command.setExecutor(commandManager);
         command.setTabCompleter(commandManager);
-    }
-
-
-    /**
-     * Registers all the managers.
-     */
-    private void registerManagers() {
-        this.taskScheduler = new TaskScheduler(this);
-        this.cropManager = new CropManager(this);
-        this.worldManager = new WorldManager(this);
-        this.addonManager = new AddonManager(this);
-        this.dataManager = new DataServiceManager(this);
-        this.autofarmManager = new AutofarmManager(this);
-        this.configManager = new ConfigurationManager(this);
-
-        if (!isReset) {
-            this.updateManager = new UpdateManager(this);
-            this.commandManager = new CommandManager(this);
-            this.permissionManager = new PermissionManager(this);
-        }
     }
 
 
@@ -202,25 +198,25 @@ public final class CropClick extends JavaPlugin {
 
         manager.registerEvents(new PlayerJoinListener(this), this);
 
+        manager.registerEvents(new PlayerInteractAtCropListener(this), this);
         manager.registerEvents(new PlayerInteractAtAutofarmListener(this), this);
         manager.registerEvents(new PlayerInteractAtContainerListener(this), this);
         manager.registerEvents(new PlayerInteractAtDispenserListener(this), this);
-        manager.registerEvents(new PlayerInteractAtCropListener(this), this);
 
-        manager.registerEvents(new HarvestCropListener(this), this);
+        manager.registerEvents(new HarvestCropListener(), this);
         manager.registerEvents(new PlayerHarvestCropListener(this), this);
         manager.registerEvents(new AutofarmHarvestCropListener(this), this);
 
         manager.registerEvents(new PlayerPlantCropListener(this), this);
         manager.registerEvents(new PlayerDestroyCropListener(this), this);
 
-        manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
-        manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
         manager.registerEvents(new PlayerLinkAutofarmListener(this), this);
+        manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
+        manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
 
-        manager.registerEvents(new AutofarmUpdateListener(this), this);
-        manager.registerEvents(new AutofarmUnlinkListener(this), this);
         manager.registerEvents(new AutofarmLinkListener(this), this);
+        manager.registerEvents(new AutofarmUnlinkListener(this), this);
+        manager.registerEvents(new AutofarmUpdateListener(this), this);
 
         manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
     }
@@ -230,7 +226,7 @@ public final class CropClick extends JavaPlugin {
      * Registers all the {@link Permission permissions}.
      */
     private void registerPermissions() {
-        permissionManager.registerPermissions(this);
+        permissionManager.registerPermissions();
     }
 
 

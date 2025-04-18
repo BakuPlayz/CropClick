@@ -19,6 +19,9 @@
 
 package com.github.bakuplayz.cropclick.worlds;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.common.CollectionUtils;
@@ -46,23 +49,28 @@ import java.util.List;
 @EqualsAndHashCode
 public final class FarmWorld {
 
+    @JsonProperty(value = "name", required = true)
     private final String name;
 
     /**
      * A variable containing all the banished addons in the {@link FarmWorld farm world}.
      */
-    private final @Getter List<AbstractAddon> banishedAddons;
+    @JsonProperty(value = "banished_addons", required = true)
+    private final List<AbstractAddon> banishedAddons;
 
     @Setter
     @Accessors(fluent = true)
+    @JsonProperty(value = "is_banished", required = true)
     private boolean isBanished;
 
     @Setter
     @Accessors(fluent = true)
+    @JsonProperty(value = "allows_players", required = true)
     private boolean allowsPlayers;
 
     @Setter
     @Accessors(fluent = true)
+    @JsonProperty(value = "allows_autofarms", required = true)
     private boolean allowsAutofarms;
 
 
@@ -74,11 +82,13 @@ public final class FarmWorld {
     }
 
 
-    public FarmWorld(@NotNull String name,
-                     boolean isBanished,
-                     boolean allowsPlayers,
-                     boolean allowsAutofarms,
-                     List<AbstractAddon> banishedAddons
+    @JsonCreator
+    public FarmWorld(
+            @JsonProperty("name") @NotNull String name,
+            @JsonProperty("is_banished") boolean isBanished,
+            @JsonProperty("allows_players") boolean allowsPlayers,
+            @JsonProperty("allows_autofarms") boolean allowsAutofarms,
+            @JsonProperty("banished_addons") List<AbstractAddon> banishedAddons
     ) {
         this.allowsAutofarms = allowsAutofarms;
         this.banishedAddons = banishedAddons;
@@ -97,6 +107,7 @@ public final class FarmWorld {
     public void toggleAddon(@NotNull AddonManager manager, @NotNull String name) {
         AbstractAddon addon = manager.findByName(name);
         if (addon == null) {
+            Log.debug("Failed to toggle the {} addon, couldn't find it.", name);
             return;
         }
 
@@ -115,6 +126,7 @@ public final class FarmWorld {
     public boolean isBanishedAddon(@NotNull AddonManager manager, @NotNull String name) {
         AbstractAddon addon = manager.findByName(name);
         if (addon == null) {
+            Log.debug("Failed check state of the {} addon, couldn't find it.", name);
             return false;
         }
         return banishedAddons.contains(addon);

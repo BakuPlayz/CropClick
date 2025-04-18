@@ -16,20 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql;
+package com.github.bakuplayz.cropclick.database;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
-// TODO: Document
-public interface SQLSerializer<D> {
+public final class EntityMapperRegistry {
 
-    void serialize(@NotNull D data, @NotNull PreparedStatement stmt) throws SQLException;
+    private static final Map<Class<?>, EntityMapper<?>> registry = new HashMap<>();
 
 
-    D deserialize(@NotNull ResultSet rs) throws SQLException;
+    public static <T> void register(@NotNull Class<T> clazz, @NotNull EntityMapper<T> mapper) {
+        registry.put(clazz, mapper);
+    }
+
+
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public static <T> EntityMapper<T> get(@NotNull Class<T> clazz) {
+        EntityMapper<T> mapper = (EntityMapper<T>) registry.get(clazz);
+
+        if (mapper == null) {
+            throw new IllegalStateException("No EntityMapper registered for class: " + clazz.getName());
+        }
+
+        return mapper;
+    }
 
 }

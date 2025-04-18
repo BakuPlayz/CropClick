@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql.query;
+package com.github.bakuplayz.cropclick.database.query;
 
-import com.github.bakuplayz.cropclick.sql.ColumnMapper;
-import com.github.bakuplayz.cropclick.sql.ColumnMapperRegistry;
+import com.github.bakuplayz.cropclick.database.EntityMapper;
+import com.github.bakuplayz.cropclick.database.EntityMapperRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -81,9 +81,9 @@ public final class InsertQuery<T> extends BaseQuery {
         StringJoiner columnNames = new StringJoiner(", ");
         StringJoiner placeholders = new StringJoiner(", ");
 
-        ColumnMapper<T> mapper = ColumnMapperRegistry.get(clazz);
-        List<String> columns = mapper.getColumns();
+        EntityMapper<T> mapper = EntityMapperRegistry.get(clazz);
         List<Object> values = mapper.getValues(instance);
+        List<String> columns = mapper.getColumns();
 
         for (int i = 0; i < columns.size(); i++) {
             columnNames.add(columns.get(i));

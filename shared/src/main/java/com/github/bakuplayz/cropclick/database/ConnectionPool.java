@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql;
+package com.github.bakuplayz.cropclick.database;
 
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,30 +29,28 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
+import java.util.concurrent.Semaphore;
 
 import static com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig.DatabaseProtocol;
 
 /**
  *
  */
-public final class ConnectionPool implements LoggerContext {
+public final class ConnectionPool {
 
     private final static int MAX_POOL_SIZE = 10;
 
     private final static int MAX_CONNECTION_TRIES = 3;
 
 
-    private final Lock connectionsSema;
+    private final Semaphore connectionsSema;
 
     private final Queue<Connection> connections;
 
 
     public ConnectionPool(@NotNull DatabaseConfig config) {
         this.connections = initializePool(config);
-        this.connectionsSema = new ReentrantLock();
+        this.connectionsSema = new Semaphore(MAX_POOL_SIZE);
     }
 
 
@@ -63,13 +61,12 @@ public final class ConnectionPool implements LoggerContext {
      *
      * @return the acquired connection.
      *
-     * @throws InterruptedException since there is a lock wait.
+     * @throws InterruptedException since there is a sema wait.
      */
     public Connection acquire() throws InterruptedException {
-        synchronized (connectionsSema) {
-            while (connections.isEmpty()) {
-                connectionsSema.wait();
-            }
+        connectionsSema.acquire();
+
+        synchronized (connections) {
             return connections.poll();
         }
     }
@@ -84,30 +81,39 @@ public final class ConnectionPool implements LoggerContext {
         try {
             if (connection.isClosed()) return;
         } catch (SQLException e) {
-            logDebug("Could not release an established SQL connection, already closed.", e);
+            Log.debug("Could not release an established SQL connection, already closed.", e);
         }
 
-        synchronized (connectionsSema) {
+        synchronized (connections) {
             connections.add(connection);
-            connectionsSema.notify();
         }
+
+        connectionsSema.release();
     }
 
 
     /**
-     * Closes all the connections within the pool.
+     * Closes all the connections within the pool, waits in all
+     * the connections to be closed before closing and removing all
+     * connections.
+     *
+     * @throws InterruptedException since there is a sema wait.
      */
-    public void close() {
-        synchronized (connectionsSema) {
+    public void close() throws InterruptedException {
+        connectionsSema.acquire(MAX_POOL_SIZE);
+
+        synchronized (connections) {
             for (Iterator<Connection> it = connections.iterator(); it.hasNext(); ) {
                 try {
                     it.next().close();
                     it.remove();
                 } catch (SQLException e) {
-                    logDebug("Could not close an established SQL connection.", e);
+                    Log.debug("Could not close an established SQL connection.", e);
                 }
             }
         }
+
+        connectionsSema.drainPermits();
     }
 
 
@@ -155,7 +161,7 @@ public final class ConnectionPool implements LoggerContext {
         try {
             return DriverManager.getConnection(path, username, password);
         } catch (SQLException e) {
-            getLogger().log(Level.WARNING, String.format("Could not establish SQL connections successfully, retrying (%d/%d).", tries, MAX_CONNECTION_TRIES), e);
+            Log.info(String.format("Could not establish SQL connections successfully, retrying (%d/%d).", tries, MAX_CONNECTION_TRIES), e);
             return tryConnect(path, username, password, tries - 1);
         }
     }

@@ -64,11 +64,7 @@ public final class Cactus extends AbstractTallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.CACTUS,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
+        return createDrop(1, 100);
     }
 
 

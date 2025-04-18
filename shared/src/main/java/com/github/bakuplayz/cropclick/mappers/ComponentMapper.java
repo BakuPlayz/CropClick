@@ -54,9 +54,9 @@ public final class ComponentMapper {
                                .getDeclaredConstructor()
                                .newInstance();
         } catch (ClassNotFoundException exception) {
-            throw new IllegalStateException("CropClick does not support this server version", exception);
+            throw new IllegalStateException("CropClick does not support this server version.", exception);
         } catch (ReflectiveOperationException exception) {
-            throw new IllegalStateException("Failed to instantiate container wrapper", exception);
+            throw new IllegalStateException("Failed to instantiate container wrapper.", exception);
         }
     }
 

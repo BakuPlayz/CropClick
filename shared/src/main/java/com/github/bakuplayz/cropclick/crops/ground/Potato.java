@@ -29,7 +29,6 @@ import com.github.bakuplayz.cropclick.crops.seeds.ground.PoisonousPotato;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
-
 /**
  * A class that represents the potato crop.
  *
@@ -66,11 +65,7 @@ public final class Potato extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.POTATO,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 4),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(4, 80);
     }
 
 

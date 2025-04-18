@@ -66,11 +66,7 @@ public final class Wheat extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.WHEAT,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(1, 80);
     }
 
 

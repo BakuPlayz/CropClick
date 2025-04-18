@@ -20,14 +20,14 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
-import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.language.LanguageAPI;
 import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
+import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -38,6 +38,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.UNLINK_ACTION_SUCCESS;
 
 
 /**
@@ -124,11 +126,9 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        LanguageAPI.Menu.UNLINK_ACTION_SUCCESS.send(plugin, player);
+        UNLINK_ACTION_SUCCESS.send(plugin, player);
 
-        if (plugin.isDebugging()) {
-            plugin.getLogger().info(String.format("%s (Player): Called the unlinked event!", player.getName()));
-        }
+        Log.debug(String.format("%s (Player): Called the unlinked event!", player.getName()));
 
         Bukkit.getPluginManager().callEvent(
                 new AutofarmUnlinkEvent(event.getAutofarm())

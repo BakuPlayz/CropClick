@@ -18,8 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
+import com.github.bakuplayz.cropclick.database.QueryScheduler;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
-import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.jetbrains.annotations.NotNull;
 

@@ -16,15 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql;
+package com.github.bakuplayz.cropclick.database;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-public interface RowMapper<T> {
+public interface EntityMapper<T> {
 
-    T map(@NotNull ResultSet rs) throws SQLException;
+
+    T toEntity(@NotNull ResultSet rs) throws SQLException, IOException;
+
+
+    Map<String, String> getColumnDefinitions();
+
+
+    List<Object> getValues(@NotNull T entity);
+
+
+    default List<String> getColumns() {
+        return new ArrayList<>(getColumnDefinitions().values());
+    }
 
 }

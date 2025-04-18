@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.listeners.player.join;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,8 +28,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.logging.Logger;
 
 
 /**
@@ -40,16 +39,11 @@ import java.util.logging.Logger;
  */
 public final class PlayerJoinListener implements Listener {
 
-    private final Logger logger;
-    private final boolean isDebugging;
-
     private final UpdateManager updateManager;
 
 
     public PlayerJoinListener(@NotNull CropClick plugin) {
         this.updateManager = plugin.getUpdateManager();
-        this.isDebugging = plugin.isDebugging();
-        this.logger = plugin.getLogger();
     }
 
 
@@ -66,9 +60,7 @@ public final class PlayerJoinListener implements Listener {
             return;
         }
 
-        if (isDebugging) {
-            logger.info(String.format("%s (Operator): Called the join event!", player.getName()));
-        }
+        Log.debug(String.format("%s (Operator): Called the join event!", player.getName()));
 
         updateManager.sendAlert(player);
     }

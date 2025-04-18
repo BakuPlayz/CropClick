@@ -1,7 +1,7 @@
-package com.github.bakuplayz.cropclick.sql.query;
+package com.github.bakuplayz.cropclick.database.query;
 
-import com.github.bakuplayz.cropclick.sql.ColumnMapper;
-import com.github.bakuplayz.cropclick.sql.ColumnMapperRegistry;
+import com.github.bakuplayz.cropclick.database.EntityMapper;
+import com.github.bakuplayz.cropclick.database.EntityMapperRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -92,7 +92,7 @@ public final class UpdateQuery<T> extends BaseQuery {
     public UpdateQuery<T> setAll(@NotNull T instance) {
         StringJoiner entries = new StringJoiner(", ");
 
-        ColumnMapper<T> mapper = ColumnMapperRegistry.get(clazz);
+        EntityMapper<T> mapper = EntityMapperRegistry.get(clazz);
         List<Object> values = mapper.getValues(instance);
         List<String> columns = mapper.getColumns();
 

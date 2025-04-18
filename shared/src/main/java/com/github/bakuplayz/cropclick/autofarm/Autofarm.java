@@ -19,12 +19,10 @@
 
 package com.github.bakuplayz.cropclick.autofarm;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
 import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.common.location.LocationTypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,52 +46,50 @@ import java.util.UUID;
 @EqualsAndHashCode
 public final class Autofarm {
 
-
     public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     @Getter
     @NotNull
-    @SerializedName("farmer")
+    @JsonProperty(value = "farmer", required = true)
     private final UUID farmerId;
 
-    @NotNull
     @Setter
     @Getter
-    @SerializedName("owner")
+    @NotNull
+    @JsonProperty(value = "owner", required = true)
     private UUID ownerId;
 
     @Setter
     @Getter
     @Accessors(fluent = true)
+    @JsonProperty(value = "is_enabled", required = true)
     private boolean isEnabled;
 
     @Setter
     @Getter
-    @SerializedName("crop")
-    @JsonAdapter(LocationTypeAdapter.class)
+    @JsonProperty(value = "crop", required = true)
     private Location cropLocation;
 
     @Setter
     @Getter
-    @SerializedName("container")
-    @JsonAdapter(LocationTypeAdapter.class)
+    @JsonProperty(value = "container", required = true)
     private Location containerLocation;
 
     @Setter
     @Getter
-    @SerializedName("dispenser")
-    @JsonAdapter(LocationTypeAdapter.class)
+    @JsonProperty(value = "dispenser", required = true)
     private Location dispenserLocation;
 
     private transient ContainerComponent container;
 
 
-    public Autofarm(@NotNull UUID farmerId,
-                    @NotNull UUID ownerId,
-                    boolean isEnabled,
-                    @NotNull Location cropLocation,
-                    @NotNull Location containerLocation,
-                    @NotNull Location dispenserLocation
+    public Autofarm(
+            @NotNull UUID farmerId,
+            @NotNull UUID ownerId,
+            boolean isEnabled,
+            @NotNull Location cropLocation,
+            @NotNull Location containerLocation,
+            @NotNull Location dispenserLocation
     ) {
         this.dispenserLocation = dispenserLocation;
         this.containerLocation = containerLocation;
@@ -104,12 +100,13 @@ public final class Autofarm {
     }
 
 
-    public Autofarm(@NotNull UUID farmerId,
-                    @NotNull UUID ownerId,
-                    boolean isEnabled,
-                    @NotNull Location cropLocation,
-                    @NotNull DoublyLocation containerLocation,
-                    @NotNull Location dispenserLocation
+    public Autofarm(
+            @NotNull UUID farmerId,
+            @NotNull UUID ownerId,
+            boolean isEnabled,
+            @NotNull Location cropLocation,
+            @NotNull DoublyLocation containerLocation,
+            @NotNull Location dispenserLocation
     ) {
         this.dispenserLocation = dispenserLocation;
         this.containerLocation = containerLocation;
@@ -160,6 +157,7 @@ public final class Autofarm {
      * * Checks whether the autofarm components are present.
      *
      * @param manager the manager to check with.
+     *
      * @return true if all are present, otherwise false.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

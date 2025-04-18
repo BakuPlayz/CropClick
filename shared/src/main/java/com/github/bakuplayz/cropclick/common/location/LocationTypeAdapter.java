@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 
 
+@Deprecated
 /**
  * A conversion adapter for Locations to JSON, and wise versa.
  *
@@ -36,6 +37,42 @@ import java.lang.reflect.Type;
  * @since 2.0.0
  */
 public final class LocationTypeAdapter implements JsonSerializer<Location>, JsonDeserializer<Location> {
+
+    /**
+     * Serializes {@link DoublyLocation doubly locations}.
+     *
+     * @param location the location object to serialize to.
+     *
+     * @return the serialized doubly location.
+     */
+    @NotNull
+    public static JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
+        JsonObject singly = serializeLocation(location.getSingly());
+        JsonObject doubly = serializeLocation(location.getDoubly());
+        JsonObject body = new JsonObject();
+        body.add("singly", singly);
+        body.add("doubly", doubly);
+        return body;
+    }
+
+
+    /**
+     * Serializes {@link Location locations}.
+     *
+     * @param location the location object to serialize to.
+     *
+     * @return the serialized location.
+     */
+    @NotNull
+    public static JsonObject serializeLocation(@NotNull Location location) {
+        JsonObject body = new JsonObject();
+        body.add("x", new JsonPrimitive(location.getX()));
+        body.add("y", new JsonPrimitive(location.getY()));
+        body.add("z", new JsonPrimitive(location.getZ()));
+        body.add("world", new JsonPrimitive(location.getWorld().getName()));
+        return body;
+    }
+
 
     /**
      * Deserializes any {@link Location location}.
@@ -111,42 +148,6 @@ public final class LocationTypeAdapter implements JsonSerializer<Location>, Json
             return serializeDoublyLocation((DoublyLocation) location);
         }
         return serializeLocation(location);
-    }
-
-
-    /**
-     * Serializes {@link DoublyLocation doubly locations}.
-     *
-     * @param location the location object to serialize to.
-     *
-     * @return the serialized doubly location.
-     */
-    @NotNull
-    public static JsonObject serializeDoublyLocation(@NotNull DoublyLocation location) {
-        JsonObject singly = serializeLocation(location.getSingly());
-        JsonObject doubly = serializeLocation(location.getDoubly());
-        JsonObject body = new JsonObject();
-        body.add("singly", singly);
-        body.add("doubly", doubly);
-        return body;
-    }
-
-
-    /**
-     * Serializes {@link Location locations}.
-     *
-     * @param location the location object to serialize to.
-     *
-     * @return the serialized location.
-     */
-    @NotNull
-    public static JsonObject serializeLocation(@NotNull Location location) {
-        JsonObject body = new JsonObject();
-        body.add("x", new JsonPrimitive(location.getX()));
-        body.add("y", new JsonPrimitive(location.getY()));
-        body.add("z", new JsonPrimitive(location.getZ()));
-        body.add("world", new JsonPrimitive(location.getWorld().getName()));
-        return body;
     }
 
 }

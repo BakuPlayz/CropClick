@@ -25,7 +25,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: Document
+/**
+ * A class representing the YAML file: 'database.yml'.
+ *
+ * @author BakuPlayz
+ * @version 2.0.0
+ * @since 2.0.0
+ */
 public final class DatabaseConfig extends AbstractConfiguration {
 
     public DatabaseConfig(@NotNull CropClick plugin) {

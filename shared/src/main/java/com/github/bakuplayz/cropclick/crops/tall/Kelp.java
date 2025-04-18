@@ -19,12 +19,12 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
+import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -56,6 +56,42 @@ public final class Kelp extends AbstractTallCrop {
     @Override
     public String getName() {
         return "kelp";
+    }
+
+
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
+    @NotNull
+    @Override
+    public Drop getDrop() {
+        return createDrop(1, 100);
+    }
+
+
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
+    @NotNull
+    @Override
+    public XMaterial getClickableType() {
+        return XMaterial.KELP_PLANT;
+    }
+
+
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
+    @NotNull
+    @Override
+    public XMaterial getMenuType() {
+        return XMaterial.KELP;
     }
 
 
@@ -93,22 +129,6 @@ public final class Kelp extends AbstractTallCrop {
 
 
     /**
-     * Gets the drop of the {@link Crop crop}.
-     *
-     * @return the crop's drop.
-     */
-    @NotNull
-    @Override
-    public Drop getDrop() {
-        return new Drop(XMaterial.KELP,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
-    }
-
-
-    /**
      * Replants the {@link Crop crop}.
      *
      * @param block the crop block to replant.
@@ -128,30 +148,6 @@ public final class Kelp extends AbstractTallCrop {
         if (!shouldReplant()) {
             block.setType(Material.WATER);
         }
-    }
-
-
-    /**
-     * Gets the clickable type of the {@link Crop crop}.
-     *
-     * @return the crop's clickable type.
-     */
-    @NotNull
-    @Override
-    public XMaterial getClickableType() {
-        return XMaterial.KELP_PLANT;
-    }
-
-
-    /**
-     * Gets the menu type of the {@link Crop crop}.
-     *
-     * @return the crop's menu type.
-     */
-    @NotNull
-    @Override
-    public XMaterial getMenuType() {
-        return XMaterial.KELP;
     }
 
 

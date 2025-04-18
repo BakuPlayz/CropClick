@@ -16,13 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql.query;
+package com.github.bakuplayz.cropclick.database.query;
 
-import com.github.bakuplayz.cropclick.sql.QueryScheduler;
-import com.github.bakuplayz.cropclick.sql.RowMapper;
-import com.github.bakuplayz.cropclick.sql.RowMapperRegistry;
+import com.github.bakuplayz.cropclick.Log;
+import com.github.bakuplayz.cropclick.database.EntityMapper;
+import com.github.bakuplayz.cropclick.database.EntityMapperRegistry;
+import com.github.bakuplayz.cropclick.database.QueryScheduler;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -61,7 +63,7 @@ public final class SelectQuery<T> extends BaseQuery {
      * @throws UnsupportedOperationException always, as executing select queries doesn't make sense since we want actual items.
      */
     @Override
-    public CompletableFuture<Boolean> execute(@NotNull QueryScheduler scheduler) throws UnsupportedOperationException {
+    public CompletableFuture<Boolean> queue(@NotNull QueryScheduler scheduler) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
@@ -125,7 +127,7 @@ public final class SelectQuery<T> extends BaseQuery {
     @NotNull
     public CompletableFuture<T> fetchOne(@NotNull QueryScheduler scheduler) {
         CompletableFuture<T> completable = new CompletableFuture<>();
-        RowMapper<T> mapper = RowMapperRegistry.get(clazz);
+        EntityMapper<T> mapper = EntityMapperRegistry.get(clazz);
 
         scheduler.queue((connection -> {
             try (PreparedStatement statement = connection.prepareStatement(build())) {
@@ -134,10 +136,12 @@ public final class SelectQuery<T> extends BaseQuery {
                 }
 
                 try (ResultSet rs = statement.executeQuery()) {
-                    completable.complete(rs.next() ? mapper.map(rs) : null);
+                    completable.complete(rs.next() ? mapper.toEntity(rs) : null);
+                } catch (IOException e) {
+                    Log.debug("Could not perform SQL fetchOne query, failed to convert entity.", e);
                 }
             } catch (SQLException e) {
-                logDebug("Could not perform SQL fetchOne query, something went wrong.", e);
+                Log.debug("Could not perform SQL fetchOne query, something went wrong.", e);
             }
         }));
 
@@ -148,7 +152,7 @@ public final class SelectQuery<T> extends BaseQuery {
     @NotNull
     public CompletableFuture<List<T>> fetchAll(@NotNull QueryScheduler scheduler) {
         CompletableFuture<List<T>> completable = new CompletableFuture<>();
-        RowMapper<T> mapper = RowMapperRegistry.get(clazz);
+        EntityMapper<T> mapper = EntityMapperRegistry.get(clazz);
 
         scheduler.queue((connection -> {
             try (PreparedStatement statement = connection.prepareStatement(build())) {
@@ -159,12 +163,14 @@ public final class SelectQuery<T> extends BaseQuery {
                 try (ResultSet rs = statement.executeQuery()) {
                     List<T> results = new ArrayList<>();
                     while (rs.next()) {
-                        results.add(mapper.map(rs));
+                        results.add(mapper.toEntity(rs));
                     }
                     completable.complete(results);
+                } catch (IOException e) {
+                    Log.debug("Could not perform SQL fetchAll query, failed to convert entity.", e);
                 }
             } catch (SQLException e) {
-                logDebug("Could not perform SQL fetchAll query, something went wrong.", e);
+                Log.debug("Could not perform SQL fetchAll query, something went wrong.", e);
             }
         }));
 

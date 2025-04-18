@@ -1,8 +1,8 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.database.QueryScheduler;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
-import com.github.bakuplayz.cropclick.sql.QueryScheduler;
 import org.jetbrains.annotations.NotNull;
 
 /**

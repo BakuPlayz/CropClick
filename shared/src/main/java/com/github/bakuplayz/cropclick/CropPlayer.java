@@ -76,7 +76,8 @@ public final class CropPlayer {
      * Toggles the plugin for this player.
      */
     public void togglePlugin() {
-        config.set(ConfigurationKey.DISABLED_PLAYERS,
+        config.set(
+                ConfigurationKey.DISABLED_PLAYERS,
                 CollectionUtils.toggleItem(config.getDisabledPlayers(), playerId)
         );
     }

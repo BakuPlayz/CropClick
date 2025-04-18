@@ -59,17 +59,6 @@ public final class SweetBerries extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 3).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 3;
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -78,11 +67,7 @@ public final class SweetBerries extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.SWEET_BERRIES,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 3),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(3, 80);
     }
 
 
@@ -119,6 +104,17 @@ public final class SweetBerries extends AbstractGroundCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.SWEET_BERRIES;
+    }
+
+
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 3).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 3;
     }
 
 }

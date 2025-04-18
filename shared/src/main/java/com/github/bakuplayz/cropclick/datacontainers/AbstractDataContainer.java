@@ -20,9 +20,8 @@ package com.github.bakuplayz.cropclick.datacontainers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.tasks.CleanupTask;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -36,11 +35,9 @@ import java.util.UUID;
 import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.*;
 
 
-public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerContext {
+public final class AbstractDataContainer<D> implements DataContainer<D> {
 
     private final static long SAVE_INTERVAL = 30 * 1000 * 20L;
-
-    private final TaskScheduler taskScheduler;
 
     private final File file;
 
@@ -50,13 +47,15 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
 
     private final Map<String, D> data;
 
+    private final CropClick plugin;
 
-    public AbstractDataContainer(@NotNull String fileName, @NotNull TaskScheduler taskScheduler) {
-        this.taskScheduler = taskScheduler;
+
+    public AbstractDataContainer(@NotNull String fileName, @NotNull CropClick plugin) {
+        this.mapper = plugin.getDatabaseManager().getJsonMapper();
         this.file = getNewFileInstance();
-        this.mapper = new ObjectMapper();
         this.data = new HashMap<>();
         this.fileName = fileName;
+        this.plugin = plugin;
 
         createIfAbsent();
         setupSave();
@@ -128,7 +127,16 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
 
 
     public void reset() {
-        // TODO: Implement
+        try {
+            Files.delete(Paths.get(file.getAbsolutePath()));
+            createIfAbsent();
+        } catch (NoSuchFileException e) {
+            Log.debug("Could not delete file: {}, not found.", file.getAbsolutePath());
+        } catch (SecurityException e) {
+            DATA_CONTAINER_FAILED_REMOVE_SECURITY.send(file.getAbsolutePath());
+        } catch (IOException | UnsupportedOperationException e) {
+            DATA_CONTAINER_FAILED_REMOVE.send(file.getAbsolutePath());
+        }
     }
 
 
@@ -139,11 +147,11 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
         try {
             Files.createFile(Paths.get(file.getAbsolutePath()));
         } catch (FileAlreadyExistsException e) {
-            logDebug("Could not create file: {}, already created.", file.getAbsolutePath());
+            Log.debug("Could not create file: {}, already created.", file.getAbsolutePath());
         } catch (SecurityException e) {
-            DATA_CONTAINER_FAILED_CREATE_SECURITY.send(getLogger(), file.getAbsolutePath());
+            DATA_CONTAINER_FAILED_CREATE_SECURITY.send(file.getAbsolutePath());
         } catch (IOException | UnsupportedOperationException e) {
-            DATA_CONTAINER_FAILED_CREATE.send(getLogger(), file.getAbsolutePath());
+            DATA_CONTAINER_FAILED_CREATE.send(file.getAbsolutePath());
         }
     }
 
@@ -152,13 +160,13 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
      * Initializes a repeating asynchronous save task that runs at a fixed interval.
      */
     private void setupSave() {
-        taskScheduler.scheduleRepeatingTask((CleanupTask) () -> {
+        plugin.getTaskScheduler().scheduleRepeatingTask((CleanupTask) () -> {
             if (!trySave(3)) {
-                DATA_CONTAINER_FAILED_SAVE.send(getLogger(), file.getAbsolutePath());
+                DATA_CONTAINER_FAILED_SAVE.send(file.getAbsolutePath());
                 return;
             }
 
-            DATA_CONTAINER_SUCCESS_SAVE.send(getLogger(), file.getAbsolutePath());
+            DATA_CONTAINER_SUCCESS_SAVE.send(file.getAbsolutePath());
         }, SAVE_INTERVAL, SAVE_INTERVAL);
     }
 
@@ -188,7 +196,6 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
             } finally {
                 Files.delete(temp);
             }
-
         } catch (IOException e) {
             return trySave(--tries);
         }
@@ -202,7 +209,7 @@ public final class AbstractDataContainer<D> implements DataContainer<D>, LoggerC
      */
     @NotNull
     private File getNewFileInstance() {
-        return new File(CropClick.getInstance().getDataFolder().getAbsolutePath() + "/data", fileName);
+        return new File(plugin.getDataFolder().getAbsolutePath() + "/data", fileName);
     }
 
 

@@ -47,7 +47,8 @@ public final class WorldManager implements FarmWorldAPI {
     /**
      * A variable containing all the registered {@link World worlds} as {@link FarmWorld farm worlds}.
      */
-    private final @Getter HashMap<String, FarmWorld> worlds;
+    @Getter
+    private final HashMap<String, FarmWorld> worlds;
 
 
     public WorldManager(@NotNull CropClick plugin) {

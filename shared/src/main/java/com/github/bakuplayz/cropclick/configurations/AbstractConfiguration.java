@@ -20,7 +20,6 @@
 package com.github.bakuplayz.cropclick.configurations;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.common.StringUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,7 +46,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.*;
  * @since 2.0.0
  */
 
-public abstract class AbstractConfiguration implements Configuration, LoggerContext {
+public abstract class AbstractConfiguration implements Configuration {
 
     protected final CropClick plugin;
 
@@ -64,7 +63,6 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
     public AbstractConfiguration(@NotNull CropClick plugin, @NotNull String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
-
         create();
     }
 
@@ -121,9 +119,9 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
                 plugin.saveResource(fileName, true);
             }
         } catch (IOException exception) {
-            FILE_SETUP_FAILED.send(plugin.getLogger(), fileName, exception);
+            FILE_SETUP_FAILED.send(fileName, exception);
         } finally {
-            FILE_SETUP_LOAD.send(plugin.getLogger(), fileName);
+            FILE_SETUP_LOAD.send(fileName);
         }
     }
 
@@ -135,7 +133,7 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
     public void reload() {
         setFile(getNewFileInstance());
         setConfiguration(YamlConfiguration.loadConfiguration(file));
-        FILE_RELOAD.send(getLogger(), fileName);
+        FILE_RELOAD.send(fileName);
     }
 
 
@@ -147,7 +145,7 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
         try {
             getConfiguration().save(file);
         } catch (IOException exception) {
-            FILE_SAVE_FAILED.send(getLogger(), fileName, exception);
+            FILE_SAVE_FAILED.send(fileName, exception);
         }
     }
 
@@ -161,7 +159,7 @@ public abstract class AbstractConfiguration implements Configuration, LoggerCont
             Files.deleteIfExists(file.toPath());
             create();
         } catch (IOException exception) {
-            FILE_RESET_FAILED.send(getLogger(), fileName, exception);
+            FILE_RESET_FAILED.send(fileName, exception);
         }
     }
 

@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.language;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.common.StringUtils;
 import com.github.bakuplayz.cropclick.configurations.config.LanguageConfig;
@@ -27,14 +28,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -59,7 +58,9 @@ public final class LanguageAPI {
         FILE_RESET_FAILED("Could not reset %s."),
 
         DATA_CONTAINER_FAILED_CREATE("Could not create file %s, due to unknown reasons."),
+        DATA_CONTAINER_FAILED_REMOVE("Could not remove file %s, due to unknown reasons."),
         DATA_CONTAINER_FAILED_CREATE_SECURITY("Could not create file %s, due to security policy."),
+        DATA_CONTAINER_FAILED_REMOVE_SECURITY("Could not remove file %s, due to security policy."),
         DATA_CONTAINER_FAILED_SAVE("Could not save file %s, due to unknown reasons."),
         DATA_CONTAINER_SUCCESS_SAVE("Successfully saved file %s."),
 
@@ -87,28 +88,25 @@ public final class LanguageAPI {
 
         /**
          * Sends the message to the {@link ConsoleCommandSender console}.
-         *
-         * @param logger the plugin's logger instance.
          */
-        public void send(@NotNull Logger logger) {
-            logger.info(message);
+        public void send() {
+            Log.info(message);
         }
 
 
         /**
          * Sends the message to the {@link ConsoleCommandSender console} replacing the "%s%" with the provided value.
          *
-         * @param logger the plugin's logger instance.
-         * @param value  the value to replace with.
+         * @param value the value to replace with.
          */
-        public void send(@NotNull Logger logger, @NotNull String value) {
-            logger.info(StringUtils.replace(message, "%s", value));
+        public void send(@NotNull String value) {
+            Log.info(StringUtils.replace(message, "%s", value));
         }
 
 
-        public void send(@NotNull Logger logger, @NotNull String value, @NotNull Exception exception) {
-            logger.severe(exception.getMessage());
-            logger.info(StringUtils.replace(message, "%s", value));
+        public void send(@NotNull String value, @NotNull Exception exception) {
+            Log.severe(exception.getMessage());
+            Log.info(StringUtils.replace(message, "%s", value));
         }
 
     }
@@ -143,8 +141,8 @@ public final class LanguageAPI {
          *
          * @return the message.
          */
-        @Contract(pure = true)
-        public @NotNull String get() {
+        @NotNull
+        public String get() {
             return "[&aCropClick&f] &7" + message;
         }
 
@@ -160,12 +158,10 @@ public final class LanguageAPI {
 
 
         /**
-         * Sends the message to the provided {@link Logger logger}.
-         *
-         * @param logger the logger to send the message to.
+         * Sends the message to the console.
          */
-        public void send(@NotNull Logger logger) {
-            logger.info(message);
+        public void send() {
+            Log.info(message);
         }
 
 
@@ -181,13 +177,12 @@ public final class LanguageAPI {
 
 
         /**
-         * Sends the message to the {@link Logger logger}, replacing the '/s' with the provided value.
+         * Sends the message to the console, replacing the '/s' with the provided value.
          *
-         * @param logger the logger to send the message to.
-         * @param value  the value to replace the placeholder with.
+         * @param value the value to replace the placeholder with.
          */
-        public void send(@NotNull Logger logger, @NotNull String value) {
-            logger.info(String.format(message, value));
+        public void send(@NotNull String value) {
+            Log.info(String.format(message, value));
         }
 
     }
@@ -243,8 +238,9 @@ public final class LanguageAPI {
          *
          * @return the message found in the config.
          */
-        public @NotNull String get(@NotNull CropClick plugin) {
-            return plugin.getLanguageConfig().getMessage("command", category, key, true);
+        @NotNull
+        public String get(@NotNull CropClick plugin) {
+            return plugin.getConfigManager().getLanguageConfig().getMessage("command", category, key, true);
         }
 
 
@@ -256,7 +252,8 @@ public final class LanguageAPI {
          *
          * @return the message found in the config, replaced with the provided value.
          */
-        public @NotNull String get(@NotNull CropClick plugin, @NotNull String value) {
+        @NotNull
+        public String get(@NotNull CropClick plugin, @NotNull String value) {
             return StringUtils.replace(get(plugin), placeholder, value);
         }
 
@@ -303,7 +300,8 @@ public final class LanguageAPI {
              *
              * @return the name of the category.
              */
-            public @NotNull String getName() {
+            @NotNull
+            public String getName() {
                 return name().toLowerCase();
             }
 
@@ -716,8 +714,10 @@ public final class LanguageAPI {
          *
          * @return the message found in the config.
          */
-        public @NotNull String get(@NotNull CropClick plugin) {
-            return plugin.getLanguageConfig().getMessage("menu", category, key, true);
+
+        @NotNull
+        public String get(@NotNull CropClick plugin) {
+            return plugin.getConfigManager().getLanguageConfig().getMessage("menu", category, key, true);
         }
 
 
@@ -730,8 +730,9 @@ public final class LanguageAPI {
          *
          * @return the message found in the config, replaced with the provided values.
          */
+        @NotNull
         @SafeVarargs
-        public final <T> @NotNull String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
+        public final <T> String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
             String[] valuesAsStrings = Arrays.stream(values)
                                                .map(Object::toString)
                                                .toArray(String[]::new);
@@ -746,8 +747,9 @@ public final class LanguageAPI {
          *
          * @return the message found in the config as a list.
          */
-        public @NotNull List<String> getAsList(@NotNull CropClick plugin) {
-            String message = plugin.getLanguageConfig().getMessage("menu", category, key, false);
+        @NotNull
+        public List<String> getAsList(@NotNull CropClick plugin) {
+            String message = plugin.getConfigManager().getLanguageConfig().getMessage("menu", category, key, false);
             return MessageUtils.readify(message, 4).stream()
                            .map(MessageUtils::colorize)
                            .collect(Collectors.toList());
@@ -762,7 +764,8 @@ public final class LanguageAPI {
          *
          * @return the message found in the config as a list.
          */
-        public @NotNull List<String> getAsAppendList(@NotNull CropClick plugin, String @NotNull ... appendable) {
+        @NotNull
+        public List<String> getAsAppendList(@NotNull CropClick plugin, String @NotNull ... appendable) {
             List<String> messages = getAsList(plugin);
             messages.add("");
             messages.addAll(Arrays.asList(appendable));
@@ -778,7 +781,9 @@ public final class LanguageAPI {
          *
          * @return the message found in the config as a list.
          */
-        public @NotNull List<String> getAsAppendList(@NotNull CropClick plugin, List<String> appendable) {
+
+        @NotNull
+        public List<String> getAsAppendList(@NotNull CropClick plugin, List<String> appendable) {
             List<String> messages = getAsList(plugin);
             messages.add("");
             messages.addAll(appendable);
@@ -812,7 +817,8 @@ public final class LanguageAPI {
          *
          * @return the title found in the config.
          */
-        public @NotNull String getTitle(@NotNull CropClick plugin) {
+        @NotNull
+        public String getTitle(@NotNull CropClick plugin) {
             String title = "CropClick: " + get(plugin);
             String error = getErrorMessage(plugin);
             return title.length() < 32 ? title : error;
@@ -827,7 +833,8 @@ public final class LanguageAPI {
          *
          * @return the title found in the config.
          */
-        public @NotNull String getTitle(@NotNull CropClick plugin, @NotNull String type) {
+        @NotNull
+        public String getTitle(@NotNull CropClick plugin, @NotNull String type) {
             if (type.isEmpty()) {
                 return getTitle(plugin);
             }
@@ -845,8 +852,9 @@ public final class LanguageAPI {
          *
          * @return the error message found in the config.
          */
-        private @NotNull String getErrorMessage(@NotNull CropClick plugin) {
-            return plugin.getLanguageConfig().getMessage("title", "error", "message", true);
+        @NotNull
+        private String getErrorMessage(@NotNull CropClick plugin) {
+            return plugin.getConfigManager().getLanguageConfig().getMessage("title", "error", "message", true);
         }
 
 
@@ -921,7 +929,8 @@ public final class LanguageAPI {
              *
              * @return the alternative name, otherwise the category name.
              */
-            public @NotNull String getName() {
+            @NotNull
+            public String getName() {
                 return altName != null ? altName : name().toLowerCase();
             }
 
@@ -1009,7 +1018,8 @@ public final class LanguageAPI {
              *
              * @return the alternative name, otherwise the category name.
              */
-            public @NotNull String getName() {
+            @NotNull
+            public String getName() {
                 return altName != null ? altName : name().toLowerCase();
             }
 

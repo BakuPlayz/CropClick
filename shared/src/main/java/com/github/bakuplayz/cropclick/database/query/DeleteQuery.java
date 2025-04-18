@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql.query;
+package com.github.bakuplayz.cropclick.database.query;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +27,16 @@ public final class DeleteQuery extends BaseQuery {
 
     public DeleteQuery(@NotNull String table) {
         query.append("DELETE FROM ").append(table);
+    }
+
+
+    /**
+     * Adds a WHERE clause with a default condition {@code 1=1}, which matches all records.
+     *
+     * @return the query instance.
+     */
+    public DeleteQuery matchAll() {
+        return where("1", "=", 1);
     }
 
 

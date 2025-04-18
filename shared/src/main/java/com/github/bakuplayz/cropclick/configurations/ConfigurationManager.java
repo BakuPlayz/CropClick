@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.configurations;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
 import com.github.bakuplayz.cropclick.configurations.config.*;
 import com.github.bakuplayz.cropclick.configurations.converter.AutofarmsConverter;
 import com.github.bakuplayz.cropclick.configurations.converter.ConfigConverter;
@@ -31,8 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FILE_SETUP_LOAD;
-
 /**
  * A manager controlling all the {@link Configuration configurations}.
  *
@@ -40,7 +37,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FILE_S
  * @version 3.0.0
  * @since 3.0.0
  */
-public final class ConfigurationManager implements LoggerContext {
+public final class ConfigurationManager {
 
     private final CropClick plugin;
 
@@ -52,6 +49,9 @@ public final class ConfigurationManager implements LoggerContext {
 
     @Getter
     private final AddonsConfig addonsConfig;
+
+    @Getter
+    private final DefaultConfig defaultConfig;
 
     @Getter
     private final PlayersConfig playersConfig;
@@ -68,6 +68,7 @@ public final class ConfigurationManager implements LoggerContext {
         this.cropsConfig = new CropsConfig(plugin);
         this.addonsConfig = new AddonsConfig(plugin);
         this.playersConfig = new PlayersConfig(plugin);
+        this.defaultConfig = new DefaultConfig(plugin);
         this.languageConfig = new LanguageConfig(plugin);
         this.databaseConfig = new DatabaseConfig(plugin);
         this.plugin = plugin;
@@ -79,18 +80,15 @@ public final class ConfigurationManager implements LoggerContext {
 
     @NotNull
     public Collection<Configuration> getAll() {
-        return Arrays.asList(usageConfig, cropsConfig, addonsConfig, playersConfig, languageConfig, databaseConfig);
+        return Arrays.asList(defaultConfig, usageConfig, cropsConfig, addonsConfig, playersConfig, languageConfig, databaseConfig);
     }
-
+    
 
     /**
      * Sets up and create configurations iff missing.
      */
     private void setupConfigs() {
-        FILE_SETUP_LOAD.send(getLogger(), "config.yml");
-        plugin.getConfig().options().copyDefaults(true);
-        plugin.saveConfig();
-
+        defaultConfig.create();
         cropsConfig.create();
         usageConfig.create();
         addonsConfig.create();

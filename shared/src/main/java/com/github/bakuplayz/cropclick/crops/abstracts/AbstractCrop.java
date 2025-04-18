@@ -65,6 +65,25 @@ public abstract class AbstractCrop implements Crop {
 
 
     /**
+     * Creates a {@link Drop} instance for this crop using its associated menu type.
+     * The drop's name, amount, and chance are retrieved from the configuration if available;
+     * otherwise, the provided default values are used.
+     *
+     * @param defAmount the default amount to drop if not specified in the configuration.
+     * @param defChance the default chance of dropping if not specified in the configuration.
+     *
+     * @return a {@link Drop} representing the crop's drop configuration.
+     */
+    protected Drop createDrop(int defAmount, int defChance) {
+        return new Drop(getMenuType(),
+                cropsConfig.get(ConfigurationKey.CROP_DROP_NAME, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.CROP_DROP_AMOUNT, defAmount, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.CROP_DROP_CHANCE, defChance, getName())
+        );
+    }
+
+
+    /**
      * Gets the current age of the {@link Crop extending crop}.
      *
      * @param block the crop block.

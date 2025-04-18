@@ -45,7 +45,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BrownMushroom extends AbstractMushroom {
 
-    private final static StackTraversal traversal = new StackTraversal();
+    private final static StackTraversal ALGORITHM = new StackTraversal();
 
 
     public BrownMushroom(@NotNull CropsConfig config) {
@@ -73,11 +73,7 @@ public final class BrownMushroom extends AbstractMushroom {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.BROWN_MUSHROOM,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 15)
-        );
+        return createDrop(1, 15);
     }
 
 
@@ -116,7 +112,7 @@ public final class BrownMushroom extends AbstractMushroom {
     public int getCurrentAge(@NotNull Block block) {
         mushrooms.clear();
 
-        return traversal.traverse(
+        return ALGORITHM.traverse(
                 new Input(block, (mushroom) -> !isNotMushroomType(mushroom) || mushrooms.contains(mushroom), mushrooms)
         );
     }

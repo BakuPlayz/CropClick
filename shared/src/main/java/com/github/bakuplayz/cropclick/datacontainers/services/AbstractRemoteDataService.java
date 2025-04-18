@@ -18,9 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
-import com.github.bakuplayz.cropclick.LoggerContext;
-import com.github.bakuplayz.cropclick.sql.QueryScheduler;
-import com.github.bakuplayz.cropclick.sql.query.*;
+import com.github.bakuplayz.cropclick.database.QueryScheduler;
+import com.github.bakuplayz.cropclick.database.query.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -34,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * @param <D> the type of data entity managed by this service.
  */
-public abstract class AbstractRemoteDataService<D> implements LoggerContext {
+public abstract class AbstractRemoteDataService<D> implements DataService<D> {
 
     @NotNull
     private final QueryScheduler scheduler;
@@ -53,9 +52,9 @@ public abstract class AbstractRemoteDataService<D> implements LoggerContext {
     /**
      * Creates table if not already exists.
      */
-    private CompletableFuture<Boolean> createTable() {
-        return new CreateQuery<>(getTable(), clazz, true)
-                       .execute(scheduler);
+    private void createTable() {
+        new CreateQuery<>(getTable(), clazz, true)
+                .queue(scheduler);
     }
 
 
@@ -117,7 +116,7 @@ public abstract class AbstractRemoteDataService<D> implements LoggerContext {
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
         return new InsertQuery<>(getTable(), clazz)
                        .values(entity)
-                       .execute(scheduler);
+                       .queue(scheduler);
     }
 
 
@@ -132,7 +131,7 @@ public abstract class AbstractRemoteDataService<D> implements LoggerContext {
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
         return new DeleteQuery(getTable())
                        .where(getIdentifier(), "=", id)
-                       .execute(scheduler);
+                       .queue(scheduler);
     }
 
 
@@ -149,20 +148,19 @@ public abstract class AbstractRemoteDataService<D> implements LoggerContext {
         return new UpdateQuery<>(getTable(), clazz)
                        .where(getIdentifier(), "=", id)
                        .setAll(entity)
-                       .execute(scheduler);
+                       .queue(scheduler);
     }
 
 
     /**
-     * Drops the table, removing all entries inside of it.
+     * Removing all entries from the table, using a delete query on all entries.
      *
      * @return a {@link CompletableFuture} that completes with {@code true} if the drop was successful.
      */
     public CompletableFuture<Boolean> reset() {
-        return new DropQuery(getTable())
-                       .execute(scheduler)
-                       .thenCompose(res -> res ? createTable() : CompletableFuture.completedFuture(false));
+        return new DeleteQuery(getTable())
+                       .matchAll()
+                       .queue(scheduler);
     }
-
 
 }

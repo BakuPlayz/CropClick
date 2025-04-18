@@ -39,6 +39,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractRoofCrop extends AbstractCrop {
 
+    private final static BottomToTopTraversal ALGORITHM = new BottomToTopTraversal();
+
+
     public AbstractRoofCrop(@NotNull CropsConfig config) {
         super(config);
     }
@@ -56,6 +59,18 @@ public abstract class AbstractRoofCrop extends AbstractCrop {
 
 
     /**
+     * Gets the {@link Seed seed} of the {@link AbstractTallCrop extending roof crop}.
+     *
+     * @return the crop's seed, otherwise null (default: null).
+     */
+    @Nullable
+    @Override
+    public Seed getSeed() {
+        return null;
+    }
+
+
+    /**
      * Gets the current age of the {@link AbstractRoofCrop extending roof crop}.
      *
      * @param block the crop block.
@@ -64,18 +79,7 @@ public abstract class AbstractRoofCrop extends AbstractCrop {
      */
     @Override
     public int getCurrentAge(@NotNull Block block) {
-        return new BottomToTopTraversal().traverse(block);
-    }
-
-
-    /**
-     * Gets the {@link Seed seed} of the {@link AbstractTallCrop extending roof crop}.
-     *
-     * @return the crop's seed, otherwise null (default: null).
-     */
-    @Override
-    public @Nullable Seed getSeed() {
-        return null;
+        return ALGORITHM.traverse(block);
     }
 
 

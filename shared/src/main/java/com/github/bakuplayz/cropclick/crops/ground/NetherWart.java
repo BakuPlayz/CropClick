@@ -59,17 +59,6 @@ public final class NetherWart extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 3).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 3;
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -77,11 +66,7 @@ public final class NetherWart extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.NETHER_WART,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 3),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(3, 80);
     }
 
 
@@ -118,6 +103,17 @@ public final class NetherWart extends AbstractGroundCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.NETHER_WART;
+    }
+
+
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 3).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 3;
     }
 
 }

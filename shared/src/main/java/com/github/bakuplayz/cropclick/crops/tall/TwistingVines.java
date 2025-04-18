@@ -64,11 +64,7 @@ public final class TwistingVines extends AbstractTallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.TWISTING_VINES,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(1, 80);
     }
 
 

@@ -20,7 +20,7 @@
 package com.github.bakuplayz.cropclick.commands.subcommands;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.LoggerContext;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
 import com.github.bakuplayz.cropclick.configurations.Configuration;
@@ -42,7 +42,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.*;
  * @since 2.0.0
  */
 @AllArgsConstructor
-public final class ResetCommand implements Subcommand, LoggerContext {
+public final class ResetCommand implements Subcommand {
 
     private final CropClick plugin;
 
@@ -74,7 +74,7 @@ public final class ResetCommand implements Subcommand, LoggerContext {
             deleteDataStorages();
             RESET_DELETE.send(plugin, player);
         } catch (IOException e) {
-            getLogger().severe(e.getMessage());
+            Log.severe(e.getMessage());
             RESET_FAILED.send(plugin, player);
         } finally {
             RESET_SUCCESS.send(plugin, player);
@@ -89,7 +89,6 @@ public final class ResetCommand implements Subcommand, LoggerContext {
      */
     private void resetConfigs() throws IOException {
         plugin.getConfigManager().getAll().forEach(Configuration::reset);
-        // TODO: fix... Files.deleteIfExists(new File(pluginFolder, "config.yml").toPath());
     }
 
 

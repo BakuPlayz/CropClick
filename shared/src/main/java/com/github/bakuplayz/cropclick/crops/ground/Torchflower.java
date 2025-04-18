@@ -60,28 +60,6 @@ public final class Torchflower extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 1).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 1;
-    }
-
-
-    /**
-     * Gets the current age of the {@link Crop crop}.
-     *
-     * @return the crop's current age (default: 1).
-     */
-    @Override
-    public int getCurrentAge(@NotNull Block block) {
-        return 1;
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -89,11 +67,7 @@ public final class Torchflower extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.TORCHFLOWER,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
+        return createDrop(1, 100);
     }
 
 
@@ -106,21 +80,6 @@ public final class Torchflower extends AbstractGroundCrop {
     @Override
     public Seed getSeed() {
         return null;
-    }
-
-
-    /**
-     * Replants the {@link Crop crop}.
-     *
-     * @param block the crop block to replant.
-     */
-    @Override
-    public void replant(@NotNull Block block) {
-        block.setType(Material.TORCHFLOWER_CROP);
-
-        if (!shouldReplant()) {
-            block.setType(Material.AIR);
-        }
     }
 
 
@@ -145,6 +104,43 @@ public final class Torchflower extends AbstractGroundCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.TORCHFLOWER;
+    }
+
+
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 1).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 1;
+    }
+
+
+    /**
+     * Gets the current age of the {@link Crop crop}.
+     *
+     * @return the crop's current age (default: 1).
+     */
+    @Override
+    public int getCurrentAge(@NotNull Block block) {
+        return 1;
+    }
+
+
+    /**
+     * Replants the {@link Crop crop}.
+     *
+     * @param block the crop block to replant.
+     */
+    @Override
+    public void replant(@NotNull Block block) {
+        block.setType(Material.TORCHFLOWER_CROP);
+
+        if (!shouldReplant()) {
+            block.setType(Material.AIR);
+        }
     }
 
 }

@@ -16,33 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.sql;
+package com.github.bakuplayz.cropclick.autofarm;
 
+import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public final class ColumnMapperRegistry {
-
-    private static final Map<Class<?>, ColumnMapper<?>> registry = new HashMap<>();
-
-
-    public static <T> void register(@NotNull Class<T> clazz, @NotNull ColumnMapper<T> mapper) {
-        registry.put(clazz, mapper);
-    }
-
+@AllArgsConstructor
+public final class AutofarmFinder {
 
     @NotNull
-    @SuppressWarnings("unchecked")
-    public static <T> ColumnMapper<T> get(@NotNull Class<T> clazz) {
-        ColumnMapper<T> mapper = (ColumnMapper<T>) registry.get(clazz);
+    private final AutofarmDataService service;
 
-        if (mapper == null) {
-            throw new IllegalStateException("No ColumnMapper registered for class: " + clazz.getName());
+
+    /**
+     * Finds the {@link Autofarm autofarm} based on the provided farmerID.
+     *
+     * @param farmerID the id to base the findings on.
+     *
+     * @return the found autofarm, otherwise null.
+     */
+    @Nullable
+    public Autofarm findById(String farmerID) {
+        if (farmerID == null) {
+            return null;
         }
-
-        return mapper;
+        return service.getOne(farmerID).join();
     }
+
 
 }

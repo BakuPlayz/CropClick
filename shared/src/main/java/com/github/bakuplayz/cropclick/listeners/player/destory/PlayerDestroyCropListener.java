@@ -21,6 +21,7 @@ package com.github.bakuplayz.cropclick.listeners.player.destory;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
@@ -43,8 +44,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
-
 
 /**
  * A listener handling all the {@link Crop crop} destroy events caused by a {@link Player}.
@@ -54,10 +53,6 @@ import java.util.logging.Logger;
  * @since 2.0.0
  */
 public final class PlayerDestroyCropListener implements Listener {
-
-    private final Logger logger;
-
-    private final boolean isDebugging;
 
     private final CropManager cropManager;
 
@@ -71,8 +66,6 @@ public final class PlayerDestroyCropListener implements Listener {
 
 
     public PlayerDestroyCropListener(@NotNull CropClick plugin) {
-        this.logger = plugin.getLogger();
-        this.isDebugging = plugin.isDebugging();
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
@@ -152,9 +145,7 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        if (isDebugging) {
-            logger.info(String.format("%s (Player): Called the destroy crop event!", player.getName()));
-        }
+        Log.debug(String.format("%s (Player): Called the destroy crop event!", player.getName()));
 
         Bukkit.getPluginManager().callEvent(
                 new PlayerUnlinkAutofarmEvent(player, autofarm)

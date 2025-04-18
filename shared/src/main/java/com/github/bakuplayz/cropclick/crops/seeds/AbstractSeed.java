@@ -45,6 +45,25 @@ public abstract class AbstractSeed implements Seed {
 
 
     /**
+     * Creates a {@link Drop} instance for this seed using its associated menu type.
+     * The drop's name, amount, and chance are retrieved from the configuration if available;
+     * otherwise, the provided default values are used.
+     *
+     * @param defAmount the default amount to drop if not specified in the configuration.
+     * @param defChance the default chance of dropping if not specified in the configuration.
+     *
+     * @return a {@link Drop} representing the seed's drop configuration.
+     */
+    protected Drop createDrop(int defAmount, int defChance) {
+        return new Drop(getMenuType(),
+                cropsConfig.get(ConfigurationKey.SEED_DROP_NAME, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_AMOUNT, defAmount, getName()),
+                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_CHANCE, defChance, getName())
+        );
+    }
+
+
+    /**
      * Checks whether the {@link AbstractSeed seed} has a {@link Drop drop}.
      *
      * @return true if it has, otherwise false.

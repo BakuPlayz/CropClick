@@ -59,17 +59,6 @@ public final class Beetroot extends AbstractGroundCrop {
 
 
     /**
-     * Gets the harvest age of the {@link Crop crop}.
-     *
-     * @return the crop's harvest age (default: 3).
-     */
-    @Override
-    public int getHarvestAge() {
-        return 3;
-    }
-
-
-    /**
      * Gets the drop of the {@link Crop crop}.
      *
      * @return the crop's drop.
@@ -77,11 +66,7 @@ public final class Beetroot extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return new Drop(XMaterial.BEETROOT,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 2),
-                cropSection.getDropChance(getName(), 80)
-        );
+        return createDrop(2, 80);
     }
 
 
@@ -118,6 +103,17 @@ public final class Beetroot extends AbstractGroundCrop {
     @Override
     public XMaterial getMenuType() {
         return XMaterial.BEETROOT;
+    }
+
+
+    /**
+     * Gets the harvest age of the {@link Crop crop}.
+     *
+     * @return the crop's harvest age (default: 3).
+     */
+    @Override
+    public int getHarvestAge() {
+        return 3;
     }
 
 }

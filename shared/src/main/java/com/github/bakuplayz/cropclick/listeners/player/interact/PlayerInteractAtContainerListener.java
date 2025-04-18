@@ -20,13 +20,14 @@
 package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
-import com.github.bakuplayz.cropclick.menus.links.ContainerLinkMenu;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
+import com.github.bakuplayz.cropclick.menus.links.ContainerLinkMenu;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -79,9 +80,7 @@ public final class PlayerInteractAtContainerListener implements Listener {
             }
         }
 
-        if (plugin.isDebugging()) {
-            plugin.getLogger().info(String.format("%s (Player): Called the interact at container event!", player.getName()));
-        }
+        Log.debug(String.format("%s (Player): Called the interact at container event!", player.getName()));
 
 
         new ContainerLinkMenu(plugin, autofarm, block, false).open(player);

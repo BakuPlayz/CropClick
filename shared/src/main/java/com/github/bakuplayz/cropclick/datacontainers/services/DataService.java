@@ -96,7 +96,12 @@ public interface DataService<D> {
     CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity);
 
 
-    // TODO: figure out control flow
-    CompletableFuture<?> reset();
+    /**
+     * Removes all the data entries inside the store.
+     *
+     * @return a {@link CompletableFuture} that completes with {@code true} if the reset was successful,
+     * or {@code false} otherwise.
+     */
+    CompletableFuture<Boolean> reset();
 
 }

@@ -20,12 +20,12 @@
 package com.github.bakuplayz.cropclick.crops.roof;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractRoofCrop;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.CaveVinesPlant;
@@ -33,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 
 
 /**
@@ -65,6 +67,42 @@ public final class GlowBerries extends AbstractRoofCrop {
     @Override
     public String getName() {
         return "glowBerries";
+    }
+
+
+    /**
+     * Gets the drop of the {@link Crop crop}.
+     *
+     * @return the crop's drop.
+     */
+    @NotNull
+    @Override
+    public Drop getDrop() {
+        return createDrop(1, 100);
+    }
+
+
+    /**
+     * Gets the clickable type of the {@link Crop crop}.
+     *
+     * @return the crop's clickable type.
+     */
+    @NotNull
+    @Override
+    public XMaterial getClickableType() {
+        return XMaterial.CAVE_VINES_PLANT;
+    }
+
+
+    /**
+     * Gets the menu type of the {@link Crop crop}.
+     *
+     * @return the crop's menu type.
+     */
+    @NotNull
+    @Override
+    public XMaterial getMenuType() {
+        return XMaterial.GLOW_BERRIES;
     }
 
 
@@ -121,18 +159,13 @@ public final class GlowBerries extends AbstractRoofCrop {
 
 
     /**
-     * Gets the drop of the {@link Crop crop}.
+     * Checks whether the {@link Crop crop} is linkable to an {@link Autofarm}.
      *
-     * @return the crop's drop.
+     * @return true if it is, otherwise false.
      */
-    @NotNull
     @Override
-    public Drop getDrop() {
-        return new Drop(XMaterial.GLOW_BERRIES,
-                cropSection.getDropName(getName()),
-                cropSection.getDropAmount(getName(), 1),
-                cropSection.getDropChance(getName(), 100)
-        );
+    public boolean isLinkable() {
+        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
     }
 
 
@@ -156,41 +189,6 @@ public final class GlowBerries extends AbstractRoofCrop {
                 currentBlock.setBlockData(vines);
             }
         }
-    }
-
-
-    /**
-     * Gets the clickable type of the {@link Crop crop}.
-     *
-     * @return the crop's clickable type.
-     */
-    @NotNull
-    @Override
-    public XMaterial getClickableType() {
-        return XMaterial.CAVE_VINES_PLANT;
-    }
-
-
-    /**
-     * Gets the menu type of the {@link Crop crop}.
-     *
-     * @return the crop's menu type.
-     */
-    @NotNull
-    @Override
-    public XMaterial getMenuType() {
-        return XMaterial.GLOW_BERRIES;
-    }
-
-
-    /**
-     * Checks whether the {@link Crop crop} is linkable to an {@link Autofarm}.
-     *
-     * @return true if it is, otherwise false.
-     */
-    @Override
-    public boolean isLinkable() {
-        return cropSection.isLinkable(getName(), false);
     }
 
 

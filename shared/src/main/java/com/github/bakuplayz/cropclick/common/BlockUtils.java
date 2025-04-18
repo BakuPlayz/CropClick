@@ -19,7 +19,7 @@
 
 package com.github.bakuplayz.cropclick.common;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
