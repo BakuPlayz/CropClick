@@ -20,6 +20,7 @@ package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import lombok.AllArgsConstructor;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,6 +44,32 @@ public final class AutofarmFinder {
             return null;
         }
         return service.getOne(farmerID).join();
+    }
+
+
+    /**
+     * Finds the {@link Autofarm autofarm} based on the provided {@link Block crop block}.
+     *
+     * @param block the crop block to base the findings on.
+     *
+     * @return the found autofarm, otherwise null.
+     */
+    @Nullable
+    public Autofarm findByCrop(@NotNull Block block) {
+        return service.getOneByCrop(block.getLocation()).join();
+    }
+
+
+    /**
+     * Finds the {@link Autofarm autofarm} based on the provided {@link Block dispenser block}.
+     *
+     * @param block the dispenser block to base the findings on.
+     *
+     * @return the found autofarm, otherwise null.
+     */
+    @Nullable
+    public Autofarm findByDispenser(@NotNull Block block) {
+        return service.getOneByDispenser(block.getLocation()).join();
     }
 
 

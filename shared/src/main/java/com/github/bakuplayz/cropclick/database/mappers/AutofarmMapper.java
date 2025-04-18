@@ -65,9 +65,9 @@ public final class AutofarmMapper implements EntityMapper<Autofarm> {
                 new SimpleImmutableEntry<>("farmer", "BINARY(16) PRIMARY KEY NOT NULL"),
                 new SimpleImmutableEntry<>("owner", "BINARY(16) NOT NULL"),
                 new SimpleImmutableEntry<>("is_enabled", "BOOLEAN NOT NULL"),
-                new SimpleImmutableEntry<>("crop", "TEXT NOT NULL"),
-                new SimpleImmutableEntry<>("container", "TEXT NOT NULL"),
-                new SimpleImmutableEntry<>("dispenser", "TEXT NOT NULL")
+                new SimpleImmutableEntry<>("crop", "JSON NOT NULL"),
+                new SimpleImmutableEntry<>("container", "JSON NOT NULL"),
+                new SimpleImmutableEntry<>("dispenser", "JSON NOT NULL")
         );
     }
 

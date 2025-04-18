@@ -44,7 +44,8 @@ public final class DatabaseConfig extends AbstractConfiguration {
     public enum DatabaseProtocol {
 
         MYSQL("mysql"),
-        MARIADB("mariadb");
+        MARIADB("mariadb"),
+        POSTGRES("postgres");
 
         private final String name;
 

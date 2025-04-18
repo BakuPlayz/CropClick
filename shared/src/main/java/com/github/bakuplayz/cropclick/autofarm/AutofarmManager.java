@@ -87,20 +87,21 @@ public final class AutofarmManager implements AutofarmAPI {
         }
 
         if (AutofarmUtils.isDispenser(block)) {
-            return dataService.findFarmByDispenser(block);
+            return autofarmFinder.findByDispenser(block);
         }
 
+        // TODO: Solve this one...
         if (AutofarmUtils.isContainer(block)) {
             return dataService.findFarmByContainer(block);
         }
 
         if (AutofarmUtils.isCrop(cropManager, block)) {
-            return dataService.findFarmByCrop(block);
+            return autofarmFinder.findByCrop(block);
         }
 
         Block blockAbove = block.getRelative(BlockFace.UP);
         if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
-            return dataService.findFarmByCrop(blockAbove);
+            return autofarmFinder.findByCrop(blockAbove);
         }
 
         return null;

@@ -67,7 +67,7 @@ public final class FarmWorldMapper implements EntityMapper<FarmWorld> {
                 new SimpleImmutableEntry<>("is_banished", "BOOLEAN NOT NULL"),
                 new SimpleImmutableEntry<>("allows_players", "BOOLEAN NOT NULL"),
                 new SimpleImmutableEntry<>("allows_autofarms", "BOOLEAN NOT NULL"),
-                new SimpleImmutableEntry<>("banished_addons", "TEXT NOT NULL")
+                new SimpleImmutableEntry<>("banished_addons", "JSON NOT NULL")
         );
     }
 

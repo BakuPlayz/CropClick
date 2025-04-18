@@ -2,6 +2,7 @@ package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -77,5 +78,27 @@ public interface AutofarmDataService extends DataService<Autofarm> {
     @NotNull
     @Override
     CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull Autofarm autofarm);
+
+
+    /**
+     * Gets the autofarm with the specified crop location, if it exists.
+     *
+     * @param location the unique identifier of the autofarm to get.
+     *
+     * @return a {@link CompletableFuture} that completes with the autofarm if found, otherwise null.
+     */
+    @NotNull
+    CompletableFuture<Autofarm> getOneByCrop(@NotNull Location location);
+
+
+    /**
+     * Gets the autofarm with the specified dispenser location, if it exists.
+     *
+     * @param location the unique identifier of the autofarm to get.
+     *
+     * @return a {@link CompletableFuture} that completes with the autofarm if found, otherwise null.
+     */
+    @NotNull
+    CompletableFuture<Autofarm> getOneByDispenser(@NotNull Location location);
 
 }
