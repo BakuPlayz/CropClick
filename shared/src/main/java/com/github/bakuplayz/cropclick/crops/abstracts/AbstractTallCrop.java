@@ -23,7 +23,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
-import com.github.bakuplayz.cropclick.crops.algorithms.BottomToTopTraversal;
+import com.github.bakuplayz.cropclick.crops.algorithms.BottomTopTraversal;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -43,7 +43,7 @@ import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.C
  */
 public abstract class AbstractTallCrop extends AbstractCrop {
 
-    private final static BottomToTopTraversal ALGORITHM = new BottomToTopTraversal();
+    private final static BottomTopTraversal AGE_ALGORITHM = new BottomTopTraversal();
 
 
     public AbstractTallCrop(@NotNull CropsConfig config) {
@@ -83,7 +83,7 @@ public abstract class AbstractTallCrop extends AbstractCrop {
      */
     @Override
     public int getCurrentAge(@NotNull Block block) {
-        return ALGORITHM.traverse(block);
+        return AGE_ALGORITHM.getCurrentAge(block);
     }
 
 

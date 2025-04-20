@@ -19,6 +19,7 @@
 package com.github.bakuplayz.cropclick.database.query;
 
 import com.github.bakuplayz.cropclick.Log;
+import com.github.bakuplayz.cropclick.database.DatabaseProtocol;
 import com.github.bakuplayz.cropclick.database.EntityMapper;
 import com.github.bakuplayz.cropclick.database.EntityMapperRegistry;
 import com.github.bakuplayz.cropclick.database.QueryScheduler;
@@ -29,7 +30,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -99,6 +102,78 @@ public final class SelectQuery<T> extends BaseQuery {
     @Override
     public SelectQuery<T> or(String column, String operator, Object value) {
         super.or(column, operator, value);
+        return this;
+    }
+
+
+    /**
+     * Adds a WHERE clause that compares one or more values against a field within a JSON column,
+     * adapting the query syntax depending on the underlying database protocol.
+     *
+     * @param protocol the database dialect (e.g. POSTGRESQL, MYSQL, MARIADB).
+     * @param column   the JSON key to extract from the data column.
+     * @param operator the comparison operator, e.g. "=" or "!=".
+     * @param values   the JSON-formatted value(s) to compare against.
+     *
+     * @return the query instance.
+     */
+    public SelectQuery<T> whereJSON(@NotNull DatabaseProtocol protocol, @NotNull String column, @NotNull String operator, String @NotNull ... values) {
+        if (values.length == 0) {
+            throw new IllegalArgumentException("At least one value must be provided for whereJSON.");
+        }
+
+        query.append(" WHERE ");
+
+        switch (protocol) {
+            case POSTGRES:
+                if (values.length == 1) {
+                    query.append("(data->'").append(column).append("')::text ")
+                            .append(operator).append(" ?");
+                } else {
+                    query.append("(data->'").append(column).append("')::text ");
+                    if (operator.equals("=")) {
+                        query.append("IN (")
+                                .append(repeatPlaceholders(values.length)).append(")");
+                    } else if (operator.equals("!=")) {
+                        query.append("NOT IN (")
+                                .append(repeatPlaceholders(values.length)).append(")");
+                    } else {
+                        throw new UnsupportedOperationException("Operator not supported for multiple values in Postgres: " + operator);
+                    }
+                }
+                break;
+
+            case MYSQL:
+            case MARIADB:
+                if (values.length == 1) {
+                    if (operator.equals("=")) {
+                        query.append("JSON_CONTAINS(JSON_EXTRACT(data, '$.")
+                                .append(column).append("'), ?)");
+                    } else {
+                        query.append("JSON_UNQUOTE(JSON_EXTRACT(data, '$.")
+                                .append(column).append("')) ").append(operator).append(" ?");
+                    }
+                } else {
+                    if (operator.equals("=")) {
+                        for (int i = 0; i < values.length; i++) {
+                            if (i > 0) query.append(" OR ");
+                            query.append("JSON_CONTAINS(JSON_EXTRACT(data, '$.")
+                                    .append(column).append("'), ?)");
+                        }
+                    } else if (operator.equals("!=")) {
+                        query.append("JSON_UNQUOTE(JSON_EXTRACT(data, '$.")
+                                .append(column).append("')) NOT IN (")
+                                .append(repeatPlaceholders(values.length)).append(")");
+                    } else {
+                        query.append("JSON_UNQUOTE(JSON_EXTRACT(data, '$.")
+                                .append(column).append("')) IN (")
+                                .append(repeatPlaceholders(values.length)).append(")");
+                    }
+                }
+                break;
+        }
+
+        Collections.addAll(parameters, values);
         return this;
     }
 
@@ -175,6 +250,16 @@ public final class SelectQuery<T> extends BaseQuery {
         }));
 
         return completable;
+    }
+
+
+    @NotNull
+    private String repeatPlaceholders(int count) {
+        StringJoiner joiner = new StringJoiner(", ");
+        for (int i = 0; i < count; ++i) {
+            joiner.add("?");
+        }
+        return joiner.toString();
     }
 
 }

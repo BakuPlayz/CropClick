@@ -27,7 +27,7 @@ import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal;
-import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal.Input;
+import com.github.bakuplayz.cropclick.crops.algorithms.inputs.TraversalInput;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -121,8 +121,8 @@ public final class Chorus extends AbstractTallCrop {
     public int getCurrentAge(@NotNull Block block) {
         choruses.clear();
 
-        return ALGORITHM.traverse(
-                new Input(block, (chorus) -> !isChorusType(chorus) || choruses.contains(chorus), choruses)
+        return ALGORITHM.getCurrentAge(
+                new TraversalInput(block, (chorus) -> !isChorusType(chorus) || choruses.contains(chorus), choruses)
         );
     }
 

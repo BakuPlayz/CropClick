@@ -101,4 +101,15 @@ public interface AutofarmDataService extends DataService<Autofarm> {
     @NotNull
     CompletableFuture<Autofarm> getOneByDispenser(@NotNull Location location);
 
+
+    /**
+     * Gets the autofarm with the specified container location, if it exists.
+     *
+     * @param location the unique identifier of the autofarm to get.
+     *
+     * @return a {@link CompletableFuture} that completes with the autofarm if found, otherwise null.
+     */
+    @NotNull
+    CompletableFuture<Autofarm> getOneByContainer(@NotNull Location location);
+
 }

@@ -35,10 +35,10 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class AbstractRemoteDataService<D> implements DataService<D> {
 
-    @NotNull
-    private final QueryScheduler scheduler;
 
-    @NotNull
+    protected final QueryScheduler scheduler;
+
+
     private final Class<D> clazz;
 
 
@@ -67,11 +67,11 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
 
 
     /**
-     * Gets the name of the identifier column used to uniquely identify entities.
+     * Gets the name of the default identifier column used to uniquely identify entities.
      *
      * @return the identifier column name.
      */
-    protected abstract String getIdentifier();
+    protected abstract String getDefaultIdentifier();
 
 
     /**
@@ -100,7 +100,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     @NotNull
     public CompletableFuture<D> getOne(@NotNull String id) {
         return new SelectQuery<>(getTable(), clazz)
-                       .where(getIdentifier(), "=", id)
+                       .where(getDefaultIdentifier(), "=", id)
                        .fetchOne(scheduler);
     }
 
@@ -130,7 +130,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     @NotNull
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
         return new DeleteQuery(getTable())
-                       .where(getIdentifier(), "=", id)
+                       .where(getDefaultIdentifier(), "=", id)
                        .queue(scheduler);
     }
 
@@ -146,7 +146,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity) {
         return new UpdateQuery<>(getTable(), clazz)
-                       .where(getIdentifier(), "=", id)
+                       .where(getDefaultIdentifier(), "=", id)
                        .setAll(entity)
                        .queue(scheduler);
     }

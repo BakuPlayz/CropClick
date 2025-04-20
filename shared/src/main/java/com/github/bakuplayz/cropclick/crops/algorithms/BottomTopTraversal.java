@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2024 BakuPlayz
+ * Copyright (C) 2025 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@ import com.github.bakuplayz.cropclick.common.BlockUtils;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-public final class BottomToTopTraversal implements TraversalAlgorithm<Integer, Block> {
+public final class BottomTopTraversal implements TraversalAlgorithm<Integer, Block> {
 
     @Override
-    public Integer traverse(@NotNull Block block) {
+    public Integer getCurrentAge(@NotNull Block block) {
         int minHeight = block.getLocation().getBlockY();
         int maxHeight = block.getWorld().getMaxHeight();
 

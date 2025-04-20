@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Semaphore;
 
-import static com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig.DatabaseProtocol;
+import static com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig.ConfigurationKey;
 
 /**
  *
@@ -141,12 +141,12 @@ public final class ConnectionPool {
 
     @Nullable
     private Connection connect(@NotNull DatabaseConfig config) {
-        String host = config.get(DatabaseConfig.ConfigurationKey.HOST);
-        String port = config.get(DatabaseConfig.ConfigurationKey.PORT);
-        String password = config.get(DatabaseConfig.ConfigurationKey.PASSWORD);
-        String username = config.get(DatabaseConfig.ConfigurationKey.USERNAME);
-        String database = config.get(DatabaseConfig.ConfigurationKey.DATABASE);
-        DatabaseProtocol protocol = config.get(DatabaseConfig.ConfigurationKey.PROTOCOL);
+        String host = config.get(ConfigurationKey.HOST);
+        String port = config.get(ConfigurationKey.PORT);
+        String password = config.get(ConfigurationKey.PASSWORD);
+        String username = config.get(ConfigurationKey.USERNAME);
+        String database = config.get(ConfigurationKey.DATABASE);
+        DatabaseProtocol protocol = config.get(ConfigurationKey.PROTOCOL);
 
         return tryConnect(String.format("jdbc:%s://%s:%s/%s", protocol.getName(), host, port, database), username, password, 3);
     }
@@ -165,6 +165,5 @@ public final class ConnectionPool {
             return tryConnect(path, username, password, tries - 1);
         }
     }
-
 
 }

@@ -21,6 +21,7 @@ package com.github.bakuplayz.cropclick.configurations.config;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
 import com.github.bakuplayz.cropclick.configurations.IConfigurationKey;
+import com.github.bakuplayz.cropclick.database.DatabaseProtocol;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -41,18 +42,6 @@ public final class DatabaseConfig extends AbstractConfiguration {
 
     @Getter
     @AllArgsConstructor
-    public enum DatabaseProtocol {
-
-        MYSQL("mysql"),
-        MARIADB("mariadb"),
-        POSTGRES("postgres");
-
-        private final String name;
-
-    }
-
-    @Getter
-    @AllArgsConstructor
     public enum ConfigurationKey implements IConfigurationKey {
 
         PASSWORD("password", "password"),
@@ -60,7 +49,7 @@ public final class DatabaseConfig extends AbstractConfiguration {
         DATABASE("database", "database"),
         HOST("host", "host"),
         PORT("port", "port"),
-        PROTOCOL("protocol", DatabaseProtocol.MARIADB);
+        PROTOCOL("protocol", DatabaseProtocol.MYSQL);
 
         @NotNull
         private final String path;

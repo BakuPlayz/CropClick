@@ -53,7 +53,7 @@ public final class GlowBerries extends AbstractRoofCrop {
 
     public GlowBerries(@NotNull CropsConfig cropsConfig) {
         super(cropsConfig);
-
+        
         this.berryYPositions = new ArrayList<>();
     }
 

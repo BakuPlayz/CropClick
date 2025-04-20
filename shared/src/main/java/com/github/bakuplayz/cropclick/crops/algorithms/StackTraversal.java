@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2024 BakuPlayz
+ * Copyright (C) 2025 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,55 +18,37 @@
  */
 package com.github.bakuplayz.cropclick.crops.algorithms;
 
-import lombok.AllArgsConstructor;
+import com.github.bakuplayz.cropclick.crops.algorithms.inputs.TraversalInput;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
-import java.util.function.Function;
 
-public final class StackTraversal implements TraversalAlgorithm<Integer, StackTraversal.Input> {
-
+public class StackTraversal implements TraversalAlgorithm<Integer, TraversalInput> {
 
     @NotNull
     @Override
-    public Integer traverse(@NotNull Input input) {
+    public Integer getCurrentAge(@NotNull TraversalInput input) {
+        Set<Block> visited = new HashSet<>();
         Stack<Block> stack = new Stack<>();
-        stack.push(input.block);
+        stack.push(input.getBlock());
 
         while (!stack.isEmpty()) {
-            Block lastItem = stack.pop();
+            Block current = stack.pop();
 
-            if (!input.filter.apply(lastItem)) {
-                continue;
+            if (!visited.add(current)) continue;
+            if (!input.getFilter().apply(current)) continue;
+
+            input.getResulting().add(current);
+
+            for (Direction direction : input.getDirections()) {
+                stack.push(direction.move(current));
             }
-
-            input.resulting.add(lastItem);
-            stack.push(lastItem.getRelative(BlockFace.UP));
-            stack.push(lastItem.getRelative(BlockFace.EAST));
-            stack.push(lastItem.getRelative(BlockFace.SOUTH));
-            stack.push(lastItem.getRelative(BlockFace.WEST));
-            stack.push(lastItem.getRelative(BlockFace.NORTH));
         }
 
-        return input.resulting.size() + 1;
-    }
-
-
-    @AllArgsConstructor
-    public static class Input {
-
-        @NotNull
-        private final Block block;
-
-        @NotNull
-        private final Function<Block, Boolean> filter;
-
-        @NotNull
-        private final List<Block> resulting;
-
+        return input.getResulting().size() + 1;
     }
 
 }

@@ -25,12 +25,11 @@ import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractMushroom;
+import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal;
+import com.github.bakuplayz.cropclick.crops.algorithms.inputs.RedMushroomInput;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Stack;
 
 
 /**
@@ -43,6 +42,9 @@ import java.util.Stack;
  * @since 2.0.0
  */
 public final class RedMushroom extends AbstractMushroom {
+
+    private final static StackTraversal AGE_ALGORITHM = new StackTraversal();
+
 
     public RedMushroom(@NotNull CropsConfig config) {
         super(config);
@@ -108,36 +110,9 @@ public final class RedMushroom extends AbstractMushroom {
     public int getCurrentAge(@NotNull Block block) {
         mushrooms.clear();
 
-        Stack<Block> stack = new Stack<>();
-        stack.push(block);
-
-        while (!stack.isEmpty()) {
-            Block mushroom = stack.pop();
-
-            if (isNotMushroomType(mushroom)) {
-                continue;
-            }
-
-            if (mushrooms.contains(mushroom)) {
-                continue;
-            }
-
-            mushrooms.add(mushroom);
-            stack.push(mushroom.getRelative(BlockFace.UP));
-            stack.push(mushroom.getRelative(BlockFace.EAST));
-            stack.push(mushroom.getRelative(BlockFace.SOUTH));
-            stack.push(mushroom.getRelative(BlockFace.WEST));
-            stack.push(mushroom.getRelative(BlockFace.NORTH));
-
-            stack.push(mushroom.getRelative(1, -1, 0));
-            stack.push(mushroom.getRelative(-1, -1, 0));
-            stack.push(mushroom.getRelative(0, -1, 1));
-            stack.push(mushroom.getRelative(0, -1, -1));
-
-            stack.push(mushroom.getRelative(BlockFace.DOWN));
-        }
-
-        return mushrooms.size() + 1;
+        return AGE_ALGORITHM.getCurrentAge(
+                new RedMushroomInput(block, (mushroom) -> !isNotMushroomType(mushroom) || mushrooms.contains(mushroom), mushrooms)
+        );
     }
 
 

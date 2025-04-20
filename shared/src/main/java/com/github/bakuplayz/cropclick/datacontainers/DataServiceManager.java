@@ -27,7 +27,6 @@ import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.RemoteAut
 import com.github.bakuplayz.cropclick.datacontainers.services.world.FarmWorldDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.world.LocalFarmWorldService;
 import com.github.bakuplayz.cropclick.datacontainers.services.world.RemoteFarmWorldService;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +44,6 @@ import java.util.Collection;
 @Getter
 public final class DataServiceManager {
 
-    private final TaskScheduler taskScheduler;
 
     private final QueryScheduler queryScheduler;
 
@@ -57,9 +55,8 @@ public final class DataServiceManager {
 
     public DataServiceManager(@NotNull CropClick plugin) {
         this.queryScheduler = plugin.getDataManager().getQueryScheduler();
-        this.taskScheduler = plugin.getTaskScheduler();
-        this.autofarmService = createAutofarmService(plugin);
         this.farmWorldDataService = createFarmWorldService(plugin);
+        this.autofarmService = createAutofarmService(plugin);
     }
 
 
@@ -72,7 +69,7 @@ public final class DataServiceManager {
     @NotNull
     private AutofarmDataService createAutofarmService(@NotNull CropClick plugin) {
         if (queryScheduler.canQuery()) {
-            return new RemoteAutofarmService(queryScheduler);
+            return new RemoteAutofarmService(plugin, queryScheduler);
         }
         return new LocalAutofarmService(plugin);
     }

@@ -27,7 +27,7 @@ import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractMushroom;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal;
-import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal.Input;
+import com.github.bakuplayz.cropclick.crops.algorithms.inputs.TraversalInput;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BrownMushroom extends AbstractMushroom {
 
-    private final static StackTraversal ALGORITHM = new StackTraversal();
+    private final static StackTraversal AGE_ALGORITHM = new StackTraversal();
 
 
     public BrownMushroom(@NotNull CropsConfig config) {
@@ -112,8 +112,8 @@ public final class BrownMushroom extends AbstractMushroom {
     public int getCurrentAge(@NotNull Block block) {
         mushrooms.clear();
 
-        return ALGORITHM.traverse(
-                new Input(block, (mushroom) -> !isNotMushroomType(mushroom) || mushrooms.contains(mushroom), mushrooms)
+        return AGE_ALGORITHM.getCurrentAge(
+                new TraversalInput(block, (mushroom) -> !isNotMushroomType(mushroom) || mushrooms.contains(mushroom), mushrooms)
         );
     }
 

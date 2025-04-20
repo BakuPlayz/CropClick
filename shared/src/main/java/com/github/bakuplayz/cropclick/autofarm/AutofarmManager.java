@@ -90,9 +90,8 @@ public final class AutofarmManager implements AutofarmAPI {
             return autofarmFinder.findByDispenser(block);
         }
 
-        // TODO: Solve this one...
         if (AutofarmUtils.isContainer(block)) {
-            return dataService.findFarmByContainer(block);
+            return autofarmFinder.findByContainer(block);
         }
 
         if (AutofarmUtils.isCrop(cropManager, block)) {

@@ -40,10 +40,7 @@ public final class AutofarmFinder {
      */
     @Nullable
     public Autofarm findById(String farmerID) {
-        if (farmerID == null) {
-            return null;
-        }
-        return service.getOne(farmerID).join();
+        return farmerID == null ? null : service.getOne(farmerID).join();
     }
 
 
@@ -72,5 +69,16 @@ public final class AutofarmFinder {
         return service.getOneByDispenser(block.getLocation()).join();
     }
 
+
+    /**
+     * Finds the {@link Autofarm autofarm} based on the provided {@link Block container block}.
+     *
+     * @param block the container block to base the findings on.
+     *
+     * @return the found autofarm, otherwise null.
+     */
+    public Autofarm findByContainer(@NotNull Block block) {
+        return service.getOneByContainer(block.getLocation()).join();
+    }
 
 }

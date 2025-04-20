@@ -30,14 +30,14 @@ import java.util.stream.Collectors;
  * Abstract base class for in-memory data service implementations.
  * <p>
  * Subclasses must provide a way to extract a unique identifier from entities of type {@code D}
- * by implementing {@link #getIdentifier(Object)}.
+ * by implementing {@link #getDefaultIdentifier(Object)}.
  * </p>
  *
  * @param <D> the type of data entity managed by this service.
  */
 public abstract class AbstractLocalDataService<D> implements DataService<D> {
 
-    private final AbstractDataContainer<D> dataContainer;
+    protected final AbstractDataContainer<D> dataContainer;
 
 
     public AbstractLocalDataService(@NotNull String fileName, @NotNull CropClick plugin) {
@@ -46,13 +46,13 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
 
 
     /**
-     * Extracts the unique identifier from the given entity.
+     * Extracts the default unique identifier from the given entity.
      *
      * @param entity the entity from which to extract the identifier.
      *
      * @return a string identifier.
      */
-    protected abstract String getIdentifier(@NotNull D entity);
+    protected abstract String getDefaultIdentifier(@NotNull D entity);
 
 
     /**
@@ -97,7 +97,7 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
     @NotNull
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
         return CompletableFuture.completedFuture(
-                dataContainer.addIfAbsent(getIdentifier(entity), entity)
+                dataContainer.addIfAbsent(getDefaultIdentifier(entity), entity)
         );
     }
 

@@ -44,6 +44,15 @@ public final class StringUtils {
     }
 
 
+    /**
+     * Replaces the {@link String provided tag} only once inside the {@link String provided text} with the {@link String replacements}.
+     *
+     * @param text         the text to replace.
+     * @param tag          the tag to replace.
+     * @param replacements the replacements to replace the tag.
+     *
+     * @return the replaced string.
+     */
     public static String replace(@NotNull String text, @NotNull String tag, @NotNull String @NotNull ... replacements) {
         String returned = text;
         for (String replacement : replacements) {

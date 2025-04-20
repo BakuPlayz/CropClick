@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2024 BakuPlayz
+ * Copyright (C) 2025 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +18,19 @@
  */
 package com.github.bakuplayz.cropclick.crops.algorithms;
 
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public interface TraversalAlgorithm<R, I> {
 
-    R traverse(@NotNull I input);
+    R getCurrentAge(@NotNull I input);
+
+
+    @FunctionalInterface
+    interface Direction {
+
+        Block move(@NotNull Block from);
+
+    }
 
 }

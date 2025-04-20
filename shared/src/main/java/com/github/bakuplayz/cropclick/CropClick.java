@@ -154,9 +154,11 @@ public final class CropClick extends JavaPlugin {
      * Registers all the managers.
      */
     private void registerManagers() {
+        // DO NOT MOVE THE ORDER OF THESE THREE, WILL CAUSE CRASHES! 😥
         this.configManager = new ConfigurationManager(this);
         this.databaseManager = new DatabaseManager(this);
         this.dataManager = new DataServiceManager(this);
+
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
         this.addonManager = new AddonManager(this);

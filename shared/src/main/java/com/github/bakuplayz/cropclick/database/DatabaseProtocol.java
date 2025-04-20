@@ -16,27 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.datacontainers.services.world;
+package com.github.bakuplayz.cropclick.database;
 
-import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import org.jetbrains.annotations.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-/**
- * Local in-memory implementation of {@link FarmWorldDataService}, used when there
- * is no database configured.
- */
-public final class LocalFarmWorldService extends AbstractLocalDataService<FarmWorld> implements FarmWorldDataService {
+@Getter
+@AllArgsConstructor
+public enum DatabaseProtocol {
 
-    public LocalFarmWorldService(@NotNull CropClick plugin) {
-        super("worlds.json", plugin);
-    }
+    MYSQL("mysql"),
+    MARIADB("mariadb"),
+    POSTGRES("postgres");
 
-
-    @Override
-    protected String getDefaultIdentifier(@NotNull FarmWorld world) {
-        return world.getName();
-    }
+    private final String name;
 
 }

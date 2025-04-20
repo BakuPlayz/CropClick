@@ -44,7 +44,7 @@ public final class RemoteFarmWorldService extends AbstractRemoteDataService<Farm
 
     @NotNull
     @Override
-    protected String getIdentifier() {
+    protected String getDefaultIdentifier() {
         return "name";
     }
 
