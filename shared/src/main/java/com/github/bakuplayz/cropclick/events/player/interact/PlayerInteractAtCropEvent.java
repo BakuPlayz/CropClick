@@ -20,9 +20,11 @@
 package com.github.bakuplayz.cropclick.events.player.interact;
 
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -38,25 +40,22 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 @Getter
+@RequiredArgsConstructor
 public final class PlayerInteractAtCropEvent extends Event implements Cancellable {
 
+    @NotNull
     private final Crop crop;
 
+    @NotNull
     private final Block block;
 
-    private final Player player;
+    @NotNull
+    private final CropPlayer player;
 
     /**
      * Checks whether the event is cancelled or not.
      */
     @Setter
     private boolean cancelled;
-
-
-    public PlayerInteractAtCropEvent(@NotNull Player player, @NotNull Block block, Crop crop) {
-        this.player = player;
-        this.block = block;
-        this.crop = crop;
-    }
 
 }

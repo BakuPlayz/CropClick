@@ -20,8 +20,7 @@ package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.configurations.IConfigurationKey;
-import com.github.bakuplayz.cropclick.database.DatabaseProtocol;
+import com.github.bakuplayz.cropclick.database.DatabaseDialect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -30,26 +29,29 @@ import org.jetbrains.annotations.NotNull;
  * A class representing the YAML file: 'database.yml'.
  *
  * @author BakuPlayz
- * @version 2.0.0
- * @since 2.0.0
+ * @version 3.0.0
+ * @since 3.0.0
  */
 public final class DatabaseConfig extends AbstractConfiguration {
 
+    // TODO: Create this file... in resources...
+
+
     public DatabaseConfig(@NotNull CropClick plugin) {
-        super(plugin, "db.yml");
+        super(plugin, "database.yml");
     }
 
 
     @Getter
     @AllArgsConstructor
-    public enum ConfigurationKey implements IConfigurationKey {
+    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         PASSWORD("password", "password"),
         USERNAME("username", "username"),
         DATABASE("database", "database"),
         HOST("host", "host"),
         PORT("port", "port"),
-        PROTOCOL("protocol", DatabaseProtocol.MYSQL);
+        DIALECT("dialect", DatabaseDialect.MYSQL);
 
         @NotNull
         private final String path;

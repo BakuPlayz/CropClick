@@ -19,9 +19,9 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.Waterlogged;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
@@ -43,8 +43,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
 
-    public Dripleaf(@NotNull CropsConfig config) {
-        super(config);
+    public Dripleaf(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 
@@ -115,7 +115,7 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
                     block.getZ()
             );
 
-            if (BlockUtils.isAir(currentBlock)) {
+            if (Blocks.isAir(currentBlock)) {
                 break;
             }
 
@@ -204,7 +204,7 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
      * @return true if it is, otherwise false.
      */
     public boolean isDripleafType(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, XMaterial.BIG_DRIPLEAF, XMaterial.BIG_DRIPLEAF_STEM);
+        return Blocks.isAnyType(block, XMaterial.BIG_DRIPLEAF, XMaterial.BIG_DRIPLEAF_STEM);
     }
 
 }

@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.events.player.harvest;
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.events.harvest.HarvestCropEvent;
 import lombok.Getter;
@@ -37,10 +38,10 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public final class PlayerHarvestCropEvent extends HarvestCropEvent {
 
-    private final Player player;
+    private final CropPlayer player;
 
 
-    public PlayerHarvestCropEvent(@NotNull Crop crop, @NotNull Block block, @NotNull Player player) {
+    public PlayerHarvestCropEvent(@NotNull Crop crop, @NotNull Block block, @NotNull CropPlayer player) {
         super(crop, block);
         this.player = player;
     }

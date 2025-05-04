@@ -22,8 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig;
 import com.github.bakuplayz.cropclick.database.mappers.AutofarmMapper;
 import com.github.bakuplayz.cropclick.database.mappers.FarmWorldMapper;
+import com.github.bakuplayz.cropclick.database.query.QueryProvider;
+import com.github.bakuplayz.cropclick.database.query.providers.MySQLProvider;
+import com.github.bakuplayz.cropclick.database.query.providers.PostgresProvider;
 import com.github.bakuplayz.cropclick.database.serializers.LocationDeserializer;
 import com.github.bakuplayz.cropclick.database.serializers.LocationSerializer;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
@@ -31,10 +35,14 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig.ConfigurationKey;
+
 @Getter
 public final class DatabaseManager {
 
     private final ObjectMapper jsonMapper;
+
+    private final QueryProvider queryProvider;
 
     private final QueryScheduler queryScheduler;
 
@@ -42,25 +50,50 @@ public final class DatabaseManager {
 
 
     public DatabaseManager(@NotNull CropClick plugin) {
-        this.connectionPool = new ConnectionPool(plugin.getConfigManager().getDatabaseConfig());
+        DatabaseConfig config = plugin.getConfigManager().getDatabaseConfig();
+
+        this.jsonMapper = initializeJSONMapper();
+        this.queryProvider = initializeProvider(config);
+        this.connectionPool = new ConnectionPool(config);
         this.queryScheduler = new QueryScheduler(connectionPool, plugin.getTaskScheduler());
-        this.jsonMapper = new ObjectMapper();
-        registerEntities();
-        registerSerializers();
+
+        registerEntities(config);
     }
 
 
-    private void registerEntities() {
-        EntityMapperRegistry.register(Autofarm.class, new AutofarmMapper(jsonMapper));
-        EntityMapperRegistry.register(FarmWorld.class, new FarmWorldMapper(jsonMapper));
+    @NotNull
+    private QueryProvider initializeProvider(@NotNull DatabaseConfig config) {
+        DatabaseDialect dialect = config.get(ConfigurationKey.DIALECT);
+
+        switch (dialect) {
+            case MARIADB:
+            case MYSQL:
+                return new MySQLProvider(jsonMapper);
+            case POSTGRES:
+                return new PostgresProvider(jsonMapper);
+            default:
+                throw new RuntimeException(String.format("Cannot find provider for the %s dialect, no implementation exist.", dialect.getName()));
+        }
     }
 
 
-    private void registerSerializers() {
+    @NotNull
+    private ObjectMapper initializeJSONMapper() {
+        ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
+
         module.addSerializer(Location.class, new LocationSerializer());
         module.addDeserializer(Location.class, new LocationDeserializer());
-        jsonMapper.registerModule(module);
+        mapper.registerModule(module);
+
+        return mapper;
+    }
+
+
+    private void registerEntities(@NotNull DatabaseConfig config) {
+        DatabaseDialect dialect = config.get(ConfigurationKey.DIALECT);
+        EntityMapperRegistry.register(Autofarm.class, new AutofarmMapper(jsonMapper, dialect));
+        EntityMapperRegistry.register(FarmWorld.class, new FarmWorldMapper(jsonMapper, dialect));
     }
 
 }

@@ -20,8 +20,8 @@
 package com.github.bakuplayz.cropclick.crops.ground;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractGroundCrop;
@@ -46,8 +46,8 @@ import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.C
  */
 public final class Melon extends AbstractGroundCrop {
 
-    public Melon(@NotNull CropsConfig config) {
-        super(config);
+    public Melon(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 

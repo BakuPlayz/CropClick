@@ -2,7 +2,7 @@ package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.common.LocationUtils;
 import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
@@ -129,7 +129,7 @@ public final class LocalAutofarmService extends AbstractLocalDataService<Autofar
      * @return true if it matches, otherwise false.
      */
     private boolean filterByDoubleChest(@NotNull Autofarm autofarm, @NotNull Block block) {
-        if (!BlockUtils.isDoubleChest(block)) {
+        if (!Blocks.isDoubleChest(block)) {
             return false;
         }
 

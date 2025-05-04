@@ -146,7 +146,7 @@ public final class ConnectionPool {
         String password = config.get(ConfigurationKey.PASSWORD);
         String username = config.get(ConfigurationKey.USERNAME);
         String database = config.get(ConfigurationKey.DATABASE);
-        DatabaseProtocol protocol = config.get(ConfigurationKey.PROTOCOL);
+        DatabaseDialect protocol = config.get(ConfigurationKey.DIALECT);
 
         return tryConnect(String.format("jdbc:%s://%s:%s/%s", protocol.getName(), host, port, database), username, password, 3);
     }

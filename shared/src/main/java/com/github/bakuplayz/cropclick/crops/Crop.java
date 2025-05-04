@@ -19,11 +19,12 @@
 
 package com.github.bakuplayz.cropclick.crops;
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
-import com.github.bakuplayz.cropclick.runnables.particles.Particle;
-import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
+import com.github.bakuplayz.cropclick.models.Particle;
+import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -130,7 +131,7 @@ public interface Crop {
      *
      * @return true if it can, otherwise false.
      */
-    boolean canHarvest(@NotNull Player player);
+    boolean canHarvest(@NotNull CropPlayer player);
 
 
     /**

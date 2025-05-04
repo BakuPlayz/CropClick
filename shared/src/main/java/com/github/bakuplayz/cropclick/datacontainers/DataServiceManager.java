@@ -20,6 +20,7 @@ package com.github.bakuplayz.cropclick.datacontainers;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.database.QueryScheduler;
+import com.github.bakuplayz.cropclick.database.query.QueryProvider;
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.LocalAutofarmService;
@@ -41,20 +42,23 @@ import java.util.Collection;
  * @version 3.0.0
  * @since 3.0.0
  */
-@Getter
 public final class DataServiceManager {
 
+    private final QueryProvider queryProvider;
 
     private final QueryScheduler queryScheduler;
 
 
+    @Getter
     private final AutofarmDataService autofarmService;
 
+    @Getter
     private final FarmWorldDataService farmWorldDataService;
 
 
     public DataServiceManager(@NotNull CropClick plugin) {
-        this.queryScheduler = plugin.getDataManager().getQueryScheduler();
+        this.queryScheduler = plugin.getDatabaseManager().getQueryScheduler();
+        this.queryProvider = plugin.getDatabaseManager().getQueryProvider();
         this.farmWorldDataService = createFarmWorldService(plugin);
         this.autofarmService = createAutofarmService(plugin);
     }
@@ -69,7 +73,7 @@ public final class DataServiceManager {
     @NotNull
     private AutofarmDataService createAutofarmService(@NotNull CropClick plugin) {
         if (queryScheduler.canQuery()) {
-            return new RemoteAutofarmService(plugin, queryScheduler);
+            return new RemoteAutofarmService(queryScheduler, queryProvider);
         }
         return new LocalAutofarmService(plugin);
     }
@@ -78,7 +82,7 @@ public final class DataServiceManager {
     @NotNull
     private FarmWorldDataService createFarmWorldService(@NotNull CropClick plugin) {
         if (queryScheduler.canQuery()) {
-            return new RemoteFarmWorldService(queryScheduler);
+            return new RemoteFarmWorldService(queryScheduler, queryProvider);
         }
         return new LocalFarmWorldService(plugin);
     }

@@ -19,14 +19,14 @@
 package com.github.bakuplayz.cropclick.menus.settings.sounds;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.MathUtils;
+import com.github.bakuplayz.cropclick.common.Maths;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder.SoundMenuState;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder.SoundMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder.SoundMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
+import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;
@@ -343,7 +343,7 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
 
         private double getAfterValue(double beforeValue) {
-            return MathUtils.round(Math.max(beforeValue - change, Sound.MIN_PITCH));
+            return Maths.roundFormatted(Math.max(beforeValue - change, Sound.MIN_PITCH));
         }
 
     }
@@ -401,7 +401,7 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
 
         private double getAfterValue(double beforeValue) {
-            return MathUtils.round(Math.min(beforeValue + change, Sound.MAX_PITCH));
+            return Maths.roundFormatted(Math.min(beforeValue + change, Sound.MAX_PITCH));
         }
 
     }

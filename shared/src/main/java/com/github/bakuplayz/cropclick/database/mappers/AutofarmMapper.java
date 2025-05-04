@@ -20,8 +20,11 @@ package com.github.bakuplayz.cropclick.database.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmFactory;
 import com.github.bakuplayz.cropclick.common.Maps;
+import com.github.bakuplayz.cropclick.database.DatabaseDialect;
 import com.github.bakuplayz.cropclick.database.EntityMapper;
+import com.github.bakuplayz.cropclick.database.LogicalType;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -42,11 +45,13 @@ public final class AutofarmMapper implements EntityMapper<Autofarm> {
 
     private final ObjectMapper mapper;
 
+    private final DatabaseDialect dialect;
+
 
     @NotNull
     @Override
     public Autofarm toEntity(@NotNull ResultSet rs) throws SQLException, IOException {
-        return new Autofarm(
+        return AutofarmFactory.createPlain(
                 UUID.nameUUIDFromBytes(rs.getBytes(1)),
                 UUID.nameUUIDFromBytes(rs.getBytes(2)),
                 rs.getBoolean(3),
@@ -62,12 +67,12 @@ public final class AutofarmMapper implements EntityMapper<Autofarm> {
     @UnmodifiableView
     public Map<String, String> getColumnDefinitions() {
         return Maps.ofEntries(
-                new SimpleImmutableEntry<>("farmer", "BINARY(16) PRIMARY KEY NOT NULL"),
-                new SimpleImmutableEntry<>("owner", "BINARY(16) NOT NULL"),
-                new SimpleImmutableEntry<>("is_enabled", "BOOLEAN NOT NULL"),
-                new SimpleImmutableEntry<>("crop", "JSON NOT NULL"),
-                new SimpleImmutableEntry<>("container", "JSON NOT NULL"),
-                new SimpleImmutableEntry<>("dispenser", "JSON NOT NULL")
+                new SimpleImmutableEntry<>("farmer", dialect.resolveNotNull(LogicalType.UUID, true)),
+                new SimpleImmutableEntry<>("owner", dialect.resolveNotNull(LogicalType.UUID)),
+                new SimpleImmutableEntry<>("is_enabled", dialect.resolveNotNull(LogicalType.BOOLEAN)),
+                new SimpleImmutableEntry<>("crop", dialect.resolveNotNull(LogicalType.JSON)),
+                new SimpleImmutableEntry<>("container", dialect.resolveNotNull(LogicalType.JSON)),
+                new SimpleImmutableEntry<>("dispenser", dialect.resolveNotNull(LogicalType.JSON))
         );
     }
 

@@ -20,9 +20,9 @@
 package com.github.bakuplayz.cropclick.crops.roof;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractRoofCrop;
@@ -51,9 +51,9 @@ public final class GlowBerries extends AbstractRoofCrop {
     private final List<Integer> berryYPositions;
 
 
-    public GlowBerries(@NotNull CropsConfig cropsConfig) {
-        super(cropsConfig);
-        
+    public GlowBerries(@NotNull CropArguments arguments) {
+        super(arguments);
+
         this.berryYPositions = new ArrayList<>();
     }
 
@@ -139,7 +139,7 @@ public final class GlowBerries extends AbstractRoofCrop {
                     block.getZ()
             );
 
-            if (BlockUtils.isAir(currentBlock)) {
+            if (Blocks.isAir(currentBlock)) {
                 break;
             }
 
@@ -200,7 +200,7 @@ public final class GlowBerries extends AbstractRoofCrop {
      * @return true if it is, otherwise false.
      */
     public boolean isGlowBerriesType(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, XMaterial.CAVE_VINES, XMaterial.CAVE_VINES_PLANT);
+        return Blocks.isAnyType(block, XMaterial.CAVE_VINES, XMaterial.CAVE_VINES_PLANT);
     }
 
 }

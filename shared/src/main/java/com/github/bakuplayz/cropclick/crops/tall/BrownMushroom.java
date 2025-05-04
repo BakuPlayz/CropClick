@@ -19,9 +19,9 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractMushroom;
@@ -48,8 +48,8 @@ public final class BrownMushroom extends AbstractMushroom {
     private final static StackTraversal AGE_ALGORITHM = new StackTraversal();
 
 
-    public BrownMushroom(@NotNull CropsConfig config) {
-        super(config);
+    public BrownMushroom(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 
@@ -146,7 +146,7 @@ public final class BrownMushroom extends AbstractMushroom {
      * @return true if it is, otherwise false.
      */
     private boolean isBrownMushroomType(@NotNull Block block) {
-        return BlockUtils.isSameType(block, XMaterial.BROWN_MUSHROOM_BLOCK);
+        return Blocks.isSameType(block, XMaterial.BROWN_MUSHROOM_BLOCK);
     }
 
 

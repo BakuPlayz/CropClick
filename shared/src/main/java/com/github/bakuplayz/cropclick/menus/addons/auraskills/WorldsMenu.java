@@ -48,7 +48,7 @@ public final class WorldsMenu extends AbstractWorldsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull FarmWorld world) {
-        boolean isBanished = world.isBanishedAddon(plugin.getAddonManager(), AuraSkillsAddon.NAME);
+        boolean isBanished = world.isAddonBanished(getAddon(plugin, AuraSkillsAddon.NAME));
         return WORLDS_ITEM_AURA_SKILLS_TIPS.getAsAppendList(plugin, WORLDS_ITEM_STATUS.get(plugin, isBanished));
     }
 

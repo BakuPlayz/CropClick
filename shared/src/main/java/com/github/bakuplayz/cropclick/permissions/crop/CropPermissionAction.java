@@ -21,7 +21,6 @@ package com.github.bakuplayz.cropclick.permissions.crop;
 
 import com.github.bakuplayz.cropclick.crops.Crop;
 import org.bukkit.permissions.Permission;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,8 +44,8 @@ public enum CropPermissionAction {
      *
      * @return the "all permission" for the action, otherwise null.
      */
-    @Contract(pure = true)
-    public @Nullable Permission getAllPermission() {
+    @Nullable
+    public Permission getAllPermission() {
         switch (this) {
             case PLANT:
                 return CropPermission.PLANT_ALL_CROPS;
@@ -68,7 +67,8 @@ public enum CropPermissionAction {
      *
      * @return the name of the permission type.
      */
-    public @NotNull String getName() {
+    @NotNull
+    public String getName() {
         return name().toLowerCase();
     }
 

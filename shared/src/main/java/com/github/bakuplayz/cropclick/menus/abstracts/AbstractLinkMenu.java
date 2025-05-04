@@ -23,7 +23,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.LocationUtils;
 import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
+import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.LinkMenuStateBuilder;
@@ -97,12 +97,6 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     protected abstract LinkContext getContext();
 
 
-    @Override
-    public SizeType getSizeType() {
-        return SizeType.DOUBLE_CHEST;
-    }
-
-
     @NotNull
     @Override
     public final LinkMenuStateHandler createStateHandler() {
@@ -121,6 +115,12 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         setItemIf(!isUnclaimed, isUnlinked ? 24 : 33, new ContainerItem(), getContainerAction(), LinkMenuStateFlag.CONTAINER_SELECTED_STATE);
         setItemIf(isUnclaimed, 31, new ClaimItem(), getClaimAction());
         setItemIf(showBackButton, 49, new CustomBackItem(plugin));
+    }
+
+
+    @Override
+    public SizeType getSizeType() {
+        return SizeType.DOUBLE_CHEST;
     }
 
 
@@ -169,9 +169,9 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
             }
             if (autofarm == null) return;
 
-            Inventory containerInventory = VersionUtils.isLegacy()
-                    ? ((Chest) item.getState().getContainerLocation().getBlock().getState()).getInventory()
-                    : ((Container) item.getState().getContainerLocation().getBlock().getState()).getInventory();
+            Inventory containerInventory = Versions.isLegacy()
+                                                   ? ((Chest) item.getState().getContainerLocation().getBlock().getState()).getInventory()
+                                                   : ((Container) item.getState().getContainerLocation().getBlock().getState()).getInventory();
 
             new PreviewContainerMenu(
                     plugin,

@@ -48,18 +48,15 @@ public final class PermissionManager {
 
     private final PluginManager pluginManager;
 
-    private final List<Crop> crops;
-
     private final List<Subcommand> subcommands;
 
-    private final CropClick plugin;
+    private final List<Crop> crops;
 
 
     public PermissionManager(@NotNull CropClick plugin) {
         this.subcommands = plugin.getCommandManager().getCommands();
         this.crops = plugin.getCropManager().getRegisteredCrops();
         this.pluginManager = Bukkit.getPluginManager();
-        this.plugin = plugin;
     }
 
 
@@ -68,7 +65,7 @@ public final class PermissionManager {
      *
      * @param plugin the plugin instance.
      */
-    public void registerPermissions() {
+    public void registerPermissions(@NotNull CropClick plugin) {
         registerCommands();
 
         /* Runs once the server is done loading in order to register all crops,

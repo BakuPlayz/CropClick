@@ -19,8 +19,8 @@
 
 package com.github.bakuplayz.cropclick.crops.abstracts;
 
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,8 +36,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractWallCrop extends AbstractCrop {
 
-    public AbstractWallCrop(@NotNull CropsConfig config) {
-        super(config);
+    public AbstractWallCrop(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 
@@ -62,5 +62,5 @@ public abstract class AbstractWallCrop extends AbstractCrop {
     public boolean hasSeed() {
         return false;
     }
-    
+
 }

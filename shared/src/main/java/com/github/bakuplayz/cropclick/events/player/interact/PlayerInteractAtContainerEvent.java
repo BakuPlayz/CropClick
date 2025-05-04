@@ -19,9 +19,11 @@
 
 package com.github.bakuplayz.cropclick.events.player.interact;
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -37,12 +39,16 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 @Getter
+@RequiredArgsConstructor
 public final class PlayerInteractAtContainerEvent extends Event implements Cancellable {
 
+    @NotNull
     private final Block block;
 
-    private final Player player;
+    @NotNull
+    private final CropPlayer player;
 
+    @NotNull
     private final ContainerComponent container;
 
     /**
@@ -50,12 +56,5 @@ public final class PlayerInteractAtContainerEvent extends Event implements Cance
      */
     @Setter
     private boolean cancelled;
-
-
-    public PlayerInteractAtContainerEvent(@NotNull Player player, @NotNull Block block, ContainerComponent container) {
-        this.container = container;
-        this.player = player;
-        this.block = block;
-    }
 
 }

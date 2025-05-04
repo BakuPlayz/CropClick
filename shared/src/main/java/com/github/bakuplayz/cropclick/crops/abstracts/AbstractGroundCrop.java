@@ -19,8 +19,8 @@
 
 package com.github.bakuplayz.cropclick.crops.abstracts;
 
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -34,8 +34,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractGroundCrop extends AbstractCrop {
 
-    public AbstractGroundCrop(@NotNull CropsConfig config) {
-        super(config);
+    public AbstractGroundCrop(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 

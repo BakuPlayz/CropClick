@@ -19,8 +19,7 @@
 
 package com.github.bakuplayz.cropclick.yaml;
 
-import com.github.bakuplayz.cropclick.runnables.particles.Particle;
-import com.github.bakuplayz.cropclick.common.Enableable;
+import com.github.bakuplayz.cropclick.models.Particle;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +40,7 @@ import java.util.Map;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public final class ParticleYaml implements Yamlable, Enableable {
+public final class ParticleYaml implements Yamlable {
 
     /**
      * The given delay before playing the particle effect ({@link Particle#MIN_DELAY min delay} & {@link Particle#MAX_DELAY max delay}).
@@ -83,7 +82,6 @@ public final class ParticleYaml implements Yamlable, Enableable {
      *
      * @return true if the sound is enabled, otherwise false.
      */
-    @Override
     public boolean isEnabled() {
         return amount > 0;
     }

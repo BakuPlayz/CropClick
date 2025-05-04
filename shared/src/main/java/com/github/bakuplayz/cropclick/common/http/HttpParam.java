@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.common.http;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
@@ -32,18 +33,16 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
+@Getter
 @EqualsAndHashCode
+@AllArgsConstructor
 public final class HttpParam {
 
-    private final @Getter String key;
+    @NotNull
+    private final String key;
 
-    private final @Getter Object value;
-
-
-    public HttpParam(@NotNull String key, @NotNull Object value) {
-        this.value = value;
-        this.key = key;
-    }
+    @NotNull
+    private final Object value;
 
 
     /**
@@ -51,9 +50,10 @@ public final class HttpParam {
      *
      * @return the param as a string.
      */
+    @NotNull
     @Override
     @Contract(pure = true)
-    public @NotNull String toString() {
+    public String toString() {
         return key + "=" + value;
     }
 

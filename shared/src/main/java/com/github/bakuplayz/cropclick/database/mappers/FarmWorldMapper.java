@@ -22,7 +22,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.common.Maps;
+import com.github.bakuplayz.cropclick.database.DatabaseDialect;
 import com.github.bakuplayz.cropclick.database.EntityMapper;
+import com.github.bakuplayz.cropclick.database.LogicalType;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +44,8 @@ import static java.util.AbstractMap.SimpleImmutableEntry;
 public final class FarmWorldMapper implements EntityMapper<FarmWorld> {
 
     private final ObjectMapper mapper;
+
+    private final DatabaseDialect dialect;
 
 
     @NotNull
@@ -63,11 +67,11 @@ public final class FarmWorldMapper implements EntityMapper<FarmWorld> {
     @UnmodifiableView
     public Map<String, String> getColumnDefinitions() {
         return Maps.ofEntries(
-                new SimpleImmutableEntry<>("name", "TEXT PRIMARY KEY NOT NULL"),
-                new SimpleImmutableEntry<>("is_banished", "BOOLEAN NOT NULL"),
-                new SimpleImmutableEntry<>("allows_players", "BOOLEAN NOT NULL"),
-                new SimpleImmutableEntry<>("allows_autofarms", "BOOLEAN NOT NULL"),
-                new SimpleImmutableEntry<>("banished_addons", "JSON NOT NULL")
+                new SimpleImmutableEntry<>("name", dialect.resolveNotNull(LogicalType.TEXT, true)),
+                new SimpleImmutableEntry<>("is_banished", dialect.resolveNotNull(LogicalType.BOOLEAN)),
+                new SimpleImmutableEntry<>("allows_players", dialect.resolveNotNull(LogicalType.BOOLEAN)),
+                new SimpleImmutableEntry<>("allows_autofarms", dialect.resolveNotNull(LogicalType.BOOLEAN)),
+                new SimpleImmutableEntry<>("banished_addons", dialect.resolveNotNull(LogicalType.JSON))
         );
     }
 

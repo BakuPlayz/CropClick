@@ -22,7 +22,6 @@ package com.github.bakuplayz.cropclick.autofarm;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -89,23 +88,6 @@ public final class Autofarm {
             boolean isEnabled,
             @NotNull Location cropLocation,
             @NotNull Location containerLocation,
-            @NotNull Location dispenserLocation
-    ) {
-        this.dispenserLocation = dispenserLocation;
-        this.containerLocation = containerLocation;
-        this.cropLocation = cropLocation;
-        this.isEnabled = isEnabled;
-        this.farmerId = farmerId;
-        this.ownerId = ownerId;
-    }
-
-
-    public Autofarm(
-            @NotNull UUID farmerId,
-            @NotNull UUID ownerId,
-            boolean isEnabled,
-            @NotNull Location cropLocation,
-            @NotNull DoublyLocation containerLocation,
             @NotNull Location dispenserLocation
     ) {
         this.dispenserLocation = dispenserLocation;

@@ -19,29 +19,31 @@
 
 package com.github.bakuplayz.cropclick.crops.abstracts;
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.common.InventoryUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.common.Inventories;
+import com.github.bakuplayz.cropclick.common.Sets;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import com.github.bakuplayz.cropclick.mappers.ComponentMapper;
-import com.github.bakuplayz.cropclick.runnables.particles.Particle;
-import com.github.bakuplayz.cropclick.runnables.particles.ParticlePlayQueue;
-import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
-import com.github.bakuplayz.cropclick.runnables.sounds.SoundPlayQueue;
+import com.github.bakuplayz.cropclick.models.Particle;
+import com.github.bakuplayz.cropclick.models.Sound;
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
+import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
+import com.github.bakuplayz.cropclick.tasks.audio.SoundTask;
+import com.github.bakuplayz.cropclick.tasks.visual.ParticleTask;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 
 /**
@@ -55,12 +57,15 @@ public abstract class AbstractCrop implements Crop {
 
     protected final CropsConfig cropsConfig;
 
+    private final TaskScheduler scheduler;
+
     private final CropAgeComponent ageComponent;
 
 
-    public AbstractCrop(@NotNull CropsConfig config) {
+    public AbstractCrop(@NotNull CropArguments arguments) {
         this.ageComponent = ComponentMapper.getAge();
-        this.cropsConfig = config;
+        this.scheduler = arguments.getTaskScheduler();
+        this.cropsConfig = arguments.getCropsConfig();
     }
 
 
@@ -137,7 +142,7 @@ public abstract class AbstractCrop implements Crop {
         );
 
         Inventory inventory = container.getInventory();
-        if (!InventoryUtils.canContain(inventory, dropItem)) {
+        if (!Inventories.canContain(inventory, dropItem)) {
             return false;
         }
 
@@ -194,8 +199,8 @@ public abstract class AbstractCrop implements Crop {
      * @return true if it can, otherwise false.
      */
     @Override
-    public boolean canHarvest(@NotNull Player player) {
-        return PermissionUtils.canHarvestCrop(player, getName());
+    public boolean canHarvest(@NotNull CropPlayer player) {
+        return player.getPermissionFunctionality().has(PermissionKey.HARVEST);
     }
 
 
@@ -255,23 +260,15 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public void playSounds(@NotNull Block block) {
-        Set<String> sounds = cropsConfig.getKeys(ConfigurationKey.SOUNDS, getName());
-        SoundPlayQueue queue = new SoundPlayQueue(block);
-
-        for (String sound : sounds) {
+        Sets.forEachWithIndex(cropsConfig.getKeys(ConfigurationKey.SOUNDS, getName()), (i, sound) -> {
             long delay = cropsConfig.get(ConfigurationKey.SOUND_DELAY, getName(), sound);
             double pitch = cropsConfig.get(ConfigurationKey.SOUND_PITCH, getName(), sound);
             double volume = cropsConfig.get(ConfigurationKey.SOUND_VOLUME, getName(), sound);
 
-            queue.queueSound(
-                    sound,
-                    volume,
-                    pitch,
-                    delay
-            );
-        }
-
-        queue.run();
+            scheduler.scheduleLater(new SoundTask(
+                    new Sound(sound, pitch, volume), block.getLocation()
+            ), delay * i);
+        });
     }
 
 
@@ -282,23 +279,15 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public void playParticles(@NotNull Block block) {
-        Set<String> particles = cropsConfig.getKeys(ConfigurationKey.PARTICLES, getName());
-        ParticlePlayQueue queue = new ParticlePlayQueue(block);
-
-        for (String particle : particles) {
+        Sets.forEachWithIndex(cropsConfig.getKeys(ConfigurationKey.PARTICLES, getName()), (i, particle) -> {
             long delay = cropsConfig.get(ConfigurationKey.PARTICLE_DELAY, getName(), particle);
             int amount = cropsConfig.get(ConfigurationKey.PARTICLE_AMOUNT, getName(), particle);
             double speed = cropsConfig.get(ConfigurationKey.PARTICLE_SPEED, getName(), particle);
 
-            queue.queueParticle(
-                    particle,
-                    amount,
-                    speed,
-                    delay
-            );
-        }
-
-        queue.run();
+            scheduler.scheduleLater(new ParticleTask(
+                    new Particle(particle, amount, speed), block.getLocation()
+            ), delay * i);
+        });
     }
 
 

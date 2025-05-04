@@ -21,10 +21,8 @@ package com.github.bakuplayz.cropclick.worlds;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.bakuplayz.cropclick.Log;
-import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
-import com.github.bakuplayz.cropclick.common.CollectionUtils;
+import com.github.bakuplayz.cropclick.common.Collections;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,36 +97,23 @@ public final class FarmWorld {
 
 
     /**
-     * Toggles an {@link AbstractAddon addon} in the {@link FarmWorld world}.
+     * Toggles the banishment state of the specified {@link AbstractAddon} in this {@link FarmWorld}.
      *
-     * @param manager the addon manager.
-     * @param name    the name of the addon.
+     * @param addon the addon to toggle.
      */
-    public void toggleAddon(@NotNull AddonManager manager, @NotNull String name) {
-        AbstractAddon addon = manager.findByName(name);
-        if (addon == null) {
-            Log.debug("Failed to toggle the {} addon, couldn't find it.", name);
-            return;
-        }
-
-        CollectionUtils.toggleItem(banishedAddons, addon);
+    public void toggleAddon(@NotNull AbstractAddon addon) {
+        Collections.toggleItem(banishedAddons, addon);
     }
 
 
     /**
-     * Checks whether an {@link AbstractAddon addon} is banished in the {@link FarmWorld world}.
+     * Checks whether the specified {@link AbstractAddon} is currently banished in this {@link FarmWorld}.
      *
-     * @param manager the addon manager.
-     * @param name    the name of the addon.
+     * @param addon the addon to check.
      *
-     * @return true if banished, otherwise false.
+     * @return true if the addon is banished; false otherwise.
      */
-    public boolean isBanishedAddon(@NotNull AddonManager manager, @NotNull String name) {
-        AbstractAddon addon = manager.findByName(name);
-        if (addon == null) {
-            Log.debug("Failed check state of the {} addon, couldn't find it.", name);
-            return false;
-        }
+    public boolean isAddonBanished(@NotNull AbstractAddon addon) {
         return banishedAddons.contains(addon);
     }
 

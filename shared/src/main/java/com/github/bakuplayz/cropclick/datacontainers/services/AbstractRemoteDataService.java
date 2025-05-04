@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
 import com.github.bakuplayz.cropclick.database.QueryScheduler;
-import com.github.bakuplayz.cropclick.database.query.*;
+import com.github.bakuplayz.cropclick.database.query.QueryProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -36,14 +36,16 @@ import java.util.concurrent.CompletableFuture;
 public abstract class AbstractRemoteDataService<D> implements DataService<D> {
 
 
-    protected final QueryScheduler scheduler;
+    protected final QueryProvider provider;
 
+    protected final QueryScheduler scheduler;
 
     private final Class<D> clazz;
 
 
-    public AbstractRemoteDataService(@NotNull QueryScheduler scheduler, @NotNull Class<D> clazz) {
+    public AbstractRemoteDataService(@NotNull QueryScheduler scheduler, @NotNull QueryProvider provider, @NotNull Class<D> clazz) {
         this.scheduler = scheduler;
+        this.provider = provider;
         this.clazz = clazz;
         createTable();
     }
@@ -53,8 +55,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      * Creates table if not already exists.
      */
     private void createTable() {
-        new CreateQuery<>(getTable(), clazz, true)
-                .queue(scheduler);
+        provider.create(getTable(), clazz, true).queue(scheduler);
     }
 
 
@@ -84,7 +85,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<List<D>> getMany(int start, int max) {
-        return new SelectQuery<>(getTable(), clazz)
+        return provider.select(getTable(), clazz)
                        .limit(start, max)
                        .fetchAll(scheduler);
     }
@@ -99,7 +100,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<D> getOne(@NotNull String id) {
-        return new SelectQuery<>(getTable(), clazz)
+        return provider.select(getTable(), clazz)
                        .where(getDefaultIdentifier(), "=", id)
                        .fetchOne(scheduler);
     }
@@ -114,7 +115,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
-        return new InsertQuery<>(getTable(), clazz)
+        return provider.insert(getTable(), clazz, true)
                        .values(entity)
                        .queue(scheduler);
     }
@@ -129,7 +130,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
-        return new DeleteQuery(getTable())
+        return provider.delete(getTable())
                        .where(getDefaultIdentifier(), "=", id)
                        .queue(scheduler);
     }
@@ -145,10 +146,21 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity) {
-        return new UpdateQuery<>(getTable(), clazz)
+        return provider.update(getTable(), clazz)
                        .where(getDefaultIdentifier(), "=", id)
                        .setAll(entity)
                        .queue(scheduler);
+    }
+
+
+    /**
+     * Counts all entities inside the data container.
+     *
+     * @return a {@link CompletableFuture} that completes with the amount of entities.
+     */
+    @NotNull
+    public CompletableFuture<Integer> countAll() {
+        return provider.count(getTable()).queue(scheduler);
     }
 
 
@@ -158,7 +170,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      * @return a {@link CompletableFuture} that completes with {@code true} if the drop was successful.
      */
     public CompletableFuture<Boolean> reset() {
-        return new DeleteQuery(getTable())
+        return provider.delete(getTable())
                        .matchAll()
                        .queue(scheduler);
     }

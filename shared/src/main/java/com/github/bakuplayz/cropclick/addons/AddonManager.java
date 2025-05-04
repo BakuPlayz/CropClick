@@ -46,8 +46,6 @@ import java.util.List;
  */
 public final class AddonManager implements AddonAPI {
 
-    private final CropClick plugin;
-
     /**
      * A variable containing all the {@link AbstractAddon registed addons}.
      */
@@ -76,16 +74,15 @@ public final class AddonManager implements AddonAPI {
     private OfflineGrowthAddon offlineGrowthAddon;
 
 
-    public AddonManager(@NotNull CropClick plugin) {
+    public AddonManager() {
         this.registeredAddons = new ArrayList<>();
-        this.plugin = plugin;
     }
 
 
     /**
      * Registers the all the {@link AbstractAddon installed addons}.
      */
-    public void registerAddons() {
+    public void registerAddons(@NotNull CropClick plugin) {
         this.mcMMOAddon = new MCMMOAddon(plugin);
         this.townyAddon = new TownyAddon(plugin);
         this.auraSkillsAddon = new AuraSkillsAddon(plugin);

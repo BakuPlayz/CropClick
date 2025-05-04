@@ -43,12 +43,13 @@ public final class LocationUtils {
      *
      * @return the found {@link DoublyLocation}, otherwise null.
      */
-    public static @Nullable DoublyLocation findDoubly(@NotNull Location location) {
+    @Nullable
+    public static DoublyLocation findDoubly(@NotNull Location location) {
         if (isDoubly(location)) {
             return (DoublyLocation) location;
         }
 
-        if (!BlockUtils.isDoubleChest(location.getBlock())) {
+        if (!Blocks.isDoubleChest(location.getBlock())) {
             return null;
         }
 
@@ -63,7 +64,8 @@ public final class LocationUtils {
      *
      * @return the found {@link DoublyLocation}, otherwise null.
      */
-    public static @Nullable DoublyLocation findDoubly(@NotNull Block block) {
+    @Nullable
+    public static DoublyLocation findDoubly(@NotNull Block block) {
         return LocationUtils.findDoubly(block.getLocation());
     }
 
@@ -101,7 +103,8 @@ public final class LocationUtils {
      * @return the found {@link DoublyLocation}, otherwise null.
      */
     @Contract("_ -> new")
-    private static @Nullable DoublyLocation getAsDoubly(@NotNull Location location) {
+    @Nullable
+    private static DoublyLocation getAsDoubly(@NotNull Location location) {
         Location locOne = new Location(
                 location.getWorld(),
                 location.getX() + 1,
@@ -127,21 +130,22 @@ public final class LocationUtils {
                 location.getZ() - 1
         );
 
-        if (BlockUtils.isDoubleChest(locOne.getBlock())) {
+        if (Blocks.isDoubleChest(locOne.getBlock())) {
             return new DoublyLocation(location, locOne);
         }
 
-        if (BlockUtils.isDoubleChest(locTwo.getBlock())) {
+        if (Blocks.isDoubleChest(locTwo.getBlock())) {
             return new DoublyLocation(location, locTwo);
         }
 
-        if (BlockUtils.isDoubleChest(locThree.getBlock())) {
+        if (Blocks.isDoubleChest(locThree.getBlock())) {
             return new DoublyLocation(location, locThree);
         }
 
-        if (BlockUtils.isDoubleChest(locFour.getBlock())) {
+        if (Blocks.isDoubleChest(locFour.getBlock())) {
             return new DoublyLocation(location, locFour);
         }
+
         return null;
     }
 

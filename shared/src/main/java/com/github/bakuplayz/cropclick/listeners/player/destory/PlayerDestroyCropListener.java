@@ -26,7 +26,7 @@ import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
@@ -84,7 +84,7 @@ public final class PlayerDestroyCropListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        if (BlockUtils.isAir(block)) {
+        if (Blocks.isAir(block)) {
             return;
         }
 
@@ -111,14 +111,14 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        CropPlayer cropPlayer = new CropPlayer(player);
-        if (!cropPlayer.canModifyRegion()) {
+        CropPlayer cropPlayer = CropPlayer.of(player);
+        if (!cropPlayer.getAddonFunctionality().canModifyRegion()) {
             event.setCancelled(true);
             return;
         }
 
         Bukkit.getPluginManager().callEvent(
-                new PlayerDestroyCropEvent(crop, block, player)
+                new PlayerDestroyCropEvent(crop, block, cropPlayer)
         );
     }
 
@@ -133,7 +133,7 @@ public final class PlayerDestroyCropListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        Player player = event.getPlayer();
+        CropPlayer player = event.getPlayer();
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
             growthAddon.getFunctionality().unregisterCrop(block.getLocation());
@@ -145,7 +145,7 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        Log.debug(String.format("%s (Player): Called the destroy crop event!", player.getName()));
+        Log.debug("{} (Player): Called the destroy crop event!", player.getBukkitPlayer().getName());
 
         Bukkit.getPluginManager().callEvent(
                 new PlayerUnlinkAutofarmEvent(player, autofarm)

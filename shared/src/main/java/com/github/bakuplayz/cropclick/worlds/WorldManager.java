@@ -21,39 +21,50 @@ package com.github.bakuplayz.cropclick.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.FarmWorldAPI;
-import com.github.bakuplayz.cropclick.datacontainers.datastorage.WorldDataStorage;
-import lombok.Getter;
+import com.github.bakuplayz.cropclick.datacontainers.services.world.FarmWorldDataService;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * A manager holding and controlling all the {@link #worldData world data} and {@link #worlds farm worlds}.
+ * A manager holding and controlling all the {@link FarmWorld farm worlds}.
  *
  * @author BakuPlayz
  * @version 2.0.0
- * @since 2.0.0
+ * @since 3.0.0
  */
 public final class WorldManager implements FarmWorldAPI {
 
-    @NotNull
-    private final WorldDataStorage worldData;
+    private final FarmWorldDataService dataService;
 
-    /**
-     * A variable containing all the registered {@link World worlds} as {@link FarmWorld farm worlds}.
-     */
-    @Getter
-    private final HashMap<String, FarmWorld> worlds;
+    private final FarmWorldFinder worldFinder;
 
 
     public WorldManager(@NotNull CropClick plugin) {
-        this.worldData = plugin.getWorldData();
-        this.worlds = worldData.getWorlds();
+        this.dataService = plugin.getDataManager().getFarmWorldDataService();
+        this.worldFinder = new FarmWorldFinder(dataService);
+    }
+
+
+    /**
+     * Gets all the {@link FarmWorld farm worlds}.
+     *
+     * @return the found farm worlds.
+     */
+    @NotNull
+    public List<FarmWorld> getWorlds() {
+        return new ArrayList<>(dataService.getMany(0, 10000).join());
+    }
+
+
+    public int getAmountOfWorlds() {
+        return dataService.countAll().join();
     }
 
 
@@ -61,7 +72,7 @@ public final class WorldManager implements FarmWorldAPI {
      * Registers all the non-registered {@link World worlds} as {@link FarmWorld farm worlds}.
      */
     public void registerWorlds() {
-        Bukkit.getWorlds().forEach(world -> worldData.registerWorld(new FarmWorld(world)));
+        Bukkit.getWorlds().forEach(world -> dataService.insertOne(new FarmWorld(world)));
     }
 
 
@@ -72,8 +83,9 @@ public final class WorldManager implements FarmWorldAPI {
      *
      * @return the found {@link FarmWorld}, otherwise null.
      */
-    public @Nullable FarmWorld findByWorld(@NotNull World world) {
-        return worldData.findWorldByWorld(world);
+    @Nullable
+    public FarmWorld findByWorld(@NotNull World world) {
+        return worldFinder.findByWorld(world);
     }
 
 
@@ -84,8 +96,9 @@ public final class WorldManager implements FarmWorldAPI {
      *
      * @return the found {@link FarmWorld}, otherwise null.
      */
-    public @Nullable FarmWorld findByName(@NotNull String name) {
-        return worldData.findWorldByName(name);
+    @Nullable
+    public FarmWorld findByName(@NotNull String name) {
+        return worldFinder.findByName(name);
     }
 
 
@@ -96,20 +109,21 @@ public final class WorldManager implements FarmWorldAPI {
      *
      * @return the found {@link FarmWorld}, otherwise null.
      */
-    public @Nullable FarmWorld findByPlayer(@NotNull Player player) {
-        return worldData.findWorldByPlayer(player);
+    @Nullable
+    public FarmWorld findByPlayer(@NotNull Player player) {
+        return worldFinder.findByWorld(player.getWorld());
     }
 
 
     /**
      * Checks whether the provided {@link FarmWorld farm world} is accessible by {@link CropClick}.
      *
-     * @param farmWorld the world to be checked.
+     * @param world the world to be checked.
      *
      * @return true if accessible, otherwise false.
      */
-    public boolean isAccessible(FarmWorld farmWorld) {
-        return farmWorld != null && !farmWorld.isBanished();
+    public boolean isAccessible(FarmWorld world) {
+        return world != null && !world.isBanished();
     }
 
 }

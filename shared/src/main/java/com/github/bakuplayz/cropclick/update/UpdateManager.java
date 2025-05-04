@@ -20,25 +20,15 @@
 package com.github.bakuplayz.cropclick.update;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.api.UpdateAPI;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
+import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.common.http.HttpParam;
 import com.github.bakuplayz.cropclick.common.http.HttpRequestBuilder;
-import com.github.bakuplayz.cropclick.language.LanguageAPI;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Logger;
-
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Update.*;
+import java.io.IOException;
 
 
 /**
@@ -53,163 +43,67 @@ public final class UpdateManager implements UpdateAPI {
     /**
      * The URL to the {@link CropClick CropClick's} update server.
      */
-    private final static String UPDATE_URL = "https://bakuplayz-plugins-api.vercel.app/CropClick";
+    private final static String UPDATE_URL = "https://spigot.bakuplayz.dev/CropClick";
 
     private final CropClick plugin;
 
     @Getter
-    @Setter(AccessLevel.PRIVATE)
-    private String updateURL;
-
-    @Getter
-    @Setter(AccessLevel.PRIVATE)
-    private String updateTitle;
-
-    @Getter
-    @Setter(AccessLevel.PRIVATE)
-    private String updateMessage;
-
-    @Getter
-    @Setter(AccessLevel.PRIVATE)
-    private UpdateState updateState;
+    private final UpdateInfo info;
 
 
     public UpdateManager(@NotNull CropClick plugin) {
-        setUpdateState(UpdateState.NOT_FETCHED_YET);
-        setUpdateMessage("");
-        setUpdateTitle("");
+        this.info = new UpdateInfo("", "", "", UpdateState.NOT_FETCHED_YET);
         this.plugin = plugin;
+        start();
     }
 
 
     private void start() {
-        plugin.getTaskScheduler().scheduleRepeatingTask(this::fetchUpdate, 0, 30 * 60 * 20);
-    }
+        plugin.getTaskScheduler().scheduleRepeatingTask(() -> {
+            try {
+                UpdateResponse response = new HttpRequestBuilder<>(UPDATE_URL, UpdateResponse.class)
+                                                  .setDefaultHeaders()
+                                                  .setParams(
+                                                          new HttpParam("serverVersion", Versions.getServerVersion()),
+                                                          new HttpParam("pluginVersion", getVersion())
+                                                  )
+                                                  .post(true)
+                                                  .getResponse();
 
+                if (response == null) {
+                    info.resetTo(UpdateState.FAILED_TO_FETCH);
+                    return;
+                }
 
-    /**
-     * Sends the {@link #updateMessage update message} to the {@link Player provided player}.
-     *
-     * @param player the player to send the message to.
-     */
-    public void sendAlert(@NotNull Player player) {
-        if (!canPlayerReceiveUpdates()) {
-            return;
-        }
+                if (response.getState() == UpdateState.UP_TO_DATE) {
+                    info.resetTo(UpdateState.UP_TO_DATE);
+                    return;
+                }
 
-        if (updateState != UpdateState.NEW_UPDATE) {
-            MessageUtils.readify(LanguageAPI.Update.UPDATE_FOUND_NO_UPDATES.get(), 10)
-                    .stream().map(MessageUtils::colorize)
-                    .forEach(player::sendMessage);
-            return;
-        }
+                if (response.getState() == UpdateState.NO_UPDATE_FOUND) {
+                    info.resetTo(UpdateState.NO_UPDATE_FOUND);
+                    return;
+                }
 
-        UPDATE_FOUND_NEW_UPDATE.send(player);
-        UPDATE_TITLE_FORMAT_PLAYER.send(player, updateTitle);
-        UPDATE_LINK_FORMAT_PLAYER.send(player, updateURL);
-        UPDATE_MESSAGE_FORMAT_PLAYER.send(player, updateMessage);
-    }
+                String title = response.getTitle();
+                String message = response.getMessage();
+                String url = response.getUrls().get("short");
+                if (message == null || url == null || title == null) {
+                    info.resetTo(UpdateState.FAILED_TO_FETCH);
+                    return;
+                }
 
-
-    /**
-     * Sends the {@link #updateMessage update message} to the {@link Logger provided logger}.
-     *
-     * @param logger the logger to send the message to.
-     */
-    public void sendAlert(@NotNull Logger logger) {
-        if (!canConsoleReceiveUpdates()) {
-            return;
-        }
-
-        if (updateState != UpdateState.NEW_UPDATE) {
-            UPDATE_FOUND_NO_UPDATES.send(logger);
-            return;
-        }
-
-        UPDATE_FOUND_NEW_UPDATE.send(logger);
-        UPDATE_TITLE_FORMAT_LOGGER.send(logger, updateTitle);
-        UPDATE_LINK_FORMAT_LOGGER.send(logger, updateURL);
-        UPDATE_MESSAGE_FORMAT_LOGGER.send(logger, updateMessage);
-    }
-
-
-    /**
-     * Fetches the updates from the {@link #UPDATE_URL update server}.
-     */
-    public void fetchUpdate() {
-        try {
-            JsonElement response = new HttpRequestBuilder(UpdateManager.UPDATE_URL)
-                                           .setDefaultHeaders()
-                                           .setParams(
-                                                   new HttpParam("serverVersion", VersionUtils.getServerVersion()),
-                                                   new HttpParam("pluginVersion", plugin.getDescription().getVersion())
-                                           )
-                                           .post(true)
-                                           .getResponse();
-
-            if (response == null) {
-                setUpdateProperties(UpdateState.FAILED_TO_FETCH);
+                info.setUrl(url);
+                info.setTitle(title);
+                info.setMessage(message);
+                info.setState(UpdateState.NEW_UPDATE);
+            } catch (IOException e) {
+                Log.info("Update fetch failed. Make sure your online to keep CropClick up to date.");
+                info.resetTo(UpdateState.FAILED_TO_FETCH);
                 return;
             }
-
-            if (response.getAsJsonObject().has("status")) {
-                setUpdateProperties(UpdateState.UP_TO_DATE);
-                return;
-            }
-
-            if (!response.getAsJsonObject().has("version")) {
-                setUpdateProperties(UpdateState.NO_UPDATE_FOUND);
-                return;
-            }
-
-            JsonObject version = response.getAsJsonObject();
-            JsonElement versionTitle = version.get("title");
-            JsonElement versionMessage = version.get("message");
-            JsonElement versionUrl = version.get("urls").getAsJsonObject().get("short");
-            if (versionMessage == null || versionUrl == null || versionTitle == null) {
-                setUpdateProperties(UpdateState.FAILED_TO_FETCH);
-                return;
-            }
-
-            setUpdateProperties(
-                    versionUrl.getAsString(),
-                    versionTitle.getAsString(),
-                    versionMessage.getAsString(),
-                    UpdateState.NEW_UPDATE
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            setUpdateProperties(UpdateState.FAILED_TO_FETCH);
-            UPDATE_FETCH_FAILED.send(plugin.getLogger());
-            return;
-        }
-        sendAlert(plugin.getLogger());
-    }
-
-
-    /**
-     * Sets {@link #updateURL}, {@link #updateTitle}, {@link #updateMessage} and {@link #updateState} to the provided.
-     *
-     * @param url     the url to set.
-     * @param title   the title to set.
-     * @param message the message to set.
-     * @param state   the update state to set.
-     */
-    private void setUpdateProperties(String url, String title, String message, UpdateState state) {
-        setUpdateURL(url);
-        setUpdateTitle(title);
-        setUpdateMessage(message);
-        setUpdateState(state);
-    }
-
-
-    /**
-     * Sets {@link #updateURL}, {@link #updateTitle}, {@link #updateMessage} to an empty string and {@link #updateState} to the provided.
-     *
-     * @param state the update state to set.
-     */
-    private void setUpdateProperties(UpdateState state) {
-        setUpdateProperties("", "", "", state);
+            // TODO: Send alert...
+        }, 0, 30 * 60 * 20);
     }
 
 
@@ -218,79 +112,21 @@ public final class UpdateManager implements UpdateAPI {
      *
      * @return true if it is, otherwise false.
      */
+    @Override
     public boolean isUpdated() {
-        return updateState == UpdateState.UP_TO_DATE;
+        return getInfo().getState() == UpdateState.UP_TO_DATE;
     }
 
 
+    /**
+     * Gets the current local version of CropClick.
+     *
+     * @return the local version of CropClick.
+     */
     @NotNull
     @Override
     public String getVersion() {
         return plugin.getDescription().getVersion();
-    }
-
-
-    /**
-     * Gets the {@link UpdateState update state's} message.
-     *
-     * @return the update state's message.
-     */
-    @NotNull
-    public String getUpdateStateMessage() {
-        switch (updateState) {
-            case NEW_UPDATE:
-                return GENERAL_STATES_NEW_UPDATE.get(plugin);
-
-            case NO_UPDATE_FOUND:
-                return GENERAL_STATES_NO_UPDATE_FOUND.get(plugin);
-
-            case UP_TO_DATE:
-                return GENERAL_STATES_UP_TO_DATE.get(plugin);
-
-            case NOT_FETCHED_YET:
-                return GENERAL_STATES_NOT_YET_FETCHED.get(plugin);
-
-            default:
-                return GENERAL_STATES_FAILED_TO_FETCH.get(plugin);
-        }
-    }
-
-
-    /**
-     * Checks whether {@link Player OP players} can receive {@link #updateMessage update messages}.
-     *
-     * @return true if they can, otherwise false (default: true).
-     */
-    public boolean canPlayerReceiveUpdates() {
-        return plugin.getConfig().getBoolean("updateMessage.player", true);
-    }
-
-
-    /**
-     * Toggles the {@link #updateMessage update message} for {@link Player OP players}.
-     */
-    public void setPlayerReceiveUpdates(boolean canReceive) {
-        plugin.getConfig().set("updateMessage.player", canReceive);
-        plugin.saveConfig();
-    }
-
-
-    /**
-     * Checks whether {@link ConsoleCommandSender the console} can receive {@link #updateMessage update messages}.
-     *
-     * @return true if it can, otherwise false (default: true).
-     */
-    public boolean canConsoleReceiveUpdates() {
-        return plugin.getConfig().getBoolean("updateMessage.console", true);
-    }
-
-
-    /**
-     * Toggles the {@link #updateMessage update message} for {@link ConsoleCommandSender the console}.
-     */
-    public void setConsoleReceiveUpdates(boolean canReceive) {
-        plugin.getConfig().set("updateMessage.console", canReceive);
-        plugin.saveConfig();
     }
 
 }

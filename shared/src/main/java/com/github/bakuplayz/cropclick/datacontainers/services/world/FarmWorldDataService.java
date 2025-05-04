@@ -96,4 +96,14 @@ public interface FarmWorldDataService extends DataService<FarmWorld> {
     @Override
     CompletableFuture<Boolean> updateOne(@NotNull String name, @NotNull FarmWorld world);
 
+
+    /**
+     * Counts all entities inside the data container.
+     *
+     * @return a {@link CompletableFuture} that completes with the amount of entities.
+     */
+    @NotNull
+    @Override
+    CompletableFuture<Integer> countAll();
+
 }

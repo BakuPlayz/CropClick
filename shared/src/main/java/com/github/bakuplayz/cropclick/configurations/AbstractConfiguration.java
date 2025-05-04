@@ -20,7 +20,8 @@
 package com.github.bakuplayz.cropclick.configurations;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.StringUtils;
+import com.github.bakuplayz.cropclick.Log;
+import com.github.bakuplayz.cropclick.common.Strings;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,8 +35,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Set;
-
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.*;
 
 
 /**
@@ -69,39 +68,39 @@ public abstract class AbstractConfiguration implements Configuration {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T get(@NotNull IConfigurationKey key, @NotNull String... args) {
-        String path = StringUtils.replace(key.getPath(), "%s", args);
+    public <T> T get(@NotNull ConfigurationKey key, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
         return (T) getConfiguration().get(path, key.getDefaultValue());
     }
 
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getOrDefault(@NotNull IConfigurationKey key, T def, @NotNull String... args) {
-        String path = StringUtils.replace(key.getPath(), "%s", args);
+    public <T> T getOrDefault(@NotNull ConfigurationKey key, T def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
         return (T) getConfiguration().get(path, def);
     }
 
 
     @NotNull
     @Override
-    public Set<String> getKeys(@NotNull IConfigurationKey key, @NotNull String... args) {
-        String path = StringUtils.replace(key.getPath(), "%s", args);
+    public Set<String> getKeys(@NotNull ConfigurationKey key, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
         ConfigurationSection section = getConfiguration().getConfigurationSection(path);
         return section == null ? Collections.emptySet() : section.getKeys(true);
     }
 
 
     @Override
-    public <T> void set(@NotNull IConfigurationKey key, T data, @NotNull String... args) {
+    public <T> void set(@NotNull ConfigurationKey key, T data, @NotNull String... args) {
         setWithoutSave(key, data, args);
         save();
     }
 
 
     @Override
-    public <T> void setWithoutSave(@NotNull IConfigurationKey key, T data, @NotNull String... args) {
-        String path = StringUtils.replace(key.getPath(), "%s", args);
+    public <T> void setWithoutSave(@NotNull ConfigurationKey key, T data, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
         getConfiguration().set(path, data);
     }
 
@@ -119,9 +118,9 @@ public abstract class AbstractConfiguration implements Configuration {
                 plugin.saveResource(fileName, true);
             }
         } catch (IOException exception) {
-            FILE_SETUP_FAILED.send(fileName, exception);
+            Log.severe("Could not setup %s.", fileName);
         } finally {
-            FILE_SETUP_LOAD.send(fileName);
+            Log.info("Loading {}.", fileName);
         }
     }
 
@@ -133,7 +132,7 @@ public abstract class AbstractConfiguration implements Configuration {
     public void reload() {
         setFile(getNewFileInstance());
         setConfiguration(YamlConfiguration.loadConfiguration(file));
-        FILE_RELOAD.send(fileName);
+        Log.info("Reloading {}.", fileName);
     }
 
 
@@ -145,7 +144,7 @@ public abstract class AbstractConfiguration implements Configuration {
         try {
             getConfiguration().save(file);
         } catch (IOException exception) {
-            FILE_SAVE_FAILED.send(fileName, exception);
+            Log.severe("Could not save %s.", fileName);
         }
     }
 
@@ -159,7 +158,7 @@ public abstract class AbstractConfiguration implements Configuration {
             Files.deleteIfExists(file.toPath());
             create();
         } catch (IOException exception) {
-            FILE_RESET_FAILED.send(fileName, exception);
+            Log.severe("Could not reset %s.", fileName);
         }
     }
 

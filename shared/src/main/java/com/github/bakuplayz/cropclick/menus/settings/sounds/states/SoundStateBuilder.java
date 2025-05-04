@@ -19,12 +19,12 @@
 package com.github.bakuplayz.cropclick.menus.settings.sounds.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.MathUtils;
+import com.github.bakuplayz.cropclick.common.Maths;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.SoundMenu;
-import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
+import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
@@ -130,8 +130,8 @@ public final class SoundStateBuilder {
             }
 
             if (flag == SoundMenuStateFlag.PITCH) {
-                state.setPitch(MathUtils.round(infer(partial)));
-                cropsConfig.set(ConfigurationKey.SOUND_PITCH, MathUtils.round(infer(partial)), crop.getName(), soundName);
+                state.setPitch(Maths.roundFormatted(infer(partial)));
+                cropsConfig.set(ConfigurationKey.SOUND_PITCH, Maths.roundFormatted(infer(partial)), crop.getName(), soundName);
             }
 
             if (flag == SoundMenuStateFlag.ORDER) {

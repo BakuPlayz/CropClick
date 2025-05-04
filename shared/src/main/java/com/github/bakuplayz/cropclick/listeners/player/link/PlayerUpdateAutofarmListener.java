@@ -22,8 +22,9 @@ package com.github.bakuplayz.cropclick.listeners.player.link;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmFactory;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.common.LocationUtils;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
@@ -133,7 +134,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
     @Contract(pure = true)
     private @NotNull Runnable getDoubleChestRunnable(@NotNull Player player, @NotNull Block block) {
         return () -> {
-            if (!BlockUtils.isDoubleChest(block)) {
+            if (!Blocks.isDoubleChest(block)) {
                 return;
             }
 
@@ -148,7 +149,7 @@ public final class PlayerUpdateAutofarmListener implements Listener {
                 return;
             }
 
-            Autofarm newAutofarm = new Autofarm(
+            Autofarm newAutofarm = AutofarmFactory.createPlain(
                     autofarm.getFarmerId(),
                     autofarm.getOwnerId(),
                     autofarm.isEnabled(),

@@ -132,6 +132,17 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
 
 
     /**
+     * Counts all entities inside the data container.
+     *
+     * @return a {@link CompletableFuture} that completes with the amount of entities.
+     */
+    @NotNull
+    public CompletableFuture<Integer> countAll() {
+        return CompletableFuture.completedFuture(dataContainer.countAll());
+    }
+
+
+    /**
      * Removes all data from the data store.
      *
      * @return a {@link CompletableFuture} that completes with {@code true}.

@@ -19,9 +19,9 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
@@ -42,8 +42,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class Kelp extends AbstractTallCrop {
 
-    public Kelp(@NotNull CropsConfig config) {
-        super(config);
+    public Kelp(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 
@@ -115,7 +115,7 @@ public final class Kelp extends AbstractTallCrop {
                     block.getZ()
             );
 
-            if (BlockUtils.isAir(currentBlock)) {
+            if (Blocks.isAir(currentBlock)) {
                 break;
             }
 
@@ -159,7 +159,7 @@ public final class Kelp extends AbstractTallCrop {
      * @return true if it is, otherwise false.
      */
     public boolean isKelpType(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, XMaterial.KELP, XMaterial.KELP_PLANT);
+        return Blocks.isAnyType(block, XMaterial.KELP, XMaterial.KELP_PLANT);
     }
 
 }

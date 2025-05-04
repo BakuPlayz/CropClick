@@ -22,12 +22,12 @@ package com.github.bakuplayz.cropclick.menus;
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.Maths;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.menus.settings.*;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.cropclick.menus.states.SettingsStateBuilder;
-import com.github.bakuplayz.cropclick.common.MathUtils;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
@@ -72,7 +72,7 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
     @Override
     public void setItems() {
-        boolean supportsParticles = VersionUtils.supportsParticles();
+        boolean supportsParticles = Versions.supportsParticles();
 
         setItem(10, new ToggleItem(), (i, player) -> new ToggleMenu(plugin).open(player));
         setItemIf(supportsParticles, 13, new ParticlesItem(), (i, player) -> new ParticlesCropsMenu(plugin).open(player));
@@ -110,8 +110,8 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
         private int getAmountOfEnabled() {
             int amountOfPlayers = Bukkit.getOfflinePlayers().length;
-            int amountOfDisabled = plugin.getPlayersConfig().getDisabledPlayers().size();
-            return MathUtils.clamp(amountOfPlayers - amountOfDisabled, MIN_PLAYER_COUNT, MAX_PLAYERS_COUNT);
+            int amountOfDisabled = plugin.getConfigManager().getPlayersConfig().getDisabledPlayers().size();
+            return Maths.clamp(amountOfPlayers - amountOfDisabled, MIN_PLAYER_COUNT, MAX_PLAYERS_COUNT);
         }
 
     }
@@ -166,8 +166,8 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
         private int getAmountOfRenamed() {
             return (int) plugin.getCropManager().getRegisteredCrops().stream()
-                    .filter(crop -> !crop.getDrop().getName().equals(crop.getName()))
-                    .count();
+                                 .filter(crop -> !crop.getDrop().getName().equals(crop.getName()))
+                                 .count();
         }
 
     }
@@ -210,9 +210,9 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
 
         private int getAmountOfBanished() {
-            return (int) plugin.getWorldManager().getWorlds().values().stream()
-                    .filter(FarmWorld::isBanished)
-                    .count();
+            return (int) plugin.getWorldManager().getWorlds().stream()
+                                 .filter(FarmWorld::isBanished)
+                                 .count();
         }
 
     }

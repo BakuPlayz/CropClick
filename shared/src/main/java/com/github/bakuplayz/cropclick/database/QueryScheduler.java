@@ -10,8 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class QueryScheduler {
-
-
+    
     private static final long RESTART_WORKERS_INTERVAL = 1000 * 60 * 60 * 20;
 
     private static final int NUM_WORKERS = 4;

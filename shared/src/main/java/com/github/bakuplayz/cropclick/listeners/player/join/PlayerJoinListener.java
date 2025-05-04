@@ -55,12 +55,9 @@ public final class PlayerJoinListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onOperatorJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if (!player.isOp()) return;
 
-        if (!player.isOp()) {
-            return;
-        }
-
-        Log.debug(String.format("%s (Operator): Called the join event!", player.getName()));
+        Log.debug("{} (Operator): Called the join event!", player.getName());
 
         updateManager.sendAlert(player);
     }

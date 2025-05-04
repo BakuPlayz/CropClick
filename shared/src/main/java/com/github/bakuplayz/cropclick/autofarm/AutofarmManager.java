@@ -22,7 +22,7 @@ package com.github.bakuplayz.cropclick.autofarm;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.AutofarmAPI;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
@@ -47,16 +47,12 @@ import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig
 public final class AutofarmManager implements AutofarmAPI {
 
 
-    @NotNull
     private final CropManager cropManager;
 
-    @NotNull
     private final DefaultConfig defaultConfig;
 
-    @NotNull
     private final AutofarmDataService dataService;
 
-    @NotNull
     private final AutofarmFinder autofarmFinder;
 
 
@@ -77,7 +73,7 @@ public final class AutofarmManager implements AutofarmAPI {
      */
     @Nullable
     public Autofarm findAutofarm(@NotNull Block block) {
-        if (BlockUtils.isAir(block)) {
+        if (Blocks.isAir(block)) {
             return null;
         }
 

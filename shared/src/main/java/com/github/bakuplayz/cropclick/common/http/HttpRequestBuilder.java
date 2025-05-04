@@ -19,11 +19,10 @@
 
 package com.github.bakuplayz.cropclick.common.http;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,21 +40,30 @@ import java.util.stream.Collectors;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class HttpRequestBuilder {
 
-    private final @Getter String url;
+public final class HttpRequestBuilder<T> {
 
-    private @Getter String params;
+    private final Class<T> clazz;
 
-    private @Getter HttpStatus status;
+    @Getter
+    private final String url;
 
-    private @Getter HttpURLConnection connection;
+    @Getter
+    private String params;
 
-    private @Getter HashMap<String, String> headers;
+    @Getter
+    private HttpStatus status;
+
+    @Getter
+    private HttpURLConnection connection;
+
+    @Getter
+    private HashMap<String, String> headers;
 
 
-    public HttpRequestBuilder(@NotNull String url) {
+    public HttpRequestBuilder(@NotNull String url, @NotNull Class<T> clazz) {
         this.headers = new HashMap<>();
+        this.clazz = clazz;
         this.params = "";
         this.url = url;
     }
@@ -66,7 +74,7 @@ public final class HttpRequestBuilder {
      *
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
-    public HttpRequestBuilder setDefaultHeaders() {
+    public HttpRequestBuilder<T> setDefaultHeaders() {
         headers.put("User-Agent", "Mozilla/5.0");
         return this;
     }
@@ -79,10 +87,10 @@ public final class HttpRequestBuilder {
      *
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
-    public HttpRequestBuilder setParams(@NotNull HttpParam... param) {
+    public HttpRequestBuilder<T> setParams(@NotNull HttpParam... param) {
         this.params = Arrays.stream(param)
-                .map(HttpParam::toString)
-                .collect(Collectors.joining("&"));
+                              .map(HttpParam::toString)
+                              .collect(Collectors.joining("&"));
         return this;
     }
 
@@ -96,7 +104,7 @@ public final class HttpRequestBuilder {
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     @SuppressWarnings("unused")
-    public HttpRequestBuilder setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
+    public HttpRequestBuilder<T> setHeaders(@NotNull HashMap<String, String> headers, boolean addDefault) {
         this.headers = headers;
         if (addDefault) {
             setDefaultHeaders();
@@ -112,8 +120,7 @@ public final class HttpRequestBuilder {
      *
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
-    public HttpRequestBuilder get(boolean doOutput)
-            throws IOException {
+    public HttpRequestBuilder<T> get(boolean doOutput) throws IOException {
         return doRequest("GET", doOutput);
     }
 
@@ -125,8 +132,7 @@ public final class HttpRequestBuilder {
      *
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
-    public HttpRequestBuilder post(boolean doOutput)
-            throws IOException {
+    public HttpRequestBuilder<T> post(boolean doOutput) throws IOException {
         return doRequest("POST", doOutput);
     }
 
@@ -138,8 +144,7 @@ public final class HttpRequestBuilder {
      *
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
-    public HttpRequestBuilder update(boolean doOutput)
-            throws IOException {
+    public HttpRequestBuilder<T> update(boolean doOutput) throws IOException {
         return doRequest("UPDATE", doOutput);
     }
 
@@ -152,8 +157,7 @@ public final class HttpRequestBuilder {
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
     @SuppressWarnings("unused")
-    public HttpRequestBuilder delete(boolean doOutput)
-            throws IOException {
+    public HttpRequestBuilder<T> delete(boolean doOutput) throws IOException {
         return doRequest("DELETE", doOutput);
     }
 
@@ -166,10 +170,9 @@ public final class HttpRequestBuilder {
      *
      * @return the {@link HttpRequestBuilder HttpRequestBuilder instance}.
      */
-    private HttpRequestBuilder doRequest(String method, boolean doOutput)
-            throws IOException {
+    private HttpRequestBuilder<T> doRequest(@NotNull String method, boolean doOutput) throws IOException {
         connection = (HttpURLConnection) new URL(
-                !params.equals("")
+                !params.isEmpty()
                         ? url + "?" + params
                         : url
         ).openConnection();
@@ -185,8 +188,7 @@ public final class HttpRequestBuilder {
     /**
      * Updates the {@link #status} to the suitable based on the response code.
      */
-    private void updateStatus()
-            throws IOException {
+    private void updateStatus() throws IOException {
         switch (connection.getResponseCode()) {
             case 200:
                 status = HttpStatus.OK;
@@ -199,7 +201,6 @@ public final class HttpRequestBuilder {
             default:
                 status = HttpStatus.NOT_FOUND;
                 break;
-
         }
     }
 
@@ -209,14 +210,14 @@ public final class HttpRequestBuilder {
      *
      * @return the request response, otherwise JsonNull.
      */
-    public JsonElement getResponse()
-            throws IOException {
+    @Nullable
+    public T getResponse() throws IOException {
         if (status == HttpStatus.UNCHANGED) {
-            return JsonNull.INSTANCE;
+            return null;
         }
 
         InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-        JsonElement body = new JsonParser().parse(reader);
+        T body = new ObjectMapper().readValue(reader, clazz);
         reader.close();
         return body;
     }

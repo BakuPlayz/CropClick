@@ -24,7 +24,7 @@ import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
@@ -78,7 +78,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        if (BlockUtils.isAir(block)) {
+        if (Blocks.isAir(block)) {
             return;
         }
 

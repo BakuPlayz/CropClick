@@ -49,6 +49,11 @@ public final class Log {
     }
 
 
+    public static void severe(@NotNull String message, @NotNull Object... params) {
+        logger.log(Level.SEVERE, message, params);
+    }
+
+
     public static void info(@NotNull String message, @NotNull Throwable throwable) {
         logger.log(Level.INFO, message, throwable);
     }

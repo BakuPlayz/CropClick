@@ -18,7 +18,6 @@
  */
 package com.github.bakuplayz.cropclick.autofarm;
 
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -28,15 +27,40 @@ import java.util.UUID;
 // TODO: Document.
 public final class AutofarmFactory {
 
+
     @NotNull
-    public static Autofarm createAutofarm(@NotNull Player player, @NotNull Location crop, @NotNull Location container, @NotNull Location dispenser) {
-        return new Autofarm(UUID.randomUUID(), player.getUniqueId(), true, crop, container, dispenser);
+    public static Autofarm createDefault(
+            @NotNull Player player,
+            @NotNull Location crop,
+            @NotNull Location container,
+            @NotNull Location dispenser
+    ) {
+        return createPlain(UUID.randomUUID(), player.getUniqueId(), true, crop, container, dispenser);
     }
 
 
     @NotNull
-    public static Autofarm createAutofarm(@NotNull Player player, @NotNull Location crop, @NotNull DoublyLocation container, @NotNull Location dispenser) {
-        return new Autofarm(UUID.randomUUID(), player.getUniqueId(), true, crop, container, dispenser);
+    public static Autofarm createWithFarmer(
+            @NotNull UUID farmer,
+            @NotNull Player player,
+            @NotNull Location crop,
+            @NotNull Location container,
+            @NotNull Location dispenser
+    ) {
+        return createPlain(farmer, player.getUniqueId(), true, crop, container, dispenser);
+    }
+
+
+    @NotNull
+    public static Autofarm createPlain(
+            @NotNull UUID farmer,
+            @NotNull UUID owner,
+            boolean isEnabled,
+            @NotNull Location crop,
+            @NotNull Location container,
+            @NotNull Location dispenser
+    ) {
+        return new Autofarm(farmer, owner, isEnabled, crop, container, dispenser);
     }
 
 }

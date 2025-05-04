@@ -19,8 +19,7 @@
 
 package com.github.bakuplayz.cropclick.yaml;
 
-import com.github.bakuplayz.cropclick.runnables.sounds.Sound;
-import com.github.bakuplayz.cropclick.common.Enableable;
+import com.github.bakuplayz.cropclick.models.Sound;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +40,7 @@ import java.util.Map;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-public final class SoundYaml implements Yamlable, Enableable {
+public final class SoundYaml implements Yamlable {
 
     /**
      * The given delay before playing the sound ({@link Sound#MIN_DELAY min delay} & {@link Sound#MAX_DELAY max delay}).
@@ -83,7 +82,6 @@ public final class SoundYaml implements Yamlable, Enableable {
      *
      * @return true if the sound is enabled, otherwise false.
      */
-    @Override
     public boolean isEnabled() {
         return volume > 0.0 && pitch > 0.0;
     }

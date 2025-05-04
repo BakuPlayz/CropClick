@@ -19,11 +19,11 @@
 
 package com.github.bakuplayz.cropclick.crops;
 
-import com.github.bakuplayz.cropclick.common.ItemBuilder;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -70,11 +70,16 @@ public final class Drop {
      */
     @NotNull
     public ItemStack toItemStack(boolean nameChanged) {
-        int randomAmount = (int) Math.round(amount * getChance());
-        return new ItemBuilder(type.parseItem())
-                       .setName(nameChanged ? name : null)
-                       .setAmount(randomAmount)
-                       .toItemStack();
+        ItemStack item = new ItemStack(type.parseItem());
+        ItemMeta meta = item.getItemMeta();
+
+        item.setAmount((int) Math.round(amount * getChance()));
+        if (nameChanged) {
+            meta.setDisplayName(name);
+            item.setItemMeta(meta);
+        }
+        
+        return item;
     }
 
 

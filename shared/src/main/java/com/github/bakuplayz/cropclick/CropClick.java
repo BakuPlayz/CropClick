@@ -10,7 +10,7 @@
  * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * <p>
  * You should have received a copy of the GNU General Public License
@@ -61,8 +61,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FAILED_TO_REGISTER_COMMANDS;
-
 
 /**
  * The class representing the core of CropClick -- my precious.
@@ -74,16 +72,11 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.FAILED
 public final class CropClick extends JavaPlugin {
 
     /**
-     * A singleton plugin instance of CropClick, used *ONLY* to communicate with the {@link CropClickAPI}.
+     * A singleton plugin instance of CropClick, used *ONLY* to
+     * communicate with the {@link CropClickAPI and {@link CropPlayer}.
      */
     @Getter(AccessLevel.PACKAGE)
     private static CropClick instance;
-
-    /**
-     * A variable used for getting statistics using bStats.
-     */
-    @Getter(AccessLevel.PACKAGE)
-    private final Metrics metrics = new Metrics(this, 5160);
 
 
     @Getter
@@ -139,7 +132,8 @@ public final class CropClick extends JavaPlugin {
         CropClick.instance = this;
 
         new SpigotSpin(this);
-
+        new Metrics(this, 5160);
+        
         registerSchedulers();
         registerManagers();
         registerAddons();
@@ -156,12 +150,12 @@ public final class CropClick extends JavaPlugin {
     private void registerManagers() {
         // DO NOT MOVE THE ORDER OF THESE THREE, WILL CAUSE CRASHES! 😥
         this.configManager = new ConfigurationManager(this);
-        this.databaseManager = new DatabaseManager(this);
-        this.dataManager = new DataServiceManager(this);
+        this.databaseManager = new DatabaseManager(this);  // dependent on above
+        this.dataManager = new DataServiceManager(this); // dependent on above
 
+        this.addonManager = new AddonManager();
         this.cropManager = new CropManager(this);
         this.worldManager = new WorldManager(this);
-        this.addonManager = new AddonManager(this);
         this.updateManager = new UpdateManager(this);
         this.commandManager = new CommandManager(this);
         this.autofarmManager = new AutofarmManager(this);
@@ -183,7 +177,7 @@ public final class CropClick extends JavaPlugin {
     private void registerCommands() {
         PluginCommand command = getCommand("cropclick");
         if (command == null) {
-            FAILED_TO_REGISTER_COMMANDS.send();
+            Log.severe("Commands failed to register, please reload the server.");
             return;
         }
 
@@ -228,7 +222,7 @@ public final class CropClick extends JavaPlugin {
      * Registers all the {@link Permission permissions}.
      */
     private void registerPermissions() {
-        permissionManager.registerPermissions();
+        permissionManager.registerPermissions(this);
     }
 
 
@@ -244,7 +238,7 @@ public final class CropClick extends JavaPlugin {
      * Registers all the {@link AbstractAddon addons}.
      */
     private void registerAddons() {
-        addonManager.registerAddons();
+        addonManager.registerAddons(this);
     }
 
 }

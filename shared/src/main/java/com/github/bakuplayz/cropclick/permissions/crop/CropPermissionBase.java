@@ -51,7 +51,8 @@ public enum CropPermissionBase {
      *
      * @return the description of the {@link CropPermission}.
      */
-    public @NotNull String getDescription(@NotNull CropPermissionAction action) {
+    @NotNull
+    public String getDescription(@NotNull CropPermissionAction action) {
         return "Permission to " + action.getName() + " all the " + getName() + " crops " + example;
     }
 
@@ -61,7 +62,8 @@ public enum CropPermissionBase {
      *
      * @return the name of the permission type.
      */
-    public @NotNull String getName() {
+    @NotNull
+    public String getName() {
         return name().toLowerCase();
     }
 

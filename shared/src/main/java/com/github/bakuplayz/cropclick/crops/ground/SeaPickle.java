@@ -19,10 +19,10 @@
 
 package com.github.bakuplayz.cropclick.crops.ground;
 
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
+import com.github.bakuplayz.cropclick.crops.MassHarvestable;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractGroundCrop;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
@@ -42,10 +42,10 @@ import org.jetbrains.annotations.Nullable;
  * @see AbstractCrop
  * @since 2.0.0
  */
-public final class SeaPickle extends AbstractGroundCrop {
+public final class SeaPickle extends AbstractGroundCrop implements MassHarvestable {
 
-    public SeaPickle(@NotNull CropsConfig config) {
-        super(config);
+    public SeaPickle(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 
@@ -147,31 +147,6 @@ public final class SeaPickle extends AbstractGroundCrop {
         org.bukkit.block.data.type.SeaPickle seaPickle = (org.bukkit.block.data.type.SeaPickle) block.getBlockData();
         seaPickle.setPickles(1);
         block.setBlockData(seaPickle);
-    }
-
-
-    /**
-     * Harvests all the {@link SeaPickle sea pickles}.
-     *
-     * @param container the container to add the drops to.
-     * @param block     the crop block that was harvested.
-     * @param crop      the crop that was harvested.
-     *
-     * @return true if it harvested all, otherwise false.
-     */
-    public boolean harvestAll(@NotNull ContainerComponent container, @NotNull Block block, @NotNull Crop crop) {
-        boolean wasHarvested = true;
-
-        int height = getCurrentAge(block);
-        for (int i = height; i > 0; --i) {
-            if (!wasHarvested) {
-                return false;
-            }
-
-            wasHarvested = crop.harvest(container);
-        }
-
-        return wasHarvested;
     }
 
 }

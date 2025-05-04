@@ -21,8 +21,8 @@ package com.github.bakuplayz.cropclick.commands;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.subcommands.*;
-import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
 import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -52,7 +52,8 @@ public final class CommandManager implements TabExecutor {
     /**
      * A variable containing all the registered commands.
      */
-    private final @Getter List<Subcommand> commands;
+    @Getter
+    private final List<Subcommand> commands;
 
 
     public CommandManager(@NotNull CropClick plugin) {
@@ -145,9 +146,9 @@ public final class CommandManager implements TabExecutor {
         }
 
         return commands.stream()
-                .map(Subcommand::getName)
-                .filter(command -> command.startsWith(args[0]))
-                .sorted().collect(Collectors.toList());
+                       .map(Subcommand::getName)
+                       .filter(command -> command.startsWith(args[0]))
+                       .sorted().collect(Collectors.toList());
     }
 
 

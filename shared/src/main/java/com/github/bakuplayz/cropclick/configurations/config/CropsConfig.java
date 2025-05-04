@@ -21,7 +21,6 @@ package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.configurations.IConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,11 +43,11 @@ public final class CropsConfig extends AbstractConfiguration {
 
 
     public void addSettings(@NotNull Crop crop) {
-        if (get(ConfigurationKey.CROP)) return;
+        if (get(CropsConfig.ConfigurationKey.CROP)) return;
 
-        for (ConfigurationKey key : ConfigurationKey.values()) {
-            if (key == ConfigurationKey.CROP) continue;
-            if (key == ConfigurationKey.SEED) continue;
+        for (ConfigurationKey key : CropsConfig.ConfigurationKey.values()) {
+            if (key == CropsConfig.ConfigurationKey.CROP) continue;
+            if (key == CropsConfig.ConfigurationKey.SEED) continue;
             setWithoutSave(key, key.getDefaultValue(), crop.getName());
         }
 
@@ -57,19 +56,19 @@ public final class CropsConfig extends AbstractConfiguration {
 
 
     public void removeSettings(@NotNull Crop crop) {
-        if (get(ConfigurationKey.CROP, crop.getName()) != null) {
-            set(ConfigurationKey.CROP, null, crop.getName());
+        if (get(CropsConfig.ConfigurationKey.CROP, crop.getName()) != null) {
+            set(CropsConfig.ConfigurationKey.CROP, null, crop.getName());
         }
 
-        if (crop.getSeed() != null && get(ConfigurationKey.SEED, crop.getSeed().getName()) != null) {
-            set(ConfigurationKey.SEED, null, crop.getSeed().getName());
+        if (crop.getSeed() != null && get(CropsConfig.ConfigurationKey.SEED, crop.getSeed().getName()) != null) {
+            set(CropsConfig.ConfigurationKey.SEED, null, crop.getSeed().getName());
         }
     }
 
 
     @Getter
     @AllArgsConstructor
-    public enum ConfigurationKey implements IConfigurationKey {
+    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         // Addon section
         MCMMO_REASON("crops.%s.addons.mcMMO.reason", ""),

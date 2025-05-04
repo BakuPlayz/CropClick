@@ -19,6 +19,7 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
 import com.github.bakuplayz.cropclick.database.QueryScheduler;
+import com.github.bakuplayz.cropclick.database.query.QueryProvider;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +31,8 @@ import org.jetbrains.annotations.NotNull;
 public final class RemoteFarmWorldService extends AbstractRemoteDataService<FarmWorld> implements FarmWorldDataService {
 
 
-    public RemoteFarmWorldService(@NotNull QueryScheduler scheduler) {
-        super(scheduler, FarmWorld.class);
+    public RemoteFarmWorldService(@NotNull QueryScheduler scheduler, @NotNull QueryProvider provider) {
+        super(scheduler, provider, FarmWorld.class);
     }
 
 

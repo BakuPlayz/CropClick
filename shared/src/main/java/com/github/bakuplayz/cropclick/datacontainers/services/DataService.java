@@ -96,6 +96,10 @@ public interface DataService<D> {
     CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity);
 
 
+    @NotNull
+    CompletableFuture<Integer> countAll();
+
+
     /**
      * Removes all the data entries inside the store.
      *

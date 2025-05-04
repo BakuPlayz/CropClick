@@ -32,20 +32,20 @@ import java.util.Set;
  */
 public interface Configuration {
 
-    <T> T get(@NotNull IConfigurationKey key, String... args);
+    <T> T get(@NotNull ConfigurationKey key, String... args);
 
 
-    <T> T getOrDefault(@NotNull IConfigurationKey key, T def, String... args);
+    <T> T getOrDefault(@NotNull ConfigurationKey key, T def, String... args);
 
 
     @NotNull
-    Set<String> getKeys(@NotNull IConfigurationKey key, String... args);
+    Set<String> getKeys(@NotNull ConfigurationKey key, String... args);
 
 
-    <T> void set(@NotNull IConfigurationKey key, T data, @NotNull String... args);
+    <T> void set(@NotNull ConfigurationKey key, T data, @NotNull String... args);
 
 
-    <T> void setWithoutSave(@NotNull IConfigurationKey key, T data, @NotNull String... args);
+    <T> void setWithoutSave(@NotNull ConfigurationKey key, T data, @NotNull String... args);
 
 
     /**

@@ -19,8 +19,8 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
@@ -39,8 +39,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class TwistingVines extends AbstractTallCrop {
 
-    public TwistingVines(@NotNull CropsConfig config) {
-        super(config);
+    public TwistingVines(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 

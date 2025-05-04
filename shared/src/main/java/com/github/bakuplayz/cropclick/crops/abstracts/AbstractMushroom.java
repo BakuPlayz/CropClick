@@ -19,9 +19,9 @@
 
 package com.github.bakuplayz.cropclick.crops.abstracts;
 
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
@@ -47,8 +47,8 @@ public abstract class AbstractMushroom extends AbstractTallCrop {
     protected final Stack<Block> mushrooms;
 
 
-    public AbstractMushroom(@NotNull CropsConfig config) {
-        super(config);
+    public AbstractMushroom(@NotNull CropArguments arguments) {
+        super(arguments);
 
         this.mushrooms = new Stack<>();
     }
@@ -85,7 +85,7 @@ public abstract class AbstractMushroom extends AbstractTallCrop {
      * @return true if it is, otherwise false.
      */
     protected boolean isNotMushroomType(@NotNull Block block) {
-        return !BlockUtils.isAnyType(block, XMaterial.MUSHROOM_STEM, XMaterial.BROWN_MUSHROOM_BLOCK, XMaterial.RED_MUSHROOM_BLOCK);
+        return !Blocks.isAnyType(block, XMaterial.MUSHROOM_STEM, XMaterial.BROWN_MUSHROOM_BLOCK, XMaterial.RED_MUSHROOM_BLOCK);
     }
 
 }

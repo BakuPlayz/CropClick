@@ -41,6 +41,6 @@ public enum HttpStatus {
     /**
      * HTTP Code: 404
      */
-    NOT_FOUND,
+    NOT_FOUND
 
 }

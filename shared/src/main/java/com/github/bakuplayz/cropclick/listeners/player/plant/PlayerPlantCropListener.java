@@ -24,10 +24,10 @@ import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.common.EventUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
+import com.github.bakuplayz.cropclick.common.Events;
 import com.github.bakuplayz.cropclick.common.PermissionUtils;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
+import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
@@ -76,12 +76,12 @@ public final class PlayerPlantCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
-        if (VersionUtils.hasMainHand() && !EventUtils.isMainHand(event.getHand())) {
+        if (Versions.hasMainHand() && !Events.isMainHand(event.getHand())) {
             return;
         }
 
         Block block = event.getClickedBlock();
-        if (BlockUtils.isAir(block)) {
+        if (Blocks.isAir(block)) {
             return;
         }
 
@@ -106,7 +106,7 @@ public final class PlayerPlantCropListener implements Listener {
         }
 
         Bukkit.getPluginManager().callEvent(
-                new PlayerPlantCropEvent(crop, block, player)
+                new PlayerPlantCropEvent(crop, block, new CropPlayer(player))
         );
     }
 
@@ -120,7 +120,7 @@ public final class PlayerPlantCropListener implements Listener {
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {
         if (event.isCancelled()) return;
 
-        Log.debug(String.format("%s (Player): Called the plant crop event!", event.getPlayer().getName()));
+        Log.debug("{} (Player): Called the plant crop event!", event.getPlayer().getBukkitPlayer().getName());
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
             growthAddon.getFunctionality().registerCrop(event.getBlock().getLocation());

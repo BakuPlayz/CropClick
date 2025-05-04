@@ -18,7 +18,7 @@
  */
 package com.github.bakuplayz.cropclick.crops.algorithms;
 
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,11 +37,11 @@ public final class BottomTopTraversal implements TraversalAlgorithm<Integer, Blo
                     block.getZ()
             );
 
-            if (BlockUtils.isAir(currentBlock)) {
+            if (Blocks.isAir(currentBlock)) {
                 break;
             }
 
-            if (BlockUtils.isSameType(block, currentBlock)) {
+            if (Blocks.isSameType(block, currentBlock)) {
                 ++height;
             }
         }

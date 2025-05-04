@@ -21,7 +21,6 @@ package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.configurations.IConfigurationKey;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +44,7 @@ public final class UsageConfig extends AbstractConfiguration {
      * Updates the usage information, used to handle legacy configuration.
      */
     public void updateUsageInfo() {
-        set(ConfigurationKey.LAST_OPENED_IN, plugin.getDescription().getDescription());
+        set(UsageConfig.ConfigurationKey.LAST_OPENED_IN, plugin.getDescription().getDescription());
     }
 
 
@@ -55,14 +54,14 @@ public final class UsageConfig extends AbstractConfiguration {
      * @return true if it is, otherwise false.
      */
     public boolean isNewFormatVersion() {
-        String lastOpenedIn = get(ConfigurationKey.LAST_OPENED_IN);
+        String lastOpenedIn = get(UsageConfig.ConfigurationKey.LAST_OPENED_IN);
         return !lastOpenedIn.startsWith("0") && !lastOpenedIn.startsWith("1");
     }
 
 
     @Getter
     @AllArgsConstructor
-    public enum ConfigurationKey implements IConfigurationKey {
+    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         LAST_OPENED_IN("last-opened-in", "");
 

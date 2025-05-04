@@ -21,8 +21,9 @@ package com.github.bakuplayz.cropclick.crops.abstracts;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
+import com.github.bakuplayz.cropclick.crops.MassHarvestable;
 import com.github.bakuplayz.cropclick.crops.algorithms.BottomTopTraversal;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import org.bukkit.Material;
@@ -41,13 +42,13 @@ import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.C
  * @see Crop
  * @since 2.0.0
  */
-public abstract class AbstractTallCrop extends AbstractCrop {
+public abstract class AbstractTallCrop extends AbstractCrop implements MassHarvestable {
 
     private final static BottomTopTraversal AGE_ALGORITHM = new BottomTopTraversal();
 
 
-    public AbstractTallCrop(@NotNull CropsConfig config) {
-        super(config);
+    public AbstractTallCrop(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 
@@ -137,21 +138,20 @@ public abstract class AbstractTallCrop extends AbstractCrop {
      *
      * @param container the container to add the drops to.
      * @param block     the crop block that was harvested.
-     * @param crop      the crop that was harvested.
      *
      * @return true if it harvested all, otherwise false.
      */
-    public boolean harvestAll(@NotNull ContainerComponent container, @NotNull Block block, @NotNull Crop crop) {
+    public boolean harvestAll(@NotNull ContainerComponent container, @NotNull Block block) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);
-        int actualHeight = getActualHeight(crop, height);
+        int actualHeight = getActualHeight(height);
         for (int i = actualHeight; i > 0; --i) {
             if (!wasHarvested) {
                 return false;
             }
 
-            wasHarvested = crop.harvest(container);
+            wasHarvested = harvest(container);
         }
 
         return wasHarvested;
@@ -161,13 +161,12 @@ public abstract class AbstractTallCrop extends AbstractCrop {
     /**
      * Gets the actual height/age of the {@link AbstractTallCrop extending tall crop}.
      *
-     * @param crop the crop to get the height of.
-     * @param age  the age of the crop.
+     * @param age the age of the crop.
      *
      * @return the actual height/age of the crop.
      */
-    private int getActualHeight(@NotNull Crop crop, int age) {
-        return crop.shouldReplant() ? age - 1 : age;
+    private int getActualHeight(int age) {
+        return shouldReplant() ? age - 1 : age;
     }
 
 }

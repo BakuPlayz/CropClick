@@ -25,7 +25,7 @@ import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleSt
 import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleStateBuilder.ParticleMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleStateBuilder.ParticleMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.runnables.particles.Particle;
+import com.github.bakuplayz.cropclick.models.Particle;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;

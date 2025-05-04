@@ -21,7 +21,7 @@ package com.github.bakuplayz.cropclick.crops;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.api.CropAPI;
-import com.github.bakuplayz.cropclick.common.VersionUtils;
+import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.common.exceptions.CropTypeDuplicateException;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.ground.*;
@@ -66,11 +66,15 @@ public final class CropManager implements CropAPI {
     @Getter
     private final HashMap<Crop, Long> harvestedCrops;
 
+    @Getter
+    private final CropArguments cropArguments;
+
 
     public CropManager(@NotNull CropClick plugin) {
+        this.cropArguments = new CropArguments(plugin.getConfigManager().getCropsConfig(), plugin.getTaskScheduler());
         this.cropsConfig = plugin.getConfigManager().getCropsConfig();
-        this.harvestedCrops = new HashMap<>();
         this.registeredCrops = new ArrayList<>();
+        this.harvestedCrops = new HashMap<>();
 
         registerVanillaCrops();
     }
@@ -80,65 +84,65 @@ public final class CropManager implements CropAPI {
      * Registers all the {@link Crop vanilla crops}.
      */
     private void registerVanillaCrops() {
-        if (VersionUtils.supportsBamboos()) {
-            registerCrop(new Bamboo(cropsConfig));
+        if (Versions.supportsBamboos()) {
+            registerCrop(new Bamboo(cropArguments));
         }
 
-        if (VersionUtils.supportsBeetroots()) {
-            registerCrop(new Beetroot(cropsConfig));
+        if (Versions.supportsBeetroots()) {
+            registerCrop(new Beetroot(cropArguments));
         }
 
-        registerCrop(new BrownMushroom(cropsConfig));
-        registerCrop(new Cactus(cropsConfig));
-        registerCrop(new Carrot(cropsConfig));
-        registerCrop(new CocoaBean(cropsConfig));
+        registerCrop(new BrownMushroom(cropArguments));
+        registerCrop(new Cactus(cropArguments));
+        registerCrop(new Carrot(cropArguments));
+        registerCrop(new CocoaBean(cropArguments));
 
-        if (VersionUtils.supportsChorus()) {
-            registerCrop(new Chorus(cropsConfig));
+        if (Versions.supportsChorus()) {
+            registerCrop(new Chorus(cropArguments));
         }
 
-        if (VersionUtils.supportsDripleaves()) {
-            registerCrop(new Dripleaf(cropsConfig));
+        if (Versions.supportsDripleaves()) {
+            registerCrop(new Dripleaf(cropArguments));
         }
 
-        if (VersionUtils.supportsGlowBerries()) {
-            registerCrop(new GlowBerries(cropsConfig));
+        if (Versions.supportsGlowBerries()) {
+            registerCrop(new GlowBerries(cropArguments));
         }
 
-        if (VersionUtils.supportsKelp()) {
-            registerCrop(new Kelp(cropsConfig));
+        if (Versions.supportsKelp()) {
+            registerCrop(new Kelp(cropArguments));
         }
 
-        registerCrop(new Melon(cropsConfig));
-        registerCrop(new NetherWart(cropsConfig));
+        registerCrop(new Melon(cropArguments));
+        registerCrop(new NetherWart(cropArguments));
 
-        if (VersionUtils.supportsPitcherPlants()) {
-            registerCrop(new PitcherPlant(cropsConfig));
+        if (Versions.supportsPitcherPlants()) {
+            registerCrop(new PitcherPlant(cropArguments));
         }
 
-        registerCrop(new Potato(cropsConfig));
-        registerCrop(new Pumpkin(cropsConfig));
-        registerCrop(new RedMushroom(cropsConfig));
+        registerCrop(new Potato(cropArguments));
+        registerCrop(new Pumpkin(cropArguments));
+        registerCrop(new RedMushroom(cropArguments));
 
-        if (VersionUtils.supportsSeaPickle()) {
-            registerCrop(new SeaPickle(cropsConfig));
+        if (Versions.supportsSeaPickle()) {
+            registerCrop(new SeaPickle(cropArguments));
         }
 
-        registerCrop(new SugarCane(cropsConfig));
+        registerCrop(new SugarCane(cropArguments));
 
-        if (VersionUtils.supportsSweetBerries()) {
-            registerCrop(new SweetBerries(cropsConfig));
+        if (Versions.supportsSweetBerries()) {
+            registerCrop(new SweetBerries(cropArguments));
         }
 
-        if (VersionUtils.supportsTorchFlowers()) {
-            registerCrop(new Torchflower(cropsConfig));
+        if (Versions.supportsTorchFlowers()) {
+            registerCrop(new Torchflower(cropArguments));
         }
 
-        if (VersionUtils.supportsTwistingVines()) {
-            registerCrop(new TwistingVines(cropsConfig));
+        if (Versions.supportsTwistingVines()) {
+            registerCrop(new TwistingVines(cropArguments));
         }
 
-        registerCrop(new Wheat(cropsConfig));
+        registerCrop(new Wheat(cropArguments));
     }
 
 
@@ -260,7 +264,7 @@ public final class CropManager implements CropAPI {
         }
 
         boolean isMaterialMatch = crop.getClickableType().parseMaterial() == block.getType();
-        if (!isMaterialMatch && VersionUtils.isLegacy()) {
+        if (!isMaterialMatch && Versions.isLegacy()) {
             isMaterialMatch = Arrays.asList(crop.getClickableType().getLegacy()).contains(block.getType().name());
         }
 

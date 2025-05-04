@@ -22,11 +22,10 @@ package com.github.bakuplayz.cropclick.language;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.common.StringUtils;
+import com.github.bakuplayz.cropclick.common.Strings;
 import com.github.bakuplayz.cropclick.configurations.config.LanguageConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -49,34 +48,14 @@ public final class LanguageAPI {
     /**
      * An enumeration for handling all the Console messages.
      */
-    public enum Console {
-
-        FILE_RELOAD("Reloading %s."),
-        FILE_SETUP_LOAD("Loading %s."),
-        FILE_SAVE_FAILED("Could not save %s."),
-        FILE_SETUP_FAILED("Could not setup %s."),
-        FILE_RESET_FAILED("Could not reset %s."),
-
-        DATA_CONTAINER_FAILED_CREATE("Could not create file %s, due to unknown reasons."),
-        DATA_CONTAINER_FAILED_REMOVE("Could not remove file %s, due to unknown reasons."),
-        DATA_CONTAINER_FAILED_CREATE_SECURITY("Could not create file %s, due to security policy."),
-        DATA_CONTAINER_FAILED_REMOVE_SECURITY("Could not remove file %s, due to security policy."),
-        DATA_CONTAINER_FAILED_SAVE("Could not save file %s, due to unknown reasons."),
-        DATA_CONTAINER_SUCCESS_SAVE("Successfully saved file %s."),
+    /*public enum Console {
 
         DATA_STORAGE_LOADING_SETUP("Loading %s."),
         DATA_STORAGE_FAILED_SAVE_OTHER("Could not save %s, due to unknown reasons."),
         DATA_STORAGE_FAILED_SAVE_REMOVED("Could not save %s, due to it being previously removed."),
         DATA_STORAGE_LOADED_DATA("Loaded %s's data."),
         DATA_STORAGE_FAILED_LOAD("Could not load %s."),
-        DATA_STORAGE_FAILED_SETUP("Could not setup %s."),
-
-        AUTOFARM_STORAGE_FAILED_REMOVE("Unlinked autofarms were unsuccessfully removed."),
-
-        FAILED_TO_REGISTER_COMMANDS("Commands failed to register, please reload the server."),
-
-        NOT_SUPPORTED_VERSION("This CropClick.jar only supports 1.8 to 1.12.2. In order to run the plugin, please change to the correct jar for your server version.");
-
+        DATA_STORAGE_FAILED_SETUP("Could not setup %s.");
 
         private final String message;
 
@@ -85,31 +64,11 @@ public final class LanguageAPI {
             this.message = message;
         }
 
-
-        /**
-         * Sends the message to the {@link ConsoleCommandSender console}.
-         */
-        public void send() {
-            Log.info(message);
-        }
-
-
-        /**
-         * Sends the message to the {@link ConsoleCommandSender console} replacing the "%s%" with the provided value.
-         *
-         * @param value the value to replace with.
-         */
-        public void send(@NotNull String value) {
-            Log.info(StringUtils.replace(message, "%s", value));
-        }
-
-
-        public void send(@NotNull String value, @NotNull Exception exception) {
-            Log.severe(exception.getMessage());
-            Log.info(StringUtils.replace(message, "%s", value));
-        }
-
     }
+    */
+
+
+    // TODO: Remove...
 
     /**
      * An enumeration for handling some Update messages.
@@ -254,7 +213,7 @@ public final class LanguageAPI {
          */
         @NotNull
         public String get(@NotNull CropClick plugin, @NotNull String value) {
-            return StringUtils.replace(get(plugin), placeholder, value);
+            return Strings.replace(get(plugin), placeholder, value);
         }
 
 
@@ -874,7 +833,7 @@ public final class LanguageAPI {
 
             String returned = message;
             for (int i = 0; i < values.length; ++i) {
-                returned = StringUtils.replace(returned, placeholders[i], values[i]);
+                returned = Strings.replace(returned, placeholders[i], values[i]);
             }
             return returned;
         }

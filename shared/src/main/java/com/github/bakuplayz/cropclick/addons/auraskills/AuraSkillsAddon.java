@@ -49,7 +49,6 @@ public final class AuraSkillsAddon extends AbstractAddon {
         if (isInstalled()) {
             this.functionality = new AuraSkillsFunctionality(cropsConfig);
         }
-
     }
 
 }

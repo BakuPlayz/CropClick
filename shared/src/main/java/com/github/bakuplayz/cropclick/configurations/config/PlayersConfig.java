@@ -21,7 +21,6 @@ package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.configurations.IConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,7 +57,7 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @Nullable
     public Location getSelectedCrop(@NotNull String playerId) {
-        return get(ConfigurationKey.SELECTED_CROP, playerId);
+        return get(PlayersConfig.ConfigurationKey.SELECTED_CROP, playerId);
     }
 
 
@@ -71,7 +70,7 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @Nullable
     public Location getSelectedContainer(@NotNull String playerId) {
-        return get(ConfigurationKey.SELECTED_CONTAINER, playerId);
+        return get(PlayersConfig.ConfigurationKey.SELECTED_CONTAINER, playerId);
     }
 
 
@@ -84,7 +83,7 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @Nullable
     public Location getSelectedDispenser(@NotNull String playerId) {
-        return get(ConfigurationKey.SELECTED_DISPENSER, playerId);
+        return get(PlayersConfig.ConfigurationKey.SELECTED_DISPENSER, playerId);
     }
 
 
@@ -95,13 +94,13 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @NotNull
     public List<String> getDisabledPlayers() {
-        return get(ConfigurationKey.DISABLED_PLAYERS);
+        return get(PlayersConfig.ConfigurationKey.DISABLED_PLAYERS);
     }
 
 
     @Getter
     @AllArgsConstructor
-    public enum ConfigurationKey implements IConfigurationKey {
+    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         ALL_PLAYERS("", Collections.emptyList()),
         SELECTED_PLAYER("%s", null),

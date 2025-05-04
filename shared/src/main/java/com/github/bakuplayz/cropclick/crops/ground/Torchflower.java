@@ -19,8 +19,8 @@
 
 package com.github.bakuplayz.cropclick.crops.ground;
 
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractGroundCrop;
@@ -43,8 +43,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class Torchflower extends AbstractGroundCrop {
 
-    public Torchflower(@NotNull CropsConfig config) {
-        super(config);
+    public Torchflower(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 

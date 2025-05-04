@@ -19,6 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.abstracts.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractWorldsMenu;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
@@ -55,11 +56,14 @@ public final class WorldsStateBuilder {
 
         public void toggleWorld(@NotNull FarmWorld world, @NotNull String addonName, int flag) {
             updateState(0, (state) -> {
-                world.toggleAddon(plugin.getAddonManager(), addonName);
+                AbstractAddon addon = plugin.getAddonManager().findByName(addonName);
+                if (addon != null) {
+                    world.toggleAddon(addon);
+                }
+
                 return state;
             }, flag);
         }
-
 
     }
 

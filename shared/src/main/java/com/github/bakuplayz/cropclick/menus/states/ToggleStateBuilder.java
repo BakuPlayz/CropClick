@@ -56,7 +56,6 @@ public final class ToggleStateBuilder {
             }, flag);
         }
 
-
     }
 
     @Getter

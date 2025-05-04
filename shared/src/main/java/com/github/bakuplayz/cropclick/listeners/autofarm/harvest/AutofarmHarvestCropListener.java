@@ -25,12 +25,10 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.BlockUtils;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
-import com.github.bakuplayz.cropclick.crops.abstracts.AbstractRoofCrop;
-import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
-import com.github.bakuplayz.cropclick.crops.ground.SeaPickle;
+import com.github.bakuplayz.cropclick.crops.MassHarvestable;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.cropclick.worlds.WorldManager;
@@ -90,7 +88,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        if (BlockUtils.isAir(block)) {
+        if (Blocks.isAir(block)) {
             return;
         }
 
@@ -166,25 +164,7 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        boolean wasHarvested;
-
-        if (crop instanceof AbstractTallCrop) {
-            AbstractTallCrop tallCrop = (AbstractTallCrop) crop;
-            wasHarvested = tallCrop.harvestAll(container, block, crop);
-
-        } else if (crop instanceof AbstractRoofCrop) {
-            AbstractRoofCrop roofCrop = (AbstractRoofCrop) crop;
-            wasHarvested = roofCrop.harvestAll(container, block, crop);
-
-        } else if (crop instanceof SeaPickle) {
-            SeaPickle seaPickle = (SeaPickle) crop;
-            wasHarvested = seaPickle.harvestAll(container, block, crop);
-
-        } else {
-            wasHarvested = crop.harvest(container);
-        }
-
-        if (!wasHarvested) {
+        if (!tryHarvest(crop, container, block)) {
             event.setCancelled(true);
             return;
         }
@@ -207,6 +187,14 @@ public final class AutofarmHarvestCropListener implements Listener {
         return block.getRelative(
                 ((Directional) block.getState().getData()).getFacing()
         );
+    }
+
+
+    private boolean tryHarvest(@NotNull Crop crop, @NotNull ContainerComponent container, @NotNull Block block) {
+        if (crop instanceof MassHarvestable) {
+            return ((MassHarvestable) crop).harvestAll(container, block);
+        }
+        return crop.harvest(container);
     }
 
 }

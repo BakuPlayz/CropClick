@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.addons.abstracts;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonFunctionality;
 import com.github.bakuplayz.cropclick.configurations.config.AddonsConfig;
@@ -42,6 +43,7 @@ import java.util.List;
 public abstract class AbstractAddon {
 
     @Getter
+    @JsonProperty(value = "name", required = true)
     protected final String name;
 
     protected transient final CropClick plugin;
@@ -54,8 +56,8 @@ public abstract class AbstractAddon {
 
 
     public AbstractAddon(@NotNull CropClick plugin, @NotNull String name) {
-        this.addonsConfig = plugin.getAddonsConfig();
-        this.cropsConfig = plugin.getCropsConfig();
+        this.addonsConfig = plugin.getConfigManager().getAddonsConfig();
+        this.cropsConfig = plugin.getConfigManager().getCropsConfig();
         this.banishedWorlds = new ArrayList<>();
         this.plugin = plugin;
         this.name = name;
@@ -65,7 +67,11 @@ public abstract class AbstractAddon {
     public abstract void setup();
 
 
-    @NotNull
+    /**
+     * Gets the functionality for the extending addon.
+     *
+     * @return the addon specific functionality.
+     */
     public abstract AddonFunctionality getFunctionality();
 
 

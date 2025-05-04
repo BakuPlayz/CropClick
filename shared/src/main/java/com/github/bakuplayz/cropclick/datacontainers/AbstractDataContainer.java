@@ -32,8 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Console.*;
-
 
 public final class AbstractDataContainer<D> implements DataContainer<D> {
 
@@ -126,6 +124,11 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
     }
 
 
+    public int countAll() {
+        return data.values().size();
+    }
+
+
     public void reset() {
         try {
             Files.delete(Paths.get(file.getAbsolutePath()));
@@ -133,9 +136,9 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
         } catch (NoSuchFileException e) {
             Log.debug("Could not delete file: {}, not found.", file.getAbsolutePath());
         } catch (SecurityException e) {
-            DATA_CONTAINER_FAILED_REMOVE_SECURITY.send(file.getAbsolutePath());
+            Log.severe("Could not remove file {}, due to security policy.", file.getAbsolutePath());
         } catch (IOException | UnsupportedOperationException e) {
-            DATA_CONTAINER_FAILED_REMOVE.send(file.getAbsolutePath());
+            Log.severe("Could not remove file {}, due to unknown reasons.", file.getAbsolutePath());
         }
     }
 
@@ -147,11 +150,11 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
         try {
             Files.createFile(Paths.get(file.getAbsolutePath()));
         } catch (FileAlreadyExistsException e) {
-            Log.debug("Could not create file: {}, already created.", file.getAbsolutePath());
+            Log.debug("Could not create file {}, already created.", file.getAbsolutePath());
         } catch (SecurityException e) {
-            DATA_CONTAINER_FAILED_CREATE_SECURITY.send(file.getAbsolutePath());
+            Log.severe("Could not create file {}, due to security policy.", file.getAbsolutePath());
         } catch (IOException | UnsupportedOperationException e) {
-            DATA_CONTAINER_FAILED_CREATE.send(file.getAbsolutePath());
+            Log.severe("Could not create file {}, due to unknown reasons.", file.getAbsolutePath());
         }
     }
 
@@ -162,11 +165,11 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
     private void setupSave() {
         plugin.getTaskScheduler().scheduleRepeatingTask((CleanupTask) () -> {
             if (!trySave(3)) {
-                DATA_CONTAINER_FAILED_SAVE.send(file.getAbsolutePath());
+                Log.severe("Could not save file {}, due to unknown reasons.", file.getAbsolutePath());
                 return;
             }
 
-            DATA_CONTAINER_SUCCESS_SAVE.send(file.getAbsolutePath());
+            Log.info("Successfully saved file {}.", file.getAbsolutePath());
         }, SAVE_INTERVAL, SAVE_INTERVAL);
     }
 
@@ -211,60 +214,5 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
     private File getNewFileInstance() {
         return new File(plugin.getDataFolder().getAbsolutePath() + "/data", fileName);
     }
-
-
- /*   static class AutofarmSerializer implements SQLSerializer<Autofarm> {
-
-        @Override
-        public void serialize(@NotNull Autofarm autofarm, @NotNull PreparedStatement stmt) throws SQLException {
-            stmt.setString(1, autofarm.getFarmerId().toString());
-            stmt.setString(2, autofarm.getOwnerId().toString());
-            stmt.setBoolean(3, autofarm.isEnabled());
-
-            stmt.setString(4, autofarm.getCropLocation().toString()); // TODO: should call an toSql?
-            stmt.setString(5, autofarm.getContainerLocation().toString()); // TODO: should call an toSql?
-            stmt.setString(6, autofarm.getDispenserLocation().toString()); // TODO: should call an toSql?
-        }
-
-
-        @Override
-        public Autofarm deserialize(@NotNull ResultSet rs) throws SQLException {
-            LocationSerializer locSerializer = new LocationSerializer();
-
-            return new Autofarm(
-                    UUID.fromString(rs.getString("farmer_id")),
-                    UUID.fromString(rs.getString("owner_id")),
-                    rs.getBoolean("is_enabled"),
-                    null,
-                    null,
-                    null
-            );
-        }
-
-    }
-
-    static class LocationSerializer implements SQLSerializer<Location> {
-
-        @Override
-        public void serialize(@NotNull Location data, @NotNull PreparedStatement stmt) throws SQLException {
-            stmt.setString(1, data.getWorld().getName());
-            stmt.setDouble(2, data.getX());
-            stmt.setDouble(3, data.getY());
-            stmt.setDouble(4, data.getZ());
-        }
-
-
-        @Override
-        public Location deserialize(@NotNull ResultSet rs) throws SQLException {
-            return new Location(
-                    Bukkit.getWorld(rs.getString("world")),
-                    rs.getDouble("x"),
-                    rs.getDouble("y"),
-                    rs.getDouble("z")
-            );
-        }
-
-    }
-*/
 
 }

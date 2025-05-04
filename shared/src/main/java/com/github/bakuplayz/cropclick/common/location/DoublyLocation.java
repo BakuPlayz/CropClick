@@ -19,7 +19,6 @@
 
 package com.github.bakuplayz.cropclick.common.location;
 
-import com.google.gson.annotations.JsonAdapter;
 import lombok.Getter;
 import lombok.ToString;
 import org.bukkit.Chunk;
@@ -41,10 +40,8 @@ import org.jetbrains.annotations.NotNull;
 @ToString
 public final class DoublyLocation extends Location {
 
-    @JsonAdapter(LocationTypeAdapter.class)
     private final Location singly;
 
-    @JsonAdapter(LocationTypeAdapter.class)
     private final Location doubly;
 
     private final transient double doublyX;

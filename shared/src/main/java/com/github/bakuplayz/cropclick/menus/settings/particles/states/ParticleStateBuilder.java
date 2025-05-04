@@ -23,7 +23,7 @@ import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.particles.ParticleMenu;
-import com.github.bakuplayz.cropclick.runnables.particles.Particle;
+import com.github.bakuplayz.cropclick.models.Particle;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;

@@ -19,6 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.abstracts.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmFactory;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
@@ -140,10 +141,12 @@ public class LinkMenuStateBuilder {
             Location container = state.getContainerLocation();
             Location dispenser = state.getDispenserLocation();
 
-            plugin.getAutofarmManager().deselectComponents(viewers.get(0));
+            CropPlayer player = CropPlayer.of(viewers.get(0));
+            player.getAutofarmFunctionality().deselectComponents();
+
             viewers.get(0).closeInventory();
 
-            Autofarm autofarm = AutofarmFactory.createAutofarm(viewers.get(0), crop, container, dispenser);
+            Autofarm autofarm = AutofarmFactory.createDefault(viewers.get(0), crop, container, dispenser);
 
             if (!autofarm.isComponentsPresent(plugin.getAutofarmManager())) {
                 LINK_ACTION_FAILURE.send(plugin, viewers.get(0));
@@ -151,7 +154,7 @@ public class LinkMenuStateBuilder {
             }
 
             Bukkit.getPluginManager().callEvent(
-                    new PlayerLinkAutofarmEvent(viewers.get(0), autofarm)
+                    new PlayerLinkAutofarmEvent(player, autofarm)
             );
         }
 
@@ -173,12 +176,14 @@ public class LinkMenuStateBuilder {
             }
 
             if (flag == LinkMenuStateFlag.CROP_SELECTED_STATE) {
+                CropPlayer player = CropPlayer.of(viewers.get(0));
+
                 if (state.isCropSelected) {
                     state.setCropLocation(null);
-                    plugin.getAutofarmManager().deselectCrop(viewers.get(0), block);
+                    player.getAutofarmFunctionality().deselectCrop(block);
                 } else {
                     state.setCropLocation(block.getLocation());
-                    plugin.getAutofarmManager().selectCrop(viewers.get(0), block);
+                    player.getAutofarmFunctionality().selectCrop(block);
                 }
 
                 state.setClickedSelected(infer(partial));
@@ -186,12 +191,14 @@ public class LinkMenuStateBuilder {
             }
 
             if (flag == LinkMenuStateFlag.CONTAINER_SELECTED_STATE) {
+                CropPlayer player = CropPlayer.of(viewers.get(0));
+
                 if (state.isContainerSelected) {
                     state.setContainerLocation(null);
-                    plugin.getAutofarmManager().deselectContainer(viewers.get(0), block);
+                    player.getAutofarmFunctionality().deselectContainer(block);
                 } else {
                     state.setContainerLocation(block.getLocation());
-                    plugin.getAutofarmManager().selectContainer(viewers.get(0), block);
+                    player.getAutofarmFunctionality().selectContainer(block);
                 }
 
                 state.setClickedSelected(infer(partial));
@@ -199,12 +206,14 @@ public class LinkMenuStateBuilder {
             }
 
             if (flag == LinkMenuStateFlag.DISPENSER_SELECTED_STATE) {
+                CropPlayer player = CropPlayer.of(viewers.get(0));
+
                 if (state.isDispenserSelected) {
                     state.setDispenserLocation(null);
-                    plugin.getAutofarmManager().deselectDispenser(viewers.get(0), block);
+                    player.getAutofarmFunctionality().deselectDispenser(block);
                 } else {
                     state.setDispenserLocation(block.getLocation());
-                    plugin.getAutofarmManager().selectDispenser(viewers.get(0), block);
+                    player.getAutofarmFunctionality().selectDispenser(block);
                 }
 
                 state.setClickedSelected(infer(partial));
@@ -257,7 +266,7 @@ public class LinkMenuStateBuilder {
             this.isDispenserSelected = isSelectedAndNotLinked(autofarm, getDispenserLocation());
             this.isContainerSelected = isSelectedAndNotLinked(autofarm, getContainerLocation());
             this.isUnclaimed = autofarm != null && Autofarm.UNKNOWN_OWNER.equals(autofarm.getOwnerId());
-            this.isClickedSelected = getClickedSelectedStatus(viewers.get(0), block, manager, context);
+            this.isClickedSelected = getClickedSelectedStatus(CropPlayer.of(viewers.get(0)), block, context);
         }
 
 
@@ -281,16 +290,16 @@ public class LinkMenuStateBuilder {
         }
 
 
-        private boolean getClickedSelectedStatus(@NotNull Player player, @NotNull Block block, @NotNull AutofarmManager manager, @NotNull LinkContext context) {
+        private boolean getClickedSelectedStatus(@NotNull CropPlayer player, @NotNull Block block, @NotNull LinkContext context) {
             switch (context) {
                 case CROP:
-                    return manager.isCropSelected(player, block);
+                    return player.getAutofarmFunctionality().isCropSelected(block);
 
                 case CONTAINER:
-                    return manager.isContainerSelected(player, block);
+                    return player.getAutofarmFunctionality().isContainerSelected(block);
 
                 case DISPENSER:
-                    return manager.isDispenserSelected(player, block);
+                    return player.getAutofarmFunctionality().isDispenserSelected(block);
             }
 
             return false;

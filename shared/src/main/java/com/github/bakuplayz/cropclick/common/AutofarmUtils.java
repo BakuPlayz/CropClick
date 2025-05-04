@@ -76,7 +76,7 @@ public final class AutofarmUtils {
      * @return true if it is, otherwise false.
      */
     public static boolean isContainer(@NotNull Block block) {
-        if (BlockUtils.isSameType(block, XMaterial.CHEST)) {
+        if (Blocks.isSameType(block, XMaterial.CHEST)) {
             return true;
         }
         return block.getType().name().contains("SHULKER");
@@ -104,7 +104,7 @@ public final class AutofarmUtils {
      * @return true if it is, otherwise false.
      */
     public static boolean isDispenser(@NotNull Block block) {
-        return BlockUtils.isSameType(block, XMaterial.DISPENSER);
+        return Blocks.isSameType(block, XMaterial.DISPENSER);
     }
 
 

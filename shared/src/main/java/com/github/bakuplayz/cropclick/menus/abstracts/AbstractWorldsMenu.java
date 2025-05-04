@@ -19,10 +19,11 @@
 package com.github.bakuplayz.cropclick.menus.abstracts;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
+import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.WorldsStateBuilder;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.WorldsStateBuilder.WorldsMenuState;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.WorldsStateBuilder.WorldsMenuStateHandler;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
@@ -55,15 +56,14 @@ public abstract class AbstractWorldsMenu extends AbstractPaginatedMenu<WorldsMen
     }
 
 
-    @Override
-    public List<FarmWorld> getPaginationItems() {
-        return new ArrayList<>(plugin.getWorldManager().getWorlds().values());
+    protected static AbstractAddon getAddon(@NotNull CropClick plugin, @NotNull String addonName) {
+        return plugin.getAddonManager().findByName(addonName);
     }
 
 
     @Override
-    public WorldsMenuStateHandler createStateHandler() {
-        return WorldsStateBuilder.createStateHandler(this, plugin);
+    public List<FarmWorld> getPaginationItems() {
+        return new ArrayList<>(plugin.getWorldManager().getWorlds());
     }
 
 
@@ -71,6 +71,12 @@ public abstract class AbstractWorldsMenu extends AbstractPaginatedMenu<WorldsMen
     @Override
     public Item loadPaginatedItem(@NotNull FarmWorld world, int position) {
         return new WorldItem(world, position);
+    }
+
+
+    @Override
+    public WorldsMenuStateHandler createStateHandler() {
+        return WorldsStateBuilder.createStateHandler(this, plugin);
     }
 
 

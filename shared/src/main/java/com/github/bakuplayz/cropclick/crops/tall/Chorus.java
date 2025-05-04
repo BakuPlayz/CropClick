@@ -19,10 +19,9 @@
 
 package com.github.bakuplayz.cropclick.crops.tall;
 
-import com.github.bakuplayz.cropclick.common.BlockUtils;
-import com.github.bakuplayz.cropclick.common.CollectionUtils;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
+import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
@@ -55,8 +54,8 @@ public final class Chorus extends AbstractTallCrop {
     private final List<Block> choruses;
 
 
-    public Chorus(@NotNull CropsConfig config) {
-        super(config);
+    public Chorus(@NotNull CropArguments arguments) {
+        super(arguments);
 
         this.choruses = new ArrayList<>();
     }
@@ -134,10 +133,9 @@ public final class Chorus extends AbstractTallCrop {
      */
     @Override
     public void replant(@NotNull Block block) {
-        CollectionUtils.reverseOrder(choruses)
-                .forEach(b -> b.setType(Material.AIR));
-
-        choruses.clear();
+        for (int i = choruses.size() - 1; i >= 0; --i) {
+            choruses.get(i).setType(Material.AIR);
+        }
     }
 
 
@@ -160,7 +158,7 @@ public final class Chorus extends AbstractTallCrop {
      * @return true if it is, otherwise false.
      */
     public boolean isChorusType(@NotNull Block block) {
-        return BlockUtils.isAnyType(block, XMaterial.CHORUS_PLANT, XMaterial.CHORUS_FLOWER);
+        return Blocks.isAnyType(block, XMaterial.CHORUS_PLANT, XMaterial.CHORUS_FLOWER);
     }
 
 }

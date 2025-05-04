@@ -20,8 +20,8 @@
 package com.github.bakuplayz.cropclick.crops.wall;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractWallCrop;
@@ -41,8 +41,8 @@ import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.C
  */
 public final class CocoaBean extends AbstractWallCrop {
 
-    public CocoaBean(@NotNull CropsConfig config) {
-        super(config);
+    public CocoaBean(@NotNull CropArguments arguments) {
+        super(arguments);
     }
 
 

@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
@@ -66,7 +67,7 @@ public final class PlayerInteractAtDispenserListener implements Listener {
         if (event.isCancelled()) return;
 
         Block block = event.getBlock();
-        Player player = event.getPlayer();
+        CropPlayer player = event.getPlayer();
         Autofarm autofarm = autofarmManager.findAutofarm(block);
 
         if (autofarmManager.isUsable(autofarm)) {
@@ -80,7 +81,7 @@ public final class PlayerInteractAtDispenserListener implements Listener {
             }
         }
 
-        Log.debug(String.format("%s (Player): Called the interact at dispenser event!", player.getName()));
+        Log.debug("{} (Player): Called the interact at dispenser event!", player.getBukkitPlayer().getName());
 
         new DispenserLinkMenu(plugin, autofarm, block, false).open(player);
     }

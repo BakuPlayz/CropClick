@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.events.player.interact;
 
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +43,7 @@ public final class PlayerInteractAtDispenserEvent extends Event implements Cance
 
     private final Block block;
 
-    private final Player player;
+    private final CropPlayer player;
 
     private final Dispenser dispenser;
 
@@ -53,7 +54,7 @@ public final class PlayerInteractAtDispenserEvent extends Event implements Cance
     private boolean cancelled;
 
 
-    public PlayerInteractAtDispenserEvent(@NotNull Player player, @NotNull Dispenser dispenser) {
+    public PlayerInteractAtDispenserEvent(@NotNull CropPlayer player, @NotNull Dispenser dispenser) {
         this.block = dispenser.getBlock();
         this.dispenser = dispenser;
         this.player = player;
