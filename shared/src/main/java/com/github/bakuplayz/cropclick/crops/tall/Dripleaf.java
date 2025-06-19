@@ -67,7 +67,7 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 100);
+        return createDrop(1, 1.0d);
     }
 
 
@@ -185,13 +185,13 @@ public final class Dripleaf extends AbstractTallCrop implements Waterlogged {
     /**
      * Sets the {@link Waterlogged waterlogged state} of the {@link Block provided block} to the provided state.
      *
-     * @param block       the block to set the state of.
-     * @param waterlogged the state to set.
+     * @param block the block to set the state of.
+     * @param state the state to set.
      */
     @Override
-    public void setWaterLogged(@NotNull Block block, boolean waterlogged) {
+    public void setWaterLogged(@NotNull Block block, boolean state) {
         org.bukkit.block.data.Waterlogged dripleaf = (org.bukkit.block.data.Waterlogged) block.getBlockData();
-        dripleaf.setWaterlogged(waterlogged);
+        dripleaf.setWaterlogged(state);
         block.setBlockData(dripleaf);
     }
 

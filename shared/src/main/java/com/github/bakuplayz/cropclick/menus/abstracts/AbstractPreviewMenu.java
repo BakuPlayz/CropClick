@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A class representing the Abstract Preview menu.
@@ -60,8 +61,11 @@ public abstract class AbstractPreviewMenu extends AbstractPlainMenu {
         private final ItemStack item;
 
 
+        @NotNull
         @Override
-        public void create() {
+        public CompletableFuture<Void> create() {
+            // Don't do anything inside of this, we don't need to modify the item in any way so far.
+            return CompletableFuture.completedFuture(null);
         }
 
 

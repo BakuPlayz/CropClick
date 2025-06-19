@@ -18,10 +18,12 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
-import com.github.bakuplayz.cropclick.tasks.CleanupTask;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.model.CleanupTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -43,20 +45,24 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
 
     private final ObjectMapper mapper;
 
-    private final Map<String, D> data;
-
     private final CropClick plugin;
 
+    private final TypeReference<Map<String, D>> reference;
 
-    public AbstractDataContainer(@NotNull String fileName, @NotNull CropClick plugin) {
-        this.mapper = plugin.getDatabaseManager().getJsonMapper();
-        this.file = getNewFileInstance();
-        this.data = new HashMap<>();
-        this.fileName = fileName;
+    private Map<String, D> data;
+
+
+    public AbstractDataContainer(@NotNull String fileName, @NotNull TypeReference<Map<String, D>> reference, @NotNull CropClick plugin) {
         this.plugin = plugin;
+        this.fileName = fileName;
+        this.reference = reference;
+        this.data = new HashMap<>();
+        this.file = getNewFileInstance();
+        this.mapper = plugin.getDatabaseManager().getJsonMapper();
 
         createIfAbsent();
         setupSave();
+        load();
     }
 
 
@@ -124,6 +130,12 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
     }
 
 
+    public void reload() {
+        load();
+        Log.info("Reloading {0}.", fileName);
+    }
+
+
     public int countAll() {
         return data.values().size();
     }
@@ -134,11 +146,11 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
             Files.delete(Paths.get(file.getAbsolutePath()));
             createIfAbsent();
         } catch (NoSuchFileException e) {
-            Log.debug("Could not delete file: {}, not found.", file.getAbsolutePath());
+            Log.debug("Could not delete file: {0}, not found.", file.getAbsolutePath());
         } catch (SecurityException e) {
-            Log.severe("Could not remove file {}, due to security policy.", file.getAbsolutePath());
+            Log.severe("Could not remove file {0}, due to security policy.", file.getAbsolutePath());
         } catch (IOException | UnsupportedOperationException e) {
-            Log.severe("Could not remove file {}, due to unknown reasons.", file.getAbsolutePath());
+            Log.severe("Could not remove file {0}, due to unknown reasons.", file.getAbsolutePath());
         }
     }
 
@@ -148,13 +160,24 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
      */
     private void createIfAbsent() {
         try {
+            Files.createDirectories(Paths.get(file.getParentFile().getPath()));
             Files.createFile(Paths.get(file.getAbsolutePath()));
+            mapper.writeValue(file, data);
         } catch (FileAlreadyExistsException e) {
-            Log.debug("Could not create file {}, already created.", file.getAbsolutePath());
+            Log.debug("Could not create file {0}, already created.", file.getAbsolutePath());
         } catch (SecurityException e) {
-            Log.severe("Could not create file {}, due to security policy.", file.getAbsolutePath());
+            Log.severe("Could not create file {0}, due to security policy.", file.getAbsolutePath());
         } catch (IOException | UnsupportedOperationException e) {
-            Log.severe("Could not create file {}, due to unknown reasons.", file.getAbsolutePath());
+            Log.severe("Could not create file {0}, due to unknown reasons.", file.getAbsolutePath());
+        }
+    }
+
+
+    private void load() {
+        try {
+            data = mapper.readValue(file, reference);
+        } catch (IOException e) {
+            Log.severe("Could not load file {0}, due to unknown reasons.", fileName);
         }
     }
 
@@ -165,12 +188,12 @@ public final class AbstractDataContainer<D> implements DataContainer<D> {
     private void setupSave() {
         plugin.getTaskScheduler().scheduleRepeatingTask((CleanupTask) () -> {
             if (!trySave(3)) {
-                Log.severe("Could not save file {}, due to unknown reasons.", file.getAbsolutePath());
+                Log.severe("Could not save {0}, due to unknown reasons.", fileName);
                 return;
             }
 
-            Log.info("Successfully saved file {}.", file.getAbsolutePath());
-        }, SAVE_INTERVAL, SAVE_INTERVAL);
+            Log.info("Successfully saved {0}.", fileName);
+        }, TaskContext.BUKKIT, SAVE_INTERVAL, SAVE_INTERVAL);
     }
 
 

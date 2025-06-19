@@ -71,7 +71,7 @@ public final class Melon extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(7, 80);
+        return createDrop(7, 0.80);
     }
 
 
@@ -140,7 +140,7 @@ public final class Melon extends AbstractGroundCrop {
      */
     @Override
     public boolean isLinkable() {
-        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
+        return cropsConfig.getBooleanOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
     }
 
 

@@ -20,11 +20,11 @@
 package com.github.bakuplayz.cropclick.crops.abstracts;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.MassHarvestable;
-import com.github.bakuplayz.cropclick.crops.algorithms.BottomTopTraversal;
+import com.github.bakuplayz.cropclick.crops.algorithms.AgeBottomTopTraversal;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -44,7 +44,7 @@ import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.C
  */
 public abstract class AbstractTallCrop extends AbstractCrop implements MassHarvestable {
 
-    private final static BottomTopTraversal AGE_ALGORITHM = new BottomTopTraversal();
+    private final static AgeBottomTopTraversal AGE_ALGORITHM = new AgeBottomTopTraversal();
 
 
     public AbstractTallCrop(@NotNull CropArguments arguments) {
@@ -106,7 +106,7 @@ public abstract class AbstractTallCrop extends AbstractCrop implements MassHarve
      */
     @Override
     public boolean isLinkable() {
-        return cropsConfig.get(ConfigurationKey.CROP_LINKABLE, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.CROP_LINKABLE, getName());
     }
 
 
@@ -141,7 +141,7 @@ public abstract class AbstractTallCrop extends AbstractCrop implements MassHarve
      *
      * @return true if it harvested all, otherwise false.
      */
-    public boolean harvestAll(@NotNull ContainerComponent container, @NotNull Block block) {
+    public boolean harvestAll(@NotNull Container container, @NotNull Block block) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);

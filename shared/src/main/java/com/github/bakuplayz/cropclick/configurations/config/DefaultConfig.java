@@ -20,8 +20,9 @@ package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -39,7 +40,7 @@ public final class DefaultConfig extends AbstractConfiguration {
 
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         UPDATE_MESSAGE_PLAYER("updateMessage.player", true),

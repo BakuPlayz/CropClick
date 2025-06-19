@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.crops;
 
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -31,12 +30,12 @@ import org.jetbrains.annotations.NotNull;
  */
 @Getter
 @AllArgsConstructor
-public class CropArguments {
+public final class CropArguments {
 
     @NotNull
     private final CropsConfig cropsConfig;
 
     @NotNull
-    private final TaskScheduler taskScheduler;
+    private final CropManager cropManager;
 
 }

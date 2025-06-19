@@ -54,11 +54,11 @@ public abstract class AbstractSeed implements Seed {
      *
      * @return a {@link Drop} representing the seed's drop configuration.
      */
-    protected Drop createDrop(int defAmount, int defChance) {
+    protected Drop createDrop(int defAmount, double defChance) {
         return new Drop(getMenuType(),
-                cropsConfig.get(ConfigurationKey.SEED_DROP_NAME, getName()),
-                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_AMOUNT, defAmount, getName()),
-                cropsConfig.getOrDefault(ConfigurationKey.SEED_DROP_CHANCE, defChance, getName())
+                cropsConfig.getString(ConfigurationKey.SEED_DROP_NAME, getName()),
+                cropsConfig.getIntOrDefault(ConfigurationKey.SEED_DROP_AMOUNT, defAmount, getName()),
+                cropsConfig.getDoubleOrDefault(ConfigurationKey.SEED_DROP_CHANCE, defChance, getName())
         );
     }
 
@@ -78,18 +78,16 @@ public abstract class AbstractSeed implements Seed {
      * Harvests the {@link AbstractSeed seed}.
      *
      * @param inventory the inventory to add the drops to.
-     *
-     * @return true if harvested, otherwise false.
      */
     @Override
-    public boolean harvest(@NotNull Inventory inventory) {
+    public void harvest(@NotNull Inventory inventory) {
         if (!hasDrop()) {
-            return false;
+            return;
         }
 
         Drop drop = getDrop();
         if (!drop.willDrop()) {
-            return false;
+            return;
         }
 
         ItemStack dropItem = drop.toItemStack(
@@ -99,8 +97,6 @@ public abstract class AbstractSeed implements Seed {
         if (dropItem.getAmount() != 0) {
             inventory.addItem(dropItem);
         }
-
-        return true;
     }
 
 
@@ -111,7 +107,7 @@ public abstract class AbstractSeed implements Seed {
      */
     @Override
     public boolean isEnabled() {
-        return cropsConfig.get(ConfigurationKey.SEED_ENABLED, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.SEED_ENABLED, getName());
     }
 
 

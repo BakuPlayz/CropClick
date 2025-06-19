@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.bakuplayz.cropclick</groupId>
         <artifactId>CropClick</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>cropclick-latest</artifactId>
@@ -26,6 +26,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.bakuplayz.cropclick</groupId>
+            <artifactId>cropclick-common</artifactId>
+            <version>2.2.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>24.1.0</version>
@@ -37,5 +43,6 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 </project>

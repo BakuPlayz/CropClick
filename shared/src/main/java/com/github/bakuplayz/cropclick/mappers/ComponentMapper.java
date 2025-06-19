@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.mappers;
 
 import com.github.bakuplayz.cropclick.Component;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
 import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
 import org.jetbrains.annotations.NotNull;
@@ -31,18 +30,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ComponentMapper {
 
-    private final static String VERSION = Versions.between(0.0, 12.9) ? "legacy" : "latest";
+    private final static String VERSION = Versions.isLegacy() ? "legacy" : "latest";
 
 
     @NotNull
     public static CropAgeComponent getAge() {
         return (CropAgeComponent) getMappedComponent("crops", "CropAge");
-    }
-
-
-    @NotNull
-    public static ContainerComponent getContainer() {
-        return (ContainerComponent) getMappedComponent("autofarms", "Container");
     }
 
 

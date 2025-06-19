@@ -50,7 +50,7 @@ public final class ChanceStateBuilder {
     }
 
 
-    public static class ChanceMenuStateHandler extends MenuStateHandler<ChanceMenuState, ChanceMenu> {
+    public final static class ChanceMenuStateHandler extends MenuStateHandler<ChanceMenuState, ChanceMenu> {
 
         private final Crop crop;
 
@@ -58,8 +58,8 @@ public final class ChanceStateBuilder {
 
 
         private ChanceMenuStateHandler(@NotNull ChanceMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
-            super(observer, new ChanceMenuState(plugin, crop));
-            this.cropsConfig = plugin.getCropsConfig();
+            super(observer, new ChanceMenuState(plugin.getConfigManager().getCropsConfig(), crop));
+            this.cropsConfig = plugin.getConfigManager().getCropsConfig();
             this.crop = crop;
         }
 
@@ -125,11 +125,11 @@ public final class ChanceStateBuilder {
     @Setter
     public static final class ChanceMenuState extends AbstractCropMenuState {
 
-        private ChanceMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
+        private ChanceMenuState(@NotNull CropsConfig config, @NotNull Crop crop) {
             this.isCropHarvestable = crop.isHarvestable();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.cropValue = (int) plugin.getCropsConfig().get(ConfigurationKey.CROP_DROP_CHANCE, crop.getName()) * 100;
-            this.seedValue = (int) plugin.getCropsConfig().get(ConfigurationKey.SEED_DROP_CHANCE, crop.hasSeed() ? crop.getSeed().getName() : "") * 100;
+            this.cropValue = (int) config.getDouble(ConfigurationKey.CROP_DROP_CHANCE, crop.getName()) * 100;
+            this.seedValue = (int) config.getDouble(ConfigurationKey.SEED_DROP_CHANCE, crop.hasSeed() ? crop.getSeed().getName() : "") * 100;
         }
     }
 

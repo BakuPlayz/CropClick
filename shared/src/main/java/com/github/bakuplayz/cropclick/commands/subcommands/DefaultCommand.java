@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.DEFAULT_DESCRIPTION;
+import static com.github.bakuplayz.cropclick.common.Languages.Command.DEFAULT_DESCRIPTION;
 
 
 /**

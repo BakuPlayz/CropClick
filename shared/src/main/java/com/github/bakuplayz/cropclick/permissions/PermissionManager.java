@@ -25,16 +25,16 @@ import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractGroundCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractWallCrop;
-import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
-import com.github.bakuplayz.cropclick.permissions.crop.CropPermission;
-import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionAction;
-import com.github.bakuplayz.cropclick.permissions.crop.CropPermissionBase;
+import dev.bakuplayz.spigotstore.task.TaskContext;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import static com.github.bakuplayz.cropclick.permissions.CropPermission.CropPermissionAction;
+import static com.github.bakuplayz.cropclick.permissions.CropPermission.CropPermissionBase;
 
 
 /**
@@ -70,7 +70,7 @@ public final class PermissionManager {
 
         /* Runs once the server is done loading in order to register all crops,
          * both CropClick's and other plugins. */
-        plugin.getTaskScheduler().scheduleLater(this::registerCrops, 0);
+        plugin.getTaskScheduler().scheduleLater(this::registerCrops, TaskContext.BUKKIT, 0);
     }
 
 
@@ -110,9 +110,6 @@ public final class PermissionManager {
      */
     private void registerCropType(@NotNull CropPermissionAction type) {
         Permission allPermission = type.getAllPermission();
-
-        assert allPermission != null; // Only here for the compiler, since type cannot be a null instance when passed.
-
         pluginManager.addPermission(allPermission);
 
         Permission groundPermission = new CropPermission(CropPermissionBase.GROUND, type);

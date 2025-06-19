@@ -18,10 +18,10 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
-import com.github.bakuplayz.cropclick.database.QueryScheduler;
-import com.github.bakuplayz.cropclick.database.query.QueryProvider;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
+import dev.bakuplayz.spigotstore.database.QueryScheduler;
+import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**

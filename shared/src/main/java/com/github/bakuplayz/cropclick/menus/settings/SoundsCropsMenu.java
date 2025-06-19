@@ -28,7 +28,9 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.CROPS_ITEM_SOUNDS;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.CROPS_ITEM_SOUNDS;
+import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
+
 
 /**
  * A class representing the Sounds menu.
@@ -45,18 +47,18 @@ public final class SoundsCropsMenu extends AbstractCropsMenu {
 
 
     @NotNull
-    @Override
-    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
-        return (item, player) -> new SoundsMenu(plugin, crop).open(player);
+    @Unmodifiable
+    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
+        return CROPS_ITEM_SOUNDS.getAsList(plugin,
+                plugin.getConfigManager().getCropsConfig().countKeys(ConfigurationKey.SOUNDS, crop.getName())
+        );
     }
 
 
     @NotNull
-    @Unmodifiable
-    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_SOUNDS.getAsList(plugin,
-                plugin.getCropsConfig().getSoundSection().getAmountOfSounds(crop.getName())
-        );
+    @Override
+    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
+        return (item, player) -> new SoundsMenu(plugin, crop).open(player);
     }
 
 }

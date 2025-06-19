@@ -23,12 +23,16 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.datacontainers.datastorage.AutofarmDataStorage;
+import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 
 /**
@@ -40,14 +44,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AutofarmLinkListener implements Listener {
 
-    private final AutofarmDataStorage farmData;
+    private final TaskScheduler taskScheduler;
+
+    private final AutofarmDataService service;
 
     private final AutofarmManager autofarmManager;
 
 
     public AutofarmLinkListener(@NotNull CropClick plugin) {
+        this.service = plugin.getDataManager().getAutofarmService();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.farmData = plugin.getFarmData();
+        this.taskScheduler = plugin.getTaskScheduler();
     }
 
 
@@ -58,20 +65,18 @@ public final class AutofarmLinkListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmLink(@NotNull AutofarmLinkEvent event) {
-        if (event.isCancelled()) return;
+        Autofarm autofarm = event.getAutofarm();
 
-        if (!autofarmManager.isEnabled()) {
-            event.setCancelled(true);
-            return;
-        }
+        Log.debug("{0}: Called the link event.", Tag.AUTOFARM, autofarm.getShortenedId());
 
-        Log.debug(String.format(
-                "%s (Autofarm): Called the link event!",
-                event.getAutofarm().getShortenedId())
-        );
+        service.insertOne(autofarm).thenAccept((success) -> {
+            if (!success) return;
 
-
-        farmData.linkFarm(event.getAutofarm());
+            taskScheduler.runTask(() -> {
+                Log.debug("{0}: Successfully added autofarm.", Tag.AUTOFARM, autofarm.getShortenedId());
+                autofarmManager.getBlocksCache().addIDs(autofarm);
+            }, TaskContext.BUKKIT);
+        });
     }
 
 }

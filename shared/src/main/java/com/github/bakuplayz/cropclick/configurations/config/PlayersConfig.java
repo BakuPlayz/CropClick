@@ -22,6 +22,7 @@ package com.github.bakuplayz.cropclick.configurations.config;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -43,6 +44,7 @@ import java.util.List;
  */
 public final class PlayersConfig extends AbstractConfiguration {
 
+
     public PlayersConfig(@NotNull CropClick plugin) {
         super(plugin, "players.yml");
     }
@@ -57,7 +59,7 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @Nullable
     public Location getSelectedCrop(@NotNull String playerId) {
-        return get(PlayersConfig.ConfigurationKey.SELECTED_CROP, playerId);
+        return getLocationOrDefault(ConfigurationKey.SELECTED_CROP, null, playerId);
     }
 
 
@@ -70,7 +72,7 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @Nullable
     public Location getSelectedContainer(@NotNull String playerId) {
-        return get(PlayersConfig.ConfigurationKey.SELECTED_CONTAINER, playerId);
+        return getLocationOrDefault(ConfigurationKey.SELECTED_CONTAINER, null, playerId);
     }
 
 
@@ -83,7 +85,7 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @Nullable
     public Location getSelectedDispenser(@NotNull String playerId) {
-        return get(PlayersConfig.ConfigurationKey.SELECTED_DISPENSER, playerId);
+        return getLocationOrDefault(ConfigurationKey.SELECTED_DISPENSER, null, playerId);
     }
 
 
@@ -94,18 +96,18 @@ public final class PlayersConfig extends AbstractConfiguration {
      */
     @NotNull
     public List<String> getDisabledPlayers() {
-        return get(PlayersConfig.ConfigurationKey.DISABLED_PLAYERS);
+        return getList(ConfigurationKey.DISABLED_PLAYERS);
     }
 
 
     @Getter
-    @AllArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         ALL_PLAYERS("", Collections.emptyList()),
         SELECTED_PLAYER("%s", null),
         SELECTED_CROP("%s.crop", null),
-        SELECTED_DISPENSER("%s.crop", null),
+        SELECTED_DISPENSER("%s.dispenser", null),
         SELECTED_CONTAINER("%s.container", null),
         DISABLED_PLAYERS("disabled", Collections.emptyList());
 

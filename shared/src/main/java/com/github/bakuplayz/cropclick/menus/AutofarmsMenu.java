@@ -19,11 +19,12 @@
 package com.github.bakuplayz.cropclick.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractPaginatedMenu;
 import com.github.bakuplayz.cropclick.menus.links.DispenserLinkMenu;
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedStateHandler;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
@@ -33,12 +34,14 @@ import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Autofarms menu.
@@ -55,15 +58,23 @@ public final class AutofarmsMenu extends AbstractPaginatedMenu<BasicPaginatedMen
     }
 
 
+    @NotNull
     @Override
-    public List<Autofarm> getPaginationItems() {
-        return plugin.getAutofarmManager().getAutofarms().stream()
-                       .filter(autofarm -> {
-                           boolean canClaim = PermissionUtils.canClaimAutofarm(viewers.get(0));
-                           boolean canUnlinkOthers = PermissionUtils.canUnlinkOthersFarm(viewers.get(0), autofarm);
-                           return canUnlinkOthers || canClaim;
-                       })
-                       .collect(Collectors.toList());
+    public CompletableFuture<List<Autofarm>> getFuturePaginationItems() {
+        CompletableFuture<List<Autofarm>> future = new CompletableFuture<>();
+        CropPlayer player = CropPlayer.fromPlayer(viewers.get(0));
+
+        plugin.getAutofarmManager().getAutofarms().thenAccept(autofarms -> future.complete(
+                autofarms.stream()
+                        .filter(autofarm -> {
+                            boolean canClaim = player.getPermissions().has(PermissionKey.AUTOFARM_CLAIM);
+                            boolean canUnlinkOthers = player.getPermissions().canUnlink(autofarm);
+                            return canUnlinkOthers || canClaim;
+                        })
+                        .collect(Collectors.toList())
+        ));
+
+        return future;
     }
 
 
@@ -76,7 +87,7 @@ public final class AutofarmsMenu extends AbstractPaginatedMenu<BasicPaginatedMen
 
     @NotNull
     @Override
-    public BasicPaginatedStateHandler createStateHandler() {
+    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
         return new BasicPaginatedStateHandler(this);
     }
 
@@ -99,14 +110,17 @@ public final class AutofarmsMenu extends AbstractPaginatedMenu<BasicPaginatedMen
         private final Autofarm autofarm;
 
 
+        @NotNull
         @Override
-        public void create() {
-            String status = MessageUtils.getStatusMessage(plugin, autofarm.isEnabled());
-            OfflinePlayer player = Bukkit.getOfflinePlayer(autofarm.getOwnerId());
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                String status = Messages.getStatusMessage(plugin, autofarm.isEnabled());
+                OfflinePlayer player = Bukkit.getOfflinePlayer(autofarm.getOwnerId());
 
-            setMaterial(XMaterial.DISPENSER);
-            setLore(AUTOFARMS_ITEM_OWNER.get(plugin, getName(player)));
-            setName(AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedId(), status));
+                setMaterial(XMaterial.DISPENSER);
+                setLore(AUTOFARMS_ITEM_OWNER.get(plugin, getName(player)));
+                setName(AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedId(), status));
+            });
         }
 
 

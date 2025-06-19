@@ -106,16 +106,8 @@ public final class Blocks {
      * @return true if it matches any, otherwise false.
      */
     @SuppressWarnings("unused")
-    public static boolean isAnyType(@NotNull Block block, @NotNull MaterialParser @NotNull ... types) {
+    public static boolean isAnyType(@NotNull Block block, @NotNull XMaterial @NotNull ... types) {
         return Arrays.stream(types).anyMatch(type -> type.parseMaterial() == block.getType());
-    }
-
-
-    public interface MaterialParser {
-
-        @NotNull
-        Material parseMaterial();
-
     }
 
 }

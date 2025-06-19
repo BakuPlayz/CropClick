@@ -20,9 +20,10 @@ package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.database.DatabaseDialect;
-import lombok.AllArgsConstructor;
+import dev.bakuplayz.spigotstore.database.DatabaseDialect;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,23 +35,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class DatabaseConfig extends AbstractConfiguration {
 
-    // TODO: Create this file... in resources...
-
-
     public DatabaseConfig(@NotNull CropClick plugin) {
         super(plugin, "database.yml");
     }
 
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
-        PASSWORD("password", "password"),
         USERNAME("username", "username"),
-        DATABASE("database", "database"),
+        PASSWORD("password", "password"),
+        DATABASE("database", "cropclick"),
         HOST("host", "host"),
-        PORT("port", "port"),
+        PORT("port", 0),
         DIALECT("dialect", DatabaseDialect.MYSQL);
 
         @NotNull

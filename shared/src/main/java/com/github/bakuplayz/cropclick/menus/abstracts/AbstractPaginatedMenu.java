@@ -74,8 +74,8 @@ public abstract class AbstractPaginatedMenu<S extends PaginatedMenuState, SH ext
 
     @NotNull
     @Override
-    public NextPageItem<S> createNextItem() {
-        return new CustomNextPageItem<>(this);
+    public PreviousPageItem<S> createPreviousItem() {
+        return new CustomPreviousPageItem<>(this);
     }
 
 
@@ -88,8 +88,8 @@ public abstract class AbstractPaginatedMenu<S extends PaginatedMenuState, SH ext
 
     @NotNull
     @Override
-    public PreviousPageItem<S> createPreviousItem() {
-        return new CustomPreviousPageItem<>(this);
+    public NextPageItem<S> createNextItem() {
+        return new CustomNextPageItem<>(this);
     }
 
 }

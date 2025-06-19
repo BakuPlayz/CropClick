@@ -18,7 +18,11 @@
  */
 package com.github.bakuplayz.cropclick;
 
-import com.github.bakuplayz.cropclick.api.*;
+import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.crops.CropManager;
+import com.github.bakuplayz.cropclick.update.UpdateManager;
+import com.github.bakuplayz.cropclick.world.WorldManager;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,31 +37,29 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public final class CropClickAPI {
 
-    @NotNull
-    private final CropAPI cropManager;
 
     @NotNull
-    private final AddonAPI addonManager;
+    private final CropManager cropManager;
 
     @NotNull
-    private final UpdateAPI updateManager;
+    private final WorldManager worldManager;
 
     @NotNull
-    private final AutofarmAPI autofarmManager;
+    private final AddonManager addonManager;
 
     @NotNull
-    private final FarmWorldAPI farmWorldManager;
+    private final UpdateManager updateManager;
+
+    @NotNull
+    private final AutofarmManager autofarmManager;
 
 
     public CropClickAPI() {
         CropClick plugin = CropClick.getInstance();
-
-        // Add cropsconfig somehow???
-
         this.cropManager = plugin.getCropManager();
         this.addonManager = plugin.getAddonManager();
         this.updateManager = plugin.getUpdateManager();
-        this.farmWorldManager = plugin.getWorldManager();
+        this.worldManager = plugin.getWorldManager();
         this.autofarmManager = plugin.getAutofarmManager();
     }
 

@@ -25,12 +25,17 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig;
 import com.github.bakuplayz.cropclick.database.mappers.AutofarmMapper;
 import com.github.bakuplayz.cropclick.database.mappers.FarmWorldMapper;
-import com.github.bakuplayz.cropclick.database.query.QueryProvider;
-import com.github.bakuplayz.cropclick.database.query.providers.MySQLProvider;
-import com.github.bakuplayz.cropclick.database.query.providers.PostgresProvider;
-import com.github.bakuplayz.cropclick.database.serializers.LocationDeserializer;
-import com.github.bakuplayz.cropclick.database.serializers.LocationSerializer;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.database.serializers.*;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
+import dev.bakuplayz.spigotstore.database.ConnectionPool;
+import dev.bakuplayz.spigotstore.database.DatabaseDialect;
+import dev.bakuplayz.spigotstore.database.DatabaseOptions;
+import dev.bakuplayz.spigotstore.database.QueryScheduler;
+import dev.bakuplayz.spigotstore.database.entity.EntityMapperRegistry;
+import dev.bakuplayz.spigotstore.database.query.providers.MySQLProvider;
+import dev.bakuplayz.spigotstore.database.query.providers.PostgresProvider;
+import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
+import dev.bakuplayz.spigotstore.database.query.providers.SQLiteProvider;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -52,9 +57,18 @@ public final class DatabaseManager {
     public DatabaseManager(@NotNull CropClick plugin) {
         DatabaseConfig config = plugin.getConfigManager().getDatabaseConfig();
 
+        DatabaseOptions options = new DatabaseOptions(
+                config.getInt(ConfigurationKey.PORT),
+                config.getString(ConfigurationKey.HOST),
+                config.getString(ConfigurationKey.USERNAME),
+                config.getString(ConfigurationKey.PASSWORD),
+                config.getString(ConfigurationKey.DATABASE),
+                config.getEnum(ConfigurationKey.DIALECT, DatabaseDialect.class)
+        );
+
         this.jsonMapper = initializeJSONMapper();
         this.queryProvider = initializeProvider(config);
-        this.connectionPool = new ConnectionPool(config);
+        this.connectionPool = new ConnectionPool(options);
         this.queryScheduler = new QueryScheduler(connectionPool, plugin.getTaskScheduler());
 
         registerEntities(config);
@@ -63,7 +77,7 @@ public final class DatabaseManager {
 
     @NotNull
     private QueryProvider initializeProvider(@NotNull DatabaseConfig config) {
-        DatabaseDialect dialect = config.get(ConfigurationKey.DIALECT);
+        DatabaseDialect dialect = config.getEnum(ConfigurationKey.DIALECT, DatabaseDialect.class);
 
         switch (dialect) {
             case MARIADB:
@@ -72,7 +86,7 @@ public final class DatabaseManager {
             case POSTGRES:
                 return new PostgresProvider(jsonMapper);
             default:
-                throw new RuntimeException(String.format("Cannot find provider for the %s dialect, no implementation exist.", dialect.getName()));
+                return new SQLiteProvider(jsonMapper);
         }
     }
 
@@ -82,8 +96,12 @@ public final class DatabaseManager {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
 
+        module.addSerializer(FarmWorld.class, new FarmWorldSerializer());
+        module.addDeserializer(FarmWorld.class, new FarmWorldDeserializer());
         module.addSerializer(Location.class, new LocationSerializer());
         module.addDeserializer(Location.class, new LocationDeserializer());
+        module.addSerializer(Autofarm.class, new AutofarmSerializer());
+        module.addDeserializer(Autofarm.class, new AutofarmDeserializer());
         mapper.registerModule(module);
 
         return mapper;
@@ -91,9 +109,10 @@ public final class DatabaseManager {
 
 
     private void registerEntities(@NotNull DatabaseConfig config) {
-        DatabaseDialect dialect = config.get(ConfigurationKey.DIALECT);
+        DatabaseDialect dialect = config.getEnum(ConfigurationKey.DIALECT, DatabaseDialect.class);
         EntityMapperRegistry.register(Autofarm.class, new AutofarmMapper(jsonMapper, dialect));
         EntityMapperRegistry.register(FarmWorld.class, new FarmWorldMapper(jsonMapper, dialect));
     }
+
 
 }

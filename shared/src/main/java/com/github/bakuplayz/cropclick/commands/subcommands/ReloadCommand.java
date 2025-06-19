@@ -23,11 +23,12 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.configurations.Configuration;
+import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Command.*;
 
 
 /**
@@ -67,6 +68,7 @@ public final class ReloadCommand implements Subcommand {
     public void perform(@NotNull Player player, String[] args) {
         try {
             plugin.getConfigManager().getAll().forEach(Configuration::reload);
+            plugin.getDataManager().getAll().forEach(DataService::reload);
         } catch (Exception e) {
             Log.severe(e.getMessage());
             RELOAD_FAILED.send(plugin, player);

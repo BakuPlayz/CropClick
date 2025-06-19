@@ -21,23 +21,16 @@ package com.github.bakuplayz.cropclick.crops.abstracts;
 
 import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import com.github.bakuplayz.cropclick.common.Inventories;
-import com.github.bakuplayz.cropclick.common.Sets;
+import com.github.bakuplayz.cropclick.common.types.Particle;
+import com.github.bakuplayz.cropclick.common.types.Sound;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
-import com.github.bakuplayz.cropclick.crops.Crop;
-import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
-import com.github.bakuplayz.cropclick.crops.CropArguments;
-import com.github.bakuplayz.cropclick.crops.Drop;
+import com.github.bakuplayz.cropclick.crops.*;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import com.github.bakuplayz.cropclick.mappers.ComponentMapper;
-import com.github.bakuplayz.cropclick.models.Particle;
-import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.cropclick.permissions.PermissionKey;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
-import com.github.bakuplayz.cropclick.tasks.audio.SoundTask;
-import com.github.bakuplayz.cropclick.tasks.visual.ParticleTask;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -57,15 +50,15 @@ public abstract class AbstractCrop implements Crop {
 
     protected final CropsConfig cropsConfig;
 
-    private final TaskScheduler scheduler;
+    private final CropManager cropManager;
 
     private final CropAgeComponent ageComponent;
 
 
     public AbstractCrop(@NotNull CropArguments arguments) {
         this.ageComponent = ComponentMapper.getAge();
-        this.scheduler = arguments.getTaskScheduler();
         this.cropsConfig = arguments.getCropsConfig();
+        this.cropManager = arguments.getCropManager();
     }
 
 
@@ -79,11 +72,11 @@ public abstract class AbstractCrop implements Crop {
      *
      * @return a {@link Drop} representing the crop's drop configuration.
      */
-    protected Drop createDrop(int defAmount, int defChance) {
+    protected Drop createDrop(int defAmount, double defChance) {
         return new Drop(getMenuType(),
-                cropsConfig.get(ConfigurationKey.CROP_DROP_NAME, getName()),
-                cropsConfig.getOrDefault(ConfigurationKey.CROP_DROP_AMOUNT, defAmount, getName()),
-                cropsConfig.getOrDefault(ConfigurationKey.CROP_DROP_CHANCE, defChance, getName())
+                cropsConfig.getString(ConfigurationKey.CROP_DROP_NAME, getName()),
+                cropsConfig.getIntOrDefault(ConfigurationKey.CROP_DROP_AMOUNT, defAmount, getName()),
+                cropsConfig.getDoubleOrDefault(ConfigurationKey.CROP_DROP_CHANCE, defChance, getName())
         );
     }
 
@@ -108,7 +101,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public boolean dropAtLeastOne() {
-        return cropsConfig.get(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, getName());
     }
 
 
@@ -131,7 +124,7 @@ public abstract class AbstractCrop implements Crop {
      * @return true if harvested, otherwise false.
      */
     @Override
-    public boolean harvest(@NotNull ContainerComponent container) {
+    public boolean harvest(@NotNull Container container) {
         if (!isHarvestable()) {
             return false;
         }
@@ -164,17 +157,16 @@ public abstract class AbstractCrop implements Crop {
         }
 
         Seed seed = getSeed();
-        if (seed == null) {
-            return false;
-        }
         if (!seed.isEnabled()) {
-            return false;
-        }
-        if (!seed.hasDrop()) {
-            return false;
+            return true;
         }
 
-        return seed.harvest(inventory);
+        if (!seed.hasDrop()) {
+            return true;
+        }
+
+        seed.harvest(inventory);
+        return true;
     }
 
 
@@ -200,7 +192,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public boolean canHarvest(@NotNull CropPlayer player) {
-        return player.getPermissionFunctionality().has(PermissionKey.HARVEST);
+        return player.getPermissions().has(PermissionKey.CROP_HARVEST, getName());
     }
 
 
@@ -211,7 +203,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public boolean isHarvestable() {
-        return cropsConfig.get(ConfigurationKey.CROP_HARVESTABLE, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.CROP_HARVESTABLE, getName());
     }
 
 
@@ -222,7 +214,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public boolean isLinkable() {
-        return cropsConfig.get(ConfigurationKey.CROP_LINKABLE, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.CROP_LINKABLE, getName());
     }
 
 
@@ -249,7 +241,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public boolean shouldReplant() {
-        return cropsConfig.get(ConfigurationKey.CROP_SHOULD_REPLANT, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.CROP_SHOULD_REPLANT, getName());
     }
 
 
@@ -260,15 +252,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public void playSounds(@NotNull Block block) {
-        Sets.forEachWithIndex(cropsConfig.getKeys(ConfigurationKey.SOUNDS, getName()), (i, sound) -> {
-            long delay = cropsConfig.get(ConfigurationKey.SOUND_DELAY, getName(), sound);
-            double pitch = cropsConfig.get(ConfigurationKey.SOUND_PITCH, getName(), sound);
-            double volume = cropsConfig.get(ConfigurationKey.SOUND_VOLUME, getName(), sound);
-
-            scheduler.scheduleLater(new SoundTask(
-                    new Sound(sound, pitch, volume), block.getLocation()
-            ), delay * i);
-        });
+        cropManager.getAudioVisualFeatures().playSoundsAt(this, block);
     }
 
 
@@ -279,15 +263,7 @@ public abstract class AbstractCrop implements Crop {
      */
     @Override
     public void playParticles(@NotNull Block block) {
-        Sets.forEachWithIndex(cropsConfig.getKeys(ConfigurationKey.PARTICLES, getName()), (i, particle) -> {
-            long delay = cropsConfig.get(ConfigurationKey.PARTICLE_DELAY, getName(), particle);
-            int amount = cropsConfig.get(ConfigurationKey.PARTICLE_AMOUNT, getName(), particle);
-            double speed = cropsConfig.get(ConfigurationKey.PARTICLE_SPEED, getName(), particle);
-
-            scheduler.scheduleLater(new ParticleTask(
-                    new Particle(particle, amount, speed), block.getLocation()
-            ), delay * i);
-        });
+        cropManager.getAudioVisualFeatures().playParticlesAt(this, block);
     }
 
 

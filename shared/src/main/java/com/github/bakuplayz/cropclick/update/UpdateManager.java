@@ -21,14 +21,20 @@ package com.github.bakuplayz.cropclick.update;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
-import com.github.bakuplayz.cropclick.api.UpdateAPI;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.common.Versions;
-import com.github.bakuplayz.cropclick.common.http.HttpParam;
-import com.github.bakuplayz.cropclick.common.http.HttpRequestBuilder;
+import com.github.bakuplayz.cropclick.common.network.HttpParam;
+import com.github.bakuplayz.cropclick.common.network.HttpRequestBuilder;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
+import dev.bakuplayz.spigotstore.task.TaskContext;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+
+import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
 
 
 /**
@@ -38,7 +44,7 @@ import java.io.IOException;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class UpdateManager implements UpdateAPI {
+public final class UpdateManager {
 
     /**
      * The URL to the {@link CropClick CropClick's} update server.
@@ -47,13 +53,19 @@ public final class UpdateManager implements UpdateAPI {
 
     private final CropClick plugin;
 
+
     @Getter
     private final UpdateInfo info;
+
+    @Getter
+    private final NotificationFeatures notifications;
 
 
     public UpdateManager(@NotNull CropClick plugin) {
         this.info = new UpdateInfo("", "", "", UpdateState.NOT_FETCHED_YET);
+        this.notifications = new NotificationFeatures(plugin.getConfigManager().getDefaultConfig());
         this.plugin = plugin;
+
         start();
     }
 
@@ -75,13 +87,9 @@ public final class UpdateManager implements UpdateAPI {
                     return;
                 }
 
-                if (response.getState() == UpdateState.UP_TO_DATE) {
-                    info.resetTo(UpdateState.UP_TO_DATE);
-                    return;
-                }
-
-                if (response.getState() == UpdateState.NO_UPDATE_FOUND) {
-                    info.resetTo(UpdateState.NO_UPDATE_FOUND);
+                if (response.getState() == UpdateState.UP_TO_DATE || response.getState() == UpdateState.NO_UPDATE_FOUND) {
+                    Log.info("Searched for updates and found none. You are up to date :)");
+                    info.resetTo(response.getState());
                     return;
                 }
 
@@ -97,13 +105,15 @@ public final class UpdateManager implements UpdateAPI {
                 info.setTitle(title);
                 info.setMessage(message);
                 info.setState(UpdateState.NEW_UPDATE);
+                Log.info("Searched for updates and found one!");
             } catch (IOException e) {
-                Log.info("Update fetch failed. Make sure your online to keep CropClick up to date.");
+                Log.info("Failed to fetch update. Make sure your online to keep CropClick up to date.");
                 info.resetTo(UpdateState.FAILED_TO_FETCH);
                 return;
             }
-            // TODO: Send alert...
-        }, 0, 30 * 60 * 20);
+
+            notifications.alertConsole();
+        }, TaskContext.BACKGROUND, 0, 30 * 60 * 20);
     }
 
 
@@ -112,7 +122,6 @@ public final class UpdateManager implements UpdateAPI {
      *
      * @return true if it is, otherwise false.
      */
-    @Override
     public boolean isUpdated() {
         return getInfo().getState() == UpdateState.UP_TO_DATE;
     }
@@ -124,9 +133,54 @@ public final class UpdateManager implements UpdateAPI {
      * @return the local version of CropClick.
      */
     @NotNull
-    @Override
     public String getVersion() {
         return plugin.getDescription().getVersion();
+    }
+
+
+    @RequiredArgsConstructor
+    public final class NotificationFeatures {
+
+        @NotNull
+        private final DefaultConfig config;
+
+
+        public void alertPlayer(@NotNull Player player) {
+            if (!config.getBoolean(ConfigurationKey.UPDATE_MESSAGE_PLAYER)) {
+                return;
+            }
+
+            if (isUpdated()) {
+                Messages.readify("Searched for updates and found none. You are up to date :)", 10)
+                        .stream().map(Messages::colorize)
+                        .forEach(player::sendMessage);
+                return;
+            }
+
+            player.sendMessage("Searched for updates and found one!");
+            player.sendMessage(Messages.colorize(String.format("Title: &f%s", info.getTitle())));
+            player.sendMessage(Messages.colorize(String.format("Link: &f%s", info.getUrl())));
+            player.sendMessage(Messages.colorize(String.format("Message: &f%s", info.getMessage())));
+        }
+
+
+        public void alertConsole() {
+            if (!config.getBoolean(ConfigurationKey.UPDATE_MESSAGE_CONSOLE)) {
+                return;
+            }
+
+            if (isUpdated()) {
+                Log.info("Searched for updates and found none. You are up to date :)");
+                return;
+            }
+
+            Log.info("Searched for updates and found one!");
+            Log.info(Messages.colorize(String.format("Title: &f%s", info.getTitle())));
+            Log.info(Messages.colorize(String.format("Link: &f%s", info.getUrl())));
+            Log.info(Messages.colorize(String.format("Message: &f%s", info.getMessage())));
+        }
+
+
     }
 
 }

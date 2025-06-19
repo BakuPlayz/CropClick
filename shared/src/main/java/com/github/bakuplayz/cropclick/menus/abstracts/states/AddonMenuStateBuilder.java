@@ -28,6 +28,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.configurations.config.AddonsConfig.ConfigurationKey;
+
+
 /**
  * A class for creating and handling the {@link AbstractAddonMenu} state.
  *
@@ -43,17 +46,17 @@ public final class AddonMenuStateBuilder {
     }
 
 
-    public static class AddonMenuStateHandler extends MenuStateHandler<AddonMenuState, AbstractAddonMenu> {
+    public final static class AddonMenuStateHandler extends MenuStateHandler<AddonMenuState, AbstractAddonMenu> {
 
         private final AbstractAddon addon;
 
-        private final AddonsConfig addonsConfig;
+        private final AddonsConfig config;
 
 
         private AddonMenuStateHandler(@NotNull AbstractAddonMenu observer, @NotNull CropClick plugin, @NotNull AbstractAddon addon) {
             super(observer, new AddonMenuState(addon));
             this.addon = addon;
-            this.addonsConfig = plugin.getAddonsConfig();
+            this.config = plugin.getConfigManager().getAddonsConfig();
         }
 
 
@@ -66,7 +69,7 @@ public final class AddonMenuStateBuilder {
         protected <P> AddonMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == AddonMenuStateFlag.ADDON_STATE) {
                 state.setAddonEnabled(infer(partial));
-                addonsConfig.setAddonState(addon.getName(), infer(partial));
+                config.set(ConfigurationKey.ADDON_ENABLED, addon.getName(), infer(partial));
             }
 
             return state;

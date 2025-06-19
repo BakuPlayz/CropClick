@@ -24,13 +24,9 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.AddonFunctionality;
 import com.github.bakuplayz.cropclick.configurations.config.AddonsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -52,13 +48,10 @@ public abstract class AbstractAddon {
 
     protected transient final AddonsConfig addonsConfig;
 
-    private transient final List<String> banishedWorlds;
-
 
     public AbstractAddon(@NotNull CropClick plugin, @NotNull String name) {
         this.addonsConfig = plugin.getConfigManager().getAddonsConfig();
         this.cropsConfig = plugin.getConfigManager().getCropsConfig();
-        this.banishedWorlds = new ArrayList<>();
         this.plugin = plugin;
         this.name = name;
     }
@@ -92,16 +85,6 @@ public abstract class AbstractAddon {
      */
     public boolean isEnabled() {
         return addonsConfig.isEnabled(name);
-    }
-
-
-    /**
-     * Gets the amount of {@link FarmWorld farm worlds} where the {@link AbstractAddon extending addon} is banished.
-     *
-     * @return the amount of worlds where the addon is banished.
-     */
-    public int getAmountOfBanished() {
-        return banishedWorlds.size() + 1;
     }
 
 }

@@ -20,12 +20,15 @@
 package com.github.bakuplayz.cropclick.menus.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
 import com.github.bakuplayz.cropclick.menus.SettingsMenu;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
 
 
 /**
@@ -39,18 +42,18 @@ public final class SettingsStateBuilder {
 
     @NotNull
     public static SettingsMenuStateHandler createStateHandler(@NotNull SettingsMenu menu, @NotNull CropClick plugin) {
-        return new SettingsMenuStateHandler(menu, plugin);
+        return new SettingsMenuStateHandler(menu, plugin.getConfigManager().getDefaultConfig());
     }
 
 
-    public static class SettingsMenuStateHandler extends MenuStateHandler<SettingsMenuState, SettingsMenu> {
+    public final static class SettingsMenuStateHandler extends MenuStateHandler<SettingsMenuState, SettingsMenu> {
 
-        private final CropClick plugin;
+        private final DefaultConfig config;
 
 
-        private SettingsMenuStateHandler(@NotNull SettingsMenu observer, @NotNull CropClick plugin) {
-            super(observer, new SettingsMenuState(plugin));
-            this.plugin = plugin;
+        private SettingsMenuStateHandler(@NotNull SettingsMenu observer, @NotNull DefaultConfig config) {
+            super(observer, new SettingsMenuState(config));
+            this.config = config;
         }
 
 
@@ -63,7 +66,7 @@ public final class SettingsStateBuilder {
         protected <P> SettingsMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == SettingsMenuStateFlag.AUTOFARM_TOGGLE) {
                 state.setAutoFarmEnabled(infer(partial));
-                plugin.getAutofarmManager().setEnabled(infer(partial));
+                config.set(ConfigurationKey.AUTOFARMS_ENABLED, infer(partial));
             }
 
             return state;
@@ -78,8 +81,8 @@ public final class SettingsStateBuilder {
         private boolean isAutoFarmEnabled;
 
 
-        private SettingsMenuState(@NotNull CropClick plugin) {
-            this.isAutoFarmEnabled = plugin.getAutofarmManager().isEnabled();
+        private SettingsMenuState(@NotNull DefaultConfig config) {
+            this.isAutoFarmEnabled = config.getBoolean(ConfigurationKey.AUTOFARMS_ENABLED);
         }
 
     }

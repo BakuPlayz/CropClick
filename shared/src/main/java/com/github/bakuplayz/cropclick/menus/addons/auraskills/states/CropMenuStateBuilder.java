@@ -49,16 +49,16 @@ public final class CropMenuStateBuilder {
     }
 
 
-    public static class CropMenuStateHandler extends MenuStateHandler<CropMenuState, CropMenu> {
+    public final static class CropMenuStateHandler extends MenuStateHandler<CropMenuState, CropMenu> {
 
         private final Crop crop;
 
-        private final CropsConfig cropsConfig;
+        private final CropsConfig config;
 
 
         private CropMenuStateHandler(@NotNull CropMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
-            super(observer, new CropMenuState(plugin, crop));
-            this.cropsConfig = plugin.getCropsConfig();
+            super(observer, new CropMenuState(plugin.getConfigManager().getCropsConfig(), crop));
+            this.config = plugin.getConfigManager().getCropsConfig();
             this.crop = crop;
         }
 
@@ -77,7 +77,7 @@ public final class CropMenuStateBuilder {
         protected <P> CropMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == CropMenuStateFlag.EXPERIENCE_VALUE) {
                 state.setExperience(infer(partial));
-                cropsConfig.set(ConfigurationKey.SKILLS_EXPERIENCE, infer(partial), crop.getName());
+                config.set(ConfigurationKey.SKILLS_EXPERIENCE, infer(partial), crop.getName());
             }
 
             return state;
@@ -89,13 +89,13 @@ public final class CropMenuStateBuilder {
     @Setter
     public static final class CropMenuState extends AbstractCropMenuState {
 
-        private int experience;
+        private double experience;
 
 
-        private CropMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
+        private CropMenuState(@NotNull CropsConfig config, @NotNull Crop crop) {
             this.isCropHarvestable = crop.isHarvestable();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.experience = plugin.getCropsConfig().get(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName());
+            this.experience = config.getDouble(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName());
         }
 
     }

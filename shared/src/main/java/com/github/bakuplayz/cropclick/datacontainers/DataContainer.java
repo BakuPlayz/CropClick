@@ -38,5 +38,5 @@ public interface DataContainer<D> {
 
     @NotNull
     Collection<D> getMany();
-    
+
 }

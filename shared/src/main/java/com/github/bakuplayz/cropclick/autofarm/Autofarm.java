@@ -19,10 +19,7 @@
 
 package com.github.bakuplayz.cropclick.autofarm;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import lombok.EqualsAndHashCode;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -41,48 +38,37 @@ import java.util.UUID;
  * @version 2.0.0
  * @since 2.0.0
  */
+@Getter
 @ToString
-@EqualsAndHashCode
 public final class Autofarm {
 
     public final static UUID UNKNOWN_OWNER = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-    @Getter
     @NotNull
-    @JsonProperty(value = "farmer", required = true)
     private final UUID farmerId;
 
-    @Setter
-    @Getter
     @NotNull
-    @JsonProperty(value = "owner", required = true)
+    private final Location cropLocation;
+
+    @NotNull
+    private final Location containerLocation;
+
+    @NotNull
+    private final Location dispenserLocation;
+
+    @Nullable
+    private final Container container;
+
+    @Setter
+    @NotNull
     private UUID ownerId;
 
     @Setter
-    @Getter
     @Accessors(fluent = true)
-    @JsonProperty(value = "is_enabled", required = true)
     private boolean isEnabled;
 
-    @Setter
-    @Getter
-    @JsonProperty(value = "crop", required = true)
-    private Location cropLocation;
 
-    @Setter
-    @Getter
-    @JsonProperty(value = "container", required = true)
-    private Location containerLocation;
-
-    @Setter
-    @Getter
-    @JsonProperty(value = "dispenser", required = true)
-    private Location dispenserLocation;
-
-    private transient ContainerComponent container;
-
-
-    public Autofarm(
+    private Autofarm(
             @NotNull UUID farmerId,
             @NotNull UUID ownerId,
             boolean isEnabled,
@@ -90,6 +76,7 @@ public final class Autofarm {
             @NotNull Location containerLocation,
             @NotNull Location dispenserLocation
     ) {
+        this.container = Container.fromBlock(containerLocation.getBlock());
         this.dispenserLocation = dispenserLocation;
         this.containerLocation = containerLocation;
         this.cropLocation = cropLocation;
@@ -99,64 +86,38 @@ public final class Autofarm {
     }
 
 
+    @NotNull
+    public static Autofarm fromPlayer(
+            @NotNull CropPlayer player,
+            @NotNull Location crop,
+            @NotNull Location container,
+            @NotNull Location dispenser
+    ) {
+        return createBasic(UUID.randomUUID(), player.getPlayerUUID(), true, crop, container, dispenser);
+    }
+
+
+    @NotNull
+    public static Autofarm createBasic(
+            @NotNull UUID farmer,
+            @NotNull UUID owner,
+            boolean isEnabled,
+            @NotNull Location crop,
+            @NotNull Location container,
+            @NotNull Location dispenser
+    ) {
+        return new Autofarm(farmer, owner, isEnabled, crop, container, dispenser);
+    }
+
+
     /**
-     * Gets the shortened {@link #farmerId autofarmer ID}.
+     * Gets the shortened {@link #farmerId autofarm identification}.
      *
-     * @return the shortened autofarm ID.
+     * @return the shortened autofarm identification.
      */
     @NotNull
     public String getShortenedId() {
-        return farmerId.toString().substring(0, 7);
-    }
-
-
-    /**
-     * Gets the {@link #container} iff present, otherwise uses
-     * the Autofarm Manager to find it via its block location.
-     */
-    @Nullable
-    public ContainerComponent getContainer() {
-        if (container == null) {
-            container = AutofarmUtils.findContainer(containerLocation.getBlock());
-        }
-
-        return container;
-    }
-
-
-    /**
-     * Checks whether the {@link Autofarm autofarm} is linked.
-     *
-     * @return true if linked, otherwise false.
-     */
-    public boolean isLinked() {
-        return containerLocation != null && dispenserLocation != null && cropLocation != null;
-    }
-
-
-    /**
-     * TODO: Remove?
-     * * Checks whether the autofarm components are present.
-     *
-     * @param manager the manager to check with.
-     *
-     * @return true if all are present, otherwise false.
-     */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isComponentsPresent(@NotNull AutofarmManager manager) {
-        if (!isLinked()) {
-            return false;
-        }
-
-        if (!manager.isComponent(dispenserLocation.getBlock())) {
-            return false;
-        }
-
-        if (!manager.isComponent(containerLocation.getBlock())) {
-            return false;
-        }
-
-        return manager.isComponent(cropLocation.getBlock());
+        return farmerId.toString().substring(0, 8);
     }
 
 }

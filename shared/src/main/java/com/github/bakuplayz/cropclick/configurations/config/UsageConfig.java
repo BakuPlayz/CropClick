@@ -1,7 +1,7 @@
 /**
  * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
  * <p>
- * Copyright (C) 2023 BakuPlayz
+ * Copyright (C) 2024 BakuPlayz
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Instant;
 
-/**
- * A class representing the YAML file: 'usage.yml'.
- *
- * @author <a href="https://gitlab.com/hannesblaman">Hannes Blåman</a>
- * @version 2.0.0
- * @since 2.0.0
- */
 public final class UsageConfig extends AbstractConfiguration {
 
     public UsageConfig(@NotNull CropClick plugin) {
@@ -40,43 +34,31 @@ public final class UsageConfig extends AbstractConfiguration {
     }
 
 
-    /**
-     * Updates the usage information, used to handle legacy configuration.
-     */
-    public void updateUsageInfo() {
-        set(UsageConfig.ConfigurationKey.LAST_OPENED_IN, plugin.getDescription().getDescription());
-    }
-
-
-    /**
-     * Checks whether the current configuration format is the latest.
-     *
-     * @return true if it is, otherwise false.
-     */
-    public boolean isNewFormatVersion() {
-        String lastOpenedIn = get(UsageConfig.ConfigurationKey.LAST_OPENED_IN);
-        return !lastOpenedIn.startsWith("0") && !lastOpenedIn.startsWith("1");
-    }
-
-
     @Getter
-    @AllArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
-        LAST_OPENED_IN("last-opened-in", "");
+        HISTORY_VERSION("migration.history.%s.version", null),
+        HISTORY_STATUS("migration.history.%s.status", MigrationStatus.PENDING),
+        HISTORY_TIMESTAMP("migration.history.%s.timestamp", Instant.now().toString());
 
         @NotNull
         private final String path;
 
         private final Object defaultValue;
 
-        /*
-        @Nullable
-        private final ConversionFunction<Object> getter;
+    }
 
-        @Nullable
-        private final ConversionFunction<Object> setter;
-*/
+    public enum MigrationStatus {
+
+        COMPLETED,
+
+        FAILED,
+
+        PENDING,
+
+        IN_PROGRESS
+
     }
 
 }

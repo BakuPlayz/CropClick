@@ -20,19 +20,13 @@
 package com.github.bakuplayz.cropclick.autofarm;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.api.AutofarmAPI;
-import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
-import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
 
@@ -44,62 +38,27 @@ import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig
  * @version 2.0.0
  * @since 2.2.0
  */
-public final class AutofarmManager implements AutofarmAPI {
+public final class AutofarmManager {
+
+    private static final int MAX_AUTOFARMS_FETCH = 10_000;
 
 
-    private final CropManager cropManager;
+    private final DefaultConfig config;
 
-    private final DefaultConfig defaultConfig;
+    @Getter
+    private final AutofarmFinder finder;
+
+    @Getter
+    private final AutofarmBlocksCache blocksCache;
 
     private final AutofarmDataService dataService;
 
-    private final AutofarmFinder autofarmFinder;
-
 
     public AutofarmManager(@NotNull CropClick plugin) {
-        this.defaultConfig = plugin.getConfigManager().getDefaultConfig();
+        this.blocksCache = new AutofarmBlocksCache(plugin);
+        this.config = plugin.getConfigManager().getDefaultConfig();
         this.dataService = plugin.getDataManager().getAutofarmService();
-        this.cropManager = plugin.getCropManager();
-        this.autofarmFinder = new AutofarmFinder(dataService);
-    }
-
-
-    /**
-     * Finds the {@link Autofarm autofarm} based on the {@link Block provided block}.
-     *
-     * @param block the block to base the findings on.
-     *
-     * @return the found autofarm, otherwise null.
-     */
-    @Nullable
-    public Autofarm findAutofarm(@NotNull Block block) {
-        if (Blocks.isAir(block)) {
-            return null;
-        }
-
-        if (AutofarmUtils.hasCachedID(block)) {
-            String farmerID = AutofarmUtils.getCachedID(block);
-            return autofarmFinder.findById(farmerID);
-        }
-
-        if (AutofarmUtils.isDispenser(block)) {
-            return autofarmFinder.findByDispenser(block);
-        }
-
-        if (AutofarmUtils.isContainer(block)) {
-            return autofarmFinder.findByContainer(block);
-        }
-
-        if (AutofarmUtils.isCrop(cropManager, block)) {
-            return autofarmFinder.findByCrop(block);
-        }
-
-        Block blockAbove = block.getRelative(BlockFace.UP);
-        if (AutofarmUtils.isCrop(cropManager, blockAbove)) {
-            return autofarmFinder.findByCrop(blockAbove);
-        }
-
-        return null;
+        this.finder = new AutofarmFinder(dataService, plugin.getCropManager());
     }
 
 
@@ -109,27 +68,14 @@ public final class AutofarmManager implements AutofarmAPI {
      * @return the found autofarms.
      */
     @NotNull
-    public List<Autofarm> getAutofarms() {
-        return new ArrayList<>(dataService.getMany(0, 10000).join());
+    public CompletableFuture<List<Autofarm>> getAutofarms() {
+        return dataService.getMany(0, MAX_AUTOFARMS_FETCH);
     }
 
 
     /**
-     * Checks whether the {@link Autofarm autofarms} are enabled.
-     *
-     * @return true if they are, otherwise false.
-     */
-    public boolean isEnabled() {
-        return defaultConfig.get(ConfigurationKey.AUTOFARMS_ENABLED);
-    }
-
-
-    public void setEnabled(boolean isEnabled) {
-        defaultConfig.set(ConfigurationKey.AUTOFARMS_ENABLED, isEnabled);
-    }
-
-
-    /**
+     * TODO: Do something about, I don't like this one.
+     * <p>
      * Checks whether the {@link Autofarm provided autofarm} is usable.
      *
      * @param autofarm the autofarm to check.
@@ -138,16 +84,8 @@ public final class AutofarmManager implements AutofarmAPI {
      */
     public boolean isUsable(Autofarm autofarm) {
         if (autofarm == null) return false;
-        if (!autofarm.isLinked()) return false;
         if (!autofarm.isEnabled()) return false;
-        return isEnabled();
-    }
-
-
-    public boolean isComponent(@NotNull Block block) {
-        if (AutofarmUtils.isDispenser(block)) return true;
-        if (AutofarmUtils.isContainer(block)) return true;
-        return AutofarmUtils.isCrop(cropManager, block);
+        return config.getBoolean(ConfigurationKey.AUTOFARMS_ENABLED);
     }
 
 
@@ -156,8 +94,9 @@ public final class AutofarmManager implements AutofarmAPI {
      *
      * @return the amount of autofarms.
      */
-    public int getAmountOfFarms() {
-        return dataService.getMany(0, 10000).join().size();
+    @NotNull
+    public CompletableFuture<Integer> getAmountOfFarms() {
+        return dataService.countAll();
     }
 
 }

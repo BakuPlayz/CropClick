@@ -71,7 +71,7 @@ public final class Pumpkin extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 100);
+        return createDrop(1, 1.0d);
     }
 
 
@@ -140,7 +140,7 @@ public final class Pumpkin extends AbstractGroundCrop {
      */
     @Override
     public boolean isLinkable() {
-        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
+        return cropsConfig.getBooleanOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
 
     }
 

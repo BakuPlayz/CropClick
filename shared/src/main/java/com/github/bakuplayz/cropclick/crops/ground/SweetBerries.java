@@ -67,7 +67,7 @@ public final class SweetBerries extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(3, 80);
+        return createDrop(3, 0.80);
     }
 
 
@@ -80,6 +80,12 @@ public final class SweetBerries extends AbstractGroundCrop {
     @Override
     public Seed getSeed() {
         return null;
+    }
+
+
+    @Override
+    public boolean isAlreadyClickable() {
+        return true;
     }
 
 

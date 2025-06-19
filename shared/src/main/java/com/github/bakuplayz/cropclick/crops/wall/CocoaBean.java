@@ -77,7 +77,7 @@ public final class CocoaBean extends AbstractWallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(3, 80);
+        return createDrop(3, 0.80);
     }
 
 
@@ -112,7 +112,7 @@ public final class CocoaBean extends AbstractWallCrop {
      */
     @Override
     public boolean isLinkable() {
-        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
+        return cropsConfig.getBooleanOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
     }
 
 }

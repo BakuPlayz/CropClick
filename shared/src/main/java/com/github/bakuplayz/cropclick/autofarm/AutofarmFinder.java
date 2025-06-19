@@ -18,17 +18,73 @@
  */
 package com.github.bakuplayz.cropclick.autofarm;
 
+import com.github.bakuplayz.cropclick.common.Autofarms;
+import com.github.bakuplayz.cropclick.common.Blocks;
+import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import lombok.AllArgsConstructor;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * A class responsible for locating and retrieving {@link Autofarm Autofarms} based on
+ * identifiers such as crop block, container block, etc.
+ *
+ * @author BakuPlayz
+ * @version 3.0.0
+ * @since 3.2.0
+ */
 @AllArgsConstructor
 public final class AutofarmFinder {
 
     @NotNull
     private final AutofarmDataService service;
+
+    @NotNull
+    private final CropManager cropManager;
+
+
+    /**
+     * Finds the {@link Autofarm autofarm} based on the {@link Block provided block}.
+     *
+     * @param block the block to base the findings on.
+     *
+     * @return the found autofarm, otherwise null.
+     */
+    @Nullable
+    public CompletableFuture<Autofarm> findByBlock(@NotNull Block block) {
+        if (Blocks.isAir(block)) {
+            return null;
+        }
+
+        if (AutofarmBlocksCache.hasCachedID(block)) {
+            String farmerID = AutofarmBlocksCache.getCachedID(block);
+            return findById(farmerID);
+        }
+
+        if (Autofarms.isDispenser(block)) {
+            return findByDispenser(block);
+        }
+
+        if (Autofarms.isContainer(block)) {
+            return findByContainer(block);
+        }
+
+        if (Autofarms.isCrop(cropManager, block)) {
+            return findByCrop(block);
+        }
+
+        Block blockAbove = block.getRelative(BlockFace.UP);
+        if (Autofarms.isCrop(cropManager, blockAbove)) {
+            return findByCrop(blockAbove);
+        }
+
+        return null;
+    }
 
 
     /**
@@ -39,8 +95,8 @@ public final class AutofarmFinder {
      * @return the found autofarm, otherwise null.
      */
     @Nullable
-    public Autofarm findById(String farmerID) {
-        return farmerID == null ? null : service.getOne(farmerID).join();
+    public CompletableFuture<Autofarm> findById(String farmerID) {
+        return farmerID == null ? null : service.getOne(farmerID);
     }
 
 
@@ -52,8 +108,8 @@ public final class AutofarmFinder {
      * @return the found autofarm, otherwise null.
      */
     @Nullable
-    public Autofarm findByCrop(@NotNull Block block) {
-        return service.getOneByCrop(block.getLocation()).join();
+    public CompletableFuture<Autofarm> findByCrop(@NotNull Block block) {
+        return service.getOneByCrop(block.getLocation());
     }
 
 
@@ -65,8 +121,8 @@ public final class AutofarmFinder {
      * @return the found autofarm, otherwise null.
      */
     @Nullable
-    public Autofarm findByDispenser(@NotNull Block block) {
-        return service.getOneByDispenser(block.getLocation()).join();
+    public CompletableFuture<Autofarm> findByDispenser(@NotNull Block block) {
+        return service.getOneByDispenser(block.getLocation());
     }
 
 
@@ -77,8 +133,8 @@ public final class AutofarmFinder {
      *
      * @return the found autofarm, otherwise null.
      */
-    public Autofarm findByContainer(@NotNull Block block) {
-        return service.getOneByContainer(block.getLocation()).join();
+    public CompletableFuture<Autofarm> findByContainer(@NotNull Block block) {
+        return service.getOneByContainer(block.getLocation());
     }
 
 }

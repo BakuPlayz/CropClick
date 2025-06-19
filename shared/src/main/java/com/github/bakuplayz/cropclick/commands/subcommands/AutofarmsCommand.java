@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.AUTOFARM_DESCRIPTION;
+import static com.github.bakuplayz.cropclick.common.Languages.Command.AUTOFARM_DESCRIPTION;
 
 
 /**

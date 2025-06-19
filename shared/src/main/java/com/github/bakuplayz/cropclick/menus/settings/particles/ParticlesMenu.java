@@ -20,24 +20,25 @@ package com.github.bakuplayz.cropclick.menus.settings.particles;
 
 import com.cryptomorin.xseries.particles.XParticle;
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.ParticleConfigSection;
+import com.github.bakuplayz.cropclick.common.Messages;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractPaginatedMenu;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedStateHandler;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
-import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Particles menu.
@@ -50,20 +51,29 @@ public final class ParticlesMenu extends AbstractPaginatedMenu<BasicPaginatedMen
 
     private final Crop crop;
 
-    private final ParticleConfigSection particleSection;
+    private final CropsConfig config;
 
 
     public ParticlesMenu(@NotNull CropClick plugin, @NotNull Crop crop) {
         super(SOUNDS_TITLE.getTitle(plugin), plugin);
-        this.particleSection = plugin.getCropsConfig().getParticleSection();
+        this.config = plugin.getConfigManager().getCropsConfig();
         this.crop = crop;
     }
 
 
     @NotNull
     @Override
-    public BasicPaginatedStateHandler createStateHandler() {
+    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
         return new BasicPaginatedStateHandler(this);
+    }
+
+
+    @Override
+    public List<String> getPaginationItems() {
+        return Arrays.stream(XParticle.values())
+                       .filter(XParticle::isSupported)
+                       .map(XParticle::name)
+                       .collect(Collectors.toList());
     }
 
 
@@ -74,14 +84,6 @@ public final class ParticlesMenu extends AbstractPaginatedMenu<BasicPaginatedMen
     }
 
 
-    @Override
-    public List<String> getPaginationItems() {
-        return Arrays.stream(XParticle.values())
-                .map(XParticle::name)
-                .collect(Collectors.toList());
-    }
-
-
     @NotNull
     @Override
     public ItemAction getPaginatedItemAction(@NotNull String particle, int position) {
@@ -89,26 +91,37 @@ public final class ParticlesMenu extends AbstractPaginatedMenu<BasicPaginatedMen
     }
 
 
-    @AllArgsConstructor
     private class ParticleItem extends ClickableItem {
 
-        @NotNull
         private final String particle;
 
+        private final int order;
 
+        private final boolean isEnabled;
+
+
+        public ParticleItem(@NotNull String particle) {
+            this.order = config.getParticleOrder(crop, particle);
+            this.isEnabled = order != -1;
+            this.particle = particle;
+        }
+
+
+        @NotNull
         @Override
-        public void create() {
-            boolean isEnabled = particleSection.isEnabled(crop.getName(), particle);
-            String status = MessageUtils.getStatusMessage(plugin, isEnabled);
-            String name = MessageUtils.beautify(particle, true);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                String status = Messages.getStatusMessage(plugin, isEnabled);
+                String name = Messages.beautify(particle, true);
 
-            setMaterial(XMaterial.FIREWORK_ROCKET);
-            setName(PARTICLES_ITEM_NAME.get(plugin, name, status));
-            setMaterial(isEnabled, XMaterial.LIME_STAINED_GLASS_PANE);
+                setMaterial(XMaterial.FIREWORK_ROCKET);
+                setName(PARTICLES_ITEM_NAME.get(plugin, name, status));
+                setMaterial(isEnabled, XMaterial.LIME_STAINED_GLASS_PANE);
 
-            if (isEnabled) {
-                setLore(PARTICLES_ITEM_ORDER.get(plugin, particleSection.getOrder(crop.getName(), particle)));
-            }
+                if (isEnabled) {
+                    setLore(PARTICLES_ITEM_ORDER.get(plugin, order));
+                }
+            });
         }
 
     }

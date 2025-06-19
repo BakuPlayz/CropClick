@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Crops menu scoped for JobsReborn.
@@ -49,12 +49,12 @@ public final class CropsMenu extends AbstractCropsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        CropsConfig cropsConfig = plugin.getCropsConfig();
+        CropsConfig config = plugin.getConfigManager().getCropsConfig();
 
         return Arrays.asList(
-                CROPS_ITEM_JOBS_MONEY.get(plugin, cropsConfig.get(ConfigurationKey.JOBS_MONEY, crop.getName())),
-                CROPS_ITEM_JOBS_POINTS.get(plugin, cropsConfig.get(ConfigurationKey.JOBS_POINTS, crop.getName())),
-                CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, cropsConfig.get(ConfigurationKey.JOBS_EXPERIENCE, crop.getName()))
+                CROPS_ITEM_JOBS_MONEY.get(plugin, config.getDouble(ConfigurationKey.JOBS_MONEY, crop.getName())),
+                CROPS_ITEM_JOBS_POINTS.get(plugin, config.getDouble(ConfigurationKey.JOBS_POINTS, crop.getName())),
+                CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, config.getDouble(ConfigurationKey.JOBS_EXPERIENCE, crop.getName()))
         );
     }
 

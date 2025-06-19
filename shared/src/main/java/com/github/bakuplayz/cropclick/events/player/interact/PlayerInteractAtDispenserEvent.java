@@ -21,6 +21,7 @@ package com.github.bakuplayz.cropclick.events.player.interact;
 
 
 import com.github.bakuplayz.cropclick.CropPlayer;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +48,9 @@ public final class PlayerInteractAtDispenserEvent extends Event implements Cance
 
     private final Dispenser dispenser;
 
+    private final Autofarm autofarm;
+
+
     /**
      * Checks whether the event is cancelled or not.
      */
@@ -54,9 +58,10 @@ public final class PlayerInteractAtDispenserEvent extends Event implements Cance
     private boolean cancelled;
 
 
-    public PlayerInteractAtDispenserEvent(@NotNull CropPlayer player, @NotNull Dispenser dispenser) {
+    public PlayerInteractAtDispenserEvent(@NotNull CropPlayer player, @NotNull Dispenser dispenser, @NotNull Autofarm autofarm) {
         this.block = dispenser.getBlock();
         this.dispenser = dispenser;
+        this.autofarm = autofarm;
         this.player = player;
     }
 

@@ -27,8 +27,6 @@ import com.github.bakuplayz.cropclick.addons.mcmmo.MCMMOAddon;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.addons.residence.ResidenceAddon;
 import com.github.bakuplayz.cropclick.addons.towny.TownyAddon;
-import com.github.bakuplayz.cropclick.addons.worldguard.WorldGuardAddon;
-import com.github.bakuplayz.cropclick.api.AddonAPI;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,33 +42,24 @@ import java.util.List;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class AddonManager implements AddonAPI {
+@Getter
+public final class AddonManager {
 
     /**
      * A variable containing all the {@link AbstractAddon registed addons}.
      */
-    @Getter
     private final List<AbstractAddon> registeredAddons;
 
-    @Getter
     private MCMMOAddon mcMMOAddon;
 
-    @Getter
     private TownyAddon townyAddon;
 
-    @Getter
     private AuraSkillsAddon auraSkillsAddon;
 
-    @Getter
     private ResidenceAddon residenceAddon;
 
-    @Getter
     private JobsRebornAddon jobsRebornAddon;
 
-    @Getter
-    private WorldGuardAddon worldGuardAddon;
-
-    @Getter
     private OfflineGrowthAddon offlineGrowthAddon;
 
 
@@ -88,7 +77,6 @@ public final class AddonManager implements AddonAPI {
         this.auraSkillsAddon = new AuraSkillsAddon(plugin);
         this.residenceAddon = new ResidenceAddon(plugin);
         this.jobsRebornAddon = new JobsRebornAddon(plugin);
-        this.worldGuardAddon = new WorldGuardAddon(plugin);
         this.offlineGrowthAddon = new OfflineGrowthAddon(plugin);
 
         registerAddon(mcMMOAddon);
@@ -96,7 +84,6 @@ public final class AddonManager implements AddonAPI {
         registerAddon(auraSkillsAddon);
         registerAddon(residenceAddon);
         registerAddon(jobsRebornAddon);
-        registerAddon(worldGuardAddon);
         registerAddon(offlineGrowthAddon);
     }
 

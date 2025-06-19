@@ -22,7 +22,6 @@ package com.github.bakuplayz.cropclick.common;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -44,7 +43,7 @@ public final class Collections {
      * @return the list with the added or removed item.
      */
     @NotNull
-    public static <E> List<E> toggleItem(@NotNull List<E> list, @NotNull E item) {
+    public static <E> Collection<E> toggleItem(@NotNull Collection<E> list, @NotNull E item) {
         if (list.contains(item)) {
             list.remove(item);
         } else {

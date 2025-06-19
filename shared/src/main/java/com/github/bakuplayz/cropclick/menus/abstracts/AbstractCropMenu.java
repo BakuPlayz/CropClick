@@ -34,6 +34,7 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A class representing the Crop menu.
@@ -66,10 +67,10 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
         super(title);
         this.crop = crop;
         this.plugin = plugin;
-        this.cropsConfig = plugin.getCropsConfig();
         this.seed = crop.getSeed();
         this.hasSeed = crop.hasSeed();
         this.cropName = crop.getName();
+        this.cropsConfig = plugin.getConfigManager().getCropsConfig();
     }
 
 
@@ -93,7 +94,7 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
     }
 
-    public static class AbstractMenuStateFlag {
+    public final static class AbstractMenuStateFlag {
 
         public final static int CROP_STATE = 0x1;
 
@@ -112,10 +113,12 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
 
         @Override
-        public void create() {
-            setName(getName());
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setLore(getLore(getAfterValue(getStateValue(getState()))));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(getName());
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setLore(getLore(getAfterValue(getStateValue(getState()))));
+            });
         }
 
 
@@ -151,10 +154,12 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
 
 
         @Override
-        public void create() {
-            setName(getName());
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setLore(getLore(getAfterValue(getStateValue(getState()))));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(getName());
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setLore(getLore(getAfterValue(getStateValue(getState()))));
+            });
         }
 
 
@@ -200,11 +205,13 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
     protected abstract class AbstractCropItem extends ClickableStateItem<S> {
 
         @Override
-        public void create() {
-            setMaterial(crop.getMenuType());
-            setName(getName(crop.isHarvestable()));
-            setLore(getLore(getState().getCropValue()));
-            setMaterial(!crop.isHarvestable(), XMaterial.GRAY_STAINED_GLASS_PANE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(crop.getMenuType());
+                setName(getName(crop.isHarvestable()));
+                setLore(getLore(getState().getCropValue()));
+                setMaterial(!crop.isHarvestable(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            });
         }
 
 
@@ -257,11 +264,13 @@ public abstract class AbstractCropMenu<S extends AbstractCropMenu.AbstractCropMe
     protected abstract class AbstractSeedItem extends ClickableStateItem<S> {
 
         @Override
-        public void create() {
-            setMaterial(seed.getMenuType());
-            setName(getName(seed.isEnabled()));
-            setLore(getLore(getState().getSeedValue()));
-            setMaterial(!seed.isEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(seed.getMenuType());
+                setName(getName(seed.isEnabled()));
+                setLore(getLore(getState().getSeedValue()));
+                setMaterial(!seed.isEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            });
         }
 
 

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Maps {
+public final class Maps {
 
     @NotNull
     @SafeVarargs

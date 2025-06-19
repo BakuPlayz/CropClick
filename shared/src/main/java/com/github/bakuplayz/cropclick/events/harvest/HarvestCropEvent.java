@@ -23,6 +23,7 @@ import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -38,21 +39,19 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 @Getter
+@RequiredArgsConstructor
 public abstract class HarvestCropEvent extends Event implements Cancellable {
 
+    @NotNull
     private final Crop crop;
 
+    @NotNull
     private final Block block;
 
     /**
      * Checks whether the event is cancelled or not.
      */
-    private @Setter boolean cancelled;
-
-
-    public HarvestCropEvent(@NotNull Crop crop, @NotNull Block block) {
-        this.block = block;
-        this.crop = crop;
-    }
+    @Setter
+    private boolean cancelled;
 
 }

@@ -28,12 +28,14 @@ import com.github.bakuplayz.cropclick.menus.addons.jobsreborn.states.CropMenuSta
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.StateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Crop menu scoped for JobsReborn.
@@ -52,7 +54,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     @NotNull
     @Override
-    public CropMenuStateHandler createStateHandler() {
+    public CropMenuStateHandler createStateHandler(@NotNull Player player) {
         return CropMenuStateBuilder.createStateHandler(this, plugin, crop);
     }
 
@@ -105,7 +107,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @Override
         protected int getStateValue(@NotNull CropMenuState state) {
-            return state.getMoney();
+            return (int) state.getMoney();
         }
 
 
@@ -118,11 +120,14 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class MoneyItem extends StateItem<CropMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.GOLD_INGOT);
-            setLore(getLore(getState().getMoney()));
-            setName(JOBS_CROP_MONEY_ITEM_NAME.get(plugin));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.GOLD_INGOT);
+                setLore(getLore(getState().getMoney()));
+                setName(JOBS_CROP_MONEY_ITEM_NAME.get(plugin));
+            });
         }
 
 
@@ -132,9 +137,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         }
 
 
-        private @NotNull List<String> getLore(int value) {
+        @NotNull
+        private List<String> getLore(double value) {
             return JOBS_CROP_MONEY_ITEM_TIPS.getAsAppendList(plugin,
-                    JOBS_CROP_MONEY_ITEM_VALUE.get(plugin, value)
+                    JOBS_CROP_MONEY_ITEM_VALUE.get(plugin, (int) value)
             );
         }
 
@@ -164,7 +170,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @Override
         protected int getStateValue(@NotNull CropMenuState state) {
-            return state.getMoney();
+            return (int) state.getMoney();
         }
 
 
@@ -199,7 +205,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @Override
         protected int getStateValue(@NotNull CropMenuState state) {
-            return state.getPoints();
+            return (int) state.getPoints();
         }
 
 
@@ -212,11 +218,14 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class PointsItem extends StateItem<CropMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.GOLD_NUGGET);
-            setName(JOBS_CROP_POINTS_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getPoints()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.GOLD_NUGGET);
+                setName(JOBS_CROP_POINTS_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getPoints()));
+            });
         }
 
 
@@ -226,9 +235,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         }
 
 
-        private @NotNull List<String> getLore(int value) {
+        @NotNull
+        private List<String> getLore(double value) {
             return JOBS_CROP_POINTS_ITEM_TIPS.getAsAppendList(plugin,
-                    JOBS_CROP_POINTS_ITEM_VALUE.get(plugin, value)
+                    JOBS_CROP_POINTS_ITEM_VALUE.get(plugin, (int) value)
             );
         }
 
@@ -258,7 +268,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @Override
         protected int getStateValue(@NotNull CropMenuState state) {
-            return state.getPoints();
+            return (int) state.getPoints();
         }
 
 
@@ -293,7 +303,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @Override
         protected int getStateValue(@NotNull CropMenuState state) {
-            return state.getExperience();
+            return (int) state.getExperience();
         }
 
 
@@ -306,11 +316,14 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class ExperienceItem extends StateItem<CropMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.EXPERIENCE_BOTTLE);
-            setName(JOBS_CROP_EXPERIENCE_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getExperience()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.EXPERIENCE_BOTTLE);
+                setName(JOBS_CROP_EXPERIENCE_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getExperience()));
+            });
         }
 
 
@@ -320,9 +333,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         }
 
 
-        private @NotNull List<String> getLore(int value) {
+        @NotNull
+        private List<String> getLore(double value) {
             return JOBS_CROP_EXPERIENCE_ITEM_TIPS.getAsAppendList(plugin,
-                    JOBS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, value)
+                    JOBS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, (int) value)
             );
         }
 
@@ -352,7 +366,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @Override
         protected int getStateValue(@NotNull CropMenuState state) {
-            return state.getExperience();
+            return (int) state.getExperience();
         }
 
 

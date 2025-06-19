@@ -22,7 +22,9 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.spigotspin.menu.items.BackItem;
 import lombok.AllArgsConstructor;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.GENERAL_BACK_ITEM_NAME;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.GENERAL_BACK_ITEM_NAME;
 
 /**
  * A class representing the {@link BackItem} scoped for
@@ -39,9 +41,8 @@ public final class CustomBackItem extends BackItem {
 
 
     @Override
-    public void create() {
-        super.create();
-        setName(GENERAL_BACK_ITEM_NAME.get(plugin));
+    public CompletableFuture<Void> create() {
+        return super.create().thenAccept((s) -> setName(GENERAL_BACK_ITEM_NAME.get(plugin)));
     }
 
 }

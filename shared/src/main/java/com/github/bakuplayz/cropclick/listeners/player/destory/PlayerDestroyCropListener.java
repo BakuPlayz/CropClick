@@ -24,16 +24,16 @@ import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
-import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.common.Blocks;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
+import com.github.bakuplayz.cropclick.world.WorldManager;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -43,6 +43,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 
 /**
@@ -60,6 +62,8 @@ public final class PlayerDestroyCropListener implements Listener {
 
     private final AddonManager addonManager;
 
+    private final TaskScheduler taskScheduler;
+
     private final AutofarmManager autofarmManager;
 
     private final OfflineGrowthAddon growthAddon;
@@ -69,6 +73,7 @@ public final class PlayerDestroyCropListener implements Listener {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
+        this.taskScheduler = plugin.getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
         this.growthAddon = addonManager.getOfflineGrowthAddon();
     }
@@ -88,38 +93,38 @@ public final class PlayerDestroyCropListener implements Listener {
             return;
         }
 
-        Player player = event.getPlayer();
-        FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessible(world)) {
-            return;
-        }
-
-        if (!world.allowsPlayers()) {
-            return;
-        }
-
-        Crop crop = cropManager.findByBlock(block);
-        Crop cropAbove = cropManager.findByBlock(block.getRelative(BlockFace.UP));
-        if (crop == null) {
-            if (cropAbove == null) {
+        CropPlayer player = CropPlayer.fromPlayer(event.getPlayer());
+        worldManager.getFinder().findByPlayer(player).thenAccept(world -> taskScheduler.runTask(() -> {
+            if (!worldManager.isAccessible(world)) {
                 return;
             }
-            crop = cropAbove;
-        }
 
-        if (!PermissionUtils.canDestroyCrop(player, crop.getName())) {
-            return;
-        }
+            if (!world.allowsPlayers()) {
+                return;
+            }
 
-        CropPlayer cropPlayer = CropPlayer.of(player);
-        if (!cropPlayer.getAddonFunctionality().canModifyRegion()) {
-            event.setCancelled(true);
-            return;
-        }
+            Crop crop = cropManager.getFinder().findByBlock(block);
+            Crop cropAbove = cropManager.getFinder().findByBlock(block.getRelative(BlockFace.UP));
+            if (crop == null) {
+                if (cropAbove == null) {
+                    return;
+                }
+                crop = cropAbove;
+            }
 
-        Bukkit.getPluginManager().callEvent(
-                new PlayerDestroyCropEvent(crop, block, cropPlayer)
-        );
+            if (!player.getPermissions().has(PermissionKey.CROP_DESTROY, crop.getName())) {
+                return;
+            }
+
+            if (!player.getAddonFeatures().canModifyRegion()) {
+                event.setCancelled(true);
+                return;
+            }
+
+            Bukkit.getPluginManager().callEvent(
+                    new PlayerDestroyCropEvent(crop, block, player)
+            );
+        }, TaskContext.BUKKIT));
     }
 
 
@@ -130,8 +135,6 @@ public final class PlayerDestroyCropListener implements Listener {
      */
     @EventHandler
     public void onPlayerDestroyCrop(@NotNull PlayerDestroyCropEvent event) {
-        if (event.isCancelled()) return;
-
         Block block = event.getBlock();
         CropPlayer player = event.getPlayer();
 
@@ -139,17 +142,18 @@ public final class PlayerDestroyCropListener implements Listener {
             growthAddon.getFunctionality().unregisterCrop(block.getLocation());
         }
 
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
-        if (!autofarmManager.isUsable(autofarm)) {
-            event.setCancelled(true);
-            return;
-        }
+        autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> {
+            if (!autofarmManager.isUsable(autofarm)) {
+                event.setCancelled(true);
+                return;
+            }
 
-        Log.debug("{} (Player): Called the destroy crop event!", player.getBukkitPlayer().getName());
+            Log.debug("{0}: Called the destroy crop event.", Tag.PLAYER, player.getOfflinePlayer().getName());
 
-        Bukkit.getPluginManager().callEvent(
-                new PlayerUnlinkAutofarmEvent(player, autofarm)
-        );
+            Bukkit.getPluginManager().callEvent(
+                    new PlayerUnlinkAutofarmEvent(player, autofarm)
+            );
+        });
     }
 
 }

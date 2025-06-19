@@ -22,16 +22,17 @@ package com.github.bakuplayz.cropclick.listeners.autofarm.harvest;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmBlocksCache;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.common.AutofarmUtils;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.crops.MassHarvestable;
 import com.github.bakuplayz.cropclick.events.autofarm.harvest.AutofarmHarvestCropEvent;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.github.bakuplayz.cropclick.world.WorldManager;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
@@ -44,6 +45,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+import static com.github.bakuplayz.cropclick.Log.Tag;
+
 
 /**
  * A listener handling all the harvest {@link Crop crop} events caused by a {@link Autofarm}.
@@ -54,7 +57,8 @@ import java.util.HashMap;
  */
 public final class AutofarmHarvestCropListener implements Listener {
 
-    private final CropClick plugin;
+
+    private final TaskScheduler taskScheduler;
 
     private final CropManager cropManager;
 
@@ -73,7 +77,7 @@ public final class AutofarmHarvestCropListener implements Listener {
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
-        this.plugin = plugin;
+        this.taskScheduler = plugin.getTaskScheduler();
         this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 
@@ -92,55 +96,51 @@ public final class AutofarmHarvestCropListener implements Listener {
             return;
         }
 
-        FarmWorld world = worldManager.findByWorld(block.getWorld());
-        if (!worldManager.isAccessible(world)) {
-            return;
-        }
+        worldManager.getFinder().findByWorld(block.getWorld()).thenAccept(world -> autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> taskScheduler.runTask(() -> {
+            if (!worldManager.isAccessible(world)) {
+                return;
+            }
 
-        if (!world.allowsAutofarms()) {
-            return;
-        }
+            if (!world.allowsAutofarms()) {
+                return;
+            }
 
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
-        if (!autofarmManager.isUsable(autofarm)) {
-            return;
-        }
+            if (!autofarmManager.isUsable(autofarm)) {
+                return;
+            }
 
-        if (!autofarm.isEnabled()) {
-            return;
-        }
+            if (!autofarm.isEnabled()) {
+                return;
+            }
 
-        if (!autofarm.isLinked()) {
-            return;
-        }
+            if (!AutofarmBlocksCache.hasCachedID(block)) {
+                autofarmManager.getBlocksCache().addIDs(autofarm);
+            }
 
-        if (AutofarmUtils.hasCachedID(block)) {
-            AutofarmUtils.addCachedID(plugin, autofarm);
-        }
+            Block facing = findDispenserFacing(block);
+            Crop crop = cropManager.getFinder().findByBlock(facing);
+            if (crop == null) {
+                return;
+            }
 
-        Block facing = findDispenserFacing(block);
-        Crop crop = cropManager.findByBlock(facing);
-        if (crop == null) {
-            return;
-        }
+            if (harvestedCrops.containsKey(crop)) {
+                return;
+            }
 
-        if (harvestedCrops.containsKey(crop)) {
-            return;
-        }
+            if (!crop.isHarvestable()) {
+                return;
+            }
 
-        if (!crop.isHarvestable()) {
-            return;
-        }
+            if (!crop.isHarvestAge(facing)) {
+                return;
+            }
 
-        if (!crop.isHarvestAge(facing)) {
-            return;
-        }
+            harvestedCrops.put(crop, System.nanoTime());
 
-        harvestedCrops.put(crop, System.nanoTime());
-
-        Bukkit.getPluginManager().callEvent(
-                new AutofarmHarvestCropEvent(crop, facing, autofarm)
-        );
+            Bukkit.getPluginManager().callEvent(
+                    new AutofarmHarvestCropEvent(crop, facing, autofarm)
+            );
+        }, TaskContext.BUKKIT)));
     }
 
 
@@ -151,15 +151,17 @@ public final class AutofarmHarvestCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmHarvestCrop(@NotNull AutofarmHarvestCropEvent event) {
-        if (event.isCancelled()) return;
-
         Crop crop = event.getCrop();
         Block block = event.getBlock();
         Autofarm autofarm = event.getAutofarm();
-        ContainerComponent container = autofarm.getContainer();
+        Container container = autofarm.getContainer();
 
         harvestedCrops.remove(crop);
 
+        // We move the container check down to this point
+        // to prevent a race condition or inconsistent state,
+        // where a crop is marked as clicked but hasn't been removed
+        // from the clicked list yet. Blocking others from interacting with it.
         if (container == null) {
             return;
         }
@@ -171,7 +173,7 @@ public final class AutofarmHarvestCropListener implements Listener {
 
         crop.replant(block);
 
-        Log.debug(String.format("%s (Autofarm): Called the harvest event!", autofarm.getShortenedId()));
+        Log.debug("{0}: Called the harvest event.", Tag.AUTOFARM, autofarm.getShortenedId());
     }
 
 
@@ -190,7 +192,7 @@ public final class AutofarmHarvestCropListener implements Listener {
     }
 
 
-    private boolean tryHarvest(@NotNull Crop crop, @NotNull ContainerComponent container, @NotNull Block block) {
+    private boolean tryHarvest(@NotNull Crop crop, @NotNull Container container, @NotNull Block block) {
         if (crop instanceof MassHarvestable) {
             return ((MassHarvestable) crop).harvestAll(container, block);
         }

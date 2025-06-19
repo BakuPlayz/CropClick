@@ -19,12 +19,15 @@
 package com.github.bakuplayz.cropclick.menus.shared;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.spigotspin.SpigotSpin;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginationContext;
 import com.github.bakuplayz.spigotspin.menu.items.paginated.CurrentPageItem;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.GENERAL_CURRENT_PAGE_ITEM_NAME;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.GENERAL_CURRENT_PAGE_ITEM_NAME;
 
 
 /**
@@ -43,9 +46,8 @@ public final class CustomCurrentPageItem<S extends PaginatedMenuState> extends C
 
 
     @Override
-    public void create() {
-        super.create();
-        setName(getName(1));
+    public CompletableFuture<Void> create() {
+        return super.create().thenAccept(s -> setName(getName(1)));
     }
 
 
@@ -56,7 +58,7 @@ public final class CustomCurrentPageItem<S extends PaginatedMenuState> extends C
 
     @NotNull
     private String getName(int displayPage) {
-        return GENERAL_CURRENT_PAGE_ITEM_NAME.get(CropClick.getInstance(), displayPage);
+        return GENERAL_CURRENT_PAGE_ITEM_NAME.get((CropClick) SpigotSpin.Plugin.REF.getPlugin(), displayPage);
     }
 
 

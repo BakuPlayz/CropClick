@@ -26,7 +26,9 @@ import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Main menu.
@@ -65,13 +67,16 @@ public final class MainMenu extends AbstractPlainMenu {
 
     private final class CropsItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.WHEAT);
-            setName(MAIN_CROPS_ITEM_NAME.get(plugin));
-            setLore(MAIN_CROPS_ITEM_TIPS.getAsAppendList(plugin,
-                    MAIN_CROPS_ITEM_STATUS.get(plugin, plugin.getCropManager().getAmountOfCrops()))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.WHEAT);
+                setName(MAIN_CROPS_ITEM_NAME.get(plugin));
+                setLore(MAIN_CROPS_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_CROPS_ITEM_STATUS.get(plugin, plugin.getCropManager().getAmountOfCrops()))
+                );
+            });
         }
 
     }
@@ -79,50 +84,61 @@ public final class MainMenu extends AbstractPlainMenu {
     private final class AutofarmsItem extends ClickableItem {
 
         @Override
-        public void create() {
-            setMaterial(XMaterial.DISPENSER);
-            setName(MAIN_AUTOFARMS_ITEM_NAME.get(plugin));
-            setLore(MAIN_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                    MAIN_AUTOFARMS_ITEM_STATUS.get(plugin, plugin.getAutofarmManager().getAmountOfFarms()))
-            );
+        public CompletableFuture<Void> create() {
+            return plugin.getAutofarmManager().getAmountOfFarms().thenAccept(farms -> {
+                setMaterial(XMaterial.DISPENSER);
+                setName(MAIN_AUTOFARMS_ITEM_NAME.get(plugin));
+                setLore(MAIN_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_AUTOFARMS_ITEM_STATUS.get(plugin, farms))
+                );
+            });
         }
 
     }
 
     private final class UpdatesItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.ANVIL);
-            setName(MAIN_UPDATES_ITEM_NAME.get(plugin));
-            setLore(MAIN_UPDATES_ITEM_TIPS.getAsAppendList(plugin,
-                    MAIN_UPDATES_ITEM_STATE.get(plugin, plugin.getUpdateManager().getUpdateStateMessage()))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.ANVIL);
+                setName(MAIN_UPDATES_ITEM_NAME.get(plugin));
+                setLore(MAIN_UPDATES_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_UPDATES_ITEM_STATE.get(plugin, plugin.getUpdateManager().getInfo().getMessage()))
+                );
+            });
         }
 
     }
 
     private final class HelpItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.BOOK);
-            setName(MAIN_HELP_ITEM_NAME.get(plugin));
-            setLore(MAIN_HELP_ITEM_TIPS.getAsAppendList(plugin,
-                    MAIN_HELP_ITEM_STATUS.get(plugin, plugin.getCommandManager().getAmountOfCommands()))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.BOOK);
+                setName(MAIN_HELP_ITEM_NAME.get(plugin));
+                setLore(MAIN_HELP_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_HELP_ITEM_STATUS.get(plugin, plugin.getCommandManager().getAmountOfCommands()))
+                );
+            });
         }
 
     }
 
     private final class AddonsItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.ENDER_CHEST);
-            setName(MAIN_ADDONS_ITEM_NAME.get(plugin));
-            setLore(MAIN_ADDONS_ITEM_TIPS.getAsAppendList(plugin,
-                    MAIN_ADDONS_ITEM_STATUS.get(plugin, plugin.getAddonManager().getAmountOfAddons())));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.ENDER_CHEST);
+                setName(MAIN_ADDONS_ITEM_NAME.get(plugin));
+                setLore(MAIN_ADDONS_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_ADDONS_ITEM_STATUS.get(plugin, plugin.getAddonManager().getAmountOfAddons())));
+            });
         }
 
     }
@@ -132,13 +148,16 @@ public final class MainMenu extends AbstractPlainMenu {
         private final static int AMOUNT_OF_SETTINGS = 6;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.CHEST);
-            setName(MAIN_SETTINGS_ITEM_NAME.get(plugin));
-            setLore(MAIN_SETTINGS_ITEM_TIPS.getAsAppendList(plugin,
-                    MAIN_SETTINGS_ITEM_STATUS.get(plugin, AMOUNT_OF_SETTINGS))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.CHEST);
+                setName(MAIN_SETTINGS_ITEM_NAME.get(plugin));
+                setLore(MAIN_SETTINGS_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_SETTINGS_ITEM_STATUS.get(plugin, AMOUNT_OF_SETTINGS))
+                );
+            });
         }
 
     }

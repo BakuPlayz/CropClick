@@ -22,6 +22,7 @@ package com.github.bakuplayz.cropclick.autofarm.metadata;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import org.bukkit.metadata.LazyMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;
@@ -35,6 +36,12 @@ import java.util.concurrent.Callable;
  * @since 2.0.0
  */
 public final class AutofarmMetadata extends LazyMetadataValue {
+
+    /**
+     * The {@link MetadataValue meta key} for the cached {@link Autofarm#getFarmerId() farmer id}.
+     */
+    public static final String FARMER_ID_KEY = "farmerID";
+
 
     public AutofarmMetadata(@NotNull CropClick plugin, Callable<Object> lazyValue) {
         super(plugin, CacheStrategy.CACHE_AFTER_FIRST_EVAL, lazyValue);

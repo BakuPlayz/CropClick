@@ -67,7 +67,7 @@ public interface Seed {
      *
      * @return true if the seed was harvested, otherwise false.
      */
-    boolean harvest(@NotNull Inventory inventory);
+    void harvest(@NotNull Inventory inventory);
 
 
     /**
@@ -75,7 +75,8 @@ public interface Seed {
      *
      * @return the seed's menu type.
      */
-    @NotNull XMaterial getMenuType();
+    @NotNull
+    XMaterial getMenuType();
 
 
     /**

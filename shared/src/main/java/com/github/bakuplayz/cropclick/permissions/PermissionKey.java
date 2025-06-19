@@ -18,14 +18,15 @@
  */
 package com.github.bakuplayz.cropclick.permissions;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum PermissionKey {
 
+    COMMAND("cropclick.command.%s"),
     COMMAND_GENERAL("cropclick.command.general"),
 
     AUTOFARM_LINK("cropclick.autofarm.link"),
@@ -37,12 +38,16 @@ public enum PermissionKey {
     AUTOFARM_INTERACT_OTHERS("cropclick.autofarm.interact.others"),
     AUTOFARM_CLAIM("cropclick.autofarm.claim"),
 
-    PLANT("cropclick.plant."),
-    DESTROY("cropclick.destroy."),
-    HARVEST("cropclick.harvest.");
-
+    CROP_PLANT("cropclick.plant.%s"),
+    CROP_DESTROY("cropclick.destroy.%s"),
+    CROP_HARVEST("cropclick.harvest.%s");
 
     @NotNull
     private final String permission;
+
+
+    public String getPermission(Object @NotNull ... args) {
+        return String.format(permission, args);
+    }
 
 }

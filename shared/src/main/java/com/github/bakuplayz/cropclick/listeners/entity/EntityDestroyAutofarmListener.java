@@ -23,7 +23,12 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.common.Autofarms;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
+import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -36,6 +41,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.bakuplayz.cropclick.Log.Tag;
+import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
+
 
 /**
  * A listener handling all the {@link Entity} destroy {@link Autofarm} events.
@@ -46,11 +54,20 @@ import java.util.stream.Collectors;
  */
 public final class EntityDestroyAutofarmListener implements Listener {
 
+    private final DefaultConfig config;
+
+    private final CropManager cropManager;
+
     private final AutofarmManager autofarmManager;
+
+    private final TaskScheduler taskScheduler;
 
 
     public EntityDestroyAutofarmListener(@NotNull CropClick plugin) {
+        this.config = plugin.getConfigManager().getDefaultConfig();
         this.autofarmManager = plugin.getAutofarmManager();
+        this.taskScheduler = plugin.getTaskScheduler();
+        this.cropManager = plugin.getCropManager();
     }
 
 
@@ -63,27 +80,22 @@ public final class EntityDestroyAutofarmListener implements Listener {
     public void onEntityExplodeAutofarm(@NotNull EntityExplodeEvent event) {
         if (event.isCancelled()) return;
 
-        if (!autofarmManager.isEnabled()) {
+        if (!config.getBoolean(ConfigurationKey.AUTOFARMS_ENABLED)) {
             return;
         }
 
-        List<Block> explodedBlocks = event.blockList();
-        List<Block> explodedComponents = getExplodedComponents(explodedBlocks);
-        for (Block component : explodedComponents) {
-            Autofarm autofarm = autofarmManager.findAutofarm(component);
+        List<Block> components = getExplodedComponents(event.blockList());
+        for (Block component : components) {
+            autofarmManager.getFinder().findByBlock(component).thenAccept(autofarm -> {
+                if (autofarm == null) return;
 
-            if (autofarm == null) {
-                continue;
-            }
-
-            Log.debug(String.format(
-                    "%s (Entity): Called the destroy autofarm event!",
-                    event.getEntity().getName())
-            );
-
-            Bukkit.getPluginManager().callEvent(
-                    new AutofarmUnlinkEvent(autofarm)
-            );
+                taskScheduler.runTask(() -> {
+                    Log.debug("{0}: Called the destroy autofarm event for autofarm ({1}).", Tag.ENTITY, event.getEntity().getName(), autofarm.getFarmerId());
+                    Bukkit.getPluginManager().callEvent(
+                            new AutofarmUnlinkEvent(autofarm)
+                    );
+                }, TaskContext.BUKKIT);
+            });
         }
     }
 
@@ -95,9 +107,10 @@ public final class EntityDestroyAutofarmListener implements Listener {
      *
      * @return the components that exploded.
      */
-    private @NotNull List<Block> getExplodedComponents(@NotNull List<Block> explodedBlocks) {
+    @NotNull
+    private List<Block> getExplodedComponents(@NotNull List<Block> explodedBlocks) {
         return explodedBlocks.stream()
-                       .filter(autofarmManager::isComponent)
+                       .filter((block) -> Autofarms.isComponent(cropManager, block))
                        .collect(Collectors.toList());
     }
 

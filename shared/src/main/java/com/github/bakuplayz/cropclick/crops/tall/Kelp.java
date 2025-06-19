@@ -67,7 +67,7 @@ public final class Kelp extends AbstractTallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 100);
+        return createDrop(1, 1.0d);
     }
 
 

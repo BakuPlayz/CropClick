@@ -22,7 +22,7 @@ package com.github.bakuplayz.cropclick.crops.abstracts;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.MassHarvestable;
-import com.github.bakuplayz.cropclick.crops.algorithms.BottomTopTraversal;
+import com.github.bakuplayz.cropclick.crops.algorithms.AgeBottomTopTraversal;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractRoofCrop extends AbstractCrop implements MassHarvestable {
 
-    private final static BottomTopTraversal AGE_ALGORITHM = new BottomTopTraversal();
+    private final static AgeBottomTopTraversal AGE_ALGORITHM = new AgeBottomTopTraversal();
 
 
     public AbstractRoofCrop(@NotNull CropArguments arguments) {

@@ -23,23 +23,26 @@ import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.common.Maths;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.menus.settings.*;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.cropclick.menus.states.SettingsStateBuilder;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 import static com.github.bakuplayz.cropclick.menus.states.SettingsStateBuilder.*;
 
 /**
@@ -65,7 +68,7 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
     @NotNull
     @Override
-    public SettingsMenuStateHandler createStateHandler() {
+    public SettingsMenuStateHandler createStateHandler(@NotNull Player player) {
         return SettingsStateBuilder.createStateHandler(this, plugin);
     }
 
@@ -97,14 +100,18 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
         private final static int MAX_PLAYERS_COUNT = 999_999;
 
 
+        @NotNull
+
         @Override
-        public void create() {
-            setPlayer(viewers.get(0));
-            setMaterial(XMaterial.PLAYER_HEAD);
-            setName(SETTINGS_TOGGLE_ITEM_NAME.get(plugin));
-            setLore(SETTINGS_TOGGLE_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())
-            ));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setPlayer(viewers.get(0));
+                setMaterial(XMaterial.PLAYER_HEAD);
+                setName(SETTINGS_TOGGLE_ITEM_NAME.get(plugin));
+                setLore(SETTINGS_TOGGLE_ITEM_TIPS.getAsAppendList(plugin,
+                        SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())
+                ));
+            });
         }
 
 
@@ -118,49 +125,58 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
     private final class ParticlesItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.FIREWORK_ROCKET);
-            setName(SETTINGS_PARTICLES_ITEM_NAME.get(plugin));
-            setLore(SETTINGS_PARTICLES_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles()))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.FIREWORK_ROCKET);
+                setName(SETTINGS_PARTICLES_ITEM_NAME.get(plugin));
+                setLore(SETTINGS_PARTICLES_ITEM_TIPS.getAsAppendList(plugin,
+                        SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles()))
+                );
+            });
         }
 
 
         private int getAmountOfParticles() {
-            return XParticle.values().length;
+            return (int) Arrays.stream(XParticle.values()).filter(XParticle::isSupported).count();
         }
 
     }
 
     private final class SoundsItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.NOTE_BLOCK);
-            setName(SETTINGS_SOUNDS_ITEM_NAME.get(plugin));
-            setLore(SETTINGS_SOUNDS_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds()))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.NOTE_BLOCK);
+                setName(SETTINGS_SOUNDS_ITEM_NAME.get(plugin));
+                setLore(SETTINGS_SOUNDS_ITEM_TIPS.getAsAppendList(plugin,
+                        SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds()))
+                );
+            });
         }
 
 
         private int getAmountOfSounds() {
-            return XSound.values().length;
+            return (int) Arrays.stream(XSound.values()).filter(XSound::isSupported).count();
         }
 
     }
 
     private final class NameItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.NAME_TAG);
-            setName(SETTINGS_NAME_ITEM_NAME.get(plugin));
-            setLore(SETTINGS_NAME_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_NAME_ITEM_STATUS.get(plugin, getAmountOfRenamed()))
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.NAME_TAG);
+                setName(SETTINGS_NAME_ITEM_NAME.get(plugin));
+                setLore(SETTINGS_NAME_ITEM_TIPS.getAsAppendList(plugin,
+                        SETTINGS_NAME_ITEM_STATUS.get(plugin, getAmountOfRenamed()))
+                );
+            });
         }
 
 
@@ -174,11 +190,14 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
     private final class AutoFarmsItem extends ClickableStateItem<SettingsMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.DISPENSER);
-            setName(SETTINGS_AUTOFARMS_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().isAutoFarmEnabled()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.DISPENSER);
+                setName(SETTINGS_AUTOFARMS_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().isAutoFarmEnabled()));
+            });
         }
 
 
@@ -191,7 +210,7 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
         @NotNull
         private List<String> getLore(boolean state) {
             return SETTINGS_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, MessageUtils.getStatusMessage(plugin, state))
+                    SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state))
             );
         }
 
@@ -200,19 +219,19 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
     private final class WorldItem extends ClickableItem {
 
         @Override
-        public void create() {
-            setMaterial(XMaterial.GRASS_BLOCK);
-            setName(SETTINGS_WORLDS_ITEM_NAME.get(plugin));
-            setLore(SETTINGS_WORLDS_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished()))
-            );
+        public CompletableFuture<Void> create() {
+            return plugin.getWorldManager().getWorlds().thenAccept((worlds) -> {
+                setMaterial(XMaterial.GRASS_BLOCK);
+                setName(SETTINGS_WORLDS_ITEM_NAME.get(plugin));
+                setLore(SETTINGS_WORLDS_ITEM_TIPS.getAsAppendList(plugin,
+                        SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished(worlds)))
+                );
+            });
         }
 
 
-        private int getAmountOfBanished() {
-            return (int) plugin.getWorldManager().getWorlds().stream()
-                                 .filter(FarmWorld::isBanished)
-                                 .count();
+        private long getAmountOfBanished(@NotNull List<FarmWorld> worlds) {
+            return worlds.stream().filter(FarmWorld::isBanished).count();
         }
 
     }

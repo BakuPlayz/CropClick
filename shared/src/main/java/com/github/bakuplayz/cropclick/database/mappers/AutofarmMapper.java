@@ -20,11 +20,10 @@ package com.github.bakuplayz.cropclick.database.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarm.AutofarmFactory;
 import com.github.bakuplayz.cropclick.common.Maps;
-import com.github.bakuplayz.cropclick.database.DatabaseDialect;
-import com.github.bakuplayz.cropclick.database.EntityMapper;
-import com.github.bakuplayz.cropclick.database.LogicalType;
+import dev.bakuplayz.spigotstore.database.DatabaseDialect;
+import dev.bakuplayz.spigotstore.database.LogicalType;
+import dev.bakuplayz.spigotstore.database.entity.EntityMapper;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +50,7 @@ public final class AutofarmMapper implements EntityMapper<Autofarm> {
     @NotNull
     @Override
     public Autofarm toEntity(@NotNull ResultSet rs) throws SQLException, IOException {
-        return AutofarmFactory.createPlain(
+        return Autofarm.createBasic(
                 UUID.nameUUIDFromBytes(rs.getBytes(1)),
                 UUID.nameUUIDFromBytes(rs.getBytes(2)),
                 rs.getBoolean(3),

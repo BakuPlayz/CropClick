@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.github.bakuplayz.cropclick.crops.algorithms.TraversalAlgorithm.Direction;
+import static com.github.bakuplayz.cropclick.crops.algorithms.AgeTraversalAlgorithm.Direction;
 
 @Getter
 public class TraversalInput {
@@ -42,11 +42,11 @@ public class TraversalInput {
 
     private final Block block;
 
-    private final Function<Block, Boolean> filter;
-
     private final List<Block> resulting;
 
     private final List<Direction> directions;
+
+    private final Function<Block, Boolean> filter;
 
 
     public TraversalInput(@NotNull Block block, @NotNull Function<Block, Boolean> filter, @NotNull List<Block> resulting) {

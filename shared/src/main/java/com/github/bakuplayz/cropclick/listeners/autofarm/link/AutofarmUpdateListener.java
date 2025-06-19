@@ -19,11 +19,8 @@
 
 package com.github.bakuplayz.cropclick.listeners.autofarm.link;
 
-import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUpdateEvent;
@@ -32,6 +29,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 
 /**
@@ -43,13 +42,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AutofarmUpdateListener implements Listener {
 
-    private final AutofarmManager autofarmManager;
-
-
-    public AutofarmUpdateListener(@NotNull CropClick plugin) {
-        this.autofarmManager = plugin.getAutofarmManager();
-    }
-
 
     /**
      * Handles all the {@link Autofarm autofarm} update link events.
@@ -58,28 +50,14 @@ public final class AutofarmUpdateListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onAutofarmUpdate(@NotNull AutofarmUpdateEvent event) {
-        if (event.isCancelled()) return;
+        Log.debug("{0}: Called the update event.", Tag.AUTOFARM, event.getOldAutofarm().getShortenedId());
 
-        if (!autofarmManager.isEnabled()) {
-            event.setCancelled(true);
-            return;
-        }
-
-        Event unlinkEvent = new AutofarmUnlinkEvent(
-                event.getOldAutofarm()
+        Bukkit.getPluginManager().callEvent(
+                new AutofarmUnlinkEvent(event.getOldAutofarm())
         );
-
-        Event linkEvent = new AutofarmLinkEvent(
-                event.getNewAutofarm()
+        Bukkit.getPluginManager().callEvent(
+                new AutofarmLinkEvent(event.getNewAutofarm())
         );
-
-        Log.debug(String.format(
-                "%s (Autofarm): Called the update event!",
-                event.getOldAutofarm().getShortenedId())
-        );
-
-        Bukkit.getPluginManager().callEvent(unlinkEvent);
-        Bukkit.getPluginManager().callEvent(linkEvent);
     }
 
 }

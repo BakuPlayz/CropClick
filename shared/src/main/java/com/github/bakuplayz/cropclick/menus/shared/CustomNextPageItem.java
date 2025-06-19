@@ -19,12 +19,15 @@
 package com.github.bakuplayz.cropclick.menus.shared;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.spigotspin.SpigotSpin;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginationContext;
 import com.github.bakuplayz.spigotspin.menu.items.paginated.NextPageItem;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.GENERAL_NEXT_PAGE_ITEM_NAME;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.GENERAL_NEXT_PAGE_ITEM_NAME;
 
 /**
  * A class representing the {@link NextPageItem} scoped for
@@ -36,16 +39,16 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.GENERAL_N
  */
 public final class CustomNextPageItem<S extends PaginatedMenuState> extends NextPageItem<S> {
 
-
     public CustomNextPageItem(@NotNull PaginationContext context) {
         super(context);
     }
 
 
     @Override
-    public void create() {
-        super.create();
-        setName(GENERAL_NEXT_PAGE_ITEM_NAME.get(CropClick.getInstance()));
+    public CompletableFuture<Void> create() {
+        return super.create().thenAccept(s -> setName(
+                GENERAL_NEXT_PAGE_ITEM_NAME.get((CropClick) SpigotSpin.Plugin.REF.getPlugin()))
+        );
     }
 
 }

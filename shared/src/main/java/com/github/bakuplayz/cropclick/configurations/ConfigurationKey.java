@@ -28,5 +28,5 @@ public interface ConfigurationKey {
 
     @NotNull
     Object getDefaultValue();
-
+    
 }

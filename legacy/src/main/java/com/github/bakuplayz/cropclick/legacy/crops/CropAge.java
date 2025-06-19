@@ -20,17 +20,25 @@ package com.github.bakuplayz.cropclick.legacy.crops;
 
 import com.github.bakuplayz.cropclick.crops.CropAgeComponent;
 import lombok.NoArgsConstructor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.material.CocoaPlant;
 import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: Add comment.
+/**
+ * A class implementation for the retrieving the crop's age,
+ * imported using reflection during runtime for legacy versions (1.8-1.12.x).
+ */
 @NoArgsConstructor
 public final class CropAge implements CropAgeComponent {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void set(@NotNull Block block, int age) {
         BlockState state = block.getState();
@@ -50,8 +58,16 @@ public final class CropAge implements CropAgeComponent {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int get(@NotNull Block block) {
+        if (block.getType() == Material.COCOA) {
+            CocoaPlant cocoa = (CocoaPlant) block.getState().getData();
+            return cocoa.getSize().ordinal();
+        }
+
         return block.getState().getData().getData();
     }
 

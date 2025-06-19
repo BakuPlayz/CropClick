@@ -25,7 +25,7 @@ import com.github.bakuplayz.cropclick.menus.abstracts.states.LinkMenuStateBuilde
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.DISPENSER_LINK_TITLE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.DISPENSER_LINK_TITLE;
 
 /**
  * A class representing the Dispenser Link menu.

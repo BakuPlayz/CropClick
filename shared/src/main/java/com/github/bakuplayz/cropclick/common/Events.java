@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.common;
 
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.events.Event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -43,8 +44,8 @@ public final class Events {
      *
      * @return true if it did, otherwise false.
      */
-    public static boolean isLeftShift(@NotNull Player player, @NotNull Action action) {
-        return player.isSneaking() && isLeftClick(action);
+    public static boolean isLeftShift(@NotNull CropPlayer player, @NotNull Action action) {
+        return player.getOfflinePlayer().getPlayer().isSneaking() && isLeftClick(action);
     }
 
 
@@ -68,7 +69,7 @@ public final class Events {
      * @return true if it is, otherwise false.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isMainHand(EquipmentSlot hand) {
+    public static boolean isMainHand(@NotNull EquipmentSlot hand) {
         return hand == EquipmentSlot.HAND;
     }
 

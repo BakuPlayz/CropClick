@@ -20,16 +20,16 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
-import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.common.Blocks;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUnlinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.github.bakuplayz.cropclick.world.WorldManager;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -39,7 +39,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.UNLINK_ACTION_SUCCESS;
+import static com.github.bakuplayz.cropclick.Log.Tag;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.UNLINK_ACTION_SUCCESS;
 
 
 /**
@@ -53,17 +54,17 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
     private final CropClick plugin;
 
-    private final WorldManager worldManager;
+    private final TaskScheduler taskScheduler;
 
-    private final AddonManager addonManager;
+    private final WorldManager worldManager;
 
     private final AutofarmManager autofarmManager;
 
 
     public PlayerUnlinkAutofarmListener(@NotNull CropClick plugin) {
         this.autofarmManager = plugin.getAutofarmManager();
+        this.taskScheduler = plugin.getTaskScheduler();
         this.worldManager = plugin.getWorldManager();
-        this.addonManager = plugin.getAddonManager();
         this.plugin = plugin;
     }
 
@@ -82,32 +83,28 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
             return;
         }
 
-        Player player = event.getPlayer();
-        if (!PermissionUtils.canUnlinkFarm(player)) {
-            return;
-        }
+        CropPlayer player = CropPlayer.fromPlayer(event.getPlayer());
+        worldManager.getFinder().findByPlayer(player).thenAccept(world -> autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> taskScheduler.runTask(() -> {
+            if (!worldManager.isAccessible(world)) {
+                return;
+            }
 
-        FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessible(world)) {
-            return;
-        }
+            if (!player.getAddonFeatures().canModifyRegion()) {
+                return;
+            }
 
-        if (!addonManager.canModifyRegion(player)) {
-            return;
-        }
+            if (!autofarmManager.isUsable(autofarm)) {
+                return;
+            }
 
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
-        if (!autofarmManager.isUsable(autofarm)) {
-            return;
-        }
+            if (!player.getPermissions().canUnlink(autofarm)) {
+                return;
+            }
 
-        if (!PermissionUtils.canUnlinkOthersFarm(player, autofarm)) {
-            return;
-        }
-
-        Bukkit.getPluginManager().callEvent(
-                new PlayerUnlinkAutofarmEvent(player, autofarm)
-        );
+            Bukkit.getPluginManager().callEvent(
+                    new PlayerUnlinkAutofarmEvent(player, autofarm)
+            );
+        }, TaskContext.BUKKIT)));
     }
 
 
@@ -118,17 +115,9 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
-        if (event.isCancelled()) return;
+        UNLINK_ACTION_SUCCESS.send(plugin, event.getPlayer());
 
-        Player player = event.getPlayer();
-        if (!PermissionUtils.canUnlinkFarm(player)) {
-            event.setCancelled(true);
-            return;
-        }
-
-        UNLINK_ACTION_SUCCESS.send(plugin, player);
-
-        Log.debug(String.format("%s (Player): Called the unlinked event!", player.getName()));
+        Log.debug("{0}: Called the unlink event.", Tag.PLAYER, event.getPlayer().getOfflinePlayer().getName());
 
         Bukkit.getPluginManager().callEvent(
                 new AutofarmUnlinkEvent(event.getAutofarm())

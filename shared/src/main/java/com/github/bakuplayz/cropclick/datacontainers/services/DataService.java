@@ -108,4 +108,7 @@ public interface DataService<D> {
      */
     CompletableFuture<Boolean> reset();
 
+
+    CompletableFuture<Boolean> reload();
+
 }

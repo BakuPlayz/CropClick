@@ -65,7 +65,7 @@ public final class Potato extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(4, 80);
+        return createDrop(4, 0.80);
     }
 
 

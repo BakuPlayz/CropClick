@@ -19,24 +19,26 @@
 package com.github.bakuplayz.cropclick.menus.settings.worlds;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.settings.states.WorldStateBuilder;
 import com.github.bakuplayz.cropclick.menus.settings.states.WorldStateBuilder.WorldMenuState;
 import com.github.bakuplayz.cropclick.menus.settings.states.WorldStateBuilder.WorldMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.settings.states.WorldStateBuilder.WorldMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.common.ViewerMap;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 
 /**
@@ -62,7 +64,7 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
     @NotNull
     @Override
-    public WorldMenuStateHandler createStateHandler() {
+    public WorldMenuStateHandler createStateHandler(@NotNull Player player) {
         return WorldStateBuilder.createStateHandler(this, world);
     }
 
@@ -89,12 +91,15 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
         private final ViewerMap viewers;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setPlayer(viewers.get(0));
-            setMaterial(XMaterial.PLAYER_HEAD);
-            setLore(getLore(world.allowsPlayers()));
-            setName(WORLD_PLAYERS_ITEM_NAME.get(plugin));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setPlayer(viewers.get(0));
+                setMaterial(XMaterial.PLAYER_HEAD);
+                setLore(getLore(world.allowsPlayers()));
+                setName(WORLD_PLAYERS_ITEM_NAME.get(plugin));
+            });
         }
 
 
@@ -115,15 +120,18 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
     private final class WorldItem extends ClickableStateItem<WorldMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            String name = MessageUtils.beautify(world.getName(), true);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                String name = Messages.beautify(world.getName(), true);
 
-            setMaterial(XMaterial.GRASS_BLOCK);
-            setName(WORLDS_ITEM_NAME.get(plugin, name));
-            setLore(getLore(world.isBanished()));
-            setMaterial(world.getName().equals("world_the_end"), XMaterial.END_STONE);
-            setMaterial(world.getName().equals("world_nether"), XMaterial.NETHERRACK);
+                setMaterial(XMaterial.GRASS_BLOCK);
+                setName(WORLDS_ITEM_NAME.get(plugin, name));
+                setLore(getLore(world.isBanished()));
+                setMaterial(world.getName().equals("world_the_end"), XMaterial.END_STONE);
+                setMaterial(world.getName().equals("world_nether"), XMaterial.NETHERRACK);
+            });
         }
 
 
@@ -145,11 +153,14 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
     private final class AutofarmsItem extends ClickableStateItem<WorldMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.DISPENSER);
-            setName(WORLD_AUTOFARMS_ITEM_NAME.get(plugin));
-            setLore(getLore(world.allowsAutofarms()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.DISPENSER);
+                setName(WORLD_AUTOFARMS_ITEM_NAME.get(plugin));
+                setLore(getLore(world.allowsAutofarms()));
+            });
         }
 
 

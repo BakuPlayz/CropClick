@@ -42,8 +42,8 @@ public final class MCMMOFunctionality implements AddonFunctionality {
      */
     public void addExperience(@NotNull OfflinePlayer player, @NotNull Crop crop) {
         ExperienceAPI.addRawXP(player.getPlayer(), "Herbalism",
-                config.get(ConfigurationKey.MCMMO_EXPERIENCE, crop.getName()),
-                config.get(ConfigurationKey.MCMMO_REASON, crop.getName())
+                config.getFloat(ConfigurationKey.MCMMO_EXPERIENCE, crop.getName()),
+                config.getString(ConfigurationKey.MCMMO_REASON, crop.getName())
         );
     }
 

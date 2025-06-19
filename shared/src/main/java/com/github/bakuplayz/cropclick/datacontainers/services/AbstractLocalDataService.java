@@ -18,11 +18,13 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.datacontainers.AbstractDataContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -40,8 +42,8 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
     protected final AbstractDataContainer<D> dataContainer;
 
 
-    public AbstractLocalDataService(@NotNull String fileName, @NotNull CropClick plugin) {
-        this.dataContainer = new AbstractDataContainer<>(fileName, plugin);
+    public AbstractLocalDataService(@NotNull String fileName, @NotNull TypeReference<Map<String, D>> reference, @NotNull CropClick plugin) {
+        this.dataContainer = new AbstractDataContainer<>(fileName, reference, plugin);
     }
 
 
@@ -149,6 +151,12 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
      */
     public CompletableFuture<Boolean> reset() {
         dataContainer.reset();
+        return CompletableFuture.completedFuture(true);
+    }
+
+
+    public CompletableFuture<Boolean> reload() {
+        dataContainer.reload();
         return CompletableFuture.completedFuture(true);
     }
 

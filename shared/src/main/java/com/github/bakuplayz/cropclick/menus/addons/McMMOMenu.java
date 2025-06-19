@@ -20,7 +20,7 @@ package com.github.bakuplayz.cropclick.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.mcmmo.MCMMOAddon;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractAddonMenu;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.CropsMenu;
@@ -29,7 +29,9 @@ import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the mcMMO menu.
@@ -38,7 +40,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
  * @version 2.2.0
  * @since 2.2.0
  */
-public class McMMOMenu extends AbstractAddonMenu {
+public final class McMMOMenu extends AbstractAddonMenu {
 
     public McMMOMenu(@NotNull CropClick plugin) {
         super(MCMMO_TITLE.getTitle(plugin), plugin, MCMMOAddon.NAME);
@@ -57,19 +59,22 @@ public class McMMOMenu extends AbstractAddonMenu {
     private final class ToggleItem extends AbstractToggleItem {
 
 
+        @NotNull
         @Override
-        public void create() {
-            setName(getName());
-            setMaterial(getMaterial());
-            setLore(ADDON_MCMMO_ITEM_TIPS.getAsList(plugin));
-            setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(getName());
+                setMaterial(getMaterial());
+                setLore(ADDON_MCMMO_ITEM_TIPS.getAsList(plugin));
+                setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            });
         }
 
 
         @NotNull
         @Override
         protected String getName() {
-            return ADDON_MCMMO_ITEM_NAME.get(plugin, MessageUtils.getStatusMessage(plugin, getState().isAddonEnabled()));
+            return ADDON_MCMMO_ITEM_NAME.get(plugin, Messages.getStatusMessage(plugin, getState().isAddonEnabled()));
         }
 
 

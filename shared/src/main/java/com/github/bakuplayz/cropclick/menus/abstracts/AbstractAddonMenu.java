@@ -27,9 +27,12 @@ import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Addon menu.
@@ -56,9 +59,10 @@ public abstract class AbstractAddonMenu extends AbstractStateMenu<AddonMenuState
 
 
     @Override
-    public AddonMenuStateHandler createStateHandler() {
+    public AddonMenuStateHandler createStateHandler(@NotNull Player player) {
         return AddonMenuStateBuilder.createStateHandler(this, plugin, addon);
     }
+
 
     protected abstract static class AbstractToggleItem extends ClickableStateItem<AddonMenuState> {
 
@@ -79,12 +83,14 @@ public abstract class AbstractAddonMenu extends AbstractStateMenu<AddonMenuState
     public final class WorldsItem extends ClickableItem {
 
         @Override
-        public void create() {
-            setMaterial(XMaterial.GRASS_BLOCK);
-            setName(ADDON_WORLDS_ITEM_NAME.get(plugin));
-            setLore(ADDON_WORLDS_ITEM_TIPS.getAsAppendList(plugin, ADDON_WORLDS_ITEM_STATUS.get(
-                    plugin, addon == null ? 0 : addon.getAmountOfBanished()))
-            );
+        public CompletableFuture<Void> create() {
+            return plugin.getWorldManager().getWorlds().thenAccept(worlds -> {
+                setMaterial(XMaterial.GRASS_BLOCK);
+                setName(ADDON_WORLDS_ITEM_NAME.get(plugin));
+                setLore(ADDON_WORLDS_ITEM_TIPS.getAsAppendList(plugin, ADDON_WORLDS_ITEM_STATUS.get(
+                        plugin, addon == null ? 0 : worlds.stream().filter(w -> w.isAddonBanished(addon)).count()))
+                );
+            });
         }
 
     }
@@ -92,11 +98,14 @@ public abstract class AbstractAddonMenu extends AbstractStateMenu<AddonMenuState
     public final class CropsItem extends ClickableItem {
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.WHEAT);
-            setName(ADDON_CROP_SETTINGS_ITEM_NAME.get(plugin));
-            setLore(ADDON_CROP_SETTINGS_ITEM_TIPS.getAsList(plugin));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.WHEAT);
+                setName(ADDON_CROP_SETTINGS_ITEM_NAME.get(plugin));
+                setLore(ADDON_CROP_SETTINGS_ITEM_TIPS.getAsList(plugin));
+            });
         }
 
     }

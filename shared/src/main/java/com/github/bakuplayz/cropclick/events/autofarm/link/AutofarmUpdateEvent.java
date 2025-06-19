@@ -22,6 +22,7 @@ package com.github.bakuplayz.cropclick.events.autofarm.link;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +36,13 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 @Getter
+@RequiredArgsConstructor
 public final class AutofarmUpdateEvent extends Event implements Cancellable {
 
+    @NotNull
     private final Autofarm oldAutofarm;
 
+    @NotNull
     private final Autofarm newAutofarm;
 
     /**
@@ -46,11 +50,5 @@ public final class AutofarmUpdateEvent extends Event implements Cancellable {
      */
     @Setter
     private boolean cancelled;
-
-
-    public AutofarmUpdateEvent(@NotNull Autofarm oldAutofarm, @NotNull Autofarm newAutofarm) {
-        this.oldAutofarm = oldAutofarm;
-        this.newAutofarm = newAutofarm;
-    }
-
+    
 }

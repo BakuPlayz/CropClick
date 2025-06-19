@@ -1,0 +1,40 @@
+####################################################################################
+#                                                                                  #
+#   $$$$$$\                                 $$$$$$\  $$\ $$\           $$\         #
+#  $$  __$$\                               $$  __$$\ $$ |\__|          $$ |        #
+#  $$ /  \__| $$$$$$\   $$$$$$\   $$$$$$\  $$ /  \__|$$ |$$\  $$$$$$$\ $$ |  $$\   #
+#  $$ |      $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |$$ |$$  _____|$$ | $$  |  #
+#  $$ |      $$ |  \__|$$ /  $$ |$$ /  $$ |$$ |      $$ |$$ |$$ /      $$$$$$  /   #
+#  $$ |  $$\ $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$\ $$ |$$ |$$ |      $$  _$$<    #
+#  \$$$$$$  |$$ |      \$$$$$$  |$$$$$$$  |\$$$$$$  |$$ |$$ |\$$$$$$$\ $$ | \$$\   #
+#   \______/ \__|       \______/ $$  ____/  \______/ \__|\__| \_______|\__|  \__|  #
+#                                $$ |                                              #
+#                                $$ |                                              #
+#                                \__|                                              #
+#                                                                                  #
+####################################################################################
+#                                                                                  #
+#   DEVELOPER CONTACT:                                                             #
+#                                                                                  #
+#   You can reach me via the links below. May it be an issue with CropClick        #
+#   or anything code related you can find me here:                                 #
+#                                                                                  #
+#   Discord: https://discord.gg/HqQqz2Z (Faster replies)                           #
+#   Spigot: https://www.spigotmc.org/resources/cropclick.69480/                    #
+#                                                                                  #
+####################################################################################
+#                                                                                  #
+#   USAGE:                                                                         #
+#                                                                                  #
+#   This configuration is used to change the connection options to a connected     #
+#   database. You can connect to one of these: MYSQL, MARIADB, POSTGRES or just    #
+#   stay at the default: SQLITE.                                                   #
+#                                                                                  #
+####################################################################################
+
+dialect: 'SQLITE'
+password: 'password'
+username: 'username'
+database: 'cropclick'
+host: '127.0.0.1'
+port: 3306

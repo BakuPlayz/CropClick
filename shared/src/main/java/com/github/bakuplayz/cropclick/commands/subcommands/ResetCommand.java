@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Command.*;
 
 
 /**

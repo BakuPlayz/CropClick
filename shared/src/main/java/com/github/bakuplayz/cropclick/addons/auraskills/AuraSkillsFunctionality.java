@@ -37,7 +37,7 @@ public final class AuraSkillsFunctionality implements AddonFunctionality {
 
     public void addExperience(@NotNull OfflinePlayer player, @NotNull Crop crop) {
         SkillsUser user = AuraSkillsApi.get().getUser(player.getUniqueId());
-        user.addSkillXp(Skills.FARMING, config.get(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName()));
+        user.addSkillXp(Skills.FARMING, config.getDouble(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName()));
     }
 
 }

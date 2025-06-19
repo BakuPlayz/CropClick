@@ -19,20 +19,21 @@
 package com.github.bakuplayz.cropclick.menus.crops.chance;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.crops.states.ChanceStateBuilder;
 import com.github.bakuplayz.cropclick.menus.crops.states.ChanceStateBuilder.ChanceMenuState;
 import com.github.bakuplayz.cropclick.menus.crops.states.ChanceStateBuilder.ChanceMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Chance menu.
@@ -51,7 +52,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
 
     @NotNull
     @Override
-    public ChanceMenuStateHandler createStateHandler() {
+    public ChanceMenuStateHandler createStateHandler(@NotNull Player player) {
         return ChanceStateBuilder.createStateHandler(this, plugin, crop);
     }
 
@@ -106,11 +107,11 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     }
 
     private final class CropItem extends AbstractCropItem {
-        
+
         @NotNull
         @Override
         protected String getName(boolean isHarvestable) {
-            String name = MessageUtils.beautify(cropName, false);
+            String name = Messages.beautify(cropName, false);
             String status = isHarvestable
                                     ? CROP_STATUS_ENABLED.get(plugin)
                                     : CROP_STATUS_DISABLED.get(plugin);
@@ -193,8 +194,8 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @NotNull
         @Override
         protected String getName(boolean state) {
-            String name = MessageUtils.beautify(seed.getName(), false);
-            String status = MessageUtils.getStatusMessage(plugin, state);
+            String name = Messages.beautify(seed.getName(), false);
+            String status = Messages.getStatusMessage(plugin, state);
             return DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status);
         }
 

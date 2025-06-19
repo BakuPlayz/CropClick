@@ -26,22 +26,24 @@ import com.github.bakuplayz.cropclick.addons.AddonManager;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.common.Events;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.events.player.plant.PlayerPlantCropEvent;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
+import com.github.bakuplayz.cropclick.world.WorldManager;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 /**
  * A listener handling all the {@link Crop crop} plant events caused by a {@link Player}.
@@ -58,6 +60,8 @@ public final class PlayerPlantCropListener implements Listener {
 
     private final WorldManager worldManager;
 
+    private final TaskScheduler taskScheduler;
+
     private final OfflineGrowthAddon growthAddon;
 
 
@@ -65,6 +69,7 @@ public final class PlayerPlantCropListener implements Listener {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
+        this.taskScheduler = plugin.getTaskScheduler();
         this.growthAddon = addonManager.getOfflineGrowthAddon();
     }
 
@@ -75,39 +80,39 @@ public final class PlayerPlantCropListener implements Listener {
      * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerPlaceCrop(@NotNull PlayerInteractEvent event) {
+    public void onPlayerPlaceCrop(@NotNull BlockPlaceEvent event) {
         if (Versions.hasMainHand() && !Events.isMainHand(event.getHand())) {
             return;
         }
 
-        Block block = event.getClickedBlock();
+        Block block = event.getBlock();
         if (Blocks.isAir(block)) {
             return;
         }
 
-        Player player = event.getPlayer();
-        FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessible(world)) {
-            return;
-        }
+        CropPlayer player = CropPlayer.fromPlayer(event.getPlayer());
+        worldManager.getFinder().findByPlayer(player).thenAccept(world -> taskScheduler.runTask(() -> {
+            if (!worldManager.isAccessible(world)) {
+                return;
+            }
 
-        CropPlayer cropPlayer = new CropPlayer(player);
-        if (!cropPlayer.canModifyRegion()) {
-            return;
-        }
+            if (!player.getAddonFeatures().canModifyRegion()) {
+                return;
+            }
 
-        Crop crop = cropManager.findByBlock(block);
-        if (crop == null) {
-            return;
-        }
+            Crop crop = cropManager.getFinder().findByBlock(block);
+            if (crop == null) {
+                return;
+            }
 
-        if (!PermissionUtils.canPlantCrop(player, crop.getName())) {
-            return;
-        }
+            if (!player.getPermissions().has(PermissionKey.CROP_PLANT, crop.getName())) {
+                return;
+            }
 
-        Bukkit.getPluginManager().callEvent(
-                new PlayerPlantCropEvent(crop, block, new CropPlayer(player))
-        );
+            Bukkit.getPluginManager().callEvent(
+                    new PlayerPlantCropEvent(crop, block, player)
+            );
+        }, TaskContext.BUKKIT));
     }
 
 
@@ -118,9 +123,7 @@ public final class PlayerPlantCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPlantCrop(@NotNull PlayerPlantCropEvent event) {
-        if (event.isCancelled()) return;
-
-        Log.debug("{} (Player): Called the plant crop event!", event.getPlayer().getBukkitPlayer().getName());
+        Log.debug("{0}: Called the plant crop event.", Tag.PLAYER, event.getPlayer().getOfflinePlayer().getName());
 
         if (addonManager.isInstalledAndEnabled(growthAddon)) {
             growthAddon.getFunctionality().registerCrop(event.getBlock().getLocation());

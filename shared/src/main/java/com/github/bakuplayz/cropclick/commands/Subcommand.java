@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.commands;
 
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,21 +63,9 @@ public interface Subcommand {
      */
     @NotNull
     default String getPermission() {
-        return String.format("cropclick.command.%s", getName());
+        return PermissionKey.COMMAND.getPermission(getName());
     }
-
-
-    /**
-     * Checks whether the provided player has permission to perform the implementing command.
-     *
-     * @param player the player to check.
-     *
-     * @return true if it has, otherwise false.
-     */
-    default boolean hasPermission(@NotNull Player player) {
-        return player.hasPermission(getPermission());
-    }
-
+    
 
     /**
      * Performs the implementing command.

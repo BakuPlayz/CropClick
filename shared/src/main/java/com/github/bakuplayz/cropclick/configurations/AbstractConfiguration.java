@@ -25,15 +25,19 @@ import com.github.bakuplayz.cropclick.common.Strings;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 
@@ -60,25 +64,159 @@ public abstract class AbstractConfiguration implements Configuration {
 
 
     public AbstractConfiguration(@NotNull CropClick plugin, @NotNull String fileName) {
-        this.plugin = plugin;
         this.fileName = fileName;
+        this.plugin = plugin;
+
         create();
     }
 
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T get(@NotNull ConfigurationKey key, @NotNull String... args) {
+    public String getString(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getStringOrDefault(key, (String) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public String getStringOrDefault(@NotNull ConfigurationKey key, String def, @NotNull String... args) {
         String path = Strings.replace(key.getPath(), "%s", args);
-        return (T) getConfiguration().get(path, key.getDefaultValue());
+        return getConfiguration().getString(path, def);
+    }
+
+
+    @Override
+    public Object getObject(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getObjectOrDefault(key, key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public Object getObjectOrDefault(@NotNull ConfigurationKey key, Object def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return getConfiguration().get(path, key.getDefaultValue());
+    }
+
+
+    @Override
+    public double getDouble(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getDoubleOrDefault(key, (double) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public double getDoubleOrDefault(@NotNull ConfigurationKey key, double def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return getConfiguration().getDouble(path, def);
+    }
+
+
+    @Override
+    public float getFloat(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getFloatOrDefault(key, (float) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public float getFloatOrDefault(@NotNull ConfigurationKey key, float def, @NotNull String... args) {
+        return (float) getDoubleOrDefault(key, def, args);
+    }
+
+
+    @Override
+    public long getLong(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getLongOrDefault(key, (long) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public long getLongOrDefault(@NotNull ConfigurationKey key, long def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return getConfiguration().getLong(path, def);
+    }
+
+
+    @Override
+    public int getInt(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getIntOrDefault(key, (int) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public int getIntOrDefault(@NotNull ConfigurationKey key, int def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return getConfiguration().getInt(path, def);
+    }
+
+
+    @Override
+    public boolean getBoolean(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getBooleanOrDefault(key, (boolean) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public boolean getBooleanOrDefault(@NotNull ConfigurationKey key, boolean def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return getConfiguration().getBoolean(path, def);
     }
 
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getOrDefault(@NotNull ConfigurationKey key, T def, @NotNull String... args) {
+    public <T> List<T> getList(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getListOrDefault(key, (List<T>) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getListOrDefault(@NotNull ConfigurationKey key, @NotNull List<T> def, @NotNull String... args) {
         String path = Strings.replace(key.getPath(), "%s", args);
-        return (T) getConfiguration().get(path, def);
+        return (List<T>) getConfiguration().getList(path, def);
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Enum<T>> T getEnum(@NotNull ConfigurationKey key, @NotNull Class<T> enumClass, @NotNull String... args) {
+        return getEnumOrDefault(key, enumClass, (T) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public <T extends Enum<T>> T getEnumOrDefault(@NotNull ConfigurationKey key, @NotNull Class<T> enumClass, @NotNull T def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        String value = getConfiguration().getString(path);
+
+        if (value != null) {
+            try {
+                return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException ignored) {
+                Log.severe("Invalid enum value, fallbacks to default.");
+            }
+        }
+
+        return def;
+    }
+
+
+    @Override
+    public Location getLocation(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getLocationOrDefault(key, (Location) key.getDefaultValue(), args);
+    }
+
+
+    @Override
+    public Location getLocationOrDefault(@NotNull ConfigurationKey key, @Nullable Location def, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return (Location) configuration.get(path, def);
+    }
+
+
+    @Override
+    public boolean isNull(@NotNull ConfigurationKey key, @NotNull String... args) {
+        String path = Strings.replace(key.getPath(), "%s", args);
+        return getConfiguration().get(path) == null;
     }
 
 
@@ -87,7 +225,7 @@ public abstract class AbstractConfiguration implements Configuration {
     public Set<String> getKeys(@NotNull ConfigurationKey key, @NotNull String... args) {
         String path = Strings.replace(key.getPath(), "%s", args);
         ConfigurationSection section = getConfiguration().getConfigurationSection(path);
-        return section == null ? Collections.emptySet() : section.getKeys(true);
+        return section == null ? Collections.emptySet() : section.getKeys(false);
     }
 
 
@@ -105,6 +243,19 @@ public abstract class AbstractConfiguration implements Configuration {
     }
 
 
+    @Override
+    public <T> void setWithReload(@NotNull ConfigurationKey key, T data, @NotNull String... args) {
+        set(key, data, args);
+        setConfiguration(YamlConfiguration.loadConfiguration(file));
+    }
+
+
+    @Override
+    public int countKeys(@NotNull ConfigurationKey key, @NotNull String... args) {
+        return getKeys(key, args).size();
+    }
+
+
     /**
      * Creates the configuration, iff not present.
      */
@@ -118,9 +269,9 @@ public abstract class AbstractConfiguration implements Configuration {
                 plugin.saveResource(fileName, true);
             }
         } catch (IOException exception) {
-            Log.severe("Could not setup %s.", fileName);
+            Log.severe("Could not setup {0}.", fileName);
         } finally {
-            Log.info("Loading {}.", fileName);
+            Log.info("Loading {0}.", fileName);
         }
     }
 
@@ -132,7 +283,7 @@ public abstract class AbstractConfiguration implements Configuration {
     public void reload() {
         setFile(getNewFileInstance());
         setConfiguration(YamlConfiguration.loadConfiguration(file));
-        Log.info("Reloading {}.", fileName);
+        Log.info("Reloading {0}.", fileName);
     }
 
 
@@ -144,7 +295,7 @@ public abstract class AbstractConfiguration implements Configuration {
         try {
             getConfiguration().save(file);
         } catch (IOException exception) {
-            Log.severe("Could not save %s.", fileName);
+            Log.severe("Could not save {0}.", fileName);
         }
     }
 
@@ -158,7 +309,7 @@ public abstract class AbstractConfiguration implements Configuration {
             Files.deleteIfExists(file.toPath());
             create();
         } catch (IOException exception) {
-            Log.severe("Could not reset %s.", fileName);
+            Log.severe("Could not reset {0}.", fileName);
         }
     }
 

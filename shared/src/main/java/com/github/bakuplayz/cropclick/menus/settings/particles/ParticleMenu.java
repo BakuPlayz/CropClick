@@ -19,26 +19,28 @@
 package com.github.bakuplayz.cropclick.menus.settings.particles;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.types.Particle;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleStateBuilder;
 import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleStateBuilder.ParticleMenuState;
 import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleStateBuilder.ParticleMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.settings.particles.states.ParticleStateBuilder.ParticleMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.models.Particle;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Particle menu.
@@ -87,7 +89,7 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
     @NotNull
     @Override
-    public ParticleMenuStateHandler createStateHandler() {
+    public ParticleMenuStateHandler createStateHandler(@NotNull Player player) {
         return ParticleStateBuilder.createStateHandler(this, plugin, crop, particleName);
     }
 
@@ -130,11 +132,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Delay"));
-            setLore(getLore(getState().getDelay()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Delay"));
+                setLore(getLore(getState().getDelay()));
+            });
         }
 
 
@@ -159,11 +164,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
     private final class DelayItem extends ClickableStateItem<ParticleMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.CLOCK);
-            setName(PARTICLE_DELAY_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getDelay()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.CLOCK);
+                setName(PARTICLE_DELAY_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getDelay()));
+            });
         }
 
 
@@ -188,11 +196,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Delay"));
-            setLore(getLore(getState().getDelay()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Delay"));
+                setLore(getLore(getState().getDelay()));
+            });
         }
 
 
@@ -221,11 +232,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Speed"));
-            setLore(getLore(getState().getSpeed()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Speed"));
+                setLore(getLore(getState().getSpeed()));
+            });
         }
 
 
@@ -250,11 +264,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
     private final class SpeedItem extends ClickableStateItem<ParticleMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.FEATHER);
-            setName(PARTICLE_SPEED_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getSpeed()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.FEATHER);
+                setName(PARTICLE_SPEED_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getSpeed()));
+            });
         }
 
 
@@ -279,11 +296,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Speed"));
-            setLore(getLore(getState().getSpeed()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Speed"));
+                setLore(getLore(getState().getSpeed()));
+            });
         }
 
 
@@ -312,11 +332,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Amount"));
-            setLore(getLore(getState().getAmount()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Amount"));
+                setLore(getLore(getState().getAmount()));
+            });
         }
 
 
@@ -341,11 +364,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
     private final class AmountItem extends ClickableStateItem<ParticleMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.CHEST);
-            setName(PARTICLE_AMOUNT_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getAmount()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.CHEST);
+                setName(PARTICLE_AMOUNT_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getAmount()));
+            });
         }
 
 
@@ -370,11 +396,14 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Amount"));
-            setLore(getLore(getState().getAmount()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Amount"));
+                setLore(getLore(getState().getAmount()));
+            });
         }
 
 
@@ -399,12 +428,15 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
     private final class IncreaseOrderItem extends ClickableStateItem<ParticleMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(PARTICLE_INCREASE_ORDER_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE);
-            setLore(getLore(getState().getOrder(), getState().getMaxOrder()));
-            setViewState(getViewState(getState().getOrder(), getState().getMaxOrder()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(PARTICLE_INCREASE_ORDER_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE);
+                setLore(getLore(getState().getOrder(), getState().getMaxOrder()));
+                setViewState(getViewState(getState().getOrder(), getState().getMaxOrder()));
+            });
         }
 
 
@@ -439,12 +471,15 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
     private final class DecreaseOrderItem extends ClickableStateItem<ParticleMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setLore(getLore(getState().getOrder()));
-            setViewState(getViewState(getState().getOrder()));
-            setName(PARTICLE_DECREASE_ORDER_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.HEAVY_WEIGHTED_PRESSURE_PLATE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setLore(getLore(getState().getOrder()));
+                setViewState(getViewState(getState().getOrder()));
+                setName(PARTICLE_DECREASE_ORDER_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.HEAVY_WEIGHTED_PRESSURE_PLATE);
+            });
         }
 
 

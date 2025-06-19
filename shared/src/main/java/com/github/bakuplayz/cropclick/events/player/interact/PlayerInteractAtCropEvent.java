@@ -21,6 +21,7 @@ package com.github.bakuplayz.cropclick.events.player.interact;
 
 
 import com.github.bakuplayz.cropclick.CropPlayer;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
@@ -51,6 +52,8 @@ public final class PlayerInteractAtCropEvent extends Event implements Cancellabl
 
     @NotNull
     private final CropPlayer player;
+
+    private final Autofarm autofarm;
 
     /**
      * Checks whether the event is cancelled or not.

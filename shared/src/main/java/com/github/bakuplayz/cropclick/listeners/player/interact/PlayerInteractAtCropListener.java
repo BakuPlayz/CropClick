@@ -20,11 +20,11 @@
 package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmBlocksCache;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.menus.links.CropLinkMenu;
@@ -34,6 +34,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 
 /**
@@ -63,10 +65,7 @@ public final class PlayerInteractAtCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtCrop(@NotNull PlayerInteractAtCropEvent event) {
-        if (event.isCancelled()) return;
-
         Crop crop = event.getCrop();
-
         if (!crop.isHarvestable()) {
             event.setCancelled(true);
             return;
@@ -78,23 +77,16 @@ public final class PlayerInteractAtCropListener implements Listener {
         }
 
         Block block = event.getBlock();
-        Player player = event.getPlayer();
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
+        CropPlayer player = event.getPlayer();
+        Autofarm autofarm = event.getAutofarm();
 
-        if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (AutofarmUtils.hasCachedID(block)) {
-                AutofarmUtils.addCachedID(plugin, autofarm);
-            }
+        if (!AutofarmBlocksCache.hasCachedID(block)) {
+            autofarmManager.getBlocksCache().addIDs(autofarm);
         }
 
-        Log.debug(String.format("%s (Player): Called the interact at crop event!", player.getName()));
+        Log.debug("{0}: Called the interact at crop event.", Tag.PLAYER, player.getOfflinePlayer().getName());
 
-        new CropLinkMenu(plugin, autofarm, block, false).open(player);
+        new CropLinkMenu(plugin, autofarm, block, false).open(player.getOfflinePlayer().getPlayer());
     }
 
 }

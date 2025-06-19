@@ -66,7 +66,7 @@ public final class Beetroot extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(2, 80);
+        return createDrop(2, 0.80);
     }
 
 

@@ -20,10 +20,11 @@
 package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -53,18 +54,18 @@ public final class LanguageConfig extends AbstractConfiguration {
      */
     @NotNull
     public String getMessage(@NotNull String category, @NotNull String subcategory, @NotNull String key, boolean colorize) {
-        String message = get(LanguageConfig.ConfigurationKey.LANGUAGE_KEY, category, subcategory, key);
+        String message = getString(ConfigurationKey.LANGUAGE_KEY, category, subcategory, key);
 
         if (message == null) {
             return subcategory.equals("title") ? "&cError" : "&cError: Message is null!";
         }
 
-        return colorize ? MessageUtils.colorize(message) : message;
+        return colorize ? Messages.colorize(message) : message;
     }
 
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         LANGUAGE_KEY("%s.%s.%s", null);

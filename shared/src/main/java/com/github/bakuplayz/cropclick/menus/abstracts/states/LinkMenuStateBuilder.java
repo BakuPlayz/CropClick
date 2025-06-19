@@ -20,12 +20,11 @@ package com.github.bakuplayz.cropclick.menus.abstracts.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarm.AutofarmFactory;
-import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
+import com.github.bakuplayz.cropclick.common.Autofarms;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractLinkMenu;
-import com.github.bakuplayz.spigotspin.menu.common.ViewerMap;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
@@ -40,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.LINK_ACTION_FAILURE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.LINK_ACTION_FAILURE;
 
 /**
  * A class for creating and handling the {@link AbstractLinkMenu} state.
@@ -49,7 +48,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.LINK_ACTI
  * @version 2.2.0
  * @since 2.2.0
  */
-public class LinkMenuStateBuilder {
+public final class LinkMenuStateBuilder {
 
     @NotNull
     public static LinkMenuStateHandler createStateHandler(
@@ -57,10 +56,10 @@ public class LinkMenuStateBuilder {
             @NotNull CropClick plugin,
             @Nullable Autofarm autofarm,
             @NotNull Block block,
-            @NotNull ViewerMap viewers,
+            @NotNull Player player,
             @NotNull LinkContext context
     ) {
-        return new LinkMenuStateHandler(menu, plugin, autofarm, block, viewers, context);
+        return new LinkMenuStateHandler(menu, plugin, autofarm, block, CropPlayer.fromPlayer(player), context);
     }
 
 
@@ -76,14 +75,14 @@ public class LinkMenuStateBuilder {
 
     }
 
-    public static class LinkMenuStateHandler extends MenuStateHandler<LinkMenuState, AbstractLinkMenu> {
+    public final static class LinkMenuStateHandler extends MenuStateHandler<LinkMenuState, AbstractLinkMenu> {
 
 
         private final Block block;
 
         private final Autofarm autofarm;
 
-        private final ViewerMap viewers;
+        private final CropPlayer player;
 
         private final CropClick plugin;
 
@@ -93,13 +92,13 @@ public class LinkMenuStateBuilder {
                 @NotNull CropClick plugin,
                 @Nullable Autofarm autofarm,
                 @NotNull Block block,
-                @NotNull ViewerMap viewers,
+                @NotNull CropPlayer player,
                 @NotNull LinkContext context
         ) {
-            super(observer, new LinkMenuState(autofarm, block, context, plugin.getAutofarmManager(), viewers));
+            super(observer, new LinkMenuState(autofarm, block, player, context));
             this.autofarm = autofarm;
-            this.viewers = viewers;
             this.plugin = plugin;
+            this.player = player;
             this.block = block;
         }
 
@@ -141,15 +140,13 @@ public class LinkMenuStateBuilder {
             Location container = state.getContainerLocation();
             Location dispenser = state.getDispenserLocation();
 
-            CropPlayer player = CropPlayer.of(viewers.get(0));
-            player.getAutofarmFunctionality().deselectComponents();
+            player.getAutofarmFeatures().deselectComponents();
+            player.getOfflinePlayer().getPlayer().closeInventory();
 
-            viewers.get(0).closeInventory();
+            Autofarm autofarm = Autofarm.fromPlayer(player, crop, container, dispenser);
 
-            Autofarm autofarm = AutofarmFactory.createDefault(viewers.get(0), crop, container, dispenser);
-
-            if (!autofarm.isComponentsPresent(plugin.getAutofarmManager())) {
-                LINK_ACTION_FAILURE.send(plugin, viewers.get(0));
+            if (!Autofarms.areComponents(plugin.getCropManager(), crop.getBlock(), container.getBlock(), dispenser.getBlock())) {
+                LINK_ACTION_FAILURE.send(plugin, player);
                 return;
             }
 
@@ -168,7 +165,7 @@ public class LinkMenuStateBuilder {
 
             if (flag == LinkMenuStateFlag.UNCLAIMED_STATE) {
                 state.setUnclaimed(infer(partial));
-                autofarm.setOwnerId(viewers.get(0).getUniqueId());
+                autofarm.setOwnerId(player.getPlayerUUID());
             }
 
             if (flag == LinkMenuStateFlag.UNLINKED_STATE) {
@@ -176,14 +173,12 @@ public class LinkMenuStateBuilder {
             }
 
             if (flag == LinkMenuStateFlag.CROP_SELECTED_STATE) {
-                CropPlayer player = CropPlayer.of(viewers.get(0));
-
                 if (state.isCropSelected) {
                     state.setCropLocation(null);
-                    player.getAutofarmFunctionality().deselectCrop(block);
+                    player.getAutofarmFeatures().deselectCrop(block);
                 } else {
                     state.setCropLocation(block.getLocation());
-                    player.getAutofarmFunctionality().selectCrop(block);
+                    player.getAutofarmFeatures().selectCrop(block);
                 }
 
                 state.setClickedSelected(infer(partial));
@@ -191,14 +186,12 @@ public class LinkMenuStateBuilder {
             }
 
             if (flag == LinkMenuStateFlag.CONTAINER_SELECTED_STATE) {
-                CropPlayer player = CropPlayer.of(viewers.get(0));
-
                 if (state.isContainerSelected) {
                     state.setContainerLocation(null);
-                    player.getAutofarmFunctionality().deselectContainer(block);
+                    player.getAutofarmFeatures().deselectContainer(block);
                 } else {
                     state.setContainerLocation(block.getLocation());
-                    player.getAutofarmFunctionality().selectContainer(block);
+                    player.getAutofarmFeatures().selectContainer(block);
                 }
 
                 state.setClickedSelected(infer(partial));
@@ -206,14 +199,12 @@ public class LinkMenuStateBuilder {
             }
 
             if (flag == LinkMenuStateFlag.DISPENSER_SELECTED_STATE) {
-                CropPlayer player = CropPlayer.of(viewers.get(0));
-
                 if (state.isDispenserSelected) {
                     state.setDispenserLocation(null);
-                    player.getAutofarmFunctionality().deselectDispenser(block);
+                    player.getAutofarmFeatures().deselectDispenser(block);
                 } else {
                     state.setDispenserLocation(block.getLocation());
-                    player.getAutofarmFunctionality().selectDispenser(block);
+                    player.getAutofarmFeatures().selectDispenser(block);
                 }
 
                 state.setClickedSelected(infer(partial));
@@ -224,6 +215,7 @@ public class LinkMenuStateBuilder {
         }
 
     }
+
 
     @Getter
     @Setter
@@ -253,53 +245,52 @@ public class LinkMenuStateBuilder {
         private LinkMenuState(
                 @Nullable Autofarm autofarm,
                 @NotNull Block block,
-                @NotNull LinkContext context,
-                @NotNull AutofarmManager manager,
-                @NotNull ViewerMap viewers
+                @NotNull CropPlayer player,
+                @NotNull LinkContext context
         ) {
-            this.isUnlinked = autofarm != null && autofarm.isLinked();
+            this.isUnlinked = autofarm == null;
             this.isEnabled = autofarm != null && autofarm.isEnabled();
-            this.cropLocation = getCropLocation(autofarm, manager, viewers.get(0));
-            this.dispenserLocation = getDispenserLocation(autofarm, manager, viewers.get(0));
-            this.containerLocation = getContainerLocation(autofarm, manager, viewers.get(0));
-            this.isCropSelected = isSelectedAndNotLinked(autofarm, getCropLocation());
-            this.isDispenserSelected = isSelectedAndNotLinked(autofarm, getDispenserLocation());
-            this.isContainerSelected = isSelectedAndNotLinked(autofarm, getContainerLocation());
+            this.cropLocation = getCropLocation(autofarm, player);
+            this.dispenserLocation = getDispenserLocation(autofarm, player);
+            this.containerLocation = getContainerLocation(autofarm, player);
+            this.isClickedSelected = getClickedSelectedStatus(player, block, context);
+            this.isCropSelected = isSelectedAndNotLinked(getCropLocation());
+            this.isDispenserSelected = isSelectedAndNotLinked(getDispenserLocation());
+            this.isContainerSelected = isSelectedAndNotLinked(getContainerLocation());
             this.isUnclaimed = autofarm != null && Autofarm.UNKNOWN_OWNER.equals(autofarm.getOwnerId());
-            this.isClickedSelected = getClickedSelectedStatus(CropPlayer.of(viewers.get(0)), block, context);
         }
 
 
-        private boolean isSelectedAndNotLinked(Autofarm autofarm, Location location) {
-            return isUnlinked && autofarm == null && location != null;
+        private boolean isSelectedAndNotLinked(Location location) {
+            return isUnlinked && location != null;
         }
 
 
-        private Location getDispenserLocation(@Nullable Autofarm autofarm, @NotNull AutofarmManager manager, @NotNull Player player) {
-            return autofarm == null ? manager.getSelectedDispenser(player) : autofarm.getDispenserLocation();
+        private Location getDispenserLocation(@Nullable Autofarm autofarm, @NotNull CropPlayer player) {
+            return autofarm == null ? player.getAutofarmFeatures().getSelectedDispenser() : autofarm.getDispenserLocation();
         }
 
 
-        private Location getContainerLocation(@Nullable Autofarm autofarm, @NotNull AutofarmManager manager, @NotNull Player player) {
-            return autofarm == null ? manager.getSelectedContainer(player) : autofarm.getContainerLocation();
+        private Location getContainerLocation(@Nullable Autofarm autofarm, @NotNull CropPlayer player) {
+            return autofarm == null ? player.getAutofarmFeatures().getSelectedContainer() : autofarm.getContainerLocation();
         }
 
 
-        private Location getCropLocation(@Nullable Autofarm autofarm, @NotNull AutofarmManager manager, @NotNull Player player) {
-            return autofarm == null ? manager.getSelectedCrop(player) : autofarm.getCropLocation();
+        private Location getCropLocation(@Nullable Autofarm autofarm, @NotNull CropPlayer player) {
+            return autofarm == null ? player.getAutofarmFeatures().getSelectedCrop() : autofarm.getCropLocation();
         }
 
 
         private boolean getClickedSelectedStatus(@NotNull CropPlayer player, @NotNull Block block, @NotNull LinkContext context) {
             switch (context) {
                 case CROP:
-                    return player.getAutofarmFunctionality().isCropSelected(block);
+                    return player.getAutofarmFeatures().isCropSelected(block);
 
                 case CONTAINER:
-                    return player.getAutofarmFunctionality().isContainerSelected(block);
+                    return player.getAutofarmFeatures().isContainerSelected(block);
 
                 case DISPENSER:
-                    return player.getAutofarmFunctionality().isDispenserSelected(block);
+                    return player.getAutofarmFeatures().isDispenserSelected(block);
             }
 
             return false;

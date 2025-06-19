@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.CROPS_ITEM_DROP_VALUE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.CROPS_ITEM_DROP_VALUE;
 
 /**
  * A class representing the Crops menu.
@@ -45,16 +45,16 @@ public final class CropsMenu extends AbstractCropsMenu {
 
 
     @NotNull
-    @Override
-    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
-        return (item, player) -> new CropMenu(plugin, crop).open(player);
+    @Unmodifiable
+    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
+        return CROPS_ITEM_DROP_VALUE.getAsList(plugin, crop.getDrop().getAmount());
     }
 
 
     @NotNull
-    @Unmodifiable
-    private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_DROP_VALUE.getAsList(plugin, crop.getDrop().getAmount());
+    @Override
+    public ItemAction getPaginatedItemAction(@NotNull Crop crop, int position) {
+        return (item, player) -> new CropMenu(plugin, crop).open(player);
     }
 
 }

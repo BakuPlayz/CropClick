@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.github.bakuplayz.cropclick.crops.algorithms.TraversalAlgorithm.Direction;
+import static com.github.bakuplayz.cropclick.crops.algorithms.AgeTraversalAlgorithm.Direction;
 
 
 public final class RedMushroomInput extends TraversalInput {

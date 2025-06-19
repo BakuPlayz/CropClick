@@ -1,15 +1,21 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.database.QueryScheduler;
-import com.github.bakuplayz.cropclick.database.query.QueryProvider;
-import com.github.bakuplayz.cropclick.database.query.queries.SelectQuery;
+import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import dev.bakuplayz.spigotstore.database.QueryScheduler;
+import dev.bakuplayz.spigotstore.database.query.SelectQuery;
+import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Remote implementation of {@link AutofarmDataService} that communicates with an external database
@@ -17,9 +23,38 @@ import java.util.concurrent.CompletableFuture;
  */
 public final class RemoteAutofarmService extends AbstractRemoteDataService<Autofarm> implements AutofarmDataService {
 
+    private static final long MAX_CACHE_ENTRIES = 1000;
+
+    private final AsyncLoadingCache<LookupKey, Autofarm> cache;
+
 
     public RemoteAutofarmService(@NotNull QueryScheduler scheduler, @NotNull QueryProvider provider) {
         super(scheduler, provider, Autofarm.class);
+        this.cache = initializeCache();
+    }
+
+
+    @NotNull
+    private AsyncLoadingCache<LookupKey, Autofarm> initializeCache() {
+        return Caffeine.newBuilder()
+                       .maximumSize(MAX_CACHE_ENTRIES)
+                       .expireAfterAccess(10, TimeUnit.MINUTES)
+                       .buildAsync((key, executor) -> loadFromDatabase(key));
+    }
+
+
+    @NotNull
+    private CompletableFuture<Autofarm> loadFromDatabase(@NotNull LookupKey key) {
+        SelectQuery<Autofarm> query = provider.select(getTable(), Autofarm.class);
+
+        if (key.isDoubly()) {
+            return query.whereJSON("container", "=",
+                    ((DoublyLocation) key.getLocation()).getSingly(),
+                    ((DoublyLocation) key.getLocation()).getDoubly()
+            ).fetchOne(scheduler);
+        }
+
+        return query.whereJSON(key.getType().getColumn(), "=", key.getLocation()).fetchOne(scheduler);
     }
 
 
@@ -43,9 +78,7 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     public CompletableFuture<Autofarm> getOneByCrop(@NotNull Location location) {
-        return provider.select(getTable(), Autofarm.class)
-                       .whereJSON("crop", "=", location)
-                       .fetchOne(scheduler);
+        return cache.get(LookupKey.of(LookupType.CROP, location));
     }
 
 
@@ -55,9 +88,7 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     public CompletableFuture<Autofarm> getOneByDispenser(@NotNull Location location) {
-        return provider.select(getTable(), Autofarm.class)
-                       .whereJSON("dispenser", "=", location)
-                       .fetchOne(scheduler);
+        return cache.get(LookupKey.of(LookupType.DISPENSER, location));
     }
 
 
@@ -67,14 +98,48 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     public CompletableFuture<Autofarm> getOneByContainer(@NotNull Location location) {
-        SelectQuery<Autofarm> query = provider.select(getTable(), Autofarm.class);
-        if (location instanceof DoublyLocation) {
-            return query.whereJSON("container", "=",
-                    ((DoublyLocation) location).getSingly(),
-                    ((DoublyLocation) location).getDoubly()
-            ).fetchOne(scheduler);
+        return cache.get(LookupKey.of(LookupType.CONTAINER, location));
+    }
+
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private enum LookupType {
+
+        CROP,
+
+        CONTAINER,
+
+        DISPENSER;
+
+
+        @NotNull
+        public String getColumn() {
+            return name().toLowerCase();
         }
-        return query.whereJSON("container", "=", location).fetchOne(scheduler);
+
+    }
+
+    @Getter
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private static class LookupKey {
+
+        @NotNull
+        private final LookupType type;
+
+        @NotNull
+        private final Location location;
+
+
+        @NotNull
+        public static LookupKey of(@NotNull LookupType type, @NotNull Location location) {
+            return new LookupKey(type, location);
+        }
+
+
+        public boolean isDoubly() {
+            return type == LookupType.CONTAINER && location instanceof DoublyLocation;
+        }
+
     }
 
 }

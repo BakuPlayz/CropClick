@@ -19,6 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.common;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
@@ -27,19 +28,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.NAME_RESPONSE_CHANGED;
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.NAME_RESPONSE_UNCHANGED;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.NAME_RESPONSE_CHANGED;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.NAME_RESPONSE_UNCHANGED;
 
 public final class AnvilMenuFactory {
 
     public static AnvilGUI.Builder createMenu(@NotNull CropClick plugin, @NotNull Item item, @NotNull String currentValue, @NotNull ValueSetter setter) {
         return new AnvilGUI.Builder()
-                .itemLeft(item.asItemStack())
-                .text(ChatColor.stripColor(currentValue))
-                .onClick((player, stateSnapshot) -> {
-                    setter.setValue(stateSnapshot.getText());
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }).onClose((stateSnapshot) -> {
+                       .itemLeft(item.asItemStack())
+                       .text(ChatColor.stripColor(currentValue))
+                       .onClick((player, stateSnapshot) -> {
+                           setter.setValue(stateSnapshot.getText());
+                           return Collections.singletonList(AnvilGUI.ResponseAction.close());
+                       }).onClose((stateSnapshot) -> {
                     Player player = stateSnapshot.getPlayer();
 
                     if (currentValue.equals(stateSnapshot.getText())) {
@@ -47,7 +48,7 @@ public final class AnvilMenuFactory {
                         return;
                     }
 
-                    player.sendMessage(NAME_RESPONSE_CHANGED.get(plugin, stateSnapshot.getText()));
+                    player.sendMessage(NAME_RESPONSE_CHANGED.get(plugin, Messages.colorize(stateSnapshot.getText())));
                 }).plugin(plugin);
     }
 

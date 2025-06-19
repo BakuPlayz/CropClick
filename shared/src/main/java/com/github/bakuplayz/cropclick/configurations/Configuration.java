@@ -19,8 +19,11 @@
 
 package com.github.bakuplayz.cropclick.configurations;
 
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,20 +35,83 @@ import java.util.Set;
  */
 public interface Configuration {
 
-    <T> T get(@NotNull ConfigurationKey key, String... args);
+    String getString(@NotNull ConfigurationKey key, @NotNull String... args);
 
 
-    <T> T getOrDefault(@NotNull ConfigurationKey key, T def, String... args);
+    String getStringOrDefault(@NotNull ConfigurationKey key, String def, @NotNull String... args);
+
+
+    Object getObject(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    Object getObjectOrDefault(@NotNull ConfigurationKey key, Object def, @NotNull String... args);
+
+
+    double getDouble(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    double getDoubleOrDefault(@NotNull ConfigurationKey key, double def, @NotNull String... args);
+
+
+    float getFloat(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    float getFloatOrDefault(@NotNull ConfigurationKey key, float def, @NotNull String... args);
+
+
+    long getLong(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    long getLongOrDefault(@NotNull ConfigurationKey key, long def, @NotNull String... args);
+
+
+    int getInt(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    int getIntOrDefault(@NotNull ConfigurationKey key, int def, @NotNull String... args);
+
+
+    boolean getBoolean(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    boolean getBooleanOrDefault(@NotNull ConfigurationKey key, boolean def, @NotNull String... args);
+
+
+    <T> List<T> getList(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    <T> List<T> getListOrDefault(@NotNull ConfigurationKey key, List<T> def, @NotNull String... args);
+
+
+    <T extends Enum<T>> T getEnum(@NotNull ConfigurationKey key, @NotNull Class<T> enumClass, @NotNull String... args);
+
+
+    <T extends Enum<T>> T getEnumOrDefault(@NotNull ConfigurationKey key, @NotNull Class<T> enumClass, @NotNull T def, @NotNull String... args);
+
+
+    Location getLocation(@NotNull ConfigurationKey key, @NotNull String... args);
+
+
+    Location getLocationOrDefault(@NotNull ConfigurationKey key, @Nullable Location def, @NotNull String... args);
+
+
+    boolean isNull(@NotNull ConfigurationKey key, @NotNull String... args);
 
 
     @NotNull
-    Set<String> getKeys(@NotNull ConfigurationKey key, String... args);
+    Set<String> getKeys(@NotNull ConfigurationKey key, @NotNull String... args);
 
 
     <T> void set(@NotNull ConfigurationKey key, T data, @NotNull String... args);
 
 
     <T> void setWithoutSave(@NotNull ConfigurationKey key, T data, @NotNull String... args);
+
+
+    <T> void setWithReload(@NotNull ConfigurationKey key, T data, @NotNull String... args);
+
+
+    int countKeys(@NotNull ConfigurationKey key, @NotNull String... args);
 
 
     /**

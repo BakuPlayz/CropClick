@@ -49,16 +49,16 @@ public final class CropMenuStateBuilder {
     }
 
 
-    public static class CropMenuStateHandler extends MenuStateHandler<CropMenuState, CropMenu> {
+    public final static class CropMenuStateHandler extends MenuStateHandler<CropMenuState, CropMenu> {
 
         private final Crop crop;
 
-        private final CropsConfig cropsConfig;
+        private final CropsConfig config;
 
 
         private CropMenuStateHandler(@NotNull CropMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
-            super(observer, new CropMenuState(plugin, crop));
-            this.cropsConfig = plugin.getCropsConfig();
+            super(observer, new CropMenuState(plugin.getConfigManager().getCropsConfig(), crop));
+            this.config = plugin.getConfigManager().getCropsConfig();
             this.crop = crop;
         }
 
@@ -97,17 +97,17 @@ public final class CropMenuStateBuilder {
         protected <P> CropMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == CropMenuStateFlag.MONEY_VALUE) {
                 state.setMoney(infer(partial));
-                cropsConfig.set(ConfigurationKey.JOBS_MONEY, infer(partial), crop.getName());
+                config.set(ConfigurationKey.JOBS_MONEY, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.POINTS_VALUE) {
                 state.setPoints(infer(partial));
-                cropsConfig.set(ConfigurationKey.JOBS_POINTS, infer(partial), crop.getName());
+                config.set(ConfigurationKey.JOBS_POINTS, infer(partial), crop.getName());
             }
 
             if (flag == CropMenuStateFlag.EXPERIENCE_VALUE) {
                 state.setExperience(infer(partial));
-                cropsConfig.set(ConfigurationKey.JOBS_EXPERIENCE, infer(partial), crop.getName());
+                config.set(ConfigurationKey.JOBS_EXPERIENCE, infer(partial), crop.getName());
             }
 
             return state;
@@ -119,17 +119,17 @@ public final class CropMenuStateBuilder {
     @Setter
     public static final class CropMenuState extends AbstractCropMenuState {
 
-        private int points;
+        private double points;
 
-        private int money;
+        private double money;
 
-        private int experience;
+        private double experience;
 
 
-        private CropMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
-            this.money = plugin.getCropsConfig().get(ConfigurationKey.JOBS_MONEY, crop.getName());
-            this.points = plugin.getCropsConfig().get(ConfigurationKey.JOBS_POINTS, crop.getName());
-            this.experience = plugin.getCropsConfig().get(ConfigurationKey.JOBS_EXPERIENCE, crop.getName());
+        private CropMenuState(@NotNull CropsConfig config, @NotNull Crop crop) {
+            this.money = config.getDouble(ConfigurationKey.JOBS_MONEY, crop.getName());
+            this.points = config.getDouble(ConfigurationKey.JOBS_POINTS, crop.getName());
+            this.experience = config.getDouble(ConfigurationKey.JOBS_EXPERIENCE, crop.getName());
         }
 
     }

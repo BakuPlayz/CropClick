@@ -19,8 +19,8 @@
 package com.github.bakuplayz.cropclick.menus.settings;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.configurations.config.PlayersConfig;
+import com.github.bakuplayz.cropclick.CropPlayer;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractPaginatedMenu;
 import com.github.bakuplayz.cropclick.menus.states.ToggleStateBuilder;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
@@ -28,11 +28,10 @@ import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -40,9 +39,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 import static com.github.bakuplayz.cropclick.menus.states.ToggleStateBuilder.ToggleMenuState;
 import static com.github.bakuplayz.cropclick.menus.states.ToggleStateBuilder.ToggleMenuStateHandler;
 
@@ -55,12 +55,9 @@ import static com.github.bakuplayz.cropclick.menus.states.ToggleStateBuilder.Tog
  */
 public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, ToggleMenuStateHandler, String> {
 
-    private final PlayersConfig playersConfig;
-
 
     public ToggleMenu(@NotNull CropClick plugin) {
         super(TOGGLE_TITLE.getTitle(plugin), plugin);
-        this.playersConfig = plugin.getPlayersConfig();
     }
 
 
@@ -76,7 +73,10 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
     @NotNull
     @Override
     public Item loadPaginatedItem(@NotNull String playerId, int position) {
-        return new PlayerItem(playerId, position);
+        CropPlayer player = CropPlayer.fromPlayer(
+                Bukkit.getOfflinePlayer(UUID.fromString(playerId))
+        );
+        return new PlayerItem(player, position);
     }
 
 
@@ -89,7 +89,7 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
 
     @NotNull
     @Override
-    public ToggleMenuStateHandler createStateHandler() {
+    public ToggleMenuStateHandler createStateHandler(@NotNull Player player) {
         return ToggleStateBuilder.createStateHandler(this);
     }
 
@@ -98,39 +98,42 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
     private final class PlayerItem extends ClickableStateItem<ToggleMenuState> {
 
         @NotNull
-        @Setter(AccessLevel.PRIVATE)
-        private String playerId;
+        private CropPlayer player;
 
         private int position;
 
 
+        @NotNull
         @Override
-        public void create() {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(playerId));
-
-            setPlayer(player);
-            setPlayerId(playerId);
-            setLore(getLore(playerId));
-            setFlags(Collections.singletonList(position));
-            setMaterial(!playersConfig.isEnabled(playerId), XMaterial.GRAY_STAINED_GLASS_PANE);
-            setViewState(playersConfig.isEnabled(playerId) ? ViewState.VISIBLE : ViewState.DISABLED);
-            setName(TOGGLE_ITEM_NAME.get(plugin, player.getName() != null ? player.getName() : playerId));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setLore(getLore());
+                setPlayer(player.getOfflinePlayer());
+                setFlags(Collections.singletonList(position));
+                setMaterial(!player.isPluginEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+                setViewState(player.isPluginEnabled() ? ViewState.VISIBLE : ViewState.DISABLED);
+                setName(TOGGLE_ITEM_NAME.get(plugin,
+                        player.getOfflinePlayer().getName() != null
+                                ? player.getOfflinePlayer().getName()
+                                : player.getPlayerID())
+                );
+            });
         }
 
 
         @Override
         public void update(@NotNull ToggleMenuState state, int flag) {
-            setLore(getLore(playerId));
-            setMaterial(!playersConfig.isEnabled(playerId), XMaterial.GRAY_STAINED_GLASS_PANE);
-            setViewState(playersConfig.isEnabled(playerId) ? ViewState.VISIBLE : ViewState.DISABLED);
+            setLore(getLore());
+            setMaterial(!player.isPluginEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            setViewState(player.isPluginEnabled() ? ViewState.VISIBLE : ViewState.DISABLED);
         }
 
 
         @NotNull
         @Unmodifiable
-        private List<String> getLore(@NotNull String playerId) {
+        private List<String> getLore() {
             return Collections.singletonList(TOGGLE_ITEM_STATUS.get(plugin,
-                    MessageUtils.getStatusMessage(plugin, playersConfig.isEnabled(playerId)))
+                    Messages.getStatusMessage(plugin, player.isPluginEnabled()))
             );
         }
 

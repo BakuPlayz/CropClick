@@ -25,7 +25,7 @@ import com.github.bakuplayz.cropclick.menus.abstracts.states.LinkMenuStateBuilde
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.CONTAINER_LINK_TITLE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.CONTAINER_LINK_TITLE;
 
 /**
  * A class representing the Container Link menu.
@@ -34,7 +34,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.CONTAINER
  * @version 2.2.0
  * @since 2.2.0
  */
-public class ContainerLinkMenu extends AbstractLinkMenu {
+public final class ContainerLinkMenu extends AbstractLinkMenu {
 
     public ContainerLinkMenu(@NotNull CropClick plugin, Autofarm autofarm, @NotNull Block block, boolean showBackButton) {
         super(plugin, CONTAINER_LINK_TITLE.getTitle(plugin), autofarm, block, showBackButton);

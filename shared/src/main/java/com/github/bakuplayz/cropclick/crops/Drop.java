@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.crops;
 
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,7 +58,7 @@ public final class Drop {
      * @return true if it will, otherwise false.
      */
     public boolean willDrop() {
-        return getChance() >= chance;
+        return getChance() >= 1 - chance;
     }
 
 
@@ -75,10 +76,10 @@ public final class Drop {
 
         item.setAmount((int) Math.round(amount * getChance()));
         if (nameChanged) {
-            meta.setDisplayName(name);
+            meta.setDisplayName(Messages.colorize(name));
             item.setItemMeta(meta);
         }
-        
+
         return item;
     }
 

@@ -20,7 +20,7 @@ package com.github.bakuplayz.cropclick.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.jobsreborn.JobsRebornAddon;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractAddonMenu;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.addons.jobsreborn.CropsMenu;
@@ -29,7 +29,9 @@ import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the JobsReborn menu.
@@ -38,7 +40,7 @@ import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
  * @version 2.2.0
  * @since 2.2.0
  */
-public class JobsRebornMenu extends AbstractAddonMenu {
+public final class JobsRebornMenu extends AbstractAddonMenu {
 
     public JobsRebornMenu(@NotNull CropClick plugin) {
         super(JOBS_REBORN_TITLE.getTitle(plugin), plugin, JobsRebornAddon.NAME);
@@ -56,19 +58,22 @@ public class JobsRebornMenu extends AbstractAddonMenu {
 
     private final class ToggleItem extends AbstractToggleItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(getName());
-            setMaterial(getMaterial());
-            setLore(ADDON_JOBS_ITEM_TIPS.getAsList(plugin));
-            setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(getName());
+                setMaterial(getMaterial());
+                setLore(ADDON_JOBS_ITEM_TIPS.getAsList(plugin));
+                setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            });
         }
 
 
         @NotNull
         @Override
         protected String getName() {
-            return ADDON_JOBS_ITEM_NAME.get(plugin, MessageUtils.getStatusMessage(plugin, getState().isAddonEnabled()));
+            return ADDON_JOBS_ITEM_NAME.get(plugin, Messages.getStatusMessage(plugin, getState().isAddonEnabled()));
         }
 
 

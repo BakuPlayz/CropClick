@@ -21,15 +21,15 @@ package com.github.bakuplayz.cropclick.menus.addons.offlinegrowth;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.offlinegrowth.OfflineGrowthAddon;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractWorldsMenu;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.WORLDS_ITEM_GROWTH_TIPS;
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.WORLDS_ITEM_STATUS;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.WORLDS_ITEM_GROWTH_TIPS;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.WORLDS_ITEM_STATUS;
 
 /**
  * A class representing the Worlds menu scoped for OfflineGrowth.

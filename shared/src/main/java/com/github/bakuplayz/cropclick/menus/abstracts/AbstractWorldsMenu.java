@@ -20,23 +20,24 @@ package com.github.bakuplayz.cropclick.menus.abstracts;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.WorldsStateBuilder;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.WorldsStateBuilder.WorldsMenuState;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.WorldsStateBuilder.WorldsMenuStateHandler;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.WORLDS_ITEM_NAME;
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.WORLDS_TITLE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.WORLDS_ITEM_NAME;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.WORLDS_TITLE;
 
 /**
  * A class representing the Abstract Worlds menu.
@@ -62,8 +63,8 @@ public abstract class AbstractWorldsMenu extends AbstractPaginatedMenu<WorldsMen
 
 
     @Override
-    public List<FarmWorld> getPaginationItems() {
-        return new ArrayList<>(plugin.getWorldManager().getWorlds());
+    public CompletableFuture<List<FarmWorld>> getFuturePaginationItems() {
+        return plugin.getWorldManager().getWorlds();
     }
 
 
@@ -75,7 +76,7 @@ public abstract class AbstractWorldsMenu extends AbstractPaginatedMenu<WorldsMen
 
 
     @Override
-    public WorldsMenuStateHandler createStateHandler() {
+    public WorldsMenuStateHandler createStateHandler(@NotNull Player player) {
         return WorldsStateBuilder.createStateHandler(this, plugin);
     }
 
@@ -95,16 +96,19 @@ public abstract class AbstractWorldsMenu extends AbstractPaginatedMenu<WorldsMen
         private int position;
 
 
+        @NotNull
         @Override
-        public void create() {
-            String name = MessageUtils.beautify(world.getName(), true);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                String name = Messages.beautify(world.getName(), true);
 
-            setMaterial(XMaterial.GRASS_BLOCK);
-            setLore(loreSupplier.getLore(world));
-            setName(WORLDS_ITEM_NAME.get(plugin, name));
-            setFlags(Collections.singletonList(position));
-            setMaterial(world.getName().equals("world_the_end"), XMaterial.END_STONE);
-            setMaterial(world.getName().equals("world_nether"), XMaterial.NETHERRACK);
+                setMaterial(XMaterial.GRASS_BLOCK);
+                setLore(loreSupplier.getLore(world));
+                setName(WORLDS_ITEM_NAME.get(plugin, name));
+                setFlags(Collections.singletonList(position));
+                setMaterial(world.getName().equals("world_the_end"), XMaterial.END_STONE);
+                setMaterial(world.getName().equals("world_nether"), XMaterial.NETHERRACK);
+            });
         }
 
 

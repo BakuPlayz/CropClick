@@ -66,7 +66,7 @@ public final class NetherWart extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(3, 80);
+        return createDrop(3, 0.80);
     }
 
 

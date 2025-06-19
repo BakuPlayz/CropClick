@@ -26,7 +26,7 @@ import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.CONTAINER_PREVIEW_TITLE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.CONTAINER_PREVIEW_TITLE;
 
 /**
  * A class representing the Preview Container menu.

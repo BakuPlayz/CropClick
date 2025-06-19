@@ -61,7 +61,7 @@ public abstract class AbstractMushroom extends AbstractTallCrop {
      */
     @Override
     public boolean dropAtLeastOne() {
-        return cropsConfig.get(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, getName());
+        return cropsConfig.getBoolean(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, getName());
     }
 
 

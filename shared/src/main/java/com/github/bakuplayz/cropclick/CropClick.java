@@ -24,7 +24,6 @@ import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
 import com.github.bakuplayz.cropclick.commands.CommandManager;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
-import com.github.bakuplayz.cropclick.common.metric.Metrics;
 import com.github.bakuplayz.cropclick.configurations.ConfigurationManager;
 import com.github.bakuplayz.cropclick.crops.CropManager;
 import com.github.bakuplayz.cropclick.database.DatabaseManager;
@@ -42,19 +41,19 @@ import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAt
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtCropListener;
 import com.github.bakuplayz.cropclick.listeners.player.interact.PlayerInteractAtDispenserListener;
 import com.github.bakuplayz.cropclick.listeners.player.join.PlayerJoinListener;
+import com.github.bakuplayz.cropclick.listeners.player.leave.PlayerLeaveListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerLinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUnlinkAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.link.PlayerUpdateAutofarmListener;
 import com.github.bakuplayz.cropclick.listeners.player.plant.PlayerPlantCropListener;
 import com.github.bakuplayz.cropclick.permissions.PermissionManager;
-import com.github.bakuplayz.cropclick.tasks.TaskScheduler;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
-import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.github.bakuplayz.cropclick.world.WorldManager;
 import com.github.bakuplayz.spigotspin.SpigotSpin;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
@@ -73,7 +72,7 @@ public final class CropClick extends JavaPlugin {
 
     /**
      * A singleton plugin instance of CropClick, used *ONLY* to
-     * communicate with the {@link CropClickAPI and {@link CropPlayer}.
+     * communicate with the {@link CropClickAPI} and {@link CropPlayer}.
      */
     @Getter(AccessLevel.PACKAGE)
     private static CropClick instance;
@@ -118,7 +117,7 @@ public final class CropClick extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        // TODO: Close all connections, and create new ones...
+        // TODO: Close all connections, and create new ones... ???
         taskScheduler.cleanupTasks();
         CropClick.instance = null;
     }
@@ -132,12 +131,10 @@ public final class CropClick extends JavaPlugin {
         CropClick.instance = this;
 
         new SpigotSpin(this);
-        new Metrics(this, 5160);
-        
+
         registerSchedulers();
         registerManagers();
         registerAddons();
-        registerWorlds();
         registerCommands();
         registerListeners();
         registerPermissions();
@@ -192,6 +189,7 @@ public final class CropClick extends JavaPlugin {
     private void registerListeners() {
         PluginManager manager = Bukkit.getPluginManager();
 
+        manager.registerEvents(new PlayerLeaveListener(), this);
         manager.registerEvents(new PlayerJoinListener(this), this);
 
         manager.registerEvents(new PlayerInteractAtCropListener(this), this);
@@ -210,9 +208,9 @@ public final class CropClick extends JavaPlugin {
         manager.registerEvents(new PlayerUnlinkAutofarmListener(this), this);
         manager.registerEvents(new PlayerUpdateAutofarmListener(this), this);
 
+        manager.registerEvents(new AutofarmUpdateListener(), this);
         manager.registerEvents(new AutofarmLinkListener(this), this);
         manager.registerEvents(new AutofarmUnlinkListener(this), this);
-        manager.registerEvents(new AutofarmUpdateListener(this), this);
 
         manager.registerEvents(new EntityDestroyAutofarmListener(this), this);
     }
@@ -223,14 +221,6 @@ public final class CropClick extends JavaPlugin {
      */
     private void registerPermissions() {
         permissionManager.registerPermissions(this);
-    }
-
-
-    /**
-     * Registers all the {@link World worlds}.
-     */
-    private void registerWorlds() {
-        worldManager.registerWorlds();
     }
 
 

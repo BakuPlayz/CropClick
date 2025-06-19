@@ -25,7 +25,7 @@ import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.DISPENSER_PREVIEW_TITLE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.DISPENSER_PREVIEW_TITLE;
 
 /**
  * A class representing the Preview Dispenser menu.

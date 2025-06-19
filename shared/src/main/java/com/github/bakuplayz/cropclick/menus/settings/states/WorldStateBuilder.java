@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.settings.states;
 
 import com.github.bakuplayz.cropclick.menus.settings.worlds.WorldMenu;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public final class WorldStateBuilder {
     }
 
 
-    public static class WorldMenuStateHandler extends MenuStateHandler<WorldMenuState, WorldMenu> {
+    public final static class WorldMenuStateHandler extends MenuStateHandler<WorldMenuState, WorldMenu> {
 
         private final FarmWorld world;
 

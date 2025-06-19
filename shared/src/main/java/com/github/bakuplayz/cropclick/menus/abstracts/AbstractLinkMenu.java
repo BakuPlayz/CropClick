@@ -19,12 +19,12 @@
 package com.github.bakuplayz.cropclick.menus.abstracts;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.common.LocationUtils;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
-import com.github.bakuplayz.cropclick.common.Versions;
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.autofarm.Container;
+import com.github.bakuplayz.cropclick.common.Locations;
+import com.github.bakuplayz.cropclick.common.Messages;
+import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.LinkMenuStateBuilder;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.LinkMenuStateBuilder.LinkContext;
@@ -34,6 +34,7 @@ import com.github.bakuplayz.cropclick.menus.abstracts.states.LinkMenuStateBuilde
 import com.github.bakuplayz.cropclick.menus.previews.PreviewContainerMenu;
 import com.github.bakuplayz.cropclick.menus.previews.PreviewDispenserMenu;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
@@ -46,10 +47,8 @@ import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Container;
 import org.bukkit.block.Dispenser;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -57,8 +56,9 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Abstract Link menu.
@@ -90,7 +90,6 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         this.plugin = plugin;
         this.autofarm = autofarm;
         this.showBackButton = showBackButton;
-        // TODO: Add cached ID?
     }
 
 
@@ -99,8 +98,8 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
     @NotNull
     @Override
-    public final LinkMenuStateHandler createStateHandler() {
-        return LinkMenuStateBuilder.createStateHandler(this, plugin, autofarm, block, viewers, getContext());
+    public final LinkMenuStateHandler createStateHandler(@NotNull Player player) {
+        return LinkMenuStateBuilder.createStateHandler(this, plugin, autofarm, block, player, getContext());
     }
 
 
@@ -151,6 +150,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
                 return;
             }
             if (autofarm == null) return;
+
             new PreviewDispenserMenu(
                     plugin,
                     autofarm,
@@ -169,14 +169,14 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
             }
             if (autofarm == null) return;
 
-            Inventory containerInventory = Versions.isLegacy()
-                                                   ? ((Chest) item.getState().getContainerLocation().getBlock().getState()).getInventory()
-                                                   : ((Container) item.getState().getContainerLocation().getBlock().getState()).getInventory();
+            Container container = Container.fromBlock(
+                    item.getState().getContainerLocation().getBlock()
+            );
 
             new PreviewContainerMenu(
                     plugin,
                     autofarm,
-                    containerInventory
+                    container.getInventory()
             ).open(player);
         };
     }
@@ -189,7 +189,6 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     }
 
 
-    // TODO: Find a better way to construct this...
     @NotNull
     private List<String> getSelectedLore(@NotNull Location location) {
         List<String> selectedPart = new ArrayList<>(getBaseLore(location));
@@ -226,9 +225,10 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
     private final class CropItem extends ClickableStateItem<LinkMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            handleState(getState());
+        public CompletableFuture<Void> create() {
+            return createSync(() -> handleState(getState()));
         }
 
 
@@ -249,7 +249,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
         @NotNull
         private XMaterial getAdaptiveMaterial(@NotNull LinkMenuState state) {
-            Crop crop = plugin.getCropManager().findByLocation(state.getCropLocation());
+            Crop crop = plugin.getCropManager().getFinder().findByLocation(state.getCropLocation());
             return crop == null ? XMaterial.WHEAT : crop.getMenuType();
         }
 
@@ -275,10 +275,10 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
     private final class ContainerItem extends ClickableStateItem<LinkMenuState> {
 
-
+        @NotNull
         @Override
-        public void create() {
-            handleState(getState());
+        public CompletableFuture<Void> create() {
+            return createSync(() -> handleState(getState()));
         }
 
 
@@ -312,7 +312,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
             }
 
             if (location instanceof DoublyLocation) {
-                DoublyLocation doubly = LocationUtils.findDoubly(location);
+                DoublyLocation doubly = Locations.findDoubly(location);
                 location = doubly == null ? location : doubly;
             }
 
@@ -329,9 +329,10 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
     private final class DispenserItem extends ClickableStateItem<LinkMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            handleState(getState());
+        public CompletableFuture<Void> create() {
+            return createSync(() -> handleState(getState()));
         }
 
 
@@ -371,21 +372,27 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
     private final class ClaimItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(LINK_CLAIM_NAME.get(plugin));
-            setLore(LINK_CLAIM_STATUS.getAsList(plugin));
-            setMaterial(XMaterial.LIGHT_BLUE_STAINED_GLASS_PANE);
-            setViewState(PermissionUtils.canClaimAutofarm(viewers.get(0)) ? ViewState.VISIBLE : ViewState.INVISIBLE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                CropPlayer player = CropPlayer.fromPlayer(viewers.get(0));
+
+                setViewState(player.getPermissions().has(PermissionKey.AUTOFARM_CLAIM) ? ViewState.VISIBLE : ViewState.INVISIBLE);
+                setMaterial(XMaterial.LIGHT_BLUE_STAINED_GLASS_PANE);
+                setLore(LINK_CLAIM_STATUS.getAsList(plugin));
+                setName(LINK_CLAIM_NAME.get(plugin));
+            });
         }
 
     }
 
     private final class ToggleItem extends ClickableStateItem<LinkMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            handleState(getState());
+        public CompletableFuture<Void> create() {
+            return createSync(() -> handleState(getState()));
         }
 
 
@@ -405,7 +412,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         @NotNull
         @Unmodifiable
         private List<String> getLore(@NotNull LinkMenuState state) {
-            return LINK_TOGGLE_STATUS.getAsList(plugin, MessageUtils.getStatusMessage(plugin, state.isEnabled()));
+            return LINK_TOGGLE_STATUS.getAsList(plugin, Messages.getStatusMessage(plugin, state.isEnabled()));
         }
 
 
@@ -417,10 +424,13 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
     private final class GlassItem extends StateItem<LinkMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setChanges(getState());
-            setFlags(LinkMenuStateFlag.CLICKED_SELECTED);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setChanges(getState());
+                setFlags(LinkMenuStateFlag.CLICKED_SELECTED);
+            });
         }
 
 

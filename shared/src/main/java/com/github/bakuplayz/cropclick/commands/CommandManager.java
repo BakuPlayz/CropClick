@@ -20,9 +20,10 @@
 package com.github.bakuplayz.cropclick.commands;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.commands.subcommands.*;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
-import com.github.bakuplayz.cropclick.permissions.command.CommandPermission;
+import com.github.bakuplayz.cropclick.permissions.CommandPermission;
+import com.github.bakuplayz.cropclick.permissions.PermissionKey;
 import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Command.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Command.*;
 
 
 /**
@@ -94,10 +95,11 @@ public final class CommandManager implements TabExecutor {
             return true;
         }
 
-        Player player = (Player) sender;
+        CropPlayer cropPlayer = CropPlayer.fromPlayer((Player) sender);
+        Player player = cropPlayer.getOfflinePlayer().getPlayer();
 
         if (args.length == 0) {
-            if (!PermissionUtils.canPlayerExecuteGeneralCommand(player)) {
+            if (!cropPlayer.getPermissions().has(PermissionKey.COMMAND_GENERAL)) {
                 PLAYER_LACK_PERMISSION.send(plugin, player, CommandPermission.GENERAL_COMMAND.getName());
                 return true;
             }
@@ -116,7 +118,7 @@ public final class CommandManager implements TabExecutor {
                 return true;
             }
 
-            if (!command.hasPermission(player)) {
+            if (!cropPlayer.getPermissions().has(PermissionKey.COMMAND, command.getName())) {
                 PLAYER_LACK_PERMISSION.send(plugin, player, command.getPermission());
                 return true;
             }

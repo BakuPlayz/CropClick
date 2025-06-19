@@ -24,10 +24,16 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: Add comment.
+/**
+ * A class implementation for the retrieving the crop's age,
+ * imported using reflection during runtime for latest versions (1.13->).
+ */
 @NoArgsConstructor
 public final class CropAge implements CropAgeComponent {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void set(@NotNull Block block, int age) {
         Ageable crop = (Ageable) block.getBlockData();
@@ -36,6 +42,9 @@ public final class CropAge implements CropAgeComponent {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int get(@NotNull Block block) {
         return ((Ageable) block.getBlockData()).getAge();

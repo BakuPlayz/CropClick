@@ -64,7 +64,7 @@ public final class TwistingVines extends AbstractTallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 80);
+        return createDrop(1, 0.80);
     }
 
 

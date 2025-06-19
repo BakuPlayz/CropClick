@@ -62,7 +62,7 @@ public final class PoisonousPotato extends AbstractSeed {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 10);
+        return createDrop(1, 0.10);
     }
 
 

@@ -19,12 +19,15 @@
 package com.github.bakuplayz.cropclick.menus.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
 import com.github.bakuplayz.cropclick.menus.UpdatesMenu;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
 
 /**
  * A class for creating and handling the {@link UpdatesMenu} state.
@@ -41,14 +44,14 @@ public final class UpdatesStateBuilder {
     }
 
 
-    public static class UpdatesMenuStateHandler extends MenuStateHandler<UpdatesMenuState, UpdatesMenu> {
+    public final static class UpdatesMenuStateHandler extends MenuStateHandler<UpdatesMenuState, UpdatesMenu> {
 
-        private final CropClick plugin;
+        private final DefaultConfig config;
 
 
         private UpdatesMenuStateHandler(@NotNull UpdatesMenu observer, @NotNull CropClick plugin) {
-            super(observer, new UpdatesMenuState(plugin));
-            this.plugin = plugin;
+            super(observer, new UpdatesMenuState(plugin.getConfigManager().getDefaultConfig()));
+            this.config = plugin.getConfigManager().getDefaultConfig();
         }
 
 
@@ -66,10 +69,10 @@ public final class UpdatesStateBuilder {
         protected <P> UpdatesMenuState onUpdateState(@NotNull P partial, int flag) {
             if (flag == UpdatesMenuStateFlag.PLAYER) {
                 state.setPlayerEnabled(infer(partial));
-                plugin.getUpdateManager().setPlayerReceiveUpdates(infer(partial));
+                config.set(ConfigurationKey.UPDATE_MESSAGE_PLAYER, infer(partial));
             } else if (flag == UpdatesMenuStateFlag.CONSOLE) {
                 state.setConsoleEnabled(infer(partial));
-                plugin.getUpdateManager().setConsoleReceiveUpdates(infer(partial));
+                config.set(ConfigurationKey.UPDATE_MESSAGE_CONSOLE, infer(partial));
             }
 
             return state;
@@ -86,9 +89,9 @@ public final class UpdatesStateBuilder {
         private boolean isConsoleEnabled;
 
 
-        private UpdatesMenuState(@NotNull CropClick plugin) {
-            this.isPlayerEnabled = plugin.getUpdateManager().canPlayerReceiveUpdates();
-            this.isConsoleEnabled = plugin.getUpdateManager().canConsoleReceiveUpdates();
+        private UpdatesMenuState(@NotNull DefaultConfig config) {
+            this.isPlayerEnabled = config.getBoolean(ConfigurationKey.UPDATE_MESSAGE_PLAYER);
+            this.isConsoleEnabled = config.getBoolean(ConfigurationKey.UPDATE_MESSAGE_CONSOLE);
         }
 
     }

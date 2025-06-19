@@ -62,7 +62,7 @@ public final class BeetrootSeed extends AbstractSeed {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(2, 80);
+        return createDrop(2, 0.80);
     }
 
 

@@ -20,11 +20,11 @@ package com.github.bakuplayz.cropclick.menus.settings.sounds.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.common.Maths;
+import com.github.bakuplayz.cropclick.common.types.Sound;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.SoundMenu;
-import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
@@ -40,6 +40,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SoundStateBuilder {
 
+    private final static int NO_ORDER = -1;
+
 
     @NotNull
     public static SoundMenuStateHandler createStateHandler(@NotNull SoundMenu menu, @NotNull CropClick plugin, @NotNull Crop crop, @NotNull String soundName) {
@@ -47,7 +49,8 @@ public final class SoundStateBuilder {
     }
 
 
-    public static class SoundMenuStateHandler extends MenuStateHandler<SoundMenuState, SoundMenu> {
+    public final static class SoundMenuStateHandler extends MenuStateHandler<SoundMenuState, SoundMenu> {
+
 
         private final Crop crop;
 
@@ -58,7 +61,7 @@ public final class SoundStateBuilder {
 
         private SoundMenuStateHandler(@NotNull SoundMenu observer, @NotNull CropClick plugin, @NotNull Crop crop, @NotNull String soundName) {
             super(observer, new SoundMenuState(plugin, crop, soundName));
-            this.cropsConfig = plugin.getCropsConfig();
+            this.cropsConfig = plugin.getConfigManager().getCropsConfig();
             this.soundName = soundName;
             this.crop = crop;
         }
@@ -66,6 +69,7 @@ public final class SoundStateBuilder {
 
         public void decreaseDelay(int decrement) {
             updateState(state.delay, (state) -> Math.max(state - decrement, Sound.MIN_DELAY), SoundMenuStateFlag.DELAY);
+            updateOrderIfRemovable();
             updateOrderStatus();
         }
 
@@ -78,6 +82,7 @@ public final class SoundStateBuilder {
 
         public void decreaseVolume(int decrement) {
             updateState(state.volume, (state) -> Math.max(state - decrement, Sound.MIN_VOLUME), SoundMenuStateFlag.VOLUME);
+            updateOrderIfRemovable();
             updateOrderStatus();
         }
 
@@ -90,6 +95,7 @@ public final class SoundStateBuilder {
 
         public void decreasePitch(double decrement) {
             updateState(state.pitch, (state) -> Math.max(state - decrement, Sound.MIN_PITCH), SoundMenuStateFlag.PITCH);
+            updateOrderIfRemovable();
             updateOrderStatus();
         }
 
@@ -111,9 +117,24 @@ public final class SoundStateBuilder {
 
 
         private void updateOrderStatus() {
-            state.setOrder(soundSection.getOrder(crop.getName(), soundName));
-            state.setMaxOrder(soundSection.getAmountOfSounds(crop.getName()) - 1);
-            updateState(state.hasOrder, (state) -> soundSection.getOrder(crop.getName(), soundName) != -1, SoundMenuStateFlag.ORDER_STATE);
+            if (state.delay == 0) return;
+            if (state.pitch == 0) return;
+            if (state.volume == 0) return;
+
+            state.setOrder(cropsConfig.getSoundOrder(crop, soundName));
+            state.setMaxOrder(cropsConfig.countKeys(ConfigurationKey.SOUNDS, crop.getName()) - 1);
+            updateState(state.hasOrder, (s) -> state.getOrder() != NO_ORDER, SoundMenuStateFlag.ORDER_STATE);
+        }
+
+
+        private void updateOrderIfRemovable() {
+            if (state.delay != 0) return;
+            if (state.pitch != 0) return;
+            if (state.volume != 0) return;
+
+            state.setOrder(NO_ORDER);
+            state.setMaxOrder(state.maxOrder - 1);
+            updateState(state.hasOrder, (s) -> state.getOrder() != NO_ORDER, SoundMenuStateFlag.ORDER_STATE);
         }
 
 
@@ -135,11 +156,14 @@ public final class SoundStateBuilder {
             }
 
             if (flag == SoundMenuStateFlag.ORDER) {
-                soundSection.swapOrder(crop.getName(), state.order, infer(partial));
+                cropsConfig.swapSoundOrder(crop, state.order, infer(partial));
                 state.setOrder(infer(partial));
             }
 
             if (flag == SoundMenuStateFlag.ORDER_STATE) {
+                if (state.order == NO_ORDER) {
+                    cropsConfig.set(ConfigurationKey.SOUND, null, crop.getName(), soundName);
+                }
                 state.setHasOrder(infer(partial));
             }
 
@@ -152,7 +176,7 @@ public final class SoundStateBuilder {
     @Setter
     public static final class SoundMenuState implements MenuState {
 
-        private double delay;
+        private long delay;
 
         private double volume;
 
@@ -166,14 +190,14 @@ public final class SoundStateBuilder {
 
 
         private SoundMenuState(@NotNull CropClick plugin, @NotNull Crop crop, @NotNull String soundName) {
-            SoundConfigSection soundSection = plugin.getCropsConfig().getSoundSection();
+            CropsConfig config = plugin.getConfigManager().getCropsConfig();
 
-            this.order = soundSection.getOrder(crop.getName(), soundName);
-            this.pitch = soundSection.getPitch(crop.getName(), soundName);
-            this.delay = soundSection.getDelay(crop.getName(), soundName);
-            this.volume = soundSection.getVolume(crop.getName(), soundName);
-            this.maxOrder = soundSection.getAmountOfSounds(crop.getName()) - 1;
-            this.hasOrder = soundSection.getOrder(crop.getName(), soundName) != -1;
+            this.volume = config.getDouble(ConfigurationKey.SOUND_VOLUME, crop.getName(), soundName);
+            this.pitch = config.getDouble(ConfigurationKey.SOUND_PITCH, crop.getName(), soundName);
+            this.delay = config.getLong(ConfigurationKey.SOUND_DELAY, crop.getName(), soundName);
+            this.maxOrder = config.countKeys(ConfigurationKey.SOUNDS, crop.getName()) - 1;
+            this.order = config.getSoundOrder(crop, soundName);
+            this.hasOrder = order != NO_ORDER;
         }
 
     }

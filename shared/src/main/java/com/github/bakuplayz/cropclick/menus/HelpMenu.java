@@ -28,11 +28,13 @@ import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 
 /**
@@ -57,15 +59,15 @@ public final class HelpMenu extends AbstractPaginatedMenu<BasicPaginatedMenuStat
 
     @NotNull
     @Override
-    public BasicPaginatedStateHandler createStateHandler() {
-        return new BasicPaginatedStateHandler(this);
+    public Item loadPaginatedItem(@NotNull Subcommand command, int position) {
+        return new HelpItem(command);
     }
 
 
     @NotNull
     @Override
-    public Item loadPaginatedItem(@NotNull Subcommand command, int position) {
-        return new HelpItem(command);
+    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
+        return new BasicPaginatedStateHandler(this);
     }
 
 
@@ -85,14 +87,17 @@ public final class HelpMenu extends AbstractPaginatedMenu<BasicPaginatedMenuStat
         private final Subcommand command;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.BOOK);
-            setName(HELP_ITEM_NAME.get(plugin, command.getName()));
-            setLore(HELP_ITEM_DESCRIPTION.get(plugin, command.getDescription()),
-                    HELP_ITEM_PERMISSION.get(plugin, command.getPermission()),
-                    HELP_ITEM_USAGE.get(plugin, command.getUsage())
-            );
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.BOOK);
+                setName(HELP_ITEM_NAME.get(plugin, command.getName()));
+                setLore(HELP_ITEM_DESCRIPTION.get(plugin, command.getDescription()),
+                        HELP_ITEM_PERMISSION.get(plugin, command.getPermission()),
+                        HELP_ITEM_USAGE.get(plugin, command.getUsage())
+                );
+            });
         }
 
     }

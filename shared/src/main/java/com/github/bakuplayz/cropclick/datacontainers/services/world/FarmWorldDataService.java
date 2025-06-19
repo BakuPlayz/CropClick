@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

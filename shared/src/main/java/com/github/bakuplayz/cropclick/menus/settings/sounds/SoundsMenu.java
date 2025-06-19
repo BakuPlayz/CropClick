@@ -20,24 +20,25 @@ package com.github.bakuplayz.cropclick.menus.settings.sounds;
 
 import com.cryptomorin.xseries.XSound;
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.sections.crops.SoundConfigSection;
+import com.github.bakuplayz.cropclick.common.Messages;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractPaginatedMenu;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedStateHandler;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
-import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Sounds menu.
@@ -50,12 +51,12 @@ public final class SoundsMenu extends AbstractPaginatedMenu<BasicPaginatedMenuSt
 
     private final Crop crop;
 
-    private final SoundConfigSection soundSection;
+    private final CropsConfig config;
 
 
     public SoundsMenu(@NotNull CropClick plugin, @NotNull Crop crop) {
         super(SOUNDS_TITLE.getTitle(plugin), plugin);
-        this.soundSection = plugin.getCropsConfig().getSoundSection();
+        this.config = plugin.getConfigManager().getCropsConfig();
         this.crop = crop;
     }
 
@@ -63,15 +64,9 @@ public final class SoundsMenu extends AbstractPaginatedMenu<BasicPaginatedMenuSt
     @Override
     public List<String> getPaginationItems() {
         return Arrays.stream(XSound.values())
-                .map(XSound::name)
-                .collect(Collectors.toList());
-    }
-
-
-    @NotNull
-    @Override
-    public BasicPaginatedStateHandler createStateHandler() {
-        return new BasicPaginatedStateHandler(this);
+                       .filter(XSound::isSupported)
+                       .map(XSound::name)
+                       .collect(Collectors.toList());
     }
 
 
@@ -84,31 +79,50 @@ public final class SoundsMenu extends AbstractPaginatedMenu<BasicPaginatedMenuSt
 
     @NotNull
     @Override
+    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
+        return new BasicPaginatedStateHandler(this);
+    }
+
+
+    @NotNull
+    @Override
     public ItemAction getPaginatedItemAction(@NotNull String sound, int position) {
         return (item, player) -> new SoundMenu(plugin, crop, sound).open(player);
     }
 
 
-    @AllArgsConstructor
     private class SoundItem extends ClickableItem {
 
         @NotNull
         private final String sound;
 
+        private final int order;
 
+        private final boolean isEnabled;
+
+
+        public SoundItem(@NotNull String sound) {
+            this.order = config.getSoundOrder(crop, sound);
+            this.isEnabled = order != -1;
+            this.sound = sound;
+        }
+
+
+        @NotNull
         @Override
-        public void create() {
-            boolean isEnabled = soundSection.isEnabled(crop.getName(), sound);
-            String status = MessageUtils.getStatusMessage(plugin, isEnabled);
-            String name = MessageUtils.beautify(sound, true);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                String status = Messages.getStatusMessage(plugin, isEnabled);
+                String name = Messages.beautify(sound, true);
 
-            setMaterial(XMaterial.NOTE_BLOCK);
-            setName(SOUNDS_ITEM_NAME.get(plugin, name, status));
-            setMaterial(isEnabled, XMaterial.LIME_STAINED_GLASS_PANE);
+                setMaterial(XMaterial.NOTE_BLOCK);
+                setName(SOUNDS_ITEM_NAME.get(plugin, name, status));
+                setMaterial(isEnabled, XMaterial.LIME_STAINED_GLASS_PANE);
 
-            if (isEnabled) {
-                setLore(SOUNDS_ITEM_ORDER.get(plugin, soundSection.getOrder(crop.getName(), sound)));
-            }
+                if (isEnabled) {
+                    setLore(SOUNDS_ITEM_ORDER.get(plugin, order));
+                }
+            });
         }
 
     }

@@ -23,9 +23,8 @@ import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmBlocksCache;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
 import com.github.bakuplayz.cropclick.menus.links.DispenserLinkMenu;
 import org.bukkit.block.Block;
@@ -35,6 +34,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 
 /**
@@ -64,26 +65,17 @@ public final class PlayerInteractAtDispenserListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtDispenser(@NotNull PlayerInteractAtDispenserEvent event) {
-        if (event.isCancelled()) return;
-
         Block block = event.getBlock();
         CropPlayer player = event.getPlayer();
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
+        Autofarm autofarm = event.getAutofarm();
 
-        if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (AutofarmUtils.hasCachedID(block)) {
-                AutofarmUtils.addCachedID(plugin, autofarm);
-            }
+        if (!AutofarmBlocksCache.hasCachedID(block)) {
+            autofarmManager.getBlocksCache().addIDs(autofarm);
         }
 
-        Log.debug("{} (Player): Called the interact at dispenser event!", player.getBukkitPlayer().getName());
+        Log.debug("{0}: Called the interact at dispenser event.", Tag.PLAYER, player.getOfflinePlayer().getName());
 
-        new DispenserLinkMenu(plugin, autofarm, block, false).open(player);
+        new DispenserLinkMenu(plugin, autofarm, block, false).open(player.getOfflinePlayer().getPlayer());
     }
 
 }

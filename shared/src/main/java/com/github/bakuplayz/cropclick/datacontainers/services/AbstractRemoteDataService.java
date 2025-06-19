@@ -18,8 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
-import com.github.bakuplayz.cropclick.database.QueryScheduler;
-import com.github.bakuplayz.cropclick.database.query.QueryProvider;
+import dev.bakuplayz.spigotstore.database.QueryScheduler;
+import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -34,7 +34,6 @@ import java.util.concurrent.CompletableFuture;
  * @param <D> the type of data entity managed by this service.
  */
 public abstract class AbstractRemoteDataService<D> implements DataService<D> {
-
 
     protected final QueryProvider provider;
 
@@ -173,6 +172,13 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
         return provider.delete(getTable())
                        .matchAll()
                        .queue(scheduler);
+    }
+
+
+    // TODO: Implement
+    @Override
+    public CompletableFuture<Boolean> reload() {
+        return CompletableFuture.completedFuture(true);
     }
 
 }

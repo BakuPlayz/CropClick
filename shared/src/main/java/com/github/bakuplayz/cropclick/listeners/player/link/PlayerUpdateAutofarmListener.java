@@ -20,17 +20,18 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarm.AutofarmFactory;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.common.Blocks;
-import com.github.bakuplayz.cropclick.common.LocationUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
-import com.github.bakuplayz.cropclick.events.Event;
+import com.github.bakuplayz.cropclick.common.Locations;
+import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmUpdateEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUpdateAutofarmEvent;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
+import dev.bakuplayz.spigotstore.task.model.Task;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -40,8 +41,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 
 /**
@@ -53,14 +55,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerUpdateAutofarmListener implements Listener {
 
-    private final CropClick plugin;
+    private final DefaultConfig config;
+
+    private final TaskScheduler taskScheduler;
 
     private final AutofarmManager autofarmManager;
 
 
     public PlayerUpdateAutofarmListener(@NotNull CropClick plugin) {
+        this.config = plugin.getConfigManager().getDefaultConfig();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.plugin = plugin;
+        this.taskScheduler = plugin.getTaskScheduler();
     }
 
 
@@ -73,20 +78,16 @@ public final class PlayerUpdateAutofarmListener implements Listener {
     public void onPlayerPlaceDoubleChest(@NotNull BlockPlaceEvent event) {
         if (event.isCancelled()) return;
 
-        if (!autofarmManager.isEnabled()) {
+        if (!config.getBoolean(DefaultConfig.ConfigurationKey.AUTOFARMS_ENABLED)) {
             return;
         }
 
-        Runnable chestRunnable = getDoubleChestRunnable(
-                event.getPlayer(),
+        Task chestRunnable = getDoubleChestTask(
+                CropPlayer.fromPlayer(event.getPlayer()),
                 event.getBlock()
         );
 
-        Bukkit.getScheduler().runTaskLater(
-                plugin,
-                chestRunnable,
-                1
-        );
+        taskScheduler.runTask(chestRunnable, TaskContext.BUKKIT);
     }
 
 
@@ -97,29 +98,19 @@ public final class PlayerUpdateAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerUpdateAutofarm(@NotNull PlayerUpdateAutofarmEvent event) {
-        if (event.isCancelled()) return;
-
-        if (!autofarmManager.isEnabled()) {
-            event.setCancelled(true);
-            return;
-        }
-
-        Player player = event.getPlayer();
+        CropPlayer player = event.getPlayer();
         Autofarm oldFarm = event.getOldAutofarm();
         Autofarm newFarm = event.getNewAutofarm();
-        if (!PermissionUtils.canUpdateOthersFarm(player, oldFarm.getOwnerId())) {
+        if (player.getPermissions().canUpdate(oldFarm)) {
             event.setCancelled(true);
             return;
         }
 
-        Event updateEvent = new AutofarmUpdateEvent(
-                oldFarm,
-                newFarm
+        Log.debug("{0}: Called the update event.", Tag.PLAYER, player.getOfflinePlayer().getName());
+
+        Bukkit.getPluginManager().callEvent(
+                new AutofarmUpdateEvent(oldFarm, newFarm)
         );
-
-        Log.debug(String.format("%s (Player): Called the update event!", player.getName()));
-
-        Bukkit.getPluginManager().callEvent(updateEvent);
     }
 
 
@@ -131,40 +122,32 @@ public final class PlayerUpdateAutofarmListener implements Listener {
      *
      * @return a runnable for updating the chest component.
      */
-    @Contract(pure = true)
-    private @NotNull Runnable getDoubleChestRunnable(@NotNull Player player, @NotNull Block block) {
+    @NotNull
+    private Task getDoubleChestTask(@NotNull CropPlayer player, @NotNull Block block) {
         return () -> {
-            if (!Blocks.isDoubleChest(block)) {
-                return;
-            }
-
-            Autofarm autofarm = autofarmManager.findAutofarm(block);
-            if (autofarm == null) {
-                return;
-            }
-
-            DoublyLocation doubleChest = LocationUtils.findDoubly(block.getLocation());
-
+            DoublyLocation doubleChest = Locations.findDoubly(block.getLocation());
             if (doubleChest == null) {
                 return;
             }
 
-            Autofarm newAutofarm = AutofarmFactory.createPlain(
-                    autofarm.getFarmerId(),
-                    autofarm.getOwnerId(),
-                    autofarm.isEnabled(),
-                    autofarm.getCropLocation(),
-                    doubleChest,
-                    autofarm.getDispenserLocation()
-            );
+            autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> {
+                if (autofarm == null) {
+                    return;
+                }
 
-            Event updateEvent = new PlayerUpdateAutofarmEvent(
-                    player,
-                    autofarm,
-                    newAutofarm
-            );
+                Autofarm newAutofarm = Autofarm.createBasic(
+                        autofarm.getFarmerId(),
+                        autofarm.getOwnerId(),
+                        autofarm.isEnabled(),
+                        autofarm.getCropLocation(),
+                        doubleChest,
+                        autofarm.getDispenserLocation()
+                );
 
-            Bukkit.getPluginManager().callEvent(updateEvent);
+                Bukkit.getPluginManager().callEvent(
+                        new PlayerUpdateAutofarmEvent(player, autofarm, newAutofarm)
+                );
+            });
         };
     }
 

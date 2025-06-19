@@ -18,10 +18,13 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 /**
  * Local in-memory implementation of {@link FarmWorldDataService}, used when there
@@ -30,7 +33,8 @@ import org.jetbrains.annotations.NotNull;
 public final class LocalFarmWorldService extends AbstractLocalDataService<FarmWorld> implements FarmWorldDataService {
 
     public LocalFarmWorldService(@NotNull CropClick plugin) {
-        super("worlds.json", plugin);
+        super("worlds.json", new TypeReference<Map<String, FarmWorld>>() {
+        }, plugin);
     }
 
 

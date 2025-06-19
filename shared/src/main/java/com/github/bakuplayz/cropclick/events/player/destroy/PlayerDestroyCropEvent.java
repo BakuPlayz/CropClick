@@ -23,6 +23,7 @@ import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -38,12 +39,16 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  */
 @Getter
+@RequiredArgsConstructor
 public final class PlayerDestroyCropEvent extends Event implements Cancellable {
 
+    @NotNull
     private final Crop crop;
 
+    @NotNull
     private final Block block;
 
+    @NotNull
     private final CropPlayer player;
 
     /**
@@ -51,12 +56,5 @@ public final class PlayerDestroyCropEvent extends Event implements Cancellable {
      */
     @Setter
     private boolean cancelled;
-
-
-    public PlayerDestroyCropEvent(@NotNull Crop crop, @NotNull Block block, @NotNull CropPlayer player) {
-        this.player = player;
-        this.block = block;
-        this.crop = crop;
-    }
 
 }

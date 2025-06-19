@@ -68,7 +68,7 @@ public final class SeaPickle extends AbstractGroundCrop implements MassHarvestab
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 100);
+        return createDrop(1, 1.0d);
     }
 
 

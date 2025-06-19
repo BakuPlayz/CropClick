@@ -21,10 +21,10 @@ package com.github.bakuplayz.cropclick.crops;
 
 import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.autofarm.Container;
+import com.github.bakuplayz.cropclick.common.types.Particle;
+import com.github.bakuplayz.cropclick.common.types.Sound;
 import com.github.bakuplayz.cropclick.crops.seeds.Seed;
-import com.github.bakuplayz.cropclick.models.Particle;
-import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -110,7 +110,7 @@ public interface Crop {
      *
      * @return true if harvested, otherwise false.
      */
-    boolean harvest(@NotNull ContainerComponent container);
+    boolean harvest(@NotNull Container container);
 
 
     /**
@@ -148,6 +148,16 @@ public interface Crop {
      * @return true if it is, otherwise false.
      */
     boolean isLinkable();
+
+
+    /**
+     * Checks whether the implementing crop is already clickable in vanilla Minecraft.
+     *
+     * @return true iff it is, false otherwise.
+     */
+    default boolean isAlreadyClickable() {
+        return false;
+    }
 
 
     /**

@@ -27,6 +27,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.Log.Tag;
+
 
 /**
  * A listener handling all the {@link Crop crop} harvest events.
@@ -37,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class HarvestCropListener implements Listener {
 
-
     /**
      * Handles all the harvest {@link Crop crop} events.
      *
@@ -45,15 +46,7 @@ public final class HarvestCropListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onHarvestCrop(@NotNull HarvestCropEvent event) {
-        if (event.isCancelled()) return;
-
-        Crop crop = event.getCrop();
-
-        if (!crop.hasDrop()) {
-            event.setCancelled(true);
-        }
-
-        Log.debug(String.format("%s (Crop): Called the harvest event!", crop.getName()));
+        Log.debug("{0}: Called the harvest event.", Tag.CROP, event.getCrop().getName());
     }
 
 }

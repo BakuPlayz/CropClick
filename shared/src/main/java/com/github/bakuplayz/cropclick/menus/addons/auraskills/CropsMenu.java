@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.CROPS_ITEM_AURA_SKILLS_EXPERIENCE;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.CROPS_ITEM_AURA_SKILLS_EXPERIENCE;
 
 /**
  * A class representing the Crops menu scoped for AuraSkills.
@@ -49,7 +49,7 @@ public final class CropsMenu extends AbstractCropsMenu {
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
         return CROPS_ITEM_AURA_SKILLS_EXPERIENCE.getAsList(plugin,
-                plugin.getCropsConfig().get(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName())
+                plugin.getConfigManager().getCropsConfig().getDouble(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName())
         );
     }
 

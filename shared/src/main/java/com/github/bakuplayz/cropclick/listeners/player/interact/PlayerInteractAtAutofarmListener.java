@@ -20,23 +20,23 @@
 package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.addons.AddonManager;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.common.*;
-import com.github.bakuplayz.cropclick.configurations.config.PlayersConfig;
-import com.github.bakuplayz.cropclick.crops.Crop;
+import com.github.bakuplayz.cropclick.common.Autofarms;
+import com.github.bakuplayz.cropclick.common.Blocks;
+import com.github.bakuplayz.cropclick.common.Events;
+import com.github.bakuplayz.cropclick.common.Versions;
+import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
 import com.github.bakuplayz.cropclick.crops.CropManager;
-import com.github.bakuplayz.cropclick.events.Event;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
-import com.github.bakuplayz.cropclick.worlds.WorldManager;
+import com.github.bakuplayz.cropclick.world.WorldManager;
+import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,6 +44,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig.ConfigurationKey;
 
 
 /**
@@ -55,21 +57,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PlayerInteractAtAutofarmListener implements Listener {
 
+    private final DefaultConfig config;
+
     private final CropManager cropManager;
 
     private final WorldManager worldManager;
 
-    private final AddonManager addonManager;
-
-    private final PlayersConfig playersConfig;
-
     private final AutofarmManager autofarmManager;
+
+    private final TaskScheduler taskScheduler;
 
 
     public PlayerInteractAtAutofarmListener(@NotNull CropClick plugin) {
+        this.config = plugin.getConfigManager().getDefaultConfig();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.playersConfig = plugin.getPlayersConfig();
-        this.addonManager = plugin.getAddonManager();
+        this.taskScheduler = plugin.getTaskScheduler();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
     }
@@ -92,57 +94,60 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
         }
 
         Action action = event.getAction();
-        Player player = event.getPlayer();
+        CropPlayer player = CropPlayer.fromPlayer(event.getPlayer());
         if (!Events.isLeftShift(player, action)) {
             return;
         }
 
-        if (!playersConfig.isEnabled(player)) {
+        if (!player.isPluginEnabled()) {
             return;
         }
 
-        if (!autofarmManager.isEnabled()) {
+        if (!config.getBoolean(ConfigurationKey.AUTOFARMS_ENABLED)) {
             return;
         }
 
-        if (!addonManager.canModifyRegion(player)) {
+        if (!player.getAddonFeatures().canModifyRegion()) {
             return;
         }
 
-        if (!PermissionUtils.canInteractAtFarm(player)) {
-            return;
-        }
+        autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> worldManager.getFinder().findByPlayer(player).thenAccept(world -> taskScheduler.runTask(() -> {
+            if (!player.getPermissions().canInteractAt(autofarm)) {
+                return;
+            }
 
-        FarmWorld world = worldManager.findByPlayer(player);
-        if (!worldManager.isAccessible(world)) {
-            return;
-        }
+            if (!worldManager.isAccessible(world)) {
+                return;
+            }
 
-        if (!world.allowsPlayers()) {
-            return;
-        }
+            if (!world.allowsPlayers()) {
+                return;
+            }
 
-        if (autofarmManager.isComponent(block)) {
-            event.setCancelled(true);
-        }
+            if (Autofarms.isContainer(block)) {
+                event.setCancelled(true);
 
-        if (AutofarmUtils.isContainer(block)) {
-            ContainerComponent container = AutofarmUtils.findContainer(block);
-            Event containerEvent = new PlayerInteractAtContainerEvent(player, block, container);
-            Bukkit.getPluginManager().callEvent(containerEvent);
-        }
+                Bukkit.getPluginManager().callEvent(
+                        new PlayerInteractAtContainerEvent(block, player, Autofarms.findContainer(block), autofarm)
+                );
+            }
 
-        if (AutofarmUtils.isDispenser(block)) {
-            Dispenser dispenser = AutofarmUtils.findDispenser(block);
-            Event dispenserEvent = new PlayerInteractAtDispenserEvent(player, dispenser);
-            Bukkit.getPluginManager().callEvent(dispenserEvent);
-        }
+            if (Autofarms.isDispenser(block)) {
+                event.setCancelled(true);
 
-        if (AutofarmUtils.isCrop(cropManager, block)) {
-            Crop crop = AutofarmUtils.findCrop(cropManager, block);
-            Event cropEvent = new PlayerInteractAtCropEvent(player, block, crop);
-            Bukkit.getPluginManager().callEvent(cropEvent);
-        }
+                Bukkit.getPluginManager().callEvent(
+                        new PlayerInteractAtDispenserEvent(player, Autofarms.findDispenser(block), autofarm)
+                );
+            }
+
+            if (Autofarms.isCrop(cropManager, block)) {
+                event.setCancelled(true);
+
+                Bukkit.getPluginManager().callEvent(
+                        new PlayerInteractAtCropEvent(Autofarms.findCrop(cropManager, block), block, player, autofarm)
+                );
+            }
+        }, TaskContext.BUKKIT)));
     }
 
 }

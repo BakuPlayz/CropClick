@@ -19,19 +19,21 @@
 package com.github.bakuplayz.cropclick.menus.abstracts;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.crops.Crop;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedStateHandler;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the Abstract Crops menu.
@@ -57,16 +59,16 @@ public abstract class AbstractCropsMenu extends AbstractPaginatedMenu<BasicPagin
     }
 
 
-    @Override
-    public BasicPaginatedStateHandler createStateHandler() {
-        return new BasicPaginatedStateHandler(this);
-    }
-
-
     @NotNull
     @Override
     public Item loadPaginatedItem(@NotNull Crop crop, int position) {
         return new CropItem(crop);
+    }
+
+
+    @Override
+    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
+        return new BasicPaginatedStateHandler(this);
     }
 
 
@@ -83,17 +85,20 @@ public abstract class AbstractCropsMenu extends AbstractPaginatedMenu<BasicPagin
         private final Crop crop;
 
 
+        @NotNull
         @Override
-        public void create() {
-            String name = MessageUtils.beautify(crop.getName(), false);
-            String status = crop.isHarvestable()
-                    ? CROPS_STATUS_ENABLED.get(plugin)
-                    : CROPS_STATUS_DISABLED.get(plugin);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                String name = Messages.beautify(crop.getName(), false);
+                String status = crop.isHarvestable()
+                                        ? CROPS_STATUS_ENABLED.get(plugin)
+                                        : CROPS_STATUS_DISABLED.get(plugin);
 
-            setMaterial(crop.getMenuType());
-            setLore(loreSupplier.getLore(crop));
-            setName(CROPS_ITEM_NAME.get(plugin, name, status));
-            setMaterial(!crop.isHarvestable(), XMaterial.GRAY_STAINED_GLASS_PANE);
+                setMaterial(crop.getMenuType());
+                setLore(loreSupplier.getLore(crop));
+                setName(CROPS_ITEM_NAME.get(plugin, name, status));
+                setMaterial(!crop.isHarvestable(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            });
         }
     }
 

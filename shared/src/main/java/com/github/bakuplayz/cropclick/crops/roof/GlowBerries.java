@@ -78,7 +78,13 @@ public final class GlowBerries extends AbstractRoofCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 100);
+        return createDrop(1, 1.0d);
+    }
+
+
+    @Override
+    public boolean isAlreadyClickable() {
+        return true;
     }
 
 
@@ -165,7 +171,7 @@ public final class GlowBerries extends AbstractRoofCrop {
      */
     @Override
     public boolean isLinkable() {
-        return cropsConfig.getOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
+        return cropsConfig.getBooleanOrDefault(ConfigurationKey.CROP_LINKABLE, false, getName());
     }
 
 

@@ -20,7 +20,7 @@ package com.github.bakuplayz.cropclick.menus.addons;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.auraskills.AuraSkillsAddon;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractAddonMenu;
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.addons.auraskills.CropsMenu;
@@ -29,7 +29,9 @@ import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import java.util.concurrent.CompletableFuture;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
  * A class representing the AuraSkills menu.
@@ -56,19 +58,22 @@ public final class AuraSkillsMenu extends AbstractAddonMenu {
 
     private final class ToggleItem extends AbstractToggleItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(getName());
-            setMaterial(getMaterial());
-            setLore(ADDON_SKILLS_ITEM_TIPS.getAsList(plugin));
-            setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(getName());
+                setMaterial(getMaterial());
+                setLore(ADDON_SKILLS_ITEM_TIPS.getAsList(plugin));
+                setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
+            });
         }
 
 
         @NotNull
         @Override
         protected String getName() {
-            return ADDON_SKILLS_ITEM_NAME.get(plugin, MessageUtils.getStatusMessage(plugin, getState().isAddonEnabled()));
+            return ADDON_SKILLS_ITEM_NAME.get(plugin, Messages.getStatusMessage(plugin, getState().isAddonEnabled()));
         }
 
 

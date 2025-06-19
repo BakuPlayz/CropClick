@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.crops;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
@@ -29,13 +29,15 @@ import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 import static com.github.bakuplayz.cropclick.menus.crops.states.CropStateBuilder.*;
 
 /**
@@ -55,7 +57,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     @NotNull
     @Override
-    public CropMenuStateHandler createStateHandler() {
+    public CropMenuStateHandler createStateHandler(@NotNull Player player) {
         return CropStateBuilder.createStateHandler(this, plugin, crop);
     }
 
@@ -117,7 +119,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @NotNull
         protected String getName(boolean isHarvestable) {
-            String name = MessageUtils.beautify(cropName, false);
+            String name = Messages.beautify(cropName, false);
             String status = isHarvestable
                                     ? CROP_STATUS_ENABLED.get(plugin)
                                     : CROP_STATUS_DISABLED.get(plugin);
@@ -194,11 +196,11 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     }
 
     private final class SeedItem extends AbstractSeedItem {
-        
+
         @NotNull
         protected String getName(boolean isEnabled) {
-            String name = MessageUtils.beautify(seed.getName(), false);
-            String status = MessageUtils.getStatusMessage(plugin, isEnabled);
+            String name = Messages.beautify(seed.getName(), false);
+            String status = Messages.getStatusMessage(plugin, isEnabled);
             return CROP_SEED_ITEM_NAME.get(plugin, name, status);
         }
 
@@ -243,41 +245,45 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class ChanceItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(CROP_CHANCE_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.OAK_PRESSURE_PLATE);
-            setLore(CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, getCropDropChance()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(CROP_CHANCE_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.OAK_PRESSURE_PLATE);
+                setLore(CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, getCropDropChance()));
 
-            if (hasSeed) {
-                setLore(
-                        CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, getCropDropChance()),
-                        CROP_CHANCE_ITEM_SEED_STATUS.get(plugin, getSeedDropChance())
-                );
-            }
+                if (hasSeed) {
+                    setLore(
+                            CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, getCropDropChance()),
+                            CROP_CHANCE_ITEM_SEED_STATUS.get(plugin, getSeedDropChance())
+                    );
+                }
+            });
         }
 
 
-        // TODO: Convert to decimal
         private int getCropDropChance() {
-            return cropsConfig.get(ConfigurationKey.CROP_DROP_CHANCE, cropName);
+            return (int) (cropsConfig.getDouble(ConfigurationKey.CROP_DROP_CHANCE, cropName) * 100);
         }
 
 
-        // TODO: Convert to decimal
         private int getSeedDropChance() {
-            return cropsConfig.get(ConfigurationKey.SEED_DROP_CHANCE, seed.getName());
+            return (int) (cropsConfig.getDouble(ConfigurationKey.SEED_DROP_CHANCE, seed.getName()) * 100);
         }
 
     }
 
     private final class LinkableItem extends ClickableStateItem<CropMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.STONE_PRESSURE_PLATE);
-            setName(CROP_LINKABLE_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().isLinkable()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.STONE_PRESSURE_PLATE);
+                setName(CROP_LINKABLE_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().isLinkable()));
+            });
         }
 
 
@@ -298,11 +304,14 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class ReplantItem extends ClickableStateItem<CropMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(CROP_REPLANT_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.HEAVY_WEIGHTED_PRESSURE_PLATE);
-            setLore(getLore(getState().isReplantable()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(CROP_REPLANT_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.HEAVY_WEIGHTED_PRESSURE_PLATE);
+                setLore(getLore(getState().isReplantable()));
+            });
         }
 
 
@@ -323,11 +332,14 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     private final class AtLeastOneItem extends ClickableStateItem<CropMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(CROP_AT_LEAST_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE);
-            setLore(getLore(getState().isDroppingAtLeastOne()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(CROP_AT_LEAST_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE);
+                setLore(getLore(getState().isDroppingAtLeastOne()));
+            });
         }
 
 

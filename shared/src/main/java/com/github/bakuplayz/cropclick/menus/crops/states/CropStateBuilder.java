@@ -49,7 +49,7 @@ public final class CropStateBuilder {
     }
 
 
-    public static class CropMenuStateHandler extends MenuStateHandler<CropMenuState, CropMenu> {
+    public final static class CropMenuStateHandler extends MenuStateHandler<CropMenuState, CropMenu> {
 
         private final Crop crop;
 
@@ -57,8 +57,8 @@ public final class CropStateBuilder {
 
 
         private CropMenuStateHandler(@NotNull CropMenu observer, @NotNull CropClick plugin, @NotNull Crop crop) {
-            super(observer, new CropMenuState(plugin, crop));
-            this.cropsConfig = plugin.getCropsConfig();
+            super(observer, new CropMenuState(plugin.getConfigManager().getCropsConfig(), crop));
+            this.cropsConfig = plugin.getConfigManager().getCropsConfig();
             this.crop = crop;
         }
 
@@ -165,14 +165,14 @@ public final class CropStateBuilder {
         private boolean isDroppingAtLeastOne;
 
 
-        private CropMenuState(@NotNull CropClick plugin, @NotNull Crop crop) {
+        private CropMenuState(@NotNull CropsConfig config, @NotNull Crop crop) {
             this.isLinkable = crop.isLinkable();
             this.isReplantable = crop.shouldReplant();
             this.isCropHarvestable = crop.isHarvestable();
             this.isDroppingAtLeastOne = crop.dropAtLeastOne();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.cropValue = plugin.getCropsConfig().get(ConfigurationKey.CROP_DROP_AMOUNT, crop.getName());
-            this.seedValue = plugin.getCropsConfig().get(ConfigurationKey.SEED_DROP_AMOUNT, crop.hasSeed() ? crop.getSeed().getName() : "");
+            this.cropValue = config.getInt(ConfigurationKey.CROP_DROP_AMOUNT, crop.getName());
+            this.seedValue = config.getInt(ConfigurationKey.SEED_DROP_AMOUNT, crop.hasSeed() ? crop.getSeed().getName() : "");
         }
 
     }

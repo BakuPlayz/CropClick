@@ -22,10 +22,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.common.Maps;
-import com.github.bakuplayz.cropclick.database.DatabaseDialect;
-import com.github.bakuplayz.cropclick.database.EntityMapper;
-import com.github.bakuplayz.cropclick.database.LogicalType;
-import com.github.bakuplayz.cropclick.worlds.FarmWorld;
+import com.github.bakuplayz.cropclick.world.FarmWorld;
+import dev.bakuplayz.spigotstore.database.DatabaseDialect;
+import dev.bakuplayz.spigotstore.database.LogicalType;
+import dev.bakuplayz.spigotstore.database.entity.EntityMapper;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -51,7 +51,7 @@ public final class FarmWorldMapper implements EntityMapper<FarmWorld> {
     @NotNull
     @Override
     public FarmWorld toEntity(@NotNull ResultSet rs) throws SQLException, IOException {
-        return new FarmWorld(
+        return FarmWorld.createBasic(
                 rs.getString(1),
                 rs.getBoolean(2),
                 rs.getBoolean(3),

@@ -53,9 +53,9 @@ public final class JobsRebornFunctionality implements AddonFunctionality {
         }
 
         String cropName = crop.getName();
-        jobsPlayer.addPoints(config.get(ConfigurationKey.JOBS_POINTS, cropName));
-        jobsPlayer.getJobProgression(FARMER_JOB).addExperience(config.get(ConfigurationKey.JOBS_EXPERIENCE, cropName));
-        jobsPlayer.getPaymentLimit().addNewAmount(CurrencyType.MONEY, config.get(ConfigurationKey.JOBS_MONEY, cropName));
+        jobsPlayer.addPoints(config.getDouble(ConfigurationKey.JOBS_POINTS, cropName));
+        jobsPlayer.getJobProgression(FARMER_JOB).addExperience(config.getDouble(ConfigurationKey.JOBS_EXPERIENCE, cropName));
+        jobsPlayer.getPaymentLimit().addNewAmount(CurrencyType.MONEY, config.getDouble(ConfigurationKey.JOBS_MONEY, cropName));
 
         Jobs.getBBManager().ShowJobProgression(jobsPlayer);
     }

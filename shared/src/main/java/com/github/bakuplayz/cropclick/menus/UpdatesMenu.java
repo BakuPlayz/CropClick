@@ -20,20 +20,22 @@
 package com.github.bakuplayz.cropclick.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.cropclick.menus.states.UpdatesStateBuilder;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
-import com.github.bakuplayz.cropclick.common.MessageUtils;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractSharedMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 import static com.github.bakuplayz.cropclick.menus.states.UpdatesStateBuilder.*;
 
 /**
@@ -57,15 +59,9 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
     }
 
 
-    @Override
-    public SizeType getSizeType() {
-        return SizeType.DOUBLE_CHEST;
-    }
-
-
     @NotNull
     @Override
-    public UpdatesMenuStateHandler createStateHandler() {
+    public UpdatesMenuStateHandler createStateHandler(@NotNull Player player) {
         return UpdatesStateBuilder.createStateHandler(this, plugin);
     }
 
@@ -73,34 +69,43 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
     @Override
     public void setItems() {
         setItem(20, new PlayerItem(), (item, player) -> stateHandler.togglePlayerState(), UpdatesMenuStateFlag.PLAYER);
-        setItem(22, new UpdateItem(), (item, player) -> { // TODO: Fix this mess...
+        setItem(22, new UpdateItem(), (item, player) -> {
             if (updateManager.isUpdated()) {
-                player.sendMessage(MessageUtils.colorize("&7No new updates."));
+                player.sendMessage(Messages.colorize("&7No new updates."));
                 return;
             }
 
-            String updateURL = updateManager.getUpdateURL();
+            String updateURL = updateManager.getInfo().getUrl();
             if (updateURL.isEmpty()) return;
 
-            String updateMessage = updateManager.getUpdateMessage();
+            String updateMessage = updateManager.getInfo().getMessage();
             if (updateMessage.isEmpty()) return;
 
-            player.sendMessage(MessageUtils.colorize(updateMessage));
-            player.sendMessage(MessageUtils.colorize("&7Get the new update on Spigot!"));
-            player.sendMessage(MessageUtils.colorize("&7" + updateURL));
+            player.sendMessage(Messages.colorize(updateMessage));
+            player.sendMessage(Messages.colorize("&7Get the new update on Spigot!"));
+            player.sendMessage(Messages.colorize("&7" + updateURL));
         });
         setItem(24, new ConsoleItem(), (item, player) -> stateHandler.toggleConsoleState(), UpdatesMenuStateFlag.CONSOLE);
         setItem(49, new CustomBackItem(plugin));
     }
 
 
+    @Override
+    public SizeType getSizeType() {
+        return SizeType.DOUBLE_CHEST;
+    }
+
+
     private final class PlayerItem extends ClickableStateItem<UpdatesMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.ITEM_FRAME);
-            setName(UPDATES_PLAYER_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().isPlayerEnabled()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.ITEM_FRAME);
+                setName(UPDATES_PLAYER_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().isPlayerEnabled()));
+            });
         }
 
 
@@ -113,7 +118,7 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
         @NotNull
         private List<String> getLore(boolean state) {
             return UPDATES_PLAYER_ITEM_TIPS.getAsAppendList(plugin,
-                    UPDATES_PLAYER_ITEM_STATUS.get(plugin, MessageUtils.getStatusMessage(plugin, state))
+                    UPDATES_PLAYER_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state))
             );
         }
 
@@ -121,11 +126,14 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
 
     private final class ConsoleItem extends ClickableStateItem<UpdatesMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.ITEM_FRAME);
-            setName(UPDATES_CONSOLE_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().isConsoleEnabled()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.ITEM_FRAME);
+                setName(UPDATES_CONSOLE_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().isConsoleEnabled()));
+            });
         }
 
 
@@ -138,7 +146,7 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
         @NotNull
         private List<String> getLore(boolean state) {
             return UPDATES_CONSOLE_ITEM_TIPS.getAsAppendList(plugin,
-                    UPDATES_CONSOLE_ITEM_STATUS.get(plugin, MessageUtils.getStatusMessage(plugin, state))
+                    UPDATES_CONSOLE_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state))
             );
         }
 
@@ -146,13 +154,16 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
 
     private final class UpdateItem extends ClickableItem {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.ANVIL);
-            setName(UPDATES_UPDATES_ITEM_NAME.get(plugin));
-            setLore(UPDATES_UPDATES_ITEM_TIPS.getAsAppendList(plugin,
-                    UPDATES_UPDATES_ITEM_STATE.get(plugin, updateManager.getUpdateStateMessage())
-            ));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.ANVIL);
+                setName(UPDATES_UPDATES_ITEM_NAME.get(plugin));
+                setLore(UPDATES_UPDATES_ITEM_TIPS.getAsAppendList(plugin,
+                        UPDATES_UPDATES_ITEM_STATE.get(plugin, updateManager.getInfo().getMessage())
+                ));
+            });
         }
 
     }

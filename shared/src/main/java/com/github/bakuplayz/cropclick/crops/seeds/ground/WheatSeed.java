@@ -62,7 +62,7 @@ public final class WheatSeed extends AbstractSeed {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(3, 80);
+        return createDrop(3, 0.80);
     }
 
 

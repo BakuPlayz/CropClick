@@ -20,9 +20,9 @@
 package com.github.bakuplayz.cropclick.listeners.player.link;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
 import com.github.bakuplayz.cropclick.events.autofarm.link.AutofarmLinkEvent;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import org.bukkit.Bukkit;
@@ -32,7 +32,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.LINK_ACTION_SUCCESS;
+import static com.github.bakuplayz.cropclick.Log.Tag;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.LINK_ACTION_SUCCESS;
 
 
 /**
@@ -59,17 +60,11 @@ public final class PlayerLinkAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLinkAutofarm(@NotNull PlayerLinkAutofarmEvent event) {
-        if (event.isCancelled()) return;
-
-        Player player = event.getPlayer();
-        if (!PermissionUtils.canLinkFarm(player)) {
-            event.setCancelled(true);
-            return;
-        }
+        CropPlayer player = event.getPlayer();
 
         LINK_ACTION_SUCCESS.send(plugin, player);
 
-        Log.debug(String.format("%s (Player): Called the link event!", player.getName()));
+        Log.debug("{0}: Called the link event.", Tag.PLAYER, player.getOfflinePlayer().getName());
 
         Bukkit.getPluginManager().callEvent(
                 new AutofarmLinkEvent(event.getAutofarm())

@@ -21,13 +21,32 @@ package com.github.bakuplayz.cropclick.database.serializers;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public final class LocationSerializer extends JsonSerializer<Location> {
+
+    public static void serializeDoublyLocation(@NotNull JsonGenerator generator, @NotNull DoublyLocation location) throws IOException {
+        generator.writeObjectFieldStart("singly");
+        serializeLocation(generator, location.getSingly());
+        generator.writeEndObject();
+
+        generator.writeObjectFieldStart("doubly");
+        serializeLocation(generator, location.getDoubly());
+        generator.writeEndObject();
+    }
+
+
+    public static void serializeLocation(@NotNull JsonGenerator generator, @NotNull Location location) throws IOException {
+        generator.writeNumberField("x", location.getX());
+        generator.writeNumberField("y", location.getY());
+        generator.writeNumberField("z", location.getZ());
+        generator.writeStringField("world", location.getWorld().getName());
+    }
+
 
     @Override
     public void serialize(@NotNull Location location, @NotNull JsonGenerator generator, @NotNull SerializerProvider provider) throws IOException {
@@ -40,25 +59,6 @@ public final class LocationSerializer extends JsonSerializer<Location> {
         }
 
         generator.writeEndObject();
-    }
-
-
-    private void serializeDoublyLocation(@NotNull JsonGenerator generator, @NotNull DoublyLocation location) throws IOException {
-        generator.writeObjectFieldStart("singly");
-        serializeLocation(generator, location.getSingly());
-        generator.writeEndObject();
-
-        generator.writeObjectFieldStart("doubly");
-        serializeLocation(generator, location.getDoubly());
-        generator.writeEndObject();
-    }
-
-
-    private void serializeLocation(@NotNull JsonGenerator generator, @NotNull Location location) throws IOException {
-        generator.writeNumberField("x", location.getX());
-        generator.writeNumberField("y", location.getY());
-        generator.writeNumberField("z", location.getZ());
-        generator.writeStringField("world", location.getWorld().getName());
     }
 
 }

@@ -20,26 +20,28 @@ package com.github.bakuplayz.cropclick.menus.settings.sounds;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.common.Maths;
+import com.github.bakuplayz.cropclick.common.types.Sound;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder.SoundMenuState;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder.SoundMenuStateFlag;
 import com.github.bakuplayz.cropclick.menus.settings.sounds.states.SoundStateBuilder.SoundMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.models.Sound;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static com.github.bakuplayz.cropclick.language.LanguageAPI.Menu.*;
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 
 /**
@@ -95,7 +97,7 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
     @NotNull
     @Override
-    public SoundMenuStateHandler createStateHandler() {
+    public SoundMenuStateHandler createStateHandler(@NotNull Player player) {
         return SoundStateBuilder.createStateHandler(this, plugin, crop, soundName);
     }
 
@@ -138,11 +140,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Delay"));
-            setLore(getLore(getState().getDelay()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Delay"));
+                setLore(getLore(getState().getDelay()));
+            });
         }
 
 
@@ -168,11 +173,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
     private final class DelayItem extends ClickableStateItem<SoundMenuState> {
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.CLOCK);
-            setName(SOUND_DELAY_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getDelay()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.CLOCK);
+                setName(SOUND_DELAY_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getDelay()));
+            });
         }
 
 
@@ -197,11 +205,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Delay"));
-            setLore(getLore(getState().getDelay()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Delay"));
+                setLore(getLore(getState().getDelay()));
+            });
         }
 
 
@@ -230,11 +241,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Volume"));
-            setLore(getLore(getState().getVolume()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Volume"));
+                setLore(getLore(getState().getVolume()));
+            });
         }
 
 
@@ -259,11 +273,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
     private final class VolumeItem extends ClickableStateItem<SoundMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.NOTE_BLOCK);
-            setName(SOUND_VOLUME_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getVolume()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.NOTE_BLOCK);
+                setName(SOUND_VOLUME_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getVolume()));
+            });
         }
 
 
@@ -288,11 +305,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         private final int change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Volume"));
-            setLore(getLore(getState().getVolume()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Volume"));
+                setLore(getLore(getState().getVolume()));
+            });
         }
 
 
@@ -321,11 +341,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         private final double change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-            setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Pitch"));
-            setLore(getLore(getState().getPitch()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Pitch"));
+                setLore(getLore(getState().getPitch()));
+            });
         }
 
 
@@ -350,11 +373,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
     private final class PitchItem extends ClickableStateItem<SoundMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.TRIPWIRE_HOOK);
-            setName(SOUND_PITCH_ITEM_NAME.get(plugin));
-            setLore(getLore(getState().getPitch()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.TRIPWIRE_HOOK);
+                setName(SOUND_PITCH_ITEM_NAME.get(plugin));
+                setLore(getLore(getState().getPitch()));
+            });
         }
 
 
@@ -379,11 +405,14 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         private final double change;
 
 
+        @NotNull
         @Override
-        public void create() {
-            setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-            setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Pitch"));
-            setLore(getLore(getState().getPitch()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
+                setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Pitch"));
+                setLore(getLore(getState().getPitch()));
+            });
         }
 
 
@@ -408,12 +437,15 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
     private final class IncreaseOrderItem extends ClickableStateItem<SoundMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setName(SOUND_INCREASE_ORDER_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE);
-            setLore(getLore(getState().getOrder(), getState().getMaxOrder()));
-            setViewState(getViewState(getState().getOrder(), getState().getMaxOrder()));
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setName(SOUND_INCREASE_ORDER_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE);
+                setLore(getLore(getState().getOrder(), getState().getMaxOrder()));
+                setViewState(getViewState(getState().getOrder(), getState().getMaxOrder()));
+            });
         }
 
 
@@ -448,12 +480,15 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
     private final class DecreaseOrderItem extends ClickableStateItem<SoundMenuState> {
 
+        @NotNull
         @Override
-        public void create() {
-            setLore(getLore(getState().getOrder()));
-            setViewState(getViewState(getState().getOrder()));
-            setName(SOUND_DECREASE_ORDER_ITEM_NAME.get(plugin));
-            setMaterial(XMaterial.HEAVY_WEIGHTED_PRESSURE_PLATE);
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setLore(getLore(getState().getOrder()));
+                setViewState(getViewState(getState().getOrder()));
+                setName(SOUND_DECREASE_ORDER_ITEM_NAME.get(plugin));
+                setMaterial(XMaterial.HEAVY_WEIGHTED_PRESSURE_PLATE);
+            });
         }
 
 

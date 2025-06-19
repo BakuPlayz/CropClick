@@ -19,8 +19,7 @@
 package com.github.bakuplayz.cropclick.datacontainers;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.database.QueryScheduler;
-import com.github.bakuplayz.cropclick.database.query.QueryProvider;
+import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.LocalAutofarmService;
@@ -28,6 +27,8 @@ import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.RemoteAut
 import com.github.bakuplayz.cropclick.datacontainers.services.world.FarmWorldDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.world.LocalFarmWorldService;
 import com.github.bakuplayz.cropclick.datacontainers.services.world.RemoteFarmWorldService;
+import dev.bakuplayz.spigotstore.database.QueryScheduler;
+import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,11 +57,15 @@ public final class DataServiceManager {
     private final FarmWorldDataService farmWorldDataService;
 
 
+    private final MigratorService migratorService;
+
+
     public DataServiceManager(@NotNull CropClick plugin) {
         this.queryScheduler = plugin.getDatabaseManager().getQueryScheduler();
         this.queryProvider = plugin.getDatabaseManager().getQueryProvider();
         this.farmWorldDataService = createFarmWorldService(plugin);
         this.autofarmService = createAutofarmService(plugin);
+        this.migratorService = new MigratorService();
     }
 
 
@@ -72,7 +77,7 @@ public final class DataServiceManager {
 
     @NotNull
     private AutofarmDataService createAutofarmService(@NotNull CropClick plugin) {
-        if (queryScheduler.canQuery()) {
+        if (migratorService.isMigrated()) {
             return new RemoteAutofarmService(queryScheduler, queryProvider);
         }
         return new LocalAutofarmService(plugin);
@@ -81,10 +86,44 @@ public final class DataServiceManager {
 
     @NotNull
     private FarmWorldDataService createFarmWorldService(@NotNull CropClick plugin) {
-        if (queryScheduler.canQuery()) {
+        if (migratorService.isMigrated()) {
             return new RemoteFarmWorldService(queryScheduler, queryProvider);
         }
         return new LocalFarmWorldService(plugin);
     }
+
+
+    public final class MigratorService {
+
+
+        public boolean isMigrated() {
+            return true;
+        }
+
+
+        public void migrateToSQL() {
+
+        }
+
+
+        private <E> void migrateAllEntities(@NotNull DataService<E> from, @NotNull DataService<E> to) {
+            from.getMany(0, Integer.MAX_VALUE)
+                    .thenAccept(entities -> entities.forEach(entity -> migrateEntity(entity, to)))
+                    .exceptionally(ex -> {
+                        Log.severe("Failed to migrate entities from data service to data service.", ex);
+                        return null;
+                    });
+        }
+
+
+        private <E> void migrateEntity(@NotNull E entity, @NotNull DataService<E> to) {
+            to.insertOne(entity).exceptionally(ex -> {
+                Log.debug("Failed to migrate {0} entity.", entity.toString());
+                return null;
+            });
+        }
+
+    }
+
 
 }

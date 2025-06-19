@@ -41,7 +41,7 @@ public final class ToggleStateBuilder {
     }
 
 
-    public static class ToggleMenuStateHandler extends PaginatedMenuStateHandler<ToggleMenuState> {
+    public final static class ToggleMenuStateHandler extends PaginatedMenuStateHandler<ToggleMenuState> {
 
 
         public ToggleMenuStateHandler(@NotNull ToggleMenu observer) {
@@ -51,7 +51,7 @@ public final class ToggleStateBuilder {
 
         public void togglePlayer(@NotNull String playerId, int flag) {
             updateState(0, (state) -> {
-                new CropPlayer(playerId).togglePlugin();
+                CropPlayer.fromId(playerId).togglePlugin();
                 return state;
             }, flag);
         }

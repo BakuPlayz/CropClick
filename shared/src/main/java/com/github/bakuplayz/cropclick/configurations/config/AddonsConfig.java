@@ -22,8 +22,9 @@ package com.github.bakuplayz.cropclick.configurations.config;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -49,12 +50,12 @@ public final class AddonsConfig extends AbstractConfiguration {
      * @return true if enabled, otherwise false.
      */
     public boolean isEnabled(@NotNull String addonName) {
-        return get(AddonsConfig.ConfigurationKey.ADDON_ENABLED, addonName);
+        return getBoolean(ConfigurationKey.ADDON_ENABLED, addonName);
     }
 
 
     @Getter
-    @AllArgsConstructor
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
 
         ADDON_ENABLED("addons.%s.isEnabled", true);

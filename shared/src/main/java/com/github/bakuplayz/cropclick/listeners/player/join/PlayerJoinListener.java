@@ -20,6 +20,7 @@
 package com.github.bakuplayz.cropclick.listeners.player.join;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import org.bukkit.entity.Player;
@@ -29,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.Log.Tag;
 
 /**
  * A listener handling all the {@link Player} join events caused by a {@link Player}.
@@ -48,18 +50,21 @@ public final class PlayerJoinListener implements Listener {
 
 
     /**
-     * Handles all the {@link Player operator} join events.
+     * Handles all the {@link Player player} join events.
      *
      * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
-    public void onOperatorJoin(@NotNull PlayerJoinEvent event) {
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!player.isOp()) return;
 
-        Log.debug("{} (Operator): Called the join event!", player.getName());
+        Log.debug("{0}: Called the join event.", Tag.PLAYER, player.getName());
 
-        updateManager.sendAlert(player);
+        if (player.isOp()) {
+            updateManager.getNotifications().alertPlayer(player);
+        }
+
+        CropPlayer.getCache().add(player.getUniqueId());
     }
 
 }

@@ -25,7 +25,7 @@ import com.github.bakuplayz.cropclick.crops.CropArguments;
 import com.github.bakuplayz.cropclick.crops.Drop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
-import com.github.bakuplayz.cropclick.crops.algorithms.StackTraversal;
+import com.github.bakuplayz.cropclick.crops.algorithms.AgeStackTraversal;
 import com.github.bakuplayz.cropclick.crops.algorithms.inputs.TraversalInput;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Material;
@@ -49,7 +49,7 @@ import static com.github.bakuplayz.cropclick.configurations.config.CropsConfig.C
  */
 public final class Chorus extends AbstractTallCrop {
 
-    private final static StackTraversal ALGORITHM = new StackTraversal();
+    private final static AgeStackTraversal ALGORITHM = new AgeStackTraversal();
 
     private final List<Block> choruses;
 
@@ -81,7 +81,7 @@ public final class Chorus extends AbstractTallCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 80);
+        return createDrop(1, 0.80);
     }
 
 
@@ -146,7 +146,7 @@ public final class Chorus extends AbstractTallCrop {
      */
     @Override
     public boolean dropAtLeastOne() {
-        return cropsConfig.getOrDefault(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, false, getName());
+        return cropsConfig.getBooleanOrDefault(ConfigurationKey.CROP_DROP_AT_LEAST_ONE, false, getName());
     }
 
 

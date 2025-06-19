@@ -20,7 +20,8 @@
 package com.github.bakuplayz.cropclick.events.player.interact;
 
 import com.github.bakuplayz.cropclick.CropPlayer;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import com.github.bakuplayz.cropclick.events.Event;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * An event called when a {@link Player} interact at a {@link ContainerComponent container}.
+ * An event called when a {@link Player} interact at a {@link Container container}.
  *
  * @author BakuPlayz
  * @version 2.2.0
@@ -49,7 +50,9 @@ public final class PlayerInteractAtContainerEvent extends Event implements Cance
     private final CropPlayer player;
 
     @NotNull
-    private final ContainerComponent container;
+    private final Container container;
+
+    private final Autofarm autofarm;
 
     /**
      * Checks whether the event is cancelled or not.

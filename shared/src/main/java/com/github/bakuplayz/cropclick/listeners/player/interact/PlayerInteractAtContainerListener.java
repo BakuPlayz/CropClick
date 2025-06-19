@@ -20,12 +20,12 @@
 package com.github.bakuplayz.cropclick.listeners.player.interact;
 
 import com.github.bakuplayz.cropclick.CropClick;
+import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import com.github.bakuplayz.cropclick.autofarm.AutofarmBlocksCache;
 import com.github.bakuplayz.cropclick.autofarm.AutofarmManager;
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
-import com.github.bakuplayz.cropclick.common.AutofarmUtils;
-import com.github.bakuplayz.cropclick.common.PermissionUtils;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtContainerEvent;
 import com.github.bakuplayz.cropclick.menus.links.ContainerLinkMenu;
 import org.bukkit.block.Block;
@@ -35,9 +35,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import static com.github.bakuplayz.cropclick.Log.Tag;
+
 
 /**
- * A listener handling all the {@link ContainerComponent Containter} interactions caused by a {@link Player}.
+ * A listener handling all the {@link Container Containter} interactions caused by a {@link Player}.
  *
  * @author BakuPlayz
  * @version 2.0.0
@@ -57,33 +59,23 @@ public final class PlayerInteractAtContainerListener implements Listener {
 
 
     /**
-     * Handles all the {@link Player player} interact at {@link ContainerComponent container} events.
+     * Handles all the {@link Player player} interact at {@link Container container} events.
      *
      * @param event the event that was fired.
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractAtContainer(@NotNull PlayerInteractAtContainerEvent event) {
-        if (event.isCancelled()) return;
-
         Block block = event.getBlock();
-        Player player = event.getPlayer();
-        Autofarm autofarm = autofarmManager.findAutofarm(block);
+        CropPlayer player = event.getPlayer();
+        Autofarm autofarm = event.getAutofarm();
 
-        if (autofarmManager.isUsable(autofarm)) {
-            if (!PermissionUtils.canInteractAtOthersFarm(player, autofarm)) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (AutofarmUtils.hasCachedID(block)) {
-                AutofarmUtils.addCachedID(plugin, autofarm);
-            }
+        if (!AutofarmBlocksCache.hasCachedID(block)) {
+            autofarmManager.getBlocksCache().addIDs(autofarm);
         }
 
-        Log.debug(String.format("%s (Player): Called the interact at container event!", player.getName()));
+        Log.debug("{0}: Called the interact at container event.", Tag.PLAYER, player.getOfflinePlayer().getName());
 
-
-        new ContainerLinkMenu(plugin, autofarm, block, false).open(player);
+        new ContainerLinkMenu(plugin, autofarm, block, false).open(player.getOfflinePlayer().getPlayer());
     }
 
 }

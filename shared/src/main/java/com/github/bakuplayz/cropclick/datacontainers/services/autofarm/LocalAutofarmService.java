@@ -1,16 +1,18 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.Blocks;
-import com.github.bakuplayz.cropclick.common.LocationUtils;
-import com.github.bakuplayz.cropclick.common.location.DoublyLocation;
+import com.github.bakuplayz.cropclick.common.Locations;
+import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.DoubleChest;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -20,7 +22,8 @@ import java.util.concurrent.CompletableFuture;
 public final class LocalAutofarmService extends AbstractLocalDataService<Autofarm> implements AutofarmDataService {
 
     public LocalAutofarmService(@NotNull CropClick plugin) {
-        super("autofarms.json", plugin);
+        super("autofarms.json", new TypeReference<Map<String, Autofarm>>() {
+        }, plugin);
     }
 
 
@@ -38,7 +41,6 @@ public final class LocalAutofarmService extends AbstractLocalDataService<Autofar
     public CompletableFuture<Autofarm> getOneByCrop(@NotNull Location location) {
         return CompletableFuture.completedFuture(
                 dataContainer.getMany().stream()
-                        .filter(Autofarm::isLinked)
                         .filter(Autofarm::isEnabled)
                         .filter(farm -> farm.getCropLocation().equals(location))
                         .findFirst().orElse(null)
@@ -54,7 +56,6 @@ public final class LocalAutofarmService extends AbstractLocalDataService<Autofar
     public CompletableFuture<Autofarm> getOneByDispenser(@NotNull Location location) {
         return CompletableFuture.completedFuture(
                 dataContainer.getMany().stream()
-                        .filter(Autofarm::isLinked)
                         .filter(Autofarm::isEnabled)
                         .filter(farm -> farm.getDispenserLocation().equals(location))
                         .findFirst().orElse(null)
@@ -70,7 +71,6 @@ public final class LocalAutofarmService extends AbstractLocalDataService<Autofar
     public CompletableFuture<Autofarm> getOneByContainer(@NotNull Location location) {
         return CompletableFuture.completedFuture(
                 dataContainer.getMany().stream()
-                        .filter(Autofarm::isLinked)
                         .filter(Autofarm::isEnabled)
                         .filter(farm -> {
                             boolean filterByDoubly = filterByDoubly(farm, location);
@@ -133,7 +133,7 @@ public final class LocalAutofarmService extends AbstractLocalDataService<Autofar
             return false;
         }
 
-        DoublyLocation doubleChest = LocationUtils.findDoubly(block);
+        DoublyLocation doubleChest = Locations.findDoubly(block);
         if (doubleChest == null) {
             return false;
         }

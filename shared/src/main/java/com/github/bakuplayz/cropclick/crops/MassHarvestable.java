@@ -18,7 +18,7 @@
  */
 package com.github.bakuplayz.cropclick.crops;
 
-import com.github.bakuplayz.cropclick.autofarms.ContainerComponent;
+import com.github.bakuplayz.cropclick.autofarm.Container;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ public interface MassHarvestable extends Crop {
      *
      * @return true if it harvested all, otherwise false.
      */
-    default boolean harvestAll(@NotNull ContainerComponent container, @NotNull Block block) {
+    default boolean harvestAll(@NotNull Container container, @NotNull Block block) {
         boolean wasHarvested = true;
 
         int height = getCurrentAge(block);

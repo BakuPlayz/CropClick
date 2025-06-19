@@ -69,7 +69,7 @@ public final class PitcherPlant extends AbstractGroundCrop {
     @NotNull
     @Override
     public Drop getDrop() {
-        return createDrop(1, 100);
+        return createDrop(1, 1.0d);
     }
 
 
