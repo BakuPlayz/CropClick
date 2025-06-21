@@ -36,6 +36,8 @@ import java.util.Collection;
 @Getter
 public final class ConfigurationManager {
 
+    private final UsageConfig usageConfig;
+
     private final CropsConfig cropsConfig;
 
     private final AddonsConfig addonsConfig;
@@ -50,6 +52,7 @@ public final class ConfigurationManager {
 
 
     public ConfigurationManager(@NotNull CropClick plugin) {
+        this.usageConfig = new UsageConfig(plugin);
         this.cropsConfig = new CropsConfig(plugin);
         this.addonsConfig = new AddonsConfig(plugin);
         this.playersConfig = new PlayersConfig(plugin);
@@ -63,7 +66,7 @@ public final class ConfigurationManager {
 
     @NotNull
     public Collection<Configuration> getAll() {
-        return Arrays.asList(defaultConfig, cropsConfig, addonsConfig, playersConfig, languageConfig, databaseConfig);
+        return Arrays.asList(defaultConfig, usageConfig, cropsConfig, addonsConfig, playersConfig, languageConfig, databaseConfig);
     }
 
 
@@ -79,6 +82,7 @@ public final class ConfigurationManager {
         addonsConfig.create();
         playersConfig.create();
         languageConfig.create();
+        usageConfig.create();
     }
 
 }

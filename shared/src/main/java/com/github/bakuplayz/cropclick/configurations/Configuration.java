@@ -19,6 +19,7 @@
 
 package com.github.bakuplayz.cropclick.configurations;
 
+import com.github.bakuplayz.cropclick.configurations.observers.ConfigurationValueObserver;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,6 +110,12 @@ public interface Configuration {
 
 
     <T> void setWithReload(@NotNull ConfigurationKey key, T data, @NotNull String... args);
+
+
+    void registerObserver(@NotNull ConfigurationKey key, @NotNull ConfigurationValueObserver observer);
+
+
+    void unregisterObserver(@NotNull ConfigurationKey key, @NotNull ConfigurationValueObserver observer);
 
 
     int countKeys(@NotNull ConfigurationKey key, @NotNull String... args);

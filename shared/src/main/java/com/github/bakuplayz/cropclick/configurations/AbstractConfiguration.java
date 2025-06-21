@@ -22,6 +22,8 @@ package com.github.bakuplayz.cropclick.configurations;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.common.Strings;
+import com.github.bakuplayz.cropclick.configurations.observers.ConfigurationValueObserver;
+import com.github.bakuplayz.cropclick.configurations.observers.UnregisterHandle;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,10 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -62,8 +61,11 @@ public abstract class AbstractConfiguration implements Configuration {
     @Setter(AccessLevel.PRIVATE)
     private FileConfiguration configuration;
 
+    private final Map<ConfigurationKey, List<ConfigurationValueObserver>> observers;
+
 
     public AbstractConfiguration(@NotNull CropClick plugin, @NotNull String fileName) {
+        this.observers = new HashMap<>();
         this.fileName = fileName;
         this.plugin = plugin;
 
@@ -240,6 +242,10 @@ public abstract class AbstractConfiguration implements Configuration {
     public <T> void setWithoutSave(@NotNull ConfigurationKey key, T data, @NotNull String... args) {
         String path = Strings.replace(key.getPath(), "%s", args);
         getConfiguration().set(path, data);
+
+        for (ConfigurationValueObserver observer : observers.get(key)) {
+            observer.onValueChanged(data);
+        }
     }
 
 
@@ -248,6 +254,20 @@ public abstract class AbstractConfiguration implements Configuration {
         set(key, data, args);
         setConfiguration(YamlConfiguration.loadConfiguration(file));
     }
+
+
+    public void registerObserver(@NotNull ConfigurationKey key, @NotNull ConfigurationValueObserver observer) {
+        observers.computeIfAbsent(key, k -> new ArrayList<>()).add(observer);
+    }
+
+
+    public void unregisterObserver(@NotNull ConfigurationKey key, @NotNull ConfigurationValueObserver observer) {
+        if (!observers.containsKey(key)) {
+            return;
+        }
+        observers.get(key).remove(observer);
+    }
+
 
 
     @Override

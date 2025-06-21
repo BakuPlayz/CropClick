@@ -20,6 +20,9 @@ package com.github.bakuplayz.cropclick.datacontainers;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
+import com.github.bakuplayz.cropclick.common.Maps;
+import com.github.bakuplayz.cropclick.configurations.config.UsageConfig;
+import com.github.bakuplayz.cropclick.datacontainers.migrations.Migration;
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.LocalAutofarmService;
@@ -32,8 +35,13 @@ import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.util.AbstractMap.SimpleImmutableEntry;
 
 
 /**
@@ -50,6 +58,8 @@ public final class DataServiceManager {
     private final QueryScheduler queryScheduler;
 
 
+    private final UsageConfig usageConfig;
+
     @Getter
     private final AutofarmDataService autofarmService;
 
@@ -63,6 +73,7 @@ public final class DataServiceManager {
     public DataServiceManager(@NotNull CropClick plugin) {
         this.queryScheduler = plugin.getDatabaseManager().getQueryScheduler();
         this.queryProvider = plugin.getDatabaseManager().getQueryProvider();
+        this.usageConfig = plugin.getConfigManager().getUsageConfig();
         this.farmWorldDataService = createFarmWorldService(plugin);
         this.autofarmService = createAutofarmService(plugin);
         this.migratorService = new MigratorService();
@@ -95,14 +106,14 @@ public final class DataServiceManager {
 
     public final class MigratorService {
 
+        private final Map<String, Migration> migrations = Maps.ofEntries(
+                new SimpleImmutableEntry<>("json-to-db", ()->{})
+        );
 
-        public boolean isMigrated() {
-            return true;
-        }
+        private AtomicBoolean isMigrated = new AtomicBoolean(false);
 
 
         public void migrateToSQL() {
-
         }
 
 
@@ -124,6 +135,7 @@ public final class DataServiceManager {
         }
 
     }
+
 
 
 }
