@@ -24,10 +24,8 @@ import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.configurations.config.LanguageConfig;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,7 +174,9 @@ public final class Languages {
         SETTINGS_TITLE(Category.TITLE, "settings"),
         TOGGLE_TITLE(Category.TITLE, "toggle"),
         UPDATES_TITLE(Category.TITLE, "updates"),
+        MIGRATIONS_TITLE(Category.TITLE, "migrations"),
 
+        DASHBOARD_TITLE(Category.TITLE, "autofarmsDashboard"),
         DISPENSER_PREVIEW_TITLE(Category.TITLE, "dispenserPreview", "%id%"),
         CONTAINER_PREVIEW_TITLE(Category.TITLE, "containerPreview", "%id%"),
 
@@ -281,6 +281,16 @@ public final class Languages {
         AUTOFARMS_ITEM_OWNER(Category.AUTOFARMS, "itemOwner", "%owner%"),
         AUTOFARMS_ITEM_OWNER_UNCLAIMED(Category.AUTOFARMS, "itemOwnerUnclaimed"),
 
+        AUTOFARMS_DASHBOARD_LINK_ITEM_NAME(Category.AUTOFARMS_DASHBOARD, SubCategory.LINK, "itemName"),
+        AUTOFARMS_DASHBOARD_LINK_ITEM_TIPS(Category.AUTOFARMS_DASHBOARD, SubCategory.LINK, "itemTips"),
+        AUTOFARMS_DASHBOARD_LINK_ITEM_STATUS(Category.AUTOFARMS_DASHBOARD, SubCategory.LINK, "itemStatus", "%status%"),
+        AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_NAME(Category.AUTOFARMS_DASHBOARD, SubCategory.MANAGE_AUTOFARMS, "itemName"),
+        AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_TIPS(Category.AUTOFARMS_DASHBOARD, SubCategory.MANAGE_AUTOFARMS, "itemTips"),
+        AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_STATUS(Category.AUTOFARMS_DASHBOARD, SubCategory.MANAGE_AUTOFARMS, "itemStatus", "%status%"),
+        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_NAME(Category.AUTOFARMS_DASHBOARD, SubCategory.TOGGLE, "itemName"),
+        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_TIPS(Category.AUTOFARMS_DASHBOARD, SubCategory.TOGGLE, "itemTips"),
+        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_STATUS(Category.AUTOFARMS_DASHBOARD, SubCategory.TOGGLE, "itemStatus", "%status%"),
+
         CROPS_ITEM_DROP_NAME(Category.CROPS, SubCategory.ITEM, "dropName", "%name%"),
         CROPS_ITEM_DROP_VALUE(Category.CROPS, SubCategory.ITEM, "dropValue", "%value%"),
         CROPS_ITEM_JOBS_EXPERIENCE(Category.CROPS, SubCategory.ITEM, "jobsExperience", "%status%"),
@@ -375,12 +385,12 @@ public final class Languages {
         LINK_CLAIM_NAME(Category.LINK, SubCategory.CLAIM, "itemName"),
         LINK_CLAIM_STATUS(Category.LINK, SubCategory.CLAIM, "itemStatus"),
 
+        MAIN_AUTOFARMS_DASHBOARD_ITEM_NAME(Category.MAIN, SubCategory.AUTOFARMS_DASHBOARD, "itemName"),
+        MAIN_AUTOFARMS_DASHBOARD_ITEM_STATUS(Category.MAIN, SubCategory.AUTOFARMS_DASHBOARD, "itemStatus", "%status%"),
+        MAIN_AUTOFARMS_DASHBOARD_ITEM_TIPS(Category.MAIN, SubCategory.AUTOFARMS_DASHBOARD, "itemTips"),
         MAIN_ADDONS_ITEM_NAME(Category.MAIN, SubCategory.ADDONS, "itemName"),
         MAIN_ADDONS_ITEM_STATUS(Category.MAIN, SubCategory.ADDONS, "itemStatus", "%status%"),
         MAIN_ADDONS_ITEM_TIPS(Category.MAIN, SubCategory.ADDONS, "itemTips"),
-        MAIN_AUTOFARMS_ITEM_NAME(Category.MAIN, SubCategory.AUTOFARMS, "itemName"),
-        MAIN_AUTOFARMS_ITEM_STATUS(Category.MAIN, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
-        MAIN_AUTOFARMS_ITEM_TIPS(Category.MAIN, SubCategory.AUTOFARMS, "itemTips"),
         MAIN_CROPS_ITEM_NAME(Category.MAIN, SubCategory.CROPS, "itemName"),
         MAIN_CROPS_ITEM_STATUS(Category.MAIN, SubCategory.CROPS, "itemStatus", "%status%"),
         MAIN_CROPS_ITEM_TIPS(Category.MAIN, SubCategory.CROPS, "itemTips"),
@@ -448,7 +458,6 @@ public final class Languages {
         PARTICLE_DECREASE_ORDER_ITEM_NAME(Category.PARTICLE, SubCategory.DECREASE_ORDER, "itemName"),
         PARTICLE_DECREASE_ORDER_ITEM_AFTER(Category.PARTICLE, SubCategory.DECREASE_ORDER, "itemAfter", "%value%"),
 
-
         SETTINGS_AUTOFARMS_ITEM_NAME(Category.SETTINGS, SubCategory.AUTOFARMS, "itemName"),
         SETTINGS_AUTOFARMS_ITEM_STATUS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemStatus", "%status%"),
         SETTINGS_AUTOFARMS_ITEM_TIPS(Category.SETTINGS, SubCategory.AUTOFARMS, "itemTips"),
@@ -467,6 +476,8 @@ public final class Languages {
         SETTINGS_WORLDS_ITEM_NAME(Category.SETTINGS, SubCategory.WORLDS, "itemName"),
         SETTINGS_WORLDS_ITEM_STATUS(Category.SETTINGS, SubCategory.WORLDS, "itemStatus", "%status%"),
         SETTINGS_WORLDS_ITEM_TIPS(Category.SETTINGS, SubCategory.WORLDS, "itemTips"),
+        SETTINGS_MIGRATIONS_ITEM_NAME(Category.SETTINGS, SubCategory.MIGRATIONS, "itemName"),
+        SETTINGS_MIGRATIONS_ITEM_TIPS(Category.SETTINGS, SubCategory.MIGRATIONS, "itemTips"),
 
         SOUNDS_ITEM_NAME(Category.SOUNDS, "itemName", "%name%", "%status%"),
         SOUNDS_ITEM_ORDER(Category.SOUNDS, "itemOrder", "%order%"),
@@ -501,6 +512,19 @@ public final class Languages {
         UPDATES_UPDATES_ITEM_NAME(Category.UPDATES, SubCategory.UPDATES, "itemName"),
         UPDATES_UPDATES_ITEM_STATE(Category.UPDATES, SubCategory.UPDATES, "itemState", "%state%"),
         UPDATES_UPDATES_ITEM_TIPS(Category.UPDATES, SubCategory.UPDATES, "itemTips"),
+
+        MIGRATIONS_PROGRESS_ITEM_NAME(Category.MIGRATIONS, SubCategory.PROGRESS, "itemName"),
+        MIGRATIONS_PROGRESS_ITEM_TIPS(Category.MIGRATIONS, SubCategory.PROGRESS, "itemTips"),
+        MIGRATIONS_PROGRESS_ITEM_STATUS(Category.MIGRATIONS, SubCategory.PROGRESS, "itemStatus", "%status%"),
+        MIGRATIONS_DEFAULT_ITEM_NAME(Category.MIGRATIONS, SubCategory.DEFAULT, "itemName"),
+        MIGRATIONS_DEFAULT_ITEM_TIPS(Category.MIGRATIONS, SubCategory.DEFAULT, "itemTips", "%database%", "%host%", "%port%", "%dialect%"),
+        MIGRATIONS_MIGRATION_ITEM_NAME(Category.MIGRATIONS, SubCategory.MIGRATION, "itemName"),
+        MIGRATIONS_MIGRATION_ITEM_TIPS(Category.MIGRATIONS, SubCategory.MIGRATION, "itemTips", "%database%", "%host%", "%port%", "%dialect%"),
+
+        MIGRATIONS_STATES_NOT_INITIALIZED(Category.MIGRATIONS, SubCategory.STATES, "notInitialized"),
+        MIGRATIONS_STATES_COMPLETED(Category.MIGRATIONS, SubCategory.STATES, "completed"),
+        MIGRATIONS_STATES_FAILED(Category.MIGRATIONS, SubCategory.STATES, "failed"),
+        MIGRATIONS_STATES_IN_PROGRESS(Category.MIGRATIONS, SubCategory.STATES, "inProgress"),
 
         WORLDS_ITEM_NAME(Category.WORLDS, "itemName", "%name%"),
         WORLDS_ITEM_STATUS(Category.WORLDS, "itemStatus", "%status%"),
@@ -611,6 +635,27 @@ public final class Languages {
 
 
         /**
+         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line,
+         * replacing all the {@link #placeholders} with all the provided values.
+         *
+         * @param plugin the plugin instance.
+         * @param values the values to replace the placeholders with.
+         * @param <T>    the object provided.
+         *
+         * @return the message found in the config, replaced with the provided values.
+         */
+        @NotNull
+        @SafeVarargs
+        public final <T> List<String> getAsList(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
+            String message = plugin.getConfigManager().getLanguageConfig().getMessage("menu", category, key, false);
+            String formatted = format(message, Arrays.stream(values).map(Object::toString).toArray(String[]::new));
+            return Messages.readify(formatted, 4).stream()
+                           .map(Messages::colorize)
+                           .collect(Collectors.toList());
+        }
+
+
+        /**
          * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line, with the messages that was provided as appendable.
          *
          * @param plugin     the plugin instance.
@@ -645,14 +690,6 @@ public final class Languages {
         }
 
 
-        @NotNull
-        @SafeVarargs
-        @Unmodifiable
-        public final <T> List<String> getAsList(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
-            return Collections.singletonList(get(plugin, values));
-        }
-
-
         /**
          * Sends the message to the {@link CommandSender sender}.
          *
@@ -673,9 +710,7 @@ public final class Languages {
          */
         @NotNull
         public String getTitle(@NotNull CropClick plugin) {
-            String title = "CropClick: " + get(plugin);
-            String error = getErrorMessage(plugin);
-            return title.length() < 32 ? title : error;
+            return "CropClick: " + get(plugin);
         }
 
 
@@ -693,22 +728,7 @@ public final class Languages {
                 return getTitle(plugin);
             }
 
-            String title = "CropClick: " + get(plugin, type);
-            String errorMessage = getErrorMessage(plugin);
-            return title.length() < 32 ? title : errorMessage;
-        }
-
-
-        /**
-         * Gets the error message from the {@link LanguageConfig language config}.
-         *
-         * @param plugin the plugin instance.
-         *
-         * @return the error message found in the config.
-         */
-        @NotNull
-        private String getErrorMessage(@NotNull CropClick plugin) {
-            return plugin.getConfigManager().getLanguageConfig().getMessage("title", "error", "message", true);
+            return "CropClick: " + get(plugin, type);
         }
 
 
@@ -742,6 +762,7 @@ public final class Languages {
             ADDON,
             ADDONS,
             AUTOFARMS,
+            AUTOFARMS_DASHBOARD("autofarmsDashboard"),
             CROP,
             CROPS,
             DROP_CHANCE("dropChance"),
@@ -761,6 +782,7 @@ public final class Languages {
             TITLE,
             TOGGLE,
             UPDATES,
+            MIGRATIONS,
             WORLD,
             WORLDS;
 
@@ -802,6 +824,8 @@ public final class Languages {
             AMOUNT,
             AT_LEAST("atLeastOne"),
             AUTOFARMS,
+            MANAGE_AUTOFARMS("manageAutofarms"),
+            LINK,
             AURA_SKILLS("auraSkills"),
             COLOR_CODE("colorCode"),
             CONSOLE,
@@ -847,7 +871,12 @@ public final class Languages {
             TOGGLE,
             TOWNY,
             UPDATES,
+            PROGRESS,
+            DEFAULT,
+            MIGRATION,
+            MIGRATIONS,
             UPDATE_STATES("updateStates"),
+            AUTOFARMS_DASHBOARD("autofarmsDashboard"),
             VOLUME,
             WORLD,
             WORLDS,

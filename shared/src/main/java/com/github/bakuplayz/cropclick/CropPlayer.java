@@ -61,7 +61,7 @@ public final class CropPlayer {
     private final PlayersConfig config;
 
     @Getter
-    private final String playerID;
+    private final String playerId;
 
     @Getter
     private final UUID playerUUID;
@@ -83,7 +83,7 @@ public final class CropPlayer {
         CropClick plugin = CropClick.getInstance();
 
         this.playerUUID = playerId;
-        this.playerID = playerId.toString();
+        this.playerId = playerId.toString();
         this.permissions = new PermissionFeatures();
         this.addonFeatures = new AddonFeatures(plugin);
         this.autofarmFeatures = new AutofarmFeatures(plugin);
@@ -120,7 +120,7 @@ public final class CropPlayer {
      * Toggles the plugin for this player.
      */
     public void togglePlugin() {
-        config.set(ConfigurationKey.DISABLED_PLAYERS, Collections.toggleItem(config.getDisabledPlayers(), playerID));
+        config.set(ConfigurationKey.DISABLED_PLAYERS, Collections.toggleItem(config.getDisabledPlayers(), playerId));
     }
 
 
@@ -130,7 +130,7 @@ public final class CropPlayer {
      * @return true if able, otherwise false.
      */
     public boolean isPluginEnabled() {
-        return !config.getDisabledPlayers().contains(playerID);
+        return !config.getDisabledPlayers().contains(playerId);
     }
 
 
@@ -217,18 +217,28 @@ public final class CropPlayer {
         }
 
 
+        public void setIsLinkModeEnabled(boolean isEnabled) {
+            config.set(ConfigurationKey.LINK_MODE_ENABLED, isEnabled, playerId);
+        }
+
+
+        public boolean isLinkModeEnabled() {
+            return config.getBoolean(ConfigurationKey.LINK_MODE_ENABLED, playerId);
+        }
+
+
         public Location getSelectedCrop() {
-            return config.getSelectedCrop(playerID);
+            return config.getSelectedCrop(playerId);
         }
 
 
         public Location getSelectedContainer() {
-            return config.getSelectedContainer(playerID);
+            return config.getSelectedContainer(playerId);
         }
 
 
         public Location getSelectedDispenser() {
-            return config.getSelectedDispenser(playerID);
+            return config.getSelectedDispenser(playerId);
         }
 
 
@@ -239,7 +249,7 @@ public final class CropPlayer {
          */
         public void selectCrop(@NotNull Block block) {
             if (!cropManager.getFinder().isCrop(block)) return;
-            config.set(ConfigurationKey.SELECTED_CROP, block.getLocation(), playerID);
+            config.set(ConfigurationKey.SELECTED_CROP, block.getLocation(), playerId);
         }
 
 
@@ -250,7 +260,7 @@ public final class CropPlayer {
          */
         public void selectContainer(@NotNull Block block) {
             if (!Blocks.isAnyType(block, Container.TYPES)) return;
-            config.set(ConfigurationKey.SELECTED_CONTAINER, block.getLocation(), playerID);
+            config.set(ConfigurationKey.SELECTED_CONTAINER, block.getLocation(), playerId);
         }
 
 
@@ -261,7 +271,7 @@ public final class CropPlayer {
          */
         public void selectDispenser(@NotNull Block block) {
             if (!Blocks.isSameType(block, XMaterial.DISPENSER)) return;
-            config.set(ConfigurationKey.SELECTED_DISPENSER, block.getLocation(), playerID);
+            config.set(ConfigurationKey.SELECTED_DISPENSER, block.getLocation(), playerId);
         }
 
 
@@ -272,7 +282,7 @@ public final class CropPlayer {
          */
         public void deselectCrop(@NotNull Block block) {
             if (!cropManager.getFinder().isCrop(block)) return;
-            config.set(ConfigurationKey.SELECTED_CROP, null, playerID);
+            config.set(ConfigurationKey.SELECTED_CROP, null, playerId);
         }
 
 
@@ -283,7 +293,7 @@ public final class CropPlayer {
          */
         public void deselectContainer(@NotNull Block block) {
             if (!Blocks.isAnyType(block, Container.TYPES)) return;
-            config.set(ConfigurationKey.SELECTED_CONTAINER, null, playerID);
+            config.set(ConfigurationKey.SELECTED_CONTAINER, null, playerId);
         }
 
 
@@ -294,7 +304,7 @@ public final class CropPlayer {
          */
         public void deselectDispenser(@NotNull Block block) {
             if (!Blocks.isSameType(block, XMaterial.DISPENSER)) return;
-            config.set(ConfigurationKey.SELECTED_DISPENSER, null, playerID);
+            config.set(ConfigurationKey.SELECTED_DISPENSER, null, playerId);
         }
 
 
@@ -304,26 +314,26 @@ public final class CropPlayer {
          * of these components selected.
          */
         public void deselectComponents() {
-            Location crop = config.getSelectedCrop(playerID);
-            Location container = config.getSelectedContainer(playerID);
-            Location dispenser = config.getSelectedDispenser(playerID);
+            Location crop = config.getSelectedCrop(playerId);
+            Location container = config.getSelectedContainer(playerId);
+            Location dispenser = config.getSelectedDispenser(playerId);
 
-            config.setWithoutSave(ConfigurationKey.SELECTED_PLAYER, null, playerID);
+            config.setWithoutSave(ConfigurationKey.SELECTED_PLAYER, null, playerId);
 
             config.getKeys(ConfigurationKey.ALL_PLAYERS).forEach(keys -> {
                 if (keys.equals("disabled")) return;
-                
+
                 CropPlayer other = CropPlayer.fromId(keys.split("\\.")[0]);
 
-                if (crop != null && crop == config.getSelectedCrop(other.playerID)) {
+                if (crop != null && crop == config.getSelectedCrop(other.playerId)) {
                     other.getAutofarmFeatures().deselectCrop(crop.getBlock());
                 }
 
-                if (container != null && container == config.getSelectedContainer(other.playerID)) {
+                if (container != null && container == config.getSelectedContainer(other.playerId)) {
                     other.getAutofarmFeatures().deselectContainer(container.getBlock());
                 }
 
-                if (dispenser != null && dispenser == config.getSelectedDispenser(other.playerID)) {
+                if (dispenser != null && dispenser == config.getSelectedDispenser(other.playerId)) {
                     other.getAutofarmFeatures().deselectDispenser(dispenser.getBlock());
                 }
             });
@@ -341,7 +351,7 @@ public final class CropPlayer {
          */
         public boolean isCropSelected(@NotNull Block block) {
             if (cropManager.getFinder().isCrop(block)) {
-                Location crop = config.getSelectedCrop(playerID);
+                Location crop = config.getSelectedCrop(playerId);
                 return crop != null && crop.equals(block.getLocation());
             }
             return false;
@@ -357,7 +367,7 @@ public final class CropPlayer {
          */
         public boolean isContainerSelected(@NotNull Block block) {
             if (Blocks.isAnyType(block, Container.TYPES)) {
-                Location container = config.getSelectedContainer(playerID);
+                Location container = config.getSelectedContainer(playerId);
                 return container != null && container.equals(block.getLocation());
             }
             return false;
@@ -373,7 +383,7 @@ public final class CropPlayer {
          */
         public boolean isDispenserSelected(@NotNull Block block) {
             if (Blocks.isSameType(block, XMaterial.DISPENSER)) {
-                Location dispenser = config.getSelectedDispenser(playerID);
+                Location dispenser = config.getSelectedDispenser(playerId);
                 return dispenser != null && dispenser.equals(block.getLocation());
             }
             return false;
@@ -392,7 +402,7 @@ public final class CropPlayer {
          * @return true if allowed, otherwise false.
          */
         public boolean canUnlink(@NotNull Autofarm autofarm) {
-            if (!playerID.equals(autofarm.getFarmerId().toString())) {
+            if (!playerId.equals(autofarm.getFarmerId().toString())) {
                 return has(PermissionKey.AUTOFARM_UNLINK_OTHERS);
             }
             return has(PermissionKey.AUTOFARM_UNLINK);
@@ -400,7 +410,7 @@ public final class CropPlayer {
 
 
         public boolean canUpdate(@NotNull Autofarm autofarm) {
-            if (!playerID.equals(autofarm.getFarmerId().toString())) {
+            if (!playerId.equals(autofarm.getFarmerId().toString())) {
                 return has(PermissionKey.AUTOFARM_UPDATE_OTHERS);
             }
             return has(PermissionKey.AUTOFARM_UPDATE);
@@ -408,7 +418,7 @@ public final class CropPlayer {
 
 
         public boolean canInteractAt(Autofarm autofarm) {
-            if (autofarm != null && !playerID.equals(autofarm.getFarmerId().toString())) {
+            if (autofarm != null && !playerId.equals(autofarm.getFarmerId().toString())) {
                 return has(PermissionKey.AUTOFARM_INTERACT_OTHERS);
             }
             return has(PermissionKey.AUTOFARM_INTERACT);

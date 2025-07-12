@@ -25,7 +25,7 @@ import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractGroundCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractTallCrop;
 import com.github.bakuplayz.cropclick.crops.abstracts.AbstractWallCrop;
-import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.api.TaskContext;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;

@@ -51,7 +51,7 @@ public final class MainMenu extends AbstractPlainMenu {
     @Override
     public void setItems() {
         setItem(21, new CropsItem(), (item, player) -> new CropsMenu(plugin).open(player));
-        setItem(23, new AutofarmsItem(), (item, player) -> new AutofarmsMenu(plugin, true).open(player));
+        setItem(23, new AutofarmsDashboardItem(), (item, player) -> new AutofarmsMenu(plugin, true).open(player));
         setItem(44, new AddonsItem(), (item, player) -> new AddonsMenu(plugin).open(player));
         setItem(45, new UpdatesItem(), (item, player) -> new UpdatesMenu(plugin).join(player, UpdatesMenu.IDENTIFIER));
         setItem(49, new HelpItem(), (item, player) -> new HelpMenu(plugin, true).open(player));
@@ -81,15 +81,15 @@ public final class MainMenu extends AbstractPlainMenu {
 
     }
 
-    private final class AutofarmsItem extends ClickableItem {
+    private final class AutofarmsDashboardItem extends ClickableItem {
 
         @Override
         public CompletableFuture<Void> create() {
             return plugin.getAutofarmManager().getAmountOfFarms().thenAccept(farms -> {
                 setMaterial(XMaterial.DISPENSER);
-                setName(MAIN_AUTOFARMS_ITEM_NAME.get(plugin));
-                setLore(MAIN_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                        MAIN_AUTOFARMS_ITEM_STATUS.get(plugin, farms))
+                setName(MAIN_AUTOFARMS_DASHBOARD_ITEM_NAME.get(plugin));
+                setLore(MAIN_AUTOFARMS_DASHBOARD_ITEM_TIPS.getAsAppendList(plugin,
+                        MAIN_AUTOFARMS_DASHBOARD_ITEM_STATUS.get(plugin, farms))
                 );
             });
         }

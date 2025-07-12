@@ -19,18 +19,16 @@
 package com.github.bakuplayz.cropclick.database.mappers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
 import com.github.bakuplayz.cropclick.common.Maps;
 import com.github.bakuplayz.cropclick.world.FarmWorld;
-import dev.bakuplayz.spigotstore.database.DatabaseDialect;
-import dev.bakuplayz.spigotstore.database.LogicalType;
-import dev.bakuplayz.spigotstore.database.entity.EntityMapper;
+import dev.bakuplayz.spigotstore.persistence.sql.core.DatabaseDialect;
+import dev.bakuplayz.spigotstore.persistence.sql.core.LogicalType;
+import dev.bakuplayz.spigotstore.registries.entity.api.EntityMapper;
+import dev.bakuplayz.spigotstore.registries.json.impl.JsonMapperRegistry;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -43,20 +41,20 @@ import static java.util.AbstractMap.SimpleImmutableEntry;
 @AllArgsConstructor
 public final class FarmWorldMapper implements EntityMapper<FarmWorld> {
 
-    private final ObjectMapper mapper;
-
     private final DatabaseDialect dialect;
+
+    private final JsonMapperRegistry jsonRegistry;
 
 
     @NotNull
     @Override
-    public FarmWorld toEntity(@NotNull ResultSet rs) throws SQLException, IOException {
+    public FarmWorld toEntity(@NotNull ResultSet rs) throws SQLException {
         return FarmWorld.createBasic(
                 rs.getString(1),
                 rs.getBoolean(2),
                 rs.getBoolean(3),
                 rs.getBoolean(4),
-                mapper.readValue(rs.getString(5), new TypeReference<List<AbstractAddon>>() {
+                jsonRegistry.fromJson(rs.getString(5), new TypeReference<List<String>>() {
                 })
         );
     }
@@ -67,7 +65,7 @@ public final class FarmWorldMapper implements EntityMapper<FarmWorld> {
     @UnmodifiableView
     public Map<String, String> getColumnDefinitions() {
         return Maps.ofEntries(
-                new SimpleImmutableEntry<>("name", dialect.resolveNotNull(LogicalType.TEXT, true)),
+                new SimpleImmutableEntry<>("name", dialect.resolveNotNull(LogicalType.STRING, true)),
                 new SimpleImmutableEntry<>("is_banished", dialect.resolveNotNull(LogicalType.BOOLEAN)),
                 new SimpleImmutableEntry<>("allows_players", dialect.resolveNotNull(LogicalType.BOOLEAN)),
                 new SimpleImmutableEntry<>("allows_autofarms", dialect.resolveNotNull(LogicalType.BOOLEAN)),

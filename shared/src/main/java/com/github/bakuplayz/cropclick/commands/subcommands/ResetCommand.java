@@ -22,9 +22,8 @@ package com.github.bakuplayz.cropclick.commands.subcommands;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import com.github.bakuplayz.cropclick.configurations.Configuration;
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYaml;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +70,7 @@ public final class ResetCommand implements Subcommand {
     public void perform(@NotNull Player player, String[] args) {
         try {
             resetConfigs();
-            deleteDataStorages();
+            resetDataStorages();
             RESET_DELETE.send(plugin, player);
         } catch (IOException e) {
             Log.severe(e.getMessage());
@@ -83,12 +82,12 @@ public final class ResetCommand implements Subcommand {
 
 
     /**
-     * Resets all the {@link AbstractConfiguration config files}.
+     * Resets all the {@link PersistentYaml config files}.
      *
      * @throws IOException thrown if any deletion failed.
      */
     private void resetConfigs() throws IOException {
-        plugin.getConfigManager().getAll().forEach(Configuration::reset);
+        plugin.getConfigManager().getAll().forEach(PersistentYaml::reset);
     }
 
 
@@ -97,7 +96,7 @@ public final class ResetCommand implements Subcommand {
      *
      * @throws IOException thrown if any deletion failed.
      */
-    private void deleteDataStorages() throws IOException {
+    private void resetDataStorages() throws IOException {
         plugin.getDataManager().getAll().forEach(DataService::reset);
     }
 

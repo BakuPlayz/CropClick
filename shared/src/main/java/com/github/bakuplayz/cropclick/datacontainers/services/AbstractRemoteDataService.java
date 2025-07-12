@@ -18,8 +18,7 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
-import dev.bakuplayz.spigotstore.database.QueryScheduler;
-import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
+import dev.bakuplayz.spigotstore.persistence.sql.api.QueryProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -37,13 +36,10 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
 
     protected final QueryProvider provider;
 
-    protected final QueryScheduler scheduler;
-
     private final Class<D> clazz;
 
 
-    public AbstractRemoteDataService(@NotNull QueryScheduler scheduler, @NotNull QueryProvider provider, @NotNull Class<D> clazz) {
-        this.scheduler = scheduler;
+    public AbstractRemoteDataService(@NotNull QueryProvider provider, @NotNull Class<D> clazz) {
         this.provider = provider;
         this.clazz = clazz;
         createTable();
@@ -54,7 +50,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      * Creates table if not already exists.
      */
     private void createTable() {
-        provider.create(getTable(), clazz, true).queue(scheduler);
+        provider.create(getTable(), clazz, true).queue();
     }
 
 
@@ -86,7 +82,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     public CompletableFuture<List<D>> getMany(int start, int max) {
         return provider.select(getTable(), clazz)
                        .limit(start, max)
-                       .fetchAll(scheduler);
+                       .fetchAll();
     }
 
 
@@ -101,7 +97,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     public CompletableFuture<D> getOne(@NotNull String id) {
         return provider.select(getTable(), clazz)
                        .where(getDefaultIdentifier(), "=", id)
-                       .fetchOne(scheduler);
+                       .fetchOne();
     }
 
 
@@ -116,7 +112,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
         return provider.insert(getTable(), clazz, true)
                        .values(entity)
-                       .queue(scheduler);
+                       .queue();
     }
 
 
@@ -131,7 +127,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
         return provider.delete(getTable())
                        .where(getDefaultIdentifier(), "=", id)
-                       .queue(scheduler);
+                       .queue();
     }
 
 
@@ -148,7 +144,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
         return provider.update(getTable(), clazz)
                        .where(getDefaultIdentifier(), "=", id)
                        .setAll(entity)
-                       .queue(scheduler);
+                       .queue();
     }
 
 
@@ -159,7 +155,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Integer> countAll() {
-        return provider.count(getTable()).queue(scheduler);
+        return provider.count(getTable()).queue();
     }
 
 
@@ -171,7 +167,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     public CompletableFuture<Boolean> reset() {
         return provider.delete(getTable())
                        .matchAll()
-                       .queue(scheduler);
+                       .queue();
     }
 
 

@@ -58,7 +58,7 @@ public final class AutofarmFinder {
     @Nullable
     public CompletableFuture<Autofarm> findByBlock(@NotNull Block block) {
         if (Blocks.isAir(block)) {
-            return null;
+            return CompletableFuture.completedFuture(null);
         }
 
         if (AutofarmBlocksCache.hasCachedID(block)) {
@@ -83,7 +83,7 @@ public final class AutofarmFinder {
             return findByCrop(blockAbove);
         }
 
-        return null;
+        return CompletableFuture.completedFuture(null);
     }
 
 
@@ -133,6 +133,7 @@ public final class AutofarmFinder {
      *
      * @return the found autofarm, otherwise null.
      */
+    @Nullable
     public CompletableFuture<Autofarm> findByContainer(@NotNull Block block) {
         return service.getOneByContainer(block.getLocation());
     }

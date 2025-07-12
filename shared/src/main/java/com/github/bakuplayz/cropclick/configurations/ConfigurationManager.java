@@ -18,8 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.configurations;
 
-import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.configurations.config.*;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYaml;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * A manager controlling all the {@link Configuration configurations}.
+ * A manager controlling all the {@link PersistentYaml configurations}.
  *
  * @author BakuPlayz
  * @version 3.0.0
@@ -51,38 +51,20 @@ public final class ConfigurationManager {
     private final DatabaseConfig databaseConfig;
 
 
-    public ConfigurationManager(@NotNull CropClick plugin) {
-        this.usageConfig = new UsageConfig(plugin);
-        this.cropsConfig = new CropsConfig(plugin);
-        this.addonsConfig = new AddonsConfig(plugin);
-        this.playersConfig = new PlayersConfig(plugin);
-        this.defaultConfig = new DefaultConfig(plugin);
-        this.languageConfig = new LanguageConfig(plugin);
-        this.databaseConfig = new DatabaseConfig(plugin);
-
-        setupConfigs(plugin);
+    public ConfigurationManager() {
+        this.usageConfig = new UsageConfig();
+        this.cropsConfig = new CropsConfig();
+        this.addonsConfig = new AddonsConfig();
+        this.playersConfig = new PlayersConfig();
+        this.defaultConfig = new DefaultConfig();
+        this.languageConfig = new LanguageConfig();
+        this.databaseConfig = new DatabaseConfig();
     }
 
 
     @NotNull
-    public Collection<Configuration> getAll() {
+    public Collection<PersistentYaml> getAll() {
         return Arrays.asList(defaultConfig, usageConfig, cropsConfig, addonsConfig, playersConfig, languageConfig, databaseConfig);
-    }
-
-
-    /**
-     * Sets up and create configurations iff missing.
-     */
-    private void setupConfigs(@NotNull CropClick plugin) {
-        plugin.getConfig().options().copyDefaults(true);
-        plugin.saveConfig();
-
-        defaultConfig.create();
-        cropsConfig.create();
-        addonsConfig.create();
-        playersConfig.create();
-        languageConfig.create();
-        usageConfig.create();
     }
 
 }

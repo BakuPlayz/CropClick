@@ -1,49 +1,30 @@
-/**
- * CropClick - "A Spigot plugin aimed at making your farming faster, and more customizable."
- * <p>
- * Copyright (C) 2024 BakuPlayz
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.github.bakuplayz.cropclick.menus;
 
 import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.common.Maths;
-import com.github.bakuplayz.cropclick.common.Messages;
 import com.github.bakuplayz.cropclick.common.Versions;
+import com.github.bakuplayz.cropclick.menus.abstracts.AbstractPaginatedMenu;
 import com.github.bakuplayz.cropclick.menus.settings.*;
-import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.cropclick.menus.states.SettingsStateBuilder;
 import com.github.bakuplayz.cropclick.world.FarmWorld;
-import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
+import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedMenuState;
+import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedStateHandler;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
-import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
+import com.github.bakuplayz.spigotspin.menu.items.Item;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
-import static com.github.bakuplayz.cropclick.menus.states.SettingsStateBuilder.*;
 
 /**
  * A class representing the Settings menu.
@@ -52,44 +33,67 @@ import static com.github.bakuplayz.cropclick.menus.states.SettingsStateBuilder.*
  * @version 2.2.0
  * @since 2.2.0
  */
-public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, SettingsMenuStateHandler> {
+public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenuState, BasicPaginatedStateHandler, Item> {
+
+    private final static List<Integer> ITEM_POSITIONS = Arrays.asList(10, 13, 16, 28, 31, 34);
 
     private final CropClick plugin;
 
-    private final boolean showBackButton;
+    private final List<Item> paginatedItems;
 
 
     public SettingsMenu(@NotNull CropClick plugin, boolean showBackButton) {
-        super(SETTINGS_TITLE.getTitle(plugin));
-        this.showBackButton = showBackButton;
+        super(SETTINGS_TITLE.getTitle(plugin), plugin, showBackButton);
+        this.paginatedItems = initializePaginationItems();
         this.plugin = plugin;
     }
 
 
     @NotNull
     @Override
-    public SettingsMenuStateHandler createStateHandler(@NotNull Player player) {
-        return SettingsStateBuilder.createStateHandler(this, plugin);
+    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
+        return new BasicPaginatedStateHandler(this);
     }
 
 
     @Override
-    public void setItems() {
-        boolean supportsParticles = Versions.supportsParticles();
+    public boolean isFramePosition(int position) {
+        return !ITEM_POSITIONS.contains(position);
+    }
 
-        setItem(10, new ToggleItem(), (i, player) -> new ToggleMenu(plugin).open(player));
-        setItemIf(supportsParticles, 13, new ParticlesItem(), (i, player) -> new ParticlesCropsMenu(plugin).open(player));
-        setItem(supportsParticles ? 16 : 13, new SoundsItem(), (i, player) -> new SoundsCropsMenu(plugin).open(player));
-        setItem(supportsParticles ? 28 : 16, new NameItem(), (i, player) -> new NamesCropsMenu(plugin).open(player));
-        setItem(supportsParticles ? 31 : 28, new AutoFarmsItem(), (i, i2) -> stateHandler.toggleAutofarmState(), SettingsMenuStateFlag.AUTOFARM_TOGGLE);
-        setItem(supportsParticles ? 34 : 31, new WorldItem(), (i, player) -> new WorldsMenu(plugin).open(player));
-        setItemIf(showBackButton, 49, new CustomBackItem(plugin));
+
+    @Override
+    public List<Item> getPaginationItems() {
+        return paginatedItems;
+    }
+
+
+    @NotNull
+    @Override
+    public Item loadPaginatedItem(@NotNull Item item, int position) {
+        return item;
     }
 
 
     @Override
     public SizeType getSizeType() {
         return SizeType.DOUBLE_CHEST;
+    }
+
+
+    @NotNull
+    private List<Item> initializePaginationItems() {
+        List<Item> items = new ArrayList<>(Arrays.asList(
+                new ToggleItem(),
+                new SoundsItem(),
+                new NameItem(),
+                new WorldItem(),
+                new MigrationsItem()
+        ));
+        if (Versions.supportsParticles()) {
+            items.add(1, new ParticlesItem());
+        }
+        return items;
     }
 
 
@@ -101,7 +105,6 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
 
         @NotNull
-
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
@@ -112,6 +115,13 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
                         SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())
                 ));
             });
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> new ToggleMenu(plugin).open(player);
         }
 
 
@@ -138,6 +148,13 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
         }
 
 
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> new ParticlesCropsMenu(plugin).open(player);
+        }
+
+
         private int getAmountOfParticles() {
             return (int) Arrays.stream(XParticle.values()).filter(XParticle::isSupported).count();
         }
@@ -156,6 +173,13 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
                         SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds()))
                 );
             });
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> new SoundsCropsMenu(plugin).open(player);
         }
 
 
@@ -180,6 +204,13 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
         }
 
 
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> new NamesCropsMenu(plugin).open(player);
+        }
+
+
         private int getAmountOfRenamed() {
             return (int) plugin.getCropManager().getRegisteredCrops().stream()
                                  .filter(crop -> !crop.getDrop().getName().equals(crop.getName()))
@@ -188,38 +219,11 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
 
     }
 
-    private final class AutoFarmsItem extends ClickableStateItem<SettingsMenuState> {
-
-        @NotNull
-        @Override
-        public CompletableFuture<Void> create() {
-            return createSync(() -> {
-                setMaterial(XMaterial.DISPENSER);
-                setName(SETTINGS_AUTOFARMS_ITEM_NAME.get(plugin));
-                setLore(getLore(getState().isAutoFarmEnabled()));
-            });
-        }
-
-
-        @Override
-        public void update(@NotNull SettingsMenuState state, int flag) {
-            setLore(getLore(state.isAutoFarmEnabled()));
-        }
-
-
-        @NotNull
-        private List<String> getLore(boolean state) {
-            return SETTINGS_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                    SETTINGS_AUTOFARMS_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state))
-            );
-        }
-
-    }
-
     private final class WorldItem extends ClickableItem {
 
         @Override
         public CompletableFuture<Void> create() {
+
             return plugin.getWorldManager().getWorlds().thenAccept((worlds) -> {
                 setMaterial(XMaterial.GRASS_BLOCK);
                 setName(SETTINGS_WORLDS_ITEM_NAME.get(plugin));
@@ -230,10 +234,37 @@ public final class SettingsMenu extends AbstractStateMenu<SettingsMenuState, Set
         }
 
 
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> new WorldsMenu(plugin).open(player);
+        }
+
+
         private long getAmountOfBanished(@NotNull List<FarmWorld> worlds) {
             return worlds.stream().filter(FarmWorld::isBanished).count();
         }
 
+    }
+
+    private final class MigrationsItem extends ClickableItem {
+
+        @NotNull
+        @Override
+        public CompletableFuture<Void> create() {
+            return createSync(() -> {
+                setMaterial(XMaterial.BOOKSHELF);
+                setName(SETTINGS_MIGRATIONS_ITEM_NAME.get(plugin));
+                setLore(SETTINGS_MIGRATIONS_ITEM_TIPS.getAsList(plugin));
+            });
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> new MigrationsMenu(plugin).join(player, MigrationsMenu.IDENTIFIER);
+        }
     }
 
 }

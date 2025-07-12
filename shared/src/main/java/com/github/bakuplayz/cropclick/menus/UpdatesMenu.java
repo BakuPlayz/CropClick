@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
@@ -46,6 +47,8 @@ import static com.github.bakuplayz.cropclick.menus.states.UpdatesStateBuilder.*;
  * @since 2.2.0
  */
 public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, UpdatesMenuStateHandler> {
+
+    public final static String IDENTIFIER = "UPDATES_MENU_" + UUID.randomUUID();
 
     private final CropClick plugin;
 
@@ -93,6 +96,12 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
     @Override
     public SizeType getSizeType() {
         return SizeType.DOUBLE_CHEST;
+    }
+
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
     }
 
 

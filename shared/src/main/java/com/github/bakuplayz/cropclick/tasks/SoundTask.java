@@ -21,7 +21,7 @@ package com.github.bakuplayz.cropclick.tasks;
 
 import com.cryptomorin.xseries.XSound;
 import com.github.bakuplayz.cropclick.common.types.Sound;
-import dev.bakuplayz.spigotstore.task.model.Task;
+import dev.bakuplayz.spigotstore.task.api.Task;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

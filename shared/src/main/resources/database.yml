@@ -28,13 +28,23 @@
 #                                                                                  #
 #   This configuration is used to change the connection options to a connected     #
 #   database. You can connect to one of these: MYSQL, MARIADB, POSTGRES or just    #
-#   stay at the default: SQLITE.                                                   #
+#   stay at the default: MYSQL.                                                    #
 #                                                                                  #
 ####################################################################################
 
-dialect: 'SQLITE'
-password: 'password'
-username: 'username'
-database: 'cropclick'
-host: '127.0.0.1'
-port: 3306
+databases:
+  default:
+    dialect: MYSQL
+    username: username
+    password: password
+    database: cropclick
+    host: 127.0.0.1
+    port: 3306
+
+  migration:
+    dialect: MYSQL
+    username: username
+    password: password
+    database: cropclick
+    host: 127.0.0.1
+    port: 3306

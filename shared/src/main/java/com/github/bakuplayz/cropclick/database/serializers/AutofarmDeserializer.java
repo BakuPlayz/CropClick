@@ -18,25 +18,18 @@
  */
 package com.github.bakuplayz.cropclick.database.serializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
+import dev.bakuplayz.spigotstore.registries.json.api.JsonDeserializer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.UUID;
 
-public final class AutofarmDeserializer extends JsonDeserializer<Autofarm> {
+public final class AutofarmDeserializer implements JsonDeserializer<Autofarm> {
 
-    @Nullable
+    @NotNull
     @Override
-    public Autofarm deserialize(@NotNull JsonParser parser, @NotNull DeserializationContext ctx) throws IOException, JsonProcessingException {
-        JsonNode node = parser.getCodec().readTree(parser);
-
+    public Autofarm fromJson(@NotNull JsonNode node) {
         return Autofarm.createBasic(
                 UUID.fromString(node.get("farmerId").asText()),
                 UUID.fromString(node.get("ownerId").asText()),
@@ -46,5 +39,5 @@ public final class AutofarmDeserializer extends JsonDeserializer<Autofarm> {
                 LocationDeserializer.deserializeLocation(node.get("dispenser"))
         );
     }
-
+    
 }

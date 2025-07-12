@@ -18,9 +18,9 @@
  */
 package com.github.bakuplayz.cropclick.configurations.config;
 
-import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
-import dev.bakuplayz.spigotstore.database.DatabaseDialect;
+import dev.bakuplayz.spigotstore.persistence.sql.core.DatabaseDialect;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,23 +33,30 @@ import org.jetbrains.annotations.NotNull;
  * @version 3.0.0
  * @since 3.0.0
  */
-public final class DatabaseConfig extends AbstractConfiguration {
+public final class DatabaseConfig extends AbstractPersistentYaml {
 
-    public DatabaseConfig(@NotNull CropClick plugin) {
-        super(plugin, "database.yml");
+    public DatabaseConfig() {
+        super("database.yml");
     }
 
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
-        USERNAME("username", "username"),
-        PASSWORD("password", "password"),
-        DATABASE("database", "cropclick"),
-        HOST("host", "host"),
-        PORT("port", 0),
-        DIALECT("dialect", DatabaseDialect.MYSQL);
+        DEFAULT_USERNAME("databases.default.username", "username"),
+        DEFAULT_PASSWORD("databases.default.password", "password"),
+        DEFAULT_DATABASE("databases.default.database", "cropclick"),
+        DEFAULT_HOST("databases.default.host", "host"),
+        DEFAULT_PORT("databases.default.port", 0),
+        DEFAULT_DIALECT("databases.default.dialect", DatabaseDialect.MYSQL),
+
+        MIGRATION_USERNAME("databases.migration.username", "username"),
+        MIGRATION_PASSWORD("databases.migration.password", "password"),
+        MIGRATION_DATABASE("databases.migration.database", "cropclick"),
+        MIGRATION_HOST("databases.migration.host", "host"),
+        MIGRATION_PORT("databases.migration.port", 0),
+        MIGRATION_DIALECT("databases.migration.dialect", DatabaseDialect.MYSQL);
 
         @NotNull
         private final String path;

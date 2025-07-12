@@ -50,7 +50,10 @@ import com.github.bakuplayz.cropclick.permissions.PermissionManager;
 import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.world.WorldManager;
 import com.github.bakuplayz.spigotspin.SpigotSpin;
-import dev.bakuplayz.spigotstore.task.TaskScheduler;
+import dev.bakuplayz.spigotstore.SpigotStore;
+import dev.bakuplayz.spigotstore.common.log.LogOptions;
+import dev.bakuplayz.spigotstore.task.api.TaskContext;
+import dev.bakuplayz.spigotstore.task.impl.TaskScheduler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -77,7 +80,10 @@ public final class CropClick extends JavaPlugin {
     @Getter(AccessLevel.PACKAGE)
     private static CropClick instance;
 
+    @Getter
+    private SpigotStore store;
 
+    
     @Getter
     private TaskScheduler taskScheduler;
 
@@ -117,8 +123,8 @@ public final class CropClick extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        // TODO: Close all connections, and create new ones... ???
-        taskScheduler.cleanupTasks();
+        store.shutdown();
+
         CropClick.instance = null;
     }
 
@@ -130,14 +136,24 @@ public final class CropClick extends JavaPlugin {
     public void onEnable() {
         CropClick.instance = this;
 
-        new SpigotSpin(this);
+        registerLibraries();
 
-        registerSchedulers();
-        registerManagers();
-        registerAddons();
-        registerCommands();
-        registerListeners();
-        registerPermissions();
+        // Register rest after one tick, as we don't want to block
+        // due e.g. connections to db being slow.
+        taskScheduler.scheduleLater(() -> {
+            registerManagers();
+            registerAddons();
+            registerCommands();
+            registerListeners();
+            registerPermissions();
+        }, TaskContext.BUKKIT, 1);
+    }
+
+
+    private void registerLibraries() {
+        new SpigotSpin(this);
+        this.store = new SpigotStore(this, new LogOptions(true));
+        this.taskScheduler = store.getTaskScheduler();
     }
 
 
@@ -146,7 +162,7 @@ public final class CropClick extends JavaPlugin {
      */
     private void registerManagers() {
         // DO NOT MOVE THE ORDER OF THESE THREE, WILL CAUSE CRASHES! 😥
-        this.configManager = new ConfigurationManager(this);
+        this.configManager = new ConfigurationManager();
         this.databaseManager = new DatabaseManager(this);  // dependent on above
         this.dataManager = new DataServiceManager(this); // dependent on above
 
@@ -157,14 +173,6 @@ public final class CropClick extends JavaPlugin {
         this.commandManager = new CommandManager(this);
         this.autofarmManager = new AutofarmManager(this);
         this.permissionManager = new PermissionManager(this);
-    }
-
-
-    /**
-     * Registers all the schedulers.
-     */
-    private void registerSchedulers() {
-        this.taskScheduler = new TaskScheduler(this);
     }
 
 

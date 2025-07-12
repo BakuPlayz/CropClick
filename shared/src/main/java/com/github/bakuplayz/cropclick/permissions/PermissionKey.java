@@ -29,6 +29,7 @@ public enum PermissionKey {
     COMMAND("cropclick.command.%s"),
     COMMAND_GENERAL("cropclick.command.general"),
 
+    AUTOFARM_TOGGLE_ALL("cropclick.toggle.all"),
     AUTOFARM_LINK("cropclick.autofarm.link"),
     AUTOFARM_UNLINK("cropclick.autofarm.unlink"),
     AUTOFARM_UNLINK_OTHERS("cropclick.autofarm.unlink.others"),

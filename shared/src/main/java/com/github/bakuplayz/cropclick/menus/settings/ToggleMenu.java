@@ -115,7 +115,7 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
                 setName(TOGGLE_ITEM_NAME.get(plugin,
                         player.getOfflinePlayer().getName() != null
                                 ? player.getOfflinePlayer().getName()
-                                : player.getPlayerID())
+                                : player.getPlayerId())
                 );
             });
         }

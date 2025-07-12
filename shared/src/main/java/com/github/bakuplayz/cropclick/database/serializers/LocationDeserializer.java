@@ -18,19 +18,15 @@
  */
 package com.github.bakuplayz.cropclick.database.serializers;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
+import dev.bakuplayz.spigotstore.registries.json.api.JsonDeserializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-
-public final class LocationDeserializer extends JsonDeserializer<Location> {
+public final class LocationDeserializer implements JsonDeserializer<Location> {
 
     @NotNull
     public static Location deserializeLocation(@NotNull JsonNode node) {
@@ -46,8 +42,7 @@ public final class LocationDeserializer extends JsonDeserializer<Location> {
 
     @NotNull
     @Override
-    public Location deserialize(@NotNull JsonParser parser, @NotNull DeserializationContext ctx) throws IOException {
-        JsonNode node = parser.getCodec().readTree(parser);
+    public Location fromJson(@NotNull JsonNode node) {
         if (node.has("doubly")) {
             return deserializeDoublyLocation(node);
         }

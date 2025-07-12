@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -32,7 +32,7 @@ public final class Maps {
     @SafeVarargs
     @UnmodifiableView
     public static <K, V> Map<K, V> ofEntries(Map.Entry<K, V> @NotNull ... entries) {
-        Map<K, V> map = new HashMap<>();
+        Map<K, V> map = new LinkedHashMap<>();
         for (Map.Entry<K, V> entry : entries) {
             map.put(entry.getKey(), entry.getValue());
         }
@@ -48,7 +48,7 @@ public final class Maps {
             throw new IllegalArgumentException("Invalid number of arguments, must be even.");
         }
 
-        Map<K, V> map = new HashMap<>();
+        Map<K, V> map = new LinkedHashMap<>();
 
         for (int i = 0; i < keyValuePairs.length; i += 2) {
             K key = (K) keyValuePairs[i];

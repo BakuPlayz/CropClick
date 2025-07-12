@@ -18,8 +18,8 @@
  */
 package com.github.bakuplayz.cropclick.configurations.config;
 
-import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +32,16 @@ import org.jetbrains.annotations.NotNull;
  * @version 3.0.0
  * @since 3.0.0
  */
-public final class DefaultConfig extends AbstractConfiguration {
+public final class DefaultConfig extends AbstractPersistentYaml {
 
-    public DefaultConfig(@NotNull CropClick plugin) {
-        super(plugin, "config.yml");
+    public DefaultConfig() {
+        super("config.yml");
     }
 
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
         UPDATE_MESSAGE_PLAYER("updateMessage.player", true),
         UPDATE_MESSAGE_CONSOLE("updateMessage.console", true),

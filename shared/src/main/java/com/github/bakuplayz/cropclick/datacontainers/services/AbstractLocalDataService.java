@@ -20,7 +20,8 @@ package com.github.bakuplayz.cropclick.datacontainers.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.datacontainers.AbstractDataContainer;
+import dev.bakuplayz.spigotstore.persistence.json.api.PersistentJsonOptions;
+import dev.bakuplayz.spigotstore.persistence.json.impl.SyncPersistentJson;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,11 +40,14 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractLocalDataService<D> implements DataService<D> {
 
-    protected final AbstractDataContainer<D> dataContainer;
+    protected final SyncPersistentJson<D> dataContainer;
 
 
     public AbstractLocalDataService(@NotNull String fileName, @NotNull TypeReference<Map<String, D>> reference, @NotNull CropClick plugin) {
-        this.dataContainer = new AbstractDataContainer<>(fileName, reference, plugin);
+        this.dataContainer = new SyncPersistentJson<>(
+                fileName, reference, plugin.getStore().getJsonRegistry(),
+                new PersistentJsonOptions(plugin.getTaskScheduler(), "/data")
+        );
     }
 
 
@@ -99,7 +103,7 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
     @NotNull
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
         return CompletableFuture.completedFuture(
-                dataContainer.addIfAbsent(getDefaultIdentifier(entity), entity)
+                dataContainer.addOneIfAbsent(getDefaultIdentifier(entity), entity)
         );
     }
 
@@ -114,7 +118,7 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
-        return CompletableFuture.completedFuture(dataContainer.remove(id));
+        return CompletableFuture.completedFuture(dataContainer.removeOne(id));
     }
 
 
@@ -128,7 +132,7 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity) {
-        dataContainer.add(id, entity);
+        dataContainer.addOne(id, entity);
         return CompletableFuture.completedFuture(true);
     }
 

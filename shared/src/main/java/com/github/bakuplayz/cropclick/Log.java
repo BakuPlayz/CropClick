@@ -20,7 +20,10 @@ package com.github.bakuplayz.cropclick;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,14 +39,18 @@ public final class Log {
 
     private final static boolean DEBUG = true;
 
-    private final static Logger logger = Logger.getLogger("CropClick");
+    private final static Logger LOGGER = Logger.getLogger("CropClick");
 
 
     static {
         try {
-            logger.addHandler(new FileHandler("cropclick.log", true));
+            File LOG_FILE = new File(
+                    CropClick.getInstance().getDataFolder().getAbsolutePath() + "/logs/cropclick.log"
+            );
+            Files.createDirectories(Paths.get(LOG_FILE.getParentFile().getPath()));
+            LOGGER.addHandler(new FileHandler(LOG_FILE.getAbsolutePath(), true));
         } catch (IOException e) {
-            System.out.println("[CropClick] (Setup): Failed to setup logger handler.");
+            severe("(Setup): Failed to setup logger handler.");
         }
     }
 
@@ -81,7 +88,7 @@ public final class Log {
      * @param params  Parameters to insert into the message
      */
     public static void severe(@NotNull String message, @NotNull Object... params) {
-        logger.log(Level.SEVERE, "[CropClick] " + message, params);
+        LOGGER.log(Level.SEVERE, "[CropClick] " + message, params);
     }
 
 
@@ -92,7 +99,7 @@ public final class Log {
      * @param throwable The throwable to log
      */
     public static void severe(@NotNull String message, @NotNull Throwable throwable) {
-        logger.log(Level.SEVERE, "[CropClick] " + message, throwable);
+        LOGGER.log(Level.SEVERE, "[CropClick] " + message, throwable);
     }
 
 
@@ -103,7 +110,7 @@ public final class Log {
      * @param throwable The throwable to log
      */
     public static void info(@NotNull String message, @NotNull Throwable throwable) {
-        logger.log(Level.INFO, "[CropClick] " + message, throwable);
+        LOGGER.log(Level.INFO, "[CropClick] $message", throwable);
     }
 
 
@@ -114,12 +121,12 @@ public final class Log {
      * @param params  Parameters to insert into the message
      */
     public static void info(@NotNull String message, @NotNull Object... params) {
-        logger.log(Level.INFO, "[CropClick] " + message, params);
+        LOGGER.log(Level.INFO, "[CropClick] " + message, params);
     }
 
 
     public static void info(@NotNull String message, @NotNull Tag tag, @NotNull Object... params) {
-        logger.log(Level.INFO, "[CropClick] (" + tag.name() + ") " + message, params);
+        LOGGER.log(Level.INFO, "[CropClick] (" + tag.name() + ") " + message, params);
     }
 
 

@@ -16,17 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.configurations;
+package com.github.bakuplayz.cropclick.common;
 
+import com.github.bakuplayz.spigotspin.utils.XMaterial;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
-public interface ConfigurationKey {
+import java.util.Arrays;
 
-    @NotNull
-    String getPath();
+public class Materials {
 
+    /**
+     * Checks whether the {@link Material provided material} matches any of the {@link Material passed materials}.
+     *
+     * @param block the type to check.
+     * @param types the types to match.
+     *
+     * @return true if it matches any, otherwise false.
+     */
+    @SuppressWarnings("unused")
+    public static boolean isAnyType(@NotNull Material material, @NotNull XMaterial @NotNull ... types) {
+        return Arrays.stream(types).anyMatch(type -> type.parseMaterial() == material);
+    }
 
-    @NotNull
-    Object getDefaultValue();
-    
 }

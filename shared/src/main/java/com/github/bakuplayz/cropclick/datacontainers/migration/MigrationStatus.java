@@ -16,27 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.bakuplayz.cropclick.datacontainers;
+package com.github.bakuplayz.cropclick.datacontainers.migration;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Collection;
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public enum MigrationStatus {
 
-public interface DataContainer<D> {
+    NOT_INITIATED,
 
-    void add(@NotNull String key, @NotNull D entity);
+    COMPLETED,
 
+    FAILED,
 
-    boolean addIfAbsent(@NotNull String key, @NotNull D entity);
-
-
-    boolean remove(@NotNull String key);
-
-
-    D getOne(@NotNull String key);
+    IN_PROGRESS;
 
 
-    @NotNull
-    Collection<D> getMany();
+    public boolean canStart() {
+        return this == NOT_INITIATED || this == FAILED;
+    }
 
 }

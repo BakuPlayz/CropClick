@@ -91,6 +91,7 @@ menu:
     help: "Help"
     updates: "Updates"
     settings: "Settings"
+    migrations: "Migrations"
 
     addons: "Addons"
     auraSkills: "AuraSkills"
@@ -108,6 +109,7 @@ menu:
     crops: "Crops"
     dropChance: "Drop Chance"
 
+    autofarmsDashboard: "Autofarms"
     autofarms: "Autofarms"
     cropLink: "Crop"
     containerLink: "Container"
@@ -154,9 +156,9 @@ menu:
       itemTips: "&7Shows all the registered crops."
       itemStatus: "&7Amount of Crops: &e%status%"
 
-    autofarms:
+    autofarmsDashboard:
       itemName: "&eAutofarms"
-      itemTips: "&7Shows all the registered autofarms."
+      itemTips: "&7Shows some important Autofarm settings, like disabling them altogether."
       itemStatus: "&7Amount of Farms: &e%status%"
 
   updates:
@@ -174,7 +176,7 @@ menu:
       itemName: "&eConsole"
       itemTips: "&7Toggle the update messages for the console."
       itemStatus: "&7Status: &e%status%"
-
+  
   help:
     itemName: "&7crop &e%name%"
     itemUsage: "&7Usage: &e%usage%"
@@ -309,6 +311,22 @@ menu:
     itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
     itemOwnerUnclaimed: "Unclaimed"
+
+  autofarmsDashboard:
+    link:
+      itemName: "&eLink"
+      itemTips: "&7Click to &etoggle &7your autofarm linking ability."
+      itemStatus: "&7Status: &e%status%"
+
+    manageAutofarms:
+      itemName: "&eManage Autofarms"
+      itemTips: "&7Shows all the registered autofarms."
+      itemStatus: "&7Amount of Farms: &e%status%"
+
+    toggle:
+      itemName: "&eToggle"
+      itemTips: "&7Setting to toggle CropClick's &eAutofarm &7functionality."
+      itemStatus: "&7Status: &e%status%"
 
   addons:
     auraSkills:
@@ -466,15 +484,14 @@ menu:
       itemTips: "&7Settings to rename &eDrop &enames &7for crops."
       itemStatus: "&7Amount of Renamed: &e%status%"
 
-    autofarms:
-      itemName: "&eAutofarms"
-      itemTips: "&7Setting to toggle CropClick's &eAutofarm &7functionality."
-      itemStatus: "&7Status: &e%status%"
-
     worlds:
       itemName: "&eWorlds"
       itemTips: "&7Settings to banish &eCropClick, &ePlayers and Autofarms&7, in specific worlds."
       itemStatus: "&7Amount of Banished: &e%status%"
+
+    migrations:
+      itemName: "&eMigrations"
+      itemTips: "&7Settings to migrate from &eJSON to database&7, or &edatabase to database&7."
 
   toggle:
     itemName: "&e%name%"
@@ -597,3 +614,23 @@ menu:
       itemName: "&eAutofarms"
       itemTips: "&7Toggles Autofarms &efunctionality&7 with CropClick, in the world."
       itemStatus: "&7Allowed: &e%status%"
+
+  migrations:
+    states:
+      notInitialized: "&7Not Initialized"
+      completed: "&aCompleted"
+      failed: "&cFailed"
+      inProgress: "&eIn progress"
+
+    progress:
+      itemName: "&eProgress"
+      itemTips: "&7Shows the current progress of the migration."
+      itemStatus: "&7Status: &e%status%"
+
+    default:
+      itemName: "&eDefault"
+      itemTips: "&7Connection from &e%database%&7@&e%host%&7:&e%port%&7 using &e%dialect%&7."
+
+    migration:
+      itemName: "&eMigration"
+      itemTips: "&7Connection to &e%database%&7@&e%host%&7:&e%port%&7 using &e%dialect%&7."

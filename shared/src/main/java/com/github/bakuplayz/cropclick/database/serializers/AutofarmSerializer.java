@@ -19,20 +19,19 @@
 package com.github.bakuplayz.cropclick.database.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
+import dev.bakuplayz.spigotstore.registries.json.api.JsonSerializer;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public final class AutofarmSerializer extends JsonSerializer<Autofarm> {
+public final class AutofarmSerializer implements JsonSerializer<Autofarm> {
+
 
     @Override
-    public void serialize(@NotNull Autofarm autofarm, @NotNull JsonGenerator generator, @NotNull SerializerProvider provider) throws IOException, JsonProcessingException {
+    public void toJson(@NotNull Autofarm autofarm, @NotNull JsonGenerator generator) throws IOException {
         generator.writeStartObject();
 
         generator.writeStringField("farmerId", autofarm.getFarmerId().toString());

@@ -19,9 +19,9 @@
 
 package com.github.bakuplayz.cropclick.configurations.config;
 
-import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.addons.abstracts.AbstractAddon;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +35,10 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class AddonsConfig extends AbstractConfiguration {
+public final class AddonsConfig extends AbstractPersistentYaml {
 
-    public AddonsConfig(@NotNull CropClick plugin) {
-        super(plugin, "addons.yml");
+    public AddonsConfig() {
+        super("addons.yml");
     }
 
 
@@ -56,7 +56,7 @@ public final class AddonsConfig extends AbstractConfiguration {
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
         ADDON_ENABLED("addons.%s.isEnabled", true);
 

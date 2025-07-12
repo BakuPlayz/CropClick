@@ -217,6 +217,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     }
 
 
+    @NotNull
     @Override
     public Item getFrameItem(int position) {
         return new GlassItem();

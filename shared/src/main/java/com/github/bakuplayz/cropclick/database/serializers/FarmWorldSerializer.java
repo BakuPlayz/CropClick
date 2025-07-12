@@ -19,18 +19,17 @@
 package com.github.bakuplayz.cropclick.database.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.bakuplayz.cropclick.world.FarmWorld;
+import dev.bakuplayz.spigotstore.registries.json.api.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public final class FarmWorldSerializer extends JsonSerializer<FarmWorld> {
+public final class FarmWorldSerializer implements JsonSerializer<FarmWorld> {
+
 
     @Override
-    public void serialize(@NotNull FarmWorld world, @NotNull JsonGenerator generator, @NotNull SerializerProvider provider) throws IOException, JsonProcessingException {
+    public void toJson(@NotNull FarmWorld world, @NotNull JsonGenerator generator) throws IOException {
         generator.writeStartObject();
         generator.writeStringField("name", world.getName());
         serializeBanishedAddons(world, generator);

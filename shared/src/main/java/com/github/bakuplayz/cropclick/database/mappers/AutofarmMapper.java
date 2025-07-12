@@ -18,18 +18,18 @@
  */
 package com.github.bakuplayz.cropclick.database.mappers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.Maps;
-import dev.bakuplayz.spigotstore.database.DatabaseDialect;
-import dev.bakuplayz.spigotstore.database.LogicalType;
-import dev.bakuplayz.spigotstore.database.entity.EntityMapper;
+import dev.bakuplayz.spigotstore.persistence.sql.core.DatabaseDialect;
+import dev.bakuplayz.spigotstore.persistence.sql.core.LogicalType;
+import dev.bakuplayz.spigotstore.registries.entity.api.EntityMapper;
+import dev.bakuplayz.spigotstore.registries.json.impl.JsonMapperRegistry;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -42,21 +42,28 @@ import static java.util.AbstractMap.SimpleImmutableEntry;
 @AllArgsConstructor
 public final class AutofarmMapper implements EntityMapper<Autofarm> {
 
-    private final ObjectMapper mapper;
-
     private final DatabaseDialect dialect;
+
+    private final JsonMapperRegistry jsonRegistry;
+
+
+    @NotNull
+    private static UUID fromBytes(byte[] bytes) {
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        return new UUID(bb.getLong(), bb.getLong());
+    }
 
 
     @NotNull
     @Override
-    public Autofarm toEntity(@NotNull ResultSet rs) throws SQLException, IOException {
+    public Autofarm toEntity(@NotNull ResultSet rs) throws SQLException {
         return Autofarm.createBasic(
-                UUID.nameUUIDFromBytes(rs.getBytes(1)),
-                UUID.nameUUIDFromBytes(rs.getBytes(2)),
+                fromBytes(rs.getBytes(1)),
+                fromBytes(rs.getBytes(2)),
                 rs.getBoolean(3),
-                mapper.readValue(rs.getString(4), Location.class),
-                mapper.readValue(rs.getString(5), Location.class),
-                mapper.readValue(rs.getString(6), Location.class)
+                jsonRegistry.fromJson(rs.getString(4), Location.class),
+                jsonRegistry.fromJson(rs.getString(5), Location.class),
+                jsonRegistry.fromJson(rs.getString(6), Location.class)
         );
     }
 
@@ -83,9 +90,9 @@ public final class AutofarmMapper implements EntityMapper<Autofarm> {
                 entity.getFarmerId(),
                 entity.getOwnerId(),
                 entity.isEnabled(),
-                entity.getCropLocation(),
-                entity.getContainerLocation(),
-                entity.getDispenserLocation()
+                jsonRegistry.toJsonString(entity.getCropLocation()),
+                jsonRegistry.toJsonString(entity.getContainerLocation()),
+                jsonRegistry.toJsonString(entity.getDispenserLocation())
         );
     }
 

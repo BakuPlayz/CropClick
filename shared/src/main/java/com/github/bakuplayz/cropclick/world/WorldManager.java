@@ -48,9 +48,8 @@ public final class WorldManager {
 
 
     public WorldManager(@NotNull CropClick plugin) {
-        this.dataService = plugin.getDataManager().getFarmWorldDataService();
+        this.dataService = plugin.getDataManager().getFarmWorldService();
         this.finder = new FarmWorldFinder(dataService);
-
         registerWorlds();
     }
 

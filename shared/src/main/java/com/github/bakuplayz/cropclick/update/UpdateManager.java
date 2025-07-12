@@ -26,7 +26,7 @@ import com.github.bakuplayz.cropclick.common.Versions;
 import com.github.bakuplayz.cropclick.common.network.HttpParam;
 import com.github.bakuplayz.cropclick.common.network.HttpRequestBuilder;
 import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
-import dev.bakuplayz.spigotstore.task.TaskContext;
+import dev.bakuplayz.spigotstore.task.api.TaskContext;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;

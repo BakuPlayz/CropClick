@@ -5,14 +5,15 @@ import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractRemoteDataService;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import dev.bakuplayz.spigotstore.database.QueryScheduler;
-import dev.bakuplayz.spigotstore.database.query.SelectQuery;
-import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
+import dev.bakuplayz.spigotstore.persistence.sql.api.QueryProvider;
+import dev.bakuplayz.spigotstore.persistence.sql.api.SelectQuery;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -28,8 +29,8 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     private final AsyncLoadingCache<LookupKey, Autofarm> cache;
 
 
-    public RemoteAutofarmService(@NotNull QueryScheduler scheduler, @NotNull QueryProvider provider) {
-        super(scheduler, provider, Autofarm.class);
+    public RemoteAutofarmService(@NotNull QueryProvider provider) {
+        super(provider, Autofarm.class);
         this.cache = initializeCache();
     }
 
@@ -49,12 +50,12 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
 
         if (key.isDoubly()) {
             return query.whereJSON("container", "=",
-                    ((DoublyLocation) key.getLocation()).getSingly(),
-                    ((DoublyLocation) key.getLocation()).getDoubly()
-            ).fetchOne(scheduler);
+                    key.getSingly(),
+                    key.getDoubly()
+            ).fetchOne();
         }
 
-        return query.whereJSON(key.getType().getColumn(), "=", key.getLocation()).fetchOne(scheduler);
+        return query.whereJSON(key.getType().getColumn(), "=", key.getSingly()).fetchOne();
     }
 
 
@@ -68,7 +69,7 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     protected String getDefaultIdentifier() {
-        return "farmer_id";
+        return "farmer";
     }
 
 
@@ -120,26 +121,60 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     }
 
     @Getter
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class LookupKey {
+    @EqualsAndHashCode
+    @RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+    private static final class LookupKey {
 
         @NotNull
         private final LookupType type;
 
         @NotNull
-        private final Location location;
+        private final LocationKey singly;
+
+        @Nullable
+        private final LocationKey doubly;
 
 
         @NotNull
         public static LookupKey of(@NotNull LookupType type, @NotNull Location location) {
-            return new LookupKey(type, location);
+            if (location instanceof DoublyLocation) {
+                return new LookupKey(
+                        type,
+                        LocationKey.from(((DoublyLocation) location).getSingly()),
+                        LocationKey.from(((DoublyLocation) location).getDoubly())
+                );
+            } else {
+                return new LookupKey(type, LocationKey.from(location), null);
+            }
         }
 
 
         public boolean isDoubly() {
-            return type == LookupType.CONTAINER && location instanceof DoublyLocation;
+            return doubly != null;
         }
-
     }
+
+    @Getter
+    @EqualsAndHashCode
+    @RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+    private static final class LocationKey {
+
+        private final int x, y, z;
+
+        @NotNull
+        private final String world;
+
+
+        @NotNull
+        public static LocationKey from(@NotNull Location location) {
+            return new LocationKey(
+                    location.getBlockX(),
+                    location.getBlockY(),
+                    location.getBlockZ(),
+                    location.getWorld().getName()
+            );
+        }
+    }
+
 
 }

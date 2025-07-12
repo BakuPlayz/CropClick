@@ -227,20 +227,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.3.1</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.2.3</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
@@ -258,7 +244,7 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>3.1.8</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -278,21 +264,14 @@
         <dependency>
             <groupId>com.github.bakuplayz</groupId>
             <artifactId>SpigotSpin</artifactId>
-            <version>0.1.1.72-local-15</version>
+            <version>0.1.1.72-local-20</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>dev.bakuplayz</groupId>
             <artifactId>spigotstore</artifactId>
-            <version>0.0.0.1-BETA-local-4</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.45.1.0</version>
+            <version>0.0.0.1-BETA-local-21</version>
             <scope>compile</scope>
         </dependency>
 

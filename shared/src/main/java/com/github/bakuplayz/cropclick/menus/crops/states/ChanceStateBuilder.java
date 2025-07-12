@@ -128,8 +128,8 @@ public final class ChanceStateBuilder {
         private ChanceMenuState(@NotNull CropsConfig config, @NotNull Crop crop) {
             this.isCropHarvestable = crop.isHarvestable();
             this.isSeedEnabled = crop.hasSeed() && crop.getSeed().isEnabled();
-            this.cropValue = (int) config.getDouble(ConfigurationKey.CROP_DROP_CHANCE, crop.getName()) * 100;
-            this.seedValue = (int) config.getDouble(ConfigurationKey.SEED_DROP_CHANCE, crop.hasSeed() ? crop.getSeed().getName() : "") * 100;
+            this.cropValue = (int) (config.getDouble(ConfigurationKey.CROP_DROP_CHANCE, crop.getName()) * 100);
+            this.seedValue = (int) (config.getDouble(ConfigurationKey.SEED_DROP_CHANCE, crop.hasSeed() ? crop.getSeed().getName() : "") * 100);
         }
     }
 

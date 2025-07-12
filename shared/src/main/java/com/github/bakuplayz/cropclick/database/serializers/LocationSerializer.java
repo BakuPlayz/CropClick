@@ -19,15 +19,14 @@
 package com.github.bakuplayz.cropclick.database.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.bakuplayz.cropclick.common.types.DoublyLocation;
+import dev.bakuplayz.spigotstore.registries.json.api.JsonSerializer;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public final class LocationSerializer extends JsonSerializer<Location> {
+public final class LocationSerializer implements JsonSerializer<Location> {
 
     public static void serializeDoublyLocation(@NotNull JsonGenerator generator, @NotNull DoublyLocation location) throws IOException {
         generator.writeObjectFieldStart("singly");
@@ -49,7 +48,7 @@ public final class LocationSerializer extends JsonSerializer<Location> {
 
 
     @Override
-    public void serialize(@NotNull Location location, @NotNull JsonGenerator generator, @NotNull SerializerProvider provider) throws IOException {
+    public void toJson(@NotNull Location location, @NotNull JsonGenerator generator) throws IOException {
         generator.writeStartObject();
 
         if (location instanceof DoublyLocation) {

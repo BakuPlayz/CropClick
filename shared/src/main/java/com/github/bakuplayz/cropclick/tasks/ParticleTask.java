@@ -22,7 +22,7 @@ package com.github.bakuplayz.cropclick.tasks;
 import com.cryptomorin.xseries.particles.ParticleDisplay;
 import com.cryptomorin.xseries.particles.XParticle;
 import com.github.bakuplayz.cropclick.common.types.Particle;
-import dev.bakuplayz.spigotstore.task.model.Task;
+import dev.bakuplayz.spigotstore.task.api.Task;
 import lombok.AllArgsConstructor;
 import org.bukkit.Location;
 

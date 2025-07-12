@@ -19,29 +19,24 @@
 package com.github.bakuplayz.cropclick.datacontainers;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.Log;
-import com.github.bakuplayz.cropclick.common.Maps;
-import com.github.bakuplayz.cropclick.configurations.config.UsageConfig;
-import com.github.bakuplayz.cropclick.datacontainers.migrations.Migration;
+import com.github.bakuplayz.cropclick.datacontainers.migration.MigrationService;
 import com.github.bakuplayz.cropclick.datacontainers.services.DataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.LocalAutofarmService;
 import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.RemoteAutofarmService;
 import com.github.bakuplayz.cropclick.datacontainers.services.world.FarmWorldDataService;
 import com.github.bakuplayz.cropclick.datacontainers.services.world.LocalFarmWorldService;
-import com.github.bakuplayz.cropclick.datacontainers.services.world.RemoteFarmWorldService;
-import dev.bakuplayz.spigotstore.database.QueryScheduler;
-import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
+import dev.bakuplayz.spigotstore.task.api.TaskContext;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.util.AbstractMap.SimpleImmutableEntry;
+import static com.github.bakuplayz.cropclick.database.DatabaseManager.LiveDatabaseContext;
+import static com.github.bakuplayz.cropclick.database.DatabaseManager.MigrationDatabaseContext;
 
 
 /**
@@ -51,91 +46,125 @@ import static java.util.AbstractMap.SimpleImmutableEntry;
  * @version 3.0.0
  * @since 3.0.0
  */
+
+
 public final class DataServiceManager {
 
-    private final QueryProvider queryProvider;
-
-    private final QueryScheduler queryScheduler;
-
-
-    private final UsageConfig usageConfig;
-
     @Getter
-    private final AutofarmDataService autofarmService;
+    private final MigrationService migrationService;
 
-    @Getter
-    private final FarmWorldDataService farmWorldDataService;
-
-
-    private final MigratorService migratorService;
+    private final LiveServiceContext liveContext;
 
 
     public DataServiceManager(@NotNull CropClick plugin) {
-        this.queryScheduler = plugin.getDatabaseManager().getQueryScheduler();
-        this.queryProvider = plugin.getDatabaseManager().getQueryProvider();
-        this.usageConfig = plugin.getConfigManager().getUsageConfig();
-        this.farmWorldDataService = createFarmWorldService(plugin);
-        this.autofarmService = createAutofarmService(plugin);
-        this.migratorService = new MigratorService();
+        this.liveContext = new LiveServiceContext(plugin);
+        this.migrationService = new MigrationService(liveContext, new MigrationServiceContext(plugin), plugin.getConfigManager().getUsageConfig());
     }
 
 
     @NotNull
     public Collection<DataService<?>> getAll() {
-        return Arrays.asList(autofarmService, farmWorldDataService);
+        return Arrays.asList(getAutofarmService(), getFarmWorldService());
     }
 
 
-    @NotNull
-    private AutofarmDataService createAutofarmService(@NotNull CropClick plugin) {
-        if (migratorService.isMigrated()) {
-            return new RemoteAutofarmService(queryScheduler, queryProvider);
-        }
-        return new LocalAutofarmService(plugin);
+    public AutofarmDataService getAutofarmService() {
+        return liveContext.getAutofarmService();
     }
 
 
-    @NotNull
-    private FarmWorldDataService createFarmWorldService(@NotNull CropClick plugin) {
-        if (migratorService.isMigrated()) {
-            return new RemoteFarmWorldService(queryScheduler, queryProvider);
-        }
-        return new LocalFarmWorldService(plugin);
+    public FarmWorldDataService getFarmWorldService() {
+        return liveContext.getFarmWorldService();
     }
 
 
-    public final class MigratorService {
+    @Getter
+    public static final class LiveServiceContext {
 
-        private final Map<String, Migration> migrations = Maps.ofEntries(
-                new SimpleImmutableEntry<>("json-to-db", ()->{})
-        );
+        @NotNull
+        private final CropClick plugin;
 
-        private AtomicBoolean isMigrated = new AtomicBoolean(false);
+        @Getter
+        private final LiveDatabaseContext context;
+
+        private final FarmWorldDataService farmWorldService;
+
+        private AutofarmDataService autofarmService;
 
 
-        public void migrateToSQL() {
+        public LiveServiceContext(@NotNull CropClick plugin) {
+            this.plugin = plugin;
+            this.context = plugin.getDatabaseManager().getLiveContext();
+            this.farmWorldService = createFarmWorldService();
+            this.autofarmService = createAutofarmService();
         }
 
 
-        private <E> void migrateAllEntities(@NotNull DataService<E> from, @NotNull DataService<E> to) {
-            from.getMany(0, Integer.MAX_VALUE)
-                    .thenAccept(entities -> entities.forEach(entity -> migrateEntity(entity, to)))
-                    .exceptionally(ex -> {
-                        Log.severe("Failed to migrate entities from data service to data service.", ex);
-                        return null;
-                    });
+        @NotNull
+        private AutofarmDataService createAutofarmService() {
+            if (context.getQueryProvider().isConnected()) {
+                return new RemoteAutofarmService(context.getQueryProvider());
+            }
+            return new LocalAutofarmService(plugin);
         }
 
 
-        private <E> void migrateEntity(@NotNull E entity, @NotNull DataService<E> to) {
-            to.insertOne(entity).exceptionally(ex -> {
-                Log.debug("Failed to migrate {0} entity.", entity.toString());
-                return null;
-            });
+        @NotNull
+        private FarmWorldDataService createFarmWorldService() {
+            return new LocalFarmWorldService(plugin);
         }
 
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static final class MigrationServiceContext {
 
+        @NotNull
+        private final CropClick plugin;
+
+        @Getter
+        @NotNull
+        private final MigrationDatabaseContext context;
+
+
+        private AutofarmDataService autofarmService;
+
+
+        public MigrationServiceContext(@NotNull CropClick plugin) {
+            this.context = plugin.getDatabaseManager().getMigrationContext();
+            this.plugin = plugin;
+        }
+
+
+        public void start() {
+            plugin.getTaskScheduler().runTask(() -> {
+                this.context.start();
+                this.autofarmService = createAutofarmService();
+            }, TaskContext.BACKGROUND);
+        }
+
+
+        public void swap(@NotNull LiveServiceContext context) {
+            AutofarmDataService tmpAutofarm = this.autofarmService;
+            this.autofarmService = context.autofarmService;
+            context.autofarmService = tmpAutofarm;
+        }
+
+
+        public void shutdown() {
+            this.autofarmService = null;
+        }
+
+
+        @Nullable
+        private AutofarmDataService createAutofarmService() {
+            if (context.getQueryProvider().isConnected()) {
+                return new RemoteAutofarmService(context.getQueryProvider());
+            }
+            return null;
+        }
+
+    }
 
 }

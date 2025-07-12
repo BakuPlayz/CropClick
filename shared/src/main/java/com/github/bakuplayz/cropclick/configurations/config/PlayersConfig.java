@@ -20,8 +20,9 @@
 package com.github.bakuplayz.cropclick.configurations.config;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,11 +43,11 @@ import java.util.List;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class PlayersConfig extends AbstractConfiguration {
+public final class PlayersConfig extends AbstractPersistentYaml {
 
 
-    public PlayersConfig(@NotNull CropClick plugin) {
-        super(plugin, "players.yml");
+    public PlayersConfig() {
+        super("players.yml");
     }
 
 
@@ -102,14 +103,15 @@ public final class PlayersConfig extends AbstractConfiguration {
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
         ALL_PLAYERS("", Collections.emptyList()),
-        SELECTED_PLAYER("%s", null),
-        SELECTED_CROP("%s.crop", null),
-        SELECTED_DISPENSER("%s.dispenser", null),
-        SELECTED_CONTAINER("%s.container", null),
-        DISABLED_PLAYERS("disabled", Collections.emptyList());
+        SELECTED_PLAYER("%s.components", null),
+        SELECTED_CROP("%s.components.crop", null),
+        SELECTED_DISPENSER("%s.components.dispenser", null),
+        SELECTED_CONTAINER("%s.components.container", null),
+        DISABLED_PLAYERS("disabled", Collections.emptyList()),
+        LINK_MODE_ENABLED("%s.link.mode", false);
 
         @NotNull
         private final String path;

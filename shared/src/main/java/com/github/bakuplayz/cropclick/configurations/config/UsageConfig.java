@@ -18,46 +18,41 @@
  */
 package com.github.bakuplayz.cropclick.configurations.config;
 
-import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
+import com.github.bakuplayz.cropclick.datacontainers.migration.MigrationStatus;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Instant;
+public final class UsageConfig extends AbstractPersistentYaml {
 
-public final class UsageConfig extends AbstractConfiguration {
+    public UsageConfig() {
+        super("usage.yml");
 
-    public UsageConfig(@NotNull CropClick plugin) {
-        super(plugin, "usage.yml");
+        clearMigrationStates();
+    }
+
+
+    private void clearMigrationStates() {
+        setWithoutSave(ConfigurationKey.TIMESTAMP, 0);
+        setWithoutSave(ConfigurationKey.STATUS, MigrationStatus.NOT_INITIATED);
+        save();
     }
 
 
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
-        HISTORY_VERSION("migration.history.%s.version", null),
-        HISTORY_STATUS("migration.history.%s.status", MigrationStatus.PENDING),
-        HISTORY_TIMESTAMP("migration.history.%s.timestamp", Instant.now().toString());
+        STATUS("migration.status", MigrationStatus.NOT_INITIATED),
+        TIMESTAMP("migration.timestamp", 0L);
 
         @NotNull
         private final String path;
 
         private final Object defaultValue;
-
-    }
-
-    public enum MigrationStatus {
-
-        COMPLETED,
-
-        FAILED,
-
-        PENDING,
-
-        IN_PROGRESS
 
     }
 

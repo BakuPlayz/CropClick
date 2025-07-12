@@ -33,8 +33,6 @@ import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCon
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtCropEvent;
 import com.github.bakuplayz.cropclick.events.player.interact.PlayerInteractAtDispenserEvent;
 import com.github.bakuplayz.cropclick.world.WorldManager;
-import dev.bakuplayz.spigotstore.task.TaskContext;
-import dev.bakuplayz.spigotstore.task.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -65,13 +63,10 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
 
     private final AutofarmManager autofarmManager;
 
-    private final TaskScheduler taskScheduler;
-
 
     public PlayerInteractAtAutofarmListener(@NotNull CropClick plugin) {
         this.config = plugin.getConfigManager().getDefaultConfig();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.taskScheduler = plugin.getTaskScheduler();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
     }
@@ -111,7 +106,15 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
             return;
         }
 
-        autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> worldManager.getFinder().findByPlayer(player).thenAccept(world -> taskScheduler.runTask(() -> {
+        if (!player.getAutofarmFeatures().isLinkModeEnabled()) {
+            return;
+        }
+
+        /* The player is in linking mode we disable all other
+         * actions till they are out of the mode. */
+        event.setCancelled(true);
+
+        worldManager.getFinder().findByPlayer(player).thenAccept(world -> autofarmManager.getFinder().findByBlock(block).thenAccept(autofarm -> {
             if (!player.getPermissions().canInteractAt(autofarm)) {
                 return;
             }
@@ -125,29 +128,23 @@ public final class PlayerInteractAtAutofarmListener implements Listener {
             }
 
             if (Autofarms.isContainer(block)) {
-                event.setCancelled(true);
-
                 Bukkit.getPluginManager().callEvent(
                         new PlayerInteractAtContainerEvent(block, player, Autofarms.findContainer(block), autofarm)
                 );
             }
 
             if (Autofarms.isDispenser(block)) {
-                event.setCancelled(true);
-
                 Bukkit.getPluginManager().callEvent(
                         new PlayerInteractAtDispenserEvent(player, Autofarms.findDispenser(block), autofarm)
                 );
             }
 
             if (Autofarms.isCrop(cropManager, block)) {
-                event.setCancelled(true);
-
                 Bukkit.getPluginManager().callEvent(
                         new PlayerInteractAtCropEvent(Autofarms.findCrop(cropManager, block), block, player, autofarm)
                 );
             }
-        }, TaskContext.BUKKIT)));
+        }));
     }
 
 }

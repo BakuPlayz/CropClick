@@ -22,6 +22,7 @@ package com.github.bakuplayz.cropclick.commands.subcommands;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
 import com.github.bakuplayz.cropclick.menus.AutofarmsMenu;
+import com.github.bakuplayz.cropclick.menus.ManageAutofarmsMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,7 @@ public final class AutofarmsCommand implements Subcommand {
 
 
     /**
-     * Performs the '/crop autofarms' command, opening the {@link AutofarmsMenu}.
+     * Performs the '/crop autofarms' command, opening the {@link ManageAutofarmsMenu}.
      *
      * @param player the player executing the command.
      * @param args   the arguments passed along the command.

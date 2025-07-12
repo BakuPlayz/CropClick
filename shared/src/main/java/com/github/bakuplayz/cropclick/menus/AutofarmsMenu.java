@@ -20,116 +20,145 @@ package com.github.bakuplayz.cropclick.menus;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
-import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.Messages;
-import com.github.bakuplayz.cropclick.menus.abstracts.AbstractPaginatedMenu;
-import com.github.bakuplayz.cropclick.menus.links.DispenserLinkMenu;
+import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
+import com.github.bakuplayz.cropclick.menus.states.DashboardStateBuilder;
 import com.github.bakuplayz.cropclick.permissions.PermissionKey;
-import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedMenuState;
-import com.github.bakuplayz.spigotspin.menu.common.paginated.BasicPaginatedStateHandler;
+import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
+import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
-import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
+import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
-import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
+import static com.github.bakuplayz.cropclick.menus.states.DashboardStateBuilder.*;
 
-/**
- * A class representing the Autofarms menu.
- *
- * @author BakuPlayz
- * @version 2.2.0
- * @since 2.2.0
- */
-public final class AutofarmsMenu extends AbstractPaginatedMenu<BasicPaginatedMenuState, BasicPaginatedStateHandler, Autofarm> {
+public class AutofarmsMenu extends AbstractStateMenu<DashboardMenuState, DashboardMenuStateHandler> {
+
+    private final CropClick plugin;
+
+    private final boolean showBackButton;
 
 
-    public AutofarmsMenu(@NotNull CropClick plugin, boolean shouldShowBack) {
-        super(AUTOFARMS_TITLE.getTitle(plugin), plugin, shouldShowBack);
+    public AutofarmsMenu(@NotNull CropClick plugin, boolean showBackButton) {
+        super(DASHBOARD_TITLE.getTitle(plugin));
+        this.showBackButton = showBackButton;
+        this.plugin = plugin;
     }
 
 
-    @NotNull
     @Override
-    public CompletableFuture<List<Autofarm>> getFuturePaginationItems() {
-        CompletableFuture<List<Autofarm>> future = new CompletableFuture<>();
-        CropPlayer player = CropPlayer.fromPlayer(viewers.get(0));
-
-        plugin.getAutofarmManager().getAutofarms().thenAccept(autofarms -> future.complete(
-                autofarms.stream()
-                        .filter(autofarm -> {
-                            boolean canClaim = player.getPermissions().has(PermissionKey.AUTOFARM_CLAIM);
-                            boolean canUnlinkOthers = player.getPermissions().canUnlink(autofarm);
-                            return canUnlinkOthers || canClaim;
-                        })
-                        .collect(Collectors.toList())
-        ));
-
-        return future;
+    public DashboardMenuStateHandler createStateHandler(@NotNull Player player) {
+        return DashboardStateBuilder.createStateHandler(this, plugin, player);
     }
 
 
-    @NotNull
     @Override
-    public Item loadPaginatedItem(@NotNull Autofarm autofarm, int position) {
-        return new AutofarmItem(autofarm);
+    public void setItems() {
+        CropPlayer player = CropPlayer.fromPlayer(getViewers().get(0));
+        boolean canToggleAll = player.getPermissions().has(PermissionKey.AUTOFARM_TOGGLE_ALL);
+
+        setItemIf(canToggleAll, 20, new AutofarmsToggleItem(), DashboardMenuStateFlag.AUTOFARM_TOGGLE);
+        setItem(canToggleAll ? 22 : 21, new ManageAutofarmsItem());
+        setItem(canToggleAll ? 24 : 23, new LinkToggleItem(), DashboardMenuStateFlag.LINK_MODE);
+        setItemIf(showBackButton, 49, new CustomBackItem(plugin));
     }
 
 
-    @NotNull
     @Override
-    public BasicPaginatedStateHandler createStateHandler(@NotNull Player player) {
-        return new BasicPaginatedStateHandler(this);
+    public SizeType getSizeType() {
+        return SizeType.DOUBLE_CHEST;
     }
 
 
-    @NotNull
-    @Override
-    public ItemAction getPaginatedItemAction(@NotNull Autofarm autofarm, int position) {
-        return (item, player) -> new DispenserLinkMenu(
-                plugin,
-                autofarm,
-                autofarm.getDispenserLocation().getBlock(),
-                true
-        ).open(player);
-    }
-
-
-    @AllArgsConstructor
-    private final class AutofarmItem extends ClickableItem {
-
-        private final Autofarm autofarm;
-
+    private final class AutofarmsToggleItem extends ClickableStateItem<DashboardMenuState> {
 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
-            return createSync(() -> {
-                String status = Messages.getStatusMessage(plugin, autofarm.isEnabled());
-                OfflinePlayer player = Bukkit.getOfflinePlayer(autofarm.getOwnerId());
+            return createSync(() -> updateItem(getState()));
+        }
 
-                setMaterial(XMaterial.DISPENSER);
-                setLore(AUTOFARMS_ITEM_OWNER.get(plugin, getName(player)));
-                setName(AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedId(), status));
+
+        @Override
+        public void update(@NotNull DashboardMenuState state, int flag) {
+            updateItem(state);
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> stateHandler.toggleAutofarmState();
+        }
+
+
+        private void updateItem(@NotNull DashboardMenuState state) {
+            setName(AUTOFARMS_DASHBOARD_TOGGLE_ITEM_NAME.get(plugin));
+            setLore(AUTOFARMS_DASHBOARD_TOGGLE_ITEM_TIPS.getAsAppendList(plugin,
+                    AUTOFARMS_DASHBOARD_TOGGLE_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state.isAutofarmEnabled())))
+            );
+            setMaterial(state.isAutofarmEnabled() ? XMaterial.DISPENSER : XMaterial.GRAY_STAINED_GLASS_PANE);
+        }
+
+    }
+
+    private final class ManageAutofarmsItem extends ClickableItem {
+
+        @NotNull
+        @Override
+        public CompletableFuture<Void> create() {
+            return plugin.getAutofarmManager().getAmountOfFarms().thenAccept(farms -> {
+                setMaterial(XMaterial.BOOK);
+                setName(AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_NAME.get(plugin));
+                setLore(AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
+                        AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_STATUS.get(plugin, farms))
+                );
             });
         }
 
 
-        private String getName(@NotNull OfflinePlayer player) {
-            if (player.getUniqueId().equals(Autofarm.UNKNOWN_OWNER)) {
-                return AUTOFARMS_ITEM_OWNER_UNCLAIMED.get(plugin);
-            }
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> new ManageAutofarmsMenu(plugin, true).open(player);
+        }
 
-            return player.getName();
+    }
+
+    private final class LinkToggleItem extends ClickableStateItem<DashboardMenuState> {
+
+        @NotNull
+        @Override
+        public CompletableFuture<Void> create() {
+            return createSync(() -> updateItem(getState()));
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> stateHandler.toggleLinkState();
+        }
+
+
+        @Override
+        public void update(@NotNull DashboardMenuState state, int flag) {
+            updateItem(state);
+        }
+
+
+        private void updateItem(@NotNull DashboardMenuState state) {
+            setName(AUTOFARMS_DASHBOARD_LINK_ITEM_NAME.get(plugin));
+            setLore(AUTOFARMS_DASHBOARD_LINK_ITEM_TIPS.getAsAppendList(plugin,
+                    AUTOFARMS_DASHBOARD_LINK_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state.isLinkModeEnabled())))
+            );
+            setMaterial(state.isLinkModeEnabled() ? XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE : XMaterial.GRAY_STAINED_GLASS_PANE);
         }
 
     }

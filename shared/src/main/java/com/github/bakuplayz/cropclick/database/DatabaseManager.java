@@ -18,8 +18,6 @@
  */
 package com.github.bakuplayz.cropclick.database;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.configurations.config.DatabaseConfig;
@@ -27,15 +25,12 @@ import com.github.bakuplayz.cropclick.database.mappers.AutofarmMapper;
 import com.github.bakuplayz.cropclick.database.mappers.FarmWorldMapper;
 import com.github.bakuplayz.cropclick.database.serializers.*;
 import com.github.bakuplayz.cropclick.world.FarmWorld;
-import dev.bakuplayz.spigotstore.database.ConnectionPool;
-import dev.bakuplayz.spigotstore.database.DatabaseDialect;
-import dev.bakuplayz.spigotstore.database.DatabaseOptions;
-import dev.bakuplayz.spigotstore.database.QueryScheduler;
-import dev.bakuplayz.spigotstore.database.entity.EntityMapperRegistry;
-import dev.bakuplayz.spigotstore.database.query.providers.MySQLProvider;
-import dev.bakuplayz.spigotstore.database.query.providers.PostgresProvider;
-import dev.bakuplayz.spigotstore.database.query.providers.QueryProvider;
-import dev.bakuplayz.spigotstore.database.query.providers.SQLiteProvider;
+import dev.bakuplayz.spigotstore.SpigotStore;
+import dev.bakuplayz.spigotstore.persistence.sql.api.QueryProvider;
+import dev.bakuplayz.spigotstore.persistence.sql.core.DatabaseDialect;
+import dev.bakuplayz.spigotstore.persistence.sql.core.DatabaseOptions;
+import dev.bakuplayz.spigotstore.registries.entity.impl.EntityMapperRegistry;
+import dev.bakuplayz.spigotstore.registries.json.impl.JsonMapperRegistry;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -45,74 +40,136 @@ import static com.github.bakuplayz.cropclick.configurations.config.DatabaseConfi
 @Getter
 public final class DatabaseManager {
 
-    private final ObjectMapper jsonMapper;
+    private final LiveDatabaseContext liveContext;
 
-    private final QueryProvider queryProvider;
+    private final MigrationDatabaseContext migrationContext;
 
-    private final QueryScheduler queryScheduler;
-
-    private final ConnectionPool connectionPool;
+    private final JsonMapperRegistry jsonRegistry;
 
 
     public DatabaseManager(@NotNull CropClick plugin) {
-        DatabaseConfig config = plugin.getConfigManager().getDatabaseConfig();
+        this.liveContext = new LiveDatabaseContext(plugin);
+        this.migrationContext = new MigrationDatabaseContext(plugin);
+        this.jsonRegistry = plugin.getStore().getJsonRegistry();
 
-        DatabaseOptions options = new DatabaseOptions(
-                config.getInt(ConfigurationKey.PORT),
-                config.getString(ConfigurationKey.HOST),
-                config.getString(ConfigurationKey.USERNAME),
-                config.getString(ConfigurationKey.PASSWORD),
-                config.getString(ConfigurationKey.DATABASE),
-                config.getEnum(ConfigurationKey.DIALECT, DatabaseDialect.class)
-        );
-
-        this.jsonMapper = initializeJSONMapper();
-        this.queryProvider = initializeProvider(config);
-        this.connectionPool = new ConnectionPool(options);
-        this.queryScheduler = new QueryScheduler(connectionPool, plugin.getTaskScheduler());
-
-        registerEntities(config);
+        registerJsonMappers();
     }
 
 
-    @NotNull
-    private QueryProvider initializeProvider(@NotNull DatabaseConfig config) {
-        DatabaseDialect dialect = config.getEnum(ConfigurationKey.DIALECT, DatabaseDialect.class);
+    // TODO: Move to SpigotStore -> Log.severe("Failed to close down database connections, memory might leak. Report to author!");
 
-        switch (dialect) {
-            case MARIADB:
-            case MYSQL:
-                return new MySQLProvider(jsonMapper);
-            case POSTGRES:
-                return new PostgresProvider(jsonMapper);
-            default:
-                return new SQLiteProvider(jsonMapper);
+
+    private void registerJsonMappers() {
+        jsonRegistry.register(FarmWorld.class, new FarmWorldSerializer(), new FarmWorldDeserializer());
+        jsonRegistry.register(Location.class, new LocationSerializer(), new LocationDeserializer());
+        jsonRegistry.register(Autofarm.class, new AutofarmSerializer(), new AutofarmDeserializer());
+    }
+
+
+    public static final class LiveDatabaseContext extends DatabaseContext {
+
+        public LiveDatabaseContext(@NotNull CropClick plugin) {
+            super(plugin);
+            start();
         }
+
+
+        @NotNull
+        @Override
+        protected DatabaseOptions getOptions() {
+            return new DatabaseOptions(
+                    config.getInt(ConfigurationKey.DEFAULT_PORT),
+                    config.getString(ConfigurationKey.DEFAULT_HOST),
+                    config.getString(ConfigurationKey.DEFAULT_USERNAME),
+                    config.getString(ConfigurationKey.DEFAULT_PASSWORD),
+                    config.getString(ConfigurationKey.DEFAULT_DATABASE),
+                    config.getEnum(ConfigurationKey.DEFAULT_DIALECT, DatabaseDialect.class)
+            );
+        }
+
+
+        @NotNull
+        @Override
+        protected DatabaseDialect getDialect() {
+            return config.getEnum(ConfigurationKey.DEFAULT_DIALECT, DatabaseDialect.class);
+        }
+
     }
 
+    public static final class MigrationDatabaseContext extends DatabaseContext {
 
-    @NotNull
-    private ObjectMapper initializeJSONMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
+        public MigrationDatabaseContext(@NotNull CropClick plugin) {
+            super(plugin);
+        }
 
-        module.addSerializer(FarmWorld.class, new FarmWorldSerializer());
-        module.addDeserializer(FarmWorld.class, new FarmWorldDeserializer());
-        module.addSerializer(Location.class, new LocationSerializer());
-        module.addDeserializer(Location.class, new LocationDeserializer());
-        module.addSerializer(Autofarm.class, new AutofarmSerializer());
-        module.addDeserializer(Autofarm.class, new AutofarmDeserializer());
-        mapper.registerModule(module);
 
-        return mapper;
+        public void start() {
+            super.start();
+        }
+
+
+        @NotNull
+        @Override
+        protected DatabaseOptions getOptions() {
+            return new DatabaseOptions(
+                    config.getInt(ConfigurationKey.MIGRATION_PORT),
+                    config.getString(ConfigurationKey.MIGRATION_HOST),
+                    config.getString(ConfigurationKey.MIGRATION_USERNAME),
+                    config.getString(ConfigurationKey.MIGRATION_PASSWORD),
+                    config.getString(ConfigurationKey.MIGRATION_DATABASE),
+                    config.getEnum(ConfigurationKey.MIGRATION_DIALECT, DatabaseDialect.class)
+            );
+        }
+
+
+        @NotNull
+        @Override
+        protected DatabaseDialect getDialect() {
+            return config.getEnum(ConfigurationKey.MIGRATION_DIALECT, DatabaseDialect.class);
+        }
+
     }
 
+    @Getter
+    public abstract static class DatabaseContext {
 
-    private void registerEntities(@NotNull DatabaseConfig config) {
-        DatabaseDialect dialect = config.getEnum(ConfigurationKey.DIALECT, DatabaseDialect.class);
-        EntityMapperRegistry.register(Autofarm.class, new AutofarmMapper(jsonMapper, dialect));
-        EntityMapperRegistry.register(FarmWorld.class, new FarmWorldMapper(jsonMapper, dialect));
+
+        @NotNull
+        protected final DatabaseConfig config;
+
+        protected final SpigotStore store;
+
+        private QueryProvider queryProvider;
+
+
+        public DatabaseContext(@NotNull CropClick plugin) {
+            this.config = plugin.getConfigManager().getDatabaseConfig();
+            this.store = plugin.getStore();
+
+            registerEntities();
+        }
+
+
+        protected void start() {
+            if (queryProvider != null) return;
+            this.queryProvider = store.getProviderSelector().select(getOptions());
+        }
+
+
+        protected abstract DatabaseOptions getOptions();
+
+
+        protected abstract DatabaseDialect getDialect();
+
+
+        private void registerEntities() {
+            DatabaseDialect dialect = getDialect();
+            JsonMapperRegistry jsonRegistry = store.getJsonRegistry();
+            EntityMapperRegistry entityRegistry = store.getEntityRegistry();
+            entityRegistry.register(dialect, Autofarm.class, new AutofarmMapper(dialect, jsonRegistry));
+            entityRegistry.register(dialect, FarmWorld.class, new FarmWorldMapper(dialect, jsonRegistry));
+        }
+
     }
-
 
 }

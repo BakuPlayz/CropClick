@@ -32,8 +32,8 @@ import com.github.bakuplayz.cropclick.events.player.destroy.PlayerDestroyCropEve
 import com.github.bakuplayz.cropclick.events.player.link.PlayerUnlinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.permissions.PermissionKey;
 import com.github.bakuplayz.cropclick.world.WorldManager;
-import dev.bakuplayz.spigotstore.task.TaskContext;
-import dev.bakuplayz.spigotstore.task.TaskScheduler;
+import dev.bakuplayz.spigotstore.task.api.TaskContext;
+import dev.bakuplayz.spigotstore.task.impl.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

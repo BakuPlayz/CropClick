@@ -19,9 +19,9 @@
 
 package com.github.bakuplayz.cropclick.configurations.config;
 
-import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
 import com.github.bakuplayz.cropclick.crops.Crop;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,10 +44,10 @@ import java.util.stream.IntStream;
  * @since 2.0.0
  */
 @Getter
-public final class CropsConfig extends AbstractConfiguration {
+public final class CropsConfig extends AbstractPersistentYaml {
 
-    public CropsConfig(@NotNull CropClick plugin) {
-        super(plugin, "crops.yml");
+    public CropsConfig() {
+        super("crops.yml");
     }
 
 
@@ -55,8 +55,7 @@ public final class CropsConfig extends AbstractConfiguration {
         if (!isNull(ConfigurationKey.CROP, crop.getName())) return;
 
         for (ConfigurationKey key : ConfigurationKey.values()) {
-            if (key == ConfigurationKey.CROP) continue;
-            if (key == ConfigurationKey.SEED) continue;
+            if (!key.isInitializable()) continue;
             setWithoutSave(key, key.getDefaultValue(), crop.getName());
         }
 
@@ -125,51 +124,53 @@ public final class CropsConfig extends AbstractConfiguration {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
         // Addon section
-        MCMMO_REASON("crops.%s.addons.mcMMO.reason", ""),
-        MCMMO_EXPERIENCE("crops.%s.addons.mcMMO.experience", 0.0d),
-        JOBS_POINTS("crops.%s.addons.jobsReborn.points", 0.0d),
-        JOBS_MONEY("crops.%s.addons.jobsReborn.money", 0.0d),
-        JOBS_EXPERIENCE("crops.%s.addons.jobsReborn.experience", 0.0d),
-        SKILLS_EXPERIENCE("crops.%s.addons.auraSkills.experience", 0.0d),
+        MCMMO_REASON("crops.%s.addons.mcMMO.reason", "", true),
+        MCMMO_EXPERIENCE("crops.%s.addons.mcMMO.experience", 0.0d, true),
+        JOBS_POINTS("crops.%s.addons.jobsReborn.points", 0.0d, true),
+        JOBS_MONEY("crops.%s.addons.jobsReborn.money", 0.0d, true),
+        JOBS_EXPERIENCE("crops.%s.addons.jobsReborn.experience", 0.0d, true),
+        SKILLS_EXPERIENCE("crops.%s.addons.auraSkills.experience", 0.0d, true),
 
         // Particle section
-        PARTICLE_DELAY("crops.%s.particles.%s.delay", 0L),
-        PARTICLE_SPEED("crops.%s.particles.%s.speed", 0.0d),
-        PARTICLE_AMOUNT("crops.%s.particles.%s.amount", 0),
-        PARTICLES("crops.%s.particles", Collections.emptyList()),
-        PARTICLE("crops.%s.particles.%s", null),
+        PARTICLES("crops.%s.particles", Collections.emptyList(), true),
+        PARTICLE("crops.%s.particles.%s", null, false, PARTICLES),
+        PARTICLE_DELAY("crops.%s.particles.%s.delay", 0L, false),
+        PARTICLE_SPEED("crops.%s.particles.%s.speed", 0.0d, false),
+        PARTICLE_AMOUNT("crops.%s.particles.%s.amount", 0, false),
 
         // Sound section
-        SOUND_DELAY("crops.%s.sounds.%s.delay", 0L),
-        SOUND_PITCH("crops.%s.sounds.%s.pitch", 0.0d),
-        SOUND_VOLUME("crops.%s.sounds.%s.volume", 0.0d),
-        SOUNDS("crops.%s.sounds", Collections.emptyList()),
-        SOUND("crops.%s.sounds.%s", null, SOUNDS),
+        SOUNDS("crops.%s.sounds", Collections.emptyList(), true),
+        SOUND("crops.%s.sounds.%s", null, false, SOUNDS),
+        SOUND_DELAY("crops.%s.sounds.%s.delay", 0L, false),
+        SOUND_PITCH("crops.%s.sounds.%s.pitch", 0.0d, false),
+        SOUND_VOLUME("crops.%s.sounds.%s.volume", 0.0d, false),
 
         // Seed section
-        SEED("seeds.%s", null),
-        SEED_DROP_NAME("seeds.%s.drop.name", ""),
-        SEED_DROP_AMOUNT("seeds.%s.drop.amount", 0),
-        SEED_DROP_CHANCE("seeds.%s.drop.chance", 0.0d),
-        SEED_ENABLED("seeds.%s.isEnabled", true),
+        SEED("seeds.%s", null, false),
+        SEED_DROP_NAME("seeds.%s.drop.name", "", true),
+        SEED_DROP_AMOUNT("seeds.%s.drop.amount", 0, true),
+        SEED_DROP_CHANCE("seeds.%s.drop.chance", 0.0d, true),
+        SEED_ENABLED("seeds.%s.isEnabled", true, true),
 
         // Crop section
-        CROP("crops.%s", null),
-        CROP_DROP_NAME("crops.%s.drop.name", ""),
-        CROP_DROP_AMOUNT("crops.%s.drop.amount", 0),
-        CROP_DROP_CHANCE("crops.%s.drop.chance", 0.0d),
-        CROP_DROP_AT_LEAST_ONE("crops.%s.drop.atLeastOne", true),
-        CROP_HARVESTABLE("crops.%s.isHarvestable", true),
-        CROP_LINKABLE("crops.%s.isLinkable", true),
-        CROP_SHOULD_REPLANT("crops.%s.shouldReplant", true);
+        CROP("crops.%s", null, false),
+        CROP_DROP_NAME("crops.%s.drop.name", "", true),
+        CROP_DROP_AMOUNT("crops.%s.drop.amount", 0, true),
+        CROP_DROP_CHANCE("crops.%s.drop.chance", 0.0d, true),
+        CROP_DROP_AT_LEAST_ONE("crops.%s.drop.atLeastOne", true, true),
+        CROP_HARVESTABLE("crops.%s.isHarvestable", true, true),
+        CROP_LINKABLE("crops.%s.isLinkable", true, true),
+        CROP_SHOULD_REPLANT("crops.%s.shouldReplant", true, true);
 
         @NotNull
         private final String path;
 
         private final Object defaultValue;
+
+        private final boolean isInitializable;
 
         private ConfigurationKey parent;
 

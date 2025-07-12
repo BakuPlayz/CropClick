@@ -19,13 +19,14 @@
 
 package com.github.bakuplayz.cropclick.configurations.config;
 
-import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.common.Messages;
-import com.github.bakuplayz.cropclick.configurations.AbstractConfiguration;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.impl.AbstractPersistentYaml;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -35,10 +36,10 @@ import org.jetbrains.annotations.NotNull;
  * @version 2.0.0
  * @since 2.0.0
  */
-public final class LanguageConfig extends AbstractConfiguration {
+public final class LanguageConfig extends AbstractPersistentYaml {
 
-    public LanguageConfig(@NotNull CropClick plugin) {
-        super(plugin, "language.yml");
+    public LanguageConfig() {
+        super("language.yml");
     }
 
 
@@ -55,24 +56,20 @@ public final class LanguageConfig extends AbstractConfiguration {
     @NotNull
     public String getMessage(@NotNull String category, @NotNull String subcategory, @NotNull String key, boolean colorize) {
         String message = getString(ConfigurationKey.LANGUAGE_KEY, category, subcategory, key);
-
-        if (message == null) {
-            return subcategory.equals("title") ? "&cError" : "&cError: Message is null!";
-        }
-
         return colorize ? Messages.colorize(message) : message;
     }
 
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public enum ConfigurationKey implements com.github.bakuplayz.cropclick.configurations.ConfigurationKey {
+    public enum ConfigurationKey implements PersistentYamlKey {
 
-        LANGUAGE_KEY("%s.%s.%s", null);
+        LANGUAGE_KEY("%s.%s.%s", "&cError: Message is null!");
 
         @NotNull
         private final String path;
 
+        @Nullable
         private final Object defaultValue;
 
     }
