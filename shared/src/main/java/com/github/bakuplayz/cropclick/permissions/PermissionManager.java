@@ -70,7 +70,7 @@ public final class PermissionManager {
 
         /* Runs once the server is done loading in order to register all crops,
          * both CropClick's and other plugins. */
-        plugin.getTaskScheduler().scheduleLater(this::registerCrops, TaskContext.BUKKIT, 0);
+        plugin.getStore().getTaskScheduler().scheduleLater(this::registerCrops, TaskContext.BUKKIT, 0);
     }
 
 

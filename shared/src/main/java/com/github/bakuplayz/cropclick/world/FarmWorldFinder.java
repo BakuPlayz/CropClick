@@ -40,9 +40,9 @@ public final class FarmWorldFinder {
      *
      * @param world the id to base the findings on.
      *
-     * @return the found FarmWorld, otherwise null.
+     * @return the found FarmWorld, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<FarmWorld> findByWorld(@NotNull World world) {
         return service.getOne(world.getName());
     }
@@ -55,9 +55,9 @@ public final class FarmWorldFinder {
      *
      * @return the found FarmWorld, otherwise null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<FarmWorld> findByName(String name) {
-        return name == null ? null : service.getOne(name);
+        return name == null ? CompletableFuture.completedFuture(null) : service.getOne(name);
     }
 
 
@@ -66,9 +66,9 @@ public final class FarmWorldFinder {
      *
      * @param player the player to base the findings on.
      *
-     * @return the found {@link FarmWorld}, otherwise null.
+     * @return the found {@link FarmWorld}, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<FarmWorld> findByPlayer(@NotNull CropPlayer player) {
         return findByWorld(player.getOfflinePlayer().getPlayer().getWorld());
     }

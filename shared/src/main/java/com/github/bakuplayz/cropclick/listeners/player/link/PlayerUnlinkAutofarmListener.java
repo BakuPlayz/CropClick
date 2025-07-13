@@ -62,8 +62,8 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
 
 
     public PlayerUnlinkAutofarmListener(@NotNull CropClick plugin) {
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.taskScheduler = plugin.getTaskScheduler();
         this.worldManager = plugin.getWorldManager();
         this.plugin = plugin;
     }

@@ -74,10 +74,10 @@ public final class AutofarmHarvestCropListener implements Listener {
 
 
     public AutofarmHarvestCropListener(@NotNull CropClick plugin) {
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
         this.worldManager = plugin.getWorldManager();
         this.cropManager = plugin.getCropManager();
-        this.taskScheduler = plugin.getTaskScheduler();
         this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 

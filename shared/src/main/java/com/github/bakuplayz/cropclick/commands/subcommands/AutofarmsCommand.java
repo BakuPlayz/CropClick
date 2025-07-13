@@ -21,7 +21,7 @@ package com.github.bakuplayz.cropclick.commands.subcommands;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.commands.Subcommand;
-import com.github.bakuplayz.cropclick.menus.AutofarmsMenu;
+import com.github.bakuplayz.cropclick.menus.AutofarmsDashboardMenu;
 import com.github.bakuplayz.cropclick.menus.ManageAutofarmsMenu;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
@@ -65,7 +65,7 @@ public final class AutofarmsCommand implements Subcommand {
      */
     @Override
     public void perform(@NotNull Player player, String[] args) {
-        new AutofarmsMenu(plugin, false).open(player);
+        new AutofarmsDashboardMenu(plugin, false).open(player);
     }
 
 }

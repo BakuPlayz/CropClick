@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 
 /**
- * A class representing the Autofarms menu.
+ * A class representing the ManageAutofarms menu.
  *
  * @author BakuPlayz
  * @version 2.2.0
@@ -54,7 +54,7 @@ public final class ManageAutofarmsMenu extends AbstractPaginatedMenu<BasicPagina
 
 
     public ManageAutofarmsMenu(@NotNull CropClick plugin, boolean shouldShowBack) {
-        super(AUTOFARMS_TITLE.getTitle(plugin), plugin, shouldShowBack);
+        super(MANAGE_AUTOFARMS_TITLE.getTitle(plugin), plugin, shouldShowBack);
     }
 
 
@@ -118,15 +118,15 @@ public final class ManageAutofarmsMenu extends AbstractPaginatedMenu<BasicPagina
                 OfflinePlayer player = Bukkit.getOfflinePlayer(autofarm.getOwnerId());
 
                 setMaterial(XMaterial.DISPENSER);
-                setLore(AUTOFARMS_ITEM_OWNER.get(plugin, getName(player)));
-                setName(AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedId(), status));
+                setLore(MANAGE_AUTOFARMS_ITEM_OWNER.get(plugin, getName(player)));
+                setName(MANAGE_AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedId(), status));
             });
         }
 
 
         private String getName(@NotNull OfflinePlayer player) {
             if (player.getUniqueId().equals(Autofarm.UNKNOWN_OWNER)) {
-                return AUTOFARMS_ITEM_OWNER_UNCLAIMED.get(plugin);
+                return MANAGE_AUTOFARMS_ITEM_OWNER_UNCLAIMED.get(plugin);
             }
 
             return player.getName();

@@ -53,9 +53,9 @@ public final class AutofarmFinder {
      *
      * @param block the block to base the findings on.
      *
-     * @return the found autofarm, otherwise null.
+     * @return the found autofarm, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<Autofarm> findByBlock(@NotNull Block block) {
         if (Blocks.isAir(block)) {
             return CompletableFuture.completedFuture(null);
@@ -92,11 +92,11 @@ public final class AutofarmFinder {
      *
      * @param farmerID the id to base the findings on.
      *
-     * @return the found autofarm, otherwise null.
+     * @return the found autofarm, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<Autofarm> findById(String farmerID) {
-        return farmerID == null ? null : service.getOne(farmerID);
+        return farmerID == null ? CompletableFuture.completedFuture(null) : service.getOne(farmerID);
     }
 
 
@@ -105,9 +105,9 @@ public final class AutofarmFinder {
      *
      * @param block the crop block to base the findings on.
      *
-     * @return the found autofarm, otherwise null.
+     * @return the found autofarm, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<Autofarm> findByCrop(@NotNull Block block) {
         return service.getOneByCrop(block.getLocation());
     }
@@ -118,9 +118,9 @@ public final class AutofarmFinder {
      *
      * @param block the dispenser block to base the findings on.
      *
-     * @return the found autofarm, otherwise null.
+     * @return the found autofarm, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<Autofarm> findByDispenser(@NotNull Block block) {
         return service.getOneByDispenser(block.getLocation());
     }
@@ -131,9 +131,9 @@ public final class AutofarmFinder {
      *
      * @param block the container block to base the findings on.
      *
-     * @return the found autofarm, otherwise null.
+     * @return the found autofarm, otherwise CompletableFuture of null.
      */
-    @Nullable
+    @NotNull
     public CompletableFuture<Autofarm> findByContainer(@NotNull Block block) {
         return service.getOneByContainer(block.getLocation());
     }

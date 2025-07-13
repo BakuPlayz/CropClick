@@ -38,15 +38,15 @@ import java.util.concurrent.CompletableFuture;
 import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
 import static com.github.bakuplayz.cropclick.menus.states.DashboardStateBuilder.*;
 
-public class AutofarmsMenu extends AbstractStateMenu<DashboardMenuState, DashboardMenuStateHandler> {
+public class AutofarmsDashboardMenu extends AbstractStateMenu<DashboardMenuState, DashboardMenuStateHandler> {
 
     private final CropClick plugin;
 
     private final boolean showBackButton;
 
 
-    public AutofarmsMenu(@NotNull CropClick plugin, boolean showBackButton) {
-        super(DASHBOARD_TITLE.getTitle(plugin));
+    public AutofarmsDashboardMenu(@NotNull CropClick plugin, boolean showBackButton) {
+        super(AUTOFARMS_DASHBOARD_TITLE.getTitle(plugin));
         this.showBackButton = showBackButton;
         this.plugin = plugin;
     }
@@ -115,9 +115,9 @@ public class AutofarmsMenu extends AbstractStateMenu<DashboardMenuState, Dashboa
         public CompletableFuture<Void> create() {
             return plugin.getAutofarmManager().getAmountOfFarms().thenAccept(farms -> {
                 setMaterial(XMaterial.BOOK);
-                setName(AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_NAME.get(plugin));
-                setLore(AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                        AUTOFARMS_DASHBOARD_AUTOFARMS_ITEM_STATUS.get(plugin, farms))
+                setName(AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_NAME.get(plugin));
+                setLore(AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
+                        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_STATUS.get(plugin, farms))
                 );
             });
         }

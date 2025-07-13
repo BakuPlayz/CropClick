@@ -51,7 +51,7 @@ public final class MainMenu extends AbstractPlainMenu {
     @Override
     public void setItems() {
         setItem(21, new CropsItem(), (item, player) -> new CropsMenu(plugin).open(player));
-        setItem(23, new AutofarmsDashboardItem(), (item, player) -> new AutofarmsMenu(plugin, true).open(player));
+        setItem(23, new AutofarmsDashboardItem(), (item, player) -> new AutofarmsDashboardMenu(plugin, true).open(player));
         setItem(44, new AddonsItem(), (item, player) -> new AddonsMenu(plugin).open(player));
         setItem(45, new UpdatesItem(), (item, player) -> new UpdatesMenu(plugin).join(player, UpdatesMenu.IDENTIFIER));
         setItem(49, new HelpItem(), (item, player) -> new HelpMenu(plugin, true).open(player));

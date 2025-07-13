@@ -46,7 +46,7 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
     public AbstractLocalDataService(@NotNull String fileName, @NotNull TypeReference<Map<String, D>> reference, @NotNull CropClick plugin) {
         this.dataContainer = new SyncPersistentJson<>(
                 fileName, reference, plugin.getStore().getJsonRegistry(),
-                new PersistentJsonOptions(plugin.getTaskScheduler(), "/data")
+                new PersistentJsonOptions(plugin.getStore().getTaskScheduler(), "/data")
         );
     }
 

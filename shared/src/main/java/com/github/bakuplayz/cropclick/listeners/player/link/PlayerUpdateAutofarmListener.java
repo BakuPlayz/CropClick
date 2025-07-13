@@ -64,8 +64,8 @@ public final class PlayerUpdateAutofarmListener implements Listener {
 
     public PlayerUpdateAutofarmListener(@NotNull CropClick plugin) {
         this.config = plugin.getConfigManager().getDefaultConfig();
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.taskScheduler = plugin.getTaskScheduler();
     }
 
 

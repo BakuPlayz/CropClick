@@ -53,8 +53,8 @@ public final class AutofarmUnlinkListener implements Listener {
 
     public AutofarmUnlinkListener(@NotNull CropClick plugin) {
         this.service = plugin.getDataManager().getAutofarmService();
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.taskScheduler = plugin.getTaskScheduler();
     }
 
 

@@ -73,8 +73,8 @@ public final class PlayerDestroyCropListener implements Listener {
         this.cropManager = plugin.getCropManager();
         this.worldManager = plugin.getWorldManager();
         this.addonManager = plugin.getAddonManager();
-        this.taskScheduler = plugin.getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.growthAddon = addonManager.getOfflineGrowthAddon();
     }
 

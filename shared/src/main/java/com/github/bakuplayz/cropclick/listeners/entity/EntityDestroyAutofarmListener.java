@@ -65,8 +65,8 @@ public final class EntityDestroyAutofarmListener implements Listener {
 
     public EntityDestroyAutofarmListener(@NotNull CropClick plugin) {
         this.config = plugin.getConfigManager().getDefaultConfig();
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.taskScheduler = plugin.getTaskScheduler();
         this.cropManager = plugin.getCropManager();
     }
 

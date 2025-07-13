@@ -39,7 +39,8 @@ import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
-import com.github.bakuplayz.spigotspin.menu.items.actions.ClickableAction;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
+import com.github.bakuplayz.spigotspin.menu.items.common.ActionState;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.StateItem;
@@ -108,11 +109,11 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         boolean isUnlinked = stateHandler.getState().isUnlinked();
         boolean isUnclaimed = stateHandler.getState().isUnclaimed();
 
-        setItemIf(!isUnclaimed && !isUnlinked, 13, new ToggleItem(), (item, player) -> stateHandler.toggleAutofarm(), LinkMenuStateFlag.ENABLED_STATE);
-        setItemIf(!isUnclaimed, isUnlinked ? 20 : 29, new CropItem(), getCropAction(), LinkMenuStateFlag.CROP_SELECTED_STATE);
-        setItemIf(!isUnclaimed, isUnlinked ? 22 : 31, new DispenserItem(), getDispenserAction(), LinkMenuStateFlag.DISPENSER_SELECTED_STATE);
-        setItemIf(!isUnclaimed, isUnlinked ? 24 : 33, new ContainerItem(), getContainerAction(), LinkMenuStateFlag.CONTAINER_SELECTED_STATE);
-        setItemIf(isUnclaimed, 31, new ClaimItem(), getClaimAction());
+        setItemIf(!isUnclaimed && !isUnlinked, 13, new ToggleItem(), LinkMenuStateFlag.ENABLED_STATE);
+        setItemIf(!isUnclaimed, isUnlinked ? 20 : 29, new CropItem(), LinkMenuStateFlag.CROP_SELECTED_STATE);
+        setItemIf(!isUnclaimed, isUnlinked ? 22 : 31, new DispenserItem(), LinkMenuStateFlag.DISPENSER_SELECTED_STATE);
+        setItemIf(!isUnclaimed, isUnlinked ? 24 : 33, new ContainerItem(), LinkMenuStateFlag.CONTAINER_SELECTED_STATE);
+        setItemIf(isUnclaimed, 31, new ClaimItem());
         setItemIf(showBackButton, 49, new CustomBackItem(plugin));
     }
 
@@ -123,62 +124,19 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     }
 
 
-    @NotNull
-    private ClickableAction<ClaimItem> getClaimAction() {
-        return (item, player) -> {
-            stateHandler.claimAutofarm();
-            forceRerender();
-        };
+    @Override
+    public boolean isFramePosition(int position) {
+        boolean isLeft = position % 9 == 0;
+        boolean isRight = position % 9 == 8;
+        boolean isTop = (position / 9.0d) <= 1.0d;
+        return isLeft || isRight || isTop;
     }
 
 
     @NotNull
-    private ClickableAction<CropItem> getCropAction() {
-        return (item, player) -> {
-            if (item.getState().isUnlinked() && getContext() == LinkContext.CROP) {
-                stateHandler.toggleCropSelect();
-            }
-        };
-    }
-
-
-    @NotNull
-    private ClickableAction<DispenserItem> getDispenserAction() {
-        return (item, player) -> {
-            if (item.getState().isUnlinked() && getContext() == LinkContext.DISPENSER) {
-                stateHandler.toggleDispenserSelect();
-                return;
-            }
-            if (autofarm == null) return;
-
-            new PreviewDispenserMenu(
-                    plugin,
-                    autofarm,
-                    ((Dispenser) item.getState().getDispenserLocation().getBlock().getState()).getInventory()
-            ).open(player);
-        };
-    }
-
-
-    @NotNull
-    private ClickableAction<ContainerItem> getContainerAction() {
-        return (item, player) -> {
-            if (item.getState().isUnlinked() && getContext() == LinkContext.CONTAINER) {
-                stateHandler.toggleContainerSelect();
-                return;
-            }
-            if (autofarm == null) return;
-
-            Container container = Container.fromBlock(
-                    item.getState().getContainerLocation().getBlock()
-            );
-
-            new PreviewContainerMenu(
-                    plugin,
-                    autofarm,
-                    container.getInventory()
-            ).open(player);
-        };
+    @Override
+    public Item getFrameItem(int position) {
+        return new GlassItem();
     }
 
 
@@ -207,39 +165,33 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         );
     }
 
-
-    @Override
-    public boolean isFramePosition(int position) {
-        boolean isLeft = position % 9 == 0;
-        boolean isRight = position % 9 == 8;
-        boolean isTop = (position / 9.0d) <= 1.0d;
-        return isLeft || isRight || isTop;
-    }
-
-
-    @NotNull
-    @Override
-    public Item getFrameItem(int position) {
-        return new GlassItem();
-    }
-
-
     private final class CropItem extends ClickableStateItem<LinkMenuState> {
 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
-            return createSync(() -> handleState(getState()));
+            return createSync(() -> updateItem(getState()));
         }
 
 
         @Override
         public void update(@NotNull LinkMenuState state, int flag) {
-            handleState(state);
+            updateItem(state);
         }
 
 
-        private void handleState(@NotNull LinkMenuState state) {
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                if (getState().isUnlinked() && getContext() == LinkContext.CROP) {
+                    stateHandler.toggleCropSelect();
+                }
+            };
+        }
+
+
+        private void updateItem(@NotNull LinkMenuState state) {
             setLore(getLore(state));
             setName(LINK_CROP_NAME.get(plugin));
             setMaterial(getAdaptiveMaterial(state));
@@ -279,17 +231,43 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
-            return createSync(() -> handleState(getState()));
+            return createSync(() -> updateItem(getState()));
         }
 
 
         @Override
         public void update(@NotNull LinkMenuState state, int flag) {
-            handleState(state);
+            updateItem(state);
+        }
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                if (getState().isUnlinked() && getContext() == LinkContext.CONTAINER) {
+                    stateHandler.toggleContainerSelect();
+                    return;
+                }
+                if (autofarm == null) return;
+
+                Container container = Container.fromBlock(
+                        getState().getContainerLocation().getBlock()
+                );
+
+                // We can never get to a state where the container we find
+                // here is null, so we just tell the compiler that too.
+                assert container != null;
+
+                new PreviewContainerMenu(
+                        plugin,
+                        autofarm,
+                        container.getInventory()
+                ).open(player);
+            };
         }
 
 
-        private void handleState(@NotNull LinkMenuState state) {
+        private void updateItem(@NotNull LinkMenuState state) {
             setLore(getLore(state));
             setName(LINK_CONTAINER_NAME.get(plugin));
             setMaterial(getAdaptiveMaterial(state));
@@ -333,17 +311,36 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
-            return createSync(() -> handleState(getState()));
+            return createSync(() -> updateItem(getState()));
         }
 
 
         @Override
         public void update(@NotNull LinkMenuState state, int flag) {
-            handleState(state);
+            updateItem(state);
         }
 
 
-        private void handleState(@NotNull LinkMenuState state) {
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                if (getState().isUnlinked() && getContext() == LinkContext.DISPENSER) {
+                    stateHandler.toggleDispenserSelect();
+                    return;
+                }
+                if (autofarm == null) return;
+
+                new PreviewDispenserMenu(
+                        plugin,
+                        autofarm,
+                        ((Dispenser) getState().getDispenserLocation().getBlock().getState()).getInventory()
+                ).open(player);
+            };
+        }
+
+
+        private void updateItem(@NotNull LinkMenuState state) {
             setLore(getLore(state));
             setMaterial(XMaterial.DISPENSER);
             setName(LINK_DISPENSER_NAME.get(plugin));
@@ -386,6 +383,15 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
             });
         }
 
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                stateHandler.claimAutofarm();
+                forceRerender();
+            };
+        }
+
     }
 
     private final class ToggleItem extends ClickableStateItem<LinkMenuState> {
@@ -393,17 +399,44 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
-            return createSync(() -> handleState(getState()));
+            return createSync(() -> {
+                updateItem(getState());
+                setViewState();
+            });
         }
 
 
         @Override
         public void update(@NotNull LinkMenuState state, int flag) {
-            handleState(state);
+            updateItem(state);
         }
 
 
-        private void handleState(@NotNull LinkMenuState state) {
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleAutofarm();
+        }
+
+
+        private void setViewState() {
+            CropPlayer player = CropPlayer.fromPlayer(viewers.get(0));
+            boolean toggleOthers = player.getPermissions().has(PermissionKey.AUTOFARM_TOGGLE_OTHERS);
+            boolean toggleSelf = player.getPermissions().has(PermissionKey.AUTOFARM_TOGGLE);
+
+            // Cannot be null since item only shown iff autofarm is
+            // not null.
+            assert autofarm != null;
+
+            if (player.getPlayerUUID() == autofarm.getOwnerId()) {
+                setViewState(toggleSelf ? ViewState.VISIBLE : ViewState.DISABLED);
+            } else {
+                setViewState(toggleOthers ? ViewState.VISIBLE : ViewState.DISABLED);
+            }
+        }
+
+
+        private void updateItem(@NotNull LinkMenuState state) {
             setLore(getLore(state));
             setName(LINK_TOGGLE_NAME.get(plugin));
             setMaterial(state.isEnabled() ? getMaterial() : XMaterial.GRAY_STAINED_GLASS_PANE);
@@ -429,7 +462,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
-                setChanges(getState());
+                updateItem(getState());
                 setFlags(LinkMenuStateFlag.CLICKED_SELECTED);
             });
         }
@@ -437,11 +470,11 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
         @Override
         public void update(@NotNull LinkMenuState state, int flag) {
-            setChanges(state);
+            updateItem(state);
         }
 
 
-        private void setChanges(@NotNull LinkMenuState state) {
+        private void updateItem(@NotNull LinkMenuState state) {
             setMaterial(XMaterial.GRAY_STAINED_GLASS_PANE);
             setMaterial(!state.isUnlinked(), XMaterial.YELLOW_STAINED_GLASS_PANE);
             setMaterial(state.isUnclaimed(), XMaterial.WHITE_STAINED_GLASS_PANE);

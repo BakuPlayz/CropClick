@@ -71,7 +71,7 @@ public final class UpdateManager {
 
 
     private void start() {
-        plugin.getTaskScheduler().scheduleRepeatingTask(() -> {
+        plugin.getStore().getTaskScheduler().scheduleRepeatingTask(() -> {
             try {
                 UpdateResponse response = new HttpRequestBuilder<>(UPDATE_URL, UpdateResponse.class)
                                                   .setDefaultHeaders()

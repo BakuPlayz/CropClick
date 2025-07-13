@@ -83,9 +83,8 @@ public final class CropClick extends JavaPlugin {
     @Getter
     private SpigotStore store;
 
-    
-    @Getter
-    private TaskScheduler taskScheduler;
+    private SpigotSpin spin;
+
 
     @Getter
     private CropManager cropManager;
@@ -124,6 +123,7 @@ public final class CropClick extends JavaPlugin {
     @Override
     public void onDisable() {
         store.shutdown();
+        //spin.shutdown();
 
         CropClick.instance = null;
     }
@@ -139,8 +139,8 @@ public final class CropClick extends JavaPlugin {
         registerLibraries();
 
         // Register rest after one tick, as we don't want to block
-        // due e.g. connections to db being slow.
-        taskScheduler.scheduleLater(() -> {
+        // due e.g. connections to db potentially being slow.
+        store.getTaskScheduler().scheduleLater(() -> {
             registerManagers();
             registerAddons();
             registerCommands();
@@ -151,9 +151,11 @@ public final class CropClick extends JavaPlugin {
 
 
     private void registerLibraries() {
-        new SpigotSpin(this);
+        this.spin = new SpigotSpin(this);
         this.store = new SpigotStore(this, new LogOptions(true));
-        this.taskScheduler = store.getTaskScheduler();
+
+        // spin.start();
+        // store.start();
     }
 
 

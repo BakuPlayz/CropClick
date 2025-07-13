@@ -21,7 +21,7 @@ commands:
 
 permissions:
   cropclick.*:
-    description: Permission to access & use everything in CropClick.
+    description: Permission to access and use everything in CropClick.
     default: op
     children:
       - cropclick.plant.*

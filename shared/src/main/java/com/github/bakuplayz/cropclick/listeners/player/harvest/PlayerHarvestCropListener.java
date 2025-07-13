@@ -74,8 +74,8 @@ public final class PlayerHarvestCropListener implements Listener {
 
     public PlayerHarvestCropListener(@NotNull CropClick plugin) {
         this.cropManager = plugin.getCropManager();
-        this.taskScheduler = plugin.getTaskScheduler();
         this.worldManager = plugin.getWorldManager();
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.harvestedCrops = cropManager.getHarvestedCrops();
     }
 

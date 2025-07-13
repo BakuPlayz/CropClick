@@ -84,7 +84,7 @@ public final class CropManager {
         this.harvestedCrops = new HashMap<>();
         this.finder = new CropFinder(registeredCrops);
         this.cropArguments = new CropArguments(config, this);
-        this.audioVisualFeatures = new AudioVisualFeatures(plugin.getTaskScheduler());
+        this.audioVisualFeatures = new AudioVisualFeatures(plugin.getStore().getTaskScheduler());
 
         registerVanillaCrops();
     }

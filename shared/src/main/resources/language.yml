@@ -109,8 +109,8 @@ menu:
     crops: "Crops"
     dropChance: "Drop Chance"
 
-    autofarmsDashboard: "Autofarms"
-    autofarms: "Autofarms"
+    autofarmsDashboard: "Autofarms Dashboard"
+    manageAutofarms: "Manage Autofarms"
     cropLink: "Crop"
     containerLink: "Container"
     dispenserLink: "Dispenser"
@@ -157,7 +157,7 @@ menu:
       itemStatus: "&7Amount of Crops: &e%status%"
 
     autofarmsDashboard:
-      itemName: "&eAutofarms"
+      itemName: "&eAutofarms Dashboard"
       itemTips: "&7Shows some important Autofarm settings, like disabling them altogether."
       itemStatus: "&7Amount of Farms: &e%status%"
 
@@ -307,7 +307,7 @@ menu:
       itemName: "&eDispenser"
       itemTips: "&7Click to view &edispenser's &7inventory."
   
-  autofarms:
+  manageAutofarms:
     itemName: "&e%name% &7(%status%)"
     itemOwner: "&7Owner: &e%owner%"
     itemOwnerUnclaimed: "Unclaimed"

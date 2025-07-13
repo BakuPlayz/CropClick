@@ -138,7 +138,7 @@ public final class DataServiceManager {
 
 
         public void start() {
-            plugin.getTaskScheduler().runTask(() -> {
+            plugin.getStore().getTaskScheduler().runTask(() -> {
                 this.context.start();
                 this.autofarmService = createAutofarmService();
             }, TaskContext.BACKGROUND);

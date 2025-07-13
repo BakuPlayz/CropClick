@@ -21,7 +21,7 @@ package com.github.bakuplayz.cropclick.menus.states;
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.configurations.config.DefaultConfig;
-import com.github.bakuplayz.cropclick.menus.AutofarmsMenu;
+import com.github.bakuplayz.cropclick.menus.AutofarmsDashboardMenu;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
 import lombok.Getter;
@@ -35,19 +35,19 @@ import static com.github.bakuplayz.cropclick.configurations.config.DefaultConfig
 public final class DashboardStateBuilder {
 
     @NotNull
-    public static DashboardMenuStateHandler createStateHandler(@NotNull AutofarmsMenu menu, @NotNull CropClick plugin, @NotNull Player player) {
+    public static DashboardMenuStateHandler createStateHandler(@NotNull AutofarmsDashboardMenu menu, @NotNull CropClick plugin, @NotNull Player player) {
         return new DashboardMenuStateHandler(menu, plugin, CropPlayer.fromPlayer(player));
     }
 
 
-    public final static class DashboardMenuStateHandler extends MenuStateHandler<DashboardMenuState, AutofarmsMenu> {
+    public final static class DashboardMenuStateHandler extends MenuStateHandler<DashboardMenuState, AutofarmsDashboardMenu> {
 
         private final CropPlayer player;
 
         private final DefaultConfig config;
 
 
-        public DashboardMenuStateHandler(@NotNull AutofarmsMenu observer, @NotNull CropClick plugin, @NotNull CropPlayer player) {
+        public DashboardMenuStateHandler(@NotNull AutofarmsDashboardMenu observer, @NotNull CropClick plugin, @NotNull CropPlayer player) {
             super(observer, new DashboardMenuState(plugin.getConfigManager().getDefaultConfig(), player));
             this.config = plugin.getConfigManager().getDefaultConfig();
             this.player = player;

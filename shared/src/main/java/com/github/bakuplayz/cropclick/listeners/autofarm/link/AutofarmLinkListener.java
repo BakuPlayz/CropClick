@@ -53,8 +53,8 @@ public final class AutofarmLinkListener implements Listener {
 
     public AutofarmLinkListener(@NotNull CropClick plugin) {
         this.service = plugin.getDataManager().getAutofarmService();
+        this.taskScheduler = plugin.getStore().getTaskScheduler();
         this.autofarmManager = plugin.getAutofarmManager();
-        this.taskScheduler = plugin.getTaskScheduler();
     }
 
 
