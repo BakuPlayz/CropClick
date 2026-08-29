@@ -115,7 +115,7 @@ public final class PlayerUnlinkAutofarmListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerUnlinkAutofarm(@NotNull PlayerUnlinkAutofarmEvent event) {
-        UNLINK_ACTION_SUCCESS.send(plugin, event.getPlayer());
+        UNLINK_ACTION_SUCCESS.builder(plugin).sendTo(event.getPlayer().getOfflinePlayer().getPlayer());
 
         Log.debug("{0}: Called the unlink event.", Tag.PLAYER, event.getPlayer().getOfflinePlayer().getName());
 

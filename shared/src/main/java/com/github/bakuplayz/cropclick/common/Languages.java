@@ -20,14 +20,10 @@
 package com.github.bakuplayz.cropclick.common;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.CropPlayer;
 import com.github.bakuplayz.cropclick.configurations.config.LanguageConfig;
+import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -43,6 +39,7 @@ public final class Languages {
      * An enumeration for handling all the Command messages.
      */
     public enum Command {
+
         COMMAND_NOT_FOUND(Category.GENERAL, "commandNotFound", "%command%"),
         PLAYER_ONLY_COMMAND(Category.GENERAL, "playerOnlyCommand"),
         PLAYER_LACK_PERMISSION(Category.GENERAL, "playerLackPermission", "%permission%"),
@@ -164,6 +161,7 @@ public final class Languages {
     /**
      * An enumeration for handling all the Menu messages.
      */
+    @Getter
     public enum Menu {
 
         MAIN_TITLE(Category.TITLE, "main"),
@@ -214,9 +212,9 @@ public final class Languages {
         GENERAL_ENABLED_STATUS(Category.GENERAL, SubCategory.STATUS, "enabled"),
         GENERAL_NEXT_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "nextPageItemName"),
         GENERAL_PREVIOUS_PAGE_ITEM_NAME(Category.GENERAL, SubCategory.PAGINATION, "previousPageItemName"),
-        GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
 
         GENERAL_STATES_NEW_UPDATE(Category.GENERAL, SubCategory.UPDATE_STATES, "newUpdate"),
+        GENERAL_STATES_FAILED_TO_FETCH(Category.GENERAL, SubCategory.UPDATE_STATES, "failedToFetch"),
         GENERAL_STATES_NO_UPDATE_FOUND(Category.GENERAL, SubCategory.UPDATE_STATES, "noUpdateFound"),
         GENERAL_STATES_NOT_YET_FETCHED(Category.GENERAL, SubCategory.UPDATE_STATES, "notYetFetched"),
         GENERAL_STATES_UP_TO_DATE(Category.GENERAL, SubCategory.UPDATE_STATES, "upToDate"),
@@ -281,15 +279,15 @@ public final class Languages {
         MANAGE_AUTOFARMS_ITEM_OWNER(Category.MANAGE_AUTOFARMS, "itemOwner", "%owner%"),
         MANAGE_AUTOFARMS_ITEM_OWNER_UNCLAIMED(Category.MANAGE_AUTOFARMS, "itemOwnerUnclaimed"),
 
-        AUTOFARMS_DASHBOARD_LINK_ITEM_NAME(Category.AUTOFARMS, SubCategory.LINK, "itemName"),
-        AUTOFARMS_DASHBOARD_LINK_ITEM_TIPS(Category.AUTOFARMS, SubCategory.LINK, "itemTips"),
-        AUTOFARMS_DASHBOARD_LINK_ITEM_STATUS(Category.AUTOFARMS, SubCategory.LINK, "itemStatus", "%status%"),
-        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_NAME(Category.AUTOFARMS, SubCategory.MANAGE_AUTOFARMS, "itemName"),
-        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_TIPS(Category.AUTOFARMS, SubCategory.MANAGE_AUTOFARMS, "itemTips"),
-        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_STATUS(Category.AUTOFARMS, SubCategory.MANAGE_AUTOFARMS, "itemStatus", "%status%"),
-        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_NAME(Category.AUTOFARMS, SubCategory.TOGGLE, "itemName"),
-        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_TIPS(Category.AUTOFARMS, SubCategory.TOGGLE, "itemTips"),
-        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_STATUS(Category.AUTOFARMS, SubCategory.TOGGLE, "itemStatus", "%status%"),
+        AUTOFARMS_DASHBOARD_LINK_ITEM_NAME(Category.AUTOFARMS_DASHBOARD, SubCategory.LINK, "itemName"),
+        AUTOFARMS_DASHBOARD_LINK_ITEM_TIPS(Category.AUTOFARMS_DASHBOARD, SubCategory.LINK, "itemTips"),
+        AUTOFARMS_DASHBOARD_LINK_ITEM_STATUS(Category.AUTOFARMS_DASHBOARD, SubCategory.LINK, "itemStatus", "%status%"),
+        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_NAME(Category.AUTOFARMS_DASHBOARD, SubCategory.MANAGE_AUTOFARMS, "itemName"),
+        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_TIPS(Category.AUTOFARMS_DASHBOARD, SubCategory.MANAGE_AUTOFARMS, "itemTips"),
+        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_STATUS(Category.AUTOFARMS_DASHBOARD, SubCategory.MANAGE_AUTOFARMS, "itemStatus", "%status%"),
+        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_NAME(Category.AUTOFARMS_DASHBOARD, SubCategory.TOGGLE, "itemName"),
+        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_TIPS(Category.AUTOFARMS_DASHBOARD, SubCategory.TOGGLE, "itemTips"),
+        AUTOFARMS_DASHBOARD_TOGGLE_ITEM_STATUS(Category.AUTOFARMS_DASHBOARD, SubCategory.TOGGLE, "itemStatus", "%status%"),
 
         CROPS_ITEM_DROP_NAME(Category.CROPS, SubCategory.ITEM, "dropName", "%name%"),
         CROPS_ITEM_DROP_VALUE(Category.CROPS, SubCategory.ITEM, "dropValue", "%value%"),
@@ -517,9 +515,14 @@ public final class Languages {
         MIGRATIONS_PROGRESS_ITEM_TIPS(Category.MIGRATIONS, SubCategory.PROGRESS, "itemTips"),
         MIGRATIONS_PROGRESS_ITEM_STATUS(Category.MIGRATIONS, SubCategory.PROGRESS, "itemStatus", "%status%"),
         MIGRATIONS_DEFAULT_ITEM_NAME(Category.MIGRATIONS, SubCategory.DEFAULT, "itemName"),
-        MIGRATIONS_DEFAULT_ITEM_TIPS(Category.MIGRATIONS, SubCategory.DEFAULT, "itemTips", "%database%", "%host%", "%port%", "%dialect%"),
+        MIGRATIONS_DEFAULT_ITEM_TIPS(Category.MIGRATIONS, SubCategory.DEFAULT, "itemTips", "%user%", "%host%", "%port%", "%dialect%"),
+        MIGRATIONS_DEFAULT_ITEM_STATUS(Category.MIGRATIONS, SubCategory.DEFAULT, "itemStatus", "%status%"),
         MIGRATIONS_MIGRATION_ITEM_NAME(Category.MIGRATIONS, SubCategory.MIGRATION, "itemName"),
-        MIGRATIONS_MIGRATION_ITEM_TIPS(Category.MIGRATIONS, SubCategory.MIGRATION, "itemTips", "%database%", "%host%", "%port%", "%dialect%"),
+        MIGRATIONS_MIGRATION_ITEM_TIPS(Category.MIGRATIONS, SubCategory.MIGRATION, "itemTips", "%user%", "%host%", "%port%", "%dialect%"),
+        MIGRATIONS_MIGRATION_ITEM_STATUS(Category.MIGRATIONS, SubCategory.MIGRATION, "itemStatus", "%status%"),
+
+        MIGRATIONS_CONNECTION_STATES_CONNECTED(Category.MIGRATIONS, SubCategory.CONNECTION_STATES, "connected"),
+        MIGRATIONS_CONNECTION_STATES_DISCONNECTED(Category.MIGRATIONS, SubCategory.CONNECTION_STATES, "disconnected"),
 
         MIGRATIONS_STATES_NOT_INITIALIZED(Category.MIGRATIONS, SubCategory.STATES, "notInitialized"),
         MIGRATIONS_STATES_COMPLETED(Category.MIGRATIONS, SubCategory.STATES, "completed"),
@@ -545,7 +548,6 @@ public final class Languages {
         WORLD_WORLD_ITEM_NAME(Category.WORLD, SubCategory.WORLD, "itemName", "%name%"),
         WORLD_WORLD_ITEM_TIPS(Category.WORLD, SubCategory.WORLD, "itemTips"),
         WORLD_WORLD_ITEM_STATUS(Category.WORLD, SubCategory.WORLD, "itemStatus", "%status%");
-
 
         private final String[] placeholders;
 
@@ -585,172 +587,27 @@ public final class Languages {
         }
 
 
-        /**
-         * Gets the message from the {@link LanguageConfig language config}.
-         *
-         * @param plugin the plugin instance.
-         *
-         * @return the message found in the config.
-         */
+        @NotNull
+        public MessageBuilder builder(@NotNull CropClick plugin) {
+            return MessageBuilder.of(plugin, this);
+        }
+
 
         @NotNull
         public String get(@NotNull CropClick plugin) {
-            return plugin.getConfigManager().getLanguageConfig().getMessage("menu", category, key, true);
+            return builder(plugin).build();
         }
 
 
-        /**
-         * Gets the message from the {@link LanguageConfig language config}, replacing all the {@link #placeholders} with all the provided values.
-         *
-         * @param plugin the plugin instance.
-         * @param values the values to replace the placeholders with.
-         * @param <T>    the object provided.
-         *
-         * @return the message found in the config, replaced with the provided values.
-         */
-        @NotNull
-        @SafeVarargs
-        public final <T> String get(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
-            String[] valuesAsStrings = Arrays.stream(values)
-                                               .map(Object::toString)
-                                               .toArray(String[]::new);
-            return format(get(plugin), valuesAsStrings);
-        }
-
-
-        /**
-         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line.
-         *
-         * @param plugin the plugin instance.
-         *
-         * @return the message found in the config as a list.
-         */
-        @NotNull
-        public List<String> getAsList(@NotNull CropClick plugin) {
-            String message = plugin.getConfigManager().getLanguageConfig().getMessage("menu", category, key, false);
-            return Messages.readify(message, 4).stream()
-                           .map(Messages::colorize)
-                           .collect(Collectors.toList());
-        }
-
-
-        /**
-         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line,
-         * replacing all the {@link #placeholders} with all the provided values.
-         *
-         * @param plugin the plugin instance.
-         * @param values the values to replace the placeholders with.
-         * @param <T>    the object provided.
-         *
-         * @return the message found in the config, replaced with the provided values.
-         */
-        @NotNull
-        @SafeVarargs
-        public final <T> List<String> getAsList(@NotNull CropClick plugin, @NotNull T @NotNull ... values) {
-            String message = plugin.getConfigManager().getLanguageConfig().getMessage("menu", category, key, false);
-            String formatted = format(message, Arrays.stream(values).map(Object::toString).toArray(String[]::new));
-            return Messages.readify(formatted, 4).stream()
-                           .map(Messages::colorize)
-                           .collect(Collectors.toList());
-        }
-
-
-        /**
-         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line, with the messages that was provided as appendable.
-         *
-         * @param plugin     the plugin instance.
-         * @param appendable the appendable messages to append to the found message.
-         *
-         * @return the message found in the config as a list.
-         */
-        @NotNull
-        public List<String> getAsAppendList(@NotNull CropClick plugin, String @NotNull ... appendable) {
-            List<String> messages = getAsList(plugin);
-            messages.add("");
-            messages.addAll(Arrays.asList(appendable));
-            return messages;
-        }
-
-
-        /**
-         * Gets the message from the {@link LanguageConfig language config}, as a list of four words per line, with the messages that was provided as appendable.
-         *
-         * @param plugin     the plugin instance.
-         * @param appendable the appendable messages to append to the found message.
-         *
-         * @return the message found in the config as a list.
-         */
-
-        @NotNull
-        public List<String> getAsAppendList(@NotNull CropClick plugin, List<String> appendable) {
-            List<String> messages = getAsList(plugin);
-            messages.add("");
-            messages.addAll(appendable);
-            return messages;
-        }
-
-
-        /**
-         * Sends the message to the {@link CommandSender sender}.
-         *
-         * @param plugin the plugin instance.
-         * @param player the player to send the message to.
-         */
-        public void send(@NotNull CropClick plugin, @NotNull CropPlayer player) {
-            player.getOfflinePlayer().getPlayer().sendMessage(get(plugin));
-        }
-
-
-        /**
-         * Gets the menu's title from the {@link LanguageConfig language config}.
-         *
-         * @param plugin the plugin instance.
-         *
-         * @return the title found in the config.
-         */
         @NotNull
         public String getTitle(@NotNull CropClick plugin) {
-            return "CropClick: " + get(plugin);
+            return "CropClick: " + builder(plugin).build();
         }
 
 
-        /**
-         * Gets the menu's title from the {@link LanguageConfig language config} with the provided type.
-         *
-         * @param plugin the plugin instance.
-         * @param type   the menu type.
-         *
-         * @return the title found in the config.
-         */
         @NotNull
-        public String getTitle(@NotNull CropClick plugin, @NotNull String type) {
-            if (type.isEmpty()) {
-                return getTitle(plugin);
-            }
-
-            return "CropClick: " + get(plugin, type);
-        }
-
-
-        /**
-         * Formats the provided message, replacing the {@link #placeholders} with the provided values.
-         *
-         * @param message the message to format.
-         * @param values  the values to replace the placeholder with.
-         *
-         * @return the formatted message.
-         */
-        @NotNull
-        private String format(@NotNull String message, @NotNull String @NotNull ... values) {
-            if (placeholders.length != values.length) {
-                return message;
-            }
-
-            String returned = message;
-            for (int i = 0; i < values.length; ++i) {
-                returned = Strings.replace(returned, placeholders[i], values[i]);
-            }
-            return returned;
+        public String getTitleWithId(@NotNull CropClick plugin, @NotNull String id) {
+            return "CropClick: " + builder(plugin).replace("%id%", id).build();
         }
 
 
@@ -761,7 +618,7 @@ public final class Languages {
 
             ADDON,
             ADDONS,
-            AUTOFARMS,
+            AUTOFARMS_DASHBOARD("autofarmsDashboard"),
             MANAGE_AUTOFARMS("manageAutofarms"),
             CROP,
             CROPS,
@@ -867,6 +724,7 @@ public final class Languages {
             SOUNDS,
             SPEED,
             STATES,
+            CONNECTION_STATES("connectionStates"),
             STATUS,
             TOGGLE,
             TOWNY,

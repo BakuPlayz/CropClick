@@ -48,9 +48,10 @@ public final class CropsMenu extends AbstractCropsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_AURA_SKILLS_EXPERIENCE.getAsList(plugin,
-                plugin.getConfigManager().getCropsConfig().getDouble(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName())
-        );
+        double status = plugin.getConfigManager().getCropsConfig().getDouble(ConfigurationKey.SKILLS_EXPERIENCE, crop.getName());
+        return CROPS_ITEM_AURA_SKILLS_EXPERIENCE.builder(plugin)
+                       .replace("%status%", status)
+                       .buildAsList();
     }
 
 

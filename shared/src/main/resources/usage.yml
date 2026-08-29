@@ -31,6 +31,11 @@
 #                                                                                  #
 ####################################################################################
 
-migration:
-  status: NOT_INITIATED
-  timestamp: 0
+databases:
+  default:
+    connected: false
+
+  migration:
+    connected: false
+    timestamp: 0
+    status: NOT_INITIATED

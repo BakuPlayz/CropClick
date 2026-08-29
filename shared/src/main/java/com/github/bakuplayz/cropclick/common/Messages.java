@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,38 +82,36 @@ public final class Messages {
      * @return the readified message as a {@link List<String> list of strings}.
      */
     @NotNull
-    public static List<String> readify(@NotNull String message, int wordsPerLine) {
+    public static List<String> readify(String message, int wordsPerLine) {
         String[] words = message.split(" ");
-        StringBuilder partOfWord = new StringBuilder();
-        List<String> readableWords = new ArrayList<>();
+        List<String> lines = new ArrayList<>();
+        StringBuilder currentLine = new StringBuilder();
+        String lastColors = "";
 
-        String color = getLastColor(message);
-        for (int i = 0; i < words.length; ++i) {
-            boolean isNotStart = i != 0;
-            boolean isNewLine = i % wordsPerLine == 0;
-            boolean skipFirstLine = i != wordsPerLine;
-            if (isNotStart && isNewLine) {
-                readableWords.add(
-                        skipFirstLine
-                                ? color + partOfWord
-                                : partOfWord.toString()
-                );
-                partOfWord = new StringBuilder();
+        int wordCount = 0;
+        for (String word : words) {
+            if (wordCount >= wordsPerLine) {
+                lines.add(currentLine.toString());
+                lastColors = ChatColor.getLastColors(currentLine.toString());
+
+                currentLine = new StringBuilder();
+                currentLine.append(lastColors); // carry over color
+                wordCount = 0;
             }
 
-            boolean hasNextWord = words.length > (i + 1);
-            boolean isNextLine = i % wordsPerLine == (wordsPerLine - 1);
-            boolean shouldAddSpace = hasNextWord && !isNextLine;
-            partOfWord.append(words[i]).append(shouldAddSpace ? " " : "");
+            if (wordCount > 0) {
+                currentLine.append(" ");
+            }
+
+            currentLine.append(word);
+            wordCount++;
         }
 
-        if (partOfWord.length() != 0) {
-            readableWords.add(color + partOfWord);
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
         }
 
-        return !readableWords.isEmpty()
-                       ? readableWords
-                       : Collections.singletonList(partOfWord.toString());
+        return lines;
     }
 
 
@@ -128,7 +125,7 @@ public final class Messages {
      */
     @NotNull
     public static String getStatusMessage(@NotNull CropClick plugin, boolean isEnabled) {
-        return isEnabled ? GENERAL_ENABLED_STATUS.get(plugin) : GENERAL_DISABLED_STATUS.get(plugin);
+        return isEnabled ? GENERAL_ENABLED_STATUS.builder(plugin).build() : GENERAL_DISABLED_STATUS.builder(plugin).build();
     }
 
 

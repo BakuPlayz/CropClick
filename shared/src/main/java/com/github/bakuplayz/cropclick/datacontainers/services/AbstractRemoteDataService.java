@@ -18,11 +18,14 @@
  */
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.bakuplayz.spigotstore.persistence.sql.api.QueryProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -34,15 +37,39 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class AbstractRemoteDataService<D> implements DataService<D> {
 
+    protected static final long MAX_CACHE_ENTRIES = 1000;
+
+
     protected final QueryProvider provider;
+
+    private final AsyncLoadingCache<String, D> idCache;
 
     private final Class<D> clazz;
 
 
     public AbstractRemoteDataService(@NotNull QueryProvider provider, @NotNull Class<D> clazz) {
+        this.idCache = initializeIdCache();
         this.provider = provider;
         this.clazz = clazz;
         createTable();
+    }
+
+
+    @NotNull
+    private AsyncLoadingCache<String, D> initializeIdCache() {
+        return Caffeine.newBuilder()
+                       .maximumSize(MAX_CACHE_ENTRIES)
+                       .expireAfterWrite(10, TimeUnit.MINUTES)
+                       .expireAfterAccess(10, TimeUnit.MINUTES)
+                       .buildAsync((key, executor) -> loadGetFromDatabase(key));
+    }
+
+
+    @NotNull
+    private CompletableFuture<D> loadGetFromDatabase(@NotNull String id) {
+        return provider.select(getTable(), clazz)
+                       .where(getDefaultIdentifier(), "=", id)
+                       .fetchOne();
     }
 
 
@@ -95,9 +122,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<D> getOne(@NotNull String id) {
-        return provider.select(getTable(), clazz)
-                       .where(getDefaultIdentifier(), "=", id)
-                       .fetchOne();
+        return idCache.get(id);
     }
 
 
@@ -110,6 +135,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> insertOne(@NotNull D entity) {
+        idCache.put(getDefaultIdentifier(), CompletableFuture.completedFuture(entity));
         return provider.insert(getTable(), clazz, true)
                        .values(entity)
                        .queue();
@@ -125,6 +151,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      */
     @NotNull
     public CompletableFuture<Boolean> deleteOne(@NotNull String id) {
+        idCache.synchronous().invalidate(id);
         return provider.delete(getTable())
                        .where(getDefaultIdentifier(), "=", id)
                        .queue();
@@ -142,8 +169,8 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
     @NotNull
     public CompletableFuture<Boolean> updateOne(@NotNull String id, @NotNull D entity) {
         return provider.update(getTable(), clazz)
-                       .where(getDefaultIdentifier(), "=", id)
                        .setAll(entity)
+                       .where(getDefaultIdentifier(), "=", id)
                        .queue();
     }
 
@@ -165,6 +192,7 @@ public abstract class AbstractRemoteDataService<D> implements DataService<D> {
      * @return a {@link CompletableFuture} that completes with {@code true} if the drop was successful.
      */
     public CompletableFuture<Boolean> reset() {
+        idCache.synchronous().invalidateAll();
         return provider.delete(getTable())
                        .matchAll()
                        .queue();

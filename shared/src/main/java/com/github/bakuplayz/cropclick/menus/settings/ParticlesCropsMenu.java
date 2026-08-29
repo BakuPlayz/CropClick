@@ -49,9 +49,9 @@ public final class ParticlesCropsMenu extends AbstractCropsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_PARTICLES.getAsList(plugin,
-                plugin.getConfigManager().getCropsConfig().countKeys(ConfigurationKey.PARTICLES, crop.getName())
-        );
+        return CROPS_ITEM_PARTICLES.builder(plugin)
+                       .replace("%status%", plugin.getConfigManager().getCropsConfig().countKeys(ConfigurationKey.PARTICLES, crop.getName()))
+                       .buildAsList();
     }
 
 

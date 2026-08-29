@@ -29,6 +29,7 @@ import com.github.bakuplayz.cropclick.world.FarmWorld;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.common.ViewerMap;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
@@ -71,9 +72,9 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
     @Override
     public void setItems() {
-        setItem(20, new PlayersItem(viewers), (i, player) -> stateHandler.togglePlayersState(), WorldMenuStateFlag.PLAYERS);
-        setItem(22, new WorldItem(), (i, player) -> stateHandler.toggleBanishedState(), WorldMenuStateFlag.BANISHED);
-        setItem(24, new AutofarmsItem(), (i, player) -> stateHandler.toggleAutofarmsState(), WorldMenuStateFlag.AUTOFARMS);
+        setItem(20, new PlayersItem(viewers), WorldMenuStateFlag.PLAYERS);
+        setItem(22, new WorldItem(), WorldMenuStateFlag.BANISHED);
+        setItem(24, new AutofarmsItem(), WorldMenuStateFlag.AUTOFARMS);
         setItem(49, new CustomBackItem(plugin));
     }
 
@@ -110,10 +111,18 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> stateHandler.togglePlayersState();
+        }
+
+
+        @NotNull
         private List<String> getLore(boolean state) {
-            return WORLD_PLAYERS_ITEM_TIPS.getAsAppendList(plugin,
-                    WORLD_PLAYERS_ITEM_STATUS.get(plugin, state)
-            );
+            String status = WORLD_PLAYERS_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", state)
+                                    .build();
+            return WORLD_PLAYERS_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -127,8 +136,8 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
                 String name = Messages.beautify(world.getName(), true);
 
                 setMaterial(XMaterial.GRASS_BLOCK);
-                setName(WORLDS_ITEM_NAME.get(plugin, name));
                 setLore(getLore(world.isBanished()));
+                setName(WORLDS_ITEM_NAME.builder(plugin).replace("%name%", name).build());
                 setMaterial(world.getName().equals("world_the_end"), XMaterial.END_STONE);
                 setMaterial(world.getName().equals("world_nether"), XMaterial.NETHERRACK);
             });
@@ -142,10 +151,18 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> stateHandler.toggleBanishedState();
+        }
+
+
+        @NotNull
         private List<String> getLore(boolean state) {
-            return WORLD_WORLD_ITEM_TIPS.getAsAppendList(plugin,
-                    WORLD_WORLD_ITEM_STATUS.get(plugin, state)
-            );
+            String status = WORLD_WORLD_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", state)
+                                    .build();
+            return WORLD_WORLD_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -171,10 +188,18 @@ public final class WorldMenu extends AbstractStateMenu<WorldMenuState, WorldMenu
 
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (i, player) -> stateHandler.toggleAutofarmsState();
+        }
+
+
+        @NotNull
         private List<String> getLore(boolean state) {
-            return WORLD_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                    WORLD_AUTOFARMS_ITEM_STATUS.get(plugin, state)
-            );
+            String status = WORLD_AUTOFARMS_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", state)
+                                    .build();
+            return WORLD_AUTOFARMS_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
 

@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.datacontainers.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.bakuplayz.cropclick.CropClick;
 import dev.bakuplayz.spigotstore.persistence.json.api.PersistentJsonOptions;
 import dev.bakuplayz.spigotstore.persistence.json.impl.SyncPersistentJson;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +42,9 @@ public abstract class AbstractLocalDataService<D> implements DataService<D> {
     protected final SyncPersistentJson<D> dataContainer;
 
 
-    public AbstractLocalDataService(@NotNull String fileName, @NotNull TypeReference<Map<String, D>> reference, @NotNull CropClick plugin) {
+    public AbstractLocalDataService(@NotNull String fileName, @NotNull TypeReference<Map<String, D>> reference) {
         this.dataContainer = new SyncPersistentJson<>(
-                fileName, reference, plugin.getStore().getJsonRegistry(),
-                new PersistentJsonOptions(plugin.getStore().getTaskScheduler(), "/data")
+                fileName, reference, new PersistentJsonOptions("/data")
         );
     }
 

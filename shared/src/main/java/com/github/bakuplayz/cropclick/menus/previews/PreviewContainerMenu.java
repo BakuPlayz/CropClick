@@ -39,7 +39,7 @@ public final class PreviewContainerMenu extends AbstractPreviewMenu {
 
 
     public PreviewContainerMenu(@NotNull CropClick plugin, @NotNull Autofarm autofarm, @NotNull Inventory inventory) {
-        super(CONTAINER_PREVIEW_TITLE.getTitle(plugin, autofarm.getShortenedId()), inventory);
+        super(CONTAINER_PREVIEW_TITLE.getTitleWithId(plugin, autofarm.getShortenedId()), inventory);
     }
 
 

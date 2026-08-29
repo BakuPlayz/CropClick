@@ -49,9 +49,8 @@ public final class SoundsCropsMenu extends AbstractCropsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_SOUNDS.getAsList(plugin,
-                plugin.getConfigManager().getCropsConfig().countKeys(ConfigurationKey.SOUNDS, crop.getName())
-        );
+        int status = plugin.getConfigManager().getCropsConfig().countKeys(ConfigurationKey.SOUNDS, crop.getName());
+        return CROPS_ITEM_SOUNDS.builder(plugin).replace("%status%", status).buildAsList();
     }
 
 

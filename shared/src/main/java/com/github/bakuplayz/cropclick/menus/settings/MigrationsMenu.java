@@ -58,16 +58,18 @@ public final class MigrationsMenu extends AbstractSharedMenu<MigrationsMenuState
     @Override
     public MigrationsMenuStateHandler createStateHandler(@NotNull Player player) {
         MigrationsMenuStateHandler handler = MigrationsStateBuilder.createStateHandler(this, plugin.getDataManager(), usageConfig);
-        usageConfig.registerObserver(UsageConfig.ConfigurationKey.STATUS, handler);
+        usageConfig.registerObserver(UsageConfig.ConfigurationKey.DATABASES_MIGRATION_STATUS, handler);
+        usageConfig.registerObserver(UsageConfig.ConfigurationKey.DATABASES_DEFAULT_CONNECTED, handler);
+        usageConfig.registerObserver(UsageConfig.ConfigurationKey.DATABASES_MIGRATION_CONNECTED, handler);
         return handler;
     }
 
 
     @Override
     public void setItems() {
-        setItem(20, new DefaultItem());
-        setItem(22, new ProgressItem(), MigrationsMenuStateFlag.HISTORY);
-        setItem(24, new MigrationItem());
+        setItem(20, new DefaultItem(), MigrationsMenuStateFlag.DEFAULT_CONNECTED);
+        setItem(22, new ProgressItem(), MigrationsMenuStateFlag.MIGRATION_HISTORY);
+        setItem(24, new MigrationItem(), MigrationsMenuStateFlag.MIGRATION_CONNECTED);
         setItem(49, new CustomBackItem(plugin));
     }
 
@@ -107,7 +109,7 @@ public final class MigrationsMenu extends AbstractSharedMenu<MigrationsMenuState
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 updateItem(getState());
-                setFlags(Collections.singletonList(MigrationsMenuStateFlag.HISTORY));
+                setFlags(Collections.singletonList(MigrationsMenuStateFlag.MIGRATION_HISTORY));
             });
         }
 
@@ -169,9 +171,13 @@ public final class MigrationsMenu extends AbstractSharedMenu<MigrationsMenuState
 
         @NotNull
         private List<String> getLore(@NotNull MigrationsMenuState state) {
-            return MIGRATIONS_PROGRESS_ITEM_TIPS.getAsAppendList(plugin,
-                    MIGRATIONS_PROGRESS_ITEM_STATUS.get(plugin, getStatus(state))
-            );
+            String status = MIGRATIONS_PROGRESS_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", getStatus(state))
+                                    .build();
+
+            return MIGRATIONS_PROGRESS_ITEM_TIPS.builder(plugin)
+                           .append(status)
+                           .buildAsList();
         }
 
 
@@ -191,40 +197,106 @@ public final class MigrationsMenu extends AbstractSharedMenu<MigrationsMenuState
 
     }
 
-    private final class DefaultItem extends Item {
+    private final class DefaultItem extends StateItem<MigrationsMenuState> {
 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                updateItem(getState());
                 setMaterial(XMaterial.CHEST);
                 setName(MIGRATIONS_DEFAULT_ITEM_NAME.get(plugin));
-                setLore(MIGRATIONS_DEFAULT_ITEM_TIPS.getAsList(plugin,
-                        databaseConfig.getString(ConfigurationKey.DEFAULT_DATABASE),
-                        databaseConfig.getString(ConfigurationKey.DEFAULT_HOST),
-                        databaseConfig.getInt(ConfigurationKey.DEFAULT_PORT),
-                        Messages.beautify(databaseConfig.getEnum(ConfigurationKey.DEFAULT_DIALECT, DatabaseDialect.class).getDialectName(), false))
-                );
+                setFlags(Collections.singletonList(MigrationsMenuStateFlag.DEFAULT_CONNECTED));
             });
+        }
+
+
+        private void updateItem(@NotNull MigrationsMenuState state) {
+            String status = MIGRATIONS_DEFAULT_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", getStatus(state))
+                                    .build();
+
+            setLore(MIGRATIONS_DEFAULT_ITEM_TIPS.builder(plugin)
+                            .replace("%username%", databaseConfig.getString(ConfigurationKey.DEFAULT_USERNAME))
+                            .replace("%host%", databaseConfig.getString(ConfigurationKey.DEFAULT_HOST))
+                            .replace("%port%", databaseConfig.getInt(ConfigurationKey.DEFAULT_PORT))
+                            .replace("%dialect%", Messages.beautify(getDialect(), false))
+                            .wrap(3)
+                            .append(status)
+                            .buildAsList()
+            );
+        }
+
+
+        @Override
+        public void update(@NotNull MigrationsMenuState state, int flag) {
+            updateItem(state);
+        }
+
+
+        @NotNull
+        public String getStatus(@NotNull MigrationsMenuState state) {
+            return state.isDefaultConnected()
+                           ? MIGRATIONS_CONNECTION_STATES_CONNECTED.get(plugin)
+                           : MIGRATIONS_CONNECTION_STATES_DISCONNECTED.get(plugin);
+        }
+
+
+        @NotNull
+        public String getDialect() {
+            return databaseConfig.getEnum(ConfigurationKey.DEFAULT_DIALECT, DatabaseDialect.class).getDialectName();
         }
 
     }
 
-    private final class MigrationItem extends Item {
+    private final class MigrationItem extends StateItem<MigrationsMenuState> {
 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                updateItem(getState());
                 setMaterial(XMaterial.CHEST_MINECART);
                 setName(MIGRATIONS_MIGRATION_ITEM_NAME.get(plugin));
-                setLore(MIGRATIONS_MIGRATION_ITEM_TIPS.getAsList(plugin,
-                        databaseConfig.getString(ConfigurationKey.MIGRATION_DATABASE),
-                        databaseConfig.getString(ConfigurationKey.MIGRATION_HOST),
-                        databaseConfig.getInt(ConfigurationKey.MIGRATION_PORT),
-                        Messages.beautify(databaseConfig.getEnum(ConfigurationKey.MIGRATION_DIALECT, DatabaseDialect.class).getDialectName(), false))
-                );
+                setFlags(Collections.singletonList(MigrationsMenuStateFlag.MIGRATION_CONNECTED));
             });
+        }
+
+
+        private void updateItem(@NotNull MigrationsMenuState state) {
+            String status = MIGRATIONS_MIGRATION_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", getStatus(state))
+                                    .build();
+
+            setLore(MIGRATIONS_MIGRATION_ITEM_TIPS.builder(plugin)
+                            .replace("%username%", databaseConfig.getString(ConfigurationKey.MIGRATION_USERNAME))
+                            .replace("%host%", databaseConfig.getString(ConfigurationKey.MIGRATION_HOST))
+                            .replace("%port%", databaseConfig.getInt(ConfigurationKey.MIGRATION_PORT))
+                            .replace("%dialect%", Messages.beautify(getDialect(), false))
+                            .wrap(3)
+                            .append(status)
+                            .buildAsList()
+            );
+        }
+
+
+        @Override
+        public void update(@NotNull MigrationsMenuState state, int flag) {
+            updateItem(state);
+        }
+
+
+        @NotNull
+        public String getStatus(@NotNull MigrationsMenuState state) {
+            return state.isMigrationConnected()
+                           ? MIGRATIONS_CONNECTION_STATES_CONNECTED.get(plugin)
+                           : MIGRATIONS_CONNECTION_STATES_DISCONNECTED.get(plugin);
+        }
+
+
+        @NotNull
+        public String getDialect() {
+            return databaseConfig.getEnum(ConfigurationKey.MIGRATION_DIALECT, DatabaseDialect.class).getDialectName();
         }
 
     }

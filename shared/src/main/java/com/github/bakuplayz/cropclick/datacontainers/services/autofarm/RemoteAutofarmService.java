@@ -24,28 +24,27 @@ import java.util.concurrent.TimeUnit;
  */
 public final class RemoteAutofarmService extends AbstractRemoteDataService<Autofarm> implements AutofarmDataService {
 
-    private static final long MAX_CACHE_ENTRIES = 1000;
-
-    private final AsyncLoadingCache<LookupKey, Autofarm> cache;
+    private final AsyncLoadingCache<LookupKey, Autofarm> locationCache;
 
 
     public RemoteAutofarmService(@NotNull QueryProvider provider) {
         super(provider, Autofarm.class);
-        this.cache = initializeCache();
+        this.locationCache = initializeLocationCache();
     }
 
 
     @NotNull
-    private AsyncLoadingCache<LookupKey, Autofarm> initializeCache() {
+    private AsyncLoadingCache<LookupKey, Autofarm> initializeLocationCache() {
         return Caffeine.newBuilder()
                        .maximumSize(MAX_CACHE_ENTRIES)
+                       .expireAfterWrite(10, TimeUnit.MINUTES)
                        .expireAfterAccess(10, TimeUnit.MINUTES)
-                       .buildAsync((key, executor) -> loadFromDatabase(key));
+                       .buildAsync((key, executor) -> loadLocationFromDatabase(key));
     }
 
 
     @NotNull
-    private CompletableFuture<Autofarm> loadFromDatabase(@NotNull LookupKey key) {
+    private CompletableFuture<Autofarm> loadLocationFromDatabase(@NotNull LookupKey key) {
         SelectQuery<Autofarm> query = provider.select(getTable(), Autofarm.class);
 
         if (key.isDoubly()) {
@@ -79,7 +78,7 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     public CompletableFuture<Autofarm> getOneByCrop(@NotNull Location location) {
-        return cache.get(LookupKey.of(LookupType.CROP, location));
+        return locationCache.get(LookupKey.of(LookupType.CROP, location));
     }
 
 
@@ -89,7 +88,7 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     public CompletableFuture<Autofarm> getOneByDispenser(@NotNull Location location) {
-        return cache.get(LookupKey.of(LookupType.DISPENSER, location));
+        return locationCache.get(LookupKey.of(LookupType.DISPENSER, location));
     }
 
 
@@ -99,7 +98,7 @@ public final class RemoteAutofarmService extends AbstractRemoteDataService<Autof
     @NotNull
     @Override
     public CompletableFuture<Autofarm> getOneByContainer(@NotNull Location location) {
-        return cache.get(LookupKey.of(LookupType.CONTAINER, location));
+        return locationCache.get(LookupKey.of(LookupType.CONTAINER, location));
     }
 
 

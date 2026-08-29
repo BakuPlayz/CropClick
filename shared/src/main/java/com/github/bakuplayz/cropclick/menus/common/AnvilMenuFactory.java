@@ -37,19 +37,25 @@ public final class AnvilMenuFactory {
         return new AnvilGUI.Builder()
                        .itemLeft(item.asItemStack())
                        .text(ChatColor.stripColor(currentValue))
+                       .itemOutput(item.asItemStack())
                        .onClick((player, stateSnapshot) -> {
                            setter.setValue(stateSnapshot.getText());
                            return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                       }).onClose((stateSnapshot) -> {
-                    Player player = stateSnapshot.getPlayer();
+                       })
+                       .onClose((stateSnapshot) -> {
+                           Player player = stateSnapshot.getPlayer();
 
-                    if (currentValue.equals(stateSnapshot.getText())) {
-                        player.sendMessage(NAME_RESPONSE_UNCHANGED.get(plugin));
-                        return;
-                    }
+                           if (currentValue.equals(stateSnapshot.getText())) {
+                               NAME_RESPONSE_UNCHANGED.builder(plugin)
+                                       .wrap(false)
+                                       .sendTo(player);
+                               return;
+                           }
 
-                    player.sendMessage(NAME_RESPONSE_CHANGED.get(plugin, Messages.colorize(stateSnapshot.getText())));
-                }).plugin(plugin);
+                           NAME_RESPONSE_CHANGED.builder(plugin)
+                                   .replace("%name%", Messages.colorize(stateSnapshot.getText()))
+                                   .wrap(false).sendTo(player);
+                       }).plugin(plugin);
     }
 
 

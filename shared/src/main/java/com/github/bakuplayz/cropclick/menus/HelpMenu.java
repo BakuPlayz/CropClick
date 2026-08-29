@@ -91,11 +91,15 @@ public final class HelpMenu extends AbstractPaginatedMenu<BasicPaginatedMenuStat
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String permission = HELP_ITEM_PERMISSION.builder(plugin).replace("%permission%", command.getPermission()).build();
+                String usage = HELP_ITEM_USAGE.builder(plugin).replace("%usage%", command.getUsage()).build();
+
                 setMaterial(XMaterial.BOOK);
-                setName(HELP_ITEM_NAME.get(plugin, command.getName()));
-                setLore(HELP_ITEM_DESCRIPTION.get(plugin, command.getDescription()),
-                        HELP_ITEM_PERMISSION.get(plugin, command.getPermission()),
-                        HELP_ITEM_USAGE.get(plugin, command.getUsage())
+                setName(HELP_ITEM_NAME.builder(plugin).replace("%name%", command.getName()).build());
+                setLore(HELP_ITEM_DESCRIPTION.builder(plugin)
+                                .replace("%description%", command.getDescription())
+                                .append(permission, usage)
+                                .buildAsList()
                 );
             });
         }

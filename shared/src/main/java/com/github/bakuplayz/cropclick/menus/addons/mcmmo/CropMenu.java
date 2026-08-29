@@ -19,7 +19,7 @@
 package com.github.bakuplayz.cropclick.menus.addons.mcmmo;
 
 import com.github.bakuplayz.cropclick.CropClick;
-import com.github.bakuplayz.cropclick.configurations.config.CropsConfig.ConfigurationKey;
+import com.github.bakuplayz.cropclick.configurations.config.CropsConfig;
 import com.github.bakuplayz.cropclick.crops.Crop;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractCropMenu;
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.states.CropMenuStateBuilder;
@@ -28,8 +28,8 @@ import com.github.bakuplayz.cropclick.menus.addons.mcmmo.states.CropMenuStateBui
 import com.github.bakuplayz.cropclick.menus.addons.mcmmo.states.CropMenuStateBuilder.CropMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.common.AnvilMenuFactory;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
-import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
-import com.github.bakuplayz.spigotspin.menu.items.actions.ClickableAction;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
+import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.StateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.entity.Player;
@@ -65,23 +65,13 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     @Override
     public void setItems() {
-        setItem(13, new ExperienceReasonItem(), getReasonAction());
+        setItem(13, new ExperienceReasonItem(), CropMenuStateFlag.REASON);
         setItem(19, new ExperienceDecreaseItem(MAX_CHANGE), (item, player) -> stateHandler.decreaseExperienceValue(MAX_CHANGE), CropMenuStateFlag.EXPERIENCE_VALUE);
         setItem(20, new ExperienceDecreaseItem(MIN_CHANGE), (item, player) -> stateHandler.decreaseExperienceValue(MIN_CHANGE), CropMenuStateFlag.EXPERIENCE_VALUE);
         setItem(22, new ExperienceItem(), CropMenuStateFlag.EXPERIENCE_VALUE);
         setItem(24, new ExperienceIncreaseItem(MIN_CHANGE), (item, player) -> stateHandler.increaseExperienceValue(MIN_CHANGE), CropMenuStateFlag.EXPERIENCE_VALUE);
         setItem(25, new ExperienceIncreaseItem(MAX_CHANGE), (item, player) -> stateHandler.increaseExperienceValue(MAX_CHANGE), CropMenuStateFlag.EXPERIENCE_VALUE);
         setItem(49, new CustomBackItem(plugin));
-    }
-
-
-    @NotNull
-    private ClickableAction<ExperienceReasonItem> getReasonAction() {
-        return (item, player) -> AnvilMenuFactory.createMenu(
-                plugin, item,
-                cropsConfig.getString(ConfigurationKey.MCMMO_REASON, crop.getName()),
-                (text) -> cropsConfig.set(ConfigurationKey.MCMMO_REASON, text, crop.getName())
-        ).open(player);
     }
 
 
@@ -95,7 +85,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return MCMMO_CROP_REMOVE_ITEM_NAME.get(plugin, change, "Experience");
+            return MCMMO_CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Experience")
+                           .build();
         }
 
 
@@ -103,7 +96,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return MCMMO_CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return MCMMO_CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -140,10 +133,12 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         }
 
 
-        private @NotNull List<String> getLore(int value) {
-            return MCMMO_CROP_EXPERIENCE_ITEM_TIPS.getAsAppendList(plugin,
-                    MCMMO_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, value)
-            );
+        @NotNull
+        private List<String> getLore(int value) {
+            String status = MCMMO_CROP_EXPERIENCE_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", value)
+                                    .build();
+            return MCMMO_CROP_EXPERIENCE_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -158,7 +153,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return MCMMO_CROP_ADD_ITEM_NAME.get(plugin, change, "Experience");
+            return MCMMO_CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Experience")
+                           .build();
         }
 
 
@@ -166,7 +164,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return MCMMO_CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return MCMMO_CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -183,18 +181,39 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
     }
 
-    private final class ExperienceReasonItem extends ClickableItem {
+    private final class ExperienceReasonItem extends ClickableStateItem<CropMenuState> {
 
         @NotNull
         @Override
         public CompletableFuture<Void> create() {
-            return createSync(() -> {
-                setMaterial(XMaterial.PAPER);
-                setName(MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME.get(plugin));
-                setLore(MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS.getAsAppendList(plugin,
-                        MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE.get(plugin, stateHandler.getState().getReason()))
-                );
-            });
+            return createSync(() -> updateItem(getState()));
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> AnvilMenuFactory.createMenu(
+                    plugin, item,
+                    cropsConfig.getString(CropsConfig.ConfigurationKey.MCMMO_REASON, crop.getName()),
+                    (text) -> cropsConfig.set(CropsConfig.ConfigurationKey.MCMMO_REASON, text, crop.getName())
+            ).open(player);
+        }
+
+
+        @Override
+        public void update(@NotNull CropMenuState state, int flag) {
+            updateItem(state);
+        }
+
+
+        private void updateItem(@NotNull CropMenuState state) {
+            String status = MCMMO_CROP_EXPERIENCE_REASON_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", state.getReason())
+                                    .build();
+            setMaterial(XMaterial.PAPER);
+            setName(MCMMO_CROP_EXPERIENCE_REASON_ITEM_NAME.get(plugin));
+            setLore(MCMMO_CROP_EXPERIENCE_REASON_ITEM_TIPS.builder(plugin).append(status).buildAsList());
         }
 
     }

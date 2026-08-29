@@ -136,13 +136,15 @@ public final class AddonsMenu extends AbstractPlainMenu {
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = ADDONS_JOBS_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", state.isJobsEnabled())
+                                        .build();
+
                 setName(ADDONS_JOBS_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.STONE_HOE);
                 setMaterial(!state.isJobsEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setMaterial(!state.isJobsInstalled(), XMaterial.ORANGE_STAINED_GLASS_PANE);
-                setLore(ADDONS_JOBS_ITEM_TIPS.getAsAppendList(plugin,
-                        ADDONS_JOBS_ITEM_STATUS.get(plugin, state.isJobsEnabled()))
-                );
+                setLore(ADDONS_JOBS_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -154,13 +156,15 @@ public final class AddonsMenu extends AbstractPlainMenu {
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = ADDONS_MCMMO_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", state.isMmoEnabled())
+                                        .build();
+
                 setName(ADDONS_MCMMO_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.GOLDEN_SWORD);
                 setMaterial(!state.isMmoEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setMaterial(!state.isMmoInstalled(), XMaterial.ORANGE_STAINED_GLASS_PANE);
-                setLore(ADDONS_MCMMO_ITEM_TIPS.getAsAppendList(plugin,
-                        ADDONS_MCMMO_ITEM_STATUS.get(plugin, state.isMmoEnabled()))
-                );
+                setLore(ADDONS_MCMMO_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -172,13 +176,15 @@ public final class AddonsMenu extends AbstractPlainMenu {
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = ADDONS_GROWTH_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", state.isGrowthEnabled())
+                                        .build();
+
                 setName(ADDONS_GROWTH_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.TALL_GRASS);
                 setMaterial(!state.isGrowthEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setMaterial(!state.isGrowthInstalled(), XMaterial.ORANGE_STAINED_GLASS_PANE);
-                setLore(ADDONS_GROWTH_ITEM_TIPS.getAsAppendList(plugin,
-                        ADDONS_GROWTH_ITEM_STATUS.get(plugin, state.isGrowthEnabled()))
-                );
+                setLore(ADDONS_GROWTH_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -190,13 +196,15 @@ public final class AddonsMenu extends AbstractPlainMenu {
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = ADDONS_RESIDENCE_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", state.isResidenceEnabled())
+                                        .build();
+
                 setName(ADDONS_RESIDENCE_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.OAK_FENCE);
                 setMaterial(!state.isResidenceEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setMaterial(!state.isResidenceInstalled(), XMaterial.ORANGE_STAINED_GLASS_PANE);
-                setLore(ADDONS_RESIDENCE_ITEM_TIPS.getAsAppendList(plugin,
-                        ADDONS_RESIDENCE_ITEM_STATUS.get(plugin, state.isResidenceEnabled()))
-                );
+                setLore(ADDONS_RESIDENCE_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -208,13 +216,15 @@ public final class AddonsMenu extends AbstractPlainMenu {
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = ADDONS_TOWNY_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", state.isTownyEnabled())
+                                        .build();
+
                 setName(ADDONS_TOWNY_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.OAK_FENCE_GATE);
                 setMaterial(!state.isTownyEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setMaterial(!state.isTownyInstalled(), XMaterial.ORANGE_STAINED_GLASS_PANE);
-                setLore(ADDONS_TOWNY_ITEM_TIPS.getAsAppendList(plugin,
-                        ADDONS_TOWNY_ITEM_STATUS.get(plugin, state.isTownyEnabled()))
-                );
+                setLore(ADDONS_TOWNY_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -226,13 +236,15 @@ public final class AddonsMenu extends AbstractPlainMenu {
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = ADDONS_SKILLS_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", state.isAuraSkillsEnabled())
+                                        .build();
+
                 setName(ADDONS_SKILLS_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.DIAMOND_AXE);
                 setMaterial(!state.isAuraSkillsEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setMaterial(!state.isAuraSkillsInstalled(), XMaterial.ORANGE_STAINED_GLASS_PANE);
-                setLore(ADDONS_SKILLS_ITEM_TIPS.getAsAppendList(plugin,
-                        ADDONS_SKILLS_ITEM_STATUS.get(plugin, state.isAuraSkillsEnabled()))
-                );
+                setLore(ADDONS_SKILLS_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 

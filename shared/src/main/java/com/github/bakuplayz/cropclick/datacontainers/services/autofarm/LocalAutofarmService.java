@@ -1,7 +1,6 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.autofarm;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.Blocks;
 import com.github.bakuplayz.cropclick.common.Locations;
@@ -21,9 +20,9 @@ import java.util.concurrent.CompletableFuture;
  */
 public final class LocalAutofarmService extends AbstractLocalDataService<Autofarm> implements AutofarmDataService {
 
-    public LocalAutofarmService(@NotNull CropClick plugin) {
+    public LocalAutofarmService() {
         super("autofarms.json", new TypeReference<Map<String, Autofarm>>() {
-        }, plugin);
+        });
     }
 
 

@@ -19,7 +19,6 @@
 package com.github.bakuplayz.cropclick.datacontainers.services.world;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.datacontainers.services.AbstractLocalDataService;
 import com.github.bakuplayz.cropclick.world.FarmWorld;
 import org.jetbrains.annotations.NotNull;
@@ -32,9 +31,9 @@ import java.util.Map;
  */
 public final class LocalFarmWorldService extends AbstractLocalDataService<FarmWorld> implements FarmWorldDataService {
 
-    public LocalFarmWorldService(@NotNull CropClick plugin) {
+    public LocalFarmWorldService() {
         super("worlds.json", new TypeReference<Map<String, FarmWorld>>() {
-        }, plugin);
+        });
     }
 
 

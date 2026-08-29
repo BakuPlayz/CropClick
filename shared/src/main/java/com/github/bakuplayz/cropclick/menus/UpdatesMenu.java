@@ -27,6 +27,7 @@ import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractSharedMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.entity.Player;
@@ -71,24 +72,9 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
 
     @Override
     public void setItems() {
-        setItem(20, new PlayerItem(), (item, player) -> stateHandler.togglePlayerState(), UpdatesMenuStateFlag.PLAYER);
-        setItem(22, new UpdateItem(), (item, player) -> {
-            if (updateManager.isUpdated()) {
-                player.sendMessage(Messages.colorize("&7No new updates."));
-                return;
-            }
-
-            String updateURL = updateManager.getInfo().getUrl();
-            if (updateURL.isEmpty()) return;
-
-            String updateMessage = updateManager.getInfo().getMessage();
-            if (updateMessage.isEmpty()) return;
-
-            player.sendMessage(Messages.colorize(updateMessage));
-            player.sendMessage(Messages.colorize("&7Get the new update on Spigot!"));
-            player.sendMessage(Messages.colorize("&7" + updateURL));
-        });
-        setItem(24, new ConsoleItem(), (item, player) -> stateHandler.toggleConsoleState(), UpdatesMenuStateFlag.CONSOLE);
+        setItem(20, new PlayerItem(), UpdatesMenuStateFlag.PLAYER);
+        setItem(22, new UpdateItem());
+        setItem(24, new ConsoleItem(), UpdatesMenuStateFlag.CONSOLE);
         setItem(49, new CustomBackItem(plugin));
     }
 
@@ -118,6 +104,13 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
         }
 
 
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.togglePlayerState();
+        }
+
+
         @Override
         public void update(@NotNull UpdatesMenuState state, int flag) {
             setLore(getLore(state.isPlayerEnabled()));
@@ -126,9 +119,10 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
 
         @NotNull
         private List<String> getLore(boolean state) {
-            return UPDATES_PLAYER_ITEM_TIPS.getAsAppendList(plugin,
-                    UPDATES_PLAYER_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state))
-            );
+            String status = UPDATES_PLAYER_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", Messages.getStatusMessage(plugin, state))
+                                    .build();
+            return UPDATES_PLAYER_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -146,6 +140,13 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
         }
 
 
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleConsoleState();
+        }
+
+
         @Override
         public void update(@NotNull UpdatesMenuState state, int flag) {
             setLore(getLore(state.isConsoleEnabled()));
@@ -154,9 +155,10 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
 
         @NotNull
         private List<String> getLore(boolean state) {
-            return UPDATES_CONSOLE_ITEM_TIPS.getAsAppendList(plugin,
-                    UPDATES_CONSOLE_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state))
-            );
+            String status = UPDATES_CONSOLE_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", Messages.getStatusMessage(plugin, state))
+                                    .build();
+            return UPDATES_CONSOLE_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -167,14 +169,37 @@ public final class UpdatesMenu extends AbstractSharedMenu<UpdatesMenuState, Upda
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = UPDATES_UPDATES_ITEM_STATE.builder(plugin)
+                                        .replace("%state%", updateManager.getInfo().getState().toReadable(plugin))
+                                        .build();
                 setMaterial(XMaterial.ANVIL);
                 setName(UPDATES_UPDATES_ITEM_NAME.get(plugin));
-                setLore(UPDATES_UPDATES_ITEM_TIPS.getAsAppendList(plugin,
-                        UPDATES_UPDATES_ITEM_STATE.get(plugin, updateManager.getInfo().getMessage())
-                ));
+                setLore(UPDATES_UPDATES_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                if (updateManager.isUpdated()) {
+                    player.sendMessage(Messages.colorize("&7No new updates."));
+                    return;
+                }
+
+                String updateURL = updateManager.getInfo().getUrl();
+                if (updateURL.isEmpty()) return;
+
+                String updateMessage = updateManager.getInfo().getMessage();
+                if (updateMessage.isEmpty()) return;
+
+                player.sendMessage(Messages.colorize(updateMessage));
+                player.sendMessage(Messages.colorize("&7Get the new update on Spigot!"));
+                player.sendMessage(Messages.colorize("&7" + updateURL));
+            };
+        }
+        
     }
 
 }

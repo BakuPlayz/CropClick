@@ -20,9 +20,9 @@ package com.github.bakuplayz.cropclick.menus.abstracts.states;
 
 import com.github.bakuplayz.cropclick.CropClick;
 import com.github.bakuplayz.cropclick.CropPlayer;
-import com.github.bakuplayz.cropclick.Log;
 import com.github.bakuplayz.cropclick.autofarm.Autofarm;
 import com.github.bakuplayz.cropclick.common.Autofarms;
+import com.github.bakuplayz.cropclick.datacontainers.services.autofarm.AutofarmDataService;
 import com.github.bakuplayz.cropclick.events.player.link.PlayerLinkAutofarmEvent;
 import com.github.bakuplayz.cropclick.menus.abstracts.AbstractLinkMenu;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuState;
@@ -86,6 +86,8 @@ public final class LinkMenuStateBuilder {
 
         private final CropClick plugin;
 
+        private final AutofarmDataService autofarmService;
+
 
         private LinkMenuStateHandler(
                 @NotNull AbstractLinkMenu observer,
@@ -96,6 +98,7 @@ public final class LinkMenuStateBuilder {
                 @NotNull LinkContext context
         ) {
             super(observer, new LinkMenuState(autofarm, block, player, context));
+            this.autofarmService = plugin.getDataManager().getAutofarmService();
             this.autofarm = autofarm;
             this.plugin = plugin;
             this.player = player;
@@ -146,7 +149,7 @@ public final class LinkMenuStateBuilder {
             Autofarm autofarm = Autofarm.fromPlayer(player, crop, container, dispenser);
 
             if (!Autofarms.areComponents(plugin.getCropManager(), crop.getBlock(), container.getBlock(), dispenser.getBlock())) {
-                LINK_ACTION_FAILURE.send(plugin, player);
+                LINK_ACTION_FAILURE.builder(plugin).sendTo(player.getOfflinePlayer().getPlayer());
                 return;
             }
 
@@ -161,11 +164,13 @@ public final class LinkMenuStateBuilder {
             if (flag == LinkMenuStateFlag.ENABLED_STATE) {
                 state.setEnabled(infer(partial));
                 autofarm.isEnabled(infer(partial));
+                autofarmService.updateOne(autofarm.getFarmerId().toString(), autofarm);
             }
 
             if (flag == LinkMenuStateFlag.UNCLAIMED_STATE) {
                 state.setUnclaimed(infer(partial));
                 autofarm.setOwnerId(player.getPlayerUUID());
+                autofarmService.updateOne(autofarm.getFarmerId().toString(), autofarm);
             }
 
             if (flag == LinkMenuStateFlag.UNLINKED_STATE) {

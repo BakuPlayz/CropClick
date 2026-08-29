@@ -118,8 +118,12 @@ public final class ManageAutofarmsMenu extends AbstractPaginatedMenu<BasicPagina
                 OfflinePlayer player = Bukkit.getOfflinePlayer(autofarm.getOwnerId());
 
                 setMaterial(XMaterial.DISPENSER);
-                setLore(MANAGE_AUTOFARMS_ITEM_OWNER.get(plugin, getName(player)));
-                setName(MANAGE_AUTOFARMS_ITEM_NAME.get(plugin, autofarm.getShortenedId(), status));
+                setLore(MANAGE_AUTOFARMS_ITEM_OWNER.builder(plugin).replace("%owner%", getName(player)).buildAsList());
+                setName(MANAGE_AUTOFARMS_ITEM_NAME.builder(plugin)
+                                .replace("%name%", autofarm.getShortenedId())
+                                .replace("%status%", status)
+                                .build()
+                );
             });
         }
 

@@ -49,8 +49,10 @@ public final class WorldsMenu extends AbstractWorldsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull FarmWorld world) {
-        boolean isBanished = world.isAddonBanished(getAddon(plugin, TownyAddon.NAME));
-        return WORLDS_ITEM_TOWNY_TIPS.getAsAppendList(plugin, WORLDS_ITEM_STATUS.get(plugin, isBanished));
+        String status = WORLDS_ITEM_STATUS.builder(plugin)
+                                .replace("%status%", world.isAddonBanished(getAddon(plugin, TownyAddon.NAME)))
+                                .build();
+        return WORLDS_ITEM_TOWNY_TIPS.builder(plugin).append(status).buildAsList();
     }
 
 

@@ -44,19 +44,19 @@ public final class DatabaseConfig extends AbstractPersistentYaml {
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements PersistentYamlKey {
 
-        DEFAULT_USERNAME("databases.default.username", "username"),
-        DEFAULT_PASSWORD("databases.default.password", "password"),
-        DEFAULT_DATABASE("databases.default.database", "cropclick"),
-        DEFAULT_HOST("databases.default.host", "host"),
-        DEFAULT_PORT("databases.default.port", 0),
-        DEFAULT_DIALECT("databases.default.dialect", DatabaseDialect.MYSQL),
+        DEFAULT_USERNAME("default.username", "username"),
+        DEFAULT_PASSWORD("default.password", "password"),
+        DEFAULT_DATABASE("default.database", "cropclick"),
+        DEFAULT_HOST("default.host", "host"),
+        DEFAULT_PORT("default.port", 0),
+        DEFAULT_DIALECT("default.dialect", DatabaseDialect.MYSQL),
 
-        MIGRATION_USERNAME("databases.migration.username", "username"),
-        MIGRATION_PASSWORD("databases.migration.password", "password"),
-        MIGRATION_DATABASE("databases.migration.database", "cropclick"),
-        MIGRATION_HOST("databases.migration.host", "host"),
-        MIGRATION_PORT("databases.migration.port", 0),
-        MIGRATION_DIALECT("databases.migration.dialect", DatabaseDialect.MYSQL);
+        MIGRATION_USERNAME("migration.username", "username"),
+        MIGRATION_PASSWORD("migration.password", "password"),
+        MIGRATION_DATABASE("migration.database", "cropclick"),
+        MIGRATION_HOST("migration.host", "host"),
+        MIGRATION_PORT("migration.port", 0),
+        MIGRATION_DIALECT("migration.dialect", DatabaseDialect.MYSQL);
 
         @NotNull
         private final String path;

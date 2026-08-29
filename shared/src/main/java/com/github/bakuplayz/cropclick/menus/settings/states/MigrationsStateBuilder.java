@@ -6,7 +6,8 @@ import com.github.bakuplayz.cropclick.datacontainers.migration.MigrationStatus;
 import com.github.bakuplayz.cropclick.menus.settings.MigrationsMenu;
 import com.github.bakuplayz.spigotspin.menu.common.paginated.PaginatedMenuState;
 import com.github.bakuplayz.spigotspin.menu.common.state.MenuStateHandler;
-import dev.bakuplayz.spigotstore.persistence.yaml.observers.ValueObserver;
+import dev.bakuplayz.spigotstore.persistence.yaml.api.PersistentYamlKey;
+import dev.bakuplayz.spigotstore.persistence.yaml.observers.PersistentYamlValueObserver;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public final class MigrationsStateBuilder {
     }
 
 
-    public final static class MigrationsMenuStateHandler extends MenuStateHandler<MigrationsMenuState, MigrationsMenu> implements ValueObserver {
+    public final static class MigrationsMenuStateHandler extends MenuStateHandler<MigrationsMenuState, MigrationsMenu> implements PersistentYamlValueObserver {
 
         private final DataServiceManager manager;
 
@@ -42,25 +43,38 @@ public final class MigrationsStateBuilder {
 
 
         public void startMigration() {
-            updateState(state.history, (state) -> state, MigrationsMenuStateFlag.HISTORY);
-        }
-
-
-        @Override
-        public <T> void onValueChanged(@NotNull T value) {
-            state.history.setStatus(infer(value));
+            notifyStateChange(state.history, MigrationsMenuStateFlag.MIGRATION_HISTORY);
         }
 
 
         @Override
         protected <P> MigrationsMenuState onUpdateState(@NotNull P partialState, int flag) {
-            if (flag == MigrationsMenuStateFlag.HISTORY && state.history.status.canStart()) {
+            if (flag == MigrationsMenuStateFlag.MIGRATION_HISTORY && state.history.status.canStart()) {
                 state.setHistory(infer(partialState));
                 manager.getMigrationService().start();
             }
 
             return state;
         }
+
+
+        @Override
+        public <T> void onValueChanged(@NotNull PersistentYamlKey key, T value) {
+            if (key == ConfigurationKey.DATABASES_MIGRATION_STATUS) {
+                state.history.setStatus(infer(value));
+            } else if (key == ConfigurationKey.DATABASES_MIGRATION_CONNECTED) {
+                updateState(state, (state) -> {
+                    state.setMigrationConnected(infer(value));
+                    return state;
+                }, MigrationsMenuStateFlag.MIGRATION_CONNECTED);
+            } else if (key == ConfigurationKey.DATABASES_DEFAULT_CONNECTED) {
+                updateState(state, (state) -> {
+                    state.setDefaultConnected(infer(value));
+                    return state;
+                }, MigrationsMenuStateFlag.DEFAULT_CONNECTED);
+            }
+        }
+
     }
 
     @Getter
@@ -69,12 +83,18 @@ public final class MigrationsStateBuilder {
 
         private MigrationHistory history;
 
+        private boolean defaultConnected;
+
+        private boolean migrationConnected;
+
 
         private MigrationsMenuState(@NotNull UsageConfig config) {
             this.history = new MigrationHistory(
-                    config.getLong(ConfigurationKey.TIMESTAMP),
-                    config.getEnum(ConfigurationKey.STATUS, MigrationStatus.class)
+                    config.getLong(ConfigurationKey.DATABASES_MIGRATION_TIMESTAMP),
+                    config.getEnum(ConfigurationKey.DATABASES_MIGRATION_STATUS, MigrationStatus.class)
             );
+            this.defaultConnected = config.getBoolean(ConfigurationKey.DATABASES_DEFAULT_CONNECTED);
+            this.migrationConnected = config.getBoolean(ConfigurationKey.DATABASES_MIGRATION_CONNECTED);
         }
 
     }
@@ -93,7 +113,12 @@ public final class MigrationsStateBuilder {
 
     public static final class MigrationsMenuStateFlag {
 
-        public final static int HISTORY = 0x0000001;
+        public final static int MIGRATION_HISTORY = 0x0000001;
+
+        public final static int DEFAULT_CONNECTED = 0x0000002;
+
+        public final static int MIGRATION_CONNECTED = 0x0000002;
+
 
     }
 

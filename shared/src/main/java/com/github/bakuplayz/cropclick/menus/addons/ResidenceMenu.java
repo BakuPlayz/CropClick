@@ -48,7 +48,7 @@ public final class ResidenceMenu extends AbstractAddonMenu {
 
     @Override
     public void setItems() {
-        setItem(21, new ToggleItem(), (item, player) -> stateHandler.toggleAddon(), AddonMenuStateFlag.ADDON_STATE);
+        setItem(21, new ToggleItem(), AddonMenuStateFlag.ADDON_STATE);
         setItem(23, new WorldsItem(), (item, player) -> new WorldsMenu(plugin).open(player));
         setItem(49, new CustomBackItem(plugin));
     }
@@ -63,7 +63,7 @@ public final class ResidenceMenu extends AbstractAddonMenu {
             return createSync(() -> {
                 setName(getName());
                 setMaterial(getMaterial());
-                setLore(ADDON_RESIDENCE_ITEM_TIPS.getAsList(plugin));
+                setLore(ADDON_RESIDENCE_ITEM_TIPS.builder(plugin).buildAsList());
                 setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
             });
         }
@@ -72,7 +72,8 @@ public final class ResidenceMenu extends AbstractAddonMenu {
         @NotNull
         @Override
         protected String getName() {
-            return ADDON_RESIDENCE_ITEM_NAME.get(plugin, Messages.getStatusMessage(plugin, getState().isAddonEnabled()));
+            String status = Messages.getStatusMessage(plugin, getState().isAddonEnabled());
+            return ADDON_RESIDENCE_ITEM_NAME.builder(plugin).replace("%status%", status).build();
         }
 
 

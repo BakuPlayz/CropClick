@@ -99,10 +99,11 @@ public class AutofarmsDashboardMenu extends AbstractStateMenu<DashboardMenuState
 
 
         private void updateItem(@NotNull DashboardMenuState state) {
+            String status = AUTOFARMS_DASHBOARD_TOGGLE_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", Messages.getStatusMessage(plugin, state.isAutofarmEnabled()))
+                                    .build();
             setName(AUTOFARMS_DASHBOARD_TOGGLE_ITEM_NAME.get(plugin));
-            setLore(AUTOFARMS_DASHBOARD_TOGGLE_ITEM_TIPS.getAsAppendList(plugin,
-                    AUTOFARMS_DASHBOARD_TOGGLE_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state.isAutofarmEnabled())))
-            );
+            setLore(AUTOFARMS_DASHBOARD_TOGGLE_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             setMaterial(state.isAutofarmEnabled() ? XMaterial.DISPENSER : XMaterial.GRAY_STAINED_GLASS_PANE);
         }
 
@@ -114,11 +115,12 @@ public class AutofarmsDashboardMenu extends AbstractStateMenu<DashboardMenuState
         @Override
         public CompletableFuture<Void> create() {
             return plugin.getAutofarmManager().getAmountOfFarms().thenAccept(farms -> {
+                String status = AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", farms)
+                                        .build();
                 setMaterial(XMaterial.BOOK);
                 setName(AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_NAME.get(plugin));
-                setLore(AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_TIPS.getAsAppendList(plugin,
-                        AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_STATUS.get(plugin, farms))
-                );
+                setLore(AUTOFARMS_DASHBOARD_MANAGE_AUTOFARMS_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -154,10 +156,11 @@ public class AutofarmsDashboardMenu extends AbstractStateMenu<DashboardMenuState
 
 
         private void updateItem(@NotNull DashboardMenuState state) {
+            String status = AUTOFARMS_DASHBOARD_LINK_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", Messages.getStatusMessage(plugin, state.isLinkModeEnabled()))
+                                    .build();
             setName(AUTOFARMS_DASHBOARD_LINK_ITEM_NAME.get(plugin));
-            setLore(AUTOFARMS_DASHBOARD_LINK_ITEM_TIPS.getAsAppendList(plugin,
-                    AUTOFARMS_DASHBOARD_LINK_ITEM_STATUS.get(plugin, Messages.getStatusMessage(plugin, state.isLinkModeEnabled())))
-            );
+            setLore(AUTOFARMS_DASHBOARD_LINK_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             setMaterial(state.isLinkModeEnabled() ? XMaterial.LIGHT_WEIGHTED_PRESSURE_PLATE : XMaterial.GRAY_STAINED_GLASS_PANE);
         }
 

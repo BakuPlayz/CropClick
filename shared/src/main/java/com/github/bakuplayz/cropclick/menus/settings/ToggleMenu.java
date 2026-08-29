@@ -107,16 +107,18 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String name = TOGGLE_ITEM_NAME.builder(plugin)
+                                      .replace("%name%",
+                                              player.getOfflinePlayer().getName() != null
+                                                      ? player.getOfflinePlayer().getName()
+                                                      : player.getPlayerId()
+                                      ).build();
+                setName(name);
                 setLore(getLore());
                 setPlayer(player.getOfflinePlayer());
                 setFlags(Collections.singletonList(position));
                 setMaterial(!player.isPluginEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
                 setViewState(player.isPluginEnabled() ? ViewState.VISIBLE : ViewState.DISABLED);
-                setName(TOGGLE_ITEM_NAME.get(plugin,
-                        player.getOfflinePlayer().getName() != null
-                                ? player.getOfflinePlayer().getName()
-                                : player.getPlayerId())
-                );
             });
         }
 
@@ -132,9 +134,9 @@ public final class ToggleMenu extends AbstractPaginatedMenu<ToggleMenuState, Tog
         @NotNull
         @Unmodifiable
         private List<String> getLore() {
-            return Collections.singletonList(TOGGLE_ITEM_STATUS.get(plugin,
-                    Messages.getStatusMessage(plugin, player.isPluginEnabled()))
-            );
+            return TOGGLE_ITEM_STATUS.builder(plugin)
+                           .replace("%status%", Messages.getStatusMessage(plugin, player.isPluginEnabled()))
+                           .buildAsList();
         }
 
     }

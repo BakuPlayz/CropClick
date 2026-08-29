@@ -79,7 +79,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return AURA_SKILLS_CROP_REMOVE_ITEM_NAME.get(plugin, change, "Experience");
+            return AURA_SKILLS_CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Experience")
+                           .build();
         }
 
 
@@ -87,7 +90,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return AURA_SKILLS_CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return AURA_SKILLS_CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -126,9 +129,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @NotNull
         private List<String> getLore(double value) {
-            return AURA_SKILLS_CROP_EXPERIENCE_ITEM_TIPS.getAsAppendList(plugin,
-                    AURA_SKILLS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, (int) value)
-            );
+            String status = AURA_SKILLS_CROP_EXPERIENCE_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", (int) value)
+                                    .build();
+            return AURA_SKILLS_CROP_EXPERIENCE_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -143,7 +147,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return AURA_SKILLS_CROP_ADD_ITEM_NAME.get(plugin, change, "Experience");
+            return AURA_SKILLS_CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Experience")
+                           .build();
         }
 
 
@@ -151,7 +158,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return AURA_SKILLS_CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return AURA_SKILLS_CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 

@@ -616,21 +616,27 @@ menu:
       itemStatus: "&7Allowed: &e%status%"
 
   migrations:
+    connectionStates:
+      connected: "&aConnected"
+      disconnected: "&7Disconnected"
+
     states:
       notInitialized: "&7Not Initialized"
+      inProgress: "&eIn progress"
       completed: "&aCompleted"
       failed: "&cFailed"
-      inProgress: "&eIn progress"
 
     progress:
       itemName: "&eProgress"
       itemTips: "&7Shows the current progress of the migration."
-      itemStatus: "&7Status: &e%status%"
+      itemStatus: "&7Status: %status%"
 
     default:
       itemName: "&eDefault"
-      itemTips: "&7Connection from &e%database%&7@&e%host%&7:&e%port%&7 using &e%dialect%&7."
+      itemTips: "&7Connection from &e%username%&7@&e%host%&7:&e%port%&7 using &e%dialect%&7."
+      itemStatus: "&7Status: %status%"
 
     migration:
       itemName: "&eMigration"
-      itemTips: "&7Connection to &e%database%&7@&e%host%&7:&e%port%&7 using &e%dialect%&7."
+      itemTips: "&7Connection to &e%username%&7@&e%host%&7:&e%port%&7 using &e%dialect%&7."
+      itemStatus: "&7Status: %status%"

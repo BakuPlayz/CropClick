@@ -53,7 +53,9 @@ public final class NamesCropsMenu extends AbstractCropsMenu {
         String currentName = plugin.getConfigManager().getCropsConfig().getStringOrDefault(
                 ConfigurationKey.CROP_DROP_NAME, name, crop.getName()
         );
-        return CROPS_ITEM_DROP_NAME.getAsList(plugin, currentName.isEmpty() ? name : currentName);
+        return CROPS_ITEM_DROP_NAME.builder(plugin)
+                       .replace("%name%", currentName.isEmpty() ? name : currentName)
+                       .buildAsList();
     }
 
 

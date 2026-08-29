@@ -29,13 +29,11 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.nio.ByteBuffer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import static java.util.AbstractMap.SimpleImmutableEntry;
 
@@ -48,18 +46,11 @@ public final class AutofarmMapper implements EntityMapper<Autofarm> {
 
 
     @NotNull
-    private static UUID fromBytes(byte[] bytes) {
-        ByteBuffer bb = ByteBuffer.wrap(bytes);
-        return new UUID(bb.getLong(), bb.getLong());
-    }
-
-
-    @NotNull
     @Override
     public Autofarm toEntity(@NotNull ResultSet rs) throws SQLException {
         return Autofarm.createBasic(
-                fromBytes(rs.getBytes(1)),
-                fromBytes(rs.getBytes(2)),
+                readUUID(rs, 1, dialect),
+                readUUID(rs, 2, dialect),
                 rs.getBoolean(3),
                 jsonRegistry.fromJson(rs.getString(4), Location.class),
                 jsonRegistry.fromJson(rs.getString(5), Location.class),

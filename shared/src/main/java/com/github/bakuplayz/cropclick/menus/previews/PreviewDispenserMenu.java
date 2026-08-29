@@ -38,7 +38,7 @@ public final class PreviewDispenserMenu extends AbstractPreviewMenu {
 
 
     public PreviewDispenserMenu(@NotNull CropClick plugin, @NotNull Autofarm autofarm, @NotNull Inventory inventory) {
-        super(DISPENSER_PREVIEW_TITLE.getTitle(plugin, autofarm.getShortenedId()), inventory);
+        super(DISPENSER_PREVIEW_TITLE.getTitleWithId(plugin, autofarm.getShortenedId()), inventory);
     }
 
 

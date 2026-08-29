@@ -37,7 +37,7 @@ import static com.github.bakuplayz.cropclick.common.Languages.Menu.WORLDS_ITEM_S
 public final class WorldsMenu extends AbstractWorldsMenu {
 
     public WorldsMenu(@NotNull CropClick plugin) {
-        super(plugin, (world) -> WORLDS_ITEM_STATUS.getAsList(plugin, world.isBanished()));
+        super(plugin, (world) -> WORLDS_ITEM_STATUS.builder(plugin).replace("%status%", world.isBanished()).buildAsList());
     }
 
 

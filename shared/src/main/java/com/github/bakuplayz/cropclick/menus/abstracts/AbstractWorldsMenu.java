@@ -104,8 +104,8 @@ public abstract class AbstractWorldsMenu extends AbstractPaginatedMenu<WorldsMen
 
                 setMaterial(XMaterial.GRASS_BLOCK);
                 setLore(loreSupplier.getLore(world));
-                setName(WORLDS_ITEM_NAME.get(plugin, name));
                 setFlags(Collections.singletonList(position));
+                setName(WORLDS_ITEM_NAME.builder(plugin).replace("%name%", name).build());
                 setMaterial(world.getName().equals("world_the_end"), XMaterial.END_STONE);
                 setMaterial(world.getName().equals("world_nether"), XMaterial.NETHERRACK);
             });

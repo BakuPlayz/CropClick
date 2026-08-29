@@ -36,8 +36,8 @@ public final class UsageConfig extends AbstractPersistentYaml {
 
 
     private void clearMigrationStates() {
-        setWithoutSave(ConfigurationKey.TIMESTAMP, 0);
-        setWithoutSave(ConfigurationKey.STATUS, MigrationStatus.NOT_INITIATED);
+        setWithoutSave(ConfigurationKey.DATABASES_MIGRATION_TIMESTAMP, 0);
+        setWithoutSave(ConfigurationKey.DATABASES_MIGRATION_STATUS, MigrationStatus.NOT_INITIATED);
         save();
     }
 
@@ -46,8 +46,11 @@ public final class UsageConfig extends AbstractPersistentYaml {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public enum ConfigurationKey implements PersistentYamlKey {
 
-        STATUS("migration.status", MigrationStatus.NOT_INITIATED),
-        TIMESTAMP("migration.timestamp", 0L);
+        DATABASES_DEFAULT_CONNECTED("databases.default.connected", false),
+        
+        DATABASES_MIGRATION_CONNECTED("databases.migration.connected", false),
+        DATABASES_MIGRATION_STATUS("databases.migration.status", MigrationStatus.NOT_INITIATED),
+        DATABASES_MIGRATION_TIMESTAMP("databases.migration.timestamp", 0L);
 
         @NotNull
         private final String path;

@@ -52,9 +52,15 @@ public final class CropsMenu extends AbstractCropsMenu {
         CropsConfig config = plugin.getConfigManager().getCropsConfig();
 
         return Arrays.asList(
-                CROPS_ITEM_JOBS_MONEY.get(plugin, config.getDouble(ConfigurationKey.JOBS_MONEY, crop.getName())),
-                CROPS_ITEM_JOBS_POINTS.get(plugin, config.getDouble(ConfigurationKey.JOBS_POINTS, crop.getName())),
-                CROPS_ITEM_JOBS_EXPERIENCE.get(plugin, config.getDouble(ConfigurationKey.JOBS_EXPERIENCE, crop.getName()))
+                CROPS_ITEM_JOBS_MONEY.builder(plugin)
+                        .replace("%status%", config.getDouble(ConfigurationKey.JOBS_MONEY, crop.getName()))
+                        .build(),
+                CROPS_ITEM_JOBS_POINTS.builder(plugin)
+                        .replace("%status%", config.getDouble(ConfigurationKey.JOBS_POINTS, crop.getName()))
+                        .build(),
+                CROPS_ITEM_JOBS_EXPERIENCE.builder(plugin)
+                        .replace("%status%", config.getDouble(ConfigurationKey.JOBS_EXPERIENCE, crop.getName()))
+                        .build()
         );
     }
 

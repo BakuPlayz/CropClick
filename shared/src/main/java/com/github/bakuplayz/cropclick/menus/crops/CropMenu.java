@@ -27,6 +27,7 @@ import com.github.bakuplayz.cropclick.menus.crops.chance.ChanceMenu;
 import com.github.bakuplayz.cropclick.menus.crops.states.CropStateBuilder;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.entity.Player;
@@ -66,23 +67,23 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     public void setItems() {
         setItem(hasSeed ? 10 : 19, new CropDecreaseItem(MAX_CHANGE), (item, player) -> stateHandler.decreaseCropValue(MAX_CHANGE), CropMenuStateFlag.CROP_VALUE);
         setItem(hasSeed ? 11 : 20, new CropDecreaseItem(MIN_CHANGE), (item, player) -> stateHandler.decreaseCropValue(MIN_CHANGE), CropMenuStateFlag.CROP_VALUE);
-        setItem(hasSeed ? 13 : 22, new CropItem(), (item, player) -> stateHandler.toggleCropHarvestState(), Arrays.asList(CropMenuStateFlag.CROP_STATE, CropMenuStateFlag.CROP_VALUE));
+        setItem(hasSeed ? 13 : 22, new CropItem(), Arrays.asList(CropMenuStateFlag.CROP_STATE, CropMenuStateFlag.CROP_VALUE));
         setItem(hasSeed ? 15 : 24, new CropIncreaseItem(MIN_CHANGE), (item, player) -> stateHandler.incrementCropValue(MIN_CHANGE), CropMenuStateFlag.CROP_VALUE);
         setItem(hasSeed ? 16 : 25, new CropIncreaseItem(MAX_CHANGE), (item, player) -> stateHandler.incrementCropValue(MAX_CHANGE), CropMenuStateFlag.CROP_VALUE);
 
         if (hasSeed) {
             setItem(28, new SeedDecreaseItem(MAX_CHANGE), (item, player) -> stateHandler.decreaseSeedValue(MAX_CHANGE), CropMenuStateFlag.SEED_VALUE);
             setItem(29, new SeedDecreaseItem(MIN_CHANGE), (item, player) -> stateHandler.decreaseSeedValue(MIN_CHANGE), CropMenuStateFlag.SEED_VALUE);
-            setItem(31, new SeedItem(), (item, player) -> stateHandler.toggleSeedEnabledState(), Arrays.asList(CropMenuStateFlag.SEED_STATE, CropMenuStateFlag.SEED_VALUE));
+            setItem(31, new SeedItem(), Arrays.asList(CropMenuStateFlag.SEED_STATE, CropMenuStateFlag.SEED_VALUE));
             setItem(33, new SeedIncreaseItem(MIN_CHANGE), (item, player) -> stateHandler.incrementSeedValue(MIN_CHANGE), CropMenuStateFlag.SEED_VALUE);
             setItem(34, new SeedIncreaseItem(MAX_CHANGE), (item, player) -> stateHandler.incrementSeedValue(MAX_CHANGE), CropMenuStateFlag.SEED_VALUE);
         }
 
-        setItem(46, new ChanceItem(), (item, player) -> new ChanceMenu(plugin, crop).open(player));
-        setItem(47, new LinkableItem(), (item, player) -> stateHandler.toggleLinkableState(), CropMenuStateFlag.LINKABLE_STATE);
+        setItem(46, new ChanceItem());
+        setItem(47, new LinkableItem(), CropMenuStateFlag.LINKABLE_STATE);
         setItem(49, new CustomBackItem(plugin));
-        setItem(51, new ReplantItem(), (item, player) -> stateHandler.toggleReplantState(), CropMenuStateFlag.REPLANT_STATE);
-        setItem(52, new AtLeastOneItem(), (item, player) -> stateHandler.toggleAtLeastOneState(), CropMenuStateFlag.AT_LEAST_ONE_STATE);
+        setItem(51, new ReplantItem(), CropMenuStateFlag.REPLANT_STATE);
+        setItem(52, new AtLeastOneItem(), CropMenuStateFlag.AT_LEAST_ONE_STATE);
     }
 
 
@@ -96,7 +97,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return CROP_REMOVE_ITEM_NAME.get(plugin, change, "Crop");
+            return CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Crop")
+                           .build();
         }
 
 
@@ -104,7 +108,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -118,21 +122,32 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class CropItem extends AbstractCropItem {
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleCropHarvestState();
+        }
+
+
+        @NotNull
+        @Override
         protected String getName(boolean isHarvestable) {
             String name = Messages.beautify(cropName, false);
             String status = isHarvestable
                                     ? CROP_STATUS_ENABLED.get(plugin)
                                     : CROP_STATUS_DISABLED.get(plugin);
-
-            return CROP_CROP_ITEM_NAME.get(plugin, name, status);
+            return CROP_CROP_ITEM_NAME.builder(plugin)
+                           .replace("%name%", name)
+                           .replace("%status%", status)
+                           .build();
         }
 
 
         @NotNull
         protected List<String> getLore(int value) {
-            return CROP_CROP_ITEM_TIPS.getAsAppendList(plugin,
-                    CROP_CROP_ITEM_DROP_VALUE.get(plugin, value)
-            );
+            String status = CROP_CROP_ITEM_DROP_VALUE.builder(plugin)
+                                    .replace("%value%", value)
+                                    .build();
+            return CROP_CROP_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -147,7 +162,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return CROP_ADD_ITEM_NAME.get(plugin, change, "Crop");
+            return CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Crop")
+                           .build();
         }
 
 
@@ -155,7 +173,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -176,7 +194,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return CROP_REMOVE_ITEM_NAME.get(plugin, change, "Seed");
+            return CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Seed")
+                           .build();
         }
 
 
@@ -184,7 +205,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -198,18 +219,29 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
     private final class SeedItem extends AbstractSeedItem {
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleSeedEnabledState();
+        }
+
+
+        @NotNull
         protected String getName(boolean isEnabled) {
             String name = Messages.beautify(seed.getName(), false);
             String status = Messages.getStatusMessage(plugin, isEnabled);
-            return CROP_SEED_ITEM_NAME.get(plugin, name, status);
+            return CROP_SEED_ITEM_NAME.builder(plugin)
+                           .replace("%name%", name)
+                           .replace("%status%", status)
+                           .build();
         }
 
 
         @NotNull
         protected List<String> getLore(int dropAmount) {
-            return CROP_SEED_ITEM_TIPS.getAsAppendList(plugin,
-                    CROP_SEED_ITEM_DROP_VALUE.get(plugin, dropAmount)
-            );
+            String status = CROP_SEED_ITEM_DROP_VALUE.builder(plugin)
+                                    .replace("%value%", dropAmount)
+                                    .build();
+            return CROP_SEED_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -224,7 +256,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return CROP_ADD_ITEM_NAME.get(plugin, change, "Seed");
+            return CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Seed")
+                           .build();
         }
 
 
@@ -232,7 +267,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -251,15 +286,28 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
             return createSync(() -> {
                 setName(CROP_CHANCE_ITEM_NAME.get(plugin));
                 setMaterial(XMaterial.OAK_PRESSURE_PLATE);
-                setLore(CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, getCropDropChance()));
+                setLore(CROP_CHANCE_ITEM_CROP_STATUS.builder(plugin)
+                                .replace("%chance%", getCropDropChance())
+                                .buildAsList()
+                );
 
                 if (hasSeed) {
-                    setLore(
-                            CROP_CHANCE_ITEM_CROP_STATUS.get(plugin, getCropDropChance()),
-                            CROP_CHANCE_ITEM_SEED_STATUS.get(plugin, getSeedDropChance())
+                    setLore(CROP_CHANCE_ITEM_CROP_STATUS.builder(plugin)
+                                    .replace("%chance%", getCropDropChance())
+                                    .build(),
+                            CROP_CHANCE_ITEM_SEED_STATUS.builder(plugin)
+                                    .replace("%chance%", getSeedDropChance())
+                                    .build()
                     );
                 }
             });
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> new ChanceMenu(plugin, crop).open(player);
         }
 
 
@@ -294,10 +342,18 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleLinkableState();
+        }
+
+
+        @NotNull
         private List<String> getLore(boolean isLinkable) {
-            return CROP_LINKABLE_ITEM_TIPS.getAsAppendList(plugin,
-                    CROP_LINKABLE_ITEM_STATUS.get(plugin, isLinkable)
-            );
+            String status = CROP_LINKABLE_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", isLinkable)
+                                    .build();
+            return CROP_LINKABLE_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -322,10 +378,18 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleReplantState();
+        }
+
+
+        @NotNull
         private List<String> getLore(boolean shouldReplant) {
-            return CROP_REPLANT_ITEM_TIPS.getAsAppendList(plugin,
-                    CROP_REPLANT_ITEM_STATUS.get(plugin, shouldReplant)
-            );
+            String status = CROP_REPLANT_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", shouldReplant)
+                                    .build();
+            return CROP_REPLANT_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -350,10 +414,18 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
 
         @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleAtLeastOneState();
+        }
+
+
+        @NotNull
         private List<String> getLore(boolean shouldDropAtLeastOne) {
-            return CROP_AT_LEAST_ITEM_TIPS.getAsAppendList(plugin,
-                    CROP_AT_LEAST_ITEM_STATUS.get(plugin, shouldDropAtLeastOne)
-            );
+            String status = CROP_AT_LEAST_ITEM_STATUS.builder(plugin)
+                                    .replace("%status%", shouldDropAtLeastOne)
+                                    .build();
+            return CROP_AT_LEAST_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }

@@ -50,7 +50,7 @@ public final class McMMOMenu extends AbstractAddonMenu {
     @Override
     public void setItems() {
         setItem(20, new CropsItem(), (item, player) -> new CropsMenu(plugin).open(player));
-        setItem(22, new ToggleItem(), (item, player) -> stateHandler.toggleAddon(), AddonMenuStateFlag.ADDON_STATE);
+        setItem(22, new ToggleItem(), AddonMenuStateFlag.ADDON_STATE);
         setItem(24, new WorldsItem(), (item, player) -> new WorldsMenu(plugin).open(player));
         setItem(49, new CustomBackItem(plugin));
     }
@@ -65,7 +65,7 @@ public final class McMMOMenu extends AbstractAddonMenu {
             return createSync(() -> {
                 setName(getName());
                 setMaterial(getMaterial());
-                setLore(ADDON_MCMMO_ITEM_TIPS.getAsList(plugin));
+                setLore(ADDON_MCMMO_ITEM_TIPS.builder(plugin).buildAsList());
                 setMaterial(!getState().isAddonEnabled(), XMaterial.GRAY_STAINED_GLASS_PANE);
             });
         }
@@ -74,7 +74,8 @@ public final class McMMOMenu extends AbstractAddonMenu {
         @NotNull
         @Override
         protected String getName() {
-            return ADDON_MCMMO_ITEM_NAME.get(plugin, Messages.getStatusMessage(plugin, getState().isAddonEnabled()));
+            String status = Messages.getStatusMessage(plugin, getState().isAddonEnabled());
+            return ADDON_MCMMO_ITEM_NAME.builder(plugin).replace("%status%", status).build();
         }
 
 

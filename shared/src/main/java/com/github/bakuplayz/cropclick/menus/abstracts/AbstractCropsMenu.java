@@ -96,7 +96,11 @@ public abstract class AbstractCropsMenu extends AbstractPaginatedMenu<BasicPagin
 
                 setMaterial(crop.getMenuType());
                 setLore(loreSupplier.getLore(crop));
-                setName(CROPS_ITEM_NAME.get(plugin, name, status));
+                setName(CROPS_ITEM_NAME.builder(plugin)
+                                .replace("%name%", name)
+                                .replace("%status%", status)
+                                .build()
+                );
                 setMaterial(!crop.isHarvestable(), XMaterial.GRAY_STAINED_GLASS_PANE);
             });
         }

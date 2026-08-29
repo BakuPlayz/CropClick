@@ -116,11 +116,15 @@ public final class SoundsMenu extends AbstractPaginatedMenu<BasicPaginatedMenuSt
                 String name = Messages.beautify(sound, true);
 
                 setMaterial(XMaterial.NOTE_BLOCK);
-                setName(SOUNDS_ITEM_NAME.get(plugin, name, status));
+                setName(SOUNDS_ITEM_NAME.builder(plugin)
+                                .replace("%name%", name)
+                                .replace("%status%", status)
+                                .build()
+                );
                 setMaterial(isEnabled, XMaterial.LIME_STAINED_GLASS_PANE);
 
                 if (isEnabled) {
-                    setLore(SOUNDS_ITEM_ORDER.get(plugin, order));
+                    setLore(SOUNDS_ITEM_ORDER.builder(plugin).replace("%order%", order).buildAsList());
                 }
             });
         }

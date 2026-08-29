@@ -145,7 +145,11 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-                setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Delay"));
+                setName(SOUND_REMOVE_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Delay")
+                                .build()
+                );
                 setLore(getLore(getState().getDelay()));
             });
         }
@@ -160,7 +164,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(double delay) {
-            return SOUND_REMOVE_ITEM_AFTER.getAsList(plugin, getAfterValue(delay));
+            return SOUND_REMOVE_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(delay))
+                           .buildAsList();
         }
 
 
@@ -192,9 +198,10 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
         @NotNull
         private List<String> getLore(double delay) {
-            return SOUND_DELAY_ITEM_TIPS.getAsAppendList(plugin,
-                    SOUND_DELAY_ITEM_VALUE.get(plugin, delay)
-            );
+            String status = SOUND_DELAY_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", delay)
+                                    .build();
+            return SOUND_DELAY_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -210,7 +217,11 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-                setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Delay"));
+                setName(SOUND_ADD_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Delay")
+                                .build()
+                );
                 setLore(getLore(getState().getDelay()));
             });
         }
@@ -225,7 +236,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(double delay) {
-            return SOUND_ADD_ITEM_AFTER.getAsList(plugin, getAfterValue(delay));
+            return SOUND_ADD_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(delay))
+                           .buildAsList();
         }
 
 
@@ -246,7 +259,11 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-                setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Volume"));
+                setName(SOUND_REMOVE_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Volume")
+                                .build()
+                );
                 setLore(getLore(getState().getVolume()));
             });
         }
@@ -261,7 +278,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(double volume) {
-            return SOUND_REMOVE_ITEM_AFTER.getAsList(plugin, getAfterValue(volume));
+            return SOUND_REMOVE_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(volume))
+                           .buildAsList();
         }
 
 
@@ -292,9 +311,10 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
         @NotNull
         private List<String> getLore(double volume) {
-            return SOUND_VOLUME_ITEM_TIPS.getAsAppendList(plugin,
-                    SOUND_VOLUME_ITEM_VALUE.get(plugin, volume)
-            );
+            String status = SOUND_VOLUME_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", volume)
+                                    .build();
+            return SOUND_VOLUME_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -310,7 +330,11 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-                setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Volume"));
+                setName(SOUND_ADD_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Volume")
+                                .build()
+                );
                 setLore(getLore(getState().getVolume()));
             });
         }
@@ -325,7 +349,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(double volume) {
-            return SOUND_ADD_ITEM_AFTER.getAsList(plugin, getAfterValue(volume));
+            return SOUND_ADD_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(volume))
+                           .buildAsList();
         }
 
 
@@ -346,7 +372,11 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-                setName(SOUND_REMOVE_ITEM_NAME.get(plugin, change, "Pitch"));
+                setName(SOUND_REMOVE_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Pitch")
+                                .build()
+                );
                 setLore(getLore(getState().getPitch()));
             });
         }
@@ -361,7 +391,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(double pitch) {
-            return SOUND_REMOVE_ITEM_AFTER.getAsList(plugin, getAfterValue(pitch));
+            return SOUND_REMOVE_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(pitch))
+                           .buildAsList();
         }
 
 
@@ -392,9 +424,10 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
 
         @NotNull
         private List<String> getLore(double pitch) {
-            return SOUND_PITCH_ITEM_TIPS.getAsAppendList(plugin,
-                    SOUND_PITCH_ITEM_VALUE.get(plugin, pitch)
-            );
+            String status = SOUND_PITCH_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", pitch)
+                                    .build();
+            return SOUND_PITCH_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -410,7 +443,11 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-                setName(SOUND_ADD_ITEM_NAME.get(plugin, change, "Pitch"));
+                setName(SOUND_ADD_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Pitch")
+                                .build()
+                );
                 setLore(getLore(getState().getPitch()));
             });
         }
@@ -425,7 +462,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(double pitch) {
-            return SOUND_ADD_ITEM_AFTER.getAsList(plugin, getAfterValue(pitch));
+            return SOUND_ADD_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(pitch))
+                           .buildAsList();
         }
 
 
@@ -459,7 +498,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(int order, int maxOrder) {
-            return SOUND_INCREASE_ORDER_ITEM_AFTER.getAsList(plugin, getAfterValue(order, maxOrder));
+            return SOUND_INCREASE_ORDER_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(order, maxOrder))
+                           .buildAsList();
         }
 
 
@@ -502,7 +543,9 @@ public final class SoundMenu extends AbstractStateMenu<SoundMenuState, SoundMenu
         @NotNull
         @Unmodifiable
         private List<String> getLore(int order) {
-            return SOUND_DECREASE_ORDER_ITEM_AFTER.getAsList(plugin, getAfterValue(order));
+            return SOUND_DECREASE_ORDER_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(order))
+                           .buildAsList();
         }
 
 

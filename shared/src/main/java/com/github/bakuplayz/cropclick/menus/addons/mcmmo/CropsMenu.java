@@ -47,9 +47,10 @@ public final class CropsMenu extends AbstractCropsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_MMO_EXPERIENCE.getAsList(plugin,
-                plugin.getConfigManager().getCropsConfig().getDouble(ConfigurationKey.MCMMO_EXPERIENCE, crop.getName())
-        );
+        double status = plugin.getConfigManager().getCropsConfig().getDouble(ConfigurationKey.MCMMO_EXPERIENCE, crop.getName());
+        return CROPS_ITEM_MMO_EXPERIENCE.builder(plugin)
+                       .replace("%status%", status)
+                       .buildAsList();
     }
 
 

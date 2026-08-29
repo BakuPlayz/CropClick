@@ -108,12 +108,13 @@ public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenu
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = SETTINGS_TOGGLE_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", getAmountOfEnabled())
+                                        .build();
                 setPlayer(viewers.get(0));
                 setMaterial(XMaterial.PLAYER_HEAD);
                 setName(SETTINGS_TOGGLE_ITEM_NAME.get(plugin));
-                setLore(SETTINGS_TOGGLE_ITEM_TIPS.getAsAppendList(plugin,
-                        SETTINGS_TOGGLE_ITEM_STATUS.get(plugin, getAmountOfEnabled())
-                ));
+                setLore(SETTINGS_TOGGLE_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -139,11 +140,12 @@ public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenu
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = SETTINGS_PARTICLES_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", getAmountOfParticles())
+                                        .build();
                 setMaterial(XMaterial.FIREWORK_ROCKET);
                 setName(SETTINGS_PARTICLES_ITEM_NAME.get(plugin));
-                setLore(SETTINGS_PARTICLES_ITEM_TIPS.getAsAppendList(plugin,
-                        SETTINGS_PARTICLES_ITEM_STATUS.get(plugin, getAmountOfParticles()))
-                );
+                setLore(SETTINGS_PARTICLES_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -167,11 +169,12 @@ public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenu
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = SETTINGS_SOUNDS_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", getAmountOfSounds())
+                                        .build();
                 setMaterial(XMaterial.NOTE_BLOCK);
                 setName(SETTINGS_SOUNDS_ITEM_NAME.get(plugin));
-                setLore(SETTINGS_SOUNDS_ITEM_TIPS.getAsAppendList(plugin,
-                        SETTINGS_SOUNDS_ITEM_STATUS.get(plugin, getAmountOfSounds()))
-                );
+                setLore(SETTINGS_SOUNDS_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -195,11 +198,12 @@ public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenu
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
+                String status = SETTINGS_NAME_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", getAmountOfRenamed())
+                                        .build();
                 setMaterial(XMaterial.NAME_TAG);
                 setName(SETTINGS_NAME_ITEM_NAME.get(plugin));
-                setLore(SETTINGS_NAME_ITEM_TIPS.getAsAppendList(plugin,
-                        SETTINGS_NAME_ITEM_STATUS.get(plugin, getAmountOfRenamed()))
-                );
+                setLore(SETTINGS_NAME_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -225,11 +229,13 @@ public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenu
         public CompletableFuture<Void> create() {
 
             return plugin.getWorldManager().getWorlds().thenAccept((worlds) -> {
+                String status = SETTINGS_WORLDS_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", getAmountOfBanished(worlds))
+                                        .build();
+
                 setMaterial(XMaterial.GRASS_BLOCK);
                 setName(SETTINGS_WORLDS_ITEM_NAME.get(plugin));
-                setLore(SETTINGS_WORLDS_ITEM_TIPS.getAsAppendList(plugin,
-                        SETTINGS_WORLDS_ITEM_STATUS.get(plugin, getAmountOfBanished(worlds)))
-                );
+                setLore(SETTINGS_WORLDS_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -255,7 +261,7 @@ public final class SettingsMenu extends AbstractPaginatedMenu<BasicPaginatedMenu
             return createSync(() -> {
                 setMaterial(XMaterial.BOOKSHELF);
                 setName(SETTINGS_MIGRATIONS_ITEM_NAME.get(plugin));
-                setLore(SETTINGS_MIGRATIONS_ITEM_TIPS.getAsList(plugin));
+                setLore(SETTINGS_MIGRATIONS_ITEM_TIPS.builder(plugin).buildAsList());
             });
         }
 

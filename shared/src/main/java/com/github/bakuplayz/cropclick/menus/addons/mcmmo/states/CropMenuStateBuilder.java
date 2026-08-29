@@ -105,7 +105,10 @@ public final class CropMenuStateBuilder {
 
     public static final class CropMenuStateFlag {
 
+
         public final static int EXPERIENCE_VALUE = 0x1;
+
+        public final static int REASON = 0x2;
 
     }
 

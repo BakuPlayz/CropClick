@@ -58,7 +58,9 @@ public final class CustomCurrentPageItem<S extends PaginatedMenuState> extends C
 
     @NotNull
     private String getName(int displayPage) {
-        return GENERAL_CURRENT_PAGE_ITEM_NAME.get((CropClick) SpigotSpin.Plugin.REF.getPlugin(), displayPage);
+        return GENERAL_CURRENT_PAGE_ITEM_NAME.builder((CropClick) SpigotSpin.Plugin.REF.getPlugin())
+                       .replace("%page%", displayPage)
+                       .build();
     }
 
 

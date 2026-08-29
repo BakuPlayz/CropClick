@@ -19,6 +19,11 @@
 
 package com.github.bakuplayz.cropclick.update;
 
+import com.github.bakuplayz.cropclick.CropClick;
+import org.jetbrains.annotations.NotNull;
+
+import static com.github.bakuplayz.cropclick.common.Languages.Menu.*;
+
 /**
  * An enumeration representing all the possible update states the plugin can be in.
  *
@@ -51,6 +56,28 @@ public enum UpdateState {
     /**
      * The response sent when an update was unable to be retrieved.
      */
-    FAILED_TO_FETCH
+    FAILED_TO_FETCH;
+
+
+    @NotNull
+    public String toReadable(@NotNull CropClick plugin) {
+        switch (this) {
+            case NEW_UPDATE:
+                return GENERAL_STATES_NEW_UPDATE.get(plugin);
+
+            case NO_UPDATE_FOUND:
+                return GENERAL_STATES_NO_UPDATE_FOUND.get(plugin);
+
+            case UP_TO_DATE:
+                return GENERAL_STATES_UP_TO_DATE.get(plugin);
+
+            case FAILED_TO_FETCH:
+                return GENERAL_STATES_FAILED_TO_FETCH.get(plugin);
+
+            case NOT_FETCHED_YET:
+            default:
+                return GENERAL_STATES_NOT_YET_FETCHED.get(plugin);
+        }
+    }
 
 }

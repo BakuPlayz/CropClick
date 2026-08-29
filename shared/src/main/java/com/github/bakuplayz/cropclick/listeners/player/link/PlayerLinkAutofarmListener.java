@@ -62,7 +62,7 @@ public final class PlayerLinkAutofarmListener implements Listener {
     public void onPlayerLinkAutofarm(@NotNull PlayerLinkAutofarmEvent event) {
         CropPlayer player = event.getPlayer();
 
-        LINK_ACTION_SUCCESS.send(plugin, player);
+        LINK_ACTION_SUCCESS.builder(plugin).sendTo(player.getOfflinePlayer().getPlayer());
 
         Log.debug("{0}: Called the link event.", Tag.PLAYER, player.getOfflinePlayer().getName());
 

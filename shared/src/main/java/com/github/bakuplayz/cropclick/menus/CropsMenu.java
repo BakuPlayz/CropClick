@@ -47,7 +47,9 @@ public final class CropsMenu extends AbstractCropsMenu {
     @NotNull
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull Crop crop) {
-        return CROPS_ITEM_DROP_VALUE.getAsList(plugin, crop.getDrop().getAmount());
+        return CROPS_ITEM_DROP_VALUE.builder(plugin)
+                       .replace("%value%", crop.getDrop().getAmount())
+                       .buildAsList();
     }
 
 

@@ -25,6 +25,7 @@ import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuild
 import com.github.bakuplayz.cropclick.menus.abstracts.states.AddonMenuStateBuilder.AddonMenuStateHandler;
 import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractStateMenu;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import org.bukkit.entity.Player;
@@ -64,12 +65,19 @@ public abstract class AbstractAddonMenu extends AbstractStateMenu<AddonMenuState
     }
 
 
-    protected abstract static class AbstractToggleItem extends ClickableStateItem<AddonMenuState> {
+    protected abstract class AbstractToggleItem extends ClickableStateItem<AddonMenuState> {
 
         @Override
         public void update(@NotNull AddonMenuState state, int flag) {
             setMaterial(state.isAddonEnabled() ? getMaterial() : XMaterial.GRAY_STAINED_GLASS_PANE);
             setName(getName());
+        }
+
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleAddon();
         }
 
 
@@ -85,11 +93,13 @@ public abstract class AbstractAddonMenu extends AbstractStateMenu<AddonMenuState
         @Override
         public CompletableFuture<Void> create() {
             return plugin.getWorldManager().getWorlds().thenAccept(worlds -> {
+                String status = ADDON_WORLDS_ITEM_STATUS.builder(plugin)
+                                        .replace("%status%", addon == null ? 0 : worlds.stream().filter(w -> w.isAddonBanished(addon)).count())
+                                        .build();
+
                 setMaterial(XMaterial.GRASS_BLOCK);
                 setName(ADDON_WORLDS_ITEM_NAME.get(plugin));
-                setLore(ADDON_WORLDS_ITEM_TIPS.getAsAppendList(plugin, ADDON_WORLDS_ITEM_STATUS.get(
-                        plugin, addon == null ? 0 : worlds.stream().filter(w -> w.isAddonBanished(addon)).count()))
-                );
+                setLore(ADDON_WORLDS_ITEM_TIPS.builder(plugin).append(status).buildAsList());
             });
         }
 
@@ -104,7 +114,7 @@ public abstract class AbstractAddonMenu extends AbstractStateMenu<AddonMenuState
             return createSync(() -> {
                 setMaterial(XMaterial.WHEAT);
                 setName(ADDON_CROP_SETTINGS_ITEM_NAME.get(plugin));
-                setLore(ADDON_CROP_SETTINGS_ITEM_TIPS.getAsList(plugin));
+                setLore(ADDON_CROP_SETTINGS_ITEM_TIPS.builder(plugin).buildAsList());
             });
         }
 

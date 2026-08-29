@@ -105,13 +105,13 @@ public final class DataServiceManager {
             if (context.getQueryProvider().isConnected()) {
                 return new RemoteAutofarmService(context.getQueryProvider());
             }
-            return new LocalAutofarmService(plugin);
+            return new LocalAutofarmService();
         }
 
 
         @NotNull
         private FarmWorldDataService createFarmWorldService() {
-            return new LocalFarmWorldService(plugin);
+            return new LocalFarmWorldService();
         }
 
     }

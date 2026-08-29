@@ -40,7 +40,6 @@ import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
 import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
-import com.github.bakuplayz.spigotspin.menu.items.common.ActionState;
 import com.github.bakuplayz.spigotspin.menu.items.common.ViewState;
 import com.github.bakuplayz.spigotspin.menu.items.state.ClickableStateItem;
 import com.github.bakuplayz.spigotspin.menu.items.state.StateItem;
@@ -143,7 +142,9 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     @NotNull
     @Unmodifiable
     private List<String> getUnlinkedLore() {
-        return LINK_FORMAT_STATE.getAsList(plugin, LINK_STATES_UNLINKED.get(plugin));
+        return LINK_FORMAT_STATE.builder(plugin)
+                       .replace("%state%", LINK_STATES_UNLINKED.get(plugin))
+                       .buildAsList();
     }
 
 
@@ -151,7 +152,11 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     private List<String> getSelectedLore(@NotNull Location location) {
         List<String> selectedPart = new ArrayList<>(getBaseLore(location));
         selectedPart.add("");
-        selectedPart.addAll(LINK_FORMAT_STATE.getAsList(plugin, LINK_STATES_SELECTED.get(plugin)));
+        selectedPart.addAll(
+                LINK_FORMAT_STATE.builder(plugin)
+                        .replace("%state%", LINK_STATES_SELECTED.get(plugin))
+                        .buildAsList()
+        );
         return selectedPart;
     }
 
@@ -159,11 +164,12 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
     @NotNull
     private List<String> getBaseLore(@NotNull Location location) {
         return Arrays.asList(
-                LINK_FORMAT_X.get(plugin, location.getBlockX()),
-                LINK_FORMAT_Y.get(plugin, location.getBlockY()),
-                LINK_FORMAT_Z.get(plugin, location.getBlockZ())
+                LINK_FORMAT_X.builder(plugin).replace("%x%", location.getBlockX()).build(),
+                LINK_FORMAT_Y.builder(plugin).replace("%y%", location.getBlockY()).build(),
+                LINK_FORMAT_Z.builder(plugin).replace("%z%", location.getBlockZ()).build()
         );
     }
+
 
     private final class CropItem extends ClickableStateItem<LinkMenuState> {
 
@@ -240,6 +246,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
             updateItem(state);
         }
 
+
         @NotNull
         @Override
         public ItemAction getAction() {
@@ -301,7 +308,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
         @NotNull
         private List<String> getLinkedLore(@NotNull Location location) {
-            return LINK_CONTAINER_TIPS.getAsAppendList(plugin, getBaseLore(location));
+            return LINK_CONTAINER_TIPS.builder(plugin).append(getBaseLore(location)).buildAsList();
         }
 
     }
@@ -363,7 +370,7 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
 
         @NotNull
         private List<String> getLinkedLore(@NotNull Location location) {
-            return LINK_DISPENSER_TIPS.getAsAppendList(plugin, getBaseLore(location));
+            return LINK_DISPENSER_TIPS.builder(plugin).append(getBaseLore(location)).buildAsList();
         }
 
     }
@@ -377,11 +384,12 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
                 CropPlayer player = CropPlayer.fromPlayer(viewers.get(0));
 
                 setViewState(player.getPermissions().has(PermissionKey.AUTOFARM_CLAIM) ? ViewState.VISIBLE : ViewState.INVISIBLE);
+                setLore(LINK_CLAIM_STATUS.builder(plugin).buildAsList());
                 setMaterial(XMaterial.LIGHT_BLUE_STAINED_GLASS_PANE);
-                setLore(LINK_CLAIM_STATUS.getAsList(plugin));
                 setName(LINK_CLAIM_NAME.get(plugin));
             });
         }
+
 
         @NotNull
         @Override
@@ -446,7 +454,9 @@ public abstract class AbstractLinkMenu extends AbstractStateMenu<LinkMenuState, 
         @NotNull
         @Unmodifiable
         private List<String> getLore(@NotNull LinkMenuState state) {
-            return LINK_TOGGLE_STATUS.getAsList(plugin, Messages.getStatusMessage(plugin, state.isEnabled()));
+            return LINK_TOGGLE_STATUS.builder(plugin)
+                           .replace("%status%", Messages.getStatusMessage(plugin, state.isEnabled()))
+                           .buildAsList();
         }
 
 

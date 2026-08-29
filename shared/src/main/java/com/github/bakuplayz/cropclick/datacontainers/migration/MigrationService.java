@@ -41,7 +41,7 @@ public final class MigrationService {
 
 
     public void start() {
-        config.set(ConfigurationKey.STATUS, MigrationStatus.IN_PROGRESS);
+        config.set(ConfigurationKey.DATABASES_MIGRATION_STATUS, MigrationStatus.IN_PROGRESS);
 
         migrationContext.start();
 
@@ -49,14 +49,14 @@ public final class MigrationService {
         AutofarmDataService toFarmService = migrationContext.getAutofarmService();
         if (toFarmService == null) {
             Log.info("Failed to migrate please check your config, restart and try again.");
-            config.set(ConfigurationKey.STATUS, MigrationStatus.FAILED);
+            config.set(ConfigurationKey.DATABASES_MIGRATION_STATUS, MigrationStatus.FAILED);
             migrationContext.shutdown();
             return;
         }
 
         migrateAllEntities(fromFarmService, toFarmService);
 
-        config.set(ConfigurationKey.STATUS, MigrationStatus.COMPLETED);
+        config.set(ConfigurationKey.DATABASES_MIGRATION_STATUS, MigrationStatus.COMPLETED);
 
         migrationContext.swap(liveContext);
 

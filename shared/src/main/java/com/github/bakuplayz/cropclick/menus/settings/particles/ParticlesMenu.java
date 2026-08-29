@@ -115,11 +115,15 @@ public final class ParticlesMenu extends AbstractPaginatedMenu<BasicPaginatedMen
                 String name = Messages.beautify(particle, true);
 
                 setMaterial(XMaterial.FIREWORK_ROCKET);
-                setName(PARTICLES_ITEM_NAME.get(plugin, name, status));
+                setName(PARTICLES_ITEM_NAME.builder(plugin)
+                                .replace("%name%", name)
+                                .replace("%status%", status)
+                                .build()
+                );
                 setMaterial(isEnabled, XMaterial.LIME_STAINED_GLASS_PANE);
 
                 if (isEnabled) {
-                    setLore(PARTICLES_ITEM_ORDER.get(plugin, order));
+                    setLore(PARTICLES_ITEM_ORDER.builder(plugin).replace("%order%", order).buildAsList());
                 }
             });
         }

@@ -31,6 +31,7 @@ import com.github.bakuplayz.spigotspin.menu.abstracts.AbstractPlainMenu;
 import com.github.bakuplayz.spigotspin.menu.common.SizeType;
 import com.github.bakuplayz.spigotspin.menu.items.ClickableItem;
 import com.github.bakuplayz.spigotspin.menu.items.Item;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import com.github.bakuplayz.spigotspin.utils.XMaterial;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
@@ -72,22 +73,10 @@ public final class NameMenu extends AbstractPlainMenu {
     @Override
     public void setItems() {
         if (crop.hasSeed()) {
-            setItem(13, new CropItem(), (item, player) -> {
-                String cropName = crop.getName();
-                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.CROP_DROP_NAME, text, cropName);
-                AnvilMenuFactory.createMenu(plugin, item, cropsConfig.getStringOrDefault(ConfigurationKey.CROP_DROP_NAME, cropName, cropName), setter).open(player);
-            });
-            setItem(31, new SeedItem(), (item, player) -> {
-                String seedName = crop.getSeed().getName();
-                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.SEED_DROP_NAME, text, seedName);
-                AnvilMenuFactory.createMenu(plugin, item, cropsConfig.getStringOrDefault(ConfigurationKey.SEED_DROP_NAME, seedName, seedName), setter).open(player);
-            });
+            setItem(13, new CropItem());
+            setItem(31, new SeedItem());
         } else {
-            setItem(22, new CropItem(), (item, player) -> {
-                String cropName = crop.getName();
-                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.CROP_DROP_NAME, text, cropName);
-                AnvilMenuFactory.createMenu(plugin, item, cropsConfig.getStringOrDefault(ConfigurationKey.CROP_DROP_NAME, cropName, cropName), setter).open(player);
-            });
+            setItem(22, new CropItem());
         }
 
         setItem(47, new ColorItem(plugin, 0));
@@ -148,11 +137,11 @@ public final class NameMenu extends AbstractPlainMenu {
         private List<String> getCodesAsLore(int startIndex) {
             return colorCodes.entrySet().stream()
                            .map(colorMap -> Messages.colorize(
-                                   NAME_COLOR_ITEM_CODE.get(
-                                           plugin,
-                                           colorMap.getKey(),
-                                           colorMap.getKey(),
-                                           colorMap.getValue())
+                                   NAME_COLOR_ITEM_CODE.builder(plugin)
+                                           .replace("%code%", colorMap.getKey())
+                                           .replace("%color%", colorMap.getKey())
+                                           .replace("%name%", colorMap.getValue())
+                                           .build()
                            ).replace("#", "&")) // Some wizardry formatting
                            .skip(startIndex)
                            .limit(11)
@@ -172,16 +161,39 @@ public final class NameMenu extends AbstractPlainMenu {
                                         ? CROP_STATUS_ENABLED.get(plugin)
                                         : CROP_STATUS_DISABLED.get(plugin);
                 String currentName = cropsConfig.getStringOrDefault(ConfigurationKey.CROP_DROP_NAME, name, crop.getName());
+                String dropName = NAME_CROP_ITEM_DROP_NAME.builder(plugin)
+                                          .replace("%name%", currentName.isEmpty() ? name : currentName)
+                                          .build();
 
                 setMaterial(crop.getMenuType());
                 setMaterial(!crop.isHarvestable(), XMaterial.RED_STAINED_GLASS_PANE);
-                setName(NAME_CROP_ITEM_NAME.get(plugin, name, status));
-                setLore(NAME_CROP_ITEM_TIPS.getAsAppendList(plugin,
-                        NAME_CROP_ITEM_DROP_NAME.get(plugin, currentName.isEmpty() ? name : currentName))
+                setName(NAME_CROP_ITEM_NAME.builder(plugin)
+                                .replace("%name%", name)
+                                .replace("%status%", status)
+                                .build()
+                );
+                setLore(NAME_CROP_ITEM_TIPS.builder(plugin)
+                                .append(dropName)
+                                .buildAsList()
                 );
             });
         }
 
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                String cropName = crop.getName();
+                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.CROP_DROP_NAME, text, cropName);
+                AnvilMenuFactory.createMenu(
+                        plugin,
+                        item,
+                        Messages.colorize(cropsConfig.getStringOrDefault(ConfigurationKey.CROP_DROP_NAME, cropName, cropName)),
+                        setter
+                ).open(player);
+            };
+        }
     }
 
     private final class SeedItem extends ClickableItem {
@@ -194,16 +206,39 @@ public final class NameMenu extends AbstractPlainMenu {
                 String name = Messages.beautify(seed.getName(), false);
                 String status = Messages.getStatusMessage(plugin, seed.isEnabled());
                 String currentName = cropsConfig.getStringOrDefault(ConfigurationKey.SEED_DROP_NAME, name, seed.getName());
+                String dropName = NAME_SEED_ITEM_DROP_NAME.builder(plugin)
+                                          .replace("%name%", currentName.isEmpty() ? name : currentName)
+                                          .build();
 
                 setMaterial(seed.getMenuType());
                 setMaterial(!seed.isEnabled(), XMaterial.RED_STAINED_GLASS_PANE);
-                setName(NAME_SEED_ITEM_NAME.get(plugin, name, status));
-                setLore(NAME_SEED_ITEM_TIPS.getAsAppendList(plugin,
-                        NAME_SEED_ITEM_DROP_NAME.get(plugin, currentName.isEmpty() ? name : currentName))
+                setName(NAME_SEED_ITEM_NAME.builder(plugin)
+                                .replace("%name%", name)
+                                .replace("%status%", status)
+                                .build()
+                );
+                setLore(NAME_SEED_ITEM_TIPS.builder(plugin)
+                                .append(dropName)
+                                .buildAsList()
                 );
             });
         }
 
+
+        @NotNull
+        @Override
+        public ItemAction getAction() {
+            return (item, player) -> {
+                String seedName = crop.getSeed().getName();
+                ValueSetter setter = (text) -> cropsConfig.set(ConfigurationKey.SEED_DROP_NAME, text, seedName);
+                AnvilMenuFactory.createMenu(
+                        plugin,
+                        item,
+                        Messages.colorize(cropsConfig.getStringOrDefault(ConfigurationKey.SEED_DROP_NAME, seedName, seedName)),
+                        setter
+                ).open(player);
+            };
+        }
     }
 
 }

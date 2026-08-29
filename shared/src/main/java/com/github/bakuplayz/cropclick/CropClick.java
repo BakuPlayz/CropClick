@@ -51,9 +51,11 @@ import com.github.bakuplayz.cropclick.update.UpdateManager;
 import com.github.bakuplayz.cropclick.world.WorldManager;
 import com.github.bakuplayz.spigotspin.SpigotSpin;
 import dev.bakuplayz.spigotstore.SpigotStore;
-import dev.bakuplayz.spigotstore.common.log.LogOptions;
+import dev.bakuplayz.spigotstore.SpigotStoreConfig;
+import dev.bakuplayz.spigotstore.common.DatabaseConfig;
+import dev.bakuplayz.spigotstore.common.log.LogConfig;
+import dev.bakuplayz.spigotstore.persistence.sql.core.DatabaseDialect;
 import dev.bakuplayz.spigotstore.task.api.TaskContext;
-import dev.bakuplayz.spigotstore.task.impl.TaskScheduler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -152,10 +154,10 @@ public final class CropClick extends JavaPlugin {
 
     private void registerLibraries() {
         this.spin = new SpigotSpin(this);
-        this.store = new SpigotStore(this, new LogOptions(true));
-
-        // spin.start();
-        // store.start();
+        this.store = new SpigotStore(this, SpigotStoreConfig.of(
+                LogConfig.builder().isDebug(true).build(),
+                DatabaseConfig.builder().disallowedDialects(DatabaseDialect.SQLITE).build()
+        ));
     }
 
 

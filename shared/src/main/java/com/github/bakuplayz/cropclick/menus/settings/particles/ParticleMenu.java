@@ -111,8 +111,8 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         setItem(28, new AmountDecreaseItem(AMOUNT_MAX_CHANGE), (item, player) -> stateHandler.decreaseAmount(AMOUNT_MAX_CHANGE), ParticleMenuStateFlag.AMOUNT);
         setItem(29, new AmountDecreaseItem(AMOUNT_MIN_CHANGE), (item, player) -> stateHandler.decreaseAmount(AMOUNT_MIN_CHANGE), ParticleMenuStateFlag.AMOUNT);
         setItem(31, new AmountItem(), ParticleMenuStateFlag.AMOUNT);
-        setItem(33, new PitchIncreaseItem(AMOUNT_MIN_CHANGE), (item, player) -> stateHandler.increaseAmount(AMOUNT_MIN_CHANGE), ParticleMenuStateFlag.AMOUNT);
-        setItem(34, new PitchIncreaseItem(AMOUNT_MAX_CHANGE), (item, player) -> stateHandler.increaseAmount(AMOUNT_MAX_CHANGE), ParticleMenuStateFlag.AMOUNT);
+        setItem(33, new AmountIncreaseItem(AMOUNT_MIN_CHANGE), (item, player) -> stateHandler.increaseAmount(AMOUNT_MIN_CHANGE), ParticleMenuStateFlag.AMOUNT);
+        setItem(34, new AmountIncreaseItem(AMOUNT_MAX_CHANGE), (item, player) -> stateHandler.increaseAmount(AMOUNT_MAX_CHANGE), ParticleMenuStateFlag.AMOUNT);
 
         setItem(47, new DecreaseOrderItem(), (item, player) -> stateHandler.decreaseOrder(), Arrays.asList(ParticleMenuStateFlag.ORDER, ParticleMenuStateFlag.ORDER_STATE));
         setItem(49, new CustomBackItem(plugin));
@@ -137,8 +137,12 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-                setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Delay"));
                 setLore(getLore(getState().getDelay()));
+                setName(PARTICLE_REMOVE_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Delay")
+                                .build()
+                );
             });
         }
 
@@ -152,7 +156,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(double delay) {
-            return PARTICLE_REMOVE_ITEM_AFTER.getAsList(plugin, getAfterValue(delay));
+            return PARTICLE_REMOVE_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(delay))
+                           .buildAsList();
         }
 
 
@@ -183,9 +189,10 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
         @NotNull
         private List<String> getLore(double delay) {
-            return PARTICLE_DELAY_ITEM_TIPS.getAsAppendList(plugin,
-                    PARTICLE_DELAY_ITEM_VALUE.get(plugin, delay)
-            );
+            String status = PARTICLE_DELAY_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", delay)
+                                    .build();
+            return PARTICLE_DELAY_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -201,7 +208,11 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-                setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Delay"));
+                setName(PARTICLE_ADD_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Delay")
+                                .build()
+                );
                 setLore(getLore(getState().getDelay()));
             });
         }
@@ -216,7 +227,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(double delay) {
-            return PARTICLE_ADD_ITEM_AFTER.getAsList(plugin, getAfterValue(delay));
+            return PARTICLE_ADD_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(delay))
+                           .buildAsList();
         }
 
 
@@ -236,9 +249,13 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @Override
         public CompletableFuture<Void> create() {
             return createSync(() -> {
-                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-                setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Speed"));
                 setLore(getLore(getState().getSpeed()));
+                setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
+                setName(PARTICLE_REMOVE_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Speed")
+                                .build()
+                );
             });
         }
 
@@ -252,7 +269,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(double speed) {
-            return PARTICLE_REMOVE_ITEM_AFTER.getAsList(plugin, getAfterValue(speed));
+            return PARTICLE_REMOVE_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(speed))
+                           .buildAsList();
         }
 
 
@@ -269,8 +288,8 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.FEATHER);
-                setName(PARTICLE_SPEED_ITEM_NAME.get(plugin));
                 setLore(getLore(getState().getSpeed()));
+                setName(PARTICLE_SPEED_ITEM_NAME.get(plugin));
             });
         }
 
@@ -283,9 +302,10 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
         @NotNull
         private List<String> getLore(double speed) {
-            return PARTICLE_SPEED_ITEM_TIPS.getAsAppendList(plugin,
-                    PARTICLE_SPEED_ITEM_VALUE.get(plugin, speed)
-            );
+            String status = PARTICLE_SPEED_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", speed)
+                                    .build();
+            return PARTICLE_SPEED_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -301,7 +321,11 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-                setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Speed"));
+                setName(PARTICLE_ADD_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Speed")
+                                .build()
+                );
                 setLore(getLore(getState().getSpeed()));
             });
         }
@@ -316,7 +340,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(double speed) {
-            return PARTICLE_ADD_ITEM_AFTER.getAsList(plugin, getAfterValue(speed));
+            return PARTICLE_ADD_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(speed))
+                           .buildAsList();
         }
 
 
@@ -337,7 +363,11 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.RED_STAINED_GLASS_PANE);
-                setName(PARTICLE_REMOVE_ITEM_NAME.get(plugin, change, "Amount"));
+                setName(PARTICLE_REMOVE_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Amount")
+                                .build()
+                );
                 setLore(getLore(getState().getAmount()));
             });
         }
@@ -352,7 +382,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(int amount) {
-            return PARTICLE_REMOVE_ITEM_AFTER.getAsList(plugin, getAfterValue(amount));
+            return PARTICLE_REMOVE_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(amount))
+                           .buildAsList();
         }
 
 
@@ -383,15 +415,16 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
 
         @NotNull
         private List<String> getLore(int amount) {
-            return PARTICLE_AMOUNT_ITEM_TIPS.getAsAppendList(plugin,
-                    PARTICLE_AMOUNT_ITEM_VALUE.get(plugin, amount)
-            );
+            String status = PARTICLE_AMOUNT_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", amount)
+                                    .build();
+            return PARTICLE_AMOUNT_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
 
     @AllArgsConstructor
-    private final class PitchIncreaseItem extends ClickableStateItem<ParticleMenuState> {
+    private final class AmountIncreaseItem extends ClickableStateItem<ParticleMenuState> {
 
         private final int change;
 
@@ -401,7 +434,11 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         public CompletableFuture<Void> create() {
             return createSync(() -> {
                 setMaterial(XMaterial.LIME_STAINED_GLASS_PANE);
-                setName(PARTICLE_ADD_ITEM_NAME.get(plugin, change, "Amount"));
+                setName(PARTICLE_ADD_ITEM_NAME.builder(plugin)
+                                .replace("%amount%", change)
+                                .replace("%type%", "Amount")
+                                .build()
+                );
                 setLore(getLore(getState().getAmount()));
             });
         }
@@ -416,7 +453,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(int amount) {
-            return PARTICLE_ADD_ITEM_AFTER.getAsList(plugin, getAfterValue(amount));
+            return PARTICLE_ADD_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(amount))
+                           .buildAsList();
         }
 
 
@@ -450,7 +489,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(int order, int maxOrder) {
-            return PARTICLE_INCREASE_ORDER_ITEM_AFTER.getAsList(plugin, getAfterValue(order, maxOrder));
+            return PARTICLE_INCREASE_ORDER_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(order, maxOrder))
+                           .buildAsList();
         }
 
 
@@ -493,7 +534,9 @@ public final class ParticleMenu extends AbstractStateMenu<ParticleMenuState, Par
         @NotNull
         @Unmodifiable
         private List<String> getLore(int order) {
-            return PARTICLE_DECREASE_ORDER_ITEM_AFTER.getAsList(plugin, getAfterValue(order));
+            return PARTICLE_DECREASE_ORDER_ITEM_AFTER.builder(plugin)
+                           .replace("%value%", getAfterValue(order))
+                           .buildAsList();
         }
 
 

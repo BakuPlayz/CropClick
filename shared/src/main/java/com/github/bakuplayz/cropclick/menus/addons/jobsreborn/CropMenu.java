@@ -93,7 +93,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, change, "Money");
+            return JOBS_CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Money")
+                           .build();
         }
 
 
@@ -101,7 +104,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return JOBS_CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return JOBS_CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -139,9 +142,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @NotNull
         private List<String> getLore(double value) {
-            return JOBS_CROP_MONEY_ITEM_TIPS.getAsAppendList(plugin,
-                    JOBS_CROP_MONEY_ITEM_VALUE.get(plugin, (int) value)
-            );
+            String status = JOBS_CROP_MONEY_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", (int) value)
+                                    .build();
+            return JOBS_CROP_MONEY_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -156,7 +160,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return JOBS_CROP_ADD_ITEM_NAME.get(plugin, change, "Money");
+            return JOBS_CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Money")
+                           .build();
         }
 
 
@@ -164,7 +171,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return JOBS_CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return JOBS_CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -191,7 +198,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, change, "Points");
+            return JOBS_CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Points")
+                           .build();
         }
 
 
@@ -199,7 +209,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return JOBS_CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return JOBS_CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -237,9 +247,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @NotNull
         private List<String> getLore(double value) {
-            return JOBS_CROP_POINTS_ITEM_TIPS.getAsAppendList(plugin,
-                    JOBS_CROP_POINTS_ITEM_VALUE.get(plugin, (int) value)
-            );
+            String status = JOBS_CROP_POINTS_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", (int) value)
+                                    .build();
+            return JOBS_CROP_POINTS_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -254,7 +265,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return JOBS_CROP_ADD_ITEM_NAME.get(plugin, change, "Points");
+            return JOBS_CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Points")
+                           .build();
         }
 
 
@@ -262,7 +276,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return JOBS_CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return JOBS_CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -289,7 +303,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return JOBS_CROP_REMOVE_ITEM_NAME.get(plugin, change, "Experience");
+            return JOBS_CROP_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Experience")
+                           .build();
         }
 
 
@@ -297,7 +314,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return JOBS_CROP_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return JOBS_CROP_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -335,9 +352,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
 
         @NotNull
         private List<String> getLore(double value) {
-            return JOBS_CROP_EXPERIENCE_ITEM_TIPS.getAsAppendList(plugin,
-                    JOBS_CROP_EXPERIENCE_ITEM_VALUE.get(plugin, (int) value)
-            );
+            String status = JOBS_CROP_EXPERIENCE_ITEM_VALUE.builder(plugin)
+                                    .replace("%value%", (int) value)
+                                    .build();
+            return JOBS_CROP_EXPERIENCE_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -352,7 +370,10 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @NotNull
         @Override
         protected String getName() {
-            return JOBS_CROP_ADD_ITEM_NAME.get(plugin, change, "Experience");
+            return JOBS_CROP_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Experience")
+                           .build();
         }
 
 
@@ -360,7 +381,7 @@ public final class CropMenu extends AbstractCropMenu<CropMenuState, CropMenuStat
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return JOBS_CROP_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return JOBS_CROP_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 

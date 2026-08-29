@@ -49,7 +49,10 @@ public final class WorldsMenu extends AbstractWorldsMenu {
     @Unmodifiable
     private static List<String> getItemLore(@NotNull CropClick plugin, @NotNull FarmWorld world) {
         boolean isBanished = world.isAddonBanished(getAddon(plugin, JobsRebornAddon.NAME));
-        return WORLDS_ITEM_JOBS_TIPS.getAsAppendList(plugin, WORLDS_ITEM_STATUS.get(plugin, isBanished));
+        String status = WORLDS_ITEM_STATUS.builder(plugin)
+                                .replace("%status%", isBanished)
+                                .build();
+        return WORLDS_ITEM_JOBS_TIPS.builder(plugin).append(status).buildAsList();
     }
 
 

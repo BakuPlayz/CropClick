@@ -26,6 +26,7 @@ import com.github.bakuplayz.cropclick.menus.crops.states.ChanceStateBuilder;
 import com.github.bakuplayz.cropclick.menus.crops.states.ChanceStateBuilder.ChanceMenuState;
 import com.github.bakuplayz.cropclick.menus.crops.states.ChanceStateBuilder.ChanceMenuStateHandler;
 import com.github.bakuplayz.cropclick.menus.shared.CustomBackItem;
+import com.github.bakuplayz.spigotspin.menu.items.actions.ItemAction;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -61,14 +62,14 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
     public void setItems() {
         setItem(hasSeed ? 10 : 19, new CropDecreaseItem(MAX_CHANGE), (item, player) -> stateHandler.decreaseCropValue(MAX_CHANGE), AbstractMenuStateFlag.CROP_VALUE);
         setItem(hasSeed ? 11 : 20, new CropDecreaseItem(MIN_CHANGE), (item, player) -> stateHandler.decreaseCropValue(MIN_CHANGE), AbstractMenuStateFlag.CROP_VALUE);
-        setItem(hasSeed ? 13 : 22, new CropItem(), (item, player) -> stateHandler.toggleCropHarvestState(), Arrays.asList(AbstractMenuStateFlag.CROP_VALUE, AbstractMenuStateFlag.CROP_STATE));
+        setItem(hasSeed ? 13 : 22, new CropItem(), Arrays.asList(AbstractMenuStateFlag.CROP_VALUE, AbstractMenuStateFlag.CROP_STATE));
         setItem(hasSeed ? 15 : 24, new CropIncreaseItem(MIN_CHANGE), (item, player) -> stateHandler.increaseCropValue(MIN_CHANGE), AbstractMenuStateFlag.CROP_VALUE);
         setItem(hasSeed ? 16 : 25, new CropIncreaseItem(MAX_CHANGE), (item, player) -> stateHandler.increaseCropValue(MAX_CHANGE), AbstractMenuStateFlag.CROP_VALUE);
 
         if (hasSeed) {
             setItem(28, new SeedDecreaseItem(MAX_CHANGE), (item, player) -> stateHandler.decreaseSeedValue(MAX_CHANGE), AbstractMenuStateFlag.SEED_VALUE);
             setItem(29, new SeedDecreaseItem(MIN_CHANGE), (item, player) -> stateHandler.decreaseSeedValue(MIN_CHANGE), AbstractMenuStateFlag.SEED_VALUE);
-            setItem(31, new SeedItem(), (item, player) -> stateHandler.toggleSeedEnabledState(), Arrays.asList(AbstractMenuStateFlag.SEED_VALUE, AbstractMenuStateFlag.SEED_STATE));
+            setItem(31, new SeedItem(), Arrays.asList(AbstractMenuStateFlag.SEED_VALUE, AbstractMenuStateFlag.SEED_STATE));
             setItem(33, new SeedIncreaseItem(MIN_CHANGE), (item, player) -> stateHandler.increaseSeedValue(MIN_CHANGE), AbstractMenuStateFlag.SEED_VALUE);
             setItem(34, new SeedIncreaseItem(MAX_CHANGE), (item, player) -> stateHandler.increaseSeedValue(MAX_CHANGE), AbstractMenuStateFlag.SEED_VALUE);
         }
@@ -87,7 +88,10 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @NotNull
         @Override
         protected String getName() {
-            return DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, change, "Crop");
+            return DROP_CHANCE_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Crop")
+                           .build();
         }
 
 
@@ -95,7 +99,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return DROP_CHANCE_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return DROP_CHANCE_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -110,22 +114,32 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
 
         @NotNull
         @Override
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleCropHarvestState();
+        }
+
+
+        @NotNull
+        @Override
         protected String getName(boolean isHarvestable) {
             String name = Messages.beautify(cropName, false);
             String status = isHarvestable
                                     ? CROP_STATUS_ENABLED.get(plugin)
                                     : CROP_STATUS_DISABLED.get(plugin);
-
-            return DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status);
+            return DROP_CHANCE_CROP_ITEM_NAME.builder(plugin)
+                           .replace("%name%", name)
+                           .replace("%status%", status)
+                           .build();
         }
 
 
         @NotNull
         @Override
         protected List<String> getLore(int value) {
-            return DROP_CHANCE_CROP_ITEM_TIPS.getAsAppendList(plugin,
-                    DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, value)
-            );
+            String status = DROP_CHANCE_CROP_ITEM_DROP_CHANCE.builder(plugin)
+                                    .replace("%value%", value)
+                                    .build();
+            return DROP_CHANCE_CROP_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -140,7 +154,10 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @NotNull
         @Override
         protected String getName() {
-            return DROP_CHANCE_ADD_ITEM_NAME.get(plugin, change, "Crop");
+            return DROP_CHANCE_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Crop")
+                           .build();
         }
 
 
@@ -148,7 +165,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return DROP_CHANCE_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return DROP_CHANCE_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -169,7 +186,10 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @NotNull
         @Override
         protected String getName() {
-            return DROP_CHANCE_REMOVE_ITEM_NAME.get(plugin, change, "Seed");
+            return DROP_CHANCE_REMOVE_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Seed")
+                           .build();
         }
 
 
@@ -177,7 +197,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return DROP_CHANCE_REMOVE_ITEM_AFTER.getAsList(plugin, value);
+            return DROP_CHANCE_REMOVE_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
@@ -193,18 +213,30 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
 
         @NotNull
         @Override
-        protected String getName(boolean state) {
-            String name = Messages.beautify(seed.getName(), false);
-            String status = Messages.getStatusMessage(plugin, state);
-            return DROP_CHANCE_CROP_ITEM_NAME.get(plugin, name, status);
+        public ItemAction getAction() {
+            return (item, player) -> stateHandler.toggleSeedEnabledState();
         }
 
 
+        @NotNull
         @Override
-        protected @NotNull List<String> getLore(int value) {
-            return DROP_CHANCE_CROP_ITEM_TIPS.getAsAppendList(plugin,
-                    DROP_CHANCE_CROP_ITEM_DROP_CHANCE.get(plugin, value)
-            );
+        protected String getName(boolean state) {
+            String name = Messages.beautify(seed.getName(), false);
+            String status = Messages.getStatusMessage(plugin, state);
+            return DROP_CHANCE_CROP_ITEM_NAME.builder(plugin)
+                           .replace("%name%", name)
+                           .replace("%status%", status)
+                           .build();
+        }
+
+
+        @NotNull
+        @Override
+        protected List<String> getLore(int value) {
+            String status = DROP_CHANCE_CROP_ITEM_DROP_CHANCE.builder(plugin)
+                                    .replace("%value%", value)
+                                    .build();
+            return DROP_CHANCE_CROP_ITEM_TIPS.builder(plugin).append(status).buildAsList();
         }
 
     }
@@ -219,7 +251,10 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @NotNull
         @Override
         protected String getName() {
-            return DROP_CHANCE_ADD_ITEM_NAME.get(plugin, change, "Seed");
+            return DROP_CHANCE_ADD_ITEM_NAME.builder(plugin)
+                           .replace("%amount%", change)
+                           .replace("%type%", "Seed")
+                           .build();
         }
 
 
@@ -227,7 +262,7 @@ public final class ChanceMenu extends AbstractCropMenu<ChanceMenuState, ChanceMe
         @Override
         @Unmodifiable
         protected List<String> getLore(int value) {
-            return DROP_CHANCE_ADD_ITEM_AFTER.getAsList(plugin, value);
+            return DROP_CHANCE_ADD_ITEM_AFTER.builder(plugin).replace("%value%", value).buildAsList();
         }
 
 
